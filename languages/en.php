@@ -175,10 +175,10 @@ class en
 		$this->bbcode_blue = 'Blue';
 		$this->bbcode_bold = 'Bold (CTRL-b)';
 		$this->bbcode_bold1 = 'B';
-		$this->bbcode_brightcove = 'Brightcove Video';
 		$this->bbcode_chocolate = 'Chocolate';
 		$this->bbcode_code = 'Code (CTRL-l)';
 		$this->bbcode_code1 = 'Code';
+		$this->bbcode_code2 = 'Codebox';
 		$this->bbcode_color = 'Color';
 		$this->bbcode_coral = 'Coral';
 		$this->bbcode_courier = 'Courier';
@@ -189,7 +189,6 @@ class en
 		$this->bbcode_email = 'Email (CTRL-e)';
 		$this->bbcode_firered = 'Firebrick Red';
 		$this->bbcode_font = 'Font';
-		$this->bbcode_google = 'Google Video';
 		$this->bbcode_green = 'Green';
 		$this->bbcode_huge = 'Huge';
 		$this->bbcode_image = 'Image (CTRL-j)';
@@ -233,7 +232,7 @@ class en
 		$this->bbcode_verdana = 'Verdana';
 		$this->bbcode_wood = 'Burly Wood';
 		$this->bbcode_yellow = 'Yellow';
-		$this->bbcode_youtube = 'Youtube Video';
+		$this->bbcode_youtube = 'YouTube';
 	}
 
 	function board()
@@ -972,7 +971,7 @@ class en
 		$this->mod_label_move_to = 'Move to';
 		$this->mod_label_options = 'Options';
 		$this->mod_label_post_delete = 'Delete Post';
-		$this->mod_label_post_edit = 'Edit Post';
+		$this->mod_label_post_edit = 'Editing post in topic: ';
 		$this->mod_label_post_icon = 'Post Icon';
 		$this->mod_label_publish = 'Publishing';
 		$this->mod_label_title = 'Title';
@@ -1378,6 +1377,8 @@ class en
 		$this->register_image = 'Please type the text shown in the image.';
 		$this->register_image_invalid = 'To verify you are a human registrant, you must type the text as shown in the image.';
 		$this->register_initiated = 'This request was initiated from IP:';
+		$this->register_math_ask = 'Please answer the following';
+		$this->register_math_fail = 'You failed to correctly answer the math question. Please try again.';
 		$this->register_must_activate = 'You have been registered. An email has been sent to %s with information on how to activate your account. Your account will be limited until you activate it.';
 		$this->register_name_invalid = 'The name you entered is too long.';
 		$this->register_name_taken = 'That member name is already taken.';
@@ -1392,6 +1393,7 @@ class en
 		$this->register_tos_i_agree = 'I agree to the above terms';
 		$this->register_tos_not_agree = 'You did not agree to the terms.';
 		$this->register_tos_read = 'Please read the following terms of service';
+		$this->register_what_is = 'What is ';
 	}
 
 	function rssfeed()
@@ -1841,6 +1843,7 @@ class en
 		$this->new_poll = 'New Poll';
 		$this->new_topic = 'New Topic';
 		$this->no = 'No';
+		$this->none = 'None';
 		$this->powered = 'Powered by';
 		$this->private_message = 'PM';
 		$this->quote = 'Quote';

@@ -153,8 +153,13 @@ class mod extends qsfglobal
 
 		if (!isset($this->post['submit'])) {
 			$forumlist = $this->htmlwidgets->select_forums($topic['topic_forum']);
+			$token = $this->generate_token();
 			return eval($this->template('MOD_MOVE_TOPIC'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->mod_label_controls, $this->lang->invalid_token );
+			}
+
 			$this->post['newforum'] = intval($this->post['newforum']);
 
 			if ($this->post['newforum'] == $topic['topic_forum']) {
@@ -220,8 +225,12 @@ class mod extends qsfglobal
 		}
 
 		$this->get['p'] = intval($this->get['p']);
-		$data = $this->db->fetch("SELECT p.post_text, p.post_author, p.post_emoticons, p.post_mbcode, p.post_topic, p.post_icon, p.post_time, t.topic_forum, t.topic_replies
-			FROM %pposts p, %ptopics t
+		$data = $this->db->fetch("SELECT p.post_text, p.post_author, p.post_emoticons, p.post_mbcode, p.post_topic, p.post_icon, p.post_time, t.topic_title, t.topic_forum, t.topic_replies,
+				u.*, m.membertitle_icon, g.group_name
+			FROM (%pposts p, %ptopics t)
+			LEFT JOIN %pusers u ON u.user_id = p.post_author
+			LEFT JOIN %pmembertitles m ON m.membertitle_id = u.user_level
+			LEFT JOIN %pgroups g ON g.group_id = u.user_group
 			WHERE t.topic_id=p.post_topic AND p.post_id=%d", $this->get['p']);
 
 		// Existence check
@@ -255,6 +264,9 @@ class mod extends qsfglobal
 			$attached = null;
 			$attached_data = null;
 			$upload_error = null;
+			$icon = $data['post_icon'] ? $data['post_icon'] : -1;
+			$preview = '';
+			$token = $this->generate_token();
 
 			$this->templater->add_templates('post');
 			$this->lang->post();
@@ -280,10 +292,99 @@ class mod extends qsfglobal
 				$this->attachmentutil->getdata($attached, $attached_data, $this->post['attached_data']);
 			}
 
+			/**
+			 * Preview
+			 */
+			if (isset($this->post['preview']) || isset($this->post['attach']) || isset($this->post['detach'])) {
+				$quote = $this->format($this->post['post'], FORMAT_HTMLCHARS);
+
+				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
+
+				if (isset($this->post['code']) ) {
+					$params |= FORMAT_MBCODE;
+					$code_check = ' checked=\'checked\'';
+				} else {
+					$code_check = '';
+				}
+
+				if (isset($this->post['emoticons'])) {
+					$params |= FORMAT_EMOTICONS;
+					$emot_check = ' checked=\'checked\'';
+				} else {
+					$emot_check = '';
+				}
+
+				$preview_text = $this->post['post'];
+				$quote = $this->format($preview_text, FORMAT_HTMLCHARS);
+				$preview_text = $this->format($preview_text, $params);
+
+				$preview_title = $this->lang->post_preview;
+
+				$this->lang->topic();
+
+				if ($this->perms->is_guest) {
+					$signature = '';
+					$Poster_Info = eval($this->template('POST_POSTER_GUEST'));
+				} else {
+					if (($data['user_avatar_type'] != 'none') ) {
+						if (substr($data['user_avatar'], -4) != '.swf') {
+							$avatar = "<img src=\"{$data['user_avatar']}\" alt=\"Avatar\" width=\"{$data['user_avatar_width']}\" height=\"{$data['user_avatar_height']}\" /><br /><br />";
+						} else {
+							$avatar = "<object width=\"{$data['user_avatar_width']}\" height=\"{$data['user_avatar_height']}\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\"><param name=\"movie\" value=\"{$data['user_avatar']}\"><param name=\"play\" value=\"true\"><param name=\"loop\" value=\"true\"><param name=\"quality\" value=\"high\"><embed src=\"{$data['user_avatar']}\" width=\"{$data['user_avatar_width']}\" height=\"{$data['user_avatar_height']}\" play=\"true\" loop=\"true\" quality=\"high\"></embed></object><br /><br />";
+						}
+					} else {
+						$avatar = null;
+					}
+
+					if ($data['user_signature'] ) {
+						$signature = '.........................<br />' . $this->format($data['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
+					} else {
+						$signature = null;
+					}
+
+					$joined = $this->mbdate(DATE_ONLY_LONG, $data['user_joined']);
+
+					$uid = $data['user_id'];
+					$uname = $data['user_name'];
+					$utitle = $data['user_title'];
+					$utitleicon = $data['membertitle_icon'];
+					$gname = $data['group_name'];
+					$uposts = $data['user_posts'];
+					$Poster_Info = eval($this->template('POST_POSTER_MEMBER'));
+				}
+
+				if ($this->post['attached_data']) {
+					$this->lang->topic();
+
+					$download_perm = $this->perms->auth('post_attach_download', $data['topic_forum']);
+
+					foreach ($this->post['attached_data'] as $md5 => $file)
+					{
+						if ($download_perm) {
+							$ext = strtolower(substr($file, -4));
+
+							if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png')) {
+								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='./attachments/$md5' alt='{$file}' />";
+								continue;
+							}
+						}
+
+						$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}";
+					}
+				}
+
+				$preview = eval($this->template('POST_PREVIEW'));
+			}
+
 			$quote     = $this->format($data['post_text'], FORMAT_HTMLCHARS);
-			$msg_icons = $this->htmlwidgets->get_icons(($data['post_icon'] == '') ? -1 : $data['post_icon']);
+
+			$icon = isset($this->post['icon']) ? $this->post['icon'] : $icon;
+			$msg_icons = $this->htmlwidgets->get_icons($icon);
+			$msg_icons = "<li><input type=\"radio\" name=\"icon\" value=\"None\" />{$this->lang->none}&nbsp;</li>" . $msg_icons;
+
 			$posticons = eval($this->template('POST_MESSAGE_ICONS'));
-			$smilies   = eval($this->template('POST_CLICKABLE_SMILIES'));
+
+			$smilies   = $this->bbcode->generate_emote_links();
 
 			if ($this->perms->auth('post_attach', $data['topic_forum'])) {
 				if ($attached) {
@@ -299,16 +400,24 @@ class mod extends qsfglobal
 
 			$post_box  = eval($this->template($this->post_box()));
 
+			$topic_title = $data['topic_title'];
+
 			return eval($this->template('MOD_EDIT_POST'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->mod_label_controls, $this->lang->invalid_token );
+			}
+
 			$emot = isset($this->post['emoticons']) ? 1 : 0;
 			$code = isset($this->post['code']) ? 1 : 0;
 
 			$this->log_action('post_edit', $this->get['p']);
-			$this->post['icon'] = isset($this->post['icon']) ? $this->post['icon'] : '';
+			$icon = isset($this->post['icon']) ? $this->post['icon'] : '';
+			if( $icon == 'None' )
+				$icon = '';
 
 			$this->db->query("UPDATE %pposts SET post_text='%s', post_emoticons=%d, post_mbcode=%d, post_edited_by='%s', post_edited_time=%d, post_icon='%s' WHERE post_id=%d",
-				$this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $this->post['icon'], $this->get['p']);
+				$this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $icon, $this->get['p']);
 
 			$first = $this->db->fetch( "SELECT p.post_id
 			 FROM %pposts p, %ptopics t
@@ -316,7 +425,7 @@ class mod extends qsfglobal
 			 ORDER BY p.post_time LIMIT 1", $data['post_topic'] );
 
 			if ($first['post_id'] == $this->get['p']) {
-				$this->db->query( "UPDATE %ptopics SET topic_icon='%s' WHERE topic_id='%d'", $this->post['icon'], $data['post_topic'] );
+				$this->db->query( "UPDATE %ptopics SET topic_icon='%s' WHERE topic_id='%d'", $icon, $data['post_topic'] );
 			}
 
 			$jump = '&amp;p=' . $this->get['p'] . '#p' . $this->get['p'];
@@ -363,6 +472,7 @@ class mod extends qsfglobal
 		if (!isset($this->post['submit'])) {
 			$topic['topic_title'] = $this->format($topic['topic_title'], FORMAT_HTMLCHARS);
 			$topic['topic_description'] = $this->format($topic['topic_description'], FORMAT_HTMLCHARS);
+			$token = $this->generate_token();
 
 			if ($this->perms->auth('topic_global')) {
 				if ($topic['topic_modes'] & TOPIC_GLOBAL) {
@@ -377,6 +487,10 @@ class mod extends qsfglobal
 			}
  			return eval($this->template('MOD_EDIT_TOPIC'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->mod_label_controls, $this->lang->invalid_token );
+			}
+
 			if ($this->perms->auth('topic_global')) {
 				if (isset($this->post['global_topic']) && !($topic['topic_modes'] & TOPIC_GLOBAL)) {
 					$topic['topic_modes'] |= TOPIC_GLOBAL;

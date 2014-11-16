@@ -195,3 +195,8 @@ function get_filecat(select,link)
 {
    self.location.href = link + '?a=files&cid=' + select.value;
 }
+
+function get_newspost(select,link)
+{
+   self.location.href = link + '?a=newspost&t=' + select.value;
+}

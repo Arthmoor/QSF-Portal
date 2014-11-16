@@ -44,30 +44,19 @@ class jsdata extends qsfglobal
 	function execute()
 	{
 		$this->nohtml = true;
-		
+
 		$json = new Services_JSON();
-		
+
 		if (!isset($this->get['data'])) $this->get['data'] = '';
-		
+
 		$results = null;
-		
+
 		switch ($this->get['data']) {
 		case 'bbcode':
 			$results = array();
-			$results['clickablesmilies'] = array();
 			$results['buttons'] = array();
 			$results['lang'] = $this->lang;
-			
-			// Load smilies
-			$replace = $this->db->query("SELECT replacement_search, replacement_replace
-				FROM %preplacements
-				WHERE replacement_type = 'emoticon'
-				AND replacement_clickable = 1
-				ORDER BY LENGTH(replacement_search) DESC");
-			while ($r = $this->db->nqfetch($replace)) {
-				$results['clickablesmilies'][$r['replacement_search']] = "./skins/{$this->skin}/emoticons/{$r['replacement_replace']}";
-			}
-			
+
 			// Load button data
 			$this->lang->bbcode();
 			$results['buttons'][] = array(
@@ -131,8 +120,15 @@ class jsdata extends qsfglobal
 				'action' => 'bbCode'
 				);
 			$results['buttons'][] = array(
+				'tag' => 'codebox',
+				'keynum' => 77, // m
+				'title' => $this->lang->bbcode_code2,
+				'value' => $this->lang->bbcode_code2,
+				'action' => 'bbCode'
+				);
+			$results['buttons'][] = array(
 				'tag' => 'quote',
-				'keynum' => 81, // q
+				'keynum' => 80, // q
 				'title' => $this->lang->bbcode_quote,
 				'value' => $this->lang->bbcode_quote1,
 				'action' => 'bbCode'
@@ -145,22 +141,10 @@ class jsdata extends qsfglobal
 				'action' => 'bbCode'
 				);
 			$results['buttons'][] = array(
-				'tag' => 'gvideo',
-				'title' => $this->lang->bbcode_google,
-				'value' => $this->lang->bbcode_google,
-				'action' => 'bbCode'
-				);
-			$results['buttons'][] = array(
 				'tag' => 'youtube',
 				'title' => $this->lang->bbcode_youtube,
 				'value' => $this->lang->bbcode_youtube,
 				'action' => 'bbcURL'
-				);
-			$results['buttons'][] = array(
-				'tag' => 'bcove',
-				'title' => $this->lang->bbcode_brightcove,
-				'value' => $this->lang->bbcode_brightcove,
-				'action' => 'bbCode'
 				);
 			$results['buttons'][] = array(
 				'tag' => 'url',

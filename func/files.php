@@ -374,16 +374,11 @@ class files extends qsfglobal
 
 		if ($this->get['f'] == 'deny') {
 			$id = intval( $this->get['fid'] );
-			// if(!isset($this->post['submit'] ) )
-			//	return eval($this->template('FILE_DENY') );
 			
 			if($getUpdate)
 				return $this->deny_update($id);
 			$file = $this->db->fetch( 'SELECT file_submitted FROM %pfiles WHERE file_id=%d', $id );
 			$name = $this->remove_file($id);
-
-			// $message = "Thank you for submitting your file, it was however denied for the following reason: ".$this->post['reason'];
-			// $this->systemPM($file['file_submitted'], "Your file submission was denied.", $message);
 
 			$this->sets['code_approval']--;
 			$this->write_sets();
@@ -838,8 +833,7 @@ class files extends qsfglobal
 	function deny_update($uid)
 	{
 		$update = $this->db->fetch( 'SELECT update_md5name, update_updater FROM %pupdates WHERE update_id=%d', $uid );
-		// $message = "Thank you for submitting your file update, it was however denied for the following reason: ".$this->post['reason'];
-		// $this->systemPM($update['update_updater'], "Your file update was denied.", $message);
+
 		@unlink('./updates/' . $update['update_md5name']);
 
 		$this->sets['code_approval']--;

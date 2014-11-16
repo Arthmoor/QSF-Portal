@@ -68,45 +68,62 @@ class register extends qsfglobal
 	function registration()
 	{
 		if (!isset($this->post['submit'])) {
-			if ($this->sets['register_image']) {
-				$imagesrc = $this->create_image();
-				$image = eval($this->template('REGISTER_IMAGE'));
-			} else {
-				$image = null;
-			}
+			$math = '';
 			$tos = $this->db->fetch('SELECT settings_tos FROM %psettings');
 			$tos_text = $this->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
-
 			$tos_text .= '<hr>';
 
 			$tos_files = $this->db->fetch('SELECT settings_tos_files FROM %psettings');
 			$tos_text .= $this->format( $tos_files['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
 
+			$token = $this->generate_token();
+
+			if ($this->sets['register_image']) {
+				$type = mt_rand(1,3);
+				$num1 = mt_rand();
+				$num2 = mt_rand();
+				$answer = 0;
+
+				switch( $type )
+				{
+					case 1: $answer = $num1 + $num2; $op = '+'; break;
+					case 2: $answer = $num1 - $num2; $op = '-'; break;
+					case 3: $answer = $num1 * $num2; $op = '*'; break;
+				}
+				$math_prompt = $this->lang->register_what_is . " $num1 $op $num2 ?";
+
+				$math = eval($this->template('REGISTER_IMAGE'));
+				$_SESSION['answer'] = $answer;
+			}
 			$_SESSION['allow_register'] = true;
 
 			return eval($this->template('REGISTER_MAIN'));
 		} else {
+			if (!isset($_SESSION['allow_register'])) {
+				// They must allow sessions to register! The session can only be set by loading the form
+				return $this->message($this->lang->register_reging, $this->lang->register_cookie_required);
+			}
+
 			// Make sure the nasty bots who are deliberately not setting this stuff don't trigger a swarm of error emails!
+			if ($this->sets['register_image']) {
+				if ( !isset( $this->post['user_math'] ) )
+					return $this->message( $this->lang->register_reging, $this->lang->register_math_fail );
+
+				$math = $this->post['user_math'];
+
+				if( $math != $_SESSION['answer'] )
+					return $this->message( $this->lang->register_reging, $this->lang->register_math_fail );
+			}
+
 			$username = isset($this->post['desuser']) ? $this->post['desuser'] : '';
 			$email    = isset($this->post['email']) ? $this->post['email'] : '';
 			$pass     = isset($this->post['passA']) ? $this->post['passA'] : '';
 			$pass2    = isset($this->post['passB']) ? $this->post['passB'] : '';
 
-			if ($this->sets['register_image']) {
-				if( isset($this->post['imagetext']) ) {
-					$image = strtoupper($this->post['imagetext']);
-				} else {
-					error(QUICKSILVER_NOTICE, "BAD BOT! You know better. But if you're a user you shoudln't be seeing this unless your browser malfunctioned.");
-				}
-			} else {
-				$image = '-';
-			}
-
 			if ((trim($username) == '')
 			|| (trim($email) == '')
 			|| (trim($pass) == '')
-			|| (trim($pass2) == '')
-			|| (trim($image) == '')) {
+			|| (trim($pass2) == '')) {
 				return $this->message($this->lang->register_reging, $this->lang->register_fields);
 			}
 
@@ -117,17 +134,7 @@ class register extends qsfglobal
 			if (!isset($this->post['terms'])) {
 				return $this->message($this->lang->register_tos, $this->lang->register_tos_not_agree);
 			}
-
-			if ($this->sets['register_image']) {
-				if (md5("{$this->sets['db_pass']}{$this->sets['mostonlinetime']}$image") != $this->post['imagestring']) {
-					return $this->message($this->lang->register_reging, $this->lang->register_image_invalid);
-				}
-			}
-			
-			if (!isset($_SESSION['allow_register'])) {
-				// They must allow sessions to register! The session can only be set by loading the form
-				return $this->message($this->lang->register_reging, $this->lang->register_cookie_required);
-			}
+		
 			// Do some quick checks to prevent flooding registration
 			if (isset($_SESSION['last_register']) && $_SESSION['last_register'] > ($this->time - $this->sets['flood_time'])) {
 				return $this->message($this->lang->register_reging, $this->lang->register_flood);

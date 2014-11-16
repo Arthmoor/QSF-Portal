@@ -320,6 +320,12 @@ class post extends qsfglobal
 
 					$joined = $this->mbdate(DATE_ONLY_LONG, $this->user['user_joined']);
 
+					$uid = $this->user['user_id'];
+					$uname = $this->user['user_name'];
+					$utitle = $this->user['user_title'];
+					$utitleicon = $this->user['membertitle_icon'];
+					$gname = $this->user['group_name'];
+					$uposts = $this->user['user_posts'];
 					$Poster_Info = eval($this->template('POST_POSTER_MEMBER'));
 				}
 
@@ -392,7 +398,7 @@ class post extends qsfglobal
 
 			$msg_icons = $this->htmlwidgets->get_icons($icon);
 			$posticons = eval($this->template('POST_MESSAGE_ICONS'));
-			$smilies   = eval($this->template('POST_CLICKABLE_SMILIES'));
+			$smilies   = $this->bbcode->generate_emote_links();
 			$post_options = eval($this->template('POST_OPTIONS'));
 
 			if ($this->perms->auth('post_attach', $this->get['f'])) {

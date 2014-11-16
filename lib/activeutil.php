@@ -33,7 +33,7 @@ if (!defined('QUICKSILVERFORUMS')) {
  * @author Geoffrey Dunn <geoff@warmage.com>
  * @since 1.2
  **/
-class activeutil extends htmltools
+class activeutil extends forumutils
 {
 	var $activeUsers    = array();
 	var $doneUpdate     = false;
@@ -49,7 +49,7 @@ class activeutil extends htmltools
 	 **/
 	function activeutil(&$qsf)
 	{
-		parent::htmltools($qsf);
+		parent::forumutils($qsf);
 		
 		$this->get = &$qsf->get;
 		$this->user_id = $qsf->user['user_id'];

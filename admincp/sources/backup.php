@@ -34,10 +34,10 @@ if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
 require_once $set['include_path'] . '/admincp/admin.php';
 
 /**
- * Database Backup
+ * Database backup
  *
- * @author Aaron Smith-Hayes <davionkalhen@gmail.com>
- * @since 1.3.3
+ * @author Jason Warner <jason@mercuryboard.com>
+ * @since 1.0.2
  **/
 class backup extends admin
 {
@@ -76,15 +76,24 @@ class backup extends admin
 	 * Generate a backup
 	 *
 	 * @author Aaron Smith-Hayes <davionkalhen@gmail.com>
-	 * @since 1.3.3
+	 * @since 1.3.2
 	 * @return string HTML
 	 **/
 	function create_backup()
 	{
-		if(!isset($this->post['submit'] ) )
+		if(!isset($this->post['submit'] ) ) {
+			$token = $this->generate_token();
 			return eval($this->template('ADMIN_BACKUP'));
+		}
 
-		$filename = "backup_".$this->version."-".date('y-m-d-H-i-s').".sql";
+		if( !$this->is_valid_token() ) {
+			return $this->message( $this->lang->backup_create, $this->lang->invalid_token );
+		}
+
+		srand();
+		$mcookie = sha1( crc32( rand() ) );
+
+		$filename = 'backup_'.$this->version.'-'.date('y-m-d-H-i-s').'-'.$mcookie.'.sql';
 		$options = "";
 
 		foreach($this->post as $key => $value )
@@ -96,25 +105,49 @@ class backup extends admin
 
 		$tables = implode( ' ', $this->get_db_tables() );
 
-		$mbdump = "mysqldump ".$options." --password=".$this->db->pass." --host=".$this->db->host." --user=".$this->db->user;
+		$mbdump = "mysqldump ".$options." -p --host=".$this->db->host." --user=".$this->db->user;
 		$mbdump .= " --result-file='../packages/".$filename."' ".$this->db->db." ".$tables;
 
-		if( ($fp = popen($mbdump, "r") ) === false )
+		$fds = array(
+				0 => array( 'pipe', 'r' ),
+				1 => array( 'pipe', 'w' ),
+				2 => array( 'pipe', 'w' )
+				);
+
+		$pipes = NULL;
+
+		$proc = proc_open( $mbdump, $fds, $pipes );
+		if( $proc === false || !is_resource( $proc ) )
 			return $this->message($this->lang->backup_create, $this->lang->backup_failed);
 
-		$buf = "";
-		while( $c = fgetc($fp) )
-			$buf .= $c;
-		pclose($fp);
-		$this->chmod("../packages/".$filename, 0777);
-		return $this->message($this->lang->backup_create, $this->lang->backup_created ." ../packages/".$filename."<br />". $this->lang->backup_output .": ".$buf, $filename, "../packages/".$filename);
+		fwrite( $pipes[0], $this->db->pass . PHP_EOL );
+		fclose( $pipes[0] );
+
+		$stdout = stream_get_contents( $pipes[1] );
+		fclose( $pipes[1] );
+		$stderr = stream_get_contents( $pipes[2] );
+		fclose( $pipes[2] );
+
+
+		$retval = proc_close( $proc );
+
+		if ( 0 != $retval )
+		{
+			return $this->message($this->lang->backup_create, $this->lang->backup_failed . '<br />' . $stderr);
+		}
+
+		$buf = $stdout . $stderr;
+
+		$this->chmod("../packages/".$filename, 0440);
+		$backup = sprintf( $this->lang->backup_created, "../packages/" );
+		return $this->message($this->lang->backup_create, $backup."<br /><br />". $this->lang->backup_output .": ".$buf, $filename, "../packages/".$filename);
 	}
 
 	/**
 	 * Restore a backup
 	 *
 	 * @author Aaron Smith-Hayes <davionkalhen@gmail.com>
-	 * @since 1.3.3
+	 * @since 1.3.2
 	 * @return string HTML
 	 **/
 	function restore_backup()
@@ -124,6 +157,7 @@ class backup extends admin
 			if ( ($dir = opendir("../packages") ) === false )
 				return $this->message($this->lang->backup_restore, $this->lang->backup_no_packages);
 
+			$token = $this->generate_token();
 			$backups = array();
 			while( ($file = readdir($dir) ) )
 			{
@@ -150,13 +184,45 @@ class backup extends admin
 		if(!file_exists("../packages/".$this->get['restore']) )
 			return $this->message($this->lang->backup_restore, $this->lang->backup_noexist);
 
-		$mbimport = "mysql --password=".$this->db->pass." --host=".$this->db->host." --user=".$this->db->user." ".$this->db->db." < ../packages/".$this->get['restore'];
-		if( ($fp = popen($mbimport, "r") ) === false )
+		if( !$this->is_valid_token() ) {
+			return $this->message( $this->lang->backup_create, $this->lang->invalid_token );
+		}
+
+		$mbimport = "mysql -p --host=".$this->db->host." --user=".$this->db->user." ".$this->db->db;
+
+		$fds = array(
+				0 => array( 'pipe', 'r' ),
+				1 => array( 'pipe', 'w' ),
+				2 => array( 'pipe', 'w' )
+				);
+
+		$pipes = NULL;
+
+		$proc = proc_open( $mbimport, $fds, $pipes );
+
+		if( $proc === false || !is_resource( $proc ) )
 			return $this->message($this->lang->backup_restore, $this->lang->backup_import_fail);
 
-		$output = "";
-		while($c = fgetc($fp) )
-			$output .= $c;
+		fwrite( $pipes[0], $this->db->pass . PHP_EOL );
+		sleep( 10 );// this is bad and buggy if the mysql server is under load/crap
+		fwrite( $pipes[0], '\\.  ../packages/' . $this->get['restore'] . PHP_EOL );
+		fclose( $pipes[0] );
+
+		$stdout = stream_get_contents( $pipes[1] );
+		fclose( $pipes[1] );
+		$stderr = stream_get_contents( $pipes[2] );
+		fclose( $pipes[2] );
+
+
+		$retval = proc_close( $proc );
+
+		if ( 0 != $retval )
+		{
+			return $this->message($this->lang->backup_restore, $this->lang->backup_import_fail . '<br />' . $stderr);
+		}
+
+		$output = $stdout . $stderr;
+
 		return $this->message($this->lang->backup_restore, $this->lang->backup_restore_done ."<br />". $this->lang->backup_output .": ".$output);
 	}
 }

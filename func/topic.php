@@ -578,6 +578,7 @@ class topic extends qsfglobal
 
 		// Quickreply
 		$this->lang->post();
+		$smilies = $this->bbcode->generate_emote_links();
 		$quickreply = eval($this->template('TOPIC_QUICKREPLY'));
 
 		return eval($this->template('TOPIC_MAIN'));

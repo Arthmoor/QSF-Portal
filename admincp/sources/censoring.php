@@ -57,7 +57,7 @@ class censoring extends admin
 			$words = null;
 			$token = $this->generate_token();
 
-			$query = $this->db->query("SELECT * FROM %preplacements WHERE replacement_type='censor' ORDER BY replacement_id");
+			$query = $this->db->query("SELECT * FROM %preplacements ORDER BY replacement_id");
 			while ($word = $this->db->nqfetch($query))
 			{
 				$words .= str_replace('(.*?)', '*', $word['replacement_search']) . "\n";
@@ -75,13 +75,13 @@ class censoring extends admin
 			$words = str_replace('*', '(.*?)', $words);
 			$words = explode("\n", $words);
 
-			$this->db->query("DELETE FROM %preplacements WHERE replacement_type='censor'");
+			$this->db->query("TRUNCATE TABLE %preplacements");
 
 			foreach ($words as $word)
 			{
 				$word = trim($word);
 				if ($word) {
-					$this->db->query("INSERT INTO %preplacements (replacement_search, replacement_replace, replacement_type) VALUES ('%s', '', 'censor')", $word);
+					$this->db->query("INSERT INTO %preplacements (replacement_search) VALUES ('%s')", $word);
 				}
 			}
 

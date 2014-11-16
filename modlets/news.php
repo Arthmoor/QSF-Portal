@@ -92,13 +92,13 @@ class news extends modlet
 
 		// Make simple links to the rest.
 		if( $x == 5 ) {
-			$items .= $this->qsf->lang->news_previous . "<br />";
-			$items .= "<ul>";
+			$items .= "<select class=\"select\" onchange=\"get_newspost(this,'{$this->qsf->self}')\">";
+			$items .= "<option value=\"\">{$this->qsf->lang->news_previous}</option>";
 			while( $row = $this->qsf->db->nqfetch($result) )
 			{
-				$items .= "<li><a href=\"{$this->qsf->self}?a=newspost&amp;t={$row['topic_id']}\">{$row['topic_title']}</a></li>";
+				$items .= "<option value=\"{$row['topic_id']}\">{$row['topic_title']}</option>";
 			}
-			$items .= "</ul>";
+			$items .= "</select>";
 		}
 		return $items;
 	}

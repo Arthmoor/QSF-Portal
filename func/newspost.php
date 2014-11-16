@@ -151,6 +151,7 @@ class newspost extends qsfglobal
 
 		$request_uri = $this->self . "?" . $this->query . "#p" . ++$pos;
 
+		$smilies = $this->bbcode->generate_emote_links();
 		return eval($this->template('NEWS_POST'));
 	}
 }

@@ -199,7 +199,7 @@ class pm extends qsfglobal
 			}
 			$this->templater->add_templates('post');
 			$this->lang->post();
-			$smilies   = eval($this->template('POST_CLICKABLE_SMILIES'));
+			$smilies   = $this->bbcode->generate_emote_links();
 
 			return eval($this->template('PM_SEND'));
 		} else {

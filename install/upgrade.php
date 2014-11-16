@@ -161,7 +161,7 @@ class upgrade extends qsfglobal
 			// Check the default skin still exists
 			$result = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='default'");
 			if (!$result) {
-				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Blue Comet', 'default')");
+				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Ashlander3', 'default')");
 				$full_template_list = true;
 			}
 			
@@ -174,7 +174,7 @@ class upgrade extends qsfglobal
 				$skin = $row['skin_dir'];
 
 				// QSF or MB default skin in default location
-				if (($row['skin_name'] == 'Blue Comet' || $row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
+				if (($row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
 					if ($full_template_list || $template_list) {
 						if ($full_template_list) {
 							$template_list = null;

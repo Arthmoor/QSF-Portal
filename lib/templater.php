@@ -27,7 +27,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
-require_once $set['include_path'] . '/lib/htmltools.php';
+require_once $set['include_path'] . '/lib/forumutils.php';
 
 /**
  * Templating system
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/lib/htmltools.php';
  * @author Geoffrey Dunn <geoff@warmage.com>
  * @since 1.2
  **/
-class templater extends htmltools
+class templater extends forumutils
 {
 	var $temps   = array();		// Loaded templates @var array
 	var $skin = 'default';		// Skin to select from
@@ -53,11 +53,12 @@ class templater extends htmltools
 	 **/
 	function templater(&$qsf)
 	{
-		parent::htmltools($qsf);
+		parent::forumutils($qsf);
 
 		// Need the template selection
 		$this->skin = $qsf->skin;
 		$this->debug_mode = $qsf->debug_mode;
+
 		// Needed for modlets
 		$this->qsf = &$qsf;
 	}

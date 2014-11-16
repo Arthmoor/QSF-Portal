@@ -410,7 +410,7 @@ else if( $_GET['action'] == 'censor' )
 
    while( $row = $oldboard->db->nqfetch($result) )
    {
-      $qsf->db->query( "INSERT INTO %preplacements (replacement_search, replacement_type) VALUES( '%s', 'censor' )", $row['word'] );
+      $qsf->db->query( "INSERT INTO %preplacements (replacement_search) VALUES( '%s' )", $row['word'] );
       $i++;
    }
 

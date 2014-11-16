@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.4.7';          // QSF Portal version @var string
+	var $version = 'v1.5';            // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -49,7 +49,7 @@ class qsfglobal
 	var $user    = array();           // Information about the user @var array
 	var $sets    = array();           // Settings @var array
 	var $modules = array();           // Module Settings @var array
-
+	var $censor  = array();           // Curse words to filter @var array
 	var $nohtml  = false;             // To display no board wrapper @var bool
 	var $time;                        // The current Unix time @var int
 	var $ip;                          // The user's IP address @var string
@@ -126,7 +126,14 @@ class qsfglobal
 		$this->activeutil = new $this->modules['active']($this);
 
 		$this->templater->init_templates($this->get['a'], $admin);
-		
+
+		$replace = $this->db->query('SELECT * FROM %preplacements ORDER BY LENGTH(replacement_search) DESC');
+
+		while ($r = $this->db->nqfetch($replace))
+		{
+			$this->censor[] = '/' . $r['replacement_search'] . '/i';
+		}
+
 		$this->set_table();
 	}
 	

@@ -655,6 +655,7 @@ class cp extends qsfglobal
 		$pr = $this->db->nqfetch($query);
 		$preview = $this->format($pr['user_signature'], $params);
 		$edit = $pr['user_signature'];
+		$smilies = $this->bbcode->generate_emote_links();
 		return eval($this->template('CP_EDIT_SIG'));
 	}
 	 

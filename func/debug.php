@@ -31,7 +31,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
-$this->nohtml = 1;
+$this->nohtml = true;
 
 $percent  = round(($this->db->querytime / $totaltime) * 100, 1);
 if (($query = substr($this->query, 0, -12)))

@@ -233,7 +233,7 @@ class perms extends admin
 			}
 			$out .= "
 			<tr>
-				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}' /><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
 			</tr>";
 			$out .= $this->etable . "</form>";
 			return $out;

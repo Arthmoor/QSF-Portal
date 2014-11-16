@@ -222,11 +222,7 @@ $queries[] = "DROP TABLE IF EXISTS %preplacements";
 $queries[] = "CREATE TABLE %preplacements (
   replacement_id smallint(3) unsigned NOT NULL auto_increment,
   replacement_search varchar(50) NOT NULL default '',
-  replacement_replace varchar(50) NOT NULL default '',
-  replacement_type varchar(15) NOT NULL default '',
-  replacement_clickable tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (replacement_id),
-  KEY `Type` (replacement_type)
+  PRIMARY KEY  (replacement_id)
 ) ENGINE=MyISAM";
 
 $queries[] = "DROP TABLE IF EXISTS %psettings";
@@ -452,20 +448,8 @@ $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, mem
 $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon) VALUES (4, 'Puddle', 250, '4.png')";
 $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon) VALUES (5, 'Pool', 500, '5.png')";
 
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (1, 'shit', '', 'censor', 0)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (2, 'fuck', '', 'censor', 0)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (3, ';)', 'wink.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (4, ':thinking:', 'thinking.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (5, ':p', 'tongue.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (6, ':rolleyes:', 'rolleyes.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (7, ':(', 'sad.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (8, ':D', 'smile.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (9, ':)', 'smirk.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (10, ':stare:', 'stare.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (11, ':o', 'surprised.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (12, ':mad:', 'mad.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (13, 'B)', 'cool.gif', 'emoticon', 1)";
-$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, replacement_replace, replacement_type, replacement_clickable) VALUES (14, ':cyclops:', 'cyclops.gif', 'emoticon', 1)";
+$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search) VALUES (1, 'shit')";
+$queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search) VALUES (2, 'fuck')";
 
 // Build settings step by step
 $sets = array();

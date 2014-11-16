@@ -392,10 +392,17 @@ class templates extends admin
 			}
 			if( empty($skin_box) && empty($new_skin_box) )
 				$new_skin_box = $this->lang->skin_none;
+
+			$token = $this->generate_token();
 			return $this->message($this->lang->install_skin, eval($this->template('ADMIN_INSTALL_SKIN')));
 		} else if (isset($this->get['skindetails'])) {
 			// Display some preview information on the skin
+			$token = $this->generate_token();
 		} else if (isset($this->get['newskin'])) {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->install_skin, $this->lang->invalid_token );
+			}
+
 			// Use new method of install
 
 			$tarTool = new archive_tar();
@@ -571,7 +578,7 @@ class templates extends admin
 			fwrite($xmlFile, "  </files>\n");
 			fwrite($xmlFile, "  <templates>\n");
 			
-        	$query = $this->db->query("SELECT * FROM %ptemplates WHERE template_skin = '%s'", $skin['skin_dir']);
+        	$query = $this->db->query("SELECT * FROM %ptemplates WHERE template_skin = '%s' ORDER BY template_name", $skin['skin_dir']);
 	        while ($row = $this->db->nqfetch($query))
 			{
 				fwrite($xmlFile, "    <template><set>{$row['template_set']}</set><name>{$row['template_name']}</name>\n");
@@ -901,6 +908,7 @@ class templates extends admin
 				<input type='submit' name='submit' value='{$this->lang->delete_template}' />
 				</div></form>");
 		} elseif( !isset($this->get['i'])) {
+			$token = $this->generate_token();
 			$this->iterator_init('tablelight', 'tabledark');
 
 			$query = $this->db->query("SELECT template_displayname, template_description, template_name, template_html
@@ -972,7 +980,7 @@ class templates extends admin
 				if ($var == 'MAIN_COPYRIGHT' ) {
 					if (stristr($val, 'MercuryBoard') === false ||
 						stristr($val, '$qsf->name') === false ||
-						stristr($val, 'http://www.quicksilverforums.com') === false)
+						stristr($val, 'Quicksilver Forums') === false)
 					{
 						$evil = 1;
 						continue;
@@ -981,7 +989,7 @@ class templates extends admin
 				if ($var == 'ADMIN_COPYRIGHT' ) {
 					if (stristr($val, 'MercuryBoard') === false ||
 						stristr($val, '$admin->name') === false ||
-						stristr($val, 'http://www.quicksilverforums.com') === false)
+						stristr($val, 'Quicksilver Forums') === false)
 					{
 						$evil = 1;
 						continue;

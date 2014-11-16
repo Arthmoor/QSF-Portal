@@ -175,10 +175,6 @@ $title = isset($qsf->title) ? $qsf->title : $qsf->sets['forum_name'];
 $time_now  = explode(' ', microtime());
 $time_exec = round($time_now[1] + $time_now[0] - $time_start, 4);
 
-if (isset($qsf->get['debug'])) {
-	$output = $qsf->show_debug($server_load, $time_exec);
-}
-
 if (!$qsf->nohtml) {
 	ob_start('ob_gzhandler');
 
@@ -196,13 +192,25 @@ if (!$qsf->nohtml) {
 	}
 	$servertime = $qsf->mbdate( DATE_LONG, $qsf->time, false );
 	$copyright = eval($qsf->template('MAIN_COPYRIGHT'));
-	$quicksilverforums = $output;
-	echo eval($qsf->template('MAIN'));
+
+	if (isset($qsf->get['debug'])) {
+		$dumpthis = eval($qsf->template('MAIN'));
+		$output = $qsf->show_debug($server_load, $time_exec);
+		echo $output;
+	} else {
+		$quicksilverforums = $output;
+		echo eval($qsf->template('MAIN'));
+	}
 
 	@ob_end_flush();
 	@flush();
 } else {
-	echo $output;
+	if (isset($qsf->get['debug'])) {
+		$output = $qsf->show_debug($server_load, $time_exec);
+		echo $output;
+	} else {
+		echo $output;
+	}
 }
 
 // Do post output stuff

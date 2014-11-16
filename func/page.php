@@ -151,8 +151,14 @@ class page extends qsfglobal
 		$nlbox = $page['flags'] & FORMAT_BREAKS ? " checked=\"checked\"" : null;
 		$htmlbox = $page['flags'] & FORMAT_HTMLCHARS ? " checked=\"checked\"" : null;
 
-		if (!isset($this->post['submit']))
+		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
  			return eval($this->template('PAGE_EDIT'));
+		}
+
+		if( !$this->is_valid_token() ) {
+			return $this->message( $this->lang->page_editing, $this->lang->invalid_token );
+		}
 
 		$flags = 0;
 		if( isset( $this->post['flags'] ) )
@@ -180,8 +186,14 @@ class page extends qsfglobal
 		$nl = FORMAT_BREAKS;
 		$html = FORMAT_HTMLCHARS;
 
-		if ( !isset($this->post['submit']) )
+		if ( !isset($this->post['submit']) ) {
+			$token = $this->generate_token();
 			return eval($this->template('PAGE_CREATE'));
+		}
+
+		if( !$this->is_valid_token() ) {
+			return $this->message( $this->lang->page_creating, $this->lang->invalid_token );
+		}
 
 		$flags = 0;
 		if( isset( $this->post['flags'] ) )

@@ -6,7 +6,7 @@
   <description></description>
   <authorname>Skin Exporter</authorname>
   <templates>
-    <template><set>emot_control</set><name>ADMIN_MEMBER_DELETE</name>
+    <template><set>member_control</set><name>ADMIN_MEMBER_DELETE</name>
       <displayname>Delete User</displayname>
       <description>Confirmation form for user deletion</description>
       <html><![CDATA[
@@ -20,21 +20,6 @@
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
-      ]]></html>
-    </template>
-    <template><set>emot_control</set><name>ADMIN_EMOTICONS_ENTRY</name>
-      <displayname>Edit Emoticons - One Entry</displayname>
-      <description>Format of one row on the emoticon editing form</description>
-      <html><![CDATA[
-<span class="emotion">{$data['replacement_search']}</span>
-<span class="emotion">
- <img src="../skins/{$this->skin}/emoticons/{$data['replacement_replace']}" alt="{$data['replacement_replace']}" />
- {$data['replacement_replace']}
-</span>
-<span class="clickable">{$clickable}</span>
-<span class="edit"><a href="$this->self?a=emot_control&amp;s=edit&amp;edit={$data['replacement_id']}">{$this->lang->edit}</a></span>
-<span class="edit"><a href="$this->self?a=emot_control&amp;s=edit&amp;delete={$data['replacement_id']}">{$this->lang->delete}</a></span>
-<p class="list_line"></p>
       ]]></html>
     </template>
     <template><set>forums</set><name>ADMIN_FORUM_DELETE</name>
@@ -229,17 +214,6 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="../skins/{$admin->skin}/images/icons/emoticon_smile.png" alt="" />
-     {$admin->lang->admin_emoticons}
-    </div>
-    <span>
-     <a href="{$admin->self}?a=emot_control&amp;s=import">{$admin->lang->admin_install_emoticons}</a>
-     <a href="{$admin->self}?a=emot_control&amp;s=add">{$admin->lang->admin_add_emoticons}</a>
-     <a href="{$admin->self}?a=emot_control&amp;s=edit">{$admin->lang->admin_edit_emoticons}</a>
-    </span>
-   </div>
-   <div class="block">
-    <div class="title">
      <img src="../skins/{$admin->skin}/images/icons/help.png" alt="" />
      {$admin->lang->admin_help}
     </div>
@@ -252,7 +226,8 @@
    <div class="block">
     <div class="title">
      <img src="../skins/{$admin->skin}/images/icons/database_gear.png" alt="" />
-     {$admin->lang->admin_db}</div>
+     {$admin->lang->admin_db}
+    </div>
     <span>
      <a href="{$admin->self}?a=backup&amp;s=create">{$admin->lang->admin_db_backup}</a>
      <a href="{$admin->self}?a=backup&amp;s=restore">{$admin->lang->admin_db_restore}</a>
@@ -295,6 +270,7 @@
  <textarea onchange="this.style.backgroundColor='#FCFCF8'; changed=true" name="code[{$data['template_name']}]" class="template_text" rows="18" cols="80" wrap="off">{$data['template_html']}</textarea>
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submitTemps" value="{$this->lang->edit_templates}" />
 {$this->etable}
       ]]></html>
@@ -349,42 +325,6 @@
 <IF ($this->get['a'] == 'perms') || ($this->get['a'] == 'file_perms')></table></IF></div>
       ]]></html>
     </template>
-    <template><set>emot_control</set><name>ADMIN_EMOTICON_EDIT</name>
-      <displayname>Edit Emoticons</displayname>
-      <description>Edit the existing emoticons</description>
-      <html><![CDATA[
-<form action="{$this->self}?a=emot_control&amp;s=edit&amp;edit={$this->get['edit']}" method="post">
-{$this->table}
- <div class="title">{$this->lang->emote}</div>
- <span class="head">
-  <span class="emotion">{$this->lang->emote_text}</span>
-  <span class="emotion">{$this->lang->emote_image}</span>
-  <span class="clickable">{$this->lang->emote_clickable}</span>
-  <span class="edit">&nbsp;</span>
-  <span class="edit">&nbsp;</span>
- </span>
- {$out}
-{$this->etable}
-</form>
-      ]]></html>
-    </template>
-    <template><set>emot_control</set><name>ADMIN_EMOTICONS_ENTRY_MOD</name>
-      <displayname>Edit Emoticons - Modify</displayname>
-      <description>Form for modifying a row in the emoticon table</description>
-      <html><![CDATA[
-<span class="emotion"><input name="new_search" value="{$data['replacement_search']}" /></span>
-<span class="emotion">
- <img src="../skins/{$this->skin}/emoticons/{$data['replacement_replace']}" alt="{$data['replacement_replace']}" />
- <select name="new_replace" onchange="document.emot_preview.src='../skins/{$this->skin}/emoticons/'+this.options[selectedIndex].value">
-  {$replacement}
- </select>
-</span>
-<span class="clickable"><input class="check" type="checkbox" name="new_click"{$clickable} /></span>
-<span class="edit"><input type="submit" name="submit" value="{$this->lang->edit}" /></span>
-<span class="edit"><a href="{$this->self}?a=emot_control&amp;s=edit&amp;delete={$data['replacement_id']}">{$this->lang->delete}</a></span>
-<p class="list_line"></p>
-      ]]></html>
-    </template>
     <template><set>templates</set><name>ADMIN_INSTALL_SKIN</name>
       <displayname>Install Skin</displayname>
       <description>Form for selecting a skin to install</description>
@@ -398,6 +338,7 @@
  <select name="install">
   {$skin_box}
  </select>
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->install_skin}" />
 </form>
 </IF>
@@ -667,9 +608,15 @@
  </span>
 
  <div class="signature">{$preview}</div>
- <p class="line"></p>
+ <p class="line"></p><br />
 
- <span class="field" id="clickablesmilies">&nbsp;</span>
+ <span class="field">
+  <script type="text/javascript">
+  <!--
+   var textarea = document.getElementById('bbcode');
+  // -->
+  </script>
+ </span>
  <span class="form">
   <textarea name="sig" id="bbcode" rows="8" cols="10">{$edit}</textarea>
  </span>
@@ -1274,6 +1221,7 @@
  {$this->lang->confirm1} {$name} {$this->lang->confirm2} {$template}
  {$this->etable}
  {$list}
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->delete_template}" />
  <input type="hidden" name="submitTemp" value="{$template_name}" />
 </form>
@@ -1294,8 +1242,9 @@
 
 <div id="footer">
  {$admin->lang->powered} <a href="http://www.qsfportal.com" class="small"><b>{$admin->name}</b></a> [{$admin->version}] &copy; 2006-2010 The {$admin->name} Development Team<br />
- {$admin->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2009 The Quicksilver Forums Development Team<br />
- {$admin->lang->based_on} <a href="http://www.mercuryboard.com" class="small"><b>MercuryBoard</b></a> &copy; 2001-2008 The Mercury Development Team<br /> Ashlander 3 {$admin->lang->based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a><br />
+ {$admin->lang->based_on} <a href="http://code.google.com/p/quicksilverforums/" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2009 The Quicksilver Forums Development Team<br />
+ {$admin->lang->based_on} <a href="http://www.mercuryboard.com" class="small"><b>MercuryBoard</b></a> &copy; 2001-2008 The Mercury Development Team<br />
+ Blue Comet {$admin->lang->based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a><br />
  {$time_exec} seconds - {$admin->db->querycount} queries - {$server_load} load
 </div>
       ]]></html>
@@ -1397,8 +1346,8 @@
  <span class="form"><textarea name="html" rows="30" cols="70"></textarea></span>
  <p class="line"></p>
 
- <input type="hidden" name="template" value="$template" />
  <input type="hidden" name="token" value="$token" />
+ <input type="hidden" name="template" value="{$template}" />
  <input type="hidden" name="form" value="true" />
  <input type="submit" value="{$this->lang->template_add}" />
  <input type="reset" value="{$this->lang->template_clear}" />
@@ -1442,7 +1391,10 @@
       <description>The active users table formatting and generalized code.</description>
       <html><![CDATA[
 {$this->table}
- <div class="title">{$this->lang->active_users}</div>
+ <div class="title">
+  <img src="./skins/{$this->skin}/images/icons/members.png" alt="" />
+  {$this->lang->active_users}
+ </div>
  <span class="head">
   <span class="icon">&nbsp;</span>
   <span class="third">{$this->lang->active_user}</span>
@@ -1804,7 +1756,7 @@
       <description>Format the look of the copyright on the board.&lt;br&gt;&lt;br&gt;&lt;b&gt;Warning: Modification to anything other than the style of this copyright will result in a violation of your terms of service&lt;/b&gt;</description>
       <html><![CDATA[
  {$qsf->lang->powered} <a href="http://www.qsfportal.com">{$qsf->name}</a> &copy; 2006-2010 The {$qsf->name} Development Team<br />
- {$qsf->lang->based_on} <a href="http://www.quicksilverforums.com">Quicksilver Forums</a> &copy; 2005-2009 The Quicksilver Forums Development Team<br />
+ {$qsf->lang->based_on} <a href="http://code.google.com/p/quicksilverforums/">Quicksilver Forums</a> &copy; 2005-2009 The Quicksilver Forums Development Team<br />
  {$qsf->lang->based_on} <a href="http://www.mercuryboard.com">MercuryBoard</a> &copy; 2001-2008 The Mercury Development Team<br />
  Blue Comet {$qsf->lang->based_on} HForumv3.1 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a>
  100% Valid &lsaquo;&rsaquo; <a href="http://validator.w3.org/check?uri=referer">XHTML1.1</a> <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
@@ -1870,7 +1822,7 @@
  <IF $member['user_email_show'] && $this->perms->auth('email_use')>
   <span class="button"><a class="email" href="mailto:{$member['user_email']}" title="{$this->lang->members_email_member}">{$this->lang->email}</a></span>
  </IF>
- <IF (!$member['user_email_show'] && $member['user_email_form']) && $this->perms->auth('email_use')>
+ <IF (!$member['user_email_show'] && $member['user_email_form'] && $this->perms->auth('email_use'))>
   <span class="button"><a class="email" href="{$this->self}?a=email&amp;to={$member['user_id']}" title="{$this->lang->members_email_member}">{$this->lang->email}</a></span>
  </IF>
  <IF ($member['user_pm'] != null)>
@@ -1976,8 +1928,9 @@
   <input class="check" type="radio" name="operation" value="delete" id="delete" checked="checked" /> <label for="delete">{$this->lang->mod_label_topic_move_complete}</label><br />
   <input class="check" type="radio" name="operation" value="lock" id="move" /> <label for="move">{$this->lang->mod_label_topic_move_link}</label>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -2004,6 +1957,7 @@
  <p class="line"></p>
 
  {$global_topic}
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -2022,11 +1976,12 @@
       <displayname>Edit Post Form</displayname>
       <description>Edit the form that edits an existing post</description>
       <html><![CDATA[
+{$preview}
 <form action="{$this->self}?a=mod&amp;s=edit_post&amp;p={$this->get['p']}" method="post" name="mbpost" enctype="multipart/form-data">
 {$this->table}
  <div class="title">
   <img src="./skins/{$this->skin}/images/icons/comment_edit.png" alt="" />
-  {$this->lang->mod_label_post_edit}
+  {$this->lang->mod_label_post_edit} $topic_title
  </div>
  {$post_box}
  <span class="field">{$this->lang->mod_label_options}</span>
@@ -2036,7 +1991,9 @@
  </span>
  <p class="line"></p>
  {$attach_box}
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
+ <input type="submit" name="preview" value="{$this->lang->post_preview}" />
 {$this->etable}
 </form>
       ]]></html>
@@ -2211,6 +2168,11 @@
  <span class="form">
   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
   <textarea name="message" id="bbcode" rows="12" cols="20">{$msg}</textarea>
+  <script type="text/javascript">
+  <!--
+   var textarea = document.getElementById('bbcode');
+  // -->
+  </script>
  </span>
 
  <p class="line"></p>
@@ -2219,14 +2181,6 @@
  <input type="submit" name="preview" value="{$this->lang->pm_preview}" />
 {$this->etable}
 </form>
-      ]]></html>
-    </template>
-    <template><set>post</set><name>POST_CLICKABLE_SMILIES</name>
-      <displayname>Clickable Smilies</displayname>
-      <description>Table cell for clickable smilies</description>
-      <html><![CDATA[
-{$this->lang->post_msg}<br /><br /><br />
-<span id="clickablesmilies"></span>
       ]]></html>
     </template>
     <template><set>pm</set><name>PM_VIEW</name>
@@ -2306,6 +2260,11 @@
 <span class="form">
  <script type="text/javascript" src="./javascript/postboxplain.js"></script>
  <textarea name="post" id="bbcode" rows="12" cols="60">{$quote}</textarea>
+ <script type="text/javascript">
+ <!--
+  var textarea = document.getElementById('bbcode');
+ // -->
+ </script>
 </span>
 <p class="line"></p>
       ]]></html>
@@ -2656,10 +2615,10 @@
 </span>
 <span class="member_info">
  <img src="./skins/{$this->skin}/images/icons/user_online.png" alt="" />
- <strong><a href="{$this->self}?a=profile&amp;w={$this->user['user_id']}">{$this->user['user_name']}</a></strong>
- <strong>{$this->user['user_title']}</strong>   <img src="./skins/{$this->skin}/images/{$this->user['membertitle_icon']}" alt="{$this->lang->topic_level}" /><br />
- <span class="text">{$this->lang->topic_group}</span>{$this->user['group_name']}<br />
- <span class="text">{$this->lang->topic_posts}</span> {$this->user['user_posts']}<br />
+ <strong><a href="{$this->self}?a=profile&amp;w={$uid}">{$uname}</a></strong><br />
+ <strong>{$utitle}</strong>   <img src="./skins/{$this->skin}/images/{$utitleicon}" alt="{$this->lang->topic_level}" /><br />
+ <span class="text">{$this->lang->topic_group}</span>{$gname}<br />
+ <span class="text">{$this->lang->topic_posts}</span> {$uposts}<br />
  <span class="text">{$this->lang->topic_joined}</span> {$joined}
 </span>
 <p></p>
@@ -3267,7 +3226,7 @@ enable('$init');
 <div class="hidden"><a id="p{$post['post_id']}"></a><IF ($first_unread_post)><a id="unread"></a></IF></div>
 {$this->table}
  <div class="title">
-  <div style="float:left; position:relative;">
+  <div style="float:left;">
    <IF ($post['newpost'])>
     <img src="./skins/{$this->skin}/images/icons/post_new.png" alt="{$this->lang->topic_new_post}" />
    </IF>
@@ -3328,7 +3287,7 @@ enable('$init');
  <img src="./skins/{$this->skin}/images/noavatar.png" alt="" />
 </span>
 <span class="member_info">
- <strong>{$this->lang->topic_guest}</strong> - ({$this->lang->topic_unreg}) IP: {$post['post_ip']}
+ <strong>{$this->lang->topic_guest}</strong> - ({$this->lang->topic_unreg}) {$post['post_ip']}
 </span>
 <p></p>
       ]]></html>
@@ -3403,7 +3362,7 @@ enable('$init');
   <strong>{$this->lang->post_msg}</strong>
  </span>
  <span class="field">
-  <span id="quicksmilies"></span>
+  $smilies
  </span>
  <span class="form">
   <textarea name="post" id="bbcodequick" rows="8" cols="75"></textarea>
@@ -3649,24 +3608,22 @@ function toggleQuickReplyBox()
  <div class="title">{$this->lang->register_reging}</div>
  <span class="field">{$this->lang->register_new_user}</span>
  <span class="form"><input type="text" name="desuser" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->register_email}</span>
  <span class="form"><input type="text" name="email" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->register_passwd}</span>
  <span class="form"><input type="password" name="passA" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->register_confirm_passwd}</span>
  <span class="form"><input type="password" name="passB" size="40" /></span>
-
  <p class="line"></p>
- {$image}
+
+ $math
+
  <IF (!$tos_text)>
   <input type="hidden" name="terms" value="1" />
  <ELSE>
@@ -3680,6 +3637,7 @@ function toggleQuickReplyBox()
 
   <p class="line"></p>
  </IF>
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->register_reg}" />
 {$this->etable}
 </form>
@@ -3782,13 +3740,9 @@ function toggleQuickReplyBox()
       <displayname>Validation Image</displayname>
       <description>The dynamic image used to validate the registrant as human.</description>
       <html><![CDATA[
-<span class="field">{$this->lang->register_image}</span>
-<input type="hidden" name="imagestring" value="{$imagesrc[0]}" />
-<span class="form">
- <img src="{$imagesrc[1]}" alt="{$this->lang->register_image}" />
- <input type="text" name="imagetext" size="50" />
-</span>
-<p class="line"></p>
+ <span class="field">{$this->lang->register_math_ask}: <br /><br />$math_prompt</span>
+ <span class="form"><input type="text" name="user_math" size="50" maxlength="50" value="" /></span>
+ <p class="line"></p>
       ]]></html>
     </template>
     <template><set>settings</set><name>ADMIN_EDIT_DB_SETTINGS</name>
@@ -3932,13 +3886,13 @@ function toggleQuickReplyBox()
  <div class="title">{$this->lang->backup_options}</div>
  <span class="field">{$this->lang->backup_add_complete} INSERT {$this->lang->backup_statements}?</span>
  <span class="form"><input type="checkbox" checked="checked" name="insert" value="1" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->backup_add} DROP TABLE {$this->lang->backup_statements}<a href="#" title="{$this->lang->backup_uncheck}">?</a></span>
  <span class="form"><input type="checkbox" checked="checked" name="droptable" value="1" class="check" /></span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->backup}" class="check" />
 {$this->etable}
 </form>
@@ -4427,6 +4381,18 @@ function toggleQuickReplyBox()
   <br />
   <MODLET news(2)>
 {$this->etable}
+
+<MODLET users_online(true)>
+      ]]></html>
+    </template>
+    <template><set>Main</set><name>MAIN_USERS_VISITED</name>
+      <displayname>MODLET: Users Visited</displayname>
+      <description>The format of the visiting users box.</description>
+      <html><![CDATA[
+<div class="article">
+ <div class="title" style="text-align:center">Today's Visitors: {$date}</div>
+ {$userlist}
+</div>
       ]]></html>
     </template>
     <template><set>Main</set><name>MAIN_USERS</name>
@@ -4497,7 +4463,7 @@ function toggleQuickReplyBox()
       <description>Format of individual category links.</description>
       <html><![CDATA[
 <span class="file_folder">
- <img src="./skins/{$this->skin}/images/icons/folder.png" alt="" />
+ <img src="./skins/{$this->skin}/images/icons/folder.png" height="14" width="14" alt="" />
  <a href="{$this->self}?a=files&amp;cid={$id}">{$name}</a> ({$count})
 </span>
       ]]></html>
@@ -4616,26 +4582,6 @@ function toggleQuickReplyBox()
  <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->files_update_file}" />
 {$this->etable}
-      ]]></html>
-    </template>
-    <template><set>Files</set><name>FILE_DENY</name>
-      <displayname>File denial form</displayname>
-      <description>Form to deny a file upload</description>
-      <html><![CDATA[
-<IF $getUpdate>
-<form method="post" action="{$this->self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={$id}&amp;cid={$this->get['cid']}&amp;u=1">
-<ELSE>
-<form method="post" action="{$this->self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={$id}&amp;cid={$this->get['cid']}">
-</IF>
-{$this->table}
- <div class="title">File Denial Form</div>
- <span class="field">Reason:</span>
- <span class="form"><textarea name="reason" cols="75" rows="6">we did not feel your file was suitable for this site.</textarea></span>
-
- <p class="line"></p>
- <input type="submit" name="submit" value="Deny" />
-{$this->etable}
-</form>
       ]]></html>
     </template>
     <template><set>profile</set><name>PROFILE_UPLOADS</name>
@@ -4775,8 +4721,9 @@ function toggleQuickReplyBox()
    <input type="checkbox" name="flags[]" id="post_breaks" value="{$nl}"{$nlbox} /><label for="post_breaks">Format breaks?</label>
    <input type="checkbox" name="flags[]" id="post_censor" value="{$cn}"{$cnbox} /><label for="post_censor">Censor contents?</label>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -4811,8 +4758,9 @@ function toggleQuickReplyBox()
    <input type="checkbox" name="flags[]" id="post_breaks" value="" /><label for="post_breaks">Format breaks?</label>
    <input type="checkbox" name="flags[]" id="post_censor" value="" /><label for="post_censor">Censor contents?</label>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -4828,7 +4776,7 @@ function toggleQuickReplyBox()
     <img src="./skins/{$this->qsf->skin}/images/icons/login.png" alt="" />
     {$this->qsf->lang->login}
    </div>
-   <input type="hidden" name="request_uri" value="{$this->qsf->self}" />
+   <input type="hidden" name="request_uri" value="{$request_uri}" />
    {$this->qsf->lang->login_user}:<br />
    <input class="input" type="text" name="user" size="17" /><br />
    {$this->qsf->lang->login_pass}:<br />
@@ -4997,14 +4945,15 @@ function toggleQuickReplyBox()
   <script type="text/javascript" src="./javascript/quickquote.js"></script>
   <form action="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" method="post" id="mbpost">
    <div class="title">Post Comment</div>
-   <div id="quicksmilies"></div><br />
-   <span class="form"><textarea class="input" name="post" id="bbcodequick" rows="8" cols="75"></textarea></span>
 
+   <span class="field">
+    $smilies
+   </span>
+   <span class="form"><textarea class="input" name="post" id="bbcodequick" rows="8" cols="75"></textarea></span>
    <p class="line"></p>
 
    <input type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">Convert emoticons into images?</label>
    <input type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">Format MbCode?</label>
-
    <p class="line"></p>
 
    <input type="submit" name="submit" value="{$this->lang->reply}" />

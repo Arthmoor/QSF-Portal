@@ -8,4 +8,4 @@ DATABASES
 seperate mysql specific queries so we can add support for other databases
 
 DOCUMENTATION
-More. More! MORE!
+More. More! MORE! <--- THIS!

@@ -27,7 +27,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
-require_once $set['include_path'] . '/lib/htmltools.php';
+require_once $set['include_path'] . '/lib/forumutils.php';
 
 /**
  * Contains all the functions for generating small pieces of
@@ -36,7 +36,7 @@ require_once $set['include_path'] . '/lib/htmltools.php';
  * @author Geoffrey Dunn <geoff@warmage.com>
  * @since 1.2
  **/
-class htmlwidgets extends htmltools
+class htmlwidgets extends forumutils
 {
 	var $tree    = null;              // The navigational tree @var string
 
@@ -47,7 +47,12 @@ class htmlwidgets extends htmltools
 	 **/
 	function htmlwidgets(&$qsf)
 	{
-		parent::htmltools($qsf);
+		parent::forumutils($qsf);
+
+		$this->modules = &$qsf->modules;
+		$this->lang = &$qsf->lang;
+		$this->self = $qsf->self;
+		$this->skin = $qsf->skin;
 
 		// Need the time for timezone stuff
 		$this->time = &$qsf->time;
