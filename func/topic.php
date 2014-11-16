@@ -566,7 +566,7 @@ class topic extends qsfglobal
 
 		$data = $this->db->fetch("
 			SELECT
-			  a.attach_name, a.attach_file, t.topic_forum
+			  a.attach_name, a.attach_file, a.attach_size, t.topic_forum
 			FROM
 			  %pattach a, %pposts p, %ptopics t
 			WHERE
@@ -580,6 +580,7 @@ class topic extends qsfglobal
 
 			header("Content-type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$data['attach_name']}\"");
+			header("Content-Length: " . $data['attach_size']);
 			readfile('./attachments/' . $data['attach_file']);
 		} else {
 			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);

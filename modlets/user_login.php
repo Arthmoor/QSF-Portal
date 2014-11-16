@@ -24,7 +24,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Create a quicklogin box for users to log in with.
  *
- * @author Roger Libiez [Samson] 2006
+ * @author Roger Libiez [Samson] http://www.iguanadons.net
  * @since 1.3.1
  **/
 class user_login extends modlet

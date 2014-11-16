@@ -161,6 +161,7 @@ class member_control extends admin
 				define('U_INT', 7);
 				define('U_CALLBACK', 8);
 				define('U_TZONE', 9);
+				define('U_IP', 10);
 
 				$cols = array(
 					'user_name'		=> array($this->lang->mc_user_name, U_TEXT, 20),
@@ -197,7 +198,8 @@ class member_control extends admin
 					'user_id'		=> array($this->lang->mc_user_id, U_IGNORE),
 					'user_joined'		=> array($this->lang->mc_user_joined, U_TIME),
 					'user_lastvisit'	=> array($this->lang->mc_user_lastvisit, U_TIME),
-					'user_lastpost'		=> array($this->lang->mc_user_lastpost, U_TIME)
+					'user_lastpost'		=> array($this->lang->mc_user_lastpost, U_TIME),
+					'user_regip'		=> array($this->lang->mc_user_regip, U_IP)
 				);
 
 				foreach ($cols as $var => $data)
@@ -234,6 +236,10 @@ class member_control extends admin
 								$line = $this->lang->no;
 							}
 						}
+						break;
+
+					case U_IP:
+						$line = $val == 0 ? '127.0.0.1' : long2ip($val);
 						break;
 
 					case U_TIME:

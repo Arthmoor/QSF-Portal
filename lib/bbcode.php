@@ -52,41 +52,13 @@ class node
 	 * @param string $attribute The attribute of the opening tag if it exists
 	 * @param node $parent The parent node of the current instance
 	 **/
-	function node( $type, $text = null, $attribute = null, $parent = null )
+	function node( $type, $text = null, $attribute = null, &$parent )
 	{
 		$this->type = $type ? htmlentities($type) : $type;
 		$this->attribute = $attribute ? htmlentities($attribute) : $attribute;
 		$this->text = $text;
 		$this->children = null;
-		$this->parent = $parent; 
-	}
-
-	/**
-	 * Appends a child to the DOM tree
-	 *
-	 * @param string $type The type of node that is to be created
-	 * @param string $text The contents of a text node
-	 * @param string $attribute The attribute of the opening tag if it exists
-	 */
-	function add_node( $type, $text = null, $attribute = null )
-	{
-		$temp = new node( $type, $text, $attribute, $this );
-		$this->children[] = &$temp;
-		return $temp;
-	}
-
-	/**
-	 * Allows traversal of the tree by returning the parent node
-	 *
-	 * @param string $text Sets the text value of the current node
-	 * @return node The parent of the current node
-	 **/
-	function up( $text = null )
-	{
-		if ( $text )
-			$this->text = $text;
-
-		return $this->parent;
+		$this->parent = &$parent;
 	}
 }
 
@@ -157,7 +129,7 @@ class bbcode extends htmltools
 		$this->user_view_emoticons = $qsf->user['user_view_emoticons'];
 
 		if ($createChild) {
-			$this->clone = new bbcode( $qsf, false );
+			$this->clone = &new bbcode( $qsf, false );
 		}
 	}
 
@@ -237,7 +209,7 @@ class bbcode extends htmltools
 	{
 		$this->line = 1; // some people like counting at 1...
 		$this->char = 1;
-		$this->data = $data;
+		$this->data = &$data;
 		$this->stack = array();
 		$this->error = array();
 		$this->root = null;
@@ -245,7 +217,7 @@ class bbcode extends htmltools
 		$this->allow_branch = true;
 	}
 
- 	/**
+	/**
 	 * Preparse text for links and email addresses.
 	 * Converts the results into URL and EMAIL tags.
 	 *
@@ -272,7 +244,8 @@ class bbcode extends htmltools
 	function make_tree( )
 	{
 		$len = strlen( $this->data );
-		$curser = $this->root = new node( 'root' );
+		$this->root = &new node( 'root', null, null, $null );
+		$curser = &$this->root;
 		$last_node = -1;
 
 		for ( $ix=0; $ix<$len; $ix++ )
@@ -314,14 +287,18 @@ class bbcode extends htmltools
 				$text = $this->_tostring( $last_node + 1, $ix );
 
 				if ( 0 != strlen( $text ) )
-					$curser->add_node( 'text', $text );
+				{
+					$__temp = &new node( 'text', $text, null, $curser );
+					$curser->children[] = &$__temp;
+				}
 				unset( $text );
 
 				if ( '/' === $element{0} ) {
 					if ( false == $this->_pop( substr( $element, 1 ) ) )
 						return false;
 
-					$curser = $curser->up();
+					$__temp = &$curser->parent;
+					$curser = &$__temp;
 				} else {
 					if ( false == $this->_push( $element ) )
 						return false;
@@ -331,7 +308,9 @@ class bbcode extends htmltools
 						$this->rejoin = '/' . $element;
 					}
 
-					$curser = $curser->add_node( $element, null, $attribute );
+					$__temp = &new node( $element, null, $attribute, $curser );
+					$curser->children[] = &$__temp;
+					$curser = &$__temp;
 				}
 
 				$ix = $temp;
@@ -352,7 +331,10 @@ class bbcode extends htmltools
 			$text = $this->_tostring( $last_node + 1, $ix );
 
 			if ( 0 != strlen( $text ) )
-				$curser->add_node( 'text', $text );
+			{
+				$__temp = &new node( 'text', $text, null, $curser );
+				$curser->children[] = &$__temp;
+			}
 			unset( $text );
 		}
 
@@ -375,9 +357,14 @@ class bbcode extends htmltools
 		/* handle text as text is special */
 		if( 'text' === $node->type )
 		{
-			$node->text = htmlentities( $node->text, ENT_NOQUOTES, 'UTF-8' );
+			/* code blocks are a special case */
+			if ( $node->parent && 'php' !== $node->parent->type )
+			{
+				$node->text = htmlentities( $node->text, ENT_NOQUOTES, 'UTF-8' );
+			}
 
-			$parent_type = $node->up()->type;
+			$__temp = &$node->parent;
+			$parent_type = $__temp->type;
 			/* turn things into emotes if requested */
 			if ($this->user_view_emoticons && ($this->options & FORMAT_EMOTICONS) && !in_array( $parent_type, $this->block_branch ) )
 			{
@@ -439,7 +426,9 @@ class bbcode extends htmltools
 	function _format_code($input, $php, $start = 1)
 	{
 		if ($php) {
-			$input = html_entity_decode($input, ENT_COMPAT, 'UTF-8' ); // contents is html so undo it
+			if( version_compare( PHP_VERSION, "5.0.0", ">=" ) ) {
+				$input = html_entity_decode($input, ENT_COMPAT, 'UTF-8'); // contents is html so undo it
+			}
 
 			if (strpos($input, '<?') === false) {
 				$input  = '<?php ' . $input . '?>';

@@ -348,6 +348,9 @@ class de
 		$this->cp_oct = 'Oktober';
 		$this->cp_old_notmatch = 'Das alte eingegebene Passwort stimmt nicht mit dem in der Datenbank überein.';
 		$this->cp_old_pass = 'Altes Passwort:';
+		$this->cp_pass = 'Password'; //Translate
+		$this->cp_pass2 = 'Only required if changing Email'; //Translate
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.'; //Translate
 		$this->cp_pass_notvaid = 'Ihr Passwort ist nicht gültig. Gehen sie sicher, das nur gültige Zeichen benutzt werden wie z.B. Buchstaben, Zahlen, Bindestriche, Unterstriche oder Leerzeichen.';
 		$this->cp_posts_page = 'Beiträge pro Themenseite. Bei 0 wird Forumstandart genutzt.';
 		$this->cp_preferences = 'Verändere Einstellungen';
@@ -746,12 +749,27 @@ class de
 	function logs()
 	{
 		$this->logs_action = 'Aktivität';
+		$this->logs_category = 'Category'; //Translate
+		$this->logs_category_created = 'Created a file category'; //Translate
+		$this->logs_category_deleted = 'Deleted a file category'; //Translate
+		$this->logs_category_edited = 'Edited a file category'; //Translate
+		$this->logs_category_from = 'from category'; //Translate
+		$this->logs_category_in = 'in category'; //Translate
 		$this->logs_deleted_post = 'Beitrag gelöscht';
 		$this->logs_deleted_topic = 'Thema gelöscht';
 		$this->logs_edited_post = 'Beitrag bearbeitet';
 		$this->logs_edited_topic = 'Thema bearbeitet';
+		$this->logs_file = 'File'; //Translate
+		$this->logs_file_deleted = 'Deleted a file'; //Translate
+		$this->logs_file_edited = 'Edited a file'; //Translate
+		$this->logs_file_moved = 'Moved a file'; //Translate
+		$this->logs_file_update_approved = 'Approved a file update'; //Translate
+		$this->logs_file_update_denied = 'Denied a file update'; //Translate
+		$this->logs_file_updated = 'Updated a file'; //Translate
 		$this->logs_id = 'IDs'; //Translate
 		$this->logs_locked_topic = 'Thema geschlossen';
+		$this->logs_mod_add = 'Set a file moderator'; //Translate
+		$this->logs_mod_remove = 'Removed a file moderator'; //Translate
 		$this->logs_moved_from = 'von Forum';
 		$this->logs_moved_to = 'zu Forum';
 		$this->logs_moved_topic = 'Thema bewegt';
@@ -870,6 +888,7 @@ class de
 		$this->mc_user_pm = 'Private Nachrichten akzeptieren';
 		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Beiträge';
+		$this->mc_user_regip = 'Registration IP'; //Translate
 		$this->mc_user_signature = 'Signatur';
 		$this->mc_user_skin = 'Skin'; //Translate
 		$this->mc_user_timezone = 'Zeitzone';
@@ -1448,6 +1467,8 @@ class de
 		$this->settings_enabled_modules = 'Aktivierte Module';
 		$this->settings_foreign_link = 'Fremdes Linkziel';
 		$this->settings_general = 'Allgemeine Einstellungen';
+		$this->settings_google_id = 'Google Analytics ID'; //Translate
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.'; //Translate
 		$this->settings_group_after = 'Gruppe nach der Regestrierung';
 		$this->settings_hot_topic = 'Beiträge für ein heißes Thema';
 		$this->settings_kilobytes = 'Kilobytes'; //Translate

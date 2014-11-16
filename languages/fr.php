@@ -347,6 +347,9 @@ class fr
 		$this->cp_oct = 'Octobre';
 		$this->cp_old_notmatch = 'L\'ancien mot de passe que vous avez saisi est incorrect.';
 		$this->cp_old_pass = 'Ancien mot de passe';
+		$this->cp_pass = 'Password'; //Translate
+		$this->cp_pass2 = 'Only required if changing Email'; //Translate
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.'; //Translate
 		$this->cp_pass_notvaid = 'Votre mot de passe est invalide. Assurez vous que vous ne utilisez que des caractères permis.';
 		$this->cp_posts_page = 'Posts per topic page. 0 resets to board default.'; //Translate
 		$this->cp_preferences = 'Changer ses préférences';
@@ -745,12 +748,27 @@ class fr
 	function logs()
 	{
 		$this->logs_action = 'Action'; //Translate
+		$this->logs_category = 'Category'; //Translate
+		$this->logs_category_created = 'Created a file category'; //Translate
+		$this->logs_category_deleted = 'Deleted a file category'; //Translate
+		$this->logs_category_edited = 'Edited a file category'; //Translate
+		$this->logs_category_from = 'from category'; //Translate
+		$this->logs_category_in = 'in category'; //Translate
 		$this->logs_deleted_post = 'Un message supprimé';
 		$this->logs_deleted_topic = 'Un sujet supprimé';
 		$this->logs_edited_post = 'Un message edité';
 		$this->logs_edited_topic = 'Un sujet edité';
+		$this->logs_file = 'File'; //Translate
+		$this->logs_file_deleted = 'Deleted a file'; //Translate
+		$this->logs_file_edited = 'Edited a file'; //Translate
+		$this->logs_file_moved = 'Moved a file'; //Translate
+		$this->logs_file_update_approved = 'Approved a file update'; //Translate
+		$this->logs_file_update_denied = 'Denied a file update'; //Translate
+		$this->logs_file_updated = 'Updated a file'; //Translate
 		$this->logs_id = 'Identifiants';
 		$this->logs_locked_topic = 'Un sujet verrouillé';
+		$this->logs_mod_add = 'Set a file moderator'; //Translate
+		$this->logs_mod_remove = 'Removed a file moderator'; //Translate
 		$this->logs_moved_from = 'du forum';
 		$this->logs_moved_to = 'au forum';
 		$this->logs_moved_topic = 'Un sujet deplacé';
@@ -869,6 +887,7 @@ class fr
 		$this->mc_user_pm = 'Acceptant les messages privés';
 		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Messages';
+		$this->mc_user_regip = 'Registration IP'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Peau';
 		$this->mc_user_timezone = 'Fuseau horaire';
@@ -1447,6 +1466,8 @@ class fr
 		$this->settings_enabled_modules = 'Modules Activés';
 		$this->settings_foreign_link = 'Cible de lien etranger';
 		$this->settings_general = 'Paramètres généraux';
+		$this->settings_google_id = 'Google Analytics ID'; //Translate
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.'; //Translate
 		$this->settings_group_after = 'Groupe Après Inscription';
 		$this->settings_hot_topic = 'Messages pour un sujet brûlant';
 		$this->settings_kilobytes = 'KiloOctets';

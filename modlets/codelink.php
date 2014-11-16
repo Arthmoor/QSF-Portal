@@ -25,7 +25,7 @@
  * Modify the files link with number of pending approvals.
  * This modlet borrows alot of duplicated code from the files.php module.
  *
- * @author Roger Libiez [Samson]
+ * @author Roger Libiez [Samson] http://www.iguanadons.net
  * @since 1.2.2
  **/
 class codelink extends modlet

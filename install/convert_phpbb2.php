@@ -26,7 +26,7 @@
  * phpBB2 Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson]
+ * Roger Libiez [Samson] http://www.iguanadons.net
  *
  * This convertor has been tested on unmodified databases for versions 2.0.4 and 2.0.14 without errors.
  * It should be reasonably safe to use on any phpBB2 2.0.x version.
@@ -388,6 +388,7 @@ else if( $_GET['action'] == 'confirmphpbbdrop' )
    $oldboard->db->query( "DROP TABLE IF EXISTS %psearch_wordlist" );
    $oldboard->db->query( "DROP TABLE IF EXISTS %psearch_wordmatch" );
    $oldboard->db->query( "DROP TABLE IF EXISTS %psessions" );
+   $oldboard->db->query( "DROP TABLE IF EXISTS %psessions_keys" );
    $oldboard->db->query( "DROP TABLE IF EXISTS %psmilies" );
    $oldboard->db->query( "DROP TABLE IF EXISTS %pthemes" );
    $oldboard->db->query( "DROP TABLE IF EXISTS %pthemes_name" );
@@ -425,7 +426,7 @@ else if( $_GET['action'] == 'censor' )
 else if( $_GET['action'] == 'members' )
 {
    $qsf->db->query( "TRUNCATE %pusers" );
-   $qsf->db->query( "INSERT INTO %pusers VALUES( 1, 'Guest', '', 0, 1, '', 0, 3, 'default', 'en', '', 'none', 0, 0, '', 0, 0, '0000-00-00', '151', '', 0, 0, '', 0, '', '', '', 0, 1, '', '', '', 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )" );
+   $qsf->db->query( "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)" );
 
    $i = 0;
    $result = $oldboard->db->query( "SELECT * FROM %pusers" );
@@ -486,8 +487,10 @@ else if( $_GET['action'] == 'members' )
          if( $row['user_icq'] )
             $icq = intval( $row['user_icq'] );
 
-         $qsf->db->query( "INSERT INTO %pusers VALUES( %d, '%s', '%s', %d, 1, '', 0, %d, 'default', 'en', '%s', '%s', %d, %d, '%s', %d, 1, '0000-00-00', 151, '%s', %d, 0, '%s', %d, '%s', '%s', '', 1, 1, '%s', '%s', '%s', %d, 0, %d, 0, 0, 1, 1, 1, 0, 0, '' )",
-            $row['user_id'], $row['username'], $row['user_password'], $row['user_regdate'], $row['user_level'], $avatar, $type, $width, $height, $row['user_email'], $showmail, $row['user_website'], $row['user_posts'], $row['user_from'], $icq, $row['user_msnm'], $row['user_aim'], $row['user_yim'], $row['user_interests'], $row['user_sig'], $row['user_lastvisit'], $row['user_session_time'] );
+         $qsf->db->query( "INSERT INTO %pusers
+            (user_id, user_name, user_password, user_joined, user_group, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_email, user_email_show, user_homepage, user_posts, user_location, user_icq, user_msn, user_aim, user_yahoo, user_interests, user_signature, user_lastvisit, user_lastpost, user_view_emoticons, user_view_avatars, user_pm_mail, user_active)
+            VALUES( %d, '%s', '%s', %d, %d, '%s', '%s', %d, %d, '%s', %d, '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, %d )",
+            $row['user_id'], $row['username'], $row['user_password'], $row['user_regdate'], $row['user_level'], $avatar, $type, $width, $height, $row['user_email'], $showmail, $row['user_website'], $row['user_posts'], $row['user_from'], $icq, $row['user_msnm'], $row['user_aim'], $row['user_yim'], $row['user_interests'], $row['user_sig'], $row['user_lastvisit'], $row['user_session_time'], $row['user_allowsmile'], $row['user_allowavatar'], $row['user_notify_pm'], $row['user_allow_viewonline'] );
          $i++;
       }
    }
@@ -553,7 +556,9 @@ else if( $_GET['action'] == 'pmessages' )
          if( $row['privmsgs_subject'] == '' )
             $row['privmsgs_subject'] = "No Title";
          $ip = get_ip( $row['privmsgs_ip'] );
-         $qsf->db->query( "INSERT INTO %ppmsystem VALUES( %d, %d, %d, INET_ATON('%s'), '%s', '%s', %d, '%s', %d, %d )",
+         $qsf->db->query( "INSERT INTO %ppmsystem
+            (pm_id, pm_to, pm_from, pm_ip, pm_bcc, pm_title, pm_time, pm_message, pm_read, pm_folder)
+            VALUES( %d, %d, %d, INET_ATON('%s'), '%s', '%s', %d, '%s', %d, %d )",
             $row['privmsgs_id'], $row['privmsgs_to_userid'], $row['privmsgs_from_userid'], $ip, $bcc, $row['privmsgs_subject'], $row['privmsgs_date'], $message, $readstate, $folder );
       }
    }
@@ -574,7 +579,7 @@ else if( $_GET['action'] == 'categories' )
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $position = $row['cat_order'] / 10;
-      $qsf->db->query( "INSERT INTO %pforums VALUES( %d, 0, '', '%s', %d, 'No Description', 0, 0, 0, 0, '' )",
+      $qsf->db->query( "INSERT INTO %pforums (forum_id, forum_name, forum_position) VALUES( %d, '%s', %d )",
          $row['cat_id'], $row['cat_title'], $position );
       $i++;
    }
@@ -595,7 +600,9 @@ else if( $_GET['action'] == 'forums' )
       $row['forum_desc'] = strip_phpbb2_tags( $row['forum_desc'] );
       $position = $row['forum_order'] / 10;
       $num = time();
-      $qsf->db->query( "INSERT INTO %pforums VALUES( '', %d, '', '%s', %d, '%s', %d, %d, %d, 0, %d )",
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_parent, forum_name, forum_position, forum_description, forum_topics, forum_replies, forum_lastpost, phpbb)
+         VALUES( %d, '%s', %d, '%s', %d, %d, %d, %d )",
          $row['cat_id'], $row['forum_name'], $position, $row['forum_desc'], $row['forum_topics'], $row['forum_posts'], $num, $row['forum_id'] );
       $i++;
    }
@@ -634,8 +641,10 @@ else if( $_GET['action'] == 'topics' )
          $topic_modes = ($topic_modes | TOPIC_POLL);
 
       $row['topic_title'] = strip_phpbb2_tags( $row['topic_title'] );
-      $qsf->db->query( "INSERT INTO %ptopics VALUES( %d, %d, '%s', '', %d, %d, %d, '', %d, %d, %d, %d, 0, '' )",
-         $row['topic_id'], $tid, $row['topic_title'], $row['topic_poster'], $row['topic_last_post_id'], $row['topic_poster'], $row['topic_time'], $row['topic_replies'], $row['topic_views'], $topic_modes );
+      $qsf->db->query( "INSERT INTO %ptopics
+         (topic_id, topic_forum, topic_title, topic_starter, topic_last_post, topic_last_poster, topic_edited, topic_posted, topic_replies, topic_views, topic_modes)
+         VALUES( %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d )",
+         $row['topic_id'], $tid, $row['topic_title'], $row['topic_poster'], $row['topic_last_post_id'], $row['topic_poster'], $row['topic_time'], $row['topic_time'], $row['topic_replies'], $row['topic_views'], $topic_modes );
       $i++;
    }
 
@@ -646,7 +655,9 @@ else if( $_GET['action'] == 'topics' )
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $sub_id++;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'topic', %d, %d )",
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'topic', %d, %d )",
          $sub_id, $row['user_id'], $row['topic_id'], $expire );
    }
    $qsf->db->query( "ALTER TABLE %pforums DROP phpbb" );
@@ -688,7 +699,7 @@ else if( $_GET['action'] == 'polls' )
       {
          $row['MEMBER_ID'] = 1;
       }
-      $qsf->db->query( "INSERT INTO %pvotes VALUES( %d, %d, '' )", $row['MEMBER_ID'], $row['POLL_ID'] );
+      $qsf->db->query( "INSERT INTO %pvotes (vote_user, vote_topic) VALUES( %d, %d )", $row['MEMBER_ID'], $row['POLL_ID'] );
    }
 
    $oldset['polls'] = 1;
@@ -734,7 +745,9 @@ else if( $_GET['action'] == 'posts' )
       $message = strip_phpbb2_tags( $row['post_text'] );
 
       $ip = get_ip( $row['poster_ip'] );
-      $qsf->db->query( "INSERT INTO %pposts VALUES( %d, %d, %d, %d, %d, 1, '%s', %d, '', INET_ATON('%s'), '', 0 )",
+      $qsf->db->query( "INSERT INTO %pposts 
+          (post_id, post_topic, post_author, post_emoticons, post_mbcode, post_text, post_time, post_ip)
+          VALUES( %d, %d, %d, %d, %d, '%s', %d, INET_ATON('%s') )",
           $row['post_id'], $row['topic_id'], $row['poster_id'], $row['enable_smilies'], $row['enable_bbcode'], $message, $row['post_time'], $ip );
       $i++;
    }

@@ -26,7 +26,7 @@
  * myBB Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson]
+ * Roger Libiez [Samson] http://www.iguanadons.net
  *
  * This convertor has been tested on unmodified databases for MyBB 1.0 and 1.1
  **/
@@ -435,7 +435,7 @@ else if( $_GET['action'] == 'members' )
 {
    $i = 0;
    $qsf->db->query( "TRUNCATE %pusers" );
-   $qsf->db->query( "INSERT INTO %pusers VALUES( 1, 'Guest', '', 0, 1, '', 0, 3, 'default', 'en', '', 'none', 0, 0, '', 0, 0, '0000-00-00', '151', '', 0, 0, '', 0, '', '', '', 0, 1, '', '', '', 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )" );
+   $qsf->db->query( "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)" );
 
    $result = $oldboard->db->query( "SELECT * FROM %pusers" );
    while( $row = $oldboard->db->nqfetch($result) )
@@ -446,6 +446,31 @@ else if( $_GET['action'] == 'members' )
          $showmail = 0;
       else
          $showmail = 1;
+
+      if( $row['pmnotify'] == '' || $row['pmnotify'] == 'no' )
+         $pmnotify = 0;
+      else
+         $pmnotify = 1;
+
+      if( $row['showsigs'] == '' || $row['showsigs'] == 'no' )
+         $showsigs = 0;
+      else
+         $showsigs = 1;
+
+      if( $row['showavatars'] == '' || $row['showavatars'] == 'no' )
+         $showavatars = 0;
+      else
+         $showavatars = 1;
+
+      if( $row['invisible'] == '' || $row['invisible'] == 'no' )
+         $invisible = 0;
+      else
+         $invisible = 1;
+
+      if( $row['receivepms'] == '' || $row['receivepms'] == 'no' )
+         $receivepms = 0;
+      else
+         $receivepms = 1;
 
       if( $row['lastvisit'] == '' || $row['lastvisit'] == 0 )
          $row['lastvisit'] = $row['regdate'];
@@ -502,8 +527,10 @@ else if( $_GET['action'] == 'members' )
       if( $row['icq'] )
          $icq = intval( $row['icq'] );
 
-      $qsf->db->query( "INSERT INTO %pusers VALUES( %d, '%s', '%s', %d, 1, '%s', %d, %d, 'default', 'en', '%s', '%s', %d, %d, '%s', %d, 1, '0000-00-00', 151, '%s', %d, 0, '', %d, '%s', '%s', '', 1, 1, '%s', '', '%s', %d, 0, %d, 0, 0, 1, 1, 1, 0, 0, '' )",
-         $row['uid'], $row['username'], $row['password'], $row['regdate'], $usertitle, $customtitle, $row['usergroup'], $avatar, $type, $width, $height, $row['email'], $showmail, $row['website'], $row['postnum'], $icq, $row['msn'], $row['aim'], $row['yahoo'], $row['signature'], $row['lastvisit'], $row['lastactive'] );
+      $qsf->db->query( "INSERT INTO %pusers
+         (user_id, user_name, user_password, user_joined, user_title, user_title_custom, user_group, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_email, user_email_show, user_homepage, user_posts, user_icq, user_msn, user_aim, user_yahoo, user_signature, user_lastvisit, user_lastpost, user_pm_mail, user_view_signatures, user_view_avatars, user_active, user_pm, user_regip)
+         VALUES( %d, '%s', '%s', %d, '%s', %d, %d, '%s', '%s', %d, %d, '%s', %d, '%s', %d, %d, '%s', '%s', '%s', '%s', %d, %d, %d, INET_ATON('%s') )",
+         $row['uid'], $row['username'], $row['password'], $row['regdate'], $usertitle, $customtitle, $row['usergroup'], $avatar, $type, $width, $height, $row['email'], $showmail, $row['website'], $row['postnum'], $icq, $row['msn'], $row['aim'], $row['yahoo'], $row['signature'], $row['lastvisit'], $row['lastactive'], $pmnotify, $showsigs, $showavatars, $invisible, $receivepms, $row['regip'] );
       $i++;
    }
 
@@ -549,7 +576,9 @@ else if( $_GET['action'] == 'pmessages' )
          }
          if( $row['subject'] == '' )
             $row['subject'] = "No Title";
-         $qsf->db->query( "INSERT INTO %ppmsystem VALUES( %d, %d, %d, 0, '%s', '%s', %d, '%s', %d, %d )",
+         $qsf->db->query( "INSERT INTO %ppmsystem
+            (pm_id, pm_to, pm_from, pm_bcc, pm_title, pm_time, pm_message, pm_read, pm_folder)
+            VALUES( %d, %d, %d, '%s', '%s', %d, '%s', %d, %d )",
             $row['pmid'], $row['toid'], $row['fromid'], $bcc, $row['subject'], $row['dateline'], $row['message'], $row['status'], $folder );
       }
    }
@@ -580,7 +609,9 @@ else if( $_GET['action'] == 'mtitles' )
          else
             $icon = $row['stars'] . '.png';
 
-         $qsf->db->query( "INSERT INTO %pmembertitles VALUES( %d, '%s', %d, '%s' )", $row['utid'], $row['title'], $row['posts'], $icon );
+         $qsf->db->query( "INSERT INTO %pmembertitles
+            (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon)
+            VALUES( %d, '%s', %d, '%s' )", $row['utid'], $row['title'], $row['posts'], $icon );
          $i++;
       }
    }
@@ -602,13 +633,22 @@ else if( $_GET['action'] == 'forums' )
       $row['name'] = strip_mybb_tags( $row['name'] );
       $row['description'] = strip_mybb_tags( $row['description'] );
 
+      $subcat = 0;
       if( $row['type'] == 'c' && $row['pid'] != 0 )
          $subcat = 1;
-      else
-         $subcat = 0;
 
-      $qsf->db->query( "INSERT INTO %pforums VALUES( %d, %d, '', '%s', 1, '%s', %d, %d, %d, %d )",
-         $row['fid'], $row['pid'], $row['name'], $row['description'], $row['threads'], $row['posts'], $row['lastpost'], $subcat );
+      $redirect = 0;
+      $desc = $row['description'];
+      if( $row['linkto'] != '' )
+      {
+         $redirect = 1;
+         $desc = $row['linkto'];
+      }
+
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_id, forum_parent, forum_name, forum_description, forum_topics, forum_replies, forum_lastpost, forum_subcat, forum_redirect)
+         VALUES( %d, %d, '%s', '%s', %d, %d, %d, %d, %d )",
+         $row['fid'], $row['pid'], $row['name'], $desc, $row['threads'], $row['posts'], $row['lastpost'], $subcat, $redirect );
       $i++;
    }
 
@@ -636,8 +676,11 @@ else if( $_GET['action'] == 'topics' )
          $topic_modes = ($topic_modes | TOPIC_POLL);
 
       $row['subject'] = strip_mybb_tags( $row['subject'] );
-      $qsf->db->query( "INSERT INTO %ptopics VALUES( %d, %d, '%s', '', %d, %d, %d, '', %d, %d, %d, %d, 0, '' )",
-         $row['tid'], $row['fid'], $row['subject'], $row['uid'], $row['lastpost'], $row['uid'], $row['dateline'], $row['replies'], $row['views'], $topic_modes );
+
+      $qsf->db->query( "INSERT INTO %ptopics
+         (topic_id, topic_forum, topic_title, topic_starter, topic_last_post, topic_last_poster, topic_posted, topic_edited, topic_replies, topic_views, topic_modes)
+         VALUES( %d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d )",
+         $row['tid'], $row['fid'], $row['subject'], $row['uid'], $row['lastposttid'], $row['uid'], $row['dateline'], $row['lastpost'], $row['replies'], $row['views'], $topic_modes );
       $i++;
    }
 
@@ -648,7 +691,9 @@ else if( $_GET['action'] == 'topics' )
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $sub_id++;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'forum', %d, %d )", $sub_id, $row['uid'], $row['fid'], $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'forum', %d, %d )", $sub_id, $row['uid'], $row['fid'], $expire );
    }
 
    $sql = "SELECT * FROM %pfavorites";
@@ -658,7 +703,9 @@ else if( $_GET['action'] == 'topics' )
       if( $row['type'] == 's' )
       {
          $sub_id++;
-         $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'topic', %d, %d )", $sub_id, $row['uid'], $row['tid'], $expire );
+         $qsf->db->query( "INSERT INTO %psubscriptions
+            (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+            VALUES( %d, %d, 'topic', %d, %d )", $sub_id, $row['uid'], $row['tid'], $expire );
       }
    }
 
@@ -682,7 +729,7 @@ else if( $_GET['action'] == 'topics' )
 
       $user = $row['uid'] + 1;
       $vote = $row['voteoption'] - 1;
-      $qsf->db->query( "INSERT INTO %pvotes VALUES( %d, %d, %d )", $user, $row['tid'], $vote );
+      $qsf->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES( %d, %d, %d )", $user, $row['tid'], $vote );
       $i++;
    }
 
@@ -700,9 +747,13 @@ else if( $_GET['action'] == 'attach' )
 
    while( $row = $oldboard->db->nqfetch($result) )
    {
-      $qsf->db->query( "INSERT INTO %pattach VALUES( %d, '%s', '%s', %d, %d, %d )",
+      $qsf->db->query( "INSERT INTO %pattach
+         (attach_id, attach_file, attach_name, attach_post, attach_downloads, attach_size)
+         VALUES( %d, '%s', '%s', %d, %d, %d )",
          $row['aid'], $row['attachname'], $row['filename'], $row['pid'], $row['downloads'], $row['filesize'] );
       $i++;
+
+      // TODO: Add code to copy the file from the MyBB folde to the QSF folder.
    }
 
    $oldset['attach'] = 1;
@@ -738,12 +789,13 @@ else if( $_GET['action'] == 'posts' )
 
       $row['message'] = strip_mybb_tags( $row['message'] );
 
-      if( $row['smilieoff'] == 'no' )
-         $smilies = 1;
-      else
+      $smilies = 1;
+      if( $row['smilieoff'] == 'yes' )
          $smilies = 0;
 
-      $qsf->db->query( "INSERT INTO %pposts VALUES( %d, %d, %d, %d, 1, 1, '%s', %d, '', INET_ATON('%s'), '', %d )",
+      $qsf->db->query( "INSERT INTO %pposts
+         (post_id, post_topic, post_author, post_emoticons, post_text, post_time, post_ip, post_edited_time)
+         VALUES( %d, %d, %d, %d, '%s', %d, INET_ATON('%s'), %d )",
          $row['pid'], $row['tid'], $row['uid'], $smilies, $row['message'], $row['dateline'], $row['ipaddress'], $row['edittime'] );
       $i++;
    }

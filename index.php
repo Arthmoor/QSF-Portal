@@ -82,10 +82,17 @@ $qsf->get['a'] = $module;
 $qsf->sets     = $set;
 $qsf->modules  = $modules;
 
-if ($qsf->sets['output_buffer'] && isset($qsf->server['HTTP_ACCEPT_ENCODING']) && stristr($qsf->server['HTTP_ACCEPT_ENCODING'], 'gzip')) {
-	if( !@ob_start('ob_gzhandler') ) {
+// If zlib isn't available, then trying to use it doesn't make much sense.
+if (extension_loaded('zlib')) {
+	if ($qsf->sets['output_buffer'] && isset($qsf->server['HTTP_ACCEPT_ENCODING']) && stristr($qsf->server['HTTP_ACCEPT_ENCODING'], 'gzip')) {
+		if( !@ob_start('ob_gzhandler') ) {
+			ob_start();
+		}
+	} else {
 		ob_start();
 	}
+} else {
+	ob_start();
 }
 
 header( 'P3P: CP="CAO PSA OUR"' );
@@ -160,6 +167,14 @@ if (isset($qsf->get['debug'])) {
 }
 
 if (!$qsf->nohtml) {
+	$google = null;
+	if ( isset($qsf->sets['analytics_id']) && !empty($qsf->sets['analytics_id']) ) {
+		$google = "<script src=\"http://www.google-analytics.com/urchin.js\" type=\"text/javascript\"></script>
+<script type=\"text/javascript\">
+_uacct = \"{$qsf->sets['analytics_id']}\";
+urchinTracker();
+</script>";
+	}
 	$servertime = $qsf->mbdate( DATE_LONG, $qsf->time, false );
 	$copyright = eval($qsf->template('MAIN_COPYRIGHT'));
 	$quicksilverforums = $output;

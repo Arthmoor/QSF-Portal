@@ -42,4 +42,3 @@ function quickQuoteInit() {
 }
 
 addLoadEvent(quickQuoteInit);
-

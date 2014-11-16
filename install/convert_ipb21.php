@@ -26,7 +26,7 @@
  * Invision Power Board 2.1 Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson]
+ * Roger Libiez [Samson] http://www.iguanadons.net
  *
  * Script tested on an unmodified Invision Power Board 2.1 database.
  * Use with any other version has not been validated!
@@ -536,7 +536,7 @@ else if( $_GET['action'] == 'censor' )
 else if( $_GET['action'] == 'members' )
 {
    $qsf->db->query( "TRUNCATE %pusers" );
-   $qsf->db->query( "INSERT INTO %pusers VALUES( 1, 'Guest', '', 0, 1, '', 0, 3, 'default', 'en', '', 'none', 0, 0, '', 0, 0, '0000-00-00', '151', '', 0, 0, '', 0, '', '', '', 0, 1, '', '', '', 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )" );
+   $qsf->db->query( "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)" );
 
    $i = 0;
    $result = $oldboard->db->query( "SELECT u.*, m.* FROM %pmembers u LEFT JOIN %pmember_extra m ON m.id=u.id" );
@@ -600,8 +600,10 @@ else if( $_GET['action'] == 'members' )
          else
             $bday = "0000-00-00";
 
-         $qsf->db->query( "INSERT INTO %pusers VALUES( %d, '%s', 'INVALID', %d, 1, '%s', 0, %d, 'default', 'en', '%s', '%s', %d, %d, '%s', %d, 1, '%s', 151, '%s', %d, '%s', %d, '%s', '%s', '', 1, 1, '%s', '%s', '%s', %d, 0, %d, 0, 0, 1, 1, 1, 0, 0, '' )",
-            $row['id'], $row['name'], $row['joined'], $row['title'], $row['mgroup'], $avatar, $type, $width, $height, $row['email'], $showmail, $bday, $row['website'], $row['posts'], $row['location'], $row['icq_number'], $row['msnname'], $row['aim_name'], $row['yahoo'], $row['interests'], $row['signature'], $row['last_visit'], $row['last_activity'] );
+         $qsf->db->query( "INSERT INTO %pusers
+            (user_id, user_name, user_password, user_joined, user_title, user_group, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_email, user_email_show, user_birthday, user_homepage, user_posts, user_location, user_icq, user_msn, user_aim, user_yahoo, user_interests, user_signature, user_lastvisit, user_lastpost, user_pm_mail, user_view_signatures, user_view_avatars, user_regip)
+            VALUES( %d, '%s', %d, '%s', %d, '%s', '%s', %d, %d, '%s', %d, '%s', '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', %d, %d, %d, %d, %d, INET_ATON('%s') )",
+            $row['id'], $row['name'], $row['legacy_password'], $row['joined'], $row['title'], $row['mgroup'], $avatar, $type, $width, $height, $row['email'], $showmail, $bday, $row['website'], $row['posts'], $row['location'], $row['icq_number'], $row['msnname'], $row['aim_name'], $row['yahoo'], $row['interests'], $row['signature'], $row['last_visit'], $row['last_activity'], $row['email_pm'], $row['view_sigs'], $row['view_avs'], $row['ip_address'] );
          $i++;
       }
    }
@@ -649,7 +651,9 @@ else if( $_GET['action'] == 'pmessages' )
             if( $row['mt_title'] == '' )
                $row['mt_title'] = "No Title";
 
-            $qsf->db->query( "INSERT INTO %ppmsystem VALUES( %d, %d, %d, 0, '%s', '%s', %d, '%s', %d, %d )",
+            $qsf->db->query( "INSERT INTO %ppmsystem
+               (pm_id, pm_to, pm_from, pm_bcc, pm_title, pm_time, pm_message, pm_read, pm_folder)
+               VALUES( %d, %d, %d, '%s', '%s', %d, '%s', %d, %d )",
                $row['mt_id'], $row['mt_to_id'], $row['mt_from_id'], $bcc, $row['mt_title'], $row['mt_date'], $row['msg_post'], $row['mt_read'], $folder );
          }
       }
@@ -681,7 +685,9 @@ else if( $_GET['action'] == 'mtitles' )
             $icon = $row['pips'];
             $icon .= '.png';
          }
-         $qsf->db->query( "INSERT INTO %pmembertitles VALUES( %d, '%s', %d, '%s' )", $row['id'], $row['title'], $row['posts'], $icon );
+         $qsf->db->query( "INSERT INTO %pmembertitles
+            (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon)
+            VALUES( %d, '%s', %d, '%s' )", $row['id'], $row['title'], $row['posts'], $icon );
          $i++;
       }
    }
@@ -708,8 +714,14 @@ else if( $_GET['action'] == 'forums' )
       else
          $subcat = 0;
 
-      $qsf->db->query( "INSERT INTO %pforums VALUES( %d, %d, '', '%s', %d, '%s', %d, %d, %d, %d )",
-         $row['id'], $row['parent_id'], $row['name'], $row['position'], $row['description'], $row['topics'], $row['posts'], $row['last_post'], $subcat );
+      $desc = $row['description'];
+      if( $row['redirect_on'] )
+         $desc = $row['redirect_url'];
+
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_id, forum_parent, forum_name, forum_position, forum_description, forum_topics, forum_replies, forum_lastpost, forum_subcat, forum_redirect)
+         VALUES( %d, %d, '%s', %d, '%s', %d, %d, %d, %d, %d )",
+         $row['id'], $row['parent_id'], $row['name'], $row['position'], $desc, $row['topics'], $row['posts'], $row['last_post'], $subcat, $row['redirect_on'] );
       $i++;
    }
 
@@ -740,8 +752,10 @@ else if( $_GET['action'] == 'topics' )
       $row['title'] = strip_ipb21_tags( $row['title'] );
       $row['description'] = strip_ipb21_tags( $row['description'] );
 
-      $qsf->db->query( "INSERT INTO %ptopics VALUES( %d, %d, '%s', '%s', %d, 0, %d, '', %d, %d, %d, %d, 0, '' )",
-         $row['tid'], $row['forum_id'], $row['title'], $row['description'], $row['starter_id'], $row['last_poster_id'], $row['last_post'], $row['posts'], $row['views'], $topic_modes );
+      $qsf->db->query( "INSERT INTO %ptopics
+         (topic_id, topic_forum, topic_title, topic_description, topic_starter, topic_last_poster, topic_posted, topic_edited, topic_replies, topic_views, topic_modes)
+         VALUES( %d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d, %d )",
+         $row['tid'], $row['forum_id'], $row['title'], $row['description'], $row['starter_id'], $row['last_poster_id'], $row['start_date'], $row['last_post'], $row['posts'], $row['views'], $topic_modes );
       $i++;
    }
 
@@ -757,7 +771,9 @@ else if( $_GET['action'] == 'topics' )
       $row['member_id']++;
 
       $expire = time() + 2592000;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'forum', %d, %d )", $row['frid'], $row['member_id'], $row['forum_id'], $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'forum', %d, %d )", $row['frid'], $row['member_id'], $row['forum_id'], $expire );
       if( $row['frid'] > $frows )
          $frows = $row['frid'];
    }
@@ -769,7 +785,9 @@ else if( $_GET['action'] == 'topics' )
 
       $lineid = $row['trid'] + $frows;
       $expire = time() + 2592000;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'topic', %d, %d )", $lineid, $row['member_id'], $row['topic_id'], $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'topic', %d, %d )", $lineid, $row['member_id'], $row['topic_id'], $expire );
    }
 
    $result = $oldboard->db->query( "SELECT * FROM %ppolls" );
@@ -786,7 +804,7 @@ else if( $_GET['action'] == 'topics' )
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $row['member_id']++;
-      $qsf->db->query( "INSERT INTO %pvotes VALUES( %d, %d, '' )", $row['member_id'], $row['tid'] );
+      $qsf->db->query( "INSERT INTO %pvotes (vote_user, vote_topic) VALUES( %d, %d )", $row['member_id'], $row['tid'] );
    }
 
    $oldset['polls'] = 1;
@@ -803,8 +821,12 @@ else if( $_GET['action'] == 'attach' )
 
    while( $row = $oldboard->db->nqfetch($result) )
    {
-      $qsf->db->query( "INSERT INTO %pattach VALUES( %d, '%s', '%s', %d, %d, %d )",
+      $qsf->db->query( "INSERT INTO %pattach
+         (attach_id, attach_file, attach_name, attach_post, attach_downloads, attach_size)
+         VALUES( %d, '%s', '%s', %d, %d, %d )",
          $row['attach_id'], $row['attach_location'], $row['attach_file'], $row['attach_pid'], $row['attach_hits'], $row['attach_filesize'] );
+
+      // TODO: Add code here to copy attachment file from the old IPB 2.1 directory to the new QSF directory.
       $i++;
    }
 
@@ -833,7 +855,7 @@ else if( $_GET['action'] == 'posts' )
    $all = $oldboard->db->num_rows( $num );
    $newstart = $start + $oldset['post_inc'];
 
-   $result = $oldboard->db->query( "SELECT * FROM  %pposts LIMIT %d, %d", $start, $oldset['post_inc'] );
+   $result = $oldboard->db->query( "SELECT * FROM %pposts LIMIT %d, %d", $start, $oldset['post_inc'] );
 
    while( $row = $oldboard->db->nqfetch($result) )
    {
@@ -842,7 +864,9 @@ else if( $_GET['action'] == 'posts' )
       /* Try and clean up some of the junk in Invisionboard posts. MySQL isn't happy about some of it. */
       $row['post'] = strip_ipb21_tags( $row['post'] );
 
-      $qsf->db->query( "INSERT INTO %pposts VALUES( %d, %d, %d, %d, 1, 1, '%s', %d, '', INET_ATON('%s'), '%s', %d )",
+      $qsf->db->query( "INSERT INTO %pposts
+         (post_id, post_topic, post_author, post_emoticons, post_text, post_time, post_ip, post_edited_by, post_edited_time)
+         VALUES( %d, %d, %d, %d, '%s', %d, INET_ATON('%s'), '%s', %d )",
          $row['pid'], $row['topic_id'], $row['author_id'], $row['use_emo'], $row['post'], $row['post_date'], $row['ip_address'], $row['edit_name'], $row['edit_time'] );
       $i++;
    }

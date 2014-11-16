@@ -94,14 +94,6 @@ class backup extends admin
 		if(isset($droptable))
 			$options .= " --add-drop-table";
 
-		// This looks a bit strange, but it will pull all of the proper prefixed tables.
-		$tb = $this->db->query( "SHOW TABLES LIKE '%p%%'" );
-		while( $tb1 = $this->db->nqfetch($tb) )
-		{
-			foreach( $tb1 as $col => $data )
-				$tarray[] = $data;
-		}
-
 		$tables = implode( ' ', $this->get_db_tables() );
 
 		$mbdump = "mysqldump ".$options." --password=".$this->db->pass." --host=".$this->db->host." --user=".$this->db->user;

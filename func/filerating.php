@@ -26,7 +26,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * File Ratings
  *
- * @author Roger Libiez [Samson]
+ * @author Roger Libiez [Samson] http://www.iguanadons.net
  **/
 class filerating extends qsfglobal
 {

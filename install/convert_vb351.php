@@ -26,7 +26,7 @@
  * vBulliten Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson]
+ * Roger Libiez [Samson] http://www.iguanadons.net
  *
  * This convertor has only had limited testing on a vBulliten 3.5.1 live demo database
  **/
@@ -383,7 +383,7 @@ else if( $_GET['action'] == 'members' )
 {
    $i = 0;
    $qsf->db->query( "TRUNCATE %pusers" );
-   $qsf->db->query( "INSERT INTO %pusers VALUES( 1, 'Guest', '', 0, 1, '', 0, 3, 'default', 'en', '', 'none', 0, 0, '', 0, 0, '0000-00-00', '151', '', 0, 0, '', 0, '', '', '', 0, 1, '', '', '', 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )" );
+   $qsf->db->query( "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)" );
 
    $result = $oldboard->db->query( "SELECT m.*, f.userid, f.signature
       FROM %puser m
@@ -425,8 +425,10 @@ else if( $_GET['action'] == 'members' )
       if( $row['icq'] )
          $icq = intval( $row['icq'] );
 
-      $qsf->db->query( "INSERT INTO %pusers VALUES( %d, '%s', '%s', %d, 1, '%s', %d, %d, 'default', 'en', '', 'none', 0, 0, '%s', %d, 1, '%s', 151, '%s', %d, 0, '', %d, '%s', '%s', '', 1, 1, '%s', '', '%s', %d, 0, %d, 0, 0, 1, 1, 1, 0, 0, '' )",
-         $row['userid'], $row['username'], $row['password'], $row['joindate'], $row['usertitle'], $row['customtitle'], $row['usergroupid'], $row['email'], $showmail, $row['birthday'], $row['homepage'], $row['posts'], $icq, $row['msn'], $row['aim'], $row['yahoo'], $row['signature'], $row['lastvisit'], $row['lastactivity'] );
+      $qsf->db->query( "INSERT INTO %pusers
+         (user_id, user_name, user_password, user_joined, user_title, user_title_custom, user_group, user_email, user_email_show, user_birthday, user_homepage, user_posts, user_icq, user_msn, user_aim, user_yahoo, user_signature, user_lastvisit, user_lastpost, user_regip)
+         VALUES( %d, '%s', '%s', %d, '%s', %d, %d, '%s', %d, '%s', '%s', %d, %d, '%s', '%s', '%s', '%s', %d, %d, INET_ATON('%s') )",
+         $row['userid'], $row['username'], $row['password'], $row['joindate'], $row['usertitle'], $row['customtitle'], $row['usergroupid'], $row['email'], $showmail, $row['birthday'], $row['homepage'], $row['posts'], $icq, $row['msn'], $row['aim'], $row['yahoo'], $row['signature'], $row['lastvisit'], $row['lastactivity'], $row['ipaddress'] );
       $i++;
    }
 
@@ -473,7 +475,9 @@ else if( $_GET['action'] == 'pmessages' )
          }
          if( $row['subject'] == '' )
             $row['subject'] = "No Title";
-         $qsf->db->query( "INSERT INTO %ppmsystem VALUES( %d, %d, %d, 0, '%s', '%s', %d, '%s', %d, %d )",
+         $qsf->db->query( "INSERT INTO %ppmsystem
+            (pm_id, pm_to, pm_from, pm_bcc, pm_title, pm_time, pm_message, pm_read, pm_folder)
+            VALUES( %d, %d, %d, '%s', '%s', %d, '%s', %d, %d )",
             $row['pmid'], $row['userid'], $row['fromuserid'], $bcc, $row['title'], $row['dateline'], $row['message'], $row['messageread'], $folder );
       }
    }
@@ -504,7 +508,9 @@ else if( $_GET['action'] == 'mtitles' )
          else
             $icon = $row['usertitleid'] . '.png';
 
-         $qsf->db->query( "INSERT INTO %pmembertitles VALUES( %d, '%s', %d, '%s' )", $row['usertitleid'], $row['title'], $row['minposts'], $icon );
+         $qsf->db->query( "INSERT INTO %pmembertitles
+            (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon)
+            VALUES( %d, '%s', %d, '%s' )", $row['usertitleid'], $row['title'], $row['minposts'], $icon );
          $i++;
       }
    }
@@ -532,8 +538,18 @@ else if( $_GET['action'] == 'forums' )
       if( $row['parentid'] == -1 )
          $row['parentid'] = '0';
 
-      $qsf->db->query( "INSERT INTO %pforums VALUES( %d, %d, '', '%s', 1, '%s', %d, %d, %d, %d )",
-         $row['forumid'], $row['parentid'], $row['title'], $row['description'], $row['threadcount'], $row['replycount'], $row['lastpost'], $subcat );
+      $redirect = 0;
+      $desc = $row['descrioption'];
+      if( $row['link'] != '' )
+      {
+         $redirect = 1;
+         $desc = $row['link'];
+      }
+
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_id, forum_parent, forum_name, forum_description, forum_topics, forum_replies, forum_lastpost, forum_subcat, forum_redirect)
+         VALUES( %d, %d, '%s', '%s', %d, %d, %d, %d, %d )",
+         $row['forumid'], $row['parentid'], $row['title'], $desc, $row['threadcount'], $row['replycount'], $row['lastpost'], $subcat, $redirect );
       $i++;
    }
 
@@ -561,7 +577,9 @@ else if( $_GET['action'] == 'topics' )
          $topic_modes = ($topic_modes | TOPIC_POLL);
 
       $row['title'] = strip_vb_tags( $row['title'] );
-      $qsf->db->query( "INSERT INTO %ptopics VALUES( %d, %d, '%s', '', %d, 0, %d, '', %d, %d, %d, %d, 0, '' )",
+      $qsf->db->query( "INSERT INTO %ptopics
+         (topic_id, topic_forum, topic_title, topic_starter, topic_last_poster, topic_edited, topic_replies, topic_views, topic_modes)
+         VALUES( %d, %d, '%s', %d, %d, %d, %d, %d, %d )",
          $row['threadid'], $row['forumid'], $row['title'], $row['postuserid'], $row['postuserid'], $row['dateline'], $row['replycount'], $row['views'], $topic_modes );
       $i++;
    }
@@ -573,14 +591,18 @@ else if( $_GET['action'] == 'topics' )
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $sub_id++;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'forum', %d, %d )", $sub_id, $row['userid'], $row['forumid'], $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'forum', %d, %d )", $sub_id, $row['userid'], $row['forumid'], $expire );
    }
 
    $result = $oldboard->db->query( "SELECT * FROM %psubscribethread" );
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $sub_id++;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'topic', %d, %d )", $sub_id, $row['userid'], $row['threadid'], $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'topic', %d, %d )", $sub_id, $row['userid'], $row['threadid'], $expire );
    }
 
    $oldset['topics'] = 1;
@@ -610,7 +632,7 @@ else if( $_GET['action'] == 'topics' )
 
       $user = $row['userid'] + 1;
       $vote = $row['voteoption'] - 1;
-      $qsf->db->query( "INSERT INTO %pvotes VALUES( %d, %d, %d )", $user, $tid, $vote );
+      $qsf->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES( %d, %d, %d )", $user, $tid, $vote );
       $i++;
    }
 
@@ -647,13 +669,14 @@ else if( $_GET['action'] == 'posts' )
 
       $row['pagetext'] = strip_vb_tags( $row['pagetext'] );
 
+      $smilies = 0;
       if( $row['allowsmilie'] == 1 )
          $smilies = 1;
-      else
-         $smilies = 0;
 
-      $qsf->db->query( "INSERT INTO %pposts VALUES( %d, %d, %d, %d, 1, 1, '%s', %d, '', INET_ATON('%s'), '', %d )",
-         $row['postid'], $row['threadid'], $row['userid'], $smilies, $row['pagetext'], $row['dateline'], $row['ipaddress'], $row['dateline'] );
+      $qsf->db->query( "INSERT INTO %pposts
+         (post_id, post_topic, post_author, post_emoticons, post_text, post_time, post_ip)
+         VALUES( %d, %d, %d, %d, '%s', %d, INET_ATON('%s') )",
+         $row['postid'], $row['threadid'], $row['userid'], $smilies, $row['pagetext'], $row['dateline'], $row['ipaddress'] );
       $i++;
    }
    if( $i == $all )

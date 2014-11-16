@@ -789,23 +789,5 @@ class mod extends qsfglobal
 		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
 			$topic_modes ^ TOPIC_PUBLISH, $t);
 	}
-
-	/**
-	 * Adds a moderator log entry
-	 *
-	 * @param string $action The action that was taken
-	 * @param int $data1 The data acted upon (post ID, forum ID, etc)
-	 * @param int $data2 Additional data, if necessary
-	 * @param int $data3 Additional data, if necessary
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.1.0
-	 * @return void
-	 **/
-	function log_action($action, $data1, $data2 = 0, $data3 = 0)
-	{
-		$this->db->query("INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3)
-			VALUES (%d, %d, '%s', %d, %d, %d)",
-			$this->user['user_id'], $this->time, $action, $data1, $data2, $data3);
-	}
 }
 ?>

@@ -348,6 +348,9 @@ class it
 		$this->cp_oct = 'Ottobre';
 		$this->cp_old_notmatch = 'La vecchia password che hai inserito non combacia con quella nel nostro database.';
 		$this->cp_old_pass = 'Vecchia Password';
+		$this->cp_pass = 'Password'; //Translate
+		$this->cp_pass2 = 'Only required if changing Email'; //Translate
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.'; //Translate
 		$this->cp_pass_notvaid = 'La tua password non è valida. Assicurati di aver usato solo caratteri validi come lettere, numeri, trattini (-), underscore (_), o spazi.';
 		$this->cp_posts_page = 'Posts per topic page. 0 resets to board default.'; //Translate
 		$this->cp_preferences = 'Modifica Preferenze';
@@ -746,12 +749,27 @@ class it
 	function logs()
 	{
 		$this->logs_action = 'Azione';
+		$this->logs_category = 'Category'; //Translate
+		$this->logs_category_created = 'Created a file category'; //Translate
+		$this->logs_category_deleted = 'Deleted a file category'; //Translate
+		$this->logs_category_edited = 'Edited a file category'; //Translate
+		$this->logs_category_from = 'from category'; //Translate
+		$this->logs_category_in = 'in category'; //Translate
 		$this->logs_deleted_post = 'Ha eliminato un messaggio';
 		$this->logs_deleted_topic = 'Ha eliminato una discussione';
 		$this->logs_edited_post = 'Ha modificato un messaggio';
 		$this->logs_edited_topic = 'Ha modificato una discussione';
+		$this->logs_file = 'File'; //Translate
+		$this->logs_file_deleted = 'Deleted a file'; //Translate
+		$this->logs_file_edited = 'Edited a file'; //Translate
+		$this->logs_file_moved = 'Moved a file'; //Translate
+		$this->logs_file_update_approved = 'Approved a file update'; //Translate
+		$this->logs_file_update_denied = 'Denied a file update'; //Translate
+		$this->logs_file_updated = 'Updated a file'; //Translate
 		$this->logs_id = 'ID';
 		$this->logs_locked_topic = 'Ha bloccato una discussione';
+		$this->logs_mod_add = 'Set a file moderator'; //Translate
+		$this->logs_mod_remove = 'Removed a file moderator'; //Translate
 		$this->logs_moved_from = 'dal forum';
 		$this->logs_moved_to = 'al forum';
 		$this->logs_moved_topic = 'Ha spostato una discussione';
@@ -870,6 +888,7 @@ class it
 		$this->mc_user_pm = 'Accetta Messaggi Privati';
 		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Messaggi';
+		$this->mc_user_regip = 'Registration IP'; //Translate
 		$this->mc_user_signature = 'Firma';
 		$this->mc_user_skin = 'Skin'; //Translate
 		$this->mc_user_timezone = 'Fuso Orario';
@@ -1448,6 +1467,8 @@ class it
 		$this->settings_enabled_modules = 'Moduli Abilitati';
 		$this->settings_foreign_link = 'Obiettivo Link Estraneo';
 		$this->settings_general = 'Configurazione Generale';
+		$this->settings_google_id = 'Google Analytics ID'; //Translate
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.'; //Translate
 		$this->settings_group_after = 'Gruppo Dopo la Registrazione';
 		$this->settings_hot_topic = 'Messaggi per Discussione Rovente';
 		$this->settings_kilobytes = 'Kilobyte';

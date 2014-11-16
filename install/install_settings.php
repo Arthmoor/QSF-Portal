@@ -22,7 +22,7 @@
  *
  **/
 
-define('LATEST', 25);   // ID of most recent upgrade script
+define('LATEST', 26);   // ID of most recent upgrade script
 define('SKIN_FILE', 'skin_default.xml');
 
 ?>

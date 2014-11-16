@@ -26,7 +26,7 @@
  * Ikonboard 3.12a Conversion Script.
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson]
+ * Roger Libiez [Samson] http://www.iguanadons.net
  *
  * Script tested on an unmodified Ikonboard 3.12a database.
  * Use with any other version is not advised!
@@ -440,7 +440,7 @@ else if( $_GET['action'] == 'members' )
    $MID = $all + 1;
 
    $qsf->db->query( "TRUNCATE %pusers" );
-   $qsf->db->query( "INSERT INTO %pusers VALUES( 1, 'Guest', '', 0, 1, '', 0, 3, 'default', 'en', '', 'none', 0, 0, '', 0, 0, '0000-00-00', '151', '', 0, 0, '', 0, '', '', '', 0, 1, '', '', '', 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )";
+   $qsf->db->query( "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)" );
 
    $result = $oldboard->db->query( "SELECT * FROM %pmember_profiles" );
    while( $row = $oldboard->db->nqfetch($result) )
@@ -513,8 +513,10 @@ else if( $_GET['action'] == 'members' )
       if( $row['ICQNUMBER'] )
          $icq = intval( $row['ICQNUMBER'] );
 
-      $qsf->db->query( "INSERT INTO %pusers VALUES( %d, '%s', '%s', %d, %d, '%s', 0, %d, 'default', 'en', '%s', '%s', %d, %d, '%s', %d, 1, '0000-00-00', 151, '%s', %d, 0, '%s', %d, '%s', '%s', '', 1, 1, '%s', '%s', '%s', %d, 0, %d, 0, 0, 1, 1, 1, 0, 0, '' )",
-         $row['MEMBER_ID'], $row['MEMBER_NAME'], $row['MEMBER_PASSWORD'], $row['MEMBER_JOINED'], $level, $row['MEMBER_TITLE'], $row['MEMBER_GROUP'], $avatar, $type, $width, $height, $row['MEMBER_EMAIL'], $showmail, $row['WEBSITE'], $row['MEMBER_POSTS'], $row['LOCATION'], $icq, $row['MSNNAME'], $row['AOLNAME'], $row['YAHOONAME'], $row['INTERESTS'], $row['SIGNATURE'], $row['LAST_LOG_IN'], $row['LAST_ACTIVITY'] );
+      $qsf->db->query( "INSERT INTO %pusers
+         (user_id, user_name, user_password, user_joined, user_level, user_title, user_group, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_email, user_email_show, user_homepage, user_posts, user_location, user_icq, user_msn, user_aim, user_yahoo, user_interests, user_signature, user_lastvisit, user_lastpost, user_regip, user_view_avatars, user_view_signatures)
+         VALUES( %d, '%s', '%s', %d, %d, '%s', %d, '%s', '%s', %d, %d, '%s', %d, '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', %d, %d, INET_ATON('%s'), %d, %d )",
+         $row['MEMBER_ID'], $row['MEMBER_NAME'], $row['MEMBER_PASSWORD'], $row['MEMBER_JOINED'], $level, $row['MEMBER_TITLE'], $row['MEMBER_GROUP'], $avatar, $type, $width, $height, $row['MEMBER_EMAIL'], $showmail, $row['WEBSITE'], $row['MEMBER_POSTS'], $row['LOCATION'], $icq, $row['MSNNAME'], $row['AOLNAME'], $row['YAHOONAME'], $row['INTERESTS'], $row['SIGNATURE'], $row['LAST_LOG_IN'], $row['LAST_ACTIVITY'], $row['MEMBER_IP'], $row['VIEW_AVS'], $row['VIEW_SIGS'] );
       $i++;
    }
 
@@ -593,7 +595,9 @@ else if( $_GET['action'] == 'pmessages' )
             }
             if( $row['TITLE'] == '' )
                $row['TITLE'] = "No Title";
-            $qsf->db->query( "INSERT INTO %ppmsystem VALUES( %d, %d, %d, 0, '%s', '%s', %d, '%s', %d, %d )",
+            $qsf->db->query( "INSERT INTO %ppmsystem 
+               (pm_id, pm_to, pm_from, pm_bcc, pm_title, pm_time, pm_message, pm_read, pm_folder)
+               VALUES( %d, %d, %d, '%s', '%s', %d, '%s', %d, %d )",
                $row['MESSAGE_ID'], $row['RECIPIENT_ID'], $row['FROM_ID'], $bcc, $row['TITLE'], $row['DATE'], $row['MESSAGE'], $row['READ_STATE'], $folder );
          }
       }
@@ -625,7 +629,9 @@ else if( $_GET['action'] == 'mtitles' )
             $icon = $row['PIPS'];
             $icon .= '.png';
          }
-         $qsf->db->query( "INSERT INTO %pmembertitles VALUES( %d, '%s', %d, '%s' )", $row['ID'], $row['TITLE'], $row['POSTS'], $icon );
+         $qsf->db->query( "INSERT INTO %pmembertitles
+            (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon)
+            VALUES( %d, '%s', %d, '%s' )", $row['ID'], $row['TITLE'], $row['POSTS'], $icon );
          $i++;
       }
    }
@@ -649,7 +655,9 @@ else if( $_GET['action'] == 'categories' )
          $subcat = 1;
       else
          $subcat = 0;
-      $qsf->db->query( "INSERT INTO %pforums VALUES( %d, %d, '', '%s', %d, '%s', 0, 0, 0, %d, '' )",
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_id, forum_parent, forum_name, forum_position, forum_description, forum_subcat)
+         VALUES( %d, %d, '%s', %d, '%s', %d )",
          $row['CAT_ID'], $row['SUB_CAT_ID'], $row['CAT_NAME'], $row['CAT_POS'], $row['CAT_DESC'], $subcat );
       $i++;
    }
@@ -668,7 +676,9 @@ else if( $_GET['action'] == 'forums' )
    {
       $row['FORUM_NAME'] = strip_ikon_tags( $row['FORUM_NAME'] );
       $row['FORUM_DESC'] = strip_ikon_tags( $row['FORUM_DESC'] );
-      $qsf->db->query( "INSERT INTO %pforums VALUES( '', %d, '', '%s', %d, '%s', %d, %d, %d, 0, %d )",
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_parent, forum_name, forum_position, forum_description, forum_topics, forum_replies, forum_lastpost, ib)
+         VALUES( %d, '%s', %d, '%s', %d, %d, %d, %d )",
          $row['CATEGORY'], $row['FORUM_NAME'], $row['FORUM_POSITION'], $row['FORUM_DESC'], $row['FORUM_TOPICS'], $row['FORUM_POSTS'], $row['FORUM_LAST_POST'], $row['FORUM_ID'] );
       $i++;
    }
@@ -737,8 +747,10 @@ else if( $_GET['action'] == 'topics' )
 
       $row['TOPIC_TITLE'] = strip_ikon_tags( $row['TOPIC_TITLE'] );
       $row['TOPIC_DESC'] = strip_ikon_tags( $row['TOPIC_DESC'] );
-      $qsf->db->query( "INSERT INTO %ptopics VALUES( %d, %d, '%s', '%s', %d, 0, %d, '', %d, %d, %d, %d, 0, '' )",
-         $row['TOPIC_ID'], $tid, $row['TOPIC_TITLE'], $row['TOPIC_DESC'], $row['TOPIC_STARTER'], $row['TOPIC_LAST_POSTER'], $row['TOPIC_LAST_DATE'], $row['TOPIC_POSTS'], $row['TOPIC_VIEWS'], $topic_modes );
+      $qsf->db->query( "INSERT INTO %ptopics
+         (topic_id, topic_forum, topic_title, topic_description, topic_starter, topic_last_poster, topic_posted, topic_edited, topic_replies, topic_views, topic_modes)
+         VALUES( %d, %d, '%s', '%s', %d, %d, %d, %d, %d, %d, %d )",
+         $row['TOPIC_ID'], $tid, $row['TOPIC_TITLE'], $row['TOPIC_DESC'], $row['TOPIC_STARTER'], $row['TOPIC_START_DATE'], $row['TOPIC_LAST_POSTER'], $row['TOPIC_LAST_DATE'], $row['TOPIC_POSTS'], $row['TOPIC_VIEWS'], $topic_modes );
       $i++;
    }
 
@@ -782,7 +794,9 @@ else if( $_GET['action'] == 'topics' )
             $row['MEMBER_ID'] = $newid;
          }
       }
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, '%s', %d, %d )", $row['ID'], $row['MEMBER_ID'], $subtype, $item, $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, '%s', %d, %d )", $row['ID'], $row['MEMBER_ID'], $subtype, $item, $expire );
    }
 
    $qsf->db->query( "ALTER TABLE %pforums DROP ib" );
@@ -845,7 +859,7 @@ else if( $_GET['action'] == 'polls' )
             $row['MEMBER_ID'] = $newid;
          }
       }
-      $qsf->db->query( "INSERT INTO %pvotes VALUES( %d, %d, '' )", $row['MEMBER_ID'], $row['POLL_ID'] );
+      $qsf->db->query( "INSERT INTO %pvotes (vote_user, vote_topic) VALUES( %d, %d )", $row['MEMBER_ID'], $row['POLL_ID'] );
    }
 
    $oldset['polls'] = 1;
@@ -907,7 +921,9 @@ else if( $_GET['action'] == 'posts' )
       /* Try and clean up some of the junk in Ikonboard posts. MySQL isn't happy about some of it. */
       $row['POST'] = strip_ikon_tags( $row['POST'] );
 
-      $qsf->db->query( "INSERT INTO %pposts VALUES( %d, %d, %d, %d, 1, 1, '%s', %d, '', INET_ATON('%s'), '', 0 )",
+      $qsf->db->query( "INSERT INTO %pposts
+         (post_id, post_topic, post_author, post_emoticons, post_text, post_time, post_ip)
+         VALUES( %d, %d, %d, %d, '%s', %d, INET_ATON('%s') )",
          $row['POST_ID'], $row['TOPIC_ID'], $row['AUTHOR'], $row['ENABLE_EMO'], $row['POST'], $row['POST_DATE'], $row['IP_ADDR'] );
       $i++;
    }

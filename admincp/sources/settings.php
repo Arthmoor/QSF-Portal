@@ -169,6 +169,7 @@ class settings extends admin
 				'output_buffer' => 'bool',
 				'servertime' => 'float',
 				'max_load' => 'float',
+				'analytics_id' => 'string',
 				'spider_active' => 'bool',
 				'spider_agent' => 'array',
 				'spider_name' => 'array',

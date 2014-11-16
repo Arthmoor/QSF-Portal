@@ -579,6 +579,10 @@
   <td class="tablelight"><input class="input" type="text" name="max_load" value="{$this->sets['max_load']}" size="40" /></td>
  </tr>
  <tr>
+  <td class="labeldark">{$this->lang->settings_google_id}<br /><span class="tiny">{$this->lang->settings_google_msg}</span></td>
+  <td class="tabledark"><input class="input" type="text" name="analytics_id" value="{$this->sets['analytics_id']}" size="40" /></td>
+ </tr>
+ <tr>
   <td class="footer" colspan="2">&nbsp;</td>
  </tr>
 {$this->etable}
@@ -1976,6 +1980,9 @@ enable('$init');
   <td class="{$class['subs']}" style="width:16%; text-align:center;"><a href="{$this->self}?a=cp&amp;s=subs">{$this->lang->cp_label_edit_subs}</a></td>
   <td class="{$class['sig']}" style="width:16%; text-align:center;"><a href="{$this->self}?a=cp&amp;s=sig">{$this->lang->cp_label_edit_sig}</a></td>
  </tr>
+ <tr>
+  <td class="footer" colspan="6">&nbsp;</td>
+ </tr>
 {$this->etable}
 
 <p></p>
@@ -2095,6 +2102,12 @@ enable('$init');
   <td class="tablelight">{$this->lang->cp_email}</td>
   <td class="tablelight">
    <input class="input" type="text" name="user_email" value="{$this->user['user_email']}" size="40" />
+  </td>
+ </tr>
+ <tr>
+  <td class="tablelight">{$this->lang->cp_pass}<br /><span class="tiny">{$this->lang->cp_pass2}</span></td>
+  <td class="tablelight">
+   <input class="input" type="password" name="passA" value="" size="40" autocomplete="off" />
   </td>
  </tr>
  <tr>
@@ -2523,13 +2536,15 @@ enable('$init');
 </div>
 <div class="copyright">
 {$copyright}
-<IF $qsf->perms->auth('is_admin')>
 <p class="adminstat">
+{$servertime}
+<IF $qsf->perms->auth('is_admin')>
  <br /><b>{$time_exec}</b> seconds - <b>{$qsf->db->querycount}</b> queries - <b>{$server_load}</b> load
  [<a href="{$qsf->self}?{$qsf->query}&amp;debug=1" class="small">{$qsf->lang->main_full}</a>]
-</p>
 </IF>
+</p>
 </div>
+
 <div class="validchecks">
  <a href="http://validator.w3.org/check?uri=referer" onclick="window.open(this.href,'_blank');return false;">
   <img src="./skins/{$qsf->skin}/images/valid-xhtml11.png" alt="Valid XHTML 1.1!" title="Valid XHTML 1.1!" />
@@ -2538,6 +2553,9 @@ enable('$init');
   <img src="./skins/{$qsf->skin}/images/valid-css.png" alt="Valid CSS!" title="Valid CSS!" />
  </a>
 </div>
+
+{$google}
+
 </body>
 </html>
       ]]></html>
@@ -4426,19 +4444,16 @@ enable('$init');
      | <a href="{$this->self}?a=files&amp;s=fixcount">{$this->lang->files_fix_stats}</a>
     </IF>
    </div>
-
-   <p></p>
-  
-   <div>
-    <input type="text" name="query" />
-    <input type="hidden" name="cats" value="all" />
-    <input type="hidden" name="sName" value="1" />
-    <input type="hidden" name="sDesc" value="1" />
-    <input type="hidden" name="sAuth" value="1" />
-    <input type="hidden" name="downCount" value="0" />
-    <input type="hidden" name="dispCount" value="100" />
-    <input type="submit" name="submit" value="Search" />
-   </div>
+  </td>
+  <td class="subheader">
+   <input type="text" name="query" />
+   <input type="hidden" name="cats" value="all" />
+   <input type="hidden" name="sName" value="1" />
+   <input type="hidden" name="sDesc" value="1" />
+   <input type="hidden" name="sAuth" value="1" />
+   <input type="hidden" name="downCount" value="0" />
+   <input type="hidden" name="dispCount" value="100" />
+   <input type="submit" name="submit" value="Search" />
   </td>
  </tr>
 {$this->etable}
@@ -4596,26 +4611,20 @@ enable('$init');
       <displayname>File Categories</displayname>
       <description>Format of the file category listings.</description>
       <html><![CDATA[
-<div style="background-color:#5ca0e6; border:1px dashed #555555; padding:1.5em; margin-bottom:1em;">
- <table width="99%">
-  <tr>
+<table class="catbox">
+ <tr>
+  <td colspan="100%">{$tree}
    <IF isset($moder)>
-    <div class="newslegend">{$this->lang->files_moderator}: <a href="{$this->self}?a=profile&amp;w={$moderid}">{$moder}</a></div>
-    <br />
+    (<strong>{$this->lang->files_moderator}</strong>: <a href="{$this->self}?a=profile&amp;w={$moderid}">{$moder}</a>)
    </IF>
-   <td>{$tree}</td>
-  </tr>
- </table>
- <br />
- <table width="99%">
-  {$catlinks}
-  <IF ($break % 5)>
-  </tr>
-  </IF>
- </table>
- <br />
-</div>
-
+  </td>
+ </tr>
+ {$catlinks}
+ <IF ($break % 5)>
+ </tr>
+ </IF>
+</table>
+<br />
 {$displaycat}
       ]]></html>
     </template>
@@ -4698,7 +4707,7 @@ enable('$init');
  </tr>
  <tr>
   <td class="tabledark"><strong>{$this->lang->files_author}:</strong></td>
-  <td class="tabledark"><input class="input" type="text" name="file_author" value="" maxlength="20" /></td>
+  <td class="tabledark"><input class="input" type="text" name="file_author" value="" maxlength="40" /></td>
  </tr>
  <tr>
   <td class="tablelight"><strong>{$this->lang->files_cat}:</strong></td>
@@ -4714,7 +4723,10 @@ enable('$init');
  </tr>
  <tr>
   <td class="tablelight"><strong>{$this->lang->files_desc}:</strong></td>
-  <td class="tablelight"><textarea class="input" name="file_description" rows="5" cols="60"></textarea>
+  <td class="tablelight">
+   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
+   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60"></textarea>
+  </td>
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">
@@ -4764,8 +4776,9 @@ enable('$init');
   </select>
 </div>
 <div class="tablelight">
+ <script type="text/javascript" src="./javascript/postboxplain.js"></script>
  <strong>{$this->lang->files_desc}:</strong><br />
- <textarea class="input" name="file_description" rows="5" cols="60">{$file_description}</textarea>
+ <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{$file_description}</textarea>
 </div>
 <div class="footer"><input type="submit" name="submit" value="{$this->lang->submit}" /></div>
       ]]></html>
@@ -4879,9 +4892,10 @@ enable('$init');
       <displayname>Recent Uploads List</displayname>
       <description>Format of the recently uploaded files list.</description>
       <html><![CDATA[
-<div class="header">{$this->lang->files_recent_uploads}:</div>
-<p></p>
-<table cellspacing="0" cellpadding="2" style="width:100%; border-collapse:collapse;">
+{$this->table}
+ <tr>
+  <td class="header" style="text-align:center" colspan="6">{$this->lang->files_recent_uploads}:</td>
+ </tr>
  <tr>
   <td class="subheader">{$this->lang->files_name}</td>
   <td class="subheader">{$this->lang->files_submitted_by}</td>
@@ -4891,8 +4905,10 @@ enable('$init');
   <td class="subheader">{$this->lang->files_rating}</td>
  </tr>
  {$catitems}
-</table>
-<div class="footer"></div>
+ <tr>
+  <td class="footer" colspan="6">&nbsp;</td>
+ </tr>
+{$this->etable}
       ]]></html>
     </template>
     <template><set>Main</set><name>MAIN_STATS</name>
@@ -5056,7 +5072,10 @@ enable('$init');
  </tr>
  <tr>
   <td class="tablelight"><strong>{$this->lang->files_desc}:</strong></td>
-  <td class="tablelight"><textarea class="input" name="file_description" rows="5" cols="60">{$file['file_description']}</textarea>
+  <td class="tablelight">
+   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
+   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{$file['file_description']}</textarea>
+  </td>
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">

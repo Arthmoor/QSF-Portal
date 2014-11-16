@@ -100,7 +100,7 @@ class login extends qsfglobal
 				}
 				$_SESSION['user'] = $user;
 				$_SESSION['pass'] = md5($pass . $this->ip);
-				
+
 				return $this->message($this->lang->login_header, $this->lang->login_logged, $this->lang->continue, str_replace('&', '&amp;', $this->post['request_uri']), $this->post['request_uri']);
 			} else {
 				return $this->message($this->lang->login_header, sprintf($this->lang->login_cant_logged, $this->self));

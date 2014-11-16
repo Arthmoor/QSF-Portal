@@ -93,8 +93,8 @@ class page extends qsfglobal
 			$this->tree($page['page_title']);
 			$this->set_title($page['page_title']);
 		} else {
-			$this->set_title($this->lang->pages_viewing);
-			$this->tree($this->lang->pages_viewing);
+			$this->set_title($this->lang->page_viewing);
+			$this->tree($this->lang->page_viewing);
 			return $this->message($this->lang->page, $this->lang->page_not_exist);
 		}
 		return eval($this->template('PAGE_PAGE'));

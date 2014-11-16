@@ -157,6 +157,7 @@ class recent extends qsfglobal
 		while ($row = $this->db->nqfetch($query))
 		{
 			$row['topic_title'] = $this->format($row['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS);
+			$row['forum_name'] = $this->format( $row['forum_name'], FORMAT_HTMLCHARS );
 
 			$row['newpost'] = !$this->readmarker->is_topic_read($row['topic_id'], $row['topic_edited']);
 

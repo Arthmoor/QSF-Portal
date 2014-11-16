@@ -1,6 +1,25 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.3.4:
+
+* Cosmetic improvements to the file module templates.
+* Added gzip detection at install.
+* Don't use zlib if the php extension isn't loaded.
+* Added support for Google Analytics tracking.
+* Timezone library outputs additional error information.
+* Added registration IP to user data.
+* Added logging for file related functions.
+
+  Bugs addressed:
+
+* Called wrong language field for non-existing custom page.
+* Crash if show_file gets called with an invalid file ID.
+* Crash in subforums with unread posts.
+* BBCode parsing fails on PHP 4 systems.
+* Conversion scripts had mismatches in database fields.
+* Post reply status checkboxes had no affect. (pin/lock after reply)
+
 Changes for 1.3.3:
 
 * Added language support for files module.

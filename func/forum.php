@@ -157,6 +157,7 @@ class forum extends qsfglobal
 
 		if ($forum = $this->db->nqfetch($query)) {
 			$this->templater->add_templates('board');
+			$this->lang->board();
 			do{
 				if (!$this->perms->auth('forum_view', $forum['forum_id'])) {
 					continue;
@@ -195,6 +196,7 @@ class forum extends qsfglobal
 
 					$forum['TopicLastTime'] = $forum['LastTime']; // Store so skin can access
 					$forum['LastTime'] = $this->mbdate(DATE_LONG, $forum['LastTime']);
+					$forum['forum_lastpost_topic'] = $forum['LastTopicID'];
 
 					if ($forum['user_lastposterID']) {
 						$forum['user_lastposter'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $forum['user_lastposterID'] . '" class="small">' . $forum['user_lastposter'] . '</a>';
@@ -250,7 +252,7 @@ class forum extends qsfglobal
 		while ($row = $this->db->nqfetch($query))
 		{
 			$row['topic_title'] = $this->format($row['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS);
-			
+
 			$row['newpost'] = !$this->readmarker->is_topic_read($row['topic_id'], $row['topic_edited']);
 
 			$Pages = $this->htmlwidgets->get_pages_topic($row['topic_replies'], 'a=topic&amp;t=' . $row['topic_id'] . '&amp;f=' . $f, ', ', 0, $m);

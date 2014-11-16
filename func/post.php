@@ -537,8 +537,8 @@ class post extends qsfglobal
 					$mode |= TOPIC_PINNED;
 				}
 
-				$this->db->query("UPDATE %ptopics SET topic_replies=topic_replies+1, topic_edited=%d, topic_last_poster=%d WHERE topic_id=%d",
-					$this->time, $this->user['user_id'], $this->get['t']);
+				$this->db->query("UPDATE %ptopics SET topic_replies=topic_replies+1, topic_modes=%d, topic_edited=%d, topic_last_poster=%d WHERE topic_id=%d",
+					$mode, $this->time, $this->user['user_id'], $this->get['t']);
 				$field = 'forum_replies';
 			} else {
 				$field = 'forum_topics';

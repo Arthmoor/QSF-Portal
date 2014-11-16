@@ -349,6 +349,9 @@ class nl
 		$this->cp_oct = 'Oktober';
 		$this->cp_old_notmatch = 'Het oude wachtwoord dat u heeft ingegeven komt niet overeen met het wachtwoord in onze database.';
 		$this->cp_old_pass = 'Oude wachtwoord';
+		$this->cp_pass = 'Password'; //Translate
+		$this->cp_pass2 = 'Only required if changing Email'; //Translate
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.'; //Translate
 		$this->cp_pass_notvaid = 'Uw wachtwoord is ongeldig. Zorg ervoor dat u alleen de toegestane leestekens zoals letters, nummers, verbindingsstreepjes, onderstreeptekens of spaties gebruikt.';
 		$this->cp_posts_page = 'Posts per topic page. 0 resets to board default.'; //Translate
 		$this->cp_preferences = 'Verander je forum instellingen';
@@ -747,12 +750,27 @@ class nl
 	function logs()
 	{
 		$this->logs_action = 'Actie';
+		$this->logs_category = 'Category'; //Translate
+		$this->logs_category_created = 'Created a file category'; //Translate
+		$this->logs_category_deleted = 'Deleted a file category'; //Translate
+		$this->logs_category_edited = 'Edited a file category'; //Translate
+		$this->logs_category_from = 'from category'; //Translate
+		$this->logs_category_in = 'in category'; //Translate
 		$this->logs_deleted_post = 'U heeft een antwoord verwijderd.';
 		$this->logs_deleted_topic = 'Onderwep verwijderd';
 		$this->logs_edited_post = 'Antwoord aangepast';
 		$this->logs_edited_topic = 'Onderwep aangepast';
+		$this->logs_file = 'File'; //Translate
+		$this->logs_file_deleted = 'Deleted a file'; //Translate
+		$this->logs_file_edited = 'Edited a file'; //Translate
+		$this->logs_file_moved = 'Moved a file'; //Translate
+		$this->logs_file_update_approved = 'Approved a file update'; //Translate
+		$this->logs_file_update_denied = 'Denied a file update'; //Translate
+		$this->logs_file_updated = 'Updated a file'; //Translate
 		$this->logs_id = 'IDs'; //Translate
 		$this->logs_locked_topic = 'Onderwerp gesloten';
+		$this->logs_mod_add = 'Set a file moderator'; //Translate
+		$this->logs_mod_remove = 'Removed a file moderator'; //Translate
 		$this->logs_moved_from = 'van forum';
 		$this->logs_moved_to = 'naar forum';
 		$this->logs_moved_topic = 'Onderwerp verplaatst';
@@ -871,6 +889,7 @@ class nl
 		$this->mc_user_pm = 'Accepteer privé berichten';
 		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Berichten';
+		$this->mc_user_regip = 'Registration IP'; //Translate
 		$this->mc_user_signature = 'Handtekening';
 		$this->mc_user_skin = 'Skin'; //Translate
 		$this->mc_user_timezone = 'Tijdszone';
@@ -1449,6 +1468,8 @@ class nl
 		$this->settings_enabled_modules = 'Enabled Modules'; //Translate
 		$this->settings_foreign_link = 'Foreign Link Target'; //Translate
 		$this->settings_general = 'General Opties';
+		$this->settings_google_id = 'Google Analytics ID'; //Translate
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.'; //Translate
 		$this->settings_group_after = 'Group After Registration'; //Translate
 		$this->settings_hot_topic = 'Posts for a Hot Topic'; //Translate
 		$this->settings_kilobytes = 'Kilobytes'; //Translate

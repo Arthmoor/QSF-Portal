@@ -26,7 +26,7 @@
  * XMB 1.9 Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson]
+ * Roger Libiez [Samson] http://www.iguanadons.net
  *
  * This convertor has been tested on XMB 1.9.3
  * I make no guarantees of it working with something older than that.
@@ -419,7 +419,7 @@ else if( $_GET['action'] == 'members' )
 {
    $i = 0;
    $qsf->db->query( "TRUNCATE %pusers" );
-   $qsf->db->query( "INSERT INTO %pusers VALUES( 1, 'Guest', '', 0, 1, '', 0, 3, 'default', 'en', '', 'none', 0, 0, '', 0, 0, '0000-00-00', '151', '', 0, 0, '', 0, '', '', '', 0, 1, '', '', '', 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )" );
+   $qsf->db->query( "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)" );
 
    $result = $oldboard->db->query( "SELECT * FROM %pmembers" );
    while( $row = $oldboard->db->nqfetch($result) )
@@ -466,6 +466,10 @@ else if( $_GET['action'] == 'members' )
          $type = "none";
       }
 
+      $pmnotify = 0;
+      if( $row['emailonu2u'] != '' )
+         $pmnotify = 1;
+
       switch( $row['langfile'] )
       {
          default:        $lang = "en"; break;
@@ -482,8 +486,10 @@ else if( $_GET['action'] == 'members' )
       if( $row['icq'] )
          $icq = intval( $row['icq'] );
 
-      $qsf->db->query( "INSERT INTO %pusers VALUES( %d, '%s', '%s', %d, 1, '', 0, %d, 'default', '%s', '%s', '%s', %d, %d, '%s', %d, 1, '0000-00-00', 151, '%s', %d, 0, '%s', %d, '%s', '%s', '', 1, 1, '%s', '', '%s', %d, 0, 0, 0, 0, 1, 1, 1, 0, 0, '' )",
-         $row['uid'], $row['username'], $row['password'], $row['regdate'], $group, $lang, $avatar, $type, $width, $height, $row['email'], $showmail, $row['site'], $row['postnum'], $row['location'], $icq, $row['msn'], $row['aim'], $row['yahoo'], $row['sig'], $row['lastvisit'] );
+      $qsf->db->query( "INSERT INTO %pusers
+         (user_id, user_name, user_password, user_joined, user_group, user_language, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_email, user_email_show, user_homepage, user_posts, user_location, user_icq, user_msn, user_aim, user_yahoo, user_signature, user_lastvisit, user_active, user_pm_mail, user_regip)
+         VALUES( %d, '%s', '%s', %d, %d, '%s', '%s', '%s', %d, %d, '%s', %d, '%s', %d, '%s', %d, '%s', '%s', '%s', '%s', %d, %d, %d, INET_ATON('%s') )",
+         $row['uid'], $row['username'], $row['password'], $row['regdate'], $group, $lang, $avatar, $type, $width, $height, $row['email'], $showmail, $row['site'], $row['postnum'], $row['location'], $icq, $row['msn'], $row['aim'], $row['yahoo'], $row['sig'], $row['lastvisit'], $row['invisible'], $pmnotify, $row['regip'] );
       $i++;
    }
 
@@ -524,7 +530,9 @@ else if( $_GET['action'] == 'pmessages' )
          $bcc = $uto;
          $uto = $ufrom;
       }
-      $qsf->db->query( "INSERT INTO %ppmsystem VALUES( %d, %d, %d, 0, '%s', '%s', %d, '%s', 0, %d )",
+      $qsf->db->query( "INSERT INTO %ppmsystem
+         (pm_id, pm_to, pm_from, pm_bcc, pm_title, pm_time, pm_message, pm_folder)
+         VALUES( %d, %d, %d, '%s', '%s', %d, '%s', %d )",
          $row['u2uid'], $uto, $ufrom, $bcc, $row['subject'], $row['dateline'], $row['message'], $folder );
    }
 
@@ -594,13 +602,15 @@ else if( $_GET['action'] == 'forums' )
       $subcat = 0;
       if( $row['type'] == 'forum' && $row['fup'] == 0 )
          $subcat = 2;
-      $qsf->db->query( "INSERT INTO %pforums VALUES( %d, %d, '', '%s', %d, '%s', %d, %d, 0, %d )",
+      $qsf->db->query( "INSERT INTO %pforums
+         (forum_id, forum_parent, forum_name, forum_position, forum_description, forum_topics, forum_replies, forum_subcat)
+         VALUES( %d, %d, '%s', %d, '%s', %d, %d, %d )",
          $row['fid'], $row['fup'], $row['name'], $row['displayorder'], $row['description'], $row['threads'], $row['posts'], $subcat );
       $i++;
    }
 
    $fid++;
-   $qsf->db->query( "INSERT INTO %pforums VALUES( %d, 0, '', 'Default Category', 0, '', 0, 0, 0, 0 )", $fid );
+   $qsf->db->query( "INSERT INTO %pforums (forum_id, forum_name) VALUES( %d, 'Default Category' )", $fid );
    $qsf->db->query( "UPDATE %pforums SET forum_parent=%d WHERE forum_subcat=2", $fid );
    $qsf->db->query( "UPDATE %pforums SET forum_subcat=0" );
 
@@ -645,7 +655,9 @@ else if( $_GET['action'] == 'topics' )
          $j++;
       }
 
-      $qsf->db->query( "INSERT INTO %ptopics VALUES( %d, %d, '%s', '', %d, 0, %d, '', %d, %d, %d, %d, 0, '%s' )",
+      $qsf->db->query( "INSERT INTO %ptopics
+         (topic_id, topic_forum, topic_title, topic_starter, topic_last_poster, topic_edited, topic_replies, topic_views, topic_modes, topic_poll_options)
+         VALUES( %d, %d, '%s', %d, %d, %d, %d, %d, %d, '%s' )",
          $row['tid'], $row['fid'], $row['subject'], $uid, $uid, $row['dateline'], $row['replies'], $row['views'], $topic_modes, $poll_options );
       $i++;
    }
@@ -666,7 +678,9 @@ else if( $_GET['action'] == 'topics' )
       $uid++;
 
       $expire = time() + 2592000;
-      $qsf->db->query( "INSERT INTO %psubscriptions VALUES( %d, %d, 'topic', %d, %d )", $row['tid'], $uid, $row['tid'], $expire );
+      $qsf->db->query( "INSERT INTO %psubscriptions
+         (subscription_id, subscription_user, subscription_type, subscription_item, subscription_expire)
+         VALUES( %d, %d, 'topic', %d, %d )", $row['tid'], $uid, $row['tid'], $expire );
    }
 
 /*
@@ -677,7 +691,7 @@ else if( $_GET['action'] == 'topics' )
    while( $row = $oldboard->db->nqfetch($result) )
    {
       $row['member_id']++;
-      $qsf->db->query( "INSERT INTO %pvotes VALUES( %d, %d, '' )", $row['member_id'], $row['tid'] );
+      $qsf->db->query( "INSERT INTO %pvotes (vote_user, vote_topic) VALUES( %d, %d )", $row['member_id'], $row['tid'] );
    }
 
    $oldset['polls'] = 1;
@@ -695,9 +709,13 @@ else if( $_GET['action'] == 'attach' )
 
    while( $row = $oldboard->db->nqfetch($result) )
    {
-      $qsf->db->query( "INSERT INTO %pattach VALUES( %d, '%s', '%s', %d, %d, %d )",
+      $qsf->db->query( "INSERT INTO %pattach
+         (attach_id, attach_file, attach_name, attach_post, attach_downloads, attach_size)
+         VALUES( %d, '%s', '%s', %d, %d, %d )",
          $row['aid'], $row['filename'], $row['filename'], $row['pid'], $row['downloads'], $row['filesize'] );
       $i++;
+
+      // TODO: Add code to copy files from XMB to QSF.
    }
 
    $oldset['attach'] = 1;
@@ -743,7 +761,9 @@ else if( $_GET['action'] == 'posts' )
       if( $row['useip'] )
          $ip = $row['useip'];
       
-      $qsf->db->query( "INSERT INTO %pposts VALUES( %d, %d, %d, %d, 1, 1, '%s', %d, '', INET_ATON('%s'), '', 0 )",
+      $qsf->db->query( "INSERT INTO %pposts
+         (post_id, post_topic, post_author, post_emoticons, post_text, post_time, post_ip)
+         VALUES( %d, %d, %d, %d, '%s', %d, INET_ATON('%s') )",
          $row['pid'], $row['tid'], $uid, $smilies, $row['message'], $row['dateline'], $ip );
       $i++;
    }

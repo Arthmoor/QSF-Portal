@@ -348,6 +348,9 @@ class sv
 		$this->cp_oct = 'Oktober';
 		$this->cp_old_notmatch = 'Ditt gamla lösenord är ej korrekt.';
 		$this->cp_old_pass = 'Gammalt Lösenord';
+		$this->cp_pass = 'Password'; //Translate
+		$this->cp_pass2 = 'Only required if changing Email'; //Translate
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.'; //Translate
 		$this->cp_pass_notvaid = 'Ditt lösenord är ogiltigt. Endast bokstäver, nummer, streck, understreck och mellanslag är tillåtna.';
 		$this->cp_posts_page = 'Inlägg per ämnessida. 0 återställer till forumstandard.';
 		$this->cp_preferences = 'Ändrar Inställningar';
@@ -746,12 +749,27 @@ class sv
 	function logs()
 	{
 		$this->logs_action = 'Händelse';
+		$this->logs_category = 'Category'; //Translate
+		$this->logs_category_created = 'Created a file category'; //Translate
+		$this->logs_category_deleted = 'Deleted a file category'; //Translate
+		$this->logs_category_edited = 'Edited a file category'; //Translate
+		$this->logs_category_from = 'from category'; //Translate
+		$this->logs_category_in = 'in category'; //Translate
 		$this->logs_deleted_post = 'Tog bort ett inlägg';
 		$this->logs_deleted_topic = 'Tog bort ett ämne';
 		$this->logs_edited_post = 'Ändrade ett inlägg';
 		$this->logs_edited_topic = 'Ändrade ett ämne';
+		$this->logs_file = 'File'; //Translate
+		$this->logs_file_deleted = 'Deleted a file'; //Translate
+		$this->logs_file_edited = 'Edited a file'; //Translate
+		$this->logs_file_moved = 'Moved a file'; //Translate
+		$this->logs_file_update_approved = 'Approved a file update'; //Translate
+		$this->logs_file_update_denied = 'Denied a file update'; //Translate
+		$this->logs_file_updated = 'Updated a file'; //Translate
 		$this->logs_id = 'IDs'; //Translate
 		$this->logs_locked_topic = 'Låste ett ämne';
+		$this->logs_mod_add = 'Set a file moderator'; //Translate
+		$this->logs_mod_remove = 'Removed a file moderator'; //Translate
 		$this->logs_moved_from = 'från forum';
 		$this->logs_moved_to = 'till forum';
 		$this->logs_moved_topic = 'Flyttade ett ämne';
@@ -870,6 +888,7 @@ class sv
 		$this->mc_user_pm = 'Accepterar Personliga Meddelanden';
 		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Inlägg';
+		$this->mc_user_regip = 'Registration IP'; //Translate
 		$this->mc_user_signature = 'Signatur';
 		$this->mc_user_skin = 'Skal';
 		$this->mc_user_timezone = 'Tids Zon';
@@ -1448,6 +1467,8 @@ class sv
 		$this->settings_enabled_modules = 'Aktiverade Moduler';
 		$this->settings_foreign_link = 'Mål för Främmande Länkar';
 		$this->settings_general = 'Allmäna Inställningar';
+		$this->settings_google_id = 'Google Analytics ID'; //Translate
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.'; //Translate
 		$this->settings_group_after = 'Grupp Efter Registrering';
 		$this->settings_hot_topic = 'Inlägg för ett Hett Ämne';
 		$this->settings_kilobytes = 'Kilobytes'; //Translate

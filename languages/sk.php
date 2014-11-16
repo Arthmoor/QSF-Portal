@@ -347,6 +347,9 @@ class sk
 		$this->cp_oct = 'Octóber';
 		$this->cp_old_notmatch = 'Pôvodné heslo, ktoré ste zadali sa nezhoduje s heslom v databáze.';
 		$this->cp_old_pass = 'Pôvodné heslo';
+		$this->cp_pass = 'Password'; //Translate
+		$this->cp_pass2 = 'Only required if changing Email'; //Translate
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.'; //Translate
 		$this->cp_pass_notvaid = 'Vaše heslo je neplatné. Uistite sa, že obsahuje len platné znaky ako sú písmená, èísla, pomlèka, podtržítko alebo medzera.';
 		$this->cp_posts_page = 'Posts per topic page. 0 resets to board default.'; //Translate
 		$this->cp_preferences = 'Zmena nastavení';
@@ -746,12 +749,27 @@ class sk
 	function logs()
 	{
 		$this->logs_action = 'Akcia';
+		$this->logs_category = 'Category'; //Translate
+		$this->logs_category_created = 'Created a file category'; //Translate
+		$this->logs_category_deleted = 'Deleted a file category'; //Translate
+		$this->logs_category_edited = 'Edited a file category'; //Translate
+		$this->logs_category_from = 'from category'; //Translate
+		$this->logs_category_in = 'in category'; //Translate
 		$this->logs_deleted_post = 'Zmazaný príspevok';
 		$this->logs_deleted_topic = 'Zmazaná téma';
 		$this->logs_edited_post = 'Zeditovaný príspevok';
 		$this->logs_edited_topic = 'Zeditovaná téma';
+		$this->logs_file = 'File'; //Translate
+		$this->logs_file_deleted = 'Deleted a file'; //Translate
+		$this->logs_file_edited = 'Edited a file'; //Translate
+		$this->logs_file_moved = 'Moved a file'; //Translate
+		$this->logs_file_update_approved = 'Approved a file update'; //Translate
+		$this->logs_file_update_denied = 'Denied a file update'; //Translate
+		$this->logs_file_updated = 'Updated a file'; //Translate
 		$this->logs_id = 'IDs'; //Translate
 		$this->logs_locked_topic = 'Zamknutá téma';
+		$this->logs_mod_add = 'Set a file moderator'; //Translate
+		$this->logs_mod_remove = 'Removed a file moderator'; //Translate
 		$this->logs_moved_from = 'z fóra';
 		$this->logs_moved_to = 'do fóra';
 		$this->logs_moved_topic = 'Presunutá téma';
@@ -870,6 +888,7 @@ class sk
 		$this->mc_user_pm = 'Prijíma osobné odkazy (PM)';
 		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Príspevky';
+		$this->mc_user_regip = 'Registration IP'; //Translate
 		$this->mc_user_signature = 'Podpis';
 		$this->mc_user_skin = 'Skin'; //Translate
 		$this->mc_user_timezone = 'Èasové Pásmo';
@@ -1449,6 +1468,8 @@ class sk
 		$this->settings_enabled_modules = 'Povolené Moduly';
 		$this->settings_foreign_link = 'Link, nasmerovaný na cudzí server';
 		$this->settings_general = 'Obecné Nastavenia';
+		$this->settings_google_id = 'Google Analytics ID'; //Translate
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.'; //Translate
 		$this->settings_group_after = 'Skupina po zaregistrovaní';
 		$this->settings_hot_topic = 'Príspevky na horúcu tému';
 		$this->settings_kilobytes = 'Kilobajtov';

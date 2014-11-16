@@ -32,15 +32,15 @@ if (!defined('QUICKSILVERFORUMS')) {
 }
 
 /**
- * The Quicksilver Forums Core
+ * The QSF Portal Core
  *
  * @author Jason Warner <jason@mercuryboard.com>
  * @since Beta 2.0
  **/
 class qsfglobal
 {
-	var $name    = 'QSF Portal'; // The name of the software @var string
-	var $version = 'v1.3.3';            // Quicksilver Forums' version @var string
+	var $name    = 'QSF Portal';      // The name of the software @var string
+	var $version = 'v1.3.4';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -867,7 +867,24 @@ class qsfglobal
 		}
 		$tree .= $parent;
 		return $tree;
-	}	
-}
+	}
 
+	/**
+	 * Adds a moderator log entry
+	 *
+	 * @param string $action The action that was taken
+	 * @param int $data1 The data acted upon (post ID, forum ID, etc)
+	 * @param int $data2 Additional data, if necessary
+	 * @param int $data3 Additional data, if necessary
+	 * @author Jason Warner <jason@mercuryboard.com>
+	 * @since 1.1.0
+	 * @return void
+	 **/
+	function log_action($action, $data1, $data2 = 0, $data3 = 0)
+	{
+		$this->db->query("INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3)
+			VALUES (%d, %d, '%s', %d, %d, %d)",
+			$this->user['user_id'], $this->time, $action, $data1, $data2, $data3);
+	}
+}
 ?>

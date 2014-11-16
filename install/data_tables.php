@@ -356,6 +356,7 @@ $queries[] = "CREATE TABLE %pusers (
   user_view_emoticons tinyint(1) unsigned NOT NULL default '1',
   user_topics_page tinyint(2) unsigned NOT NULL DEFAULT '0',
   user_posts_page tinyint(2) unsigned NOT NULL DEFAULT '0',
+  user_regip INT UNSIGNED NOT NULL default '0',
   user_perms text NOT NULL default '',
   user_file_perms text NOT NULL default '',
   PRIMARY KEY  (user_id)
@@ -888,9 +889,10 @@ $sets['link_target'] = '_blank';
 $sets['logintime'] = 31536000;
 $sets['mailserver'] = 'localhost';
 $sets['max_load'] = 0;
+$sets['analytics_id'] = '';
 $sets['mostonline'] = 0;
 $sets['mostonlinetime'] = 0;
-$sets['output_buffer'] = 1;
+$sets['output_buffer'] = (extension_loaded('zlib') ? 1 : 0);
 $sets['posts'] = 0;
 $sets['posts_per_page'] = 15;
 $sets['register_image'] = 0;

@@ -347,6 +347,9 @@ class en
 		$this->cp_oct = 'October';
 		$this->cp_old_notmatch = 'The old password you entered does not match the one in our database.';
 		$this->cp_old_pass = 'Old Password';
+		$this->cp_pass = 'Password';
+		$this->cp_pass2 = 'Only required if changing Email';
+		$this->cp_pass_notmatch = 'The password you entered does not match the one in our database.';
 		$this->cp_pass_notvaid = 'Your password is not valid. Make sure it uses only valid characters such as letters, numbers, dashes, underscores, or spaces.';
 		$this->cp_posts_page = 'Posts per topic page. 0 resets to board default.';
 		$this->cp_preferences = 'Changing Preferences';
@@ -745,12 +748,27 @@ class en
 	function logs()
 	{
 		$this->logs_action = 'Action';
+		$this->logs_category = 'Category';
+		$this->logs_category_created = 'Created a file category';
+		$this->logs_category_deleted = 'Deleted a file category';
+		$this->logs_category_edited = 'Edited a file category';
+		$this->logs_category_from = 'from category';
+		$this->logs_category_in = 'in category';
 		$this->logs_deleted_post = 'Deleted a post';
 		$this->logs_deleted_topic = 'Deleted a topic';
 		$this->logs_edited_post = 'Edited a post';
 		$this->logs_edited_topic = 'Edited a topic';
+		$this->logs_file = 'File';
+		$this->logs_file_deleted = 'Deleted a file';
+		$this->logs_file_edited = 'Edited a file';
+		$this->logs_file_moved = 'Moved a file';
+		$this->logs_file_update_approved = 'Approved a file update';
+		$this->logs_file_update_denied = 'Denied a file update';
+		$this->logs_file_updated = 'Updated a file';
 		$this->logs_id = 'IDs';
 		$this->logs_locked_topic = 'Locked a topic';
+		$this->logs_mod_add = 'Set a file moderator';
+		$this->logs_mod_remove = 'Removed a file moderator';
 		$this->logs_moved_from = 'from forum';
 		$this->logs_moved_to = 'to forum';
 		$this->logs_moved_topic = 'Moved a topic';
@@ -869,6 +887,7 @@ class en
 		$this->mc_user_pm = 'Accepting Private Messages';
 		$this->mc_user_pm_mail = 'Email Private Messages';
 		$this->mc_user_posts = 'Posts';
+		$this->mc_user_regip = 'Registration IP';
 		$this->mc_user_signature = 'Signature';
 		$this->mc_user_skin = 'Skin';
 		$this->mc_user_timezone = 'Time Zone';
@@ -1447,6 +1466,8 @@ class en
 		$this->settings_enabled_modules = 'Enabled Modules';
 		$this->settings_foreign_link = 'Foreign Link Target';
 		$this->settings_general = 'General Settings';
+		$this->settings_google_id = 'Google Analytics ID';
+		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.';
 		$this->settings_group_after = 'Group After Registration';
 		$this->settings_hot_topic = 'Posts for a Hot Topic';
 		$this->settings_kilobytes = 'Kilobytes';

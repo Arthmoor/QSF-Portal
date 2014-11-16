@@ -161,9 +161,9 @@ class register extends qsfglobal
 			}
 
 			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emoticons, user_view_signatures,
-				user_language, user_email_show, user_pm, user_timezone) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, %d)",
+				user_language, user_email_show, user_pm, user_timezone, user_regip) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, %d, INET_ATON('%s'))",
 				$username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
-				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone']);
+				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone'], $this->ip);
 
 			$this->sets['last_member'] = $username;
 			$this->sets['last_member_id'] = $this->db->insert_id("users");
@@ -174,7 +174,7 @@ class register extends qsfglobal
 				return $this->send_activation_email($email, $username, $pass, $this->time);
 			}
 
-			return $this->message($this->lang->register_reging, sprintf($this->lang->register_done, $this->self));
+			return $this->message($this->lang->register_reging, $this->lang->register_done);
 		}
 	}
 
@@ -184,7 +184,7 @@ class register extends qsfglobal
 
 		// todo. Make this more friendly with internationlisation. Currenlty it's too limiting for Currently in grammar.
 		$message = "{$this->lang->register_requested} {$username}\n";
-		$message .= "{$this->lang->register_initiated} {$_SERVER['REMOTE_ADDR']}\n\n";
+		$message .= "{$this->lang->register_initiated} {$this->ip}\n\n";
 		$message .= "{$this->lang->register_email_msg}\n";
 		$message .= "{$this->lang->register_email_msg2} {$this->sets['forum_name']}.\n\n";
 		$message .= "{$this->lang->register_email_msg3}\n";

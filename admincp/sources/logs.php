@@ -100,6 +100,61 @@ class logs extends admin
 				$id = $this->lang->logs_topic . " #" . $log['log_data1'];
 				break;
 
+			case 'file_edit':
+				$action = $this->lang->logs_file_edited;
+				$id = $this->lang->logs_file . " #" . $log['log_data1'];
+				break;
+
+			case 'file_delete':
+				$action = $this->lang->logs_file_deleted;
+				$id = $this->lang->logs_file . " #" . $log['log_data1'];
+				break;
+
+			case 'file_move':
+				$action = $this->lang->logs_file_moved;
+				$id = $this->lang->logs_file . " #" . $log['log_data1'] . " " . $this->lang->logs_category_from . " " . $log['log_data2'] . " to " . $log['log_data3'];
+				break;
+
+			case 'file_edit_category':
+				$action = $this->lang->logs_category_edited;
+				$id = $this->lang->logs_category . " #" . $log['log_data1'];
+				break;
+
+			case 'file_delete_category':
+				$action = $this->lang->logs_category_deleted;
+				$id = $this->lang->logs_category . " #" . $log['log_data1'];
+				break;
+
+			case 'file_new_category':
+				$action = $this->lang->logs_category_created;
+				$id = $this->lang->logs_category . " #" . $log['log_data1'];
+				break;
+
+			case 'file_add_moderator':
+				$action = $this->lang->logs_mod_add;
+				$id = $this->lang->logs_user . " #" . $log['log_data1'] . " " . $this->lang->logs_category_in . " #" . $log['log_data2'];
+				break;
+
+			case 'file_rem_moderator':
+				$action = $this->lang->logs_mod_remove;
+				$id = $this->lang->logs_category . " #" . $log['log_data1'];
+				break;
+
+			case 'file_update':
+				$action = $this->lang->logs_file_updated;
+				$id = $this->lang->logs_file . " #" . $log['log_data1'];
+				break;
+
+			case 'file_deny_update':
+				$action = $this->lang->logs_file_update_denied;
+				$id = $this->lang->logs_file . " #" . $log['log_data1'];
+				break;
+
+			case 'file_approve_update':
+				$action = $this->lang->logs_file_update_approved;
+				$id = $this->lang->logs_file . " #" . $log['log_data1'];
+				break;
+
 			default:
 				$action = $log['log_action'];
 				$id = $log['log_data1'];

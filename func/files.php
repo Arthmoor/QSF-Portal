@@ -26,7 +26,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Downloads file browser
  *
- * @author Roger Libiez [Samson], Davion, Asylumius
+ * @author Roger Libiez [Samson] http://www.iguanadons.net, Davion, Asylumius
  * @since 1.2.2
  **/
 class files extends qsfglobal
@@ -195,6 +195,7 @@ class files extends qsfglobal
 			$author = $this->post['file_author'];
 			$desc = $this->post['file_description'];
 
+			$this->log_action( 'file_edit', $id );
 			$this->db->query( "UPDATE %pfiles SET file_name='%s', file_catid=%d, file_author='%s', file_description='%s' WHERE file_id=%d", $name, $catid, $author, $desc, $id );
 			return $this->message( $this->lang->files_edit_file, "{$file['file_name']} " . $this->lang->files_has_updated, "{$this->lang->continue}", "{$this->self}?a=files&amp;s=viewfile&amp;fid={$id}" );
 		}
@@ -203,7 +204,7 @@ class files extends qsfglobal
 	function move_file()
 	{
 		$id = intval( $this->get['fid'] );
-		$file = $this->db->fetch( "SELECT file_name, file_catid FROM %pfiles WHERE file_id=%d", $id );
+		$file = $this->db->fetch( "SELECT file_id, file_name, file_catid FROM %pfiles WHERE file_id=%d", $id );
 
 		if (!$this->file_perms->auth('move_files', $file['file_catid'])) {
 			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_move_not_permitted);
@@ -230,6 +231,7 @@ class files extends qsfglobal
 				return $this->message( $this->lang->files_move_file, $this->lang->files_move_no_category, "{$this->lang->continue}", "{$this->self}?a=files&amp;s=move&amp;fid={$id}" );
 			}
 
+			$this->log_action( 'file_move', $file['file_id'], $file['file_catid'], $catid );
 			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count-1 WHERE fcat_id=%d", $file['file_catid'] );
 			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count+1 WHERE fcat_id=%d", $catid );
 			$this->db->query( "UPDATE %pfiles SET file_catid=%d WHERE file_id=%d", $catid, $id );
@@ -354,23 +356,28 @@ class files extends qsfglobal
 			
 			if(!$getUpdate)
 			{
-				$file = $this->db->fetch( "SELECT file_filename, file_md5name, file_catid FROM %pfiles WHERE file_id=%d", $id );
+				$file = $this->db->fetch( "SELECT file_filename, file_md5name, file_catid, file_size FROM %pfiles WHERE file_id=%d", $id );
 				$filename = $file['file_filename'];
 				$md5name = $file['file_md5name'];
+				$size = $file['file_size'];
 				$basepath = "./downloads/";
 			}
 			else
 			{
-				$update = $this->db->fetch( "SELECT update_name, update_md5name, update_updating FROM %pupdates WHERE update_id=%d", $id );
+				$update = $this->db->fetch( "SELECT update_name, update_md5name, update_updating, update_size FROM %pupdates WHERE update_id=%d", $id );
 				$filename = $update['update_name'];
 				$md5name = $update['update_md5name'];
+				$size = $update['update_size'];
 				$basepath = "./updates/";
 			}
 			
 			$this->nohtml = true;
-			
+
+			// Need to terminate and unlock the session at this point or the site will stall for the current user.
+			session_write_close();
 			header("Content-type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$filename}\"");
+			header("Content-Length: " . $size);
 			readfile($basepath . $md5name);
 		}
 		return $this->message($this->lang->files_approve, $this->lang->files_invalid_option, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue");
@@ -428,6 +435,7 @@ class files extends qsfglobal
 			$this->db->query( "UPDATE %pfile_categories SET fcat_name='%s', fcat_parent=%d, fcat_longpath='%s', fcat_description='%s' WHERE fcat_id=%d", $name, $parent, $longpath, $desc, $cid );
 			$this->update_children_longpath($cat['fcat_id']);
 			$this->update_category_trees();
+			$this->log_action( 'file_edit_category', $cid );
 			return $this->message( $this->lang->files_edit_category, $this->lang->files_cat_edited, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 	}
@@ -462,6 +470,7 @@ class files extends qsfglobal
 			if( !( $newMod = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_name='%s'", $name ) ) )
 				return $this->message( $this->lang->files_add_mod, $this->lang->files_add_mod_nouser );
 			$this->db->query( "UPDATE %pfile_categories SET fcat_moderator=%d WHERE fcat_id=%d", $newMod['user_id'], $parent );
+			$this->log_action( 'file_add_moderator', $newMod['user_id'], $cid );
 			return $this->message( $this->lang->files_add_mod, "{$newMod['user_name']} " . $this->lang->files_add_mod_made );
 		}
 	}
@@ -491,6 +500,7 @@ class files extends qsfglobal
 		{
 			$parent = intval($this->post['parent']);
 			$this->db->query( "UPDATE %pfile_categories SET fcat_moderator=0 WHERE fcat_id=%d", $parent );
+			$this->log_action( 'file_rem_moderator', $parent );
 			return $this->message( $this->lang->files_remove_mod, $this->lang->files_remove_mod_done );
 		}
 	}
@@ -553,6 +563,7 @@ class files extends qsfglobal
 				$perms->update();
 			}
 
+			$this->log_action( 'file_delete_category', $catid );
 			return $this->message( $this->lang->files_delete_cat, $this->lang->files_delete_cat_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cat['fcat_parent']}" );
 		}
 	}
@@ -633,6 +644,7 @@ class files extends qsfglobal
 				$perms->update();
 			}
 
+			$this->log_action( 'file_new_category', $newid );
 			return $this->message( $this->lang->files_add_cat, $this->lang->files_add_cat_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$parent}" );
 		}
 	}
@@ -655,7 +667,7 @@ class files extends qsfglobal
 			$out .= eval($this->template('FILE_DELETE'));
 		} else {
 			$name = $this->remove_file($id, true);
-
+			$this->log_action( 'file_delete', $id );
 			$out .= $this->message( $this->lang->files_delete_file, "{$name} " . $this->lang->files_delete_file_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 		return $out;
@@ -718,6 +730,7 @@ class files extends qsfglobal
 			(update_name, update_updating, update_description, update_md5name, update_date, update_size, update_updater)
 			VALUES( '%s', %d, '%s', '%s', %d, %d, %d )", $filename, $fid, $desc, $md5name, $date, $size, $userId );
 
+			$this->log_action( 'file_update', $fid );
 			$this->sets['code_approval']++;
 			$this->write_sets();
 
@@ -738,6 +751,7 @@ class files extends qsfglobal
 		$this->sets['code_approval']--;
 		$this->write_sets();
 		$this->db->query( "DELETE FROM %pupdates WHERE update_id=%d", $uid );
+		$this->log_action( 'deny_update', $uid );
 		return $this->message( $this->lang->files_update_deny, $this->lang->files_update_denied, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue}" );
 	}
 
@@ -783,6 +797,7 @@ class files extends qsfglobal
 
 		$this->sets['code_approval']--;
 		$this->write_sets();
+		$this->log_action( 'approve_update', $uid, $fid );
 		return $this->message( $this->lang->files_update_approve, $this->lang->files_update_approved, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue" );
 	}
 	
@@ -873,13 +888,16 @@ class files extends qsfglobal
 
 		$id = intval($this->get['fid']);
 
-		$file = $this->db->fetch( "SELECT file_filename, file_md5name FROM %pfiles WHERE file_id=%d", $id );
+		$file = $this->db->fetch( "SELECT file_filename, file_md5name, file_size FROM %pfiles WHERE file_id=%d", $id );
 
 		$this->nohtml = true;
 		$this->db->query( "UPDATE %pfiles SET file_downloads=file_downloads+1 WHERE file_id=%d", $id );
 
+		// Need to terminate and unlock the session at this point or the site will stall for the current user.
+		session_write_close();
 		header("Content-type: application/octet-stream");
 		header("Content-Disposition: attachment; filename=\"{$file['file_filename']}\"");
+		header("Content-Length: " . $file['file_size']);
 		readfile('./downloads/' . $file['file_md5name']);
 	}
 
@@ -1029,6 +1047,9 @@ class files extends qsfglobal
 		    FROM %pfiles f
 		    LEFT JOIN %pusers u ON u.user_id=f.file_submitted
 		    WHERE file_id=%d", $fid );
+
+                if (!$query)
+                        return $this->message( $this->lang->files_view, $this->files_comment_specify );
 
 		foreach($query as $key => $value)
 			$$key = $value;

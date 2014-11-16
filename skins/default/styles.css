@@ -1000,13 +1000,6 @@ div.filemenu
 	width:70%;
 }
 
-.category
-{
-	/* width:100%; */
-	padding:1em;
-	text-align:left;
-}
-
 .mb_box
 {
 	background-color:#e0e0e0;
@@ -1065,4 +1058,12 @@ div.filemenu
 	border-top:1px dotted #555555;
 	height:1px;
 	padding-bottom:.3em;
+}
+
+table.catbox {
+	padding:5px;
+	width:98%;
+	margin:0 auto 0 auto;
+	background:#003b68;
+	border:1px dotted #e6bd5c;
 }

@@ -20,7 +20,7 @@
  * Display a file rating, and provide a rating link.
  * Useful for download type sites.
  *
- * @author Roger Libiez [Samson]
+ * @author Roger Libiez [Samson] http://www.iguanadons.net
  **/
 class file_rating extends modlet
 {
