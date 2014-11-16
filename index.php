@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -207,10 +207,10 @@ if (!$qsf->nohtml) {
 			document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));
 			</script>
 			<script type=\"text/javascript\">
+			try {
 			var pageTracker = _gat._getTracker(\"{$qsf->sets['analytics_id']}\");
-			pageTracker._initData();
 			pageTracker._trackPageview();
-			</script>";
+			} catch(err) {}</script>";
 	}
 	$servertime = $qsf->mbdate( DATE_LONG, $qsf->time, false );
 	$copyright = eval($qsf->template('MAIN_COPYRIGHT'));

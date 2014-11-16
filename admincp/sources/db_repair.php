@@ -33,22 +33,52 @@ if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
 
 require_once $set['include_path'] . '/admincp/admin.php';
 
-class php_info extends admin
+class db_repair extends admin
 {
 	function execute()
 	{
-		$this->nohtml = true;
+		$this->set_title($this->lang->repair_db);
+		$this->tree($this->lang->repair_db);
 
-		if (!function_exists('phpinfo')) {
-			return $this->message($this->lang->php_error, $this->lang->php_error_msg);
+		$repair_result = $this->repair_tables();
+
+		$output = $this->message($this->lang->repair_db, $this->lang->repaired_db);
+		$output .= $repair_result;
+		return $output;
+	}
+
+	function repair_tables()
+	{
+		$tables = implode( ', ', $this->get_db_tables() );
+
+		$result = $this->db->query('REPAIR TABLE ' . $tables);
+
+		$show_headers = true;
+
+		$out = $this->table;
+
+		while ($row = $this->db->nqfetch($result))
+		{
+			if ($show_headers) {
+				$out .= "<span class=\"head\">\n";
+
+				foreach ($row as $col => $data)
+				{
+					$out .= "<span class='starter'>$col</span>\n";
+				}
+
+				$out .= "</span>\n<p></p>";
+
+				$show_headers = false;
+			}
+
+			foreach ($row as $col => $data)
+			{
+				$out .= "<span class='starter'>" . $this->format($data, FORMAT_HTMLCHARS) . "</span>\n";
+			}
+			$out .= "<p class='list_line'></p>\n";
 		}
-
-		ob_start();
-		phpinfo();
-		$phpinfo = ob_get_contents();
-		ob_end_clean();
-
-		return $phpinfo;
+		return $out . $this->etable;
 	}
 }
 ?>

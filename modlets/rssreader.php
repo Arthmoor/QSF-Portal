@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -174,13 +174,13 @@ class rssreader extends modlet
 		$this->rssFeeds[$url] = new xmlparser();
 
 		// Check if RSS cache directory exists
-		if (!is_dir('../stats/rsscache/')) {
-			@mkdir('../stats/rsscache/');
-			$this->qsf->chmod('../stats/rsscache', 0777, false);
+		if (!is_dir('../rss/rsscache/')) {
+			@mkdir('../rss/rsscache/');
+			$this->qsf->chmod('../rss/rsscache', 0777, false);
 		}
 		
 		// Check if the cached file is there
-		$cacheFilename = '../stats/rsscache/' . md5($url) . '.xml';
+		$cacheFilename = '../rss/rsscache/' . md5($url) . '.xml';
 		$maxFileAge = time() - $this->cacheFilesFor;
 		if (!file_exists($cacheFilename) || filectime($cacheFilename) < $maxFileAge) {
 			// Download the file

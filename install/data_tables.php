@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -348,6 +348,8 @@ $queries[] = "CREATE TABLE %pusers (
   user_topics_page tinyint(2) unsigned NOT NULL DEFAULT '0',
   user_posts_page tinyint(2) unsigned NOT NULL DEFAULT '0',
   user_regip INT UNSIGNED NOT NULL default '0',
+  user_register_email varchar(100) default '',
+  user_server_data text,
   user_perms text NOT NULL default '',
   user_file_perms text NOT NULL default '',
   PRIMARY KEY  (user_id)
@@ -467,6 +469,9 @@ $queries[] = "INSERT INTO %preplacements (replacement_id, replacement_search, re
 
 // Build settings step by step
 $sets = array();
+$sets['wordpress_api_key'] = '';
+$sets['akismet_email'] = 0;
+$sets['akismet_ureg'] = 0;
 $sets['admin_incoming'] = 'root';
 $sets['admin_outgoing'] = 'root';
 $sets['attach_types'] = array('jpg', 'gif', 'png', 'bmp', 'zip', 'tgz', 'gz', 'rar');

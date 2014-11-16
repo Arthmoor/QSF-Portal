@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -227,7 +227,7 @@ class forum extends qsfglobal
 				DISTINCT(p.post_author) as dot,
 				t.topic_id, t.topic_title, t.topic_last_poster, t.topic_starter, t.topic_replies, t.topic_modes,
 				t.topic_posted, t.topic_edited, t.topic_icon, t.topic_views, t.topic_description, t.topic_moved, t.topic_forum,
-				s.user_name AS topic_starter_name, m.user_name AS topic_last_poster_name, p.post_id AS topic_last_post
+				s.user_name AS topic_starter_name, m.user_name AS topic_last_poster_name, t.topic_last_post
 			FROM
 				(%ptopics t,
 				%pusers s)
@@ -300,7 +300,16 @@ class forum extends qsfglobal
 
 			$row['edited'] = $row['topic_edited']; // Store so skin can access
 			$row['topic_edited'] = $this->mbdate(DATE_LONG, $row['topic_edited']);
-			$row['topic_views']  = number_format($row['topic_views'], 0, null, $this->lang->sep_thousands);
+
+			$moved = null;
+			if ($row['topic_modes'] & TOPIC_MOVED) {
+				$moved = $this->lang->forum_moved . ': ';
+				$row['topic_replies'] = '--';
+				$row['topic_views'] = '--';
+			} else {
+				$row['topic_replies']  = number_format($row['topic_replies'], 0, null, $this->lang->sep_thousands);
+				$row['topic_views']  = number_format($row['topic_views'], 0, null, $this->lang->sep_thousands);
+			}
 
 			if ($row['topic_modes'] & TOPIC_PINNED) {
 				$row['topic_title'] = "<strong>" . $row['topic_title'] . "</strong>";

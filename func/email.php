@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -95,12 +95,38 @@ class email extends qsfglobal
 				return $this->message($this->lang->email_email, $this->lang->email_no_member);
 			}
 
+			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
+			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_email'] ) {
+				require_once $this->sets['include_path'] . '/lib/Akismet.class.php';
+
+				$spam_checked = false;
+				$akismet = null;
+
+				try {
+					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key']);
+					$akismet->setCommentAuthor($this->user['user_name']);
+					$akismet->setCommentAuthorEmail($this->user['user_email']);
+					$akismet->setCommentContent($this->post['message']);
+					$akismet->setCommentType('QSFP Email');
+
+					$spam_checked = true;
+				}
+				// Try and deal with it rather than say something.
+				catch(Exception $e) {}
+
+				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+					$this->log_action('Spam Email Caught', 0, 0, 0);
+					return $this->message( $this->lang->email_email, $this->lang->settings_akismet_email_spam );
+				}
+			}
+
 			$mailer = new $this->modules['mailer']($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
 
 			$mailer->setSubject("{$this->sets['forum_name']} - {$this->post['subject']}");
 			$mailer->setMessage("This mail has been sent by {$this->user['user_name']} via {$this->sets['forum_name']}\n\n" . $this->post['message']);
 			$mailer->setRecipient($target['user_email']);
 			$mailer->setServer($this->sets['mailserver']);
+			$mailer->setHeader('User-IP: ' . $this->ip );
 
 			$mailer->doSend();
 

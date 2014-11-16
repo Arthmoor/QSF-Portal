@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -199,7 +199,8 @@ class member_control extends admin
 					'user_joined'		=> array($this->lang->mc_user_joined, U_TIME),
 					'user_lastvisit'	=> array($this->lang->mc_user_lastvisit, U_TIME),
 					'user_lastpost'		=> array($this->lang->mc_user_lastpost, U_TIME),
-					'user_regip'		=> array($this->lang->mc_user_regip, U_IP)
+					'user_regip'		=> array($this->lang->mc_user_regip, U_IP),
+                                        'user_register_email'   => array($this->lang->mc_user_regemail, U_TEXT, 100)
 				);
 
 				foreach ($cols as $var => $data)
@@ -210,7 +211,7 @@ class member_control extends admin
 
 					$val = $member[$var];
 
-					if (($var == 'user_signature') || ($var == 'user_email') || ($var == 'user_title')) {
+					if (($var == 'user_signature') || ($var == 'user_email') || ($var == 'user_register_email') || ($var == 'user_title')) {
 						$val = $this->format($val, FORMAT_HTMLCHARS);
 					} elseif (($var == 'user_icq') && !$val) {
 						$val = null;

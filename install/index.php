@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -65,8 +65,8 @@ function check_writeable_files()
 		$fixme .= "../skins/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../stats')) {
-		$fixme .= "../stats/<br />";
+	if(!is_writeable('../rss')) {
+		$fixme .= "../rss/<br />";
 		$writeable = false;
 	}
 	if(!is_writeable('../downloads')) {

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -177,7 +177,7 @@ class templater extends htmltools
 	 * Parse if statements in a template.
 	 * @param string $string html template
 	 * @param string $piece templates name
-	 * @author Aaron Smith-Hayes (DavionKalhen@Gmail.com
+	 * @author Aaron Smith-Hayes (DavionKalhen@Gmail.com)
 	 * @since 1.4.3
 	 * @return string with if's parsed.
 	 **/
@@ -254,7 +254,7 @@ class templater extends htmltools
          * @param int $i location of this if on the stack
          * @param int $else location of the else -1 if no else.
          * @param int $end location of endif on the stack.
-	 * @author Aaron Smith-Hayes (DavionKalhen@Gmail.com
+	 * @author Aaron Smith-Hayes (DavionKalhen@Gmail.com)
 	 * @since 1.4.3
 	 * @return string representation of the if statement.
 	 **/
@@ -294,7 +294,7 @@ class templater extends htmltools
 	 * @param mixed $stack Stack queue of if's.
          * @param int $size size of the stack passed.
          * @param int $if the if's location on the stack
-	 * @author Aaron Smith-Hayes (DavionKalhen@Gmail.com
+	 * @author Aaron Smith-Hayes (DavionKalhen@Gmail.com)
 	 * @since 1.4.3
 	 * @return array containing the locations of the else and if on the stack
 	 **/

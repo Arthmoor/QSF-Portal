@@ -1,6 +1,34 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.4.5:
+
+* Removed all non-English language files from the base package.
+* Changed the stats directory name to rss to avoid problems with how some web hosts handle the stats directory name.
+* Merged the "users visited" function into the users_online module so it can now be called through a MODLET statement.
+* User IP will be added to mail headers delivered through the email form.
+* Copyright footers updated for 2010. Non-essential skin change.
+* Google Analytics code updated.
+* Top of page will now display where a new post, poll, or reply is being made to.
+* Akismet filter support has been added to user registration and the email form.
+
+   Bugs addressed:
+
+* External http links are not setting _blank targets as needed. [Fixed by Detruire]
+* BBCode parser crashes on bad multibyte characters. [Fix by Kiasyn]
+* Topic locks and pins were not tracked if the action was done using the post reply form.
+* Registration process errors out when bots submit unset forms that are missing data.
+* Improper usage of the rel="nofollow" tag has been corrected.
+* Missing avatars generate errors in the HTTP logs even though they shouldn't have.
+* Editing a root level file category added an extra forward slash to the long path name.
+* ACP Member controls crashed due to missing language elements.
+* Unread post links are not loading the correct posts.
+* Time display for "yesterday" and "today" was not displayed correctly.
+* HTML error in the TOPIC_MAIN template for the locked topic icon.
+* 7zip files should now identify properly in the files module.
+* Bad language text in the error message for a non-empty category.
+* Potential security exploit fixed in URL processing for the files module.
+
 Changes for 1.4.4:
 
 * Copyright footers updated for 2008. [Non-essential skin change]

@@ -1,13 +1,13 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2008 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,6 @@
  *
  **/
 
-define('LATEST', 32);   // ID of most recent upgrade script
+define('LATEST', 33);   // ID of most recent upgrade script
 define('SKIN_FILE', 'skin_default.xml');
 ?>

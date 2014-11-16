@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -153,6 +153,8 @@ class post extends qsfglobal
 
 			$this->get['f'] = $topic['forum_id'];
 
+			$this->lang->post_reply_topic = sprintf( $this->lang->post_reply_topic, $topic['topic_title'] );
+
 			$this->htmlwidgets->tree_forums($topic['forum_id'], true);
 			$this->tree($shortened_title, $this->self . '?a=topic&amp;t=' . $this->get['t'] . '&amp;f=' . $topic['forum_id']);
 			$this->tree($this->lang->post_replying1);
@@ -177,6 +179,8 @@ class post extends qsfglobal
 				return $this->message($this->lang->post_creating, $this->lang->post_no_forum);
 			}
 
+			$forum = $this->db->fetch("SELECT forum_name FROM %pforums WHERE forum_id=%d", $this->get['f']);
+
 			$this->htmlwidgets->tree_forums($this->get['f'], true);
 			$this->tree($this->lang->post_creating_poll);
 			break;
@@ -199,6 +203,8 @@ class post extends qsfglobal
 			if (!$this->db->num_rows($this->db->query("SELECT forum_id FROM %pforums WHERE forum_id=%d", $this->get['f']))) {
 				return $this->message($this->lang->post_creating, $this->lang->post_no_forum);
 			}
+
+			$forum = $this->db->fetch("SELECT forum_name FROM %pforums WHERE forum_id=%d", $this->get['f']);
 
 			$this->htmlwidgets->tree_forums($this->get['f'], true);
 			$this->tree($this->lang->post_creating);
@@ -487,6 +493,12 @@ class post extends qsfglobal
 				}
 
 				$this->get['t'] = $this->db->insert_id("topics");
+
+				// Topic pin and lock were not being tracked here before. Oops.
+				if ( $mode & TOPIC_PINNED )
+					$this->log_action('topic_pin', $this->get['t']);
+				if ( $mode & TOPIC_LOCKED )
+					$this->log_action('topic_lock', $this->get['t']);
 			}
 			
 			if ($this->perms->auth('post_inc_userposts', $this->get['f'])) {

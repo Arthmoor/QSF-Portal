@@ -2,7 +2,7 @@
 <qsfmod>
   <title>Skin: Blue Comet</title>
   <type folder="default">skin</type>
-  <version>v1.4.4</version>
+  <version>v1.4.5</version>
   <description></description>
   <authorname>Skin Exporter</authorname>
   <templates>
@@ -236,6 +236,7 @@
      <a href="{$admin->self}?a=backup&amp;s=restore">{$admin->lang->admin_db_restore}</a>
      <a href="{$admin->self}?a=settings&amp;s=db">{$admin->lang->admin_db_conn}</a>
      <a href="{$admin->self}?a=optimize">{$admin->lang->admin_db_optimize}</a>
+     <a href="{$admin->self}?a=db_repair">{$admin->lang->admin_db_repair}</a>
      <a href="{$admin->self}?a=query">{$admin->lang->admin_db_query}</a>
     </span>
    </div>
@@ -1210,6 +1211,31 @@
 {$this->etable}
 
 {$this->table}
+ <div class="title">Akismet {$this->lang->settings}</div>
+ <span class="field">{$this->lang->settings_wordpress_id}<br /><span class="tiny">{$this->lang->settings_wordpress_msg}</span></span>
+ <span class="form"><input class="input" type="text" name="wordpress_api_key" value="{$this->sets['wordpress_api_key']}" size="40" /></span>
+
+ <p class="line"></p>
+
+ <span class="field">{$this->lang->settings_akismet_email_enable}<br /><span class="tiny">{$this->lang->settings_akismet_email_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_email" value="1" <IF $this->sets['akismet_email']>checked="checked"</IF> id="akismet_email1" /><label for="akismet_email1">{$this->lang->settings_enabled}</label><br />
+  <input class="check" type="radio" name="akismet_email" value="0" <IF !$this->sets['akismet_email']>checked="checked"</IF> id="akismet_email2" /><label for="akismet_email2">{$this->lang->settings_disabled}</label>
+ </span>
+
+ <p class="line"></p>
+
+ <span class="field">{$this->lang->settings_akismet_ureg_enable}<br /><span class="tiny">{$this->lang->settings_akismet_ureg_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_ureg" value="1" <IF $this->sets['akismet_ureg']>checked="checked"</IF> id="akismet_ureg1" /><label for="akismet_ureg1">{$this->lang->settings_enabled}</label><br />
+  <input class="check" type="radio" name="akismet_ureg" value="0" <IF !$this->sets['akismet_ureg']>checked="checked"</IF> id="akismet_ureg2" /><label for="akismet_ureg2">{$this->lang->settings_disabled}</label>
+ </span>
+
+ <p class="line"></p>
+ <input type="submit" value="{$this->lang->submit}" />
+{$this->etable}
+
+{$this->table}
  <div class="title">{$this->lang->settings_server}</div>
  <span class="field">{$this->lang->settings_server_gzip}<br /><span class="tiny">{$this->lang->settings_server_gzip_msg}</span></span>
  <span class="form">
@@ -1311,8 +1337,8 @@
 </div>
 
 <div id="footer">
- {$admin->lang->powered} <a href="http://www.qsfportal.com" class="small"><b>{$admin->name}</b></a> [{$admin->version}] &copy; 2006-2008 The {$admin->name} Development Team<br />
- {$admin->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2008 The Quicksilver Forums Development Team<br />
+ {$admin->lang->powered} <a href="http://www.qsfportal.com" class="small"><b>{$admin->name}</b></a> [{$admin->version}] &copy; 2006-2010 The {$admin->name} Development Team<br />
+ {$admin->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2009 The Quicksilver Forums Development Team<br />
  {$admin->lang->based_on} <a href="http://www.mercuryboard.com" class="small"><b>MercuryBoard</b></a> &copy; 2001-2008 The Mercury Development Team<br /> Ashlander 3 {$admin->lang->based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a><br />
  {$time_exec} seconds - {$admin->db->querycount} queries - {$server_load} load
 </div>
@@ -1562,7 +1588,7 @@
 </span>
 
 <span class="topic">
- <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}" title="{$this->lang->forum_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages} <IF $row['newpost']>
+ $moved<a href="{$this->self}?a=topic&amp;t={$row['topic_id']}" title="{$this->lang->forum_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages} <IF $row['newpost']>
  &mdash; <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread"><img src="./skins/{$this->skin}/images/icons/topic_unread.png" title="{$this->lang->forum_unread}" alt="{$this->lang->forum_unread}" /></a></IF>
  {$row['topic_description']}
 </span>
@@ -1831,12 +1857,11 @@
       <displayname>Copyright</displayname>
       <description>Format the look of the copyright on the board.&lt;br&gt;&lt;br&gt;&lt;b&gt;Warning: Modification to anything other than the style of this copyright will result in a violation of your terms of service&lt;/b&gt;</description>
       <html><![CDATA[
- {$qsf->lang->powered} <a href="http://www.qsfportal.com">{$qsf->name}</a> &copy; 2006-2008 The {$qsf->name} Development Team<br />
- {$qsf->lang->based_on} <a href="http://www.quicksilverforums.com">Quicksilver Forums</a> &copy; 2005-2008 The Quicksilver Forums Development Team<br />
+ {$qsf->lang->powered} <a href="http://www.qsfportal.com">{$qsf->name}</a> &copy; 2006-2010 The {$qsf->name} Development Team<br />
+ {$qsf->lang->based_on} <a href="http://www.quicksilverforums.com">Quicksilver Forums</a> &copy; 2005-2009 The Quicksilver Forums Development Team<br />
  {$qsf->lang->based_on} <a href="http://www.mercuryboard.com">MercuryBoard</a> &copy; 2001-2008 The Mercury Development Team<br />
  Blue Comet {$qsf->lang->based_on} HForumv3.1 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a>
- - 100% Valid &lsaquo;&rsaquo; <a href="http://validator.w3.org/check?uri=referer">XHTML1.1</a>
- + <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+ 100% Valid &lsaquo;&rsaquo; <a href="http://validator.w3.org/check?uri=referer">XHTML1.1</a> <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
       ]]></html>
     </template>
     <template><set>board</set><name>BOARD_LAST_POST_BOX</name>
@@ -2430,11 +2455,11 @@
    {$this->lang->profile_profile}
   </div>
 
+  <IF ($profile['user_avatar']) != null>
   <span class="avatar">
-   <IF ($profile['user_avatar'] != $this->lang->profile_none)>
     {$profile['user_avatar']}
-   </IF>
   </span>
+  </IF>
 
   <span class="member_info">
    <IF ($online)>
@@ -2589,7 +2614,7 @@
 {$this->table}
  <div class="title">
   <img src="./skins/{$this->skin}/images/icons/new_topic.png" alt="" />
-  {$this->lang->post_new_topic}
+  {$this->lang->post_new_topic} {$forum['forum_name']}
  </div>
  <span class="field">{$this->lang->post_topic_title}</span>
  <span class="form"><input type="text" name="title" value="{$title}" size="60" maxlength="75" /></span>
@@ -2619,7 +2644,7 @@
 {$this->table}
  <div class="title">
   <img src="./skins/{$this->skin}/images/icons/comment_add.png" alt="" />
-  {$this->lang->post_reply_topic}
+  {$this->lang->post_reply_topic} {$topic['forum_name']}
  </div>
  {$post_box}
  {$post_options}
@@ -2706,7 +2731,7 @@
 {$this->table}
  <div class="title">
   <img src="./skins/{$this->skin}/images/icons/chart_bar_add.png" alt="" />
-  {$this->lang->post_new_poll}
+  {$this->lang->post_new_poll} {$forum['forum_name']}
  </div>
  <span class="field">{$this->lang->post_topic_title}</span>
  <span class="form"><input type="text" name="title" size="60" value="{$title}" maxlength="75" /></span>
@@ -3493,7 +3518,7 @@ function toggleQuickReplyBox()
   <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_topic}">{$this->lang->new_topic}</a></div>
  </IF>
  <IF ($topic['topic_modes'] & TOPIC_LOCKED)>
-  <div class="bigbutton"><a class="locked">{$this->lang->topic_locked}</span></div>
+  <div class="bigbutton"><a class="locked">{$this->lang->topic_locked}</a></div>
  </IF>
  <IF $can_reply>
   <div class="bigbutton"><a class="topic_reply" href="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" title="{$this->lang->topic_reply}">{$this->lang->reply}</a></div>
@@ -4256,7 +4281,7 @@ function toggleQuickReplyBox()
 
 {$this->table}
  <MODLET file_rating({$file_id})> 
- | <a href="{$this->self}?a=files&amp;s=download&amp;cid={$cid}&amp;fid={$file_id}" rel="nofollow">{$this->lang->files_download}</a>
+ | <a href="{$this->self}?a=files&amp;s=download&amp;cid={$cid}&amp;fid={$file_id}">{$this->lang->files_download}</a>
  | <a href="{$this->self}?a=files&amp;s=listcomments&amp;fid={$file_id}">{$this->lang->files_comments}({$file_comments})</a>
  <IF $this->is_submitter($file_id, $file_catid)>
   | <a href="{$this->self}?a=files&amp;s=update&amp;fid={$file_id}&amp;cid={$file_catid}">{$this->lang->files_update}</a>

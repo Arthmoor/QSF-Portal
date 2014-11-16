@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -182,7 +182,10 @@ class settings extends admin
 				'rss_feed_title' => 'string',
 				'rss_feed_desc' => 'string',
 				'optional_modules' => 'array',
-				'edit_post_age' => 'int'
+				'edit_post_age' => 'int',
+				'wordpress_api_key' => 'string',
+				'akismet_email' => 'bool',
+				'akismet_ureg' => 'bool'
 			);
 
 			foreach ($this->post as $var => $val)

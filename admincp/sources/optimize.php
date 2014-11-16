@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -40,16 +40,45 @@ class optimize extends admin
 		$this->set_title($this->lang->optimize);
 		$this->tree($this->lang->optimize);
 
-		$this->opt_tables();
+		$optimize_result = $this->opt_tables();
 
-		return $this->message($this->lang->optimize, $this->lang->optimized);
+		$output = $this->message($this->lang->optimize, $this->lang->optimized);
+		$output .= $optimize_result;
+		return $output;
 	}
 
 	function opt_tables()
 	{
 		$tables = implode( ', ', $this->get_db_tables() );
 
-		$this->db->query('OPTIMIZE TABLE ' . $tables);
+		$result = $this->db->query('OPTIMIZE TABLE ' . $tables);
+
+		$show_headers = true;
+
+		$out = $this->table;
+
+		while ($row = $this->db->nqfetch($result))
+		{
+			if ($show_headers) {
+				$out .= "<span class=\"head\">\n";
+
+				foreach ($row as $col => $data)
+				{
+					$out .= "<span class='starter'>$col</span>\n";
+				}
+
+				$out .= "</span>\n<p></p>";
+
+				$show_headers = false;
+			}
+
+			foreach ($row as $col => $data)
+			{
+				$out .= "<span class='starter'>" . $this->format($data, FORMAT_HTMLCHARS) . "</span>\n";
+			}
+			$out .= "<p class='list_line'></p>\n";
+		}
+		return $out . $this->etable;
 	}
 }
 ?>

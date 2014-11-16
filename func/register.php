@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -86,10 +86,11 @@ class register extends qsfglobal
 
 			return eval($this->template('REGISTER_MAIN'));
 		} else {
-			$username = $this->post['desuser'];
-			$email    = $this->post['email'];
-			$pass     = $this->post['passA'];
-			$pass2    = $this->post['passB'];
+			// Make sure the nasty bots who are deliberately not setting this stuff don't trigger a swarm of error emails!
+			$username = isset($this->post['desuser']) ? $this->post['desuser'] : '';
+			$email    = isset($this->post['email']) ? $this->post['email'] : '';
+			$pass     = isset($this->post['passA']) ? $this->post['passA'] : '';
+			$pass2    = isset($this->post['passB']) ? $this->post['passB'] : '';
 
 			if ($this->sets['register_image']) {
 				if( isset($this->post['imagetext']) ) {
@@ -168,10 +169,37 @@ class register extends qsfglobal
 				$group_id = $this->sets['default_group'];
 			}
 
+                        // Store the contents of the entire $_SERVER array.
+                        $svars = serialize($_SERVER);
+
+			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
+			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_ureg'] ) {
+				require_once $this->sets['include_path'] . '/lib/Akismet.class.php';
+
+				$spam_checked = false;
+				$akismet = null;
+
+				try {
+					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key']);
+					$akismet->setCommentAuthor($username);
+					$akismet->setCommentAuthorEmail($email);
+					$akismet->setCommentType('QSFP Registration');
+
+					$spam_checked = true;
+				}
+				// Try and deal with it rather than say something.
+				catch(Exception $e) {}
+
+				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+					$this->log_action('Blocked User Registration', 0, 0, 0);
+					return $this->message( $this->lang->register_reging, $this->lang->settings_akismet_ureg_spam );
+				}
+			}
+
 			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emoticons, user_view_signatures,
-				user_language, user_email_show, user_pm, user_timezone, user_regip) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, %d, INET_ATON('%s'))",
+				user_language, user_email_show, user_pm, user_timezone, user_regip, user_register_email, user_server_data) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, %d, INET_ATON('%s'), '%s', '%s')",
 				$username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
-				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone'], $this->ip);
+				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone'], $this->ip, $email, $svars);
 
 			$this->sets['last_member'] = $username;
 			$this->sets['last_member_id'] = $this->db->insert_id("users");
@@ -225,7 +253,7 @@ class register extends qsfglobal
 	function create_image()
 	{
 		// Need to get rid of other image files since the names will all be different now.
-		foreach( glob("./stats/*.png") as $filename ) {
+		foreach( glob("./rss/*.png") as $filename ) {
 			unlink($filename);
 		}
 
@@ -239,7 +267,7 @@ class register extends qsfglobal
 		$graph = new AntiSpam();
 		
 		$text  = strtoupper($graph->Rand(6));
-		$filename = "./stats/register" . $this->time . ".png";
+		$filename = "./rss/register" . $this->time . ".png";
 		$graph->Stroke($filename);
 
 		return array(md5("{$this->sets['db_pass']}{$this->sets['mostonlinetime']}$text"), $filename);

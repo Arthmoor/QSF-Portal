@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -109,7 +109,7 @@ class profile extends qsfglobal
 					$last['topic_title'] = substr($last['topic_title'], 0, 22) . '...';
 				}
 
-				$lastpost = '<a href="' . $this->self . '?a=topic&amp;t=' . $last['topic_id'] . '" rel="nofollow">' . $this->format($last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a><br />' . $this->mbdate(DATE_LONG, $last['post_time']);
+				$lastpost = '<a href="' . $this->self . '?a=topic&amp;t=' . $last['topic_id'] . '">' . $this->format($last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a><br />' . $this->mbdate(DATE_LONG, $last['post_time']);
 			} else {
 				$lastpost = $this->lang->profile_unkown;
 			}
@@ -120,13 +120,13 @@ class profile extends qsfglobal
 				if (!$posts_total['count']) {
 					$fav_forum = $this->lang->profile_unkown;
 				} else {
-					$fav_forum = sprintf($this->lang->profile_fav_forum, "<a href=\"{$this->self}?a=forum&amp;f={$final_fav['Forum']}\" rel=\"nofollow\">{$final_fav['forum_name']}</a>", round($final_fav['Forumuser_posts'] / $posts_total['count'] * 100));
+					$fav_forum = sprintf($this->lang->profile_fav_forum, "<a href=\"{$this->self}?a=forum&amp;f={$final_fav['Forum']}\">{$final_fav['forum_name']}</a>", round($final_fav['Forumuser_posts'] / $posts_total['count'] * 100));
 				}
 			} else {
 				$fav_forum = $this->lang->profile_unkown;
 			}
 
-			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$user\" rel=\"nofollow\">" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
+			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$user\">" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
 
 			$PostInfo = eval($this->template('PROFILE_POST_INFO'));
 		} else {
@@ -150,7 +150,7 @@ class profile extends qsfglobal
 		if ($profile['user_avatar_type'] != 'none') {
 			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"\" style=\"width:{$profile['user_avatar_width']}px; height:{$profile['user_avatar_height']}px;\" />";
 		} else {
-			$profile['user_avatar'] = $this->lang->profile_none;
+			$profile['user_avatar'] = null;
 		}
 
 		if ($profile['user_homepage']) {

@@ -1,5 +1,5 @@
 -------------------------------
-== QSF Portal v1.4.3 ==
+== QSF Portal v1.4.5 ==
 -------------------------------
 
 === Installation ===
@@ -12,7 +12,7 @@
     ./avatars/uploaded/
     ./downloads/
     ./skins/
-    ./stats/
+    ./rss/
     ./settings.php
     ./updates/
 

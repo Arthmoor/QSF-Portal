@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -168,13 +168,13 @@ class topic extends qsfglobal
                 }
 		if ($this->get['unread']) {
 			// Jump to the first unread post (or the last post)
-			$timeread = $this->readmarker->topic_last_read($topic['topic_forum']);
+			$timeread = $this->readmarker->topic_last_read($this->get['t']);
 			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_time < %d",
 				$this->get['t'], $timeread);
 			if ($posts) $postCount = $posts['posts'] + 1;
 			else $postCount = 0;
 			$this->get['min'] = 0; // Start at the first page regardless
-			while ($postCount > ($this->get['min'] + $this->get['num'])) {
+			while ($postCount >= ($this->get['min'] + $this->get['num'])) {
 				$this->get['min'] += $this->get['num'];
 			}
 		}
@@ -611,11 +611,13 @@ class topic extends qsfglobal
 			session_write_close();
 
 			ini_set("zlib.output_compression", "Off");
+			header("Connection: close");
 			header("Content-Type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$data['attach_name']}\"");
 			header("Content-Length: " . $data['attach_size']);
 			header("X-Robots-Tag: noarchive, nosnippet, noindex");
-			echo file_get_contents('./attachments/' . $data['attach_file']);
+			// directly pass through file to output buffer
+			@readfile( './attachments/' . $data['attach_file'] );
 		} else {
 			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);
 		}

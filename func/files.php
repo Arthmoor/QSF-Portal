@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -58,8 +58,22 @@ class files extends qsfglobal
 			$this->get['s'] = null;
 		}
 
-		$cid = isset($this->get['cid']) ? $this->get['cid'] : 0;
-		$fid = isset($this->get['fid']) ? $this->get['fid'] : 0;
+		$cid = 0;
+		if( isset($this->get['cid']) ) {
+			if( !is_numeric($this->get['cid']) ) {
+				return $this->message( $this->lang->files, $this->lang->files_invalid_category );
+			}
+			$cid = intval($this->get['cid']);
+		}
+
+		$fid = 0;
+		if( isset($this->get['fid']) ) {
+			if( !is_numeric($this->get['fid']) ) {
+				return $this->message( $this->lang->files, $this->lang->files_invalid_file );
+			}
+			$fid = intval($this->get['fid']);
+		}
+
 		switch($this->get['s'])
 		{
 			case 'recent':
@@ -443,7 +457,11 @@ class files extends qsfglobal
 				}
 			}
 
-			$longpath .= "/{$name}";
+			if ($parent != 0) {
+				$longpath .= "/{$name}";
+			} else {
+				$longpath .= $name;
+			}
 			$this->db->query( "UPDATE %pfile_categories SET fcat_name='%s', fcat_parent=%d, fcat_longpath='%s', fcat_description='%s' WHERE fcat_id=%d", $name, $parent, $longpath, $desc, $cid );
 			$this->update_children_longpath($cat['fcat_id']);
 			$this->update_category_trees();
@@ -558,7 +576,7 @@ class files extends qsfglobal
 			$count = $cat['fcat_count'];
 
 			if ($count > 0) {
-				$not_exist = sprintf($this->lang->delete_cat_not_empty, $cat['fcat_name']);
+				$not_exist = sprintf($this->lang->files_delete_cat_not_empty, $cat['fcat_name']);
 				return $this->message($this->lang->files_delete_cat, $this->lang->files_delete_cat_not_empty, $this->lang->continue, "{$this->self}?a=files&amp;cid={$catid}");
 			}
 
@@ -919,11 +937,13 @@ class files extends qsfglobal
 		session_write_close();
 
 		ini_set("zlib.output_compression", "Off");
+		header("Connection: close");
 		header("Content-Type: application/octet-stream");
 		header("Content-Disposition: attachment; filename=\"{$file['file_filename']}\"");
 		header("Content-Length: " . $file['file_size']);
 		header("X-Robots-Tag: noarchive, nosnippet, noindex");
-		echo file_get_contents( './downloads/' . $file['file_md5name']);
+		// directly pass through file to output buffer
+		@readfile( './downloads/' . $file['file_md5name'] );
 	}
 
 	// NOTE: Need to change function around so it only prints a <table> if there is at least one result. -Asy
@@ -1113,7 +1133,7 @@ class files extends qsfglobal
 			case 'py': $fileType = $this->lang->files_view_python; break;
 			case 'cpp': case 'hh': case 'hpp': case 'cc': $fileType = $this->lang->files_view_cpp; break;
 			case 'java': $fileType = $this->lang->files_view_java; break;
-			case 'gz': case 'tgz': case 'zip': case 'rar':
+			case 'gz': case 'tgz': case 'zip': case 'rar': case '7z':
 			case 'bz2': case 'tbz2': $fileType = $this->lang->files_view_archive; break;
 			default: $fileType = $file_extension;
 		}

@@ -108,7 +108,7 @@ Remotely, navigate to the <tt>qsforums</tt> directory. Check the directory listi
 addons      attachments  docs              downloads    global.php  
 admincp     avatars      defaultutils.php  func          index.php
 install     languages    modlets           robots.txt    skins
-javascript  lib          packages          settings.php  stats
+javascript  lib          packages          settings.php  rss
 timezone    updates
 
 You have successfully uploaded QSF Portal to your webspace!
@@ -231,7 +231,7 @@ The following directories and files require world-writeable permissions:
   qsforums/downloads/
   qsforums/packages/
   qsforums/skins/
-  qsforums/stats/
+  qsforums/rss/
   qsforums/settings.php
   qsforums/updates/
 

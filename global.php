@@ -1,13 +1,13 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2008 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.4.4';          // QSF Portal version @var string
+	var $version = 'v1.4.5';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -296,7 +296,7 @@ class qsfglobal
 			$lang = $this->get['lang'];
 		}
 
-		if (strstr($lang, '/') || !file_exists($path . 'languages/' . $lang . '.php')) {
+		if (strstr($lang, '/') || strstr($lang, '\\') || !file_exists($path . 'languages/' . $lang . '.php')) {
 			$lang = 'en';
 		}
 
@@ -471,10 +471,10 @@ class qsfglobal
 		// Use the user's chosen GMT offset, ie: GMT-8 = Pacific time, US
 		$tz_offset = $this->user['user_timezone'] * 3600;
 		$time = $gmt_time + $tz_offset;
-		$current_tz_time = $this->time + $tz_offset;
+		$current_tz_time = $this->time;
 
 		// DST adjustment if needed. Yes, it needs to know the current time so it can trick old posts into looking right.
-		if( date( "I", $this->time ) == 1 ) {
+		if( date( "I", $current_tz_time ) == 1 ) {
 			$time += 3600;
 		}
 

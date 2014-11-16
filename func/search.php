@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -284,9 +284,18 @@ class search extends qsfglobal
 
 			// Limit forums being searched
 			if ($this->post['forums']) {
-				$sql .= 'f.forum_id IN (%s) AND ';
-				$sql_data[] = implode(',', $this->post['forums']);
-			}
+				if ( is_array( $this->post['forums'] ) ) {
+					$sql .= 'f.forum_id IN (%s) AND ';
+
+					foreach( $this->post['forums'] as $forums_id => $forums_val )
+						$this->post['forums'][$forums_id] = (int)$forums_val;
+
+					$sql_data[] = implode(',', $this->post['forums']);
+				} else {
+					$sql .= 'f.forum_id = \'%d\' AND ';
+					$sql_data[] = (int)$this->post['forums'];
+				}
+                        }
 
 			if (isset($this->post['time_check'])) {
 				$sql .= $this->create_time_query($this->post['time_way_select'], $this->post['time_select'], $sql_data) . ' AND ';

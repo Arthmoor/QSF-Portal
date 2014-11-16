@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -49,7 +49,7 @@ class recent_posts extends modlet
 			FROM
 			 %ptopics t
 			LEFT JOIN %pusers u ON u.user_id = t.topic_last_poster
-			WHERE t.topic_forum IN (%s)
+			WHERE t.topic_forum IN (%s) AND !(t.topic_modes & TOPIC_MOVED)
 			ORDER BY topic_edited DESC LIMIT 5", $forums_str );
 
 		while( $row = $this->qsf->db->nqfetch($query) )
@@ -60,22 +60,30 @@ class recent_posts extends modlet
 			if (!($row['topic_modes'] & TOPIC_PUBLISH)) {
 				if (!$this->qsf->perms->auth('topic_view_unpublished', $row['topic_forum']) || !$this->qsf->perms->auth('topic_view', $row['topic_forum'])) {
 					$content .= '';
-				}else{
+				} else {
 					if (!$this->qsf->readmarker->is_topic_read($row['topic_id'], $row['topic_edited'])) {
 						$content .= "<img src='./skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
+					} else {
+						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";
 					}
-					$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'><i>".$topic_title."</i></a><br />";
-					$content .= $date ." ". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">". $row['user_name']."</a><hr />";
+
+					$content .= "<i>".$topic_title."</i></a><br />";
+					$content .= $date ."<br />". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">". $row['user_name']."</a><hr />";
 				}
-			}else{
+			} else {
 				if (!$this->qsf->perms->auth('topic_view', $row['topic_forum'])) {
 					$content .= '';
 				} else {
 					if (!$this->qsf->readmarker->is_topic_read($row['topic_id'], $row['topic_edited'])) {
 						$content .= "<img src='./skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
+					} else {
+						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";
 					}
-				        $content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>".$topic_title."</a><br />";
-					$content .= $date ." ". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">".$row['user_name']."</a><hr />";
+
+					$content .= $topic_title."</a><br />";
+					$content .= $date ."<br />". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">".$row['user_name']."</a><hr />";
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -73,6 +73,7 @@ $modules['admin_modules'] = array(
 	'ban',
 	'censoring',
 	'cms',
+	'db_repair',
 	'emot_control',
 	'file_perms',
 	'forums',

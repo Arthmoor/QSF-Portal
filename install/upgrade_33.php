@@ -30,7 +30,30 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
-$need_templates = true;
+// Upgrade from QSF Portal 1.4.4 to QSF Portal 1.4.5
 
-$queries[] = "DELETE FROM %pmembertitles WHERE membertitle_icon='6.gif'";
+// Template changes - Don't forget to enclose them inside single quotes!!!
+$need_templates = array(
+	// Added templates
+	'ADMIN_INDEX', // Changed templates
+	'FILE_DETAILS',
+	'PROFILE_MAIN',
+	'POST_TOPIC',
+	'POST_REPLY',
+	'POST_POLL',
+	'TOPIC_MAIN',
+	'FORUM_TOPIC'
+	);
+
+$this->sets['wordpress_api_key'] = '';
+$this->sets['akismet_email'] = 0;
+$this->sets['akismet_ureg'] = 0;
+
+// Forum permission changes	
+
+// File permission changes
+
+// Queries to run
+$queries[] = "ALTER TABLE %pusers ADD user_register_email varchar(100) default ''";
+$queries[] = "ALTER TABLE %pusers ADD user_server_data text";
 ?>

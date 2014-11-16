@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -54,7 +54,9 @@ class users_online extends modlet
 		$userlist = "";
 		if( $arg == "true" ) {
 			$this->userlist = $this->usersonline();
-			$userlist = "<br /><hr />" . $this->userlist['TITLEONTABLE'] . "<br />" . $this->userlist['USERNAMES'];
+			$userlist = $this->userlist['TITLEONTABLE'] . "<br /><br />" . $this->userlist['USERNAMES'];
+			$date = $this->qsf->mbdate( DATE_ONLY_LONG, $this->qsf->time, false );
+			return eval($this->qsf->template('MAIN_USERS_VISITED'));
 		}
 		return eval($this->qsf->template('MAIN_USERS'));
 	}

@@ -152,6 +152,9 @@ function initTextarea(textarea) {
 		var oldButtonIndex = 0;
 		
 		for (var buttonIndex in buttonArray) {
+			// Quickie hack to avoid problems with user-added javascript extensions.
+			if (buttonArray[buttonIndex].title == "undefined")
+				continue; 
 			// Check if we want to add a break
 			if (buttonArray[buttonIndex].action == 'bbcFont' && 
 					buttonArray[oldButtonIndex].action != 'bbcFont') {

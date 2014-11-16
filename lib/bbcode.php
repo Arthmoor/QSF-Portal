@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -637,7 +637,22 @@ class bbcode extends htmltools
 				return '[url]' . $node->text . '[/url]' ;
 		}
 
-		return '<a href="' . $url . '">' . $node->text . '</a>';
+		// Check for a query string.
+		if ( !empty( $_SERVER['QUERY_STRING'] ) ) {
+			$queryString = '?' . $_SERVER['QUERY_STRING'];
+		} else {
+			$queryString = null;
+		}
+
+		// Find the forum's URL base (host without www/directory forum is in)
+		$forumURLBase = str_replace( 'www.', null, $_SERVER['HTTP_HOST'] ) . dirname( $_SERVER['SCRIPT_NAME'] );
+
+		// Check if the URL is external.
+		if ( ( strpos( $url, $forumURLBase ) === false ) && !empty( $this->sets['link_target'] ) && $this->sets['link_target'] != '_self' ) {
+			return '<a href="' . $url . '" onclick="window.open(this.href, \'' . $this->sets['link_target'] . '\'); return false;">' . $node->text . '</a>';
+		} else {
+			return '<a href="' . $url . '">' . $node->text . '</a>';
+		}
 	}
 
 	function _process_youtube(&$node)
@@ -747,7 +762,7 @@ class bbcode extends htmltools
 	}
 
 	/**
-	 * Handle formatting out censored workds
+	 * Handle formatting out censored words
 	 *
 	 * PROTECTED
 	 *

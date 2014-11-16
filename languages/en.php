@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2008 The QSF Portal Development Team
+ * Copyright (c) 2006-2010 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -82,6 +82,7 @@ class en
 		$this->admin_db_conn = 'Edit connection settings';
 		$this->admin_db_optimize = 'Optimize the database';
 		$this->admin_db_query = 'Execute an SQL query';
+		$this->admin_db_repair = 'Repair the database';
 		$this->admin_db_restore = 'Restore a backup';
 		$this->admin_delete_forum = 'Delete a forum';
 		$this->admin_delete_group = 'Delete a group';
@@ -394,6 +395,12 @@ class en
 		$this->cp_zone = 'Time Zone';
 	}
 
+	function db_repair()
+	{
+		$this->repair_db = 'Repair Database';
+		$this->repaired_db = 'The tables in the database have been repaired.';
+	}
+
 	function email()
 	{
 		$this->email_blocked = 'That member is not accepting email through this form.';
@@ -501,6 +508,8 @@ class en
 		$this->files_fix_stats2 = 'The file stats have been corrected.';
 		$this->files_has_updated = 'has been updated with new information.';
 		$this->files_index = 'File Index';
+		$this->files_invalid_category = 'An invalid category was entered. Please check the URL.';
+		$this->files_invalid_file = 'An invalid file ID was entered. Please check the URL.';
 		$this->files_invalid_option = 'Invalid option flag';
 		$this->files_moderator = 'Moderator';
 		$this->files_modify_info = 'Modify File Information';
@@ -902,6 +911,7 @@ class en
 		$this->mc_user_pm = 'Accepting Private Messages';
 		$this->mc_user_pm_mail = 'Email Private Messages';
 		$this->mc_user_posts = 'Posts';
+		$this->mc_user_regemail = 'Registration Email';
 		$this->mc_user_regip = 'Registration IP';
 		$this->mc_user_signature = 'Signature';
 		$this->mc_user_skin = 'Skin';
@@ -1194,8 +1204,8 @@ class en
 		$this->post_must_msg = 'You must include a message when posting.';
 		$this->post_must_options = 'You must include options when creating a new poll.';
 		$this->post_must_title = 'You must include a title when creating a new topic.';
-		$this->post_new_poll = 'New poll';
-		$this->post_new_topic = 'New topic';
+		$this->post_new_poll = 'Creating new poll in:';
+		$this->post_new_topic = 'Posting new topic in:';
 		$this->post_no_forum = 'That forum was not found.';
 		$this->post_no_topic = 'No topic was specified.';
 		$this->post_no_vote = 'You must choose an option to vote for.';
@@ -1212,7 +1222,7 @@ class en
 		$this->post_posting = 'Posting';
 		$this->post_preview = 'Preview';
 		$this->post_reply = 'Reply';
-		$this->post_reply_topic = 'Reply to topic';
+		$this->post_reply_topic = 'Replying to topic \'%s\' in:';
 		$this->post_replying = 'Replying To Topic';
 		$this->post_replying1 = 'Replying';
 		$this->post_too_many_options = 'You must have between 2 and %d options to a poll.';
@@ -1450,6 +1460,12 @@ class en
 		$this->settings = 'Settings';
 		$this->settings_active = 'Active Users Settings';
 		$this->settings_allow = 'Allow';
+		$this->settings_akismet_email_enable = 'Email Form Protection';
+		$this->settings_akismet_email_enable_msg = 'Spam filter protection for the user email forms.';
+		$this->settings_akismet_email_spam = 'Your email has been flagged as spam and has not been delivered.';
+		$this->settings_akismet_ureg_enable = 'User Registration Protection';
+		$this->settings_akismet_ureg_enable_msg = 'Spam filter protection for new user registrations.';
+		$this->settings_akismet_ureg_spam = 'Registration blocked by spam filtering. If you believe this to be in error, please contact the administration.';
 		$this->settings_antibot = 'Anti-Robot Registration';
 		$this->settings_attach_ext = 'Attachments - File Extensions';
 		$this->settings_attach_one_per = 'One per line. No periods.';
@@ -1560,6 +1576,8 @@ class en
 		$this->settings_tos = 'Terms of Service';
 		$this->settings_tos_files = 'Terms of Service: Uploads';
 		$this->settings_updated = 'Settings have been updated.';
+		$this->settings_wordpress_id = 'Wordpress API Key';
+		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: http://akismet.com/personal/';
 	}
 
 	function stats()
