@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' dir='ltr'>
+<head>
+<meta http-equiv='Content-Type' content='application/xhtml+xml; charset=iso-8859-1' />
+
+<title>Quicksilver Forums - Help</title>
+<link rel="stylesheet" type="text/css" href="../../skins/default/styles.css" />
+<link rel="stylesheet" type="text/css" href="help.css" />
+
+<!--[if lt IE 7]>
+<script src='../../skins/default/pngfix.js' type='text/javascript'></script>
+<![endif]-->
+
+</head>
+<body>
+                                                                                
+                                                                                
+<div class="round-top"><div>&nbsp;</div></div>
+<div class="container">
+
+  <div>
+    <h1><img src="../../skins/default/images/quicksilver_logo.png" alt="Quicksilver Forums" height="138" width="419" /></h1>
+  </div>
+
+	<ul class="nav">
+
+			<li><a href="index.html">Help Home</a></li>
+			<li><a href="readme.html">Readme</a></li>
+			<li><a href="faq.html">FAQ</a></li>
+			<li><a href="install.html">Install</a></li>
+	</ul>
+
+<div class="content">
+
+<h2>Frequently Asked Questions</h2>
+<hr class="light" />
+<p></p>
+<h3>GENERAL</h3>
+<ul>
+<li>Q. What is Quicksilver Forums?
+</li>
+<li>A. Quicksilver Forums is a bulletin board system written in PHP 4 and MySQL. <a href="http://www.quicksilverforums.com/">http://www.quicksilverforums.com/</a>
+<p></p>
+</li>
+<li>Q. What is Mercuryboard?
+</li>
+<li>A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. <a href="http://www.mercuryboard.com/">http://www.mercuryboard.com/</a>
+</li>
+</ul>
+
+<h3>INSTALLATION</h3>
+<ul>
+<li>Q. QuickSilver Forums keeps saying that it cannot update settings.php when I install it.
+</li>
+<li>A. This is because the CHMOD setting are lower than 0666 or if you're running a windows server the file is not writable by the webserver.
+<p></p>
+</li>
+<li>Q. How do you change the CHMOD settings on Dreamweaver?
+</li>
+<li>A. Go to the ftp log and type in <code>site CHMOD 666 /myForumFolder/settings.php</code>. We recommend using another FTP program such as Smart FTP. Dreamweaver is not well suited to moving files around.
+<p></p>
+</li>
+<li>Q. It wants details for a MySQL database. I don't know how to create one!
+</li>
+<li>A. <a href="http://dev.mysql.com/doc/refman/5.0/en/database-use.html">http://dev.mysql.com/doc/refman/5.0/en/database-use.html</a> Also your hosting provider may have created tools to help you manage MySQL. Speak to your hosting provider, they are there to help you.
+<p></p>
+</li>
+<li>Q. Does Quicksilver Forums work on databases other than MySQL?
+</li>
+<li>A. No.
+<p></p>
+</li>
+<li>Q. I can't post! / How do you create forums?
+</li>
+<li>A. Go into "admin cp -&gt; Create a forum" and create a CATEGORY and set the permissions to default. Now go to" Create a forum" again and create a forum using that category and using the permissions from that category.
+<p></p>
+</li>
+<li>Q. Why do I have to create categories?
+</li>
+<li>A. Every forum must exist within a category. And forums can act as a category for other forums. You can make a very complex hierarchy if you wish but it must have at least 1 category and 1 forum.
+<p></p>
+</li>
+<li>Q. Should I use Full permissions or No Permissions when creating forums?
+</li>
+<li>A. Generally no. They can be useful for advanced operators of live/test sites.
+<p></p>
+</li>
+<li>Q. How do i allow guests to post?
+</li>
+<li>A. Change their permissions in "admin cp -&gt; Edit a group's permissions" to allow "Create polls", "Create replies" and "Create topics" in specified forums.
+</li>
+</ul>
+
+<h3>OPERATION</h3>
+<ul>
+<li>Q. The board is blank or gabled.
+</li>
+<li>A. In your Admin CP, go to Edit Board Settings and disable GZIP. 
+</li>
+</ul>
+
+<h3>ADVANCED</h3>
+<ul>
+<li>Q. Can I look at the database?
+</li>
+<li>A. There is a tool in the admin cp to allow running SQL queries for advanced users. Or we can recommend using phpMyAdmin for browsing the structure / data.
+<p></p>
+</li>
+<li>Q. Can I put PHP code into temmplates?
+</li>
+<li>A. Generally no. But you can get createive using the following syntax: <code>&lt;IF (php condition)&gt;(html output)&lt;/IF&gt;</code> And there are also modlets that allow you to drop in code <code>&lt;MODLET mymodletname()&gt;</code>
+<p></p>
+</li>
+<li>Q. I think I found a bug?
+</li>
+<li>A. Visit the website, search to see if someone found it already, if not then report what happened and how to repeat it.
+<p></p>
+</li>
+<li>Q. Can I help the Quicksilver Forums team?
+</li>
+<li>A. Visit the website and jump right in. It's an open house party!
+<p></p>
+If you need further help please go to:
+<a href="http://forums.quicksilverforums.com/index.php?a=forum&amp;f=7">http://forums.quicksilverforums.com/index.php?a=forum&amp;f=7</a>
+</li>
+</ul>
+
+</div>
+
+
+<div class="clear"></div>	
+	<p class="copyright">&copy; Copyright 2005-2006 Quicksilver Forums Development Team<br/>
+
+</div>
+<div class="round-bottom"><div>&nbsp;</div></div>
+
+</body>
+</html>

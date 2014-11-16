@@ -1,0 +1,220 @@
+This guide was written to help with the initial installation and configuration of Quicksilver Forums (version 1.2.0), a MySQL and PHP-based forum/bulletin board system. You can peruse the features of Quicksilver Forums by [http://www.quicksilverforums.com/features.html clicking here]. Some noteworthy features include:
+
+* Built-in anti-robot, anti-spam controls;
+* Flexible user configuration: Macromedia Flash avatars, blind e-mail correspondence between users, and accessible in 18 languages;
+* BBCode and JavaScript post editing tools; and
+* Powerful administration tools: easy backup and restore system, support for modules, and ability to communicate with users.
+
+=== Who is this guide for? ===
+
+This guide was written for end-users with roughly intermediate knowledge of maintaing a web site. It is assumed the reader knows the basics of unpacking a compressed archive, using a client for making FTP or SSH connections, uploading files from your local computer to a remote server via said client, and possesses a working knowledge of the *NIX command line.
+
+=== Latest Release ===
+
+Up-to-date releases of Quicksilver Forums can be accessed at its [http://quicksilverforums.com/ official website], or at its [http://sourceforge.net/projects/qsforums/ SourceForge Project Page].
+ 
+=== Copyright and License ===
+
+This document, The Quicksilver Forums Installation Guide, is copyrighted (c) 2006 by The Quicksilver Forums Development Team. Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.1 or any later version published by the Free Software Foundation; with no Invariant Sections, with no Front-Cover Texts, and with no Back-Cover Texts. A copy of the license is available at:
+
+  http://www.gnu.org/copyleft/fdl.html
+
+=== Disclaimer ===
+
+No liability for the contents of this document can be accepted.  Use the concepts, examples and information at your own risk. There may be errors and inaccuracies, that could be damaging to your system. Proceed with caution, and although this is highly unlikely, the author(s) do not take any responsibility.
+
+All copyrights are held by their by their respective owners, unless specifically noted otherwise. Use of a term in this document should not be regarded as affecting the validity of any trademark or service mark. Naming of particular products or brands should not be seen as endorsements.
+
+=== Feedback ===
+
+Feedback is most certainly welcome for this document. Send your additions, comments and criticisms to:
+
+  Joe King, jcbstallion {at} users (dot) sourceforge (dot) net
+  qsfdev {at} lists (dot) berlios (dot) de
+
+== Pre-Installation ==
+
+=== Preparing for Migration from Other Forum Package ===
+
+TODO: Probably will require a separate guide.
+
+=== Preparing for Upgrade ===
+
+If you will be upgrading from an earlier version of Quicksilver Forums, please hang onto your <tt>settings.php</tt> file. It is recommended when uploading files you do not overwrite this file. This is easiest done by making a copy temporarily and putting it back after all files are in place. Or deleting the settings.php provided in the new release.
+
+=== Preparing for Installation ===
+
+In order for Quicksilver Forums to function, the following are required prior to installation:
+
+* A functioning web server, like [http://www.apache.org/ Apache], or a web hosting service;
+* FTP or SSH access to your webspace;
+* [http://www.mysql.com/ MySQL] version 3.22 or higher; and
+* [http://www.php.net/ PHP] version 4.3.0 or higher.
+
+Also, it is helpful to know the following:
+
+* The URL to your web site; and
+* The directory containing your "webspace." It depends upon the host, but by default Apache servers look in <tt>$HOME/public_html/</tt> for web pages to serve.
+
+If you will be using a third-party web hosting service, speak to an administrator about setting up a MySQL database for your site, for which there may be additional hosting fees. The administrator will likely provide you the following important information:
+
+* The hostname of the MySQL server;
+* The username and password required to access your database; and
+* The ''name'' of your database.
+  
+== Installation ==
+
+This section will ready the user's webspace for Quicksilver Forums, guide the user through uploading Quicksilver Forums to the webspace, and setting the proper permissions for installation. Those comfortable with the uploading process can do so and skip to the ''Permissions'' subsection.
+
+=== Uploading the Files ===
+
+Unpack the Quicksilver Forums version 1.2.0 archive into a directory called
+<tt>quicksilver</tt> on your desktop.
+
+Log into your webspace, via FTP or SSH and create a directory called <tt>qsforums</tt> .
+
+''NOTE: It does not have to be named <tt>qsforums</tt> -- you may name it whatever you wish, though <tt>qsforums</tt> will be used throughout the remainder of this guide. Adapt to your situation as necessary.''
+
+Direct your client to your local <tt>quicksilver</tt> folder and upload everything to the <tt>qsforums</tt> directory within your webspace.
+
+Remotely, navigate to the <tt>qsforums</tt> directory. Check the directory listing. Here is what it should look like:
+
+admincp      defaultutils.php  index.php   lib           skins
+attachments  docs              install     modlets       stats
+avatars      func              javascript  robots.txt    timezone
+databases    global.php        languages   settings.php
+
+You have successfully uploaded Quicksilver Forums to your webspace! Now it is time to set permissions for the files, which affects both the security and operability of the installation.
+
+=== Permissions ===
+
+Within your client you may have to modify the permissions of the Quicksilver Forums files uploaded to your webspace. If you are using a third-party hosting service, ensure you are not violating any terms of service by modifying permissions. Determine the host's recommended permissions are for directories and files, particularly PHP files. Some hosts may not require you to modify permissions because of their server configuration. ''Be aware of your host's policies and what portions of this subsection apply to you, as it deals with security and access control.''
+
+It is assumed you have uploaded Quicksilver Forums to a directory called <tt>qsforums</tt> within your webspace. Connect to your webspace via FTP or SSH (if you have not already) and navigate to the <tt>qsforums</tt> directory.
+
+==== Permission changing if your server is running a UNIX permission system ====
+
+It is prudent to assign your host's default permissions to all the files you uploaded. Modify the following values with those advised by your host. On ''most'' servers, it is, in ''chmod'' terms, '''755''' for directories, and '''644''' for files.
+
+If you have shell access, these are some easy commands for expediting permissions for all within the <tt>qsforums</tt> directory. Some hosts may have a script available which will automatically set proper permissions. Please consult your administrator. Here are some examples:
+
+  $ find . -type d -print0 | xargs -0 chmod 755
+  $ find . -type f -print0 | xargs -0 chmod 644
+
+''NOTE: If the <tt>find</tt> does not work, try using <tt>gfind</tt> instead.''
+
+There are specific directories and files that will require write permissions. On third-party hosts, administrators may provide permission guidelines for such files and folders. If you have such information available, please see the section ''Permission Errors'' and set permissions accordingly. If you are unsure, please continue. Permission errors will be dealt with on a case-by-case basis later.
+
+==== Permissions if you are using IIS ====
+
+IIS works differently to any UNIX system because CHMOD does not exist in the same way. When using IIS you must be browsing your files in a program like windows explorer to make them easy to change. Some FTP programs have the choice of using CHMOD of IIS permissions. 
+
+When you are viewing your folders you now need to right click on the folder that you wish to change the permission of, in this case it will be the quicksilverforums directory. Now select 'Sharing and Security' and select the tab saying 'Web Sharing'. If you now select the 'share this folder' radio button you should have a window with a selection of permission options, you need to make sure the bottom section has 'Execute(include scripts) is selected and you have full read, write and execute options also enabled. You need to make sure that the user you are using has the correct permissions to change permissions, contact your host if you have any concerns on changing permissions or are unsure on what to do.
+
+You have successfully set your permissions. The next section involves accessing your installation of Quicksilver Forums with a JavaScript and cookies-enabled browser to setup the initial configuration.
+
+== Configuration ==
+
+
+This section will guide you through the basic web-based configuration of Quicksilver Forums.
+
+=== Post-Installation Configuration ===
+
+Maintain a SSH or FTP connection to your webspace. Launch your favorite graphical browser (with JavaScript and CSS enabled), and access the <tt>qsforums/install</tt> subdirectory. For example:
+
+  http://example.com/~you/qsforums/install
+
+This takes you to the Quicksilver Forums install page. Select the applicable radio button. If this is your first install, the default selection will serve you fine. Note the values in the left column, which report your server, PHP, and MySQL versions and configurations. Keep this information handy, in case more in-depth troubleshooting is required.
+
+The next page has four sections: New Database Configuration, New Board Settings, Administrator Account Settings, and Create Initial Data.
+
+* '''New Database Configuration:''' Fill in the necessary details for your database as provided by your administrator. "Database Socket" and/or "Database Port" may be left blank if those values are unnecessary for your host. As for "Table Prefix", do not modify the default value unless you will be using the same MySQL database for numerous instances of Quicksilver Forums.
+* '''New Board Settings:''' Fill in the name of your board, and verify the install script accurately captured the URL to your Quicksilver Forums installation. Correct it if necessary.
+* '''Administrator Account Settings:''' When selecting an administrative username, it is recommended it not be obvious, like ''admin''. Select an obscure password, preferrably composed of upper and lowercase letters, numbers, and symbols. For security reasons, change your administrative password frequently to safeguard your forums.
+* '''Create Initial Data:''' If this is your first installation of Quicksilver Forums, it is recommended you leave the checkbox checked. If you are confident you can create the categories and forums in QSF you need then uncheck it to give you a blank slate.
+
+Click "Continue." If you are directed to a page saying "Congratulations!", you have successfully installed Quicksilver Forums! In such a case, delete the <tt>qsforums/install</tt> directory immediately. If not removed promptly, it could allow a third-party to reconfigure your site.
+
+If you are receiving error messages, proceed to the next section, which has procedures for dealing with the most common difficulties.
+
+== Troubleshooting ==
+
+This section contains remedies for common errors, the vast majority of which deal with file and directory permissions. The first subsection, "Permission-Related Errors," contains those directories and files that require write permissions, since a considerable majority of errors deal with incorrect permissions. The remainder subsections deal with individual error messages.
+
+Before continuing, please verify that you are using a web browser with JavaScript, cookies, and CSS enabled while working with Quicksilver Forums' web-based configuration tools.
+
+=== Permission-Related Errors ===
+
+The following directories and files require read and write permissions. Please verify their permissions are set properly. The necessary permissions differ from host to host. Consult your administrator. Otherwise, it is safe to set directory permissions to '''755''' and file permissions to '''644''' using the <tt>chmod</tt> command. In some cases these permissions are not sufficient; world-writeable permissions ('''777''' for directories, '''666''' for files) may need to be set. World-writeable permissions should be assigned cautiously as such permissions could threaten site security.
+
+All files and directories require world readable permissions. The following directories and files require world-writeable permissions:
+
+  qsforums/attachments/
+  qsforums/avatars/uploaded/
+  qsforums/databases/
+  qsforums/skins/
+  qsforums/stats/
+  qsforums/settings.php
+
+Please attempt to resume installation after setting the proper permissions to these files. The remaining subsections deal with individual error messages and their respective remedies.
+
+=== Individual Error Messages ===
+
+This following subsections deal with individual error messages you may encounter during the installation process.
+
+==== Couldn't connect to a database using the specified information. ====
+
+  Couldn't connect to a database using the specified information.
+
+This error message is displayed when Quicksilver Forums is unable to connect to your host's MySQL database with user-sepcified information at install time.
+
+In your browser, go "back" to the configuration page. Verify that the database information you entered is correct. This error can only occur if these values are incorrect or incomplete. Verify you have input the correct values as supplied by your administrator.
+
+==== The database connection was ok, but <tt>settings.php</tt> could not be updated. ====
+
+  The database connection was ok, but settings.php could not be updated. CHMOD settings.php to 0666.
+
+Assuming the "Permission-Related Errors" section has been consulted and permissions already set, you may have to set ''world-writeable'' permissions for the <tt>settings.php</tt> file. Consult your administator first before assigning world-writeable permissions:
+
+  $ chmod 666 settings.php
+
+Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
+
+==== Database connected, settings written, but... ====
+
+  Database connected, settings written, but no tables could be loaded from file: data_tables.php
+
+  Database connected, settings written, but no templates could be loaded from file: data_templates.php
+
+These errors are generated when <tt>qsforums/install/data_tables.php</tt> or <tt>qsforums/install/data_templates.php</tt> are either corrupt or lack the necessary read permissions. You may wish to re-upload these files before continuing.
+
+These files need world-readable permissions. From the <tt>qsforums/install</tt> directory, issue the following command:
+
+  $ chmod 644 data_tables.php data_templates.php
+
+Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
+
+==== You have not specified an admistrator account... ====
+
+  You have not specified an admistrator account. Please go back and correct this error.
+
+This error message is generated when the ''Administrator Account Settings'' section of the configuration page was not properly completed. Quicksilver Forums requires the user to set an administrator username, enter the administrator's password twice, and supply an e-mail address for the administrator (which will not be published by default).
+
+Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
+
+==== Database connected, settings written, but no seed data... ====
+
+  Database connected, settings written, but no seed data could be loaded from file: seed_data.php
+
+The file <tt>qsforums/install/seed_data.php</tt> is either corrupt or does not have proper world-readable permissions set. This file is used to "seed" a new installation of Quicksilver Forums by providing a sample forum and messages. This file is used if you checked the option labelled "Create Initial Data" in the configuration page. You may wish to re-upload this file before continuing.
+
+Issue this command from the <tt>qsforums/install</tt> directory to assign world-readable permissions:
+
+  $ chmod 644 seed_data.php
+
+Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
+
+== Appendices ==
+
+TODO: To be added.
+

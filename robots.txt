@@ -1,0 +1,21 @@
+# keep robots out of places that have no interesting content
+# these places are still public and accessable. just not good
+# places for search engines to hit
+
+User-agent: *
+Disallow: /index.php?a=post
+Disallow: /index.php?a=search
+Disallow: /index.php?a=members
+Disallow: /index.php?a=help
+Disallow: /index.php?a=pm
+Disallow: /index.php?a=cp
+Disallow: /index.php?a=active
+Disallow: /index.php?a=email
+Disallow: /index.php?a=printer
+Disallow: /index.php?a=register
+Disallow: /index.php?a=login
+Disallow: /index.php?s=mark
+Disallow: /index.php?a=topic&s=attach
+
+User-agent: WebReaper
+Disallow: /

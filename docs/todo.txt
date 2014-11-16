@@ -1,0 +1,23 @@
+SUBSCRIPTIONS
+Rework mass mailing in general to no longer use a 'bogus' to address while hiding all the receipients in the BCC field
+
+TRANSLATIONS
+Translation of all the new fields created for the admin cp
+
+MOD CP
+Break down admin cp into smaller bits so user groups can be granted small access such as 'ban users' or 'create forum' without having super user access
+
+SKINS
+phase out use of unskinable images and printable.php
+
+READ/UNREAD
+rework so it's more usable across as a way to work through topics
+
+ATTACHMENTS
+rework so it can be used by post.php AND mod.php
+
+DATABASES
+seperate mysql specific queries so we can add support for other databases
+
+DOCUMENTATION
+More. More! MORE!

@@ -1,0 +1,212 @@
+-------------------------------------------
+=== Quicksilver Forums Coding Standards ===
+-------------------------------------------
+
+Please follow these guidelines when modifying or adding to the Quicksilver
+Forums source. They are slightly modified PEAR (http://pear.php.net) coding
+standards.
+
+== Indenting and Space ==
+ Use an indent of 1 tab. After the first non-tab character on a line, spaces
+ should be used for whitespace. There should not be any space at the end of a
+ line.
+
+== Control Structures ==
+ These include if, for, while, switch, etc. Here is an example if statement,
+ since it is the most complicated of them:
+
+ if ((condition1) || (condition2)) {
+ 	action1;
+ } elseif ((condition3) && (condition4)) {
+ 	action2;
+ } else {
+ 	defaultaction;
+ }
+
+ You are strongly encouraged to always use curly braces even in situations
+ where they are technically optional. Having them increases readability and
+ decreases the likelihood of logic errors being introduced when new lines are
+ added.
+
+ Format switch statements in this way:
+
+ switch (condition)
+ {
+ case 1:
+ 	action1;
+ 	break;
+
+ case 2:
+ 	action2;
+ 	break;
+
+ default:
+ 	defaultaction;
+ 	break;
+ }
+
+== Function Calls ==
+ Functions should be called with no spaces between the function name, the
+ opening parenthesis, and the first parameter; spaces between commas and each
+ parameter, and no space between the last parameter, the closing parenthesis,
+ and the semicolon. Here's an example:
+
+ $var = foo($bar, $baz, $quux);
+
+ As displayed above, there should be one space on either side of an equals sign
+ used to assign the return value of a function to a variable. In the case of a
+ block of related assignments, more space may be inserted to promote
+ readability:
+
+ $short         = foo($bar);
+ $long_variable = foo($baz);
+
+== Function Definitions ==
+ Function declarations follow the "one true brace" convention:
+
+ function fooFunction($arg1, $arg2 = '')
+ {
+ 	if (condition) {
+ 		statement;
+ 	}
+ 	return $val;
+ }
+
+ Arguments with default values go at the end of the argument list. Always
+ attempt to return a meaningful value from a function if one is appropriate.
+ Here is a slightly longer example:
+
+ function connect(&$dsn, $persistent = false)
+ {
+ 	if (is_array($dsn)) {
+ 		$dsninfo = &$dsn;
+ 	} else {
+ 		$dsninfo = DB::parseDSN($dsn);
+ 	}
+
+ 	if (!$dsninfo || !$dsninfo['phptype']) {
+ 		return $this->raiseError();
+ 	}
+
+ 	return true;
+ }
+
+== Comments ==
+ Inline source documentation should work with phpDocumentor. More information
+ about PHPDoc can be found here: http://www.phpdoc.org
+
+ Non-documentation comments are strongly encouraged. A general rule of thumb is
+ that if you look at a section of code and think "Wow, I don't want to try and
+ describe that", you need to comment it before you forget how it works.
+
+ C style comments (/* */) and standard C++ comments (//) are both fine. Use of
+ Perl/shell style comments (#) is discouraged.
+
+== Including Code ==
+ Anywhere you are unconditionally including a class file, use require().
+ Anywhere you are conditionally including a class file (for example, factory
+ methods), use include().
+
+ Note: include() and require() are statements, not functions. You don't need
+ parentheses around the filename to be included.
+
+== PHP Code Tags ==
+ Always use <?php ?> to delimit PHP code, not the <? ?> shorthand. This is
+ required for PEAR compliance and is also the most portable way to include PHP
+ code on differing operating systems and setups.
+
+== Strings and Arrays ==
+ Always use '' for strings that don't contain variables. For strings that
+ contain variables, either close the string and concatenate the variables, or
+ use double quotes.
+
+ Array keys are strings and should be quoted as such. Put braces around the
+ variable to prevent the parser from reading it as "Array['key']"
+
+ Valid ways to use strings and arrays:
+ $foo = 'Single quotes (\') work fine when escaped';
+ $foo = 'I am showing you ' . $bar['baz'] . ' an example';
+ $foo = "I am showing you {$bar['baz']} an example";
+
+ Invalid ways to use strings and arrays:
+ $foo = "There are no variables in this string.";
+ $foo = "The key is $bar[baz]";
+
+== Header Comment Blocks ==
+ All source code files in the core Quicksilver Forums distribution should
+ contain the following comment block as the header:
+
+ /**
+  * Quicksilver Forums
+  * Copyright (c) 2005 The Quicksilver Forums Development Team
+  *  http://www.quicksilverforums.com/
+  * 
+  * This program is free software; you can redistribute it and/or
+  * modify it under the terms of the GNU General Public License
+  * as published by the Free Software Foundation; either version 2
+  * of the License, or (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  **/
+
+== Example URLs ==
+ Use "example.com" for all example URLs, per RFC 2606.
+
+== Naming Conventions ==
+ Generally speaking, the names of classes, functions and variables should
+ always be descriptive enough to easily tell the reader of the code what they
+ are used for.
+
+== Classes ==
+ Classes should be given descriptive names. Avoid using abbreviations where
+ possible. Class names should be all-lowercase.
+
+== Functions and Methods ==
+ Functions and methods should be named descriptively with underscores
+ separating words, all-lowercase. A verb-noun combination is recommended.
+
+ Some good function names:
+
+ connect()
+ get_data()
+ build_some_widget()
+
+== Constants ==
+ Constants should always be all-uppercase, with underscores to separate words.
+ Constants go in ./func/constants.php. Their names should reflect the context
+ of their use.
+
+ Constants are preferred over magic numbers.
+
+== Global Variables ==
+ Don't use global variables in any file with a class.
+
+== True, false, null ==
+ PHP's built-in values true, false and null must be written in lower-case.
+
+== Compatibility ==
+ All code must work with PHP 4.0.0. If this isn't feasible, check availability
+ with function_exists(). Don't bother coding for PHP3.
+
+ All code must work with all possible configurations of PHP, including various
+ values for register_globals, magic_quotes_gpc, etc.
+
+ All HTML must work as intended in all popular browsers, including Internet
+ Explorer 5+, Netscape 4+, Mozilla, and recent versions of Opera.
+
+ Do not use JavaScript to validate forms or supply critical features. JavaScript
+ should supplement the existing HTML, not replace PHP. All code must work with
+ JavaScript enabled or disabled, in all popular browsers, as feasible.
+
+ Queries should be valid for all available databases. Use a switch() statement
+ to determine the database type if you need features available only to certain
+ databases.
+
+ Queries should work with recent and popular versions of databases. For MySQL,
+ keep it compatible with all versions newer than 3.22.x.
+
+ Keep all code compatible with all web servers, primarily Apache and IIS.

@@ -1,0 +1,210 @@
+Changes for 1.2.0:
+  General Changes and Additions:
+* Spoilers now display an icon (like quotes and code blocks)
+* Recent posts includes all topics since last visit as well as all unread topics
+* Added db_pgsql class as a step towards future PostgreSQL support
+* Added html version of Docs
+* Removed old (mercuryboard) install guide
+* Can now download a backup directly without saving to the server
+* Minor change to chmod the created backup file
+* Added javascript to assist timezone selection
+* Logins now support PHP sessions if cookies fail to set. Session is fixed to IP
+* Updated timezones including three new timezones
+* Topic icons no longer hasn it's own column
+* Removed no-cache settings for admin cp
+* Speed information now supressed when not in debug mode
+* Topics can now be marked as published or unpublished - Jon
+* Birthday display is now handled as a modlet
+* ini_set only used if a mailserver is selected
+* Message Icons now use an unordered list rather than a table
+* RSS feeds now use templates
+* RSS feeds now include guid
+* New permission now marks if a post contributes to that user's postcount
+* Upgrades can now introduce new permissions that default to ON
+* Quickreply now available as a native feature
+* All new hander for tracking read and unread posts
+* Upgrade now informs user of what skins have been modified
+* Registration and stats images are now created in the stats folder
+* Moved to a more modular system with many new classes in lib
+* Clickable smilies now use an unorded list instead of a table
+* Moved timezone styling out to CSS file
+* BB code formatting now users em and strong instead of i and b
+* Removed printer module
+* Dropped any support for PHP versions older than 4.3.0
+
+  Bugs Addressed:
+* [security] Registration now uses sessions to stop spamming registration form
+* Split topics would not pick up new topic start author
+* Coundn't access PM outbox without javascript
+* Couldn't add a template with position 0
+* Spider agents are now set correctly and no longer require 2 arrays
+* Timezone class to handle timezone files with only one entry - Matt
+* Split topics did not count post replies properly
+* Could create a group without a name
+* Stopped moved topic leftovers showing in recent topics
+* Suckerfish menu was not working in IE for RTL languages
+* PNGs now render much better in IE
+* Unpinning a topic no longer marks it as new
+* No longer show users as online who wish to hide board activity
+* Very long user_agent string was causing errors
+* Was counting 1 too many replies when deleting a topic
+* Backup was providing an incorrect link to the backup file
+* User title not validated in admin cp - Matt
+* Extra slashes were appearing when editing attachments 
+
+  Translation Updates:
+* Updated Swedish translation - LadyAnna
+* Big update to German translation - Ibus
+* Significant update to Hebrew translation - David (ddady)
+* Big update to Italian translation - Giuseppe
+* Norwegian translation completely rewritten - Ingvild
+* Big update to French translation - Brinick
+
+Changes for 1.1.9:
+
+* Separated out some more javascript files
+* Fixed bug in profile editing after signature editor was moved
+* Extra <br /> tag removed from AdminCP menu
+* Validation error in RECENT_MAIN template
+* XMB Forum convertor script added.
+* RSS Feed can now generate feeds for individual forums and topics.
+* Removed the defunct javascript files from the default skin.
+* New forum installation seeds itself with a default category, forum, and topic.
+* View next/prev topic links added.
+* IP address stored with PM.
+* Significant update to Italian translation
+* New template BOARD_CATEGORY_END
+* Ability to edit(add/delete) Attachments on posts
+* More PHP 5 and MySQL 5 bugfixes.
+* BUG: Modlets could not be used inside <IF> tags.
+* BUG: Search spiders were counting toward guest user total.
+* BUG: Code tags contained leadng spaces.
+* BUG: Error when editing profile
+
+Changes for 1.1.8:
+
+* New BB code for superscript, subscript and indent
+* Fixed bug in upgrading with non-default skins
+* Fixed bug in renaming a skin without permission to rename folder
+* Fixed anti-robot registration to no longer be case sensitive
+* Added handheld css to improve readability for handheld devices
+* Fix to xhtml validation error on posting
+* Updated French Translation - xboxrulz (still incomplete)
+* Pulled out attachment code into separate module
+* Fixed bug in restoring backups
+
+Changes for 1.1.7:
+
+* Fixed various bugs in the upgrade process
+
+Changes for 1.1.6:
+
+* Lots of cleanups to templates
+* Fixes to templates to improve IE rendering
+* Fixes to images not rendering transparency in IE
+* Many additional templates for Admin CP display
+* Improved forum install/conversion/upgrade system
+* Added Moderators core group
+* Changes to queries for MySQL 5.0.12 support
+* Fixed bug where non-admins could not have a custom title
+* Fixed error in Dutch language file
+* Tweaked handling of code tags to avoid making the last line invisible when code is very wide
+* Fixed handling of img tags inside url tags
+* Fixed bug where reminder message was not displaying
+* Changed quotes to use div tags instead of complex table
+* Added left (align) BB code tag
+* Fixed javascript for setting Avatar creating an endless loop if noavatar.png did not exist
+* Added vBulletin 3.5.1 convertor
+* Added MyBB converter
+* Added Invision Power Board 2.1.x convertor
+* General improvements and bugfixes to all forum convertors
+* Added spoiler BB code tag
+* Merged two queries in forum display
+* Fixed color tag to allow use of RGB as a color
+* Fixed guest posts displaying as duplicates when 2 or more guests logged in
+* Improved topic counting now recounts topic replies too - NiteShdw
+* Hack to stop rssfeed marking topics as read
+* Removed modlet:init()
+* Fixed RSS reader so it checks for templates correctly
+* Made statistics center more check for png support
+* Added row_format=fixed to speed up some tables
+* Added display of Forum name in Recent posts
+* robots.txt file to keep spiders from accessing things they don't need to
+* Plugged an XSS injection point
+* Poll options now use BB code
+* Added enhanced editor for user signatures - Jon
+* Pulled out BB code buttons into seperate template
+
+Bugfixes for 1.1.4:
+
+* [font] and [color] code is not being sanitized properly.
+* BUG #2799: Fixed attachment bug where the index page was appended to the file output.
+* BUG #3053: SQL injection vulnerability in HTTP_USER_AGENT
+* BUG #2644: P3P Compact privacy header added - hopefully to solve IE6 login issues.
+* BUG #1210: Navigation tree for moved subforums does not reflect move.
+
+Bugfixes in official 1.1.5 CVS branch:
+
+* New members are unable to register.
+* Removed the hardcoded styling from the $botformat variable.
+* Guest account must have a level > 0 to view the board.
+* Editing a post redirects to the first page of the topic, despite position of post edited.
+* Post icon is not changeable when editing a post.
+* Fixed skinning permission problems, well mostly anyway.
+* Better checking of email addresses (was too strict previously)
+* Administrators email not visible by default
+* New registrations get bad email link
+* No more endless "Re: Re: Re: Re: ...." in private message replies.
+* Database connection error check in index.php is called too late if not working.
+
+New features and modifications for 1.1.5:
+
+* Added CubaLibre's "Add HTML Template" mod.
+* Added a "Delete HTML Template" mod.
+* Language support for AdminCP. Translations needed.
+* AdminCP is fully skinnable. Addition of several new templates for the AdminCP.
+* Added Ragnarok's "spider display" modification.
+* Added Geoff's "recent topics" modification.
+* Added ibarcode's adminbar modification.
+* AdminCP timezone selection from list instead of obscure number.
+* Added RSS Feed module.
+* Board admins can pick their own custom title now via the member controls.
+* Skins now exported and imported from within the skins directory.
+* Database backups are now saved in and restored from the databases directory.
+* Forum convertors have been mostly integrated into the installer.
+* Installer broken up into smaller chunks due to memory limit boundaries(!)
+* All images the skins/images directory converted to PNG format. Javascript included for IE5+ correction.
+* Links inside posts use rel="nofollow" to discourage spamming
+* Subforums count towards parent category/forum topic and reply counts
+* Subforums considered in showing parent category/forum last post
+* Subforums can be created that behave like subcategories.
+* General input validation code added.
+* Board location URL calculated during installation.
+* Support for optional modules which can be enabled/disabled in the AdminCP.
+* More CSS control over quote box style.
+* ISO822 Date formatting added to mbdate() function. Used by RSS feeds.
+* <ELSE> now allowed in templates in addition to <IF>
+* Private message preview
+* Show ToS for newly registering users
+* FAQ added - Jonathan West <jon@quicksilverforums.com>
+* Can selectively delete private messages
+* <MODLET> tag now available to templates to allow including code on any template
+* Guests and new registrations have their language detected from the browser
+* Suckerfish style menu used in admin CP
+* Full Dutch translation
+* Full Swedish translation
+* improved speed in calculating dates 'today' and 'yesterday' - Matt
+* Registration prompts to agree to Terms of service
+* IP addresses stored as integer rather than varchar (save space)
+* debug link hidden from non-admins
+* FAQ added to documents
+* Automatic detection of guest language 
+* Rss reader in Admin CP to alert of new releases or other important annoucements
+* Full timezone handling including daylight savings
+* New skin by http://www.misterpink.com.au/
+* Skin icons by http://www.famfamfam.com/
+* Fixes to handling of [patch] [code] and [php] tags
+* Fixed error where permissions were defaulting to full
+* Fixed error where you could not export a skin that included zero byte files
+* Sets skin to 'default' for administrators up upgrading
+* Full Slovak translation

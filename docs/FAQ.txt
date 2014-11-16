@@ -1,0 +1,61 @@
+--------------------------------
+== FAQ for Quicksilver Forums ==
+--------------------------------
+
+=== GENERAL ===
+
+* Q. What is Quicksilver Forums?
+* A. Quicksilver Forums is a bulletin board system written in PHP 4 and MySQL. http://www.quicksilverforums.com/
+
+* Q. What is Mercuryboard?
+* A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. http://www.mercuryboard.com/
+
+=== INSTALLATION ===
+
+* Q. QuickSilver Forums keeps saying that it cannot update settings.php when I install it.
+* A. This is because the CHMOD setting are lower than 0666 or if you're running a windows server the file is not writable by the webserver.
+
+* Q. How do you change the CHMOD settings on Dreamweaver?
+* A. Go to the ftp log and type in <tt>site CHMOD 666 /myForumFolder/settings.php</tt>. We recommend using another FTP program such as Smart FTP. Dreamweaver is not well suited to moving files around.
+
+* Q. It wants details for a MySQL database. I don't know how to create one!
+* A. http://dev.mysql.com/doc/refman/5.0/en/database-use.html Also your hosting provider may have created tools to help you manage MySQL. Speak to your hosting provider, they are there to help you.
+
+* Q. Does Quicksilver Forums work on databases other than MySQL?
+* A. No.
+
+* Q. I can't post! / How do you create forums?
+* A. Go into "admin cp -> Create a forum" and create a CATEGORY and set the permissions to default. Now go to" Create a forum" again and create a forum using that category and using the permissions from that category.
+
+* Q. Why do I have to create categories?
+* A. Every forum must exist within a category. And forums can act as a category for other forums. You can make a very complex hierarchy if you wish but it must have at least 1 category and 1 forum.
+
+* Q. Should I use Full permissions or No Permissions when creating forums?
+* A. Generally no. They can be useful for advanced operators of live/test sites.
+
+* Q. How do i allow guests to post?
+* A. Change their permissions in "admin cp -> Edit a group's permissions" to allow "Create polls", "Create replies" and "Create topics" in specified forums.
+
+=== OPERATION ===
+
+* Q. The board is blank or gabled.
+* A. In your Admin CP, go to Edit Board Settings and disable GZIP. 
+
+=== ADVANCED ===
+
+* Q. Can I look at the database?
+* A. There is a tool in the admin cp to allow running SQL queries for advanced users. Or we can recommend using phpMyAdmin for browsing the structure / data.
+
+* Q. Can I put PHP code into temmplates?
+* A. Generally no. But you can get createive using the following syntax: <tt><IF (php condition)>(html output)</IF></tt> And there are also modlets that allow you to drop in code <tt><MODLET mymodletname()></tt>
+
+* Q. I think I found a bug?
+* A. Visit the website, search to see if someone found it already, if not then report what happened and how to repeat it.
+
+* Q. Can I help the Quicksilver Forums team?
+* A. Visit the website and jump right in. It's an open house party!
+
+If you need further help please go to:
+http://forums.quicksilverforums.com/index.php?a=forum&f=7
+
+
