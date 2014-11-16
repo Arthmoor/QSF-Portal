@@ -157,6 +157,7 @@ class sv
 		$this->ban = 'Blockera';
 		$this->ban_banned_ips = 'Blockera IP Adresser';
 		$this->ban_banned_members = 'Blockerade Medlemmar';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'Blockera IP Adresser';
 		$this->ban_member_explain1 = 'för att blockera medlemmar ändra deras användargrupp till';
 		$this->ban_member_explain2 = 'i medlemmskontrollen.';
@@ -476,6 +477,7 @@ class sv
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -576,6 +578,7 @@ class sv
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -783,10 +786,12 @@ class sv
 		$this->logs_moved_topic_num = 'Flyttade ämne #';
 		$this->logs_pinned_topic = 'Klistrade ett ämne';
 		$this->logs_post = 'Inlägg';
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'Tid';
 		$this->logs_topic = 'Ämne';
 		$this->logs_unlocked_topic = 'Låste upp ett ämne';
 		$this->logs_unpinned_topic = 'Klistrade av ett ämne';
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'Användare';
 		$this->logs_view = 'Visa Moderatorhändelser';
 	}
@@ -802,6 +807,7 @@ class sv
 		$this->main_cp = 'kontrollpanelen';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'Fullständig';
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'hjälp';
@@ -936,12 +942,18 @@ class sv
 	{
 		$this->mod_confirm_post_delete = 'Är du säker på att du vill radera detta inlägg?';
 		$this->mod_confirm_topic_delete = 'Är du säker på att du vill radera detta ämne?';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = 'Du kan inte radera första inlägget i ett ämne.';
 		$this->mod_error_move_category = 'Du kan inte flytta ett ämne till en kategori.';
 		$this->mod_error_move_create = 'Du har inte tillåtelse att flytta ämen till det forumet';
 		$this->mod_error_move_forum = 'Du kan inte flytta ett ämne till ett forum som inte existerar.';
 		$this->mod_error_move_global = 'Du kan inte flytta ett globalt ämne. Ändra ämnet innan du flyttar det.';
 		$this->mod_error_move_same = 'Du kan inte flytta ett ämne till det forum det redan befinner sig i.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'Moderatorkontroller';
 		$this->mod_label_description = 'Beskrivning';
 		$this->mod_label_emoticon = 'Konvertera emoticons till bilder?';
@@ -1058,8 +1070,10 @@ class sv
 		$this->perms_post_attach_download = 'Ladda ner filerna i inlägget';
 		$this->perms_post_create = 'Skapa svar';
 		$this->perms_post_delete = 'Ta bort valfritt inlägg';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'Ta bort endast inlägg som användaren gjort';
 		$this->perms_post_edit = 'Ändra valfritt inlägg';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'Ändra endast inlägg som användaren gjort';
 		$this->perms_post_inc_userposts = 'Inläggen adderas till användarens totala antal inlägg';
 		$this->perms_post_noflood = 'Undanta från floodkontroll för inlägg';
@@ -1083,7 +1097,6 @@ class sv
 		$this->perms_topic_split = 'Dela valfritt ämne till flera ämnen';
 		$this->perms_topic_split_own = 'Endast dela ämnen användaren skapat till flera ämnen';
 		$this->perms_topic_unlock = 'Låsa upp valfritt ämne';
-		$this->perms_topic_unlock_mod = 'Låsa upp en moderators lås';
 		$this->perms_topic_unlock_own = 'Endast låsa upp ämnen användaren har skapat';
 		$this->perms_topic_unpin = 'Klistra av valfritt ämne';
 		$this->perms_topic_unpin_own = 'Endast klistra av ämnen som användaren skapat';
@@ -1119,6 +1132,7 @@ class sv
 		$this->pm_group = 'Grupp';
 		$this->pm_guest = 'Som gäst kan du inte använda snabbmeddelande. Logga in eller registrera dig.';
 		$this->pm_joined = 'Gick Med';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'Snabbmeddelande';
 		$this->pm_msgtext = 'Meddelandetext';
 		$this->pm_multiple = 'Separera flera mottagare med ett ;';
@@ -1479,6 +1493,7 @@ class sv
 		$this->settings_default_yes = 'Förval Ja';
 		$this->settings_disabled = 'Avaktiverad';
 		$this->settings_disabled_notice = 'Meddelande vid Avaktiverad';
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'E-Postinställningar';
 		$this->settings_email_fake = 'För visning endast. Borde inte vara en riktig e-postadress.';
 		$this->settings_email_from = 'E-post Från Adress';
@@ -1543,6 +1558,7 @@ class sv
 		$this->settings_timezone = 'Tids Zon';
 		$this->settings_topics_page = 'Ämnen Per Forumsida';
 		$this->settings_tos = 'Vilkor för Tjänsten';
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'Inställningarna har uppdaterats.';
 	}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -57,6 +57,7 @@ class profile extends qsfglobal
 		$this->tree($this->lang->profile_view_profile);
 
 		if (!isset($this->get['w'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->profile_profile, $this->lang->profile_must_user);
 		}
 
@@ -68,6 +69,7 @@ class profile extends qsfglobal
 			WHERE m.user_id=%d AND g.group_id=m.user_group", $user);
 
 		if (!$profile || ($user == USER_GUEST_UID)) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->profile_view_profile, $this->lang->profile_no_member);
 		}
 
@@ -146,7 +148,7 @@ class profile extends qsfglobal
 		}
 
 		if ($profile['user_avatar_type'] != 'none') {
-			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"{$this->lang->profile_avatar}\" style=\"width:{$profile['user_avatar_width']}px; height:{$profile['user_avatar_height']}px;\" />";
+			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"\" style=\"width:{$profile['user_avatar_width']}px; height:{$profile['user_avatar_height']}px;\" />";
 		} else {
 			$profile['user_avatar'] = $this->lang->profile_none;
 		}

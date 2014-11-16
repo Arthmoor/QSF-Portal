@@ -1,6 +1,27 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.4.3:
+
+* Close the DB connection once we're done with it.
+* Added an RSS feed for recent uploads.
+* Turned the root file category into a real one.
+* Added permissions to block editing or deleting posts older than a set time.
+* Added the ability to see what IPs a user has posted from.
+* Added TOS text setting for uploads.
+* Created generic TOS links on file and forum menus.
+* Able to mark PM's as unread. - Jon
+* All copyright headers updated for 2008.
+
+   Bugs addressed:
+
+* Error library crashes when called from the AdminCP.
+* Mark forum as read link is not working.
+* A connection with a blank IP address will crash the site.
+* Poll icon is missing from the recent posts display.
+* File stats fix had an incorrect database field called.
+* Removing all member titles causes everyone to logout, as well as post problems. - Jon
+
 Changes for 1.4.2:
 
   Bugs addressed:

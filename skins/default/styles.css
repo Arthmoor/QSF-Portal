@@ -73,12 +73,11 @@ textarea {
 
 /* Company */
 #header {
-	height: 70px;
+	height: 58px;
 	border-bottom: 1px solid white;
 	margin: 0px 0px 38px;
 }
 #header #company {
-	padding: 10px 12px 7px;
 	float: left;
 	position: absolute;
 }
@@ -92,9 +91,8 @@ textarea {
 	background: url('./images/qsfportal_logo.png') no-repeat;
 	font: 1px Sans-serif;
 	color: white;
-	height: 87px;
-	width: 560px;
-	margin: 7px 12px;
+	height: 100px;
+	width: 400px;
 	float: left;
 }
 #header #company .title:hover {

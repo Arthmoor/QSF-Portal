@@ -2,7 +2,7 @@
 <qsfmod>
   <title>Skin: Blue Comet</title>
   <type folder="default">skin</type>
-  <version>v1.4.2</version>
+  <version>v1.4.3</version>
   <description></description>
   <authorname>Skin Exporter</authorname>
   <templates>
@@ -123,7 +123,7 @@
  <div id="container">	
   <div id="header"> 
    <div id="company">
-    <div class="logo">&nbsp;</div> <a href="{$admin->sets['loc_of_board']}" class="title">{$admin->sets['forum_name']}</a>
+    <div class="title"></div>
    </div>
    <ul id="navigation">
     <li class="active"><a href="{$admin->sets['loc_of_board']}" class="c1">{$admin->sets['forum_name']}</a></li>
@@ -382,8 +382,6 @@
  </select>
  <input type="submit" name="submit" value="{$this->lang->install_skin}" />
 </form>
-<ELSE>
- {$this->lang->skin_none}
 </IF>
 
 <IF !empty($new_skin_box)>
@@ -995,6 +993,11 @@
  <span class="form"><input type="text" name="hot_limit" value="{$this->sets['hot_limit']}" size="40" /></span>
 
  <p class="line"></p>
+
+ <span class="field">{$this->lang->settings_edit_post_age}</span>
+ <span class="form"><input type="text" name="edit_post_age" value="{$this->sets['edit_post_age']}" size="40" /></span>
+
+ <p class="line"></p>
  
  <span class="field">{$this->lang->settings_foreign_link}<br /><span class="tiny">{$this->lang->settings_blank}</span></span>
  <span class="form"><input type="text" name="link_target" value="{$this->sets['link_target']}" size="40" /></span>
@@ -1018,6 +1021,12 @@
  <span class="form"><textarea name="tos" rows="10" cols="37">{$tos_text}</textarea></span>
 
  <p class="line"></p>
+
+ <span class="field">{$this->lang->settings_tos_files}</span>
+ <span class="form"><textarea name="tos_files" rows="10" cols="37">{$tos_files_text}</textarea></span>
+
+ <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
@@ -1436,7 +1445,8 @@
 {$this->table}
  <div class="title">{$this->lang->ban_banned_ips}</div>
  {$this->lang->ban_one_per_line}<br />
- {$this->lang->ban_regex_allowed}
+ {$this->lang->ban_regex_allowed}<br />
+ {$this->lang->ban_cidr}
  <p class="line"></p>
  <textarea name="banned_ips" rows="12" cols="70" class="input">{$ips}</textarea>
  <p class="line"></p>
@@ -1475,7 +1485,7 @@
       <html><![CDATA[
 {$this->table}
  <div style="float:left">{$this->htmlwidgets->tree}</div>
- <div style="text-align:right"><a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
+ <div style="text-align:right"><a href="{$this->self}?a=forum_rules" title="{$this->lang->main_forum_rules}">{$this->lang->main_forum_rules}</a> | <a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
 {$this->etable}
 {$Forum_SubMain}
 
@@ -1574,7 +1584,7 @@
       <html><![CDATA[
 <script type="text/javascript" src="./javascript/forumjump.js"></script>
 {$this->table}
- <a href="{$this->self}?s=mark&amp;f={$f}" class="mark_read"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->forum_mark_read}" title="{$this->lang->forum_mark_read}" /></a>
+ <a href="{$this->self}?a=board&amp;s=mark&amp;f={$f}" class="mark_read"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->forum_mark_read}" title="{$this->lang->forum_mark_read}" /></a>
  <IF $can_post>
   <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$f}" title="{$this->lang->forum_new_poll}">{$this->lang->new_poll}</a></div>
   <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$f}" title="{$this->lang->forum_new_topic}">{$this->lang->new_topic}</a></div>
@@ -1721,8 +1731,7 @@
    <div><a id="top"></a></div>
    <div id="header">
     <div id="company">
-     <div class="logo"></div>
-     <a href="{$qsf->sets['loc_of_board']}" class="title">{$qsf->sets['forum_name']}</a>
+     <div class="title"></div>
     </div>
     <ul id="navigation">
      <li class="active"><a href="{$qsf->sets['loc_of_board']}" class="c1">{$qsf->sets['forum_name']}</a></li>
@@ -1849,7 +1858,7 @@
 <IF ( ($this->get['c'] != 0) && ($cat_name = split(urldecode('%3C/b%3E'), $this->htmlwidgets->tree)) && ($cat_name = $cat_name[(count($cat_name) - 1)]))></IF>
 {$this->table}
  <div style="float:left">{$this->htmlwidgets->tree}</div>
- <div style="text-align:right"><a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
+ <div style="text-align:right"><a href="{$this->self}?a=forum_rules" title="{$this->lang->main_forum_rules}">{$this->lang->main_forum_rules}</a> | <a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
 {$this->etable}
 <IF ($this->get['c'] != 0)>
  {$this->table}
@@ -2177,9 +2186,9 @@
       <html><![CDATA[
 <span class="icon">
  <IF ($pm['pm_read'] == 'new')>
-  <img src="./skins/$this->skin/images/icons/new_message.png" alt="{$this->lang->pm_pm}" />
+  <img src="./skins/{$this->skin}/images/icons/new_message.png" alt="{$this->lang->pm_pm}" />
  <ELSE>
-  <img src="./skins/$this->skin/images/icons/messenger.png" alt="{$this->lang->pm_pm}" />
+  <a href="{$this->self}?a=pm&amp;s=unread&amp;m={$pm['pm_id']}"><img src="./skins/{$this->skin}/images/icons/messenger.png" alt="{$this->lang->pm_pm}" /></a>
  </IF>
 </span>
 <span class="message"><a href="{$this->self}?a=pm&amp;s=view&amp;m={$pm['pm_id']}" title="{$preview}">{$pm['pm_title']}</a></span>
@@ -3013,7 +3022,7 @@ enable('$init');
   {$this->lang->recent_hot}
  </span>
  <span class="eight">
-  <img src="./skins/{$this->skin}/images/icons/poll.png" title="{$this->lang->recent_poll}" alt="{$this->lang->recent_poll}" />
+  <img src="./skins/{$this->skin}/images/icons/chart_bar.png" title="{$this->lang->recent_poll}" alt="{$this->lang->recent_poll}" />
   {$this->lang->recent_poll}
  </span>
  <span class="eight">
@@ -3232,6 +3241,21 @@ enable('$init');
 </item>
       ]]></html>
     </template>
+    <template><set>rssfeed</set><name>RSSFEED_FILE_ITEM</name>
+      <displayname>RSS File Item</displayname>
+      <description>Feed for a single file in RSS format.</description>
+      <html><![CDATA[
+<item>
+ <title>{$title}</title>
+ <link>{$this->sets['loc_of_board']}{$this->mainfile}?a=files&amp;s=viewfile&amp;fid={$query_row['file_id']}</link>
+ <description>{$desc}</description>
+ <guid isPermaLink="true">{$this->sets['loc_of_board']}{$this->mainfile}?a=files&amp;s=viewfile&amp;fid={$query_row['file_id']}</guid>
+ <pubDate>{$pubdate}</pubDate>
+ <category>{$cat_name}</category>
+ <author>{$user_email}</author>
+</item>
+      ]]></html>
+    </template>
     <template><set>rssfeed</set><name>RSSFEED_ERROR</name>
       <displayname>RSS Error</displayname>
       <description>Feed for handling errors in RSS format.</description>
@@ -3336,7 +3360,7 @@ enable('$init');
  <img src="./skins/{$this->skin}/images/noavatar.png" alt="" />
 </span>
 <span class="member_info">
- <strong>{$this->lang->topic_guest}</strong> - ({$this->lang->topic_unreg})
+ <strong>{$this->lang->topic_guest}</strong> - ({$this->lang->topic_unreg}) IP: {$post['post_ip']}
 </span>
 <p></p>
       ]]></html>
@@ -3351,15 +3375,16 @@ enable('$init');
 
 <span class="member_info">
  <IF ($online)>
-  <img src="./skins/{$this->skin}/images/icons/user_online.png" alt="{$this->lang->topic_online}" title="{$this->lang->topic_online}" />
+  <img src="./skins/{$this->skin}/images/icons/user_online.png" alt="" title="{$this->lang->topic_online}" />
  <ELSE>
-  <img src="./skins/{$this->skin}/images/icons/user_offline.png" alt="{$this->lang->topic_offline}" title="{$this->lang->topic_offline}" />
+  <img src="./skins/{$this->skin}/images/icons/user_offline.png" alt="" title="{$this->lang->topic_offline}" />
  </IF>
- <strong><a href="{$this->self}?a=profile&amp;w={$post['user_id']}" title="{$post['post_ip']}">{$post['user_name']}</a></strong><br />
- <strong>{$post['user_title']}</strong>   <img src="./skins/{$this->skin}/images/{$post['membertitle_icon']}" alt="{$this->lang->topic_level}" /><br />
+ <strong><a href="{$this->self}?a=profile&amp;w={$post['user_id']}">{$post['user_name']}</a></strong><br />
+ <strong>{$post['user_title']}</strong>   <img src="./skins/{$this->skin}/images/{$post['membertitle_icon']}" alt="" /><br />
  <span class="text">{$this->lang->topic_group}</span>{$post['group_name']}<br />
  <span class="text">{$this->lang->topic_posts}</span>{$post['user_posts']}<br />
  <span class="text">{$this->lang->topic_joined}</span>{$post['user_joined']}
+ <IF $post['post_ip'] != null><br /><span class="text">IP</span><a href="{$this->self}?a=mod&amp;s=viewips&amp;t={$this->get['t']}&amp;w={$post['post_author']}">{$post['post_ip']}</a></IF>
 </span>
 
 <span class="member_bits">
@@ -3459,7 +3484,7 @@ function toggleQuickReplyBox()
       <html><![CDATA[
 {$this->table}
  <div style="float:left">{$this->htmlwidgets->tree}</div>
- <div style="text-align:right"><a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
+ <div style="text-align:right"><a href="{$this->self}?a=forum_rules" title="{$this->lang->main_forum_rules}">{$this->lang->main_forum_rules}</a> | <a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
 {$this->etable}
 {$PollDisplay}
 {$this->table}
@@ -4027,6 +4052,7 @@ function toggleQuickReplyBox()
   <img src="./skins/{$this->skin}/images/icons/downloads.png" alt="" />
   {$this->lang->files}
  </div>
+ <a href="{$this->self}?a=upload_rules">{$this->lang->files_upload_rules}</a>
  <a href="{$this->self}?a=files">{$this->lang->files_index}</a> 
   | <a href="{$this->self}?a=files&amp;s=search">{$this->lang->files_search2}</a>
   | <a href="{$this->self}?a=files&amp;s=recent">{$this->lang->files_recent}</a>
@@ -4167,7 +4193,6 @@ function toggleQuickReplyBox()
  <span class="field"><strong>{$this->lang->files_add_cat_parent}:</strong></span>
  <span class="form">
   <select name="parent">
-   <option value="0">/</option>
    {$list}
   </select>
  </span>
@@ -4713,7 +4738,6 @@ function toggleQuickReplyBox()
  <span class="field"><strong>{$this->lang->files_add_cat_parent}:</strong></span>
  <span class="form">
   <select name="parent">
-   <option value="0"{$selected}>/</option>
    {$list}
   </select>
  </span>
@@ -4791,11 +4815,11 @@ function toggleQuickReplyBox()
 
  <span class="field">Options:</span>
  <span class="form">
+   <input type="checkbox" name="flags[]" id="post_html" value="{$html}"{$htmlbox} /><label for="post_html">Format HTML?</label>
    <input type="checkbox" name="flags[]" id="post_bbcode" value="{$bb}"{$bbbox} /><label for="post_bbcode">Format BBCode?</label>
    <input type="checkbox" name="flags[]" id="post_emote" value="{$em}"{$embox} /><label for="post_emote">Format Emoticons?</label>
-   <input type="checkbox" name="flags[]" id="post_censor" value="{$cn}"{$cnbox} /><label for="post_censor">Censor contents?</label>
    <input type="checkbox" name="flags[]" id="post_breaks" value="{$nl}"{$nlbox} /><label for="post_breaks">Format breaks?</label>
-   <input type="checkbox" name="flags[]" id="post_html" value="{$html}"{$htmlbox} /><label for="post_html">Format HTML?</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value="{$cn}"{$cnbox} /><label for="post_censor">Censor contents?</label>
  </span>
 
  <p class="line"></p>

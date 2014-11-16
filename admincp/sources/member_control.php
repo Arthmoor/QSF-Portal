@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -216,7 +216,7 @@ class member_control extends admin
 						$val = null;
 					}
 
-					$line = "";
+					$line = '';
 					$class = $this->iterate();
 
 					switch ($data[1])
@@ -349,7 +349,7 @@ class member_control extends admin
 				$user_view_signatures = intval($this->post['user_view_signatures']);
 				$user_view_emoticons = intval($this->post['user_view_emoticons']);
 
-				$this->db->query( "UPDATE %pusers SET user_name='%s', user_group=%d, user_title='%s',
+				$this->db->query( "UPDATE %pusers SET user_name='%s', user_email='%s', user_group=%d, user_title='%s',
 				  user_title_custom=%d, user_language='%s', user_skin='%s', user_avatar='%s',
 				  user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d, user_level=%d,
 				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s',
@@ -357,7 +357,7 @@ class member_control extends admin
 				  user_icq=%d, user_msn='%s', user_aim='%s', user_gtalk='%s', user_yahoo='%s',
 				  user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
 				  user_view_signatures=%d, user_view_emoticons=%d WHERE user_id=%d",
-				  $user_name, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
+				  $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
 				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
 				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_interests,
 				  $user_signature, $user_posts, $user_uploads, $user_icq, $user_msn, $user_aim,

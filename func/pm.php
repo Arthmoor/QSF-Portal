@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -78,6 +78,10 @@ class pm extends qsfglobal
 
 		case 'clear':
 			return $this->clear();
+			break;
+
+		case 'unread':
+			return $this->mark_unread();
 			break;
 
 		default:
@@ -272,6 +276,7 @@ class pm extends qsfglobal
 	function view()
 	{
 		if (!isset($this->get['m'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_no_number);
 		}
 
@@ -286,6 +291,7 @@ class pm extends qsfglobal
 			  m.user_group = g.group_id", $this->get['m']);
 
 		if (!$pm) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_no_number);
 		}
 
@@ -340,6 +346,7 @@ class pm extends qsfglobal
 	function delete_pm()
 	{
 		if (!isset($this->get['m'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_no_number);
 		}
 		$this->get['m'] = intval($this->get['m']);
@@ -360,6 +367,7 @@ class pm extends qsfglobal
 	function clear()
 	{
 		if (!isset($this->get['f'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_no_folder);
 		}
 
@@ -372,6 +380,27 @@ class pm extends qsfglobal
 				$this->user['user_id'], $this->get['f']);
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_deleted_all);
 		}
+	}
+
+	/**
+	 * Mark a message as unread
+	 *
+	 * @author Jonathan West <jon@quicksilverforums.com>
+	 * @since 1.4.3
+	 * @return HTML message
+	 **/
+	function mark_unread()
+	{
+		if (!isset($this->get['m'])) {
+			header('HTTP/1.0 404 Not Found');
+			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_no_number);
+		}
+
+		$this->get['m'] = intval($this->get['m']);
+
+		$this->db->query( 'UPDATE %ppmsystem SET pm_read=0 WHERE pm_id=%d AND pm_to=%d', $this->get['m'], $this->user['user_id'] );
+
+		return $this->message($this->lang->pm_personal_msging, $this->lang->pm_mark_unread);
 	}
 
 	function checkOwner($id)

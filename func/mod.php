@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -102,6 +102,10 @@ class mod extends qsfglobal
 			return $this->publish_topic();
 			break;
 
+		case 'viewips':
+			return $this->view_ip_history();
+			break;
+
 		default:
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_action, $this->lang->continue, "javascript:history.go(-1)");
 			break;
@@ -122,6 +126,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -131,6 +136,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!isset($topic['topic_title'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -209,6 +215,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['p'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_post,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -219,6 +226,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!isset($data['post_text'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_post,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -227,6 +235,18 @@ class mod extends qsfglobal
 
 		if (!$this->perms->auth('post_edit', $data['topic_forum']) && (!$is_owner || ($is_owner && !$this->perms->auth('post_edit_own', $data['topic_forum'])))) {
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_perm_post_edit, $this->lang->continue, "$this->self?a=topic&amp;t={$data['post_topic']}");
+		}
+
+		// Locked topic?
+		$topic = $this->db->fetch( "SELECT topic_modes FROM %ptopics WHERE topic_id=%d", $data['post_topic'] );
+		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
+			return $this->message($this->lang->mod_label_controls, $this->lang->mod_edit_post_locked, $this->lang->continue, "$this->self?a=topic&amp;t={$data['post_topic']}" );
+		}
+
+		// Too old?
+		$hours = $this->sets['edit_post_age'];
+		if( !$this->perms->auth('post_edit_old', $data['topic_forum']) && $hours > 0 && $this->time - ($hours*60*60) > $data['post_time'] ) {
+			return $this->message($this->lang->mod_label_controls, sprintf( $this->lang->mod_edit_post_old, $hours ), $this->lang->continue, "$this->self?a=topic&amp;t={$data['post_topic']}" );
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -319,6 +339,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -328,6 +349,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!isset($topic['topic_title'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -386,6 +408,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -394,6 +417,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!$topic) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -433,6 +457,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -441,6 +466,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!$topic) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -480,6 +506,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['p'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_post,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -490,6 +517,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!isset($post['post_id'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_post,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -507,6 +535,18 @@ class mod extends qsfglobal
 
 		if (!$this->perms->auth('post_delete', $post['topic_forum']) && (!$is_owner || ($is_owner && !$this->perms->auth('post_delete_own', $post['topic_forum'])))) {
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_perm_post_delete, $this->lang->continue, "$this->self?a=topic&amp;t={$post['topic_id']}");
+		}
+
+		// Locked topic?
+		$topic = $this->db->fetch( "SELECT topic_modes FROM %ptopics WHERE topic_id=%d", $post['post_topic'] );
+		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
+			return $this->message($this->lang->mod_label_controls, $this->lang->mod_delete_post_locked, $this->lang->continue, "$this->self?a=topic&amp;t={$post['post_topic']}" );
+		}
+
+		// Too old?
+		$hours = $this->sets['edit_post_age'];
+		if( !$this->perms->auth('post_delete_old', $post['topic_forum']) && $hours > 0 && $this->time - ($hours*60*60) > $post['post_time'] ) {
+			return $this->message($this->lang->mod_label_controls, sprintf( $this->lang->mod_edit_post_old, $hours ), $this->lang->continue, "$this->self?a=topic&amp;t={$post['post_topic']}" );
 		}
 
 		// Confirmation check
@@ -541,6 +581,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -549,6 +590,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!isset($topic['topic_id'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -585,6 +627,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -593,6 +636,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!$topic) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 		// Check permissions
@@ -625,6 +669,7 @@ class mod extends qsfglobal
 
 		// Parameters check
 		if (!isset($this->get['t']) || !isset($this->post['posttarget'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -634,6 +679,7 @@ class mod extends qsfglobal
 
 		// Existence check
 		if (!isset($topic['topic_id'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
@@ -705,6 +751,38 @@ class mod extends qsfglobal
 
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_success_split);
 		}
+	}
+
+	/**
+	 * Lists IPs used by a member when posting
+	 *
+	 * @author Roger Libiez [Samson] http://www.iguanadons.net
+	 * @since 1.4.3
+	 * @return evaluated HTML template
+	 **/
+	function view_ip_history()
+	{
+		$t = intval($this->get['t']);
+		$id = intval($this->get['w']);
+
+		$topic = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		if( !$this->perms->auth('post_viewip', $topic['topic_forum']) ) {
+			return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
+		}
+
+		$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
+		$iplist = $this->db->query( "SELECT INET_NTOA(post_ip) as post_ip
+			FROM %pposts
+			WHERE post_author=%d
+			GROUP BY post_ip", $id );
+
+		$out = '';
+		while( $ip = $this->db->nqfetch($iplist) )
+		{
+			$out .= "<br />" . $ip['post_ip'];
+		}
+
+		return $this->message( $this->lang->mod_ip_view, sprintf($this->lang->mod_ip_view_posted, $user['user_name']) . $out );
 	}
 
 	/**

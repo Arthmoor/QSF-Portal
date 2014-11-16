@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -110,6 +110,7 @@ class page extends qsfglobal
 		} else {
 			$this->set_title($this->lang->page_viewing);
 			$this->tree($this->lang->page_viewing);
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->page, $this->lang->page_not_exist);
 		}
 		return eval($this->template('PAGE_PAGE'));
@@ -132,8 +133,10 @@ class page extends qsfglobal
 		WHERE
 			page_id=%d", $p);
 
-		if ( !$page )
+		if ( !$page ) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->page_editing, $this->lang->page_not_exist);
+		}
 
 		$bb = FORMAT_MBCODE;
 		$em = FORMAT_EMOTICONS;
@@ -195,8 +198,10 @@ class page extends qsfglobal
 
 		$page = $this->db->fetch("SELECT page_id FROM %ppages WHERE page_id=%d", $p);
 
-		if ( !$page )
+		if ( !$page ) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->page_delete, $this->lang->page_not_exist);
+		}
 
 		if ( !isset($this->get['confirm']) )
 			return $this->message($this->lang->page_delete, $this->lang->page_delete_confirm,

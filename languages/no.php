@@ -157,6 +157,7 @@ class no
 		$this->ban = 'Blokkér';
 		$this->ban_banned_ips = 'Blokkér IP-adresser';
 		$this->ban_banned_members = 'Blokkerte medlemmer';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'Blokkér IP-adresser';
 		$this->ban_member_explain1 = 'For å blokkere brukere, endre brukergruppen deres til';
 		$this->ban_member_explain2 = 'under medlemskontrollen.';
@@ -476,6 +477,7 @@ class no
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -576,6 +578,7 @@ class no
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -783,10 +786,12 @@ class no
 		$this->logs_moved_topic_num = 'Flyttet emne nr.';
 		$this->logs_pinned_topic = 'Markerte et emne';
 		$this->logs_post = 'Innlegg';
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'Tid';
 		$this->logs_topic = 'Emne';
 		$this->logs_unlocked_topic = 'Gjenåpnet et emne';
 		$this->logs_unpinned_topic = 'Fjernet markeringen på et emne';
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'Bruker';
 		$this->logs_view = 'Se på moderatorenes handlinger';
 	}
@@ -802,6 +807,7 @@ class no
 		$this->main_cp = 'Kontrollpanel';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'Full'; //Translate
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'Hjelp';
@@ -936,12 +942,18 @@ class no
 	{
 		$this->mod_confirm_post_delete = 'Er du sikker på at du vil slette dette innlegget?';
 		$this->mod_confirm_topic_delete = 'Er du sikker på at du vil slette dette emnet?';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = 'Du kan ikke slette det første innlegget i et emne.';
 		$this->mod_error_move_category = 'Du kan ikke flytte et emne til en kategori.';
 		$this->mod_error_move_create = 'Du har ikke lov til å flytte emner til det forumet.';
 		$this->mod_error_move_forum = 'Du kan ikke flytte et emne til et forum som ikke eksisterer.';
 		$this->mod_error_move_global = 'Du kan ikke flytte et globalt emne. Endre emnet før du flytter det.';
 		$this->mod_error_move_same = 'Du kan ikke flytte et emne til det forum det allerede befinner seg i.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'Moderatorkontroller';
 		$this->mod_label_description = 'Beskrivelse';
 		$this->mod_label_emoticon = 'Konvertere smilies til bilder?';
@@ -1058,8 +1070,10 @@ class no
 		$this->perms_post_attach_download = 'Laste ned innleggsvedlegg';
 		$this->perms_post_create = 'Legge inn svar';
 		$this->perms_post_delete = 'Slette alle typer innlegg';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'Slette kun innlegg brukeren har laget';
 		$this->perms_post_edit = 'Endre alle typer innlegg';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'Endre kun innlegg brukeren har laget';
 		$this->perms_post_inc_userposts = 'Innlegg blir lagt til brukerens totale innleggsantall';
 		$this->perms_post_noflood = 'Unnlatt fra overflodskontroll for innlegg';
@@ -1083,7 +1097,6 @@ class no
 		$this->perms_topic_split = 'Dele opp alle typer emner i flere emner';
 		$this->perms_topic_split_own = 'Dele opp kun emner brukeren har laget i flere emner';
 		$this->perms_topic_unlock = 'Låse opp alle typer emner';
-		$this->perms_topic_unlock_mod = 'Låse opp en moderators lås';
 		$this->perms_topic_unlock_own = 'Låse opp kun emner brukeren har laget';
 		$this->perms_topic_unpin = 'Avmarkere alle typer emner';
 		$this->perms_topic_unpin_own = 'Avmarkere kun emner brukeren har laget';
@@ -1119,6 +1132,7 @@ class no
 		$this->pm_group = 'Gruppe';
 		$this->pm_guest = 'Som gjest kan du ikke benytte meldinger. Logg inn eller registrér deg.';
 		$this->pm_joined = 'Innmeldt';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'Meldinger';
 		$this->pm_msgtext = 'Meldingstekst';
 		$this->pm_multiple = 'Separér forskjellige mottakere med ;';
@@ -1479,6 +1493,7 @@ class no
 		$this->settings_default_yes = 'Ja er standard';
 		$this->settings_disabled = 'Avslått';
 		$this->settings_disabled_notice = 'Beskjed avslått';
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'Epostinnstillinger';
 		$this->settings_email_fake = 'Kun for å vise fram. Bør ikke være en ordentlig epostadresse.';
 		$this->settings_email_from = 'Avsenderadresse for epost';
@@ -1543,6 +1558,7 @@ class no
 		$this->settings_timezone = 'Tidssone';
 		$this->settings_topics_page = 'Emner per forumside';
 		$this->settings_tos = 'Bruksvilkår';
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'Innstillinger oppdatert.';
 	}
 

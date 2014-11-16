@@ -156,6 +156,7 @@ class he
 		$this->ban = 'חסום';
 		$this->ban_banned_ips = 'חסומות IP כתובות';
 		$this->ban_banned_members = 'חברים חסומים';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'חסומות IP כתובות';
 		$this->ban_member_explain1 = 'לחסימת משתמשים, שנה את קבוצת המשתמשים שלהם ל';
 		$this->ban_member_explain2 = '.בלוח בקרת המשתמשים';
@@ -475,6 +476,7 @@ class he
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -575,6 +577,7 @@ class he
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -782,10 +785,12 @@ class he
 		$this->logs_moved_topic_num = 'הועברה הודעה #';
 		$this->logs_pinned_topic = 'ננעצה הודעה';
 		$this->logs_post = 'תגובה';
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'זמן';
 		$this->logs_topic = 'נושא';
 		$this->logs_unlocked_topic = 'שוחררה הודעה';
 		$this->logs_unpinned_topic = 'נותקה הודעה';
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'משתמש';
 		$this->logs_view = 'הצג פעילות מבקר';
 	}
@@ -801,6 +806,7 @@ class he
 		$this->main_cp = 'לוח בקרה';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'מלא';
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'עזרה';
@@ -935,12 +941,18 @@ class he
 	{
 		$this->mod_confirm_post_delete = '?האם אתה בטוח רוצה למחוק את ההודעה';
 		$this->mod_confirm_topic_delete = '?האם אתה בטוח רוצה למחוק את ההודעה';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = '.אינך יכול למחוק את ההודעה הראשונה בנושא';
 		$this->mod_error_move_category = '.אינך יכול להעביר נושא לקטגוריה';
 		$this->mod_error_move_create = 'אין לך הרשאות להעביר נושאים לפורום הזה.';
 		$this->mod_error_move_forum = '.אינך יכול להעביר נושא לפורום שלא קיים';
 		$this->mod_error_move_global = '.אינך יכול להעביר נושא גלובלי. ערוך את הנושא לפני העברתו';
 		$this->mod_error_move_same = 'אינך יכול להעביר נושא לפורום בו הוא כבר קיים.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'כלי אחראי';
 		$this->mod_label_description = 'תאור';
 		$this->mod_label_emoticon = '?להמיר סמלי הבעה לתמונות';
@@ -1057,8 +1069,10 @@ class he
 		$this->perms_post_attach_download = 'Download post attachments'; //Translate
 		$this->perms_post_create = 'יצירת תגובות';
 		$this->perms_post_delete = 'מחיקת כל הודעה';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'מחיקת ההודעות רק שמשתמש זה יצר';
 		$this->perms_post_edit = 'עריכת כל הודעה';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'עריכת הודעות רק שמשתמש זה יצר';
 		$this->perms_post_inc_userposts = 'Posts contribute to user\'s total post count'; //Translate
 		$this->perms_post_noflood = 'Exempt from post flood control'; //Translate
@@ -1082,7 +1096,6 @@ class he
 		$this->perms_topic_split = 'פיצול נושא נושאים מרובים';
 		$this->perms_topic_split_own = 'פיצול נושאים למספר נושאים רק שמשתמש זה יצר';
 		$this->perms_topic_unlock = 'פתיחת נעילת כל נושא';
-		$this->perms_topic_unlock_mod = 'פתיחת נעילה של אחראי/ם';
 		$this->perms_topic_unlock_own = 'פתיחת נעילת נושאים רק שמשתמש זה יצר';
 		$this->perms_topic_unpin = 'פתיחת נעיצת כל נושא';
 		$this->perms_topic_unpin_own = 'פתיחת נעיצת נושאים רק שמשתמש זה יצר';
@@ -1118,6 +1131,7 @@ class he
 		$this->pm_group = 'קבוצה';
 		$this->pm_guest = '.כאורח, אינך יכול להשתמש במסנג\'ר. אנא הכינס למערכת או הירשם';
 		$this->pm_joined = 'הצטרף';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'מסנג\'ר פרטי';
 		$this->pm_msgtext = 'תוכן הודעה';
 		$this->pm_multiple = '; הפרד נמענים מרובים עם';
@@ -1478,6 +1492,7 @@ class he
 		$this->settings_default_yes = 'כן ברירת המחדל';
 		$this->settings_disabled = 'מנוטרל';
 		$this->settings_disabled_notice = 'הודעת ניטרול';
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'הגדרות אימייל';
 		$this->settings_email_fake = 'לתצוגה בלבד. לא מחייב כתובת אימייל תקפה.';
 		$this->settings_email_from = 'אימייל מכתובת';
@@ -1542,6 +1557,7 @@ class he
 		$this->settings_timezone = 'אזור זמן';
 		$this->settings_topics_page = 'נושאים לדף פורום';
 		$this->settings_tos = 'תנאי שימוש';
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'ההגדרות עודכנו.';
 	}
 

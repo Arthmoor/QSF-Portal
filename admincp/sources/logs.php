@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -72,6 +72,16 @@ class logs extends admin
 			case 'post_edit':
 				$action = $this->lang->logs_edited_post;
 				$id = $this->lang->logs_post . " #" . $log['log_data1'];
+				break;
+
+			case 'topic_publish':
+				$action = $this->lang->logs_published_topic;
+				$id = $this->lang->logs_topic . ' #' . $log['log_data1'];
+				break;
+
+			case 'topic_unpublish':
+				$action = $this->lang->logs_unpublished_topic;
+				$id = $this->lang->logs_topic . ' #' . $log['log_data1'];
 				break;
 
 			case 'topic_lock':

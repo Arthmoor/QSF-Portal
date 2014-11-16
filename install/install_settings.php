@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -22,6 +22,6 @@
  *
  **/
 
-define('LATEST', 30);   // ID of most recent upgrade script
+define('LATEST', 31);   // ID of most recent upgrade script
 define('SKIN_FILE', 'skin_default.xml');
 ?>

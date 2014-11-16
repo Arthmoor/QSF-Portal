@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -52,6 +52,7 @@ class forum extends qsfglobal
 		}
 
 		if (!isset($this->get['f'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->forum_forum, $this->lang->forum_noexist);
 		}
 
@@ -110,6 +111,7 @@ class forum extends qsfglobal
 		 */
 		$exists = $this->db->fetch("SELECT forum_id, forum_parent, forum_name, forum_subcat FROM %pforums WHERE forum_id=%d", $f);
 		if (!isset($exists['forum_parent']) || !$exists['forum_parent']) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->forum_forum, $this->lang->forum_noexist);
 		}
 		

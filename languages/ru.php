@@ -157,6 +157,7 @@ class ru
 		$this->ban = 'Ban'; //Translate
 		$this->ban_banned_ips = 'Ban IP Addresses'; //Translate
 		$this->ban_banned_members = 'Banned Members'; //Translate
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'Ban IP Addresses'; //Translate
 		$this->ban_member_explain1 = 'To ban users, change their user group to'; //Translate
 		$this->ban_member_explain2 = 'in the member controls.'; //Translate
@@ -476,6 +477,7 @@ class ru
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -576,6 +578,7 @@ class ru
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -783,10 +786,12 @@ class ru
 		$this->logs_moved_topic_num = 'Moved topic #'; //Translate
 		$this->logs_pinned_topic = 'Pinned a topic'; //Translate
 		$this->logs_post = 'Post'; //Translate
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'Time'; //Translate
 		$this->logs_topic = 'Topic'; //Translate
 		$this->logs_unlocked_topic = 'Unlocked a topic'; //Translate
 		$this->logs_unpinned_topic = 'Unpinned a topic'; //Translate
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'User'; //Translate
 		$this->logs_view = 'View Moderator Actions'; //Translate
 	}
@@ -802,6 +807,7 @@ class ru
 		$this->main_cp = 'контрольная панель';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'Полный отчет';
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'помощь';
@@ -936,12 +942,18 @@ class ru
 	{
 		$this->mod_confirm_post_delete = 'Ты действительно хочешь удалить это сообщение?';
 		$this->mod_confirm_topic_delete = 'Ты действительно хочешь удалить эту тему??';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = 'Невозможно удалить первое сообщение в теме.';
 		$this->mod_error_move_category = 'Нелья переместить тему в категорию.';
 		$this->mod_error_move_create = 'У тебя нет права перемещать темы в этот форум.';
 		$this->mod_error_move_forum = 'Нельзя переместить тему в несуществующий форум.';
 		$this->mod_error_move_global = 'You cannot move a global topic. Edit the topic before moving it.'; //Translate
 		$this->mod_error_move_same = 'Тема уже находится в этом форуме.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'Пульт модератора';
 		$this->mod_label_description = 'Описание';
 		$this->mod_label_emoticon = 'Заменять смайлы на картинки?';
@@ -1058,8 +1070,10 @@ class ru
 		$this->perms_post_attach_download = 'Download post attachments'; //Translate
 		$this->perms_post_create = 'Create replies'; //Translate
 		$this->perms_post_delete = 'Delete any post'; //Translate
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'Delete only posts the user has created'; //Translate
 		$this->perms_post_edit = 'Edit any post'; //Translate
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'Edit only posts the user has created'; //Translate
 		$this->perms_post_inc_userposts = 'Posts contribute to user\'s total post count'; //Translate
 		$this->perms_post_noflood = 'Exempt from post flood control'; //Translate
@@ -1083,7 +1097,6 @@ class ru
 		$this->perms_topic_split = 'Split any topic into multiple topics'; //Translate
 		$this->perms_topic_split_own = 'Split only topics the user has created into multiple topics'; //Translate
 		$this->perms_topic_unlock = 'Unlock any topic'; //Translate
-		$this->perms_topic_unlock_mod = 'Unlock a moderator\'s lock'; //Translate
 		$this->perms_topic_unlock_own = 'Unlock only topics the user has created'; //Translate
 		$this->perms_topic_unpin = 'Unpin any topic'; //Translate
 		$this->perms_topic_unpin_own = 'Unpin only topics the user has created'; //Translate
@@ -1119,6 +1132,7 @@ class ru
 		$this->pm_group = 'Группа';
 		$this->pm_guest = 'Ты не можешь отправлять сообщения незарегистрировавшись.';
 		$this->pm_joined = 'Присоединился';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'Сообщения';
 		$this->pm_msgtext = 'Текст сообщения';
 		$this->pm_multiple = 'Перечислите адресатов через точку с запятой (;)';
@@ -1479,6 +1493,7 @@ class ru
 		$this->settings_default_yes = 'Default Yes'; //Translate
 		$this->settings_disabled = 'Disabled'; //Translate
 		$this->settings_disabled_notice = 'Disabled Notice'; //Translate
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'E-Mail Settings'; //Translate
 		$this->settings_email_fake = 'For display only. Should not be a real e-mail address.'; //Translate
 		$this->settings_email_from = 'E-mail From Address'; //Translate
@@ -1543,6 +1558,7 @@ class ru
 		$this->settings_timezone = 'Time Zone'; //Translate
 		$this->settings_topics_page = 'Topics Per Forum Page'; //Translate
 		$this->settings_tos = 'Terms of Service'; //Translate
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'Settings have been updated.'; //Translate
 	}
 

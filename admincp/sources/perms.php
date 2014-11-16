@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -110,16 +110,17 @@ class perms extends admin
 				'post_noflood'		=> $this->lang->perms_post_noflood,
 				'post_delete'		=> $this->lang->perms_post_delete,
 				'post_delete_own'	=> $this->lang->perms_post_delete_own,
+				'post_delete_old'	=> $this->lang->perms_post_delete_old,
 				'topic_delete'		=> $this->lang->perms_topic_delete,
 				'topic_delete_own'	=> $this->lang->perms_topic_delete_own,
 				'post_edit'		=> $this->lang->perms_post_edit,
 				'post_edit_own'		=> $this->lang->perms_post_edit_own,
+				'post_edit_old'		=> $this->lang->perms_post_edit_old,
 				'topic_edit'		=> $this->lang->perms_topic_edit,
 				'topic_edit_own'	=> $this->lang->perms_topic_edit_own,
 				'topic_lock'		=> $this->lang->perms_topic_lock,
 				'topic_lock_own'	=> $this->lang->perms_topic_lock_own,
 				'topic_unlock'		=> $this->lang->perms_topic_unlock,
-				'topic_unlock_mod'	=> $this->lang->perms_topic_unlock_mod,
 				'topic_unlock_own'	=> $this->lang->perms_topic_unlock_own,
 				'topic_pin'		=> $this->lang->perms_topic_pin,
 				'topic_pin_own'		=> $this->lang->perms_topic_pin_own,

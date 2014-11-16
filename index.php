@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -73,13 +73,18 @@ $set = array_merge($set, unserialize($settings['settings_data']));
  * Otherwise $missing remains false and no error is generated later.
  */
 $missing = false;
+$terms_module = '';
 if (!isset($_GET['a']) ) {
 	$module = $modules['default_module'];
-	if( isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) )
+	if( isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '&debug=1' )
 		$missing = true;
 } elseif ( !in_array( $_GET['a'], array_merge($set['optional_modules'], $modules['public_modules']) ) ) {
 	$module = $modules['default_module'];
-	$missing = true;
+
+	if( $_GET['a'] != 'forum_rules' && $_GET['a'] != 'upload_rules' )
+		$missing = true;
+	else
+		$terms_module = $_GET['a'];
 } else {
 	$module = $_GET['a'];
 }
@@ -162,7 +167,19 @@ if( $missing ) {
 	header( 'HTTP/1.0 404 Not Found' );
 	$output = $qsf->message( $qsf->lang->error, $qsf->lang->error_404 );
 } else {
-	$output = $qsf->execute();
+	if( $terms_module == 'forum_rules' ) {
+		$tos = $qsf->db->fetch( 'SELECT settings_tos FROM %psettings' );
+
+		$message = $qsf->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+		$output = $qsf->message( 'Terms of Service: Forums', $message );
+	} elseif ( $terms_module == 'upload_rules' ) {
+		$tos = $qsf->db->fetch( 'SELECT settings_tos_files FROM %psettings' );
+
+		$message = $qsf->format( $tos['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+		$output = $qsf->message( 'Terms of Service: Uploads', $message );
+	} else {
+		$output = $qsf->execute();
+	}
 }
 
 if (($qsf->get['a'] == 'forum') && isset($qsf->get['f'])) {
@@ -205,4 +222,6 @@ urchinTracker();
 // Do post output stuff
 $qsf->cleanup();
 
+// Close the DB connection.
+$qsf->db->close();
 ?>

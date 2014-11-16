@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -38,6 +38,8 @@ require_once $set['include_path'] . '/global.php';
  **/
 class rssfeed extends qsfglobal
 {
+	var $cat_data;
+
 	/**
 	 * Main interface. Get a RSS feed of posts
 	 *
@@ -46,6 +48,8 @@ class rssfeed extends qsfglobal
 	 **/
 	function execute()
 	{
+		$this->cat_data = false;
+
 		// Gives IE7 fits about being unable to read the feed, but we don't want unauthorized visitors with this anyway.
 		if (!$this->perms->auth('board_view')) {
 			$this->lang->board();
@@ -73,6 +77,8 @@ class rssfeed extends qsfglobal
 			$t = intval($this->get['t']);
 			$this->link .= "&amp;t=$t";
 			$feed = $this->generate_topic_feed($t);
+		} else if (isset($this->get['files'])) {
+			$feed = $this->generate_files_feed();
 		} else {
 			$feed = $this->generate_full_feed();
 		}
@@ -116,7 +122,6 @@ class rssfeed extends qsfglobal
 			ORDER BY p.post_time DESC
 			LIMIT %d",
 			$forums_str, TOPIC_PUBLISH, $this->sets['rss_feed_posts']);
-
 
 		$items = '';
 		while( $row = $this->db->nqfetch( $query ) )
@@ -258,23 +263,153 @@ class rssfeed extends qsfglobal
 	 **/
 	function get_post($query_row)
 	{
-		$title = $this->format( $query_row['topic_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
+		$title = $this->format( $query_row['topic_title'], FORMAT_CENSOR );
+		$title = htmlspecialchars( $title );
+
 		$desc = substr( $query_row['post_text'], 0, 500 );
-		$desc = $this->format( $desc, FORMAT_HTMLCHARS | FORMAT_CENSOR );
+		$desc = $this->format( $desc, FORMAT_CENSOR );
+		$desc = htmlspecialchars( $desc );
+
 		$pubdate = $this->mbdate( DATE_ISO822, $query_row['post_time'], false );
+
 		$forum_name = 'Unknown';
 		$forum = $this->readmarker->get_forum($query_row['topic_forum']);
-		if ($forum != null) $forum_name = $forum['forum_name'];
-		$user_email = $this->format( $query_row['user_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
-		$user_email .= ' &lt;';
+		if ($forum != null) $forum_name = htmlspecialchars( $forum['forum_name'] );
+
+		$user_email = '';
 		if ($query_row['user_email_show']) {
 			$user_email .= $query_row['user_email'];
 		} else {
 			$user_email .= 'nobody@example.com';
 		}
-		$user_email .= '&gt;';
+		$user_email .= ' (';
+		$user_email .= $this->format( $query_row['user_name'], FORMAT_CENSOR );
+		$user_email .= ')';
+		$user_email = htmlspecialchars( $user_email );
 		
 		return eval($this->template('RSSFEED_ITEM'));
+	}
+
+	/**
+	 * Get a RSS feed of recent files uploaded to the site
+	 *
+	 * @since 1.4.3
+	 * @return string rss output
+	 **/
+	function generate_files_feed()
+	{
+		$cat_str = $this->create_category_permissions_string();
+
+		$query = $this->db->query( "SELECT
+				f.file_id,
+				f.file_name,
+				f.file_description,
+				f.file_date,
+				c.fcat_id,
+				c.fcat_name,
+				u.user_name,
+				u.user_email,
+				u.user_email_show
+			FROM 
+				%pfiles f,
+				%pfile_categories c,
+				%pusers u
+			WHERE c.fcat_id IN (%s) AND
+				f.file_catid = c.fcat_id AND
+				u.user_id = f.file_submitted AND
+				f.file_approved = 1
+			ORDER BY f.file_date DESC
+			LIMIT %d",
+			$cat_str, $this->sets['rss_feed_posts']);
+
+		$items = '';
+		while( $row = $this->db->nqfetch( $query ) )
+		{
+			$items .= $this->get_file($row);
+		}
+
+		Header( 'Content-type: text/xml', 1 );
+		return eval($this->template('RSSFEED_ALL_POSTS'));
+	}
+
+	/**
+	 * Get the rss information for a single item
+	 *
+	 * @param array $query_row query information for the file
+	 *	topic_id, topic_title, post_time, post_text and user_name
+	 * @since 1.4.3
+	 * @return string rss item output
+	 **/
+	function get_file($query_row)
+	{
+		$title = $this->format( $query_row['file_name'], FORMAT_CENSOR );
+		$title = htmlspecialchars( $title );
+
+		$desc = substr( $query_row['file_description'], 0, 500 );
+		$desc = $this->format( $desc, FORMAT_CENSOR );
+		$desc = htmlspecialchars( $desc );
+
+		$pubdate = $this->mbdate( DATE_ISO822, $query_row['file_date'], false );
+
+		$cat_name = $this->format( $query_row['fcat_name'], FORMAT_CENSOR );
+		$cat_name = htmlspecialchars( $cat_name );
+
+		$user_email = '';
+		if ($query_row['user_email_show']) {
+			$user_email .= $query_row['user_email'];
+		} else {
+			$user_email .= 'nobody@example.com';
+		}
+		$user_email .= ' (';
+		$user_email .= $this->format( $query_row['user_name'], FORMAT_CENSOR );
+		$user_email .= ')';
+		$user_email = htmlspecialchars( $user_email );
+		
+		return eval($this->template('RSSFEED_FILE_ITEM'));
+	}
+
+	/**
+	 * Get a list of forums the user can view
+	 *
+	 * @author Geoffrey Dunn <geoff@warmage.com>
+	 * @since 1.4.3
+	 * @return string comma delimited list for us in SQL
+	 **/
+	function create_category_permissions_string()
+	{
+		$categories = array();
+		$allCats = $this->_load_cat_data();
+		
+		foreach ($allCats as $row)
+		{
+			if ($this->file_perms->auth('category_view', $row['fcat_id']))
+			{
+				$categories[] = $row['fcat_id'];
+			}
+		}
+		return implode(', ', $categories);
+	}
+
+	/**
+	 * Load the forum data into a static array so we don't have to run
+	 * multiple queries for the same data
+	 *
+	 * @author Geoffrey Dunn <geoff@warmage.com>
+	 * @since 1.4.3
+	 **/
+	function _load_cat_data()
+	{
+		if ($this->cat_data === false) {
+			$this->cat_data = array();
+			
+			$q = $this->db->query("SELECT * FROM %pfile_categories");
+
+			while ($f = $this->db->nqfetch($q))
+			{
+				$this->cat_data[] = $f;
+			}
+		}
+		return $this->cat_data;
 	}
 }
 ?>

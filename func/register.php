@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -74,9 +74,13 @@ class register extends qsfglobal
 			} else {
 				$image = null;
 			}
-			$tos = $this->db->fetch("SELECT settings_tos FROM %psettings");
-			$tos_text = $tos['settings_tos'];
-			$tos_text = nl2br($tos_text);
+			$tos = $this->db->fetch('SELECT settings_tos FROM %psettings');
+			$tos_text = $this->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+
+			$tos_text .= '<hr>';
+
+			$tos_files = $this->db->fetch('SELECT settings_tos_files FROM %psettings');
+			$tos_text .= $this->format( $tos_files['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
 
 			$_SESSION['allow_register'] = true;
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -32,9 +32,7 @@ if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
 }
 
 require_once $set['include_path'] . '/admincp/admin.php';
-require_once $set['include_path'] . '/lib/tar.php';
 require_once $set['include_path'] . '/lib/qsf_zip.php';
-require_once $set['include_path'] . '/lib/xmlparser.php';
 require_once $set['include_path'] . '/lib/packageutil.php';
 
 class templates extends admin
@@ -341,7 +339,7 @@ class templates extends admin
 			// Build drop down list for the OLD method
 			$skin_box = '';
 
-			$dp = opendir('../skins');
+			$dp = opendir('../packages');
 			while (($file = readdir($dp)) !== false)
 			{
 				$ext = strtolower(substr($file, -4));
@@ -384,7 +382,8 @@ class templates extends admin
 
 				$new_skin_box .= "</li>\n";
 			}
-
+			if( empty($skin_box) && empty($new_skin_box) )
+				$new_skin_box = $this->lang->skin_none;
 			return $this->message($this->lang->install_skin, eval($this->template('ADMIN_INSTALL_SKIN')));
 		} else if (isset($this->get['skindetails'])) {
 			// Display some preview information on the skin
@@ -462,7 +461,7 @@ class templates extends admin
 
 			return $this->message($this->lang->install_skin, $this->lang->install_done);
 		} else {
-			// Use old method of install
+			// Use old method of install. This only works on old style Mercuryboard skins.
 			if (!isset($this->get['temp']) && !isset($this->get['install'])) {
 				if (!isset($this->post['install'])) {
 					return $this->message($this->lang->install_skin, $this->lang->skin_none);

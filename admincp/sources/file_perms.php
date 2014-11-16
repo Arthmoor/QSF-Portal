@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -76,12 +76,15 @@ class file_perms extends admin
 		$this->set_title($title);
 		$this->tree($title);
 
-		$cats_only = $this->db->query("SELECT fcat_id, fcat_name FROM %pfile_categories ORDER BY fcat_name");
+		$cats_only = $this->db->query('SELECT fcat_id, fcat_name FROM %pfile_categories ORDER BY fcat_name');
 
 		$cats_list = array();
 		$cats_list[] = array( 'fcat_id' => 0, 'fcat_name' => 'Root' );
+
 		while ($cat = $this->db->nqfetch($cats_only))
 		{
+			if( $cat['fcat_id'] == 0 )
+				continue;
 			$cats_list[] = $cat;
 		}
 
@@ -103,10 +106,10 @@ class file_perms extends admin
 			$count = count($cats_list) + 1;
 
 			if ($mode == 'user') {
-				$query = $this->db->fetch("SELECT user_name, user_file_perms FROM %pusers WHERE user_id=%d", $this->post['group']);
+				$query = $this->db->fetch('SELECT user_name, user_file_perms FROM %pusers WHERE user_id=%d', $this->post['group']);
 				$label = "User '{$query['user_name']}'";
 			} else {
-				$query = $this->db->fetch("SELECT group_name FROM %pgroups WHERE group_id=%d", $this->post['group']);
+				$query = $this->db->fetch('SELECT group_name FROM %pgroups WHERE group_id=%d', $this->post['group']);
 				$label = "Group '{$query['group_name']}'";
 			}
 

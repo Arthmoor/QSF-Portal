@@ -30,7 +30,38 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
-// Upgrade from 1.1.6 to 1.1.7
+// Upgrade from QSF Portal 1.4.2 to QSF Portal 1.4.3
 
-$need_templates = array();
+// Template changes - Don't forget to enclose them inside single quotes!!!
+$need_templates = array(
+	// Added templates
+	'RSSFEED_FILE_ITEM',
+	// Changed templates
+	'FORUM_TOPICS_MAIN',
+	'ADMIN_INSTALL_SKIN',
+	'ADMIN_EDIT_BOARD_SETTINGS',
+	'ADMIN_BAN_FORM',
+	'PAGE_EDIT',
+	'PAGE_CREATE',
+	'RECENT_MAIN',
+	'FILE_ADD_CAT',
+	'FILE_EDIT_CAT',
+	'TOPIC_POSTER_MEMBER',
+	'BOARD_MAIN',
+	'FILES_MAIN',
+	'PM_FOLDER_MESSAGE'
+	);
+
+$this->sets['edit_post_age'] = 0;
+
+// Forum permission changes	
+$new_permissions['post_edit_old'] = false;
+$new_permissions['post_delete_old'] = false;
+
+// File permission changes
+
+// Queries to run
+$queries[] = "INSERT INTO %pfile_categories (fcat_id, fcat_name, fcat_longpath) VALUES( 0, 'Root', '/' )";
+$queries[] = "UPDATE %pfile_categories SET fcat_id=0 WHERE fcat_name='Root'";
+$queries[] = "ALTER TABLE %psettings ADD settings_tos_files text AFTER settings_tos";
 ?>

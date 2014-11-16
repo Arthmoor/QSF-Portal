@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -68,7 +68,13 @@ class db_mysql extends database
 			$this->connection = false;
 		}
 	}
-	
+
+	function close()
+	{
+		if( $this->connection )
+			@mysql_close( $this->connection );
+	}
+
 	/**
 	 * Runs an EXPLAIN or similar on a query
 	 *

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -93,6 +93,8 @@ class settings extends admin
 			$group = $this->db->fetch("SELECT group_name FROM %pgroups WHERE group_id=%d", USER_AWAIT);
 			$tos = $this->db->fetch("SELECT settings_tos FROM %psettings");
 			$tos_text = htmlspecialchars($tos['settings_tos']);
+			$tos = $this->db->fetch("SELECT settings_tos_files FROM %psettings");
+			$tos_files_text = htmlspecialchars($tos['settings_tos_files']);
 
 			$attachsize = ($this->sets['attach_upload_size'] / 1024);
 			$attachtypes = implode("\r\n", $this->sets['attach_types']);
@@ -118,6 +120,8 @@ class settings extends admin
 			}
 
 			$tos_text = $this->post['tos'];
+			$tos_files_text = $this->post['tos_files'];
+
 			$vartypes = array(
 				'db_host' => 'string',
 				'db_name' => 'string',
@@ -177,12 +181,13 @@ class settings extends admin
 				'rss_feed_time' => 'int',
 				'rss_feed_title' => 'string',
 				'rss_feed_desc' => 'string',
-				'optional_modules' => 'array'
+				'optional_modules' => 'array',
+				'edit_post_age' => 'int'
 			);
 
 			foreach ($this->post as $var => $val)
 			{
-				if ($var == 'tos')
+				if ($var == 'tos' || $var == 'tos_files')
 					continue;
 				if (($vartypes[$var] == 'int') || ($vartypes[$var] == 'bool')) {
 					$val = intval($val);
@@ -230,6 +235,7 @@ class settings extends admin
 					$this->post['default_lang'], $this->post['default_skin'], USER_GUEST_UID);
 				$this->write_sets();
 				$this->db->query("UPDATE %psettings SET settings_tos='%s'", $tos_text);
+				$this->db->query("UPDATE %psettings SET settings_tos_files='%s'", $tos_files_text);
 			}
 
 			return $this->message($this->lang->settings, $this->lang->settings_updated);

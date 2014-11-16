@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -95,8 +95,6 @@ $modules['admin_modules'] = array(
 
 // These are generic enough that you shouldn't need to customise them
 require_once $set['include_path'] . '/lib/modlet.php';
-require_once $set['include_path'] . '/lib/xmlparser.php';
 require_once $set['include_path'] . '/func/constants.php';
 require_once $set['include_path'] . '/lib/globalfunctions.php';
-
 ?>

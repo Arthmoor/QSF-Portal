@@ -158,6 +158,7 @@ class nl
 		$this->ban = 'Ban'; //Translate
 		$this->ban_banned_ips = 'Ban IP Addressen';
 		$this->ban_banned_members = 'Verbannen gebruikers';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'Verban IP Addressen';
 		$this->ban_member_explain1 = 'Om gebruikers te bannen: verander hun gebruikersgroep in';
 		$this->ban_member_explain2 = 'In de gebruikersinstellingen.';
@@ -477,6 +478,7 @@ class nl
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -577,6 +579,7 @@ class nl
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -784,10 +787,12 @@ class nl
 		$this->logs_moved_topic_num = 'Onderwerp # verplaatst';
 		$this->logs_pinned_topic = 'Een onderwerp sticky gemaakt';
 		$this->logs_post = 'Antwoord';
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'Tijd';
 		$this->logs_topic = 'Onderwerp';
 		$this->logs_unlocked_topic = 'Een topic heropend';
 		$this->logs_unpinned_topic = 'Een onderwerp van sticky verwijderd';
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'Gebruiker';
 		$this->logs_view = 'Bekijk de moderator acties';
 	}
@@ -803,6 +808,7 @@ class nl
 		$this->main_cp = 'Instellingen';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'Vol';
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'Help'; //Translate
@@ -937,12 +943,18 @@ class nl
 	{
 		$this->mod_confirm_post_delete = 'Weet u zeker dat u dit bericht wil verwijderen?';
 		$this->mod_confirm_topic_delete = 'Weet u zeker dat u dit onderwerp wil verwijderen?';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = 'Je kan het eerste bericht in een onderwerp niet verwijderen.';
 		$this->mod_error_move_category = 'Je kan een onderwerp niet verplaatsen naar een categorie';
 		$this->mod_error_move_create = 'Je hebt geen toestemming om de topics naar dat forum te verplaatsen.';
 		$this->mod_error_move_forum = 'Je kan een onderwerp niet verplaatsen naar een forum dat niet bestaat.';
 		$this->mod_error_move_global = 'You cannot move a global topic. Edit the topic before moving it.'; //Translate
 		$this->mod_error_move_same = 'Je kan een onderwerp niet verplaatsen naar het forum waar het al staat.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'Moderator Beheer';
 		$this->mod_label_description = 'Omschrijving';
 		$this->mod_label_emoticon = 'Smilies omzetten naar afbeeldingen?';
@@ -1059,8 +1071,10 @@ class nl
 		$this->perms_post_attach_download = 'Download bericht attachments';
 		$this->perms_post_create = 'Nieuw antwoord';
 		$this->perms_post_delete = 'Verwijder alle berichten';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'Verwijder alleen berichten die de gebruiker gemaakt heeft';
 		$this->perms_post_edit = 'Pas eender welk bericht aan';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'Pas enkel berichten aan die de oprichter gemaakt heeft';
 		$this->perms_post_inc_userposts = 'Posts contribute to user\'s total post count'; //Translate
 		$this->perms_post_noflood = 'STel vrij van berichten flood controle';
@@ -1084,7 +1098,6 @@ class nl
 		$this->perms_topic_split = 'Verander alle onderwerpen in verschillende nieuwe onderwerpen';
 		$this->perms_topic_split_own = 'Verander alle onderwerpen die de opstichter heeft aangemaakt in nieuwe onderwerpen';
 		$this->perms_topic_unlock = 'Unlock elk onderwerp';
-		$this->perms_topic_unlock_mod = 'Unlock een moderators slotje';
 		$this->perms_topic_unlock_own = 'Unlock  alleen onderwerpen die de opstichter opgestart heeft';
 		$this->perms_topic_unpin = 'Verwijder sticky van alle onderwerpen';
 		$this->perms_topic_unpin_own = 'Verwijder sticky van de onderwerpen die de opstichter aangemaakt heeft.';
@@ -1120,6 +1133,7 @@ class nl
 		$this->pm_group = 'Groep';
 		$this->pm_guest = 'Als gast, kunt u geen privé berichten versturen. Login of Registreer, aub.';
 		$this->pm_joined = 'Lid sinds';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'Privé berichten';
 		$this->pm_msgtext = 'Bericht:';
 		$this->pm_multiple = 'Scheid verschillende ontvangers met een ;';
@@ -1480,6 +1494,7 @@ class nl
 		$this->settings_default_yes = 'Default Yes'; //Translate
 		$this->settings_disabled = 'Disabled'; //Translate
 		$this->settings_disabled_notice = 'Disabled Notice'; //Translate
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'E-mail Opties';
 		$this->settings_email_fake = 'For display only. Should not be a real e-mail address.'; //Translate
 		$this->settings_email_from = 'E-mail From Address'; //Translate
@@ -1544,6 +1559,7 @@ class nl
 		$this->settings_timezone = 'Tijdszone';
 		$this->settings_topics_page = 'Onderwerpen per forumpagina';
 		$this->settings_tos = 'Voorwaarden';
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'Opties zijn geupdate.';
 	}
 

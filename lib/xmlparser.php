@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -26,8 +26,6 @@ if (!defined('QUICKSILVERFORUMS')) {
 	header('HTTP/1.0 403 Forbidden');
 	die;
 }
-
-require_once $set['include_path'] . '/lib/tar.php';
 
 /**
  * Simple XML parser

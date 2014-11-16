@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -67,8 +67,10 @@ class permissions
 		'post_create' => false,
 		'post_delete' => false,
 		'post_delete_own' => false,
+		'post_delete_old' => false,
 		'post_edit' => false,
 		'post_edit_own' => false,
+		'post_edit_old' => false,
 		'post_noflood' => false,
 		'post_viewip' => false,
 		'post_inc_userposts' => false,
@@ -89,7 +91,6 @@ class permissions
 		'topic_split' => false,
 		'topic_split_own' => false,
 		'topic_unlock' => false,
-		'topic_unlock_mod' => false,
 		'topic_unlock_own' => false,
 		'topic_unpin' => false,
 		'topic_unpin_own' => false,
@@ -106,9 +107,9 @@ class permissions
 		'edit_avatar' => true,
 		'edit_profile' => true,
 		'edit_sig' => true,
-                'page_edit' => true, // Added for CMS                                              
-                'page_create' => true, // Added for CMS                                              
-                'page_delete' => true, // Added for CMS 
+                'page_edit' => true, // Added for CMS
+                'page_create' => true, // Added for CMS
+                'page_delete' => true, // Added for CMS
 		'pm_noflood' => true,
 		'search_noflood' => true,
 		'topic_global' => true

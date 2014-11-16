@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -161,7 +161,7 @@ class search extends qsfglobal
 		}
 
 		if (isset($this->get['member_check'])) {
-			$this->post['time_way_select'] = $this->get['member_check'];
+			$this->post['member_check'] = $this->get['member_check'];
 		}
 
 		if (isset($this->get['member_select'])) {
@@ -414,9 +414,7 @@ class search extends qsfglobal
 
 					$match['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $match['user_joined']);
 
-					if ($this->perms->auth('post_viewip', $match['forum_id'])) {
-						$match['post_ip'] = "{$this->lang->search_ip}: {$match['post_ip']}";
-					} else {
+					if (!$this->perms->auth('post_viewip', $match['forum_id'])) {
 						$match['post_ip'] = null;
 					}
 
@@ -452,7 +450,7 @@ class search extends qsfglobal
 
 						if (($match['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
 							if (substr($match['user_avatar'], -4) != '.swf') {
-								$match['user_avatar'] = "<img src='{$match['user_avatar']}' alt='{$this->lang->search_avatar}' width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' /><br /><br />";
+								$match['user_avatar'] = "<img src='{$match['user_avatar']}' alt='' width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' /><br /><br />";
 							} else {
 								$match['user_avatar'] = "<object width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'><param name='movie' value='{$match['user_avatar']}'><param name='play' value='true'><param name='loop' value='true'><param name='quality' value='high'><embed src='{$match['user_avatar']}' width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' play='true' loop='true' quality='high'></embed></object><br /><br />";
 							}

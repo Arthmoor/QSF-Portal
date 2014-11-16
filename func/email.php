@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -61,6 +61,7 @@ class email extends qsfglobal
 		$this->tree($this->lang->email_email);
 
 		if (!$this->perms->auth('email_use')) {
+			header('HTTP/1.0 403 Forbidden');
 			return $this->message($this->lang->email_email, $this->lang->email_no_perm);
 		}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.4.2';          // QSF Portal version @var string
+	var $version = 'v1.4.3';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -87,7 +87,7 @@ class qsfglobal
 		$this->db      = $db;
 		$this->time    = time();
 		$this->query   = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
-		$this->ip      = $_SERVER['REMOTE_ADDR'];
+		$this->ip      = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
 		$this->agent   = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
 		$this->agent   = substr($this->agent, 0, 99); // Cut off after 100 characters.
 		$this->self    = $_SERVER['PHP_SELF'];
@@ -411,6 +411,18 @@ class qsfglobal
 		return array_merge($sets, unserialize($settings['settings_data']));
 	}
 
+	function cidrmatch( $cidr )
+	{
+		$ip = decbin( ip2long($this->ip) );
+		list( $cidr1, $cidr2, $cidr3, $cidr4, $bits ) = sscanf( $cidr, '%d.%d.%d.%d/%d' );
+		$cidr = decbin( ip2long( "$cidr1.$cidr2.$cidr3.$cidr4" ) );
+		for( $i = strlen($ip); $i < 32; $i++ )
+			$ip = "0$ip";
+		for( $i = strlen($cidr); $i < 32; $i++ )
+			$cidr = "0$cidr";
+		return !strcmp( substr($ip, 0, $bits), substr($cidr, 0, $bits) );
+	}
+
 	/**
 	 * Determines if a user has been banned
 	 *
@@ -427,7 +439,7 @@ class qsfglobal
 		if ($this->sets['banned_ips']) {
 			foreach ($this->sets['banned_ips'] as $ip)
 			{
-				if (preg_match("/$ip/", $this->ip)) {
+				if (preg_match("/$ip/", $this->ip) || (strstr($ip, '/') && $this->cidrmatch(stripslashes($ip))) ) {
 					return true;
 				}
 			}

@@ -1,5 +1,5 @@
 -------------------------------------------
-=== Quicksilver Forums Coding Standards ===
+=== QSF Portal Coding Standards ===
 -------------------------------------------
 
 Please follow these guidelines when modifying or adding to the Quicksilver

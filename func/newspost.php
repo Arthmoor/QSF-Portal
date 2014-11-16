@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -42,6 +42,7 @@ class newspost extends qsfglobal
 		}
 
 		if( !isset( $this->get['t'] ) ) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message( "News", "No such article." );
 		}
 
@@ -61,6 +62,7 @@ class newspost extends qsfglobal
 		    WHERE t.topic_id=%d LIMIT 1", $post );
 
 		if( !$row ) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message( "News", "No such article. (2)" );
 		}
 

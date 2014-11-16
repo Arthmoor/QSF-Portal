@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -81,6 +81,7 @@ class recent extends qsfglobal
 
 		// Handle the unlikely case where the user cannot view ANY forums
 		if ($forums_str == "") {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->recent_forum, $this->lang->recent_noexist);
 		}
         

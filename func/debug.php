@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -58,6 +58,7 @@ hr {height:1px; border:0 none inherit; border-top:1px solid #666666}
 <span style='font-size:18px; color:#660000'><b>QSF Portal Debug</b></span>";
 
 if (!$this->debug_mode) {
+	header('HTTP/1.0 403 Forbidden');
 	$out .= "<br /><br /><span style='font-size:12px'>This feature has been disabled.</span>
 	</div></body></html>";
 	return;

@@ -157,6 +157,7 @@ class de
 		$this->ban = 'Sperren';
 		$this->ban_banned_ips = 'Gesperrte IP Adressen';
 		$this->ban_banned_members = 'Gesperrte Mitglieder';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'IP Adressen sperren';
 		$this->ban_member_explain1 = 'Um Benutzer zu sperren, ändern sie die Gruppe in der Mitgliederverwaltung zu';
 		$this->ban_member_explain2 = '.';
@@ -476,6 +477,7 @@ class de
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -576,6 +578,7 @@ class de
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -783,10 +786,12 @@ class de
 		$this->logs_moved_topic_num = 'Thema # bewegt';
 		$this->logs_pinned_topic = 'Thema genagelt';
 		$this->logs_post = 'Beitrag';
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'Zeit';
 		$this->logs_topic = 'Thema';
 		$this->logs_unlocked_topic = 'Thema geöffnet';
 		$this->logs_unpinned_topic = 'Thema entnagelt';
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'Benutzer';
 		$this->logs_view = 'Moderator Aktivitäten anschauen';
 	}
@@ -802,6 +807,7 @@ class de
 		$this->main_cp = 'Kontrollzentrum';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'Voll';
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'Hilfe';
@@ -936,12 +942,18 @@ class de
 	{
 		$this->mod_confirm_post_delete = 'Sind sie sich sicher, das sie diesen Beitrag löschen wollen?';
 		$this->mod_confirm_topic_delete = 'Sind sie sich sicher, das sie dieses Thema löschen wollen?';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = 'Sie können den ersten Beitrag eines Themas nicht löschen.';
 		$this->mod_error_move_category = 'Sie können ein Thema nicht zu einer Kategorie verschieben.';
 		$this->mod_error_move_create = 'sie haben keine Erlaubnis, Themen in dem Forum zu verschieben.';
 		$this->mod_error_move_forum = 'Sie können das Thema nicht zu einem nicht existierendem Forum verschieben.';
 		$this->mod_error_move_global = 'Sie können kein globales Thema verschieben. Editieren sie es vorher!';
 		$this->mod_error_move_same = 'Sie können das Thema nicht in ein Forum verschieben, indem es sich schon befindet.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'Moderator Kontrolle';
 		$this->mod_label_description = 'Beschreibung';
 		$this->mod_label_emoticon = 'Konvertiere Smilies in Bilder?';
@@ -1058,8 +1070,10 @@ class de
 		$this->perms_post_attach_download = 'Beitragsanhänge runterladen';
 		$this->perms_post_create = 'Antworten erstellen';
 		$this->perms_post_delete = 'Jegliche Beiträge löschen';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'Nur Beiträge des Benutzers löschen';
 		$this->perms_post_edit = 'Jegliche Beiträge bearbeiten';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'Nur Beiträge des Benutzers bearbeiten';
 		$this->perms_post_inc_userposts = 'Beiträge zur Gesamtanzahl der Benutzerbeiträge hinzunehmen';
 		$this->perms_post_noflood = 'Ausgenommen von Beitrags-Flood-Kontrolle';
@@ -1083,7 +1097,6 @@ class de
 		$this->perms_topic_split = 'Jegliche Themen in mehrere Themen aufteilen';
 		$this->perms_topic_split_own = 'Nur Themen des Benutzers in mehrere Themen aufteilen';
 		$this->perms_topic_unlock = 'Jegliche Themen öffnen';
-		$this->perms_topic_unlock_mod = 'Schließung eines Moderators öffnen';
 		$this->perms_topic_unlock_own = 'Nur Themen des Benutzers öffnen';
 		$this->perms_topic_unpin = 'Jegliche Themen entnageln';
 		$this->perms_topic_unpin_own = 'Nur Themen des Benutzers entnageln';
@@ -1119,6 +1132,7 @@ class de
 		$this->pm_group = 'Gruppe';
 		$this->pm_guest = 'Als Gast können sie die Nachrichtenzentrale nicht benutzen. Bitte melden sie sich an oder registrieren sie sich.';
 		$this->pm_joined = 'Teilgenommen';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'Nachrichtenzentrale';
 		$this->pm_msgtext = 'Text';
 		$this->pm_multiple = 'Trenne mehrere Empfänger mit ;';
@@ -1479,6 +1493,7 @@ class de
 		$this->settings_default_yes = 'Standard Ja';
 		$this->settings_disabled = 'Deaktiviert';
 		$this->settings_disabled_notice = 'Deaktivierungshinweis';
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'E-Mail Einstellungen';
 		$this->settings_email_fake = 'Nur für die Anzeige. Es sollte keine echte Emailadresse sein.';
 		$this->settings_email_from = 'E-mail Von-Adresse';
@@ -1543,6 +1558,7 @@ class de
 		$this->settings_timezone = 'Zeitzone';
 		$this->settings_topics_page = 'Themen pro Forumseite';
 		$this->settings_tos = 'Nutzungsbestimmungen';
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'Einstellungen wurden aktualisiert.';
 	}
 

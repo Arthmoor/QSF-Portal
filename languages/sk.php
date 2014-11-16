@@ -156,6 +156,7 @@ class sk
 		$this->ban = 'Zablokova';
 		$this->ban_banned_ips = 'Zablokova IP Adresu';
 		$this->ban_banned_members = 'Zablokovaní užívatelia';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net'; //Translate
 		$this->ban_ip = 'Zablokované IP Adresy';
 		$this->ban_member_explain1 = 'Ak chcete zablokova užívate¾ov, presuòte ich do skupiny';
 		$this->ban_member_explain2 = 'v nastaveniach užívate¾ov.';
@@ -475,6 +476,7 @@ class sk
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
 		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
 		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_delete_root = 'You cannot delete the root category.'; //Translate
 		$this->files_denied = 'has been denied.'; //Translate
 		$this->files_deny = 'Deny'; //Translate
 		$this->files_desc = 'Description'; //Translate
@@ -575,6 +577,7 @@ class sk
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_upload_rules = 'Upload Rules'; //Translate
 		$this->files_uploaded = 'The file has been uploaded.'; //Translate
 		$this->files_view = 'View File'; //Translate
 		$this->files_view_archive = 'Archive'; //Translate
@@ -783,10 +786,12 @@ class sk
 		$this->logs_moved_topic_num = 'Poèet presunutých tém';
 		$this->logs_pinned_topic = 'Prišpendlená téma';
 		$this->logs_post = 'Príspevok';
+		$this->logs_published_topic = 'Published a topic'; //Translate
 		$this->logs_time = 'Èas';
 		$this->logs_topic = 'Téma';
 		$this->logs_unlocked_topic = 'Odomknutá téma';
 		$this->logs_unpinned_topic = 'Odšpendlená téma';
+		$this->logs_unpublished_topic = 'Unpublished a topic'; //Translate
 		$this->logs_user = 'Užívate¾';
 		$this->logs_view = 'Prezeranie èinnosti moderátora';
 	}
@@ -802,6 +807,7 @@ class sk
 		$this->main_cp = 'ovládací panel';
 		$this->main_files = 'Files'; //Translate
 		$this->main_forum = 'Forum'; //Translate
+		$this->main_forum_rules = 'Forum Rules'; //Translate
 		$this->main_full = 'Detaily';
 		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'help';
@@ -936,12 +942,18 @@ class sk
 	{
 		$this->mod_confirm_post_delete = 'Urèite chcete zmaza tento príspevok?';
 		$this->mod_confirm_topic_delete = 'Urèite chcete zmaza túto tému?';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.'; //Translate
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.'; //Translate
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.'; //Translate
 		$this->mod_error_first_post = 'Nemôžete zmaza prvý príspevok pod témou.';
 		$this->mod_error_move_category = 'Nemôžete presunú tému do kategórie.';
 		$this->mod_error_move_create = 'Nemôžete presúva témy do zadaného fóra.';
 		$this->mod_error_move_forum = 'Nemôžete presunú tému do fóra. ktoré neexistuje.';
 		$this->mod_error_move_global = 'Nemôžete presúva globálnu tému. Zmeòte nastavenia témy, než ju presuniete.';
 		$this->mod_error_move_same = 'Nemôžete presunú tému do fóra, v ktorom sa momentálne nachádza.';
+		$this->mod_ip_view = 'View IP History'; //Translate
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.'; //Translate
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />'; //Translate
 		$this->mod_label_controls = 'Ovládanie pre moderátorov';
 		$this->mod_label_description = 'Popis';
 		$this->mod_label_emoticon = 'Konvertova textové smajlíky na obrázky?';
@@ -1058,8 +1070,10 @@ class sk
 		$this->perms_post_attach_download = 'Sahova prílohy príspevkov';
 		$this->perms_post_create = 'Vytvára odpovede';
 		$this->perms_post_delete = 'Maza lubovo¾ný príspevok';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires'; //Translate
 		$this->perms_post_delete_own = 'Maza iba vlastné príspevky';
 		$this->perms_post_edit = 'Editova lubovo¾ný príspevok';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires'; //Translate
 		$this->perms_post_edit_own = 'Editova iba vlastné príspevky';
 		$this->perms_post_inc_userposts = 'Posts contribute to user\'s total post count'; //Translate
 		$this->perms_post_noflood = 'Vyòa z kontroly zahltenosti príspevkov';
@@ -1083,7 +1097,6 @@ class sk
 		$this->perms_topic_split = 'Rozde¾ovanie ¾ubovo¾nej témy na viaceré témy';
 		$this->perms_topic_split_own = 'Rozde¾ovanie iba vlastných tém na viaceré témy';
 		$this->perms_topic_unlock = 'Odomykanie ¾ubovo¾ných tém';
-		$this->perms_topic_unlock_mod = 'Odomykanie zámku moderátora';
 		$this->perms_topic_unlock_own = 'Odomykanie iba	vlastných zámkov';
 		$this->perms_topic_unpin = 'Odšpendlenie ¾ubovo¾ných tém';
 		$this->perms_topic_unpin_own = 'Odšpendlenie iba vlastných tém';
@@ -1120,6 +1133,7 @@ class sk
 		$this->pm_group = 'Skupina';
 		$this->pm_guest = 'Ako návštevník (guest) nemáte povolenie používa odkazovaè. Prosím nalogujte sa alebo sa zaregistrujte.. alebo sa dajte vypcha.';
 		$this->pm_joined = 'Registrácia';
+		$this->pm_mark_unread = 'Message marked as unread.'; //Translate
 		$this->pm_messenger = 'Odkazovaè';
 		$this->pm_msgtext = 'Text odkazu';
 		$this->pm_multiple = 'Viacerých adresátov odde¾te znakom ;';
@@ -1480,6 +1494,7 @@ class sk
 		$this->settings_default_yes = 'Prednastavi ÁNO';
 		$this->settings_disabled = 'Neprístupné';
 		$this->settings_disabled_notice = 'Poznámka o neprístupnosti';
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted'; //Translate
 		$this->settings_email = 'Nastavenia E-Mailu';
 		$this->settings_email_fake = 'Zobrazovaný email. Toto by nemala by skutoèná emailová adresa.';
 		$this->settings_email_from = 'E-mail odosielate¾a';
@@ -1544,6 +1559,7 @@ class sk
 		$this->settings_timezone = 'Èasové Pásmo';
 		$this->settings_topics_page = 'Poèet tém na jednej stránke fóra';
 		$this->settings_tos = 'Podmienky Použitia';
+		$this->settings_tos_files = 'Terms of Service: Uploads'; //Translate
 		$this->settings_updated = 'Nastavenia boli zaktualizované.';
 	}
 

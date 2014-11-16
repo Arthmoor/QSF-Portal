@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -33,8 +33,13 @@ if (!defined('QUICKSILVERFORUMS')) {
 
 $error_version = '2.0';
 
-require './settings.php';
-require_once './lib/mailer.php';
+if( is_readable( './settings.php' ) ) {
+	require './settings.php';
+	require_once './lib/mailer.php';
+} else {
+	require '../settings.php';
+	require_once '../lib/mailer.php';
+}
 
 function get_backtrace()
 {
@@ -174,11 +179,11 @@ function error_fatal($type, $message, $file, $line = 0)
 	}
 
 	// DO NOT allow this information into the error reports!!!
-        $details = str_replace( $set['db_name'], "****", $details );
+	$details = str_replace( $set['db_name'], "****", $details );
 	$details = str_replace( $set['db_pass'], "****", $details );
 	$details = str_replace( $set['db_user'], "****", $details );
 	$details = str_replace( $set['db_host'], "****", $details );
-        $backtrace = str_replace( $set['db_name'], "****", $backtrace );
+	$backtrace = str_replace( $set['db_name'], "****", $backtrace );
 	$backtrace = str_replace( $set['db_pass'], "****", $backtrace );
 	$backtrace = str_replace( $set['db_user'], "****", $backtrace );
 	$backtrace = str_replace( $set['db_host'], "****", $backtrace );
@@ -190,11 +195,12 @@ function error_fatal($type, $message, $file, $line = 0)
 		$mailer->setSubject("QSF Portal Error Report");
 
 		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
+		$ip    = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
 
 		$error_report = "QSF Portal has exited with an error!\n";
 		$error_report .= "The error details are as follows:\n\nURL: http://" . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . "\n";
 		$error_report .= "Querying user agent: " . $agent . "\n";
-		$error_report .= "Querying IP: " . $_SERVER['REMOTE_ADDR'] . "\n\n";
+		$error_report .= "Querying IP: " . $ip . "\n\n";
 		$error_report .= strip_tags($message) . "\n\n" . strip_tags($details) . "\n\n" . strip_tags($backtrace);
 		$error_report = str_replace( "&nbsp;", " ", html_entity_decode($error_report) );
 		$mailer->setMessage($error_report);
@@ -311,11 +317,12 @@ function error_notice($message)
 		$mailer->setSubject("QSF Portal Notice Report");
 
 		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
+		$ip    = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
 
 		$error_report = "QSF Portal triggered the following notice:\n\n";
 		$error_report .= "URL: http://" . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . "?" . $_SERVER['QUERY_STRING'] . "\n";
 		$error_report .= "Querying user agent: " . $agent . "\n";
-		$error_report .= "Querying IP: " . $_SERVER['REMOTE_ADDR'] . "\n\n";
+		$error_report .= "Querying IP: " . $ip . "\n\n";
 		$error_report .= strip_tags($message) . "\n\n";
 		$error_report = str_replace( "&nbsp;", " ", html_entity_decode($error_report) );
 		$mailer->setMessage($error_report);

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -168,6 +168,9 @@ class rssreader extends modlet
 	 **/
 	function read_URL($url)
 	{
+		require_once $this->qsf->sets['include_path'] . '/lib/tar.php';
+		require_once $this->qsf->sets['include_path'] . '/lib/xmlparser.php';
+
 		$this->rssFeeds[$url] = new xmlparser();
 
 		// Check if RSS cache directory exists

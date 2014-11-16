@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -607,10 +607,12 @@ class post extends qsfglobal
 	function vote()
 	{
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->post_voting, $this->lang->post_no_topic);
 		}
 
 		if (!isset($this->post['pollvote'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->post_voting, $this->lang->post_no_vote);
 		}
 
@@ -635,6 +637,7 @@ class post extends qsfglobal
 	function nullvote()
 	{
 		if (!isset($this->get['t'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->post_voting, $this->lang->post_no_topic);
 		}
 

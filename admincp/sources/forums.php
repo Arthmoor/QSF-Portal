@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -185,6 +185,45 @@ class forums extends admin
 	}
 
 	/**
+	 * Cleans up orphaned topics and posts that no longer have valid hierarchy data.
+	 *
+	 * @author Roger Libiez [Samson] http://www.iguanadons.net
+	 * @since 1.4.3
+	**/
+	function CleanOrphans()
+	{
+		$topic_purge = null;
+
+		$topics = $this->db->query( 'SELECT topic_id, topic_forum FROM %ptopics' );
+		while( $topic = $this->db->nqfetch( $topics ) )
+		{
+			$exists = $this->db->fetch( 'SELECT forum_id FROM %pforums WHERE forum_id=%d', $topic['topic_forum'] );
+			if( !$exists )
+				$topic_purge .= "topic_id={$topic['topic_id']} OR ";
+		}
+
+		if( $topic_purge ) {
+			$topic_purge = substr($topic_purge, 0, -4);
+			$this->db->query( "DELETE FROM %ptopics WHERE $topic_purge" );
+		}
+
+		$post_purge = null;
+
+		$posts = $this->db->query( 'SELECT post_id, post_topic FROM %pposts' );
+		while( $post = $this->db->nqfetch( $posts ) )
+		{
+			$exists2 = $this->db->fetch( 'SELECT topic_id FROM %ptopics WHERE topic_id=%d', $post['post_topic'] );
+			if( !$exists2 )
+				$post_purge .= "post_id={$post['post_id']} OR ";
+		}
+
+		if( $post_purge ) {
+			$post_purge = substr($post_purge, 0, -4);
+			$this->db->query( "DELETE FROM %pposts WHERE $post_purge" );
+		}
+	}
+
+	/**
 	 * Removes forum $id as well as all posts/topics for $id
 	 *
 	 * @param int $id ID of forum
@@ -231,6 +270,9 @@ class forums extends admin
 
 		// Recount after the carnage so the board totals are correct.
 		$this->RecountForums();
+
+		// Clean up any orphans that got left behind, because this process apparently isn't perfect.
+		$this->CleanOrphans();
 
 		return $this->message($this->lang->forum_delete, $this->lang->forum_deleted);
 	}

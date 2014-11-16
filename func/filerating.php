@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -52,7 +52,8 @@ class filerating extends qsfglobal
 		$rating = "";
 
 		if (!isset($this->get['f'])) {
-			return $this->qsf->message($this->lang->files_rate, $this->lang->files_rate_valid);
+			header('HTTP/1.0 404 Not Found');
+			return $this->message($this->lang->files_rate, $this->lang->files_rate_valid);
 		}
 
 		if (!isset($this->post['rate'])) {

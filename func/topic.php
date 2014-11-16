@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
@@ -105,14 +105,17 @@ class topic extends qsfglobal
 
 		if (!$topic) {
 			$this->set_title($this->lang->topic_not_found);
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->topic_error, $this->lang->topic_not_found_message);
 		}
 		
 		if (!($topic['topic_modes'] & TOPIC_PUBLISH) && !$this->perms->auth('topic_view_unpublished', $topic['topic_forum'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->topic_error, $this->lang->topic_unpublished);
 		}
 
 		if (!$this->perms->auth('topic_view', $topic['topic_forum'])) {
+			header('HTTP/1.0 403 Forbidden');
 			return $this->message(
 				$this->lang->topic_error,
 				($this->perms->is_guest) ? sprintf($this->lang->topic_perm_view_guest, $this->self) : $this->lang->topic_perm_view
@@ -155,6 +158,7 @@ class topic extends qsfglobal
 				header('Location: ' . $this->self . '?a=topic&t=' . $new_topic['topic_id']);
 				return;
                         } else {
+				header('HTTP/1.0 404 Not Found');
 				if ($this->get['view'] == 'older') {
 					return $this->message($this->lang->topic_not_found, $this->lang->topic_no_older);
 				} else {
@@ -358,6 +362,8 @@ class topic extends qsfglobal
 			} else if ($first_unread_post === true) {
 				$first_unread_post = 0;
 			}
+
+			$post_time = $post['post_time'];
 			$post['post_time']   = $this->mbdate(DATE_LONG, $post['post_time']);
 			$post['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $post['user_joined']);
 
@@ -381,9 +387,7 @@ class topic extends qsfglobal
 				$post['post_text'] = str_replace($this->get['hl'], "<span style='color:#FF0000; font-weight:bold'>{$this->get['hl']}</span>", $post['post_text']);
 			}
 
-			if ($this->perms->auth('post_viewip', $topic['topic_forum'])) {
-				$post['post_ip'] = "{$this->lang->topic_ip}: {$post['post_ip']}";
-			} else {
+			if (!$this->perms->auth('post_viewip', $topic['topic_forum'])) {
 				$post['post_ip'] = null;
 			}
 
@@ -466,7 +470,7 @@ class topic extends qsfglobal
 
 				if (($post['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
 					if (substr($post['user_avatar'], -4) != '.swf') {
-						$post['user_avatar'] = "<img src='{$post['user_avatar']}' alt='{$this->lang->topic_avatar}' width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' /><br /><br />";
+						$post['user_avatar'] = "<img src='{$post['user_avatar']}' alt='' width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' /><br /><br />";
 					} else {
 						$post['user_avatar'] = "<object width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'><param name='movie' value='{$post['user_avatar']}'><param name='play' value='true'><param name='loop' value='true'><param name='quality' value='high'><embed src='{$post['user_avatar']}' width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' play='true' loop='true' quality='high'></embed></object><br /><br />";
 					}
@@ -528,14 +532,25 @@ class topic extends qsfglobal
 
 			$user_created_post = ($this->user['user_id'] == $post['post_author']);
 
+			$hours = $this->sets['edit_post_age'];
 			$can_edit = false; // Shortcut for skin
 			if ($this->perms->auth('post_edit', $topic['topic_forum']) || ($user_created_post && $this->perms->auth('post_edit_own', $topic['topic_forum']))) {
-				$can_edit = true;
+				if( !($topic['topic_modes'] & TOPIC_LOCKED) )
+					$can_edit = true;
+				if( $hours > 0 && $this->time - ($hours*60*60) > $post_time )
+					$can_edit = false;
+				if( $this->perms->auth('post_edit_old', $topic['topic_forum']) )
+					$can_edit = true;
 			}
 
 			$can_delete = false; // Shortcut for skin
 			if ($this->perms->auth('post_delete', $topic['topic_forum']) || ($user_created_post && $this->perms->auth('post_delete_own', $topic['topic_forum']))) {
-				$can_delete = true;
+				if( !($topic['topic_modes'] & TOPIC_LOCKED) )
+					$can_delete = true;
+				if( $hours > 0 && $this->time - ($hours*60*60) > $post_time )
+					$can_delete = false;
+				if( $this->perms->auth('post_delete_old', $topic['topic_forum']) )
+					$can_delete = true;
 			}
 
 			$can_reply = false;
@@ -572,6 +587,7 @@ class topic extends qsfglobal
 	function get_attachment()
 	{
 		if (!isset($this->get['id'])) {
+			header('HTTP/1.0 404 Not Found');
 			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);
 		}
 

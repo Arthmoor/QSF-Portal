@@ -156,6 +156,7 @@ class en
 		$this->ban = 'Ban';
 		$this->ban_banned_ips = 'Ban IP Addresses';
 		$this->ban_banned_members = 'Banned Members';
+		$this->ban_cidr = 'You can also ban by CIDR ranges. CIDR ranges can be easily obtained by looking the IP up at arin.net';
 		$this->ban_ip = 'Ban IP Addresses';
 		$this->ban_member_explain1 = 'To ban users, change their user group to';
 		$this->ban_member_explain2 = 'in the member controls.';
@@ -475,6 +476,7 @@ class en
 		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.';
 		$this->files_delete_file_specify = 'You must specify a file to delete.';
 		$this->files_delete_nocat = 'No such category.';
+		$this->files_delete_root = 'You cannot delete the root category.';
 		$this->files_denied = 'has been denied.';
 		$this->files_deny = 'Deny';
 		$this->files_desc = 'Description';
@@ -575,6 +577,7 @@ class en
 		$this->files_upload_no_root = 'Cannot upload to the Root category.';
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.';
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.';
+		$this->files_upload_rules = 'Upload Rules';
 		$this->files_uploaded = 'The file has been uploaded.';
 		$this->files_view = 'View File';
 		$this->files_view_archive = 'Archive';
@@ -782,10 +785,12 @@ class en
 		$this->logs_moved_topic_num = 'Moved topic #';
 		$this->logs_pinned_topic = 'Pinned a topic';
 		$this->logs_post = 'Post';
+		$this->logs_published_topic = 'Published a topic';
 		$this->logs_time = 'Time';
 		$this->logs_topic = 'Topic';
 		$this->logs_unlocked_topic = 'Unlocked a topic';
 		$this->logs_unpinned_topic = 'Unpinned a topic';
+		$this->logs_unpublished_topic = 'Unpublished a topic';
 		$this->logs_user = 'User';
 		$this->logs_view = 'View Moderator Actions';
 	}
@@ -801,6 +806,7 @@ class en
 		$this->main_cp = 'Control Panel';
 		$this->main_files = 'Files';
 		$this->main_forum = 'Forum';
+		$this->main_forum_rules = 'Forum Rules';
 		$this->main_full = 'Full';
 		$this->main_guests = 'Guests';
 		$this->main_help = 'Help';
@@ -935,12 +941,18 @@ class en
 	{
 		$this->mod_confirm_post_delete = 'Are you sure you want to delete this post?';
 		$this->mod_confirm_topic_delete = 'Are you sure you want to delete the topic?';
+		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.';
+		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.';
+		$this->mod_edit_post_old = 'You cannot edit a post older than %d hours.';
 		$this->mod_error_first_post = 'You cannot delete the first post in a topic.';
 		$this->mod_error_move_category = 'You cannot move a topic to a category.';
 		$this->mod_error_move_create = 'You do not have permission to move topics to that forum.';
 		$this->mod_error_move_forum = 'You cannot move a topic to a forum that does not exist.';
 		$this->mod_error_move_global = 'You cannot move a global topic. Edit the topic before moving it.';
 		$this->mod_error_move_same = 'You cannot move a topic to the forum it is already in.';
+		$this->mod_ip_view = 'View IP History';
+		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.';
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />';
 		$this->mod_label_controls = 'Moderator Controls';
 		$this->mod_label_description = 'Description';
 		$this->mod_label_emoticon = 'Convert emoticons into images?';
@@ -1057,8 +1069,10 @@ class en
 		$this->perms_post_attach_download = 'Download post attachments';
 		$this->perms_post_create = 'Create replies';
 		$this->perms_post_delete = 'Delete any post';
+		$this->perms_post_delete_old = 'Delete posts after time limit expires';
 		$this->perms_post_delete_own = 'Delete only posts the user has created';
 		$this->perms_post_edit = 'Edit any post';
+		$this->perms_post_edit_old = 'Edit posts after time limit expires';
 		$this->perms_post_edit_own = 'Edit only posts the user has created';
 		$this->perms_post_inc_userposts = 'Posts contribute to user\'s total post count';
 		$this->perms_post_noflood = 'Exempt from post flood control';
@@ -1082,7 +1096,6 @@ class en
 		$this->perms_topic_split = 'Split any topic into multiple topics';
 		$this->perms_topic_split_own = 'Split only topics the user has created into multiple topics';
 		$this->perms_topic_unlock = 'Unlock any topic';
-		$this->perms_topic_unlock_mod = 'Unlock a moderator\'s lock';
 		$this->perms_topic_unlock_own = 'Unlock only topics the user has created';
 		$this->perms_topic_unpin = 'Unpin any topic';
 		$this->perms_topic_unpin_own = 'Unpin only topics the user has created';
@@ -1118,6 +1131,7 @@ class en
 		$this->pm_group = 'Group';
 		$this->pm_guest = 'As a guest, you cannot use the messenger. Please login or register.';
 		$this->pm_joined = 'Joined';
+		$this->pm_mark_unread = 'Message marked as unread.';
 		$this->pm_messenger = 'Messenger';
 		$this->pm_msgtext = 'Message Text';
 		$this->pm_multiple = 'Separate multiple recipients with ;';
@@ -1478,6 +1492,7 @@ class en
 		$this->settings_default_yes = 'Default Yes';
 		$this->settings_disabled = 'Disabled';
 		$this->settings_disabled_notice = 'Disabled Notice';
+		$this->settings_edit_post_age = 'Hours until post cannot be edited or deleted';
 		$this->settings_email = 'E-Mail Settings';
 		$this->settings_email_fake = 'For display only. Should not be a real e-mail address.';
 		$this->settings_email_from = 'E-mail From Address';
@@ -1542,6 +1557,7 @@ class en
 		$this->settings_timezone = 'Time Zone';
 		$this->settings_topics_page = 'Topics Per Forum Page';
 		$this->settings_tos = 'Terms of Service';
+		$this->settings_tos_files = 'Terms of Service: Uploads';
 		$this->settings_updated = 'Settings have been updated.';
 	}
 
