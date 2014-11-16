@@ -1,19 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<!-- $Id: index.php,v 1.2 2002/08/12 15:11:44 jason Exp $ -->
-
-<title>Candy Corn</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-
-<body bgcolor='#FFFFFF'>
-
-<center>
-<br><br><br><br><font size='6' face='Verdana'><b>Candy Corn</b></font><br><br><br>
-
-<img src='../corn.gif' alt='Candy Corn' border='0'>
-</center>
-
-</body>
-</html>
+<?php
+header('HTTP/1.0 404 Not Found');
+?>
+<html><head>
+<style type="text/css">
+body { font: 14px Arial, Sans-serif; }
+a { color: #000; text-decoration: none; border-bottom: 1px solid #EEEEEE; }
+</style>
+</head><body>
+<h2><a href="http://www.syridium.com/skins/qsf/hforum-v3/">Syridium HForum v3</a></h2>
+<h3>Skin for <a href="http://www.quicksilverforums.com/">QuickSilver Forums</a></h3>
+<br>Skin HTML and Concept Copyright 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a>
+<br><br>Silk icons by Mark James of <a href="http://www.famfamfam.com/">FamFamFam</a>
+</body></html>

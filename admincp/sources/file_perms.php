@@ -172,7 +172,7 @@ class file_perms extends admin
 
 			return $out . "
 			<tr>
-				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update File Permissions' /></td>
+				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}' /><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update File Permissions' /></td>
 			</tr>" . $this->etable . "</form>";
 		} else {
 			if( !$this->is_valid_token() ) {
