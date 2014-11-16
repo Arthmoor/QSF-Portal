@@ -1,6 +1,13 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.4.2:
+
+  Bugs addressed:
+
+* SECURITY: The error reporting library will reveal database security info when an error connecting to the database is displayed.
+* The RSS reader needs to define a user agent due to restrictions in place at qsfportal.com
+
 Changes for 1.4.1:
 
 * Installer changed to use ENGINE instead of TYPE in table creation queries.
