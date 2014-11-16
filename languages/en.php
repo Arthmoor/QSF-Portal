@@ -1363,7 +1363,9 @@ class en
 		$this->register_activated = 'Your account has been activated!';
 		$this->register_activating = 'Account Activation';
 		$this->register_activation_error = 'There was an error while activating your account. Check to see if your browser contains the full url in the activation email. If the problem persists, contact the board administrator to have your email resent.';
+		$this->register_akismet_ureg_spam = 'Registration blocked by spam filtering. If you believe this to be in error, please contact the administration.';
 		$this->register_confirm_passwd = 'Confirm Password';
+		$this->register_cookie_required = 'You must enable cookies in order to register on this site.';
 		$this->register_done = 'You have been registered! You can now login.';
 		$this->register_email = 'Email Address';
 		$this->register_email_invalid = 'The email address you entered is invalid.';
@@ -1468,7 +1470,6 @@ class en
 		$this->settings_akismet_email_spam = 'Your email has been flagged as spam and has not been delivered.';
 		$this->settings_akismet_ureg_enable = 'User Registration Protection';
 		$this->settings_akismet_ureg_enable_msg = 'Spam filter protection for new user registrations.';
-		$this->settings_akismet_ureg_spam = 'Registration blocked by spam filtering. If you believe this to be in error, please contact the administration.';
 		$this->settings_antibot = 'Anti-Robot Registration';
 		$this->settings_attach_ext = 'Attachments - File Extensions';
 		$this->settings_attach_one_per = 'One per line. No periods.';

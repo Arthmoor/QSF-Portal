@@ -2,7 +2,7 @@
 <qsfmod>
   <title>Skin: Blue Comet</title>
   <type folder="default">skin</type>
-  <version>v1.4.6</version>
+  <version>v1.4.7</version>
   <description></description>
   <authorname>Skin Exporter</authorname>
   <templates>
@@ -1826,16 +1826,15 @@
       <displayname>Board View</displayname>
       <description>Change the appearance of the main board screen, which lists all available forums</description>
       <html><![CDATA[
-<IF ( ($this->get['c'] != 0) && ($cat_name = split(urldecode('%3C/b%3E'), $this->htmlwidgets->tree)) && ($cat_name = $cat_name[(count($cat_name) - 1)]))></IF>
 {$this->table}
  <div style="float:left">{$this->htmlwidgets->tree}</div>
  <div style="text-align:right"><a href="{$this->self}?a=forum_rules" title="{$this->lang->main_forum_rules}">{$this->lang->main_forum_rules}</a> | <a href="{$this->self}?a=board&amp;s=mark" title="{$this->lang->main_mark1}">{$this->lang->main_mark}</a> | <a href="{$this->self}?a=recent" title="{$this->lang->main_recent1}">{$this->lang->main_recent}</a></div>
 {$this->etable}
-<IF ($this->get['c'] != 0)>
+<IF ($c != 0)>
  {$this->table}
   <div class="title">
    <img src="./skins/{$this->skin}/images/icons/report.png" alt="" />
-   <a href="{$this->self}?c={$this->get['c']}">{$cat_name}</a>
+   {$cat_name}
   </div>
   <span class="head">
    <span class="icon">&nbsp;</span>
@@ -1846,7 +1845,7 @@
   </span>
 </IF>
   {$forums}
-<IF ($this->get['c'] != 0)>
+<IF ($c != 0)>
  {$this->etable}
 </IF>
       ]]></html>

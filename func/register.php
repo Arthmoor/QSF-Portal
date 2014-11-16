@@ -126,11 +126,11 @@ class register extends qsfglobal
 			
 			if (!isset($_SESSION['allow_register'])) {
 				// They must allow sessions to register! The session can only be set by loading the form
-				return $this->message($this->lang->register_reging, sprintf($this->lang->register_flood, $this->sets['flood_time']));
+				return $this->message($this->lang->register_reging, $this->lang->register_cookie_required);
 			}
 			// Do some quick checks to prevent flooding registration
 			if (isset($_SESSION['last_register']) && $_SESSION['last_register'] > ($this->time - $this->sets['flood_time'])) {
-				return $this->message($this->lang->register_reging, sprintf($this->lang->register_flood, $this->sets['flood_time']));
+				return $this->message($this->lang->register_reging, $this->lang->register_flood);
 			}
 			$_SESSION['last_register'] = $this->time;
 
@@ -192,7 +192,7 @@ class register extends qsfglobal
 
 				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
 					$this->log_action('Blocked User Registration', 0, 0, 0);
-					return $this->message( $this->lang->register_reging, $this->lang->settings_akismet_ureg_spam );
+					return $this->message( $this->lang->register_reging, $this->lang->register_akismet_ureg_spam );
 				}
 			}
 

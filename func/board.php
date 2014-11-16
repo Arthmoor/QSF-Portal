@@ -57,10 +57,10 @@ class board extends qsfglobal
 			);
 		}
 
-		if (!isset($this->get['c'])) {
-			$this->get['c'] = 0;
-		} else {
-			$this->htmlwidgets->tree_forums($this->get['c']);
+		$c = 0;
+		if (isset($this->get['c'])) {
+			$c = intval($this->get['c']);
+			$this->htmlwidgets->tree_forums($c);
 		}
 
 		if (isset($this->get['s'])) {
@@ -104,8 +104,12 @@ class board extends qsfglobal
 			}
 		}
 
-		$forums    = $this->getForums($_forums, $this->get['c']);
+		$forums    = $this->getForums($_forums, $c);
 
+		if( $c > 0 ) {
+			$query = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id = %d", $c );
+			$cat_name = $query['forum_name'];
+		}
 		return eval($this->template('BOARD_MAIN'));
 	}
 

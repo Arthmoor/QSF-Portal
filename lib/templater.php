@@ -383,7 +383,7 @@ class templater extends htmltools
 			} else {
 				require_once($this->sets['include_path'] .  '/modlets/' . $modlet . '.php');
 			}
-			$this->modlets[$modlet] =& new $modlet($this->qsf);
+			$this->modlets[$modlet] = new $modlet($this->qsf);
 			if ($this->validate($modlet, TYPE_OBJECT, 'modlet')) {
 				return '<!-- ERROR: Modlet ' . htmlspecialchars($modlet) . ' is not a type of modlet -->';
 			}

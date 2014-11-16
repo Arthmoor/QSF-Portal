@@ -132,7 +132,7 @@ class bbcode extends htmltools
 		$this->user_view_emoticons = $qsf->user['user_view_emoticons'];
 
 		if ($createChild) {
-			$this->clone = &new bbcode( $qsf, false );
+			$this->clone = new bbcode( $qsf, false );
 		}
 	}
 
@@ -247,8 +247,8 @@ class bbcode extends htmltools
 	function make_tree( )
 	{
 		$len = strlen( $this->data );
-		$this->root = &new node( 'root', null, null, $null );
-		$curser = &$this->root;
+		$this->root = new node( 'root', null, null, $null );
+		$curser = $this->root;
 		$last_node = -1;
 
 		for ( $ix=0; $ix<$len; $ix++ )
@@ -302,8 +302,7 @@ class bbcode extends htmltools
 
 				if ( 0 != strlen( $text ) )
 				{
-					$__temp = &new node( 'text', $text, null, $curser );
-					$curser->children[] = &$__temp;
+					$curser->children[] = new node( 'text', $text, null, $curser );
 				}
 				unset( $text );
 
@@ -346,8 +345,7 @@ class bbcode extends htmltools
 
 			if ( 0 != strlen( $text ) )
 			{
-				$__temp = &new node( 'text', $text, null, $curser );
-				$curser->children[] = &$__temp;
+				$curser->children[] = new node( 'text', $text, null, $curser );
 			}
 			unset( $text );
 		}

@@ -93,8 +93,6 @@ $qsf->get['a'] = $module;
 $qsf->sets     = $set;
 $qsf->modules  = $modules;
 
-ob_start('ob_gzhandler');
-
 header( 'P3P: CP="CAO PSA OUR"' );
 session_start();
 
@@ -182,6 +180,8 @@ if (isset($qsf->get['debug'])) {
 }
 
 if (!$qsf->nohtml) {
+	ob_start('ob_gzhandler');
+
 	$google = null;
 	if ( isset($qsf->sets['analytics_id']) && !empty($qsf->sets['analytics_id']) ) {
 		$google = "<script type=\"text/javascript\">
@@ -198,12 +198,12 @@ if (!$qsf->nohtml) {
 	$copyright = eval($qsf->template('MAIN_COPYRIGHT'));
 	$quicksilverforums = $output;
 	echo eval($qsf->template('MAIN'));
+
+	@ob_end_flush();
+	@flush();
 } else {
 	echo $output;
 }
-
-@ob_end_flush();
-@flush();
 
 // Do post output stuff
 $qsf->cleanup();

@@ -27,21 +27,21 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
-require_once $set['include_path'] . '/lib/bbcode.php';
-
 /**
  * Contains handler for tracking and fetching active users
  *
  * @author Geoffrey Dunn <geoff@warmage.com>
  * @since 1.2
  **/
-class activeutil extends bbcode
+class activeutil extends htmltools
 {
 	var $activeUsers    = array();
 	var $doneUpdate     = false;
 	var $totalGuests    = 0; // Total guest users online
 	var $totalMembers   = 0; // Total members online
-	
+
+	var $sessionid = null;
+
 	/**
 	 * Constructor
 	 *
@@ -49,7 +49,7 @@ class activeutil extends bbcode
 	 **/
 	function activeutil(&$qsf)
 	{
-		parent::bbcode($qsf);
+		parent::htmltools($qsf);
 		
 		$this->get = &$qsf->get;
 		$this->user_id = $qsf->user['user_id'];
@@ -57,6 +57,8 @@ class activeutil extends bbcode
 		$this->ip = $qsf->ip;
 		$this->agent = $qsf->agent;
 		$this->self = $qsf->self;
+		$this->bbcode = $qsf->bbcode;
+		$this->sessionid = session_id();
 	}
 
 	/**
@@ -70,9 +72,9 @@ class activeutil extends bbcode
 		if (!$this->doneUpdate) {
 			$item = $this->_get_item($action);
 	
-			$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent) 
-				VALUES (%d, '%s', %d, %d, INET_ATON('%s'), '%s')",
-				$userid, $action, $item, $this->time, $this->ip, $this->agent);
+			$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
+				VALUES (%d, '%s', %d, %d, INET_ATON('%s'), '%s', '%s')",
+				$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid);
 			$this->doneUpdate = true; // Flag to make sure we only call once
 		}
 	}
@@ -218,7 +220,7 @@ class activeutil extends bbcode
 				case 'topic':
 					if ($this->perms->auth('topic_view', $user['topic_forum']) || $this->perms->auth('forum_view', $user['topic_forum'])) {
 						$topic = $user['topic_forum'];
-						$action_link = "<a href='{$this->self}?a=topic&amp;t={$user['active_item']}'>" . $this->format($user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a>';
+						$action_link = "<a href='{$this->self}?a=topic&amp;t={$user['active_item']}'>" . $this->bbcode->format($user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a>';
 					}
 					break;
 
