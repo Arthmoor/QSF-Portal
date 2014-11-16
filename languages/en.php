@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2008 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -102,7 +102,7 @@ class en
 		$this->admin_edit_settings = 'Edit board settings';
 		$this->admin_edit_skin = 'Edit or delete a skin';
 		$this->admin_edit_templates = 'Edit HTML templates';
-		$this->admin_emoticons = 'Emoticons';
+		$this->admin_emoticons = 'Emoticon Controls';
 		$this->admin_export_skin = 'Export a skin';
 		$this->admin_fix_stats = 'Fix the member statistics';
 		$this->admin_forum_order = 'Change the forum ordering';
@@ -124,6 +124,8 @@ class en
 		$this->admin_stats = 'Statistics center';
 		$this->admin_upgrade_skin = 'Upgrade a Skin';
 		$this->admin_your_board = 'Your Board';
+		$this->admin_new_captcha = 'Add new captcha pair';
+		$this->admin_list_captcha = 'List existing captcha pairs';
 	}
 
 	function backup()
@@ -278,6 +280,27 @@ class en
 		$this->censor_updated = 'Word list updated.';
 	}
 
+	function conversation()
+	{
+		$this->cv_conversation = 'Private Conversations';
+		$this->cv_by = 'By';
+		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
+		$this->cv_guest_user = 'Guest';
+		$this->cv_icon = 'Message Icon';
+		$this->cv_jump = 'Jump to newest post in topic';
+		$this->cv_last = 'Last Post';
+		$this->cv_no_topics = 'You have no private conversations to display.';
+		$this->cv_new_convo = 'New Conversation';
+		$this->cv_pages = 'Pages';
+		$this->cv_replies = 'Replies';
+		$this->cv_start_convo = 'Start a Conversation';
+		$this->cv_starter = 'Starter';
+		$this->cv_topic = 'Topic';
+		$this->cv_topic_posted = 'Posted';
+		$this->cv_unread = 'Jump to oldest unread post';
+		$this->cv_views = 'Views';
+	}
+
 	function cp()
 	{
 		$this->cp_aim = 'AIM Screen Name';
@@ -286,6 +309,7 @@ class en
 		$this->cp_aug = 'August';
 		$this->cp_avatar_current = 'Your current avatar';
 		$this->cp_avatar_error = 'Avatar Error';
+		$this->cp_avatar_gravatar = 'Specify a Gravatar email address';
 		$this->cp_avatar_must_select = 'You must select an avatar.';
 		$this->cp_avatar_none = 'Do not use an avatar';
 		$this->cp_avatar_pixels = 'pixels';
@@ -298,6 +322,7 @@ class en
 		$this->cp_avatar_upload_too_large = 'The avatar you specified to upload is too large. The maximum size is %d kilobytes.';
 		$this->cp_avatar_url = 'Specify a URL for your avatar';
 		$this->cp_avatar_use = 'Use your uploaded avatar';
+		$this->cp_gravatar_upload_failed = 'The email address you entered was not a valid format.';
 		$this->cp_bday = 'Birthday';
 		$this->cp_been_updated = 'Your profile has been updated.';
 		$this->cp_been_updated1 = 'Your avatar has been updated.';
@@ -321,7 +346,6 @@ class en
 		$this->cp_feb = 'February';
 		$this->cp_file_type = 'The avatar you entered is not valid. Make sure the url is correctly formatted, and the file type is either gif, jpg, or png.';
 		$this->cp_format = 'Name Formatting';
-		$this->cp_gtalk = 'GTalk Account';
 		$this->cp_header = 'User Control Panel';
 		$this->cp_height = 'Height';
 		$this->cp_icq = 'ICQ Number';
@@ -334,6 +358,7 @@ class en
 		$this->cp_label_edit_prefs = 'Edit Preferences';
 		$this->cp_label_edit_profile = 'Edit Profile';
 		$this->cp_label_edit_sig = 'Edit Signature';
+		$this->cp_label_edit_sig_spam = 'Your signature update has been blocked due to spam filtering restrictions.';
 		$this->cp_label_edit_subs = 'Edit Subscriptions';
 		$this->cp_language = 'Language';
 		$this->cp_less_charac = 'Your name must be less than 32 characters.';
@@ -362,6 +387,7 @@ class en
 		$this->cp_preferences = 'Changing Preferences';
 		$this->cp_preview_sig = 'Signature Preview:';
 		$this->cp_privacy = 'Privacy Options';
+		$this->cp_profile_spam = 'Your profile URL update has been blocked due to spam filter restrictions.';
 		$this->cp_repeat_pass = 'Repeat New Password';
 		$this->cp_sept = 'September';
 		$this->cp_show_active = 'Show your activities when you are using the board?';
@@ -379,6 +405,7 @@ class en
 		$this->cp_sub_updated = 'Selected subscriptions have been deleted.';
 		$this->cp_topic_option = 'Topic Options';
 		$this->cp_topics_page = 'Topics per forum page. 0 resets to board default.';
+		$this->cp_twitter = 'Twitter ID';
 		$this->cp_updated = 'Profile Updated';
 		$this->cp_updated1 = 'Avatar Updated';
 		$this->cp_updated_prefs = 'Preferences Updated';
@@ -402,6 +429,7 @@ class en
 
 	function email()
 	{
+		$this->email_akismet_email_spam = 'Your email has been flagged as spam and has not been delivered.';
 		$this->email_blocked = 'That member is not accepting email through this form.';
 		$this->email_email = 'Email';
 		$this->email_msgtext = 'Email Body:';
@@ -413,14 +441,18 @@ class en
 		$this->email_to = 'To:';
 	}
 
-	function emot_control()
+	function emoticon_control()
 	{
-		$this->emote = 'Emoticons';
-		$this->emote_add = 'Add Emoticons';
+		$this->emote = 'Emoticon Controls';
+		$this->emote_add = 'Add New Emoticon';
 		$this->emote_added = 'Emoticon added.';
+		$this->emote_back = 'Back to Emoticon Controls';
 		$this->emote_clickable = 'Clickable';
-		$this->emote_edit = 'Edit Emoticons';
-		$this->emote_image = 'Image';
+		$this->emote_controls = 'QSF Portal Emoticon Controls';
+		$this->emote_edit_or_delete = 'Edit or Delete Emoticons';
+		$this->emote_image = 'Image File';
+		$this->emote_invalid_image = 'Invalid image type %s. Valid file types are jpg, png and gif.';
+		$this->emote_image_failed = 'Image failed to upload!';
 		$this->emote_install = 'Install Emoticons';
 		$this->emote_install_done = 'Emoticons have been successfully reinstalled.';
 		$this->emote_install_warning = 'This will erase all existing emoticon settings and import uploaded emoticons from your currently selected skin into the database.';
@@ -573,7 +605,7 @@ class en
 		$this->files_update_approved = 'The update has been approved.';
 		$this->files_update_denied = 'Update has been denied and purged.';
 		$this->files_update_deny = 'Deny Update';
-		$this->files_update_desc = 'The description has been updated.';
+		$this->files_update_desc = 'The file information has been updated.';
 		$this->files_update_exists = 'A file by that name already exists in the database.';
 		$this->files_update_file = 'Update File';
 		$this->files_update_file_need_desc = 'The description field must be filled in.';
@@ -588,9 +620,11 @@ class en
 		$this->files_upload_pending = 'The file has been uploaded and is pending approval.';
 		$this->files_upload_rules = 'Upload Rules';
 		$this->files_uploaded = 'The file has been uploaded.';
+		$this->files_version = 'Version';
 		$this->files_view = 'View File';
 		$this->files_view_archive = 'Archive';
 		$this->files_view_c = 'C Source';
+		$this->files_view_category = 'View Category';
 		$this->files_view_cat_not_permitted = 'You are not permitted to view this category.';
 		$this->files_view_cpp = 'C++ Source';
 		$this->files_view_java = 'Java Source';
@@ -737,6 +771,7 @@ class en
 		$this->jsdata_detail = 'Enter a description';
 		$this->jsdata_smiles = 'Clickable Smilies';
 		$this->jsdata_url = 'URL';
+		$this->jsdata_youtube_url = 'Enter the YouTube video URL';
 	}
 
 	function jslang()
@@ -795,6 +830,7 @@ class en
 		$this->logs_pinned_topic = 'Pinned a topic';
 		$this->logs_post = 'Post';
 		$this->logs_published_topic = 'Published a topic';
+		$this->logs_reported_spam = 'Reported spam';
 		$this->logs_time = 'Time';
 		$this->logs_topic = 'Topic';
 		$this->logs_unlocked_topic = 'Unlocked a topic';
@@ -809,7 +845,7 @@ class en
 		$this->main_activate = 'Your account has not yet been activated.';
 		$this->main_activate_resend = 'Resend Activation Email';
 		$this->main_admincp = 'Admin CP';
-		$this->main_affiliates = 'Affiliates';
+		$this->main_affiliates = 'Related Links';
 		$this->main_banned = 'You have been banned from viewing any portion of this board.';
 		$this->main_code = 'Code';
 		$this->main_cp = 'Control Panel';
@@ -847,6 +883,7 @@ class en
 		$this->main_reminder_closed = 'The board is closed and only viewable to admins.';
 		$this->main_said = 'said';
 		$this->main_search = 'Search';
+		$this->main_spam_controls = 'Spam Controls';
 		$this->main_stats = 'Stats';
 		$this->main_top_posters = 'Top Posters';
 		$this->main_top_uploaders = 'Top Uploaders';
@@ -874,6 +911,7 @@ class en
 	{
 		$this->mc = 'Member Control';
 		$this->mc_confirm = 'Are you sure you want to delete';
+		$this->mc_confirm_bot = 'Are you sure you want to report <b>%s</b> as a spambot?';
 		$this->mc_delete = 'Delete Member';
 		$this->mc_deleted = 'Member Deleted.';
 		$this->mc_edit = 'Edit Member';
@@ -894,7 +932,7 @@ class en
 		$this->mc_user_email = 'Email Address';
 		$this->mc_user_email_show = 'Email Is Public';
 		$this->mc_user_group = 'Group';
-		$this->mc_user_gtalk = 'GTalk Account';
+		$this->mc_user_twitter = 'Twitter ID';
 		$this->mc_user_homepage = 'Homepage';
 		$this->mc_user_icq = 'ICQ Number';
 		$this->mc_user_id = 'User ID';
@@ -912,6 +950,7 @@ class en
 		$this->mc_user_posts = 'Posts';
 		$this->mc_user_regemail = 'Registration Email';
 		$this->mc_user_regip = 'Registration IP';
+		$this->mc_user_server_data = 'HTTP Raw Data';
 		$this->mc_user_signature = 'Signature';
 		$this->mc_user_skin = 'Skin';
 		$this->mc_user_timezone = 'Time Zone';
@@ -950,6 +989,7 @@ class en
 	function mod()
 	{
 		$this->mod_confirm_post_delete = 'Are you sure you want to delete this post?';
+		$this->mod_confirm_post_delete_spam = 'Are you sure you want to delete this post and report it as spam?';
 		$this->mod_confirm_topic_delete = 'Are you sure you want to delete the topic?';
 		$this->mod_delete_post_locked = 'You cannot delete a post in a locked topic.';
 		$this->mod_edit_post_locked = 'You cannot edit a post in a locked topic.';
@@ -1177,6 +1217,7 @@ class en
 
 	function post()
 	{
+		$this->post_akismet_posts_spam = 'Your post has been flagged as spam and must be approved by a moderator.';
 		$this->post_attach = 'Attachments';
 		$this->post_attach_add = 'Add Attachment';
 		$this->post_attach_disrupt = 'Adding or removing attachments will not disrupt your post.';
@@ -1244,12 +1285,12 @@ class en
 		$this->profile_email_address = 'Email Address';
 		$this->profile_fav = 'Favorite Forum';
 		$this->profile_fav_forum = '%s (%d%% of this member\'s posts)';
-		$this->profile_gtalk = 'GTalk Account';
 		$this->profile_icq_uin = 'ICQ Number';
 		$this->profile_info = 'Information';
 		$this->profile_interest = 'Interests';
 		$this->profile_joined = 'Joined';
 		$this->profile_last_post = 'Last Post';
+		$this->profile_last_visit = 'Last Visited';
 		$this->profile_list = 'Member List';
 		$this->profile_location = 'Location';
 		$this->profile_member = 'Member Group';
@@ -1267,6 +1308,7 @@ class en
 		$this->profile_private = '[ Private ]';
 		$this->profile_profile = 'Profile';
 		$this->profile_signature = 'Signature';
+		$this->profile_twitter = 'Twitter ID';
 		$this->profile_unkown = '[ Unknown ]';
 		$this->profile_upload_last = 'Last Upload';
 		$this->profile_uploads = 'Uploads';
@@ -1378,7 +1420,7 @@ class en
 		$this->register_image_invalid = 'To verify you are a human registrant, you must type the text as shown in the image.';
 		$this->register_initiated = 'This request was initiated from IP:';
 		$this->register_math_ask = 'Please answer the following';
-		$this->register_math_fail = 'You failed to correctly answer the math question. Please try again.';
+		$this->register_math_fail = 'You failed to correctly answer the question. Please try again.';
 		$this->register_must_activate = 'You have been registered. An email has been sent to %s with information on how to activate your account. Your account will be limited until you activate it.';
 		$this->register_name_invalid = 'The name you entered is too long.';
 		$this->register_name_taken = 'That member name is already taken.';
@@ -1388,6 +1430,7 @@ class en
 		$this->register_passwd = 'Password';
 		$this->register_reg = 'Register';
 		$this->register_reging = 'Registering';
+		$this->register_registration_disabled = 'New user registration has been disabled on this site.';
 		$this->register_requested = 'Account activation request for:';
 		$this->register_tos = 'Terms of Service';
 		$this->register_tos_i_agree = 'I agree to the above terms';
@@ -1469,14 +1512,19 @@ class en
 		$this->settings_allow = 'Allow';
 		$this->settings_akismet_email_enable = 'Email Form Protection';
 		$this->settings_akismet_email_enable_msg = 'Spam filter protection for the user email forms.';
-		$this->settings_akismet_email_spam = 'Your email has been flagged as spam and has not been delivered.';
+		$this->settings_akismet_posts_enable = 'Forum Post Protection';
+		$this->settings_akismet_posts_enable_msg = 'Spam filter protection for forum posts.';
+		$this->settings_akismet_posts_number = 'Number of posts before a user is exempt from spam filtering.';
+		$this->settings_akismet_profiles_enable = 'User Profile Protection';
+		$this->settings_akismet_profiles_enable_msg = 'Spam filter protection for user profiles.';
 		$this->settings_akismet_ureg_enable = 'User Registration Protection';
 		$this->settings_akismet_ureg_enable_msg = 'Spam filter protection for new user registrations.';
+		$this->settings_akismet_sigs_enable = 'User Signature Protection';
+		$this->settings_akismet_sigs_enable_msg = 'Spam filter protection for user signatures.';
 		$this->settings_antibot = 'Anti-Robot Registration';
-		$this->settings_attach_ext = 'Attachments - File Extensions';
+		$this->settings_attach_ext = 'Post Attachments - Allowed File Extensions';
 		$this->settings_attach_one_per = 'One per line. No periods.';
 		$this->settings_avatar = 'Avatar Settings';
-		$this->settings_avatar_flash = 'Flash Avatars';
 		$this->settings_avatar_max_height = 'Maximum Avatar Height';
 		$this->settings_avatar_max_width = 'Maximum Avatar Width';
 		$this->settings_avatar_upload = 'Uploaded Avatars - Max File Size';
@@ -1490,7 +1538,20 @@ class en
 		$this->settings_board_rssfeed_posts = 'Number of posts to list on RSS Feed';
 		$this->settings_board_rssfeed_time = 'Refresh time in minutes';
 		$this->settings_board_rssfeed_title = 'RSS Feed Title';
-		$this->settings_clickable = 'Clickable Smilies Per Row';
+		$this->settings_captcha_pair = 'Add Captcha Pair';
+		$this->settings_captcha_added = 'New captcha pair was added successfully.';
+		$this->settings_captcha_answer = 'Answer';
+		$this->settings_captcha_delete = 'Delete Captcha Pair';
+		$this->settings_captcha_deleted = 'Captcha pair has been deleted successfully.';
+		$this->settings_captcha_display = 'Display Captcha Pairs';
+		$this->settings_captcha_edit = 'Edit Captcha Pair';
+		$this->settings_captcha_edited = 'Captcha pair has been updated successfully.';
+		$this->settings_captcha_invalid = 'Invalid captcha pair value specified.';
+		$this->settings_captcha_missing = 'The question and answer must both be filled in.';
+		$this->settings_captcha_new_answer = 'New Captcha Answer';
+		$this->settings_captcha_new_question = 'New Captcha Question';
+		$this->settings_captcha_no_pair = 'No such captcha pair exists.';
+		$this->settings_captcha_question = 'Question';
 		$this->settings_cookie = 'Cookie and Flood Settings';
 		$this->settings_cookie_domain = 'Cookie Domain';
 		$this->settings_cookie_path = 'Cookie Path';
@@ -1527,7 +1588,8 @@ class en
 		$this->settings_email_smtp = 'SMTP Mail Server';
 		$this->settings_email_valid = 'New Member E-mail Validation';
 		$this->settings_enabled = 'Enabled';
-		$this->settings_enabled_modules = 'Enabled Modules';
+		$this->settings_files = 'File Settings';
+		$this->settings_file_approval = 'File Uploads - Approval Required?';
 		$this->settings_foreign_link = 'Foreign Link Target';
 		$this->settings_general = 'General Settings';
 		$this->settings_google_id = 'Google Analytics ID';
@@ -1535,9 +1597,10 @@ class en
 		$this->settings_group_after = 'Group After Registration';
 		$this->settings_hot_topic = 'Posts for a Hot Topic';
 		$this->settings_kilobytes = 'Kilobytes';
-		$this->settings_max_attach_size = 'Attachments - Maximum File Size';
+		$this->settings_max_attach_size = 'Post Attachments - Maximum File Size';
 		$this->settings_members = 'Member Settings';
-		$this->settings_modname_only = 'Module name only. Do not include .php';
+		$this->settings_meta_keywords = 'Meta Keywords';
+		$this->settings_meta_description = 'Meta Description';
 		$this->settings_new = 'New Setting';
 		$this->settings_new_add = 'Add New Board Setting';
 		$this->settings_new_added = 'New settings added.';
@@ -1557,11 +1620,10 @@ class en
 		$this->settings_post_flood = 'Post Flood Control';
 		$this->settings_post_min_time = 'Minimum time between posts.';
 		$this->settings_posts_topic = 'Posts Per Topic Page';
+		$this->settings_registrations = 'New User Registrations';
 		$this->settings_search_flood = 'Search Flood Control';
 		$this->settings_search_min_time = 'Minimum time between searches.';
 		$this->settings_server = 'Server Settings';
-		$this->settings_server_gzip = 'GZIP Compression';
-		$this->settings_server_gzip_msg = 'Improves speed. Disable if the board appears jumbled or blank.';
 		$this->settings_server_maxload = 'Maximum Server Load';
 		$this->settings_server_maxload_msg = 'Disables board under excessive server strain. Enter 0 to disable.';
 		$this->settings_server_timezone = 'Server Time Zone';
@@ -1586,11 +1648,36 @@ class en
 		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: http://akismet.com/personal/';
 	}
 
+	function spam_control()
+	{
+		$this->spam_action = 'Action';
+		$this->spam_all_deleted = 'All flagged spam has been deleted.';
+		$this->spam_author = 'Author';
+		$this->spam_clear_all = 'Clear Entire Table';
+		$this->spam_control = 'Spam Control';
+		$this->spam_controls = 'Akismet: Spam Controls';
+		$this->spam_deleted = 'Spam Deleted';
+		$this->spam_false_positive = 'The post has been approved and Akismet notified of a false positive.';
+		$this->spam_invalid_option = 'Invalid option passed.';
+		$this->spam_message1 = 'Forum posts flagged as spam. Click on <span style="color:yellow">Not Spam</span> to allow posting and notify Akismet of a false positive.';
+		$this->spam_message2 = 'Click on <span style="color:yellow">Delete</span> to remove it now. Spam left here will be deleted after 30 days automatically.';
+		$this->spam_no_post = 'There is no such spam post.';
+		$this->spam_no_view = 'You do not have permission to view this module.';
+		$this->spam_not_spam = 'Not Spam';
+		$this->spam_text = 'Text';
+	}
+
 	function stats()
 	{
 		$this->stats = 'Statistics Center';
+		$this->stats_false_neg = 'False Negatives';
+		$this->stats_false_pos = 'False Positives';
+		$this->stats_forum_posts = 'Forum Posts';
 		$this->stats_post_by_month = 'Posts by Month';
+		$this->stats_prof = 'Profiles';
+		$this->stats_reg = 'Registrations';
 		$this->stats_reg_by_month = 'Registrations by Month';
+		$this->stats_sig = 'Signatures';
 	}
 
 	function templates()
@@ -1618,6 +1705,7 @@ class en
 		$this->export_done = 'Skin exported to the skins directory.';
 		$this->export_select = 'Select a skin to export';
 		$this->export_skin = 'Export Skin';
+		$this->export_writeable = 'The packages folder on your server is not writeable. The skin cannot be exported.';
 		$this->install_done = 'The skin has been installed successfully.';
 		$this->install_exists1 = 'It appears that the skin';
 		$this->install_exists2 = 'is already installed.';
@@ -1662,9 +1750,10 @@ class en
 		$this->temps_ban = 'AdminCP Bans';
 		$this->temps_board_index = 'Board Index';
 		$this->temps_censoring = 'AdminCP Word Censoring';
+		$this->temps_conversation = 'Private Conversations';
 		$this->temps_cp = 'Member Control Panel';
 		$this->temps_email = 'Email A Member';
-		$this->temps_emot_control = 'AdminCP Emoticons';
+		$this->temps_emoticon_control = 'AdminCP Emoticons';
 		$this->temps_forum = 'Forums';
 		$this->temps_forums = 'AdminCP Forums';
 		$this->temps_groups = 'AdminCP Groups';
@@ -1687,6 +1776,7 @@ class en
 		$this->temps_rssfeed = 'RSS Feed';
 		$this->temps_search = 'Searching';
 		$this->temps_settings = 'AdminCP Settings';
+		$this->temps_spam = 'Spam Controls';
 		$this->temps_templates = 'AdminCP Template Editor';
 		$this->temps_titles = 'AdminCP Member Titles';
 		$this->temps_topic_prune = 'AdminCP Topic Pruning';
@@ -1726,6 +1816,7 @@ class en
 		$this->topic_create_topic = 'Create New Topic';
 		$this->topic_delete = 'Delete';
 		$this->topic_delete_post = 'Delete this post';
+		$this->topic_delete_spam = 'Report this post as spam';
 		$this->topic_edit = 'Edit';
 		$this->topic_edit_post = 'Edit this post';
 		$this->topic_edited = 'Last edited %s by %s';
@@ -1737,7 +1828,7 @@ class en
 		$this->topic_level = 'Member Level';
 		$this->topic_links_aim = 'Send an AIM message to %s';
 		$this->topic_links_email = 'Send an email to %s';
-		$this->topic_links_gtalk = 'Send a GTalk message to %s';
+		$this->topic_links_twitter = 'Visit %s\'s Twitter page';
 		$this->topic_links_icq = 'Send an ICQ messsage to %s';
 		$this->topic_links_msn = 'View %s\'s MSN profile';
 		$this->topic_links_pm = 'Send a personal messsage to %s';
@@ -1797,6 +1888,7 @@ class en
 		$this->board_by = 'By';
 		$this->charset = 'utf-8';
 		$this->continue = 'Continue';
+		$this->date = 'Date';
 		$this->date_long = 'M j, Y';
 		$this->date_short = 'n/j/y';
 		$this->delete = 'Delete';
@@ -1835,9 +1927,8 @@ class en
 		$this->gmt_pos8 = '[GMT+8:00] Beijing, Hong Kong, Singapore';
 		$this->gmt_pos9 = '[GMT+9:00] Tokyo, Seoul';
 		$this->gmt_pos95 = '[GMT+9:30] Adelaide, Darwin';
-		$this->gtalk = 'GT';
 		$this->icq = 'ICQ';
-		$this->invalid_token = 'Invalid or expired security token. Please go back and try again.';
+		$this->invalid_token = 'The security validation token used to verify you are authorized to perform this action is either invalid or expired. Please try again.';
 		$this->msn = 'MSN';
 		$this->new_message = 'New Message';
 		$this->new_poll = 'New Poll';
@@ -1853,12 +1944,15 @@ class en
 		$this->select_all = 'Select All';
 		$this->sep_decimals = '.';
 		$this->sep_thousands = ',';
+		$this->spam = 'Spam';
 		$this->spoiler = 'Spoiler';
 		$this->submit = 'Submit';
 		$this->subscribe = 'Subscribe';
 		$this->time_long = ', g:i a';
 		$this->time_only = 'g:i a';
 		$this->today = 'Today';
+		$this->topic = 'Topic';
+		$this->twitter = 'Twitter';
 		$this->website = 'WWW';
 		$this->yahoo = 'Yahoo';
 		$this->yes = 'Yes';

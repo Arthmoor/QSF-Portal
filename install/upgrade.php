@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,9 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
+define('LATEST', 37);   // ID of most recent upgrade script
+
+require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
 require_once $set['include_path'] . '/lib/xmlparser.php';
 require_once $set['include_path'] . '/lib/packageutil.php';
@@ -42,44 +45,204 @@ require_once $set['include_path'] . '/lib/packageutil.php';
  */
 class upgrade extends qsfglobal
 {
+	// Override for upgrade purposes.
+	function get_settings($sets)
+	{
+		$settings = $this->db->fetch("SELECT settings_data FROM %psettings LIMIT 1");
+
+		return array_merge($sets, json_decode($settings['settings_data'], true));
+	}
+
 	function upgrade_board( $step )
 	{
 		switch($step) {
 		default:
-			echo "<form action='{$this->self}' method='get'>
-			    <table border='0' cellpadding='4' cellspacing='0'>\n";
+			echo "<form action='{$this->self}?mode=upgrade&amp;step=2' method='post'>
+ <div class='article'>
+  <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
+
+			$db = new $this->modules['database']($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
+				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix']);
+
+			if ( !$db->connection )
+			{
+				echo "Couldn't select database: " . $db->error();
+				break;
+			}
+
+  			echo "<div class='title'>Directory Permissions</div>";
 
 			check_writeable_files();
 
-			echo "<tr><td colspan='2' align='center'><b>Upgrade from what version?</b></td></tr>";
+			$this->db = $db;
+			$this->pre = $this->sets['prefix'];
+			$this->sets = $this->get_settings($this->sets);
 
-			include 'templates/upgradefromversion.php';
+			$v_message = 'To determine what version you are running, check the bottom of your AdminCP page. Or check the CHANGES file and look for the latest revision mentioned there.';
+			if( isset($this->sets['app_version']) )
+				$v_message = 'The upgrade script has determined you are currently using ' . $this->sets['app_version'];
 
-			echo "    </table>
+			echo "<br /><br /><strong>{$v_message}</strong>";
+
+			if( isset($this->sets['app_version']) && $this->sets['app_version'] == $this->version ) {
+				echo "<br /><br />The detected version of {$this->name} is the same as the version you are trying to upgrade to. The upgrade cannot be processed.";
+			} else {
+				echo "<div class='title' style='text-align:center'>Upgrade from what version?</div>
+			       <span class='half'>
+				<div class='title'>QSF Portal</div>
+
+				<span class='field'><input type='radio' name='from' value='38' id='upgrade38' /></span>
+				<span class='form'><label for='upgrade38'>QSF Portal v1.5.2</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='37' id='upgrade37' /></span>
+				<span class='form'><label for='upgrade37'>QSF Portal v1.5.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='36' id='upgrade36' /></span>
+				<span class='form'><label for='upgrade36'>QSF Portal v1.5</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='35' id='upgrade35' /></span>
+				<span class='form'><label for='upgrade35'>QSF Portal v1.4.6</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='34' id='upgrade34' /></span>
+				<span class='form'><label for='upgrade34'>QSF Portal v1.4.5</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='33' id='upgrade33' /></span>
+				<span class='form'><label for='upgrade33'>QSF Portal v1.4.4</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='32' id='upgrade32' /></span>
+				<span class='form'><label for='upgrade32'>QSF Portal v1.4.3</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='31' id='upgrade31' /></span>
+				<span class='form'><label for='upgrade31'>QSF Portal v1.4.2</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='30' id='upgrade30' /></span>
+				<span class='form'><label for='upgrade30'>QSF Portal v1.4.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='29' id='upgrade29' /></span>
+				<span class='form'><label for='upgrade29'>QSF Portal v1.4.0</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='28' id='upgrade28' /></span>
+				<span class='form'><label for='upgrade28'>QSF Portal v1.3.5</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='27' id='upgrade27' /></span>
+				<span class='form'><label for='upgrade27'>QSF Portal v1.3.4</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='26' id='upgrade26' /></span>
+				<span class='form'><label for='upgrade26'>QSF Portal v1.3.3</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='25' id='upgrade25' /></span>
+				<span class='form'><label for='upgrade25'>QSF Portal v1.3.2</label></span>
+			       </span>
+
+			       <span class='half'>
+    				<div class='title'>Quicksilver Forums</div>
+
+				<span class='field'><input type='radio' name='from' value='24' id='upgrade24' /></span>
+				<span class='form'><label for='upgrade24'>QSF Portal v1.3.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='23' id='upgrade23' /></span>
+				<span class='form'><label for='upgrade23'>Quicksilver Forums v1.3.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='22' id='upgrade22' /></span>
+				<span class='form'><label for='upgrade22'>Quicksilver Forums v1.3.0</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='21' id='upgrade21' /></span>
+				<span class='form'><label for='upgrade21'>Quicksilver Forums v1.2.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='20' id='upgrade20' /></span>
+				<span class='form'><label for='upgrade20'>Quicksilver Forums v1.2.0</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='19' id='upgrade19' /></span>
+				<span class='form'><label for='upgrade19'>Quicksilver Forums v1.1.9</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='18' id='upgrade18' /></span>
+				<span class='form'><label for='upgrade18'>Quicksilver Forums v1.1.8</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='17' id='upgrade17' /></span>
+				<span class='form'><label for='upgrade17'>Quicksilver Forums v1.1.7</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='16' id='upgrade16' /></span>
+				<span class='form'><label for='upgrade16'>Quicksilver Forums v1.1.6</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='15' id='upgrade15' /></span>
+				<span class='form'><label for='upgrade15'>Quicksilver Forums v1.1.5</label></span>
+			       </span>
+
+			       <span class='half'>
+				<div class='title'>MercuryBoard</div>
+
+				<span class='field'><input type='radio' name='from' value='14' id='upgrade14' /></span>
+				<span class='form'><label for='upgrade14'>MercuryBoard v1.1.4</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='13' id='upgrade13' /></span>
+				<span class='form'><label for='upgrade13'>MercuryBoard v1.1.3</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='12' id='upgrade12' /></span>
+				<span class='form'><label for='upgrade12'>MercuryBoard v1.1.2</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='11' id='upgrade11' /></span>
+				<span class='form'><label for='upgrade11'>MercuryBoard v1.1.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='10' id='upgrade10' /></span>
+				<span class='form'><label for='upgrade10'>MercuryBoard v1.1.0</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='9' id='upgrade9' /></span>
+				<span class='form'><label for='upgrade9'>MercuryBoard v1.0.2</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='8' id='upgrade8' /></span>
+				<span class='form'><label for='upgrade8'>MercuryBoard v1.0.1</label></span>
+				<p class='line'></p>
+
+				<span class='field'><input type='radio' name='from' value='7' id='upgrade7' /></span>
+				<span class='form'><label for='upgrade7'>MercuryBoard v1.0.0</label></span>
+			       </span>
+				<p></p>
+
+				<div style='text-align:center'>
+				 <input type='submit' value='Continue' />
+				 <input type='hidden' name='mode' value='upgrade' />
+				 <input type='hidden' name='step' value='2' />
+				</div>";
+			}
+			echo "    </div>
 			    </form>\n";
 			break;
 
-		// Step 1.5 simply updates the database info
-		case 15:
-			$this->sets['db_host']   = $this->post['db_host'];
-			$this->sets['db_name']   = $this->post['db_name'];
-			$this->sets['db_user']   = $this->post['db_user'];
-			$this->sets['db_pass']   = $this->post['db_pass'];
-			$this->sets['db_port']   = $this->post['db_port'];
-			$this->sets['db_socket'] = $this->post['db_socket'];
-			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
-
-			if (!$this->write_db_sets('../settings.php')) {
-				echo 'settings.php could not be updated.<br /><br />CHMOD settings.php to 0666.';
-				break;
-			}
-			// Fall through to the next case
-
 		case 2:
-			@set_time_limit(300);
+ <div class='article'>
+  <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
+			@set_time_limit(600);
 
 			// Check to see if all upgrade files are intact
-			$check = $this->get['from'];
+			$check = $this->post['from'];
 			while ($check <= LATEST)
 			{
 				if (!is_readable("./upgrade_$check.php")) {
@@ -88,6 +251,7 @@ class upgrade extends qsfglobal
 				}
 				$check++;
 			}
+			$check = $this->post['from'];
 
 			$db = new $this->modules['database']($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
 				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix']);
@@ -116,17 +280,17 @@ class upgrade extends qsfglobal
 			$this->db   = $db;
 
 			// We can't get settings from the database unless we're already running >= 1.1.0
-			if ($this->get['from'] >= 10) {
+			if ($check >= 10) {
 				$this->sets = $this->get_settings($this->sets);
 			}
 
 			$this->perms = new $this->modules['permissions']($this);
 			$this->file_perms = new $this->modules['file_permissions']($this);
 
-			while ($this->get['from'] <= LATEST)
+			while ($check <= LATEST)
 			{
-				include "./upgrade_{$this->get['from']}.php";
-				$this->get['from']++;
+				include "./upgrade_{$check}.php";
+				$check++;
 
 				// This gets really complicated so be careful
 				if (is_bool($need_templates)) {
@@ -149,8 +313,8 @@ class upgrade extends qsfglobal
 			 * it after the board is fully upgraded.
 			 **/
 
-			if ($need_templates && !is_readable(SKIN_FILE)) {
-				echo 'No templates could be loaded from ' . SKIN_FILE;
+			if ($need_templates && !is_readable('skin_default.xml')) {
+				echo 'No templates could be loaded from skin_default.xml';
 				break;
 			}
 
@@ -161,7 +325,7 @@ class upgrade extends qsfglobal
 			// Check the default skin still exists
 			$result = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='default'");
 			if (!$result) {
-				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Ashlander3', 'default')");
+				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Ashlander 3', 'default')");
 				$full_template_list = true;
 			}
 			
@@ -174,7 +338,7 @@ class upgrade extends qsfglobal
 				$skin = $row['skin_dir'];
 
 				// QSF or MB default skin in default location
-				if (($row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
+				if (($row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Blue Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
 					if ($full_template_list || $template_list) {
 						if ($full_template_list) {
 							$template_list = null;
@@ -193,7 +357,7 @@ class upgrade extends qsfglobal
 						
 						// Create template
 						$xmlInfo = new xmlparser();
-						$xmlInfo->parse(SKIN_FILE);
+						$xmlInfo->parse('skin_default.xml');
 						$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
 						packageutil::insert_templates('default', $this->db, $templatesNode, $template_list);
 						unset($templatesNode);
@@ -201,15 +365,15 @@ class upgrade extends qsfglobal
 						
 						$didsomething = true;
 					}
-					if ($row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'Candy Corn') {
-						$this->db->query("UPDATE %pskins SET skin_name='Blue Comet' WHERE skin_dir='%s'", $skin);
+					if ($row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'Blue Comet' || $row['skin_name'] == 'Candy Corn') {
+						$this->db->query("UPDATE %pskins SET skin_name='Ashlander 3' WHERE skin_dir='%s'", $skin);
 					}
 				}
 				else
 				{
 					// Other skins
 					$xmlInfo = new xmlparser();
-					$xmlInfo->parse(SKIN_FILE);
+					$xmlInfo->parse('skin_default.xml');
 					$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
 					$temp_names = packageutil::list_templates($templatesNode);
 					$temps_to_insert = array();
@@ -369,8 +533,6 @@ class upgrade extends qsfglobal
 				}
 			}
 
-			$this->write_sets();
-
 			// New fields in forum tables need to be fixed in case the old install was a conversion
 			$this->updateForumTrees();
 			$this->RecountForums();
@@ -425,12 +587,17 @@ class upgrade extends qsfglobal
 				}
 			}
 
+			$this->sets['app_version'] = $this->version;
+			$this->write_sets();
+
 			$message ='';
 			if ($didsomething) {
 				$message = $skinsupdated . "</span>";
 			}
-			echo $message . "<br />Upgrade successful.<br />";
-			echo "<a href='../index.php'>To the portal</a>";
+			echo "$message
+			  <div class='title' style='text-align:center'>Upgrade Successful</div>
+			  <a href='../index.php'>Go to your site.</a>
+			 </div>";
 			break;
 		}
 	}

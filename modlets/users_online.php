@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,6 +58,11 @@ class users_online extends modlet
 			$date = $this->qsf->mbdate( DATE_ONLY_LONG, $this->qsf->time, false );
 			return eval($this->qsf->template('MAIN_USERS_VISITED'));
 		}
+
+		$link = "<a href=\"{$this->qsf->self}?a=active\" class=\"activeusers\">{$this->qsf->lang->main_users_online}</a>";
+		if( $this->qsf->perms->is_guest )
+			$link = $this->qsf->lang->main_users_online;
+
 		return eval($this->qsf->template('MAIN_USERS'));
 	}
 
@@ -119,7 +124,10 @@ class users_online extends modlet
 				if ($user['bot']) {
 					$allusers[] = $user['name'];
 				} else {
-					$allusers[] = "<a {$user['link']} title=\"{$user['title']}\">{$user['name']}</a>";
+					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
+						$allusers[] = "<a {$user['link']} title=\"{$user['title']}\">{$user['name']}</a>";
+					else
+						$allusers[] = $user['name'];
 				}
 				$allnames[] = $user['name'];
 			}
@@ -132,7 +140,10 @@ class users_online extends modlet
 		$which_day = date("d F Y", $this->qsf->time);
 		$today_date = strtotime("$which_day");
 
-		$query = $this->qsf->db->query( "SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= '%s' AND user_name NOT LIKE 'Guest' ORDER BY user_name", $today_date );
+		if( $this->qsf->user['user_group'] == USER_GUEST || $this->qsf->user['user_group'] == USER_AWAIT )
+			$query = $this->qsf->db->query( "SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= '%s' AND user_group !=%d AND user_group !=%d AND user_posts >= 1 ORDER BY user_name", $today_date, USER_GUEST, USER_AWAIT );
+		else
+			$query = $this->qsf->db->query( "SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= '%s' AND user_group !=%d ORDER BY user_name", $today_date, USER_GUEST );
 
 		$count_users = $this->qsf->db->num_rows($query);
 		$user_names = '';
@@ -140,9 +151,11 @@ class users_online extends modlet
 		if($count_users == '0') {
 			$title_onlinetd_table = '<strong>There have been no members online today.</strong>';
 		} else {
-			for($i=0; $i < $count_users; $i++) {
-				$user_id = mysql_result($query, $i, "user_id");
-				$user_name = mysql_result($query, $i, "user_name");
+			$i = 0;
+			while( $row = $this->qsf->db->nqfetch($query) )
+			{
+				$user_id = $row['user_id'];
+				$user_name = $row['user_name'];
 
 				if ($i == ($count_users - 1)) {
 					$comma = "";

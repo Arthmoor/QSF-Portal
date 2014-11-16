@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -54,10 +54,28 @@ error_reporting(E_ALL);
 // Check for any addons available
 include_addons($set['include_path'] . '/addons/');
 
-if (!isset($_GET['a']) || !in_array($_GET['a'], $modules['admin_modules'])) {
+/*
+ * Logic here:
+ * If 'a' is not set, but some other query is, it's a bogus request for this software.
+ * If 'a' is set, but the module doesn't exist, it's either a malformed URL or a bogus request.
+ * Otherwise $missing remains false and no error is generated later.
+ */
+$missing = false;
+if (!isset($_GET['a']) ) {
 	$module = $modules['default_admin_module'];
+	if( isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) )
+		$missing = true;
+} elseif ( !file_exists( 'sources/' . $_GET['a'] . '.php' ) ) {
+	$module = $modules['default_admin_module'];
+
+	$missing = true;
 } else {
 	$module = $_GET['a'];
+}
+
+if ( strstr($module, '/') || strstr($module, '\\') ) {
+	header('HTTP/1.0 403 Forbidden');
+	exit( 'You have been banned from this site.' );
 }
 
 require './sources/' . $module . '.php';
@@ -73,6 +91,7 @@ $admin = new $module($db);
 $admin->get['a'] = $module;
 $admin->pre      = $set['prefix'];
 $admin->sets     = $admin->get_settings($set);
+$admin->site     = $admin->sets['loc_of_board']; // Will eventually replace $admin->self once the SEO URL changes are done.
 $admin->modules  = $modules;
 $admin->user_cl  = new $admin->modules['user']($admin);
 $admin->user     = $admin->user_cl->login();
@@ -100,4 +119,9 @@ if (!$admin->nohtml) {
 } else {
 	echo $output;
 }
+@ob_end_flush();
+@flush();
+
+// Close the DB connection.
+$admin->db->close();
 ?>

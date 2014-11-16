@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,8 +252,6 @@ class post extends qsfglobal
 			 * Preview
 			 */
 			if (isset($this->post['preview']) || isset($this->post['attach']) || isset($this->post['detach'])) {
-				$quote = $this->format($this->post['post'], FORMAT_HTMLCHARS);
-
 				if (($s == 'topic') || ($s == 'poll')) {
 					$title = $this->format($this->post['title'], FORMAT_HTMLCHARS);
 					$desc  = $this->format($this->post['desc'], FORMAT_HTMLCHARS);
@@ -285,9 +283,8 @@ class post extends qsfglobal
 					$checkGlob = '';
 				}
 
-				$preview_text = $this->post['post'];
-				$quote = $this->format($preview_text, FORMAT_HTMLCHARS);
-				$preview_text = $this->format($preview_text, $params);
+				$quote = $this->format($this->post['post'], FORMAT_HTMLCHARS);
+				$preview_text = $this->format($this->post['post'], $params);
 
 				if ($title != '') {
 					$preview_title = $title;
@@ -302,15 +299,7 @@ class post extends qsfglobal
 					$signature = '';
 					$Poster_Info = eval($this->template('POST_POSTER_GUEST'));
 				} else {
-					if (($this->user['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
-						if (substr($this->user['user_avatar'], -4) != '.swf') {
-							$avatar = "<img src=\"{$this->user['user_avatar']}\" alt=\"Avatar\" width=\"{$this->user['user_avatar_width']}\" height=\"{$this->user['user_avatar_height']}\" /><br /><br />";
-						} else {
-							$avatar = "<object width=\"{$this->user['user_avatar_width']}\" height=\"{$this->user['user_avatar_height']}\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\"><param name=\"movie\" value=\"{$this->user['user_avatar']}\"><param name=\"play\" value=\"true\"><param name=\"loop\" value=\"true\"><param name=\"quality\" value=\"high\"><embed src=\"{$this->user['user_avatar']}\" width=\"{$this->user['user_avatar_width']}\" height=\"{$this->user['user_avatar_height']}\" play=\"true\" loop=\"true\" quality=\"high\"></embed></object><br /><br />";
-						}
-					} else {
-						$avatar = null;
-					}
+					$avatar = $this->htmlwidgets->display_avatar( $this->user );
 
 					if ($this->user['user_signature'] && $this->user['user_view_signatures']) {
 						$signature = '.........................<br />' . $this->format($this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
@@ -340,7 +329,7 @@ class post extends qsfglobal
 							$ext = strtolower(substr($file, -4));
 
 							if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png')) {
-								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='./attachments/$md5' alt='{$file}' />";
+								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->sets['loc_of_board']}/attachments/$md5' alt='{$file}' />";
 								continue;
 							}
 						}
@@ -486,16 +475,16 @@ class post extends qsfglobal
 				$this->sets['topics']++;
 
 				if ($s != 'poll') {
-					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes)
-						VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
+					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_type)
+						VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d, %d)",
 						$this->post['title'], $this->get['f'], $this->post['desc'], $this->user['user_id'],
-						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode);
+						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM);
 				} else {
 					$mode |= TOPIC_POLL;
-					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_poll_options) VALUES
-						('%s', %d, '%s', %d, '%s', %d, %d, %d, %d, '%s')",
+					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_type, topic_poll_options)
+						VALUES('%s', %d, '%s', %d, '%s', %d, %d, %d, %d, %d, '%s')",
 						$this->post['title'], $this->get['f'], $this->post['desc'], $this->user['user_id'],
-						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, $this->post['options']);
+						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM, $this->post['options']);
 				}
 
 				$this->get['t'] = $this->db->insert_id("topics");
@@ -535,9 +524,48 @@ class post extends qsfglobal
 			}
 			*/
 
-			$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon)
-				VALUES (%d, %d, '%s', %d, %d, %d, %d, INET_ATON('%s'), '%s')",
-				$this->get['t'], $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon']);
+			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
+			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_posts'] ) {
+				if( !$this->perms->auth('is_admin') && $this->user['user_posts'] < $this->sets['akismet_posts_number'] ) {
+					require_once $this->sets['include_path'] . '/lib/akismet.php';
+
+					$spam_checked = false;
+					$akismet = null;
+
+					try {
+						$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
+						$akismet->setCommentAuthor($this->user['user_name']);
+						$akismet->setCommentAuthorEmail($this->user['user_email']);
+						$akismet->setCommentContent($this->post['post']);
+						$akismet->setCommentType('forum-post');
+
+						$spam_checked = true;
+					}
+					// Try and deal with it rather than say something.
+					catch(Exception $e) {}
+
+					if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+						$this->log_action('Possible Spam Posted', 0, 0, 0);
+
+						// Store the contents of the entire $_SERVER array.
+						$svars = json_encode($_SERVER);
+
+						$this->db->query("INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emoticons, spam_mbcode, spam_count, spam_ip, spam_icon, spam_svars)
+							VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
+							$this->get['t'], $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars);
+
+						$this->sets['spam_post_count']++;
+						$this->sets['spam_pending']++;
+						$this->write_sets();
+
+						return $this->message( $this->lang->post_posting, $this->lang->post_akismet_posts_spam );
+					}
+				}
+			}
+
+			$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
+				VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
+				$this->get['t'], $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $this->referrer, $this->agent);
 			$post_id = $this->db->insert_id("posts");
 
 			$this->db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $this->get['t']);
@@ -546,8 +574,7 @@ class post extends qsfglobal
 				$this->db->query("UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d, user_level='%s', user_title='%s' WHERE user_id=%d",
 					$this->time, $newlevel['user_level'], $membertitle, $this->user['user_id']);
 			} else {
-				$this->db->query("UPDATE %pusers SET user_lastpost=%d WHERE user_id=%d",
-					$this->time, $this->user['user_id']);
+				$this->db->query("UPDATE %pusers SET user_lastpost=%d WHERE user_id=%d", $this->time, $this->user['user_id']);
 			}
 
 			if ($s == 'reply') {

@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ class activeutil extends forumutils
 			$item = $this->_get_item($action);
 	
 			$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
-				VALUES (%d, '%s', %d, %d, INET_ATON('%s'), '%s', '%s')",
+				VALUES (%d, '%s', %d, %d, '%s', '%s', '%s')",
 				$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid);
 			$this->doneUpdate = true; // Flag to make sure we only call once
 		}
@@ -166,7 +166,7 @@ class activeutil extends forumutils
 		$this->update($this->get['a'], $this->user_id);
 
 		$query = $this->db->query("
-			SELECT a.*, INET_NTOA(a.active_ip) as active_ip, u.user_name, u.user_active, g.group_format, f.forum_name, t.topic_title, t.topic_forum, u2.user_name AS profile_name
+			SELECT a.*, a.active_ip, u.user_name, u.user_active, g.group_format, f.forum_name, t.topic_title, t.topic_forum, u2.user_name AS profile_name
 			FROM (%pactive a, %pgroups g, %pusers u)
 			LEFT JOIN %pforums f ON f.forum_id=a.active_item
 			LEFT JOIN %ptopics t ON t.topic_id=a.active_item
@@ -197,7 +197,10 @@ class activeutil extends forumutils
 				$title = (!$this->perms->auth('post_viewip') ? null : $user['active_ip'] . ' --- ') .  htmlspecialchars($user['active_user_agent']);
 
 				if ($user['active_id'] != USER_GUEST_UID) {
-					$link = "href=\"{$this->self}?a=profile&amp;w={$user['active_id']}\"";
+					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
+						$link = "href=\"{$this->self}?a=profile&amp;w={$user['active_id']}\"";
+					else
+						$link = '';
 					$name = sprintf($user['group_format'], $user['user_name']);
 					if( !$user['user_active'] ) {
 						$name = sprintf( '<i>%s</i>', $name );

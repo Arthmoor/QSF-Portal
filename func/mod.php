@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -221,17 +221,17 @@ class mod extends qsfglobal
 		// Parameters check
 		if (!isset($this->get['p'])) {
 			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_post,  $this->lang->continue, "javascript:history.go(-1)");
+			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_post, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
-		$this->get['p'] = intval($this->get['p']);
+		$p = intval($this->get['p']);
 		$data = $this->db->fetch("SELECT p.post_text, p.post_author, p.post_emoticons, p.post_mbcode, p.post_topic, p.post_icon, p.post_time, t.topic_title, t.topic_forum, t.topic_replies,
 				u.*, m.membertitle_icon, g.group_name
 			FROM (%pposts p, %ptopics t)
 			LEFT JOIN %pusers u ON u.user_id = p.post_author
 			LEFT JOIN %pmembertitles m ON m.membertitle_id = u.user_level
 			LEFT JOIN %pgroups g ON g.group_id = u.user_group
-			WHERE t.topic_id=p.post_topic AND p.post_id=%d", $this->get['p']);
+			WHERE t.topic_id=p.post_topic AND p.post_id=%d", $p);
 
 		// Existence check
 		if (!isset($data['post_text'])) {
@@ -277,16 +277,16 @@ class mod extends qsfglobal
 			
 			// Handle attachment stuff
 			if (!isset($this->post['attached_data'])) {
-				$this->post['attached_data'] = $this->attachmentutil->build_attached_data($this->get['p']);
+				$this->post['attached_data'] = $this->attachmentutil->build_attached_data($p);
 			}
 
 			if ($this->perms->auth('post_attach', $data['topic_forum'])) {
 				// Attach
 				if (isset($this->post['attach'])) {
-					$upload_error = $this->attachmentutil->attach_now($this->get['p'], $this->files['attach_upload'], $this->post['attached_data']);
+					$upload_error = $this->attachmentutil->attach_now($p, $this->files['attach_upload'], $this->post['attached_data']);
 				// Detach
 				} elseif (isset($this->post['detach'])) {
-					$this->attachmentutil->delete_now($this->get['p'], $this->post['attached'], $this->post['attached_data']);
+					$this->attachmentutil->delete_now($p, $this->post['attached'], $this->post['attached_data']);
 				}
 
 				$this->attachmentutil->getdata($attached, $attached_data, $this->post['attached_data']);
@@ -296,8 +296,6 @@ class mod extends qsfglobal
 			 * Preview
 			 */
 			if (isset($this->post['preview']) || isset($this->post['attach']) || isset($this->post['detach'])) {
-				$quote = $this->format($this->post['post'], FORMAT_HTMLCHARS);
-
 				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
 				if (isset($this->post['code']) ) {
@@ -314,9 +312,8 @@ class mod extends qsfglobal
 					$emot_check = '';
 				}
 
-				$preview_text = $this->post['post'];
-				$quote = $this->format($preview_text, FORMAT_HTMLCHARS);
-				$preview_text = $this->format($preview_text, $params);
+				$quote = $this->format($this->post['post'], FORMAT_HTMLCHARS);
+				$preview_text = $this->format($this->post['post'], $params);
 
 				$preview_title = $this->lang->post_preview;
 
@@ -326,15 +323,7 @@ class mod extends qsfglobal
 					$signature = '';
 					$Poster_Info = eval($this->template('POST_POSTER_GUEST'));
 				} else {
-					if (($data['user_avatar_type'] != 'none') ) {
-						if (substr($data['user_avatar'], -4) != '.swf') {
-							$avatar = "<img src=\"{$data['user_avatar']}\" alt=\"Avatar\" width=\"{$data['user_avatar_width']}\" height=\"{$data['user_avatar_height']}\" /><br /><br />";
-						} else {
-							$avatar = "<object width=\"{$data['user_avatar_width']}\" height=\"{$data['user_avatar_height']}\" classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\"><param name=\"movie\" value=\"{$data['user_avatar']}\"><param name=\"play\" value=\"true\"><param name=\"loop\" value=\"true\"><param name=\"quality\" value=\"high\"><embed src=\"{$data['user_avatar']}\" width=\"{$data['user_avatar_width']}\" height=\"{$data['user_avatar_height']}\" play=\"true\" loop=\"true\" quality=\"high\"></embed></object><br /><br />";
-						}
-					} else {
-						$avatar = null;
-					}
+					$avatar = $this->htmlwidgets->display_avatar( $data );
 
 					if ($data['user_signature'] ) {
 						$signature = '.........................<br />' . $this->format($data['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
@@ -364,7 +353,7 @@ class mod extends qsfglobal
 							$ext = strtolower(substr($file, -4));
 
 							if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png')) {
-								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='./attachments/$md5' alt='{$file}' />";
+								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->sets['loc_of_board']}/attachments/$md5' alt='{$file}' />";
 								continue;
 							}
 						}
@@ -411,24 +400,24 @@ class mod extends qsfglobal
 			$emot = isset($this->post['emoticons']) ? 1 : 0;
 			$code = isset($this->post['code']) ? 1 : 0;
 
-			$this->log_action('post_edit', $this->get['p']);
+			$this->log_action('post_edit', $p);
 			$icon = isset($this->post['icon']) ? $this->post['icon'] : '';
 			if( $icon == 'None' )
 				$icon = '';
 
 			$this->db->query("UPDATE %pposts SET post_text='%s', post_emoticons=%d, post_mbcode=%d, post_edited_by='%s', post_edited_time=%d, post_icon='%s' WHERE post_id=%d",
-				$this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $icon, $this->get['p']);
+				$this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $icon, $p);
 
 			$first = $this->db->fetch( "SELECT p.post_id
 			 FROM %pposts p, %ptopics t
 			 WHERE p.post_topic=t.topic_id AND t.topic_id=%d
 			 ORDER BY p.post_time LIMIT 1", $data['post_topic'] );
 
-			if ($first['post_id'] == $this->get['p']) {
+			if ($first['post_id'] == $p) {
 				$this->db->query( "UPDATE %ptopics SET topic_icon='%s' WHERE topic_id='%d'", $icon, $data['post_topic'] );
 			}
 
-			$jump = '&amp;p=' . $this->get['p'] . '#p' . $this->get['p'];
+			$jump = '&amp;p=' . $p . '#p' . $p;
 
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_success_post_edit, $this->lang->continue, "{$this->self}?a=topic&amp;t={$data['post_topic']}$jump", "$this->self?a=topic&t={$data['post_topic']}$jump");
 		}
@@ -624,15 +613,20 @@ class mod extends qsfglobal
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_no_post,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
-		$this->get['p'] = intval($this->get['p']);
-		$post = $this->db->fetch("SELECT p.post_id, p.post_author, p.post_topic, p.post_time, t.topic_id, t.topic_forum
+		$spam = false;
+		if( isset($this->get['c']) )
+			$spam = true;
+
+		$p = intval($this->get['p']);
+		$post = $this->db->fetch("SELECT p.post_id, p.post_author, p.post_topic, p.post_time, p.post_text, p.post_ip, p.post_referrer, p.post_agent,
+			t.topic_id, t.topic_forum, t.topic_replies
 			FROM %pposts p,	%ptopics t
-			WHERE p.post_id=%d AND p.post_topic=t.topic_id", $this->get['p']);
+			WHERE p.post_id=%d AND p.post_topic=t.topic_id", $p );
 
 		// Existence check
 		if (!isset($post['post_id'])) {
 			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_post,  $this->lang->continue, "javascript:history.go(-1)");
+			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_post, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
 		$first = $this->db->fetch("SELECT p.post_id
@@ -640,7 +634,7 @@ class mod extends qsfglobal
 			WHERE p.post_topic=t.topic_id AND t.topic_id=%d
 			ORDER BY p.post_time LIMIT 1", $post['topic_id']);
 
-		if ($first['post_id'] == $this->get['p']) {
+		if ($first['post_id'] == $p && !$spam) {
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_error_first_post);
 		}
 
@@ -665,7 +659,10 @@ class mod extends qsfglobal
 
 		// Confirmation check
 		if (!isset($this->get['confirm'])) {
-			return $this->message($this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete, $this->lang->continue, "$this->self?a=mod&amp;s=del_post&amp;p={$this->get['p']}&amp;confirm=1");
+			if( !$spam )
+				return $this->message($this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete, $this->lang->continue, "$this->self?a=mod&amp;s=del_post&amp;p=$p&amp;confirm=1");
+			else
+				return $this->message($this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete_spam, $this->lang->continue, "$this->self?a=mod&amp;s=del_post&amp;p=$p}&amp;confirm=1&amp;c=spam");
 		}
 
 		$prev = $this->db->fetch("SELECT MAX(p.post_id) AS prev_post FROM %pposts p
@@ -674,9 +671,37 @@ class mod extends qsfglobal
 		  
 		$jump = '&amp;p=' . $prev['prev_post'] . '#p' . $prev['prev_post'];
 
-		$this->htmlwidgets->delete_post($this->get['p']);
+		if( $spam ) {
+			// Time to report the spammer before we delete the post. Hopefully this is enough info to strike back with.
+			$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $post['post_author'] );
+			require_once $this->sets['include_path'] . '/lib/akismet.php';
+			$akismet = new Akismet($this->settings['site_address'], $this->settings['wordpress_api_key'], $this->version);
+			$akismet->setCommentAuthor($user['user_name']);
+			$akismet->setCommentContent($post['post_text']);
+			$akismet->setUserIP($post['post_ip']);
+			$akismet->setReferrer($post['post_referrer']);
+			$akismet->setUserAgent($post['post_agent']);
+			$akismet->setCommentType('QSFP Forum Post');
 
-		$this->log_action('post_delete', $this->get['p']);
+			$akismet->submitSpam();
+
+			$this->sets['spam_post_count']++;
+			$this->sets['spam_false_count']++;
+			$this->write_sets();
+		}
+
+		$this->htmlwidgets->delete_post($p);
+
+		if( $spam ) {
+			$this->log_action('spam_delete', $p);
+
+			// Torch topic along with post if it's the only one.
+			if ($post['topic_replies'] == 0) {
+				$this->htmlwidgets->delete_topic($post['post_topic']);
+			}
+		} else {
+			$this->log_action('post_delete', $p);
+		}
 
 		return $this->message($this->lang->mod_label_controls, $this->lang->mod_success_post_delete, $this->lang->continue, "{$this->self}?a=topic&amp;t={$post['topic_id']}$jump", "$this->self?a=topic&t={$post['topic_id']}$jump");
 	}
@@ -805,7 +830,7 @@ class mod extends qsfglobal
 		}
 
 		if (!isset($this->post['submitsplit'])) {
-			$posttarget = htmlspecialchars(serialize($this->post['posttarget']));
+			$posttarget = htmlspecialchars(json_encode($this->post['posttarget']));
 
 			$display[1] = in_array('1', $this->post['posttarget']) ? '' : 'display:none';
 			$display[2] = in_array('2', $this->post['posttarget']) ? '' : 'display:none';
@@ -815,7 +840,7 @@ class mod extends qsfglobal
 			$topic['topic_title'] = $this->format($topic['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS);
 			return eval($this->template('MOD_SPLIT_TOPIC'));
 		} else {
-			$posttarget = unserialize($this->post['posttarget']);
+			$posttarget = json_decode($this->post['posttarget'], true);
 			$where = array();
 			$moved = 0;
 
@@ -885,10 +910,7 @@ class mod extends qsfglobal
 		}
 
 		$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
-		$iplist = $this->db->query( "SELECT INET_NTOA(post_ip) as post_ip
-			FROM %pposts
-			WHERE post_author=%d
-			GROUP BY post_ip", $id );
+		$iplist = $this->db->query( "SELECT post_ip FROM %pposts WHERE post_author=%d GROUP BY post_ip", $id );
 
 		$out = '';
 		while( $ip = $this->db->nqfetch($iplist) )

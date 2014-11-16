@@ -1,8 +1,8 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,7 +49,7 @@ class filerating extends qsfglobal
 
                 $this->nohtml = true;
                 $this->templater->debug_mode = false; // This is a stripped pop-up window.
-		$rating = "";
+		$rating = '';
 
 		if (!isset($this->get['f'])) {
 			header('HTTP/1.0 404 Not Found');

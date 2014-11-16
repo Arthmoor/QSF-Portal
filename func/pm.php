@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -244,13 +244,13 @@ class pm extends qsfglobal
 				$ok_pm[] = $who['user_id'];
 
 				$this->db->query("INSERT INTO %ppmsystem (pm_to, pm_from, pm_ip, pm_title, pm_time, pm_message, pm_folder)
-					VALUES (%d, %d, INET_ATON('%s'), '%s', %d, '%s', 0)",
+					VALUES (%d, %d, '%s', '%s', %d, '%s', 0)",
 					$who['user_id'], $this->user['user_id'], $this->ip, $this->post['title'], $this->time, $this->post['message']);
 
 				$message_id = $this->db->insert_id("pmsystem");
 				if ($who['user_pm_mail']) {
 					$message  = "{$this->sets['forum_name']}\n";
-					$message .= "{$this->sets['loc_of_board']}{$this->mainfile}?a=pm&s=view&m={$message_id}\n\n";
+					$message .= "{$this->site}/index.php?a=pm&s=view&m={$message_id}\n\n";
 					$message .= $this->user['user_name'] . " " . $this->lang->pm_sent_mail . "\n\n";
 					$message .= $this->lang->pm_title . ": " . $this->format($this->post['title'], FORMAT_CENSOR);
 
@@ -261,7 +261,7 @@ class pm extends qsfglobal
 			}
 
 			$this->db->query("INSERT INTO %ppmsystem (pm_to, pm_from, pm_ip, pm_bcc, pm_title, pm_time, pm_message, pm_folder, pm_read)
-				VALUES (%d, %d, INET_ATON('%s'), '%s', '%s', %d, '%s', 1, 1)",
+				VALUES (%d, %d, '%s', '%s', '%s', %d, '%s', 1, 1)",
 				$this->user['user_id'], $this->user['user_id'], $this->ip, implode(';', $ok_pm), $this->post['title'], $this->time, $this->post['message']);
 			$this->db->query("UPDATE %pusers SET user_lastpm=%d WHERE user_id=%d", $this->time, $this->user['user_id']);
 
@@ -299,15 +299,7 @@ class pm extends qsfglobal
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_noview);
 		}
 
-		if (($pm['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
-			if (substr($pm['user_avatar'], -4) != '.swf') {
-				$pm['user_avatar'] = "<img src='{$pm['user_avatar']}' alt='{$this->lang->pm_avatar}' width='{$pm['user_avatar_width']}' height='{$pm['user_avatar_height']}' /><br /><br />";
-			} else {
-				$pm['user_avatar'] = "<object width='{$pm['user_avatar_width']}' height='{$pm['user_avatar_height']}' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'><param name='movie' value='{$pm['user_avatar']}'><param name='play' value='true'><param name='loop' value='true'><param name='quality' value='high'><embed src='{$pm['user_avatar']}' width='{$pm['user_avatar_width']}' height='{$pm['user_avatar_height']}' play='true' loop='true' quality='high'></embed></object><br /><br />";
-			}
-		} else {
-			$pm['user_avatar'] = null;
-		}
+		$pm['user_avatar'] = $this->htmlwidgets->display_avatar( $pm );
 
 		if ($pm['user_signature'] && $this->user['user_view_signatures']) {
 			$pm['user_signature'] = '.........................<br />' . $this->format($pm['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);

@@ -49,32 +49,15 @@ Roger Libiez [Samson] http://www.iguanadons.net
 ====================
 
 Roger Libiez [Samson], Davion, Asylumius
-    * Files and Fileratings, and other support modlets for QSF Portal.
+    * Things too numerous to mention now!
 
 KingOfSka
     * Top Posters and Top Uploaders modlets
 
-======================
+Mark James
+    * All of the icons scattered about the skin. Excellent work. See his credits file in skins/default/images/icons
 
-Translations are maintained by:
-    * Bulgarian, Vratza Online <info at vratza.com>
-    * Chinese, Anonymous
-    * Czech, Yarda Horák <replay69 at seznam.cz>
-    * Dutch, Martijn Meijer <qw70 at hotmail.com>
-    * English, Jason Warner <jason at mercuryboard.com>
-    * Finnish, Vesa Piittinen <vesa at merri.net>
-    * French, Stephane Revel <st_garp98 at hotmail.com>
-    * German, Ralf Krienke <myself at brain666.de>
-    * Hebrew, Anonymous
-    * Hungarian, Szász Attila <helpdesk at maximedia.hu>
-    * Indonesian, Deco <deco1895 at yahoo.com>
-    * Italian, Filippo Bovo <ikari at ctonet.it>
-    * Norwegian, JGS <sag1 at online.no>
-    * Portuguese, Miguel Garcia <info at cisiodon.com.br>
-    * Russian, Alexey Loshkarev <elf at pechkin.ru>
-    * Slovak, Anonymous
-    * Spanish, Oscar Puertas <info at sitiosmexico.net>
-    * Swedish, Markus Höglund <markus at pidelipom.com>
+======================
 
 Many thanks to:
     * Our users for the consistent support of the project
@@ -82,5 +65,6 @@ Many thanks to:
     * The community and moderating team at mercuryboard.com
     * The phpMyAdmin team for their fantastic tool, which was heavily used
       during development
-    * The JpGraph team for allowing us to use their PHP graphing library
     * Sunsite.dk for free CVS hosting
+    * The Webmin team for their awesome administration tool that aided greatly in further development.
+    * Google Code for their free project hosting.

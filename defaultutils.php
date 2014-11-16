@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,40 +59,6 @@ $modules['active'] = 'activeutil';
 // Other variables that we can allow addons to change
 $modules['default_module'] = 'main';
 $modules['default_admin_module'] = 'home';
-$modules['public_modules'] = array(
-	'help',
-	'jsdata',
-	'jslang',
-	'post',
-	'register',
-	'login',
-	'forum',
-	'topic');
-$modules['admin_modules'] = array(
-	'backup',
-	'ban',
-	'censoring',
-	'cms',
-	'db_repair',
-	'emot_control',
-	'file_perms',
-	'forums',
-	'groups',
-	'help',
-	'Admin',
-	'logs',
-	'mass_mail',
-	'membercount',
-	'member_control',
-	'optimize',
-	'perms',
-	'php_info',
-	'prune',
-	'query',
-	'settings',
-	'stats',
-	'templates',
-	'titles');
 
 // These are generic enough that you shouldn't need to customise them
 require_once $set['include_path'] . '/lib/modlet.php';

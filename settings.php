@@ -7,11 +7,11 @@ if (!defined('QUICKSILVERFORUMS')) {
 
 $set = array();
 $set['db_host'] = 'localhost';
-$set['db_name'] = '';
-$set['db_pass'] = '';
-$set['db_port'] = '3306';
+$set['db_name'] = 'DB_NAME';
+$set['db_pass'] = 'DB_PASS';
+$set['db_port'] = '';
 $set['db_socket'] = '';
-$set['db_user'] = '';
+$set['db_user'] = 'DB_USER';
 $set['dbtype'] = 'mysql';
 $set['installed'] = '0';
 $set['prefix'] = 'qsfp_';

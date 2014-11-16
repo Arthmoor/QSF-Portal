@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -64,7 +64,7 @@ class rssfeed extends qsfglobal
 		
 		$feed = null;
 		
-		$this->link = "{$this->sets['loc_of_board']}{$this->mainfile}?a=rssfeed";
+		$this->link = "{$this->site}/index.php?a=rssfeed";
 		
 		if (isset($this->get['f'])) {
 			$f = intval($this->get['f']);
@@ -303,9 +303,12 @@ class rssfeed extends qsfglobal
 	 **/
 	function generate_files_feed()
 	{
+		$items = '';
+
 		$cat_str = $this->create_category_permissions_string();
 
-		$query = $this->db->query( "SELECT
+		if( $cat_str != '' ) {
+			$query = $this->db->query( "SELECT
 				f.file_id,
 				f.file_name,
 				f.file_description,
@@ -327,12 +330,11 @@ class rssfeed extends qsfglobal
 			LIMIT %d",
 			$cat_str, $this->sets['rss_feed_posts']);
 
-		$items = '';
-		while( $row = $this->db->nqfetch( $query ) )
-		{
-			$items .= $this->get_file($row);
+			while( $row = $this->db->nqfetch( $query ) )
+			{
+				$items .= $this->get_file($row);
+			}
 		}
-
 		Header( 'Content-type: text/xml', 1 );
 		return eval($this->template('RSSFEED_ALL_POSTS'));
 	}
@@ -358,6 +360,9 @@ class rssfeed extends qsfglobal
 
 		$cat_name = $this->format( $query_row['fcat_name'], FORMAT_CENSOR );
 		$cat_name = htmlspecialchars( $cat_name );
+
+		$fid = $query_row['file_id'];
+		$furl = $this->clean_url( $title );
 
 		$user_email = '';
 		if ($query_row['user_email_show']) {

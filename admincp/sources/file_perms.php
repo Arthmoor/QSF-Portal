@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -134,15 +134,13 @@ class file_perms extends admin
 
 			$out .= $this->show_headers($cats_list);
 
-			$this->iterator_init('tablelight', 'tabledark');
-
 			$i = 0;
 			foreach ($perms as $perm => $label)
 			{
 				$out .= "
 				<tr>
-					<td class='" . $this->iterate() . "'>$label</td>
-					<td class='" . $this->lastValue() . "' align='center'>
+					<td>$label</td>
+					<td align='center'>
 						<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All
 					</td>";
 
@@ -155,10 +153,10 @@ class file_perms extends admin
 							$checked = '';
 						}
 
-						$out .= "\n<td class='" . $this->lastValue() . "' align='center'><input type='checkbox' name='perms[$perm][{$cat['fcat_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked /></td>";
+						$out .= "\n<td align='center'><input type='checkbox' name='perms[$perm][{$cat['fcat_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked /></td>";
 					}
 				} elseif ($cats_list) {
-					$out .= "\n<td class='" . $this->lastValue() . "' colspan='$count' align='center'>N/A</td>";
+					$out .= "\n<td colspan='$count' align='center'>N/A</td>";
 				}
 
 				$out .= "

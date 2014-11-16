@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,8 +166,6 @@ class perms extends admin
 				<td colspan='8' class='header'>{$this->lang->perms_global}</td>
 			</tr>";
 
-			$this->iterator_init('tablelight', 'tabledark');
-
 			$globals = array();
 			$locals = array();
 
@@ -180,20 +178,19 @@ class perms extends admin
 
 			$i = 0;
 			$out .= "<tr>\n";
-			$this->iterate();
+
 			foreach ($globals as $perm => $label)
 			{
-				$out .= "<td class='" . $this->lastValue() . "' style='width:15%'>$label</td>\n" . "<td class='" . $this->lastValue() . "' align='center'>\n" . 
+				$out .= "<td style='width:15%'>$label</td>\n<td align='center'>\n" . 
 					"<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All\n" .
 					"</td>\n";
 				if ( ++$i == 4 ) {
 					$i = 0;
-					$out .= "</tr><tr>";
-					$this->iterate();
+					$out .= '</tr><tr>';
 				}					
 			}
 			while ( $i++ < 4 ) {
-				$out .= "<td class='" . $this->lastValue() . "'></td><td class='" . $this->lastValue() . "'></td>";
+				$out .= "<td></td><td></td>";
 			}
 			$out .= "</tr>";
 			$out .= "<tr>
@@ -215,19 +212,18 @@ class perms extends admin
 					$out .= "<td class='subheader'></td>";
 				$out .= "</tr>";
 				foreach ($forums_list as $forum) {
-					$shade = $this->iterate();
 					$out .= "<tr>\n";
-					$out .= "  <td class='$shade'>{$forum['forum_name']}</td>\n";
+					$out .= "  <td>{$forum['forum_name']}</td>\n";
 					$i = 0;
 					foreach( $perms_chunk as $perm => $label ) {
 						$checked = ($perms_obj->auth($perm, $forum['forum_id'])) ? " checked='checked'" : '';
-						$out .= "  <td class='$shade' align='center'>\n";
+						$out .= "  <td align='center'>\n";
 						$out .= "    <input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked />\n";
 						$out .= "  </td>\n";
 						$i++;
 					}
 					while( $i++ < count($chunks[0]) )
-						$out .= "<td class='$shade'></td>";
+						$out .= "<td></td>";
 					$out .= "</tr>\n";
 				}
 			}

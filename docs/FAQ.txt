@@ -1,6 +1,6 @@
---------------------------------
+------------------------
 == FAQ for QSF Portal ==
---------------------------------
+------------------------
 
 === GENERAL ===
 
@@ -8,10 +8,11 @@
 * A. QSF Portal is a community portal and lightweight CMS system written in PHP and MySQL. It is based on Quicksilver Forums.
 
 * Q. Ok, so what is Quicksilver Forums?
-* A. Quicksilver Forums is a bulletin board system written in PHP and MySQL. It is based on the MercuryBoard code. http://www.quicksilverforums.com/
+* A. Quicksilver Forums is a bulletin board system written in PHP and MySQL. It is based on the MercuryBoard code. http://code.google.com/p/quicksilverforums/
 
 * Q. Fine, then what is MercuryBoard?
-* A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. MercuryBoard is a lightweight, fast, PHP and MySQL forum script. http://www.mercuryboard.com/
+* A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. MercuryBoard is a lightweight, fast, PHP and MySQL forum script.
+     https://github.com/markelliot/MercuryBoard
 
 === INSTALLATION ===
 
@@ -37,12 +38,7 @@
 * A. Generally no. They can be useful for advanced operators of live/test sites.
 
 * Q. How do i allow guests to post?
-* A. Change their permissions in "admin cp -> Edit a group's permissions" to allow "Create polls", "Create replies" and "Create topics" in specified forums.
-
-=== OPERATION ===
-
-* Q. The board is blank or garbled.
-* A. In your Admin CP, go to Edit Board Settings and disable GZIP. 
+* A. Change their permissions in "admin cp -> Edit a group's permissions" to allow "Create polls", "Create replies" and "Create topics" in specified forums. This is probably not a good idea though as it would give any spam bots that slip through a free pass at posting their garbage to your site.
 
 === ADVANCED ===
 
@@ -56,13 +52,7 @@
 * A. Visit the website, search to see if someone found it already, if not then report what happened and how to repeat it.
 
 * Q. Can I help the QSF Portal team?
-* A. Visit the website and jump right in. It's an open house party!
+* A. Visit the project website and jump right in. It's an open house party! https://github.com/Arthmoor/QSF-Portal
 
 * Q. How much of the code do QSF and QSF Portal share in common?
 * A. A lot. Many things which affect the QSF code also affect the QSF Portal code, and to some extent both are still affected by things they share in common with MercuryBoard.
-
-If you need further help please go to:
-http://www.qsfportal.com/index.php?a=forum&f=7
-
-Or you can also visit:
-http://forums.quicksilverforums.com/index.php?a=forum&f=7

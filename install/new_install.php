@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,6 +31,10 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
+if ( isset( $_POST['dbtype'] ) )
+	$set['dbtype'] = $_POST['dbtype'];
+
+require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
 require_once $set['include_path'] . '/lib/xmlparser.php';
 require_once $set['include_path'] . '/lib/packageutil.php';
@@ -42,29 +46,129 @@ require_once $set['include_path'] . '/lib/packageutil.php';
  */
 class new_install extends qsfglobal
 {
-	function install_board( $step )
+	function server_url()
+	{
+	   $proto = "http" .
+		   ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
+	   $server = isset($_SERVER['HTTP_HOST']) ?
+		   $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+	   return $proto . $server;
+	}
+
+	function install_board( $step, $mysqli )
 	{
 		switch($step) {
 		default:
 			$url = preg_replace('/install\/?$/i', '', $this->server_url() . dirname($_SERVER['PHP_SELF']));
 
-			echo "<form action='{$this->self}?mode=new_install&amp;step=2' method='post'>
-                              <table border='0' cellpadding='4' cellspacing='0'>\n";
+echo "<form action='{$this->self}?mode=new_install&amp;step=2' method='post'>
+ <div class='article'>
+  <div class='title' style='text-align:center'>New {$this->name} Installation</div>
+  <div class='title'>Directory Permissions</div>";
 
 			check_writeable_files();
+			if(!is_writeable('../settings.php')) {
+				echo "<br /><br />Settings file cannot be written to. The installer cannot continue until this problem is corrected.";
+				break;
+			}
 
-			include 'templates/newdatabase.php';
-			include 'templates/newboardsettings.php';
-			include 'templates/newadmin.php';
-			include 'templates/newseeddata.php';
-			echo "<tr>
-                         <td class='subheader' colspan='2' align='center'><input type='submit' value='Continue' /></td>
-                         </tr>
-                         </table>
-                         </form>";
-			break;
+echo "    <p></p>
+  <div class='title' style='text-align:center'>New Database Configuration</div>
+
+  <span class='field'>Host Server:</span>
+  <span class='form'><input class='input' type='text' name='db_host' value='{$this->sets['db_host']}' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Database Type:</span>
+  <span class='form'>";
+  if ($mysqli) {
+    echo 'MySQLi';
+  } else {
+    echo 'MySQL';
+  }
+  echo "</span>
+  <p class='line'></p>
+
+  <span class='field'>Database Name:</span>
+  <span class='form'><input class='input' type='text' name='db_name' value='{$this->sets['db_name']}' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Database Username:</span>
+  <span class='form'><input class='input' type='text' name='db_user' value='{$this->sets['db_user']}' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Database Password:</span>
+  <span class='form'><input class='input' type='password' name='db_pass' value='' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Table Prefix:</span>
+  <span class='form'>
+   <input class='input' type='text' name='prefix' value='{$this->sets['prefix']}' /> This should only be changed if you need to install multiple QSFP sites in the same database.
+  </span>
+  <p class='line'></p>
+
+  <span class='field'>Database Port:</span>
+  <span class='form'><input class='input' type='text' name='db_port' value='{$this->sets['db_port']}' /> Blank for none</span>
+  <p class='line'></p>
+
+  <span class='field'>Database Socket:</span>
+  <span class='form'><input class='input' type='text' name='db_socket' value='{$this->sets['db_socket']}' /> Blank for none</span>
+  <p></p>
+
+  <div class='title' style='text-align:center'>New Site Settings</div>
+
+  <span class='field'>Site Name:</span>
+  <span class='form'><input class='input' type='text' name='site_name' value='{$this->name}' size='75' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Site URL:</span>
+  <span class='form'><input class='input' type='text' name='site_url' value='{$url}' size='75' /></span>
+  <p></p>
+
+  <div class='title' style='text-align:center'>Administrator Account Settings</div>
+
+  <span class='field'>User Name:</span>
+  <span class='form'><input class='input' type='text' name='admin_name' size='30' maxlength='30' /></span>
+  <p class='line'></p>
+
+  <span class='field'>User Password:</span>
+  <span class='form'><input class='input' type='password' name='admin_pass' size='30' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Password (confirmation):</span>
+  <span class='form'><input class='input' type='password' name='admin_pass2' size='30' /></span>
+  <p class='line'></p>
+
+  <span class='field'>Contact Email:</span>
+  <span class='form'>
+   <input class='input' type='text' name='admin_email' size='50' maxlength='100' value='{$this->sets['admin_email']}' />
+   This is where messages from the system will be sent. Needs to be a real address.
+  </span>
+  <p class='line'></p>
+
+  <span class='field'>System Email:</span>
+  <span class='form'>
+   <input class='input' type='text' name='contact_email' size='50' maxlength='100' />
+   Address the system sends mail as. Can be either real or fake.
+  </span>
+  <p class='line'></p>
+
+  <div style='text-align:center'>";
+
+  if ($mysqli) {
+    echo "<input type='hidden' name='dbtype' value='mysqli' />";
+  } else {
+    echo "<input type='hidden' name='dbtype' value='mysql' />";
+  }
+
+  echo "<input type='submit' name='submit' value='Continue' /></div>
+ </div>
+</form>";
+break;
 
 		case 2:
+  echo "<div class='article'>
+  <div class='title'>New {$this->name} Installation</div>";
 			$db = new $this->modules['database']($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
 
 			if (!$db->connection) {
@@ -79,6 +183,7 @@ class new_install extends qsfglobal
 			$this->sets['db_name']   = $this->post['db_name'];
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
+			$this->sets['dbtype']    = $this->post['dbtype'];
 			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
 
 			if (!$this->write_db_sets('../settings.php') && !isset($this->post['downloadsettings'])) {
@@ -95,29 +200,27 @@ class new_install extends qsfglobal
 					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars($this->post['db_port']) . "\" />\n
 					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars($this->post['db_socket']) . "\" />\n
 					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars($this->post['prefix']) . "\" />\n
-					<input type=\"hidden\" name=\"board_name\" value=\"" . htmlspecialchars($this->post['board_name']) . "\" />\n
-					<input type=\"hidden\" name=\"board_url\" value=\"" . htmlspecialchars($this->post['board_url']) . "\" />\n
+					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['dbtype']) . "\" />\n
+					<input type=\"hidden\" name=\"site_name\" value=\"" . htmlspecialchars($this->post['site_name']) . "\" />\n
+					<input type=\"hidden\" name=\"site_url\" value=\"" . htmlspecialchars($this->post['site_url']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_name\" value=\"" . htmlspecialchars($this->post['admin_name']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_pass\" value=\"" . htmlspecialchars($this->post['admin_pass']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_pass2\" value=\"" . htmlspecialchars($this->post['admin_pass2']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_email\" value=\"" . htmlspecialchars($this->post['admin_email']) . "\" />\n
 					";
-				if (isset($this->post['seed_data']) && $this->post['seed_data']) {
-					echo "<input type=\"hidden\" name=\"seed_data\" value=\"yes\" />\n";
-				}
 				echo "<input type=\"submit\" value=\"Force Install\" />
 					</form>
 					 ";
 				break;
 			}
 
-			if (!is_readable('./data_tables.php')) {
-				echo 'Database connected, settings written, but no tables could be loaded from file: data_tables.php';
+			if (!is_readable('./' . $this->sets['dbtype'] . '_data_tables.php')) {
+				echo 'Database connected, settings written, but no tables could be loaded from file: ./' . $this->sets['dbtype'] . '_data_tables.php';
 				break;
 			}
 
-			if (!is_readable(SKIN_FILE)) {
-				echo 'Database connected, settings written, but no templates could be loaded from file: ' . SKIN_FILE;
+			if (!is_readable('skin_default.xml')) {
+				echo 'Database connected, settings written, but no templates could be loaded from file: skin_default.xml';
 				break;
 			}
 
@@ -133,32 +236,27 @@ class new_install extends qsfglobal
 				break;
 			}
 
-			if (isset($this->post['seed_data']) && $this->post['seed_data'] && !is_readable('./seed_data.php')) {
-				echo 'Database connected, settings written, but no seed data could be loaded from file: seed_data.php';
-				break;
-			}
-
 			$queries = array();
 			$pre = $this->sets['prefix'];
 			$this->pre = $this->sets['prefix'];
 
 			// Create tables
-			include './data_tables.php';
+			include './' . $this->sets['dbtype'] . '_data_tables.php';
 
 			execute_queries($queries, $db);
 			$queries = null;
 			
 			// Create template
 			$xmlInfo = new xmlparser();
-			$xmlInfo->parse(SKIN_FILE);
+			$xmlInfo->parse('skin_default.xml');
 			$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
 			packageutil::insert_templates('default', $this->db, $templatesNode);
 			unset($templatesNode);
 			$xmlInfo = null;
 
 			$this->sets = $this->get_settings($this->sets);
-			$this->sets['loc_of_board'] = $this->post['board_url'];
-			$this->sets['forum_name'] = $this->post['board_name'];
+			$this->sets['loc_of_board'] = $this->post['site_url'];
+			$this->sets['forum_name'] = $this->post['site_name'];
 
 			$this->post['admin_pass'] = md5($this->post['admin_pass']);
 
@@ -168,49 +266,165 @@ class new_install extends qsfglobal
 				htmlspecialchars($this->post['admin_name'])
 			);
 
-			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone)
-				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', %d)",
-				$this->post['admin_name'], $this->post['admin_pass'], USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime']);
+			$this->sets['spam_post_count'] = 0;
+			$this->sets['spam_email_count'] = 0;
+			$this->sets['spam_reg_count'] = 0;
+			$this->sets['spam_sig_count'] = 0;
+			$this->sets['spam_profile_count'] = 0;
+			$this->sets['ham_count'] = 0;
+			$this->sets['spam_false_count'] = 0;
+			$this->sets['spam_pending'] = 0;
+			$this->sets['wordpress_api_key'] = '';
+			$this->sets['akismet_email'] = 0;
+			$this->sets['akismet_ureg'] = 0;
+			$this->sets['akismet_sigs'] = 0;
+			$this->sets['akismet_posts'] = 0;
+			$this->sets['akismet_posts_number'] = 5;
+			$this->sets['akismet_profiles'] = 0;
+
+			$this->sets['attach_types'] = array('jpg', 'gif', 'png', 'bmp', 'zip', 'tgz', 'gz', 'rar', '7z');
+			$this->sets['attach_upload_size'] = 51200;
+			$this->sets['avatar_height'] = 100;
+			$this->sets['avatar_upload_size'] = 51200;
+			$this->sets['avatar_width'] = 100;
+			$this->sets['banned_ips'] = array();
+			$this->sets['edit_post_age'] = 0;
+			$this->sets['closed'] = 0;
+			$this->sets['closedtext'] = 'This site is currently down for maintenance. Please check back later.';
+
+			$server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+			$this->sets['cookie_domain'] = $server;
+
+			$path = dirname($_SERVER['PHP_SELF']);
+			$path = str_replace( 'install', '', $path );
+			$this->sets['cookie_path'] = $path;
+
+			$this->sets['cookie_prefix'] = 'qsfp_';
+			$this->sets['cookie_secure'] = 0;
+
+			$this->sets['emailactivation'] = 1;
+			$this->sets['flood_time'] = 30;
+			$this->sets['hot_limit'] = 20;
+			$this->sets['link_target'] = '_blank';
+			$this->sets['logintime'] = 31536000;
+			$this->sets['mailserver'] = 'localhost';
+			$this->sets['max_load'] = 0;
+			$this->sets['analytics_id'] = '';
+			$this->sets['mostonline'] = 0;
+			$this->sets['mostonlinetime'] = 0;
+			$this->sets['posts'] = 0;
+			$this->sets['posts_per_page'] = 15;
+			$this->sets['register_image'] = 0;
+			$this->sets['servertime'] = 0;
+			$this->sets['topics'] = 0;
+			$this->sets['topics_per_page'] = 20;
+			$this->sets['vote_after_results'] = 0;
+			$this->sets['default_skin'] = 'default';
+			$this->sets['default_email_shown'] = 0;
+			$this->sets['default_lang'] = 'en';
+			$this->sets['default_group'] = 2;
+			$this->sets['default_timezone'] = 0;
+			$this->sets['default_pm'] = 1;
+			$this->sets['default_view_avatars'] = 1;
+			$this->sets['default_view_sigs'] = 1;
+			$this->sets['default_view_emots'] = 1;
+			$this->sets['flood_time_pm'] = 30;
+			$this->sets['flood_time_search'] = 10;
+			$this->sets['spider_active'] = 1;
+			$this->sets['spider_name'] = array(
+				'googlebot' 	=> 'Google',
+				'yahoo'		=> 'Yahoo!',
+				'bingbot'	=> 'Bing'
+			);
+			$this->sets['debug_mode'] = 0;
+			$this->sets['file_count'] = 0;
+			$this->sets['file_approval'] = 0;
+			$this->sets['code_approval'] = 0;
+			$this->sets['rss_feed_title'] = '';
+			$this->sets['rss_feed_desc'] = '';
+			$this->sets['rss_feed_posts'] = 5;
+			$this->sets['rss_feed_time'] = 60;
+			$this->sets['registrations_allowed'] = 1;
+
+			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height)
+				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', %d, '%s', '%s', %d, %d)",
+				$this->post['admin_name'], $this->post['admin_pass'], USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime'], './avatars/avatar.jpg', 'local', 100, 100);
 			$admin_uid = $this->db->insert_id("users");
 
 			$this->sets['last_member'] = $this->post['admin_name'];
 			$this->sets['last_member_id'] = $admin_uid;
 			$this->sets['admin_incoming'] = $this->post['admin_email'];
-			$this->sets['admin_outgoing'] = $this->post['admin_email'];
+			$this->sets['admin_outgoing'] = $this->post['contact_email'];
 			$this->sets['admin_email'] = $this->post['admin_email'];
-			$this->sets['members']++;
+			$this->sets['members'] = 1;
 			$this->sets['installed'] = 1;
+			$this->sets['app_version'] = $this->version;
 
-			if (isset($this->post['seed_data']) && $this->post['seed_data']) {
-				include './seed_data.php';
-								
-				// Create Category
-				$categoryId = $this->create_forum($categoryName, $categoryDesc, 0);
-				
-				// Create Forum
-				$forumId = $this->create_forum($forumName, $forumDesc, $categoryId);
-				
-				// Create Topic
-				$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 
-					VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
-					$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, TOPIC_PUBLISH);
-				$topicId = $this->db->insert_id("topics");
-				
-				// Create Post
-				$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_ip, post_icon)
-					VALUES (%d, %d, '%s', %d, 1, 1, INET_ATON('%s'), '%s')",
-					$topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon);
-				$postId = $this->db->insert_id("posts");
-				
-				$this->db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $postId, $topicId);
-					
-				$this->db->query("UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d WHERE user_id=%d", $this->time, $admin_uid);
+			$topicName = "Welcome to {$this->name}";
+			$topicDesc = '';
+			$topicIcon = 'exclaim.gif';
+			$topicPost = "Congratulations on your successful install of {$this->name} {$this->version}. A couple of places you should visit now that things are up and running:
 
-				$this->db->query("UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=%d WHERE forum_id=%d", $postId, $forumId);
-				
-				$this->sets['topics']++;
-				$this->sets['posts']++;
-			}
+[b]Admin CP[/b]
+In the Admin CP, you can configure the details of your site from the Board Settings menu. Then from there you can start creating more forums for your site.
+ 
+[b]Control Panel[/b]
+The control panel is where you and your future members can configure their user data such as avatars, signatures, and their profiles.
+
+[b]Help[/b]
+Should you need assistance with something, have an issue to report, or just want to drop by and show your appreciation, the project's [url=https://github.com/Arthmoor/QSF-Portal]Google Code[/url] page is the place do to it.
+
+Have fun and enjoy your new site!";
+
+			// Create Category
+			$categoryId = $this->create_forum('Discussion', '', 0);
+
+			// Create Forum - Make News Forum
+			$forumId = $this->create_forum('News Posts', 'The main page news forum. Only administrators can see this or post in it. Posts here appear as front page news items.', $categoryId);
+
+			// Create Topic
+			$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 
+				VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
+				$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, TOPIC_PUBLISH);
+			$topicId = $this->db->insert_id("topics");
+
+			// Create Post
+			$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_ip, post_icon)
+				VALUES (%d, %d, '%s', %d, 1, 1, INET_ATON('%s'), '%s')",
+				$topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon);
+			$postId = $this->db->insert_id("posts");
+
+			$this->db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $postId, $topicId);
+
+			$this->db->query("UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d WHERE user_id=%d", $this->time, $admin_uid);
+
+			$this->db->query("UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=%d WHERE forum_id=%d", $postId, $forumId);
+
+			$this->sets['topics']++;
+			$this->sets['posts']++;
+
+			// Create second forum - Public chat
+			$forumId = $this->create_forum('Chat', "Welcome to {$this->sets['forum_name']}. Introduce yourself, ask a question, or join in on any conversations here.", $categoryId);
+
+			// Probably a better way to do this, but it's easy.
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=1",
+				'a:50:{s:10:"board_view";b:1;s:17:"board_view_closed";b:1;s:11:"do_anything";b:1;s:11:"edit_avatar";b:1;s:12:"edit_profile";b:1;s:8:"edit_sig";b:1;s:9:"email_use";b:1;s:10:"forum_view";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:8:"is_admin";b:1;s:11:"page_create";b:1;s:11:"page_delete";b:1;s:9:"page_edit";b:1;s:10:"pm_noflood";b:1;s:11:"poll_create";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:9:"poll_vote";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_attach";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:20:"post_attach_download";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_create";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_delete";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"post_delete_old";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"post_delete_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:9:"post_edit";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"post_edit_old";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"post_edit_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:18:"post_inc_userposts";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"post_noflood";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_viewip";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"search_noflood";b:1;s:12:"topic_create";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_delete";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:16:"topic_delete_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:10:"topic_edit";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"topic_edit_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_global";b:1;s:10:"topic_lock";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"topic_lock_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:10:"topic_move";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"topic_move_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:9:"topic_pin";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"topic_pin_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"topic_publish";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:18:"topic_publish_auto";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"topic_split";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"topic_split_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_unlock";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:16:"topic_unlock_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"topic_unpin";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"topic_unpin_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:10:"topic_view";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:22:"topic_view_unpublished";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}'
+				);
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=2",
+				'a:50:{s:10:"board_view";b:1;s:17:"board_view_closed";b:0;s:11:"do_anything";b:1;s:11:"edit_avatar";b:1;s:12:"edit_profile";b:1;s:8:"edit_sig";b:1;s:9:"email_use";b:1;s:10:"forum_view";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:8:"is_admin";b:0;s:11:"page_create";b:0;s:11:"page_delete";b:0;s:9:"page_edit";b:0;s:10:"pm_noflood";b:0;s:11:"poll_create";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:9:"poll_vote";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:11:"post_attach";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:20:"post_attach_download";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_create";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:11:"post_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_own";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:9:"post_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:18:"post_inc_userposts";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:12:"post_noflood";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_viewip";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"search_noflood";b:0;s:12:"topic_create";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:12:"topic_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_delete_own";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:10:"topic_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_edit_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_global";b:0;s:10:"topic_lock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_lock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_move";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_move_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"topic_pin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_pin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_publish";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"topic_publish_auto";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:11:"topic_split";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_split_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_unlock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_unlock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_unpin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_unpin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_view";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:22:"topic_view_unpublished";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}}'
+				);
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=3",
+				'a:50:{s:10:"board_view";b:1;s:17:"board_view_closed";b:0;s:11:"do_anything";b:1;s:11:"edit_avatar";b:0;s:12:"edit_profile";b:0;s:8:"edit_sig";b:0;s:9:"email_use";b:0;s:10:"forum_view";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:8:"is_admin";b:0;s:11:"page_create";b:0;s:11:"page_delete";b:0;s:9:"page_edit";b:0;s:10:"pm_noflood";b:0;s:11:"poll_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"poll_vote";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_attach";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:20:"post_attach_download";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"post_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"post_inc_userposts";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"post_noflood";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_viewip";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"search_noflood";b:0;s:12:"topic_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_delete_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_edit_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_global";b:0;s:10:"topic_lock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_lock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_move";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_move_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"topic_pin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_pin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_publish";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"topic_publish_auto";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_split";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_split_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_unlock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_unlock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_unpin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_unpin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_view";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:22:"topic_view_unpublished";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}}'
+				);
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=4",
+				'a:50:{s:10:"board_view";b:0;s:17:"board_view_closed";b:0;s:11:"do_anything";b:0;s:11:"edit_avatar";b:0;s:12:"edit_profile";b:0;s:8:"edit_sig";b:0;s:9:"email_use";b:0;s:10:"forum_view";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:8:"is_admin";b:0;s:11:"page_create";b:0;s:11:"page_delete";b:0;s:9:"page_edit";b:0;s:10:"pm_noflood";b:0;s:11:"poll_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"poll_vote";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_attach";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:20:"post_attach_download";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"post_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"post_inc_userposts";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"post_noflood";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_viewip";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"search_noflood";b:0;s:12:"topic_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_delete_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_edit_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_global";b:0;s:10:"topic_lock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_lock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_move";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_move_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"topic_pin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_pin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_publish";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"topic_publish_auto";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_split";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_split_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_unlock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_unlock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_unpin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_unpin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_view";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:22:"topic_view_unpublished";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}}'
+				);
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=5",
+				'a:50:{s:10:"board_view";b:1;s:17:"board_view_closed";b:0;s:11:"do_anything";b:1;s:11:"edit_avatar";b:1;s:12:"edit_profile";b:1;s:8:"edit_sig";b:1;s:9:"email_use";b:0;s:10:"forum_view";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:8:"is_admin";b:0;s:11:"page_create";b:0;s:11:"page_delete";b:0;s:9:"page_edit";b:0;s:10:"pm_noflood";b:0;s:11:"poll_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"poll_vote";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_attach";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:20:"post_attach_download";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"post_delete_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"post_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_old";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"post_edit_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"post_inc_userposts";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"post_noflood";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_viewip";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"search_noflood";b:0;s:12:"topic_create";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_delete";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_delete_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_edit";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_edit_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_global";b:0;s:10:"topic_lock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_lock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_move";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:14:"topic_move_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:9:"topic_pin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_pin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:13:"topic_publish";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:18:"topic_publish_auto";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_split";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_split_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:12:"topic_unlock";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:16:"topic_unlock_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"topic_unpin";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:15:"topic_unpin_own";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:10:"topic_view";a:3:{i:1;b:1;i:2;b:0;i:3;b:1;}s:22:"topic_view_unpublished";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}}'
+				);
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=6",
+				'a:50:{s:10:"board_view";b:1;s:17:"board_view_closed";b:0;s:11:"do_anything";b:1;s:11:"edit_avatar";b:1;s:12:"edit_profile";b:1;s:8:"edit_sig";b:1;s:9:"email_use";b:1;s:10:"forum_view";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:8:"is_admin";b:0;s:11:"page_create";b:1;s:11:"page_delete";b:0;s:9:"page_edit";b:1;s:10:"pm_noflood";b:0;s:11:"poll_create";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:9:"poll_vote";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_attach";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:20:"post_attach_download";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_create";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"post_delete";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"post_delete_old";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"post_delete_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:9:"post_edit";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"post_edit_old";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"post_edit_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:18:"post_inc_userposts";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"post_noflood";a:3:{i:1;b:0;i:2;b:0;i:3;b:0;}s:11:"post_viewip";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"search_noflood";b:0;s:12:"topic_create";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_delete";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:16:"topic_delete_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:10:"topic_edit";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"topic_edit_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_global";b:1;s:10:"topic_lock";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"topic_lock_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:10:"topic_move";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:14:"topic_move_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:9:"topic_pin";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"topic_pin_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:13:"topic_publish";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:18:"topic_publish_auto";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"topic_split";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"topic_split_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:12:"topic_unlock";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:16:"topic_unlock_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:11:"topic_unpin";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:15:"topic_unpin_own";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:10:"topic_view";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}s:22:"topic_view_unpublished";a:3:{i:1;b:1;i:2;b:1;i:3;b:1;}}'
+				);
 
 			// Stupid as this may look, it appears to be quite necessary to allow categories to work.
 			$perms = new $this->modules['file_permissions']($this);
@@ -223,13 +437,8 @@ class new_install extends qsfglobal
 			$writeSetsWorked = $this->write_db_sets('../settings.php');
 			$this->write_sets();
 
-			if( version_compare( PHP_VERSION, "5.2.0", "<" ) ) {
-				setcookie($this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'].'; HttpOnly', $this->sets['cookie_secure']);
-				setcookie($this->sets['cookie_prefix'] . 'pass', $this->post['admin_pass'], $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'].'; HttpOnly', $this->sets['cookie_secure']);
-			} else {
-				setcookie($this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-				setcookie($this->sets['cookie_prefix'] . 'pass', $this->post['admin_pass'], $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			}
+			setcookie($this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			setcookie($this->sets['cookie_prefix'] . 'pass', $this->post['admin_pass'], $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 
 			if (!$writeSetsWorked) {
 				echo "Congratulations! Your board has been installed.<br />
@@ -243,6 +452,7 @@ class new_install extends qsfglobal
 					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars($this->post['db_port']) . "\" />\n
 					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars($this->post['db_socket']) . "\" />\n
 					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars($this->post['prefix']) . "\" />\n
+					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['dbtype']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_email\" value=\"" . htmlspecialchars($this->post['admin_email']) . "\" />\n
 					<input type=\"submit\" value=\"Download settings.php\" />
 					</form>
@@ -252,11 +462,14 @@ class new_install extends qsfglobal
 					 ";
 			} else {
 				echo "Congratulations! Your portal has been installed.<br />
-				An administrator account was registered.<br />
-				REMEMBER TO DELETE THE INSTALL DIRECTORY!<br /><br />
-				<a href='../index.php'>Go to your portal.</a>";
+				An administrator account was registered.<br /><br />
+				<span style='color:yellow; font-weight:bold;'>REMEMBER TO DELETE THE INSTALL DIRECTORY!</span><br /><br />
+				<a href='../index.php'>Go to your site.</a>";
 			}
+			echo '</div>';
+
 			break;
+
 		case 3:
 			// Give them the settings.php file
 			$this->sets['db_host']   = $this->post['db_host'];
@@ -266,6 +479,7 @@ class new_install extends qsfglobal
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
 			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
+			$this->sets['dbtype']    = $this->post['dbtype'];
 			$this->sets['admin_email'] = $this->post['admin_email'];
 
 			$settingsFile = $this->create_settings_file();
@@ -278,15 +492,6 @@ class new_install extends qsfglobal
 		}
 	}
 
-	function server_url()
-	{ 
-	   $proto = "http" .
-		   ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
-	   $server = isset($_SERVER['HTTP_HOST']) ?
-		   $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-	   return $proto . $server;
-	}
-	
 	/**
 	 * Creates a category or forum
 	 *

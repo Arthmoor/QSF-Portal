@@ -1,5 +1,5 @@
 -------------------------------
-== QSF Portal v1.4.5 ==
+== QSF Portal v1.6.0 ==
 -------------------------------
 
 === Installation ===
@@ -33,12 +33,11 @@
  (previously known as Candy Corn) for all administrators. This is so you can
  still login and access Admin CP. Many templates have been added so any
  skins for Mercuryboard 1.1.4 or older will need significant changes.
- See http://www.qsfportal.com for more information
+ See https://github.com/Arthmoor/QSF-Portal for more information
 
 === Requirements ===
- QSF Portal works with PHP 4.3.0 or higher. PHP 5 is also supported.
- MySQL 3.22 or higher is required. QSF Portal works on any operating
- system and web server combination.
+ QSF Portal works with PHP 5.3.0 or higher. MySQL 4.1 or higher is required.
+ QSF Portal works on any operating system and web server combination.
 
  If you experience a problem and you meet these requirements, please report it
  as a bug. The latest versions of PHP and MySQL are recommended to keep
@@ -53,13 +52,12 @@
 === How You Can Help ===
  If you know PHP and MySQL, and would like to help develop QSF Portal,
  then feel free to modify the code and join the discussion at 
- http://www.qsfportal.com or contact <qsfdev at lists dot berlios dot de>.
+ https://github.com/Arthmoor/QSF-Portal .
  If you know a language in addition to English and would like to translate,
  your help is also welcome.
 
- Feature requests and bug reports are also very important to us. We have
- created forums at our site for this kind of information.
+ Feature requests and bug reports are also very important to us.
 
 === Support ===
  If you're sure you've read the above information, and it simply will not work,
- visit http://www.qsfportal.com for support
+ visit https://github.com/Arthmoor/QSF-Portal for support

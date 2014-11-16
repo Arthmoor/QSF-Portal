@@ -1,8 +1,8 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,11 +55,13 @@ class recent_uploads extends modlet
 		while($file = $this->qsf->db->nqfetch($result))
 		{
 			$filesize = ceil($file['file_size'] / 1024);
+			$fid = $file['file_id'];
 			$fname = $this->qsf->format($file['file_name'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+			$furl = $this->qsf->clean_url($fname);
 			$title = "Downloads: {$file['file_downloads']}  Size: {$filesize} KB";
 			$author = $this->qsf->format($file['file_author'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
-			$content .= "<a href=\"". $this->qsf->self . "?a=files&amp;s=viewfile&amp;fid={$file['file_id']}\" title=\"{$title}\">{$fname}</a>";
+			$content .= "<a href=\"". $this->qsf->site . "/files/{$furl}-{$fid}/\" title=\"{$title}\">{$fname}</a>";
 			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->self}?a=profile&amp;w={$file['file_submitted']}\">{$file['user_name']}</a><hr />";
 		}
 		return eval($this->qsf->template('MAIN_RECENT_UPLOADS'));

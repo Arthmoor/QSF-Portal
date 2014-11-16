@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ class members extends qsfglobal
 		$this->tree($this->lang->members_list);
 
 		$this->get['min'] = isset($this->get['min']) ? intval($this->get['min']) : 0;
-		$this->get['num'] = isset($this->get['num']) ? intval($this->get['num']) : 10;
+		$this->get['num'] = isset($this->get['num']) ? intval($this->get['num']) : 25;
 		$asc = 0;
 
 		if (isset($this->get['order'], $this->get['asc'])) {
@@ -114,7 +114,7 @@ class members extends qsfglobal
 
 		$result = $this->db->query("
 			SELECT
-				m.user_joined, m.user_email_show, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id, m.user_posts, m.user_title, m.user_homepage,
+				m.user_joined, m.user_email_show, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id, m.user_posts, m.user_title, m.user_homepage, m.user_group,
 				g.group_name
 			FROM
 				%pusers m,
@@ -130,17 +130,19 @@ class members extends qsfglobal
 			USER_GUEST_UID, $this->get['min'], $this->get['num']);
 
 		$Members = null;
-		$i = 0;
 
 		while ($member = $this->db->nqfetch($result))
 		{
-			if ($i % 2 == 0) {
-				$class = 'tablelight';
-			} else {
-				$class = 'tabledark';
-			}
-
 			$member['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $member['user_joined']);
+
+			// Do not display members awaiting activation, or members with zero posts to guests or other members awaiting activation. Discourages spambots.
+			if( $this->user['user_id'] == USER_GUEST_UID || $this->user['user_group'] == USER_AWAIT ) {
+				if( $member['user_group'] == USER_AWAIT )
+					continue;
+
+				if( $member['user_posts'] < 1 )
+					continue;
+			}
 
 			if ($this->perms->auth('email_use')) {
 				if ($member['user_email_show']) {
@@ -157,7 +159,6 @@ class members extends qsfglobal
 			}
 
 			$Members .= eval($this->template('MEMBERS_MEMBER'));
-			$i++;
 		}
 
 		return eval($this->template('MEMBERS_MAIN'));

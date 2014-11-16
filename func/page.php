@@ -1,8 +1,8 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,14 +73,8 @@ class page extends qsfglobal
 			return eval($this->template('PAGE_NONE'));
 
 		$Pages = null;
-		$i = 0;
 		while ( $page = $this->db->nqfetch($result) )
 		{
-			$i++;
-			if ( $i % 2 == 0 )
-				$class = 'tablelight';
-			else
-				$class = 'tabledark';
 			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE | FORMAT_EMOTICONS;
 			$page['page_title'] = $this->format($page['page_title'], $param );
 			$Pages .= eval($this->template('PAGE_ENTRY'));

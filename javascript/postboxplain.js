@@ -1,31 +1,38 @@
 /* Used by POST_BOX_PLAIN template */
 
-function insertCode(code, textarea) {
-  if (window.getSelection) {
-    if (textarea.selectionStart != textarea.selectionEnd) {
-      textarea.value = textarea.value.substring(0, textarea.selectionStart) + code
-              + textarea.value.substring(textarea.selectionEnd, textarea.value.length);
-      textarea.selectionStart = textarea.value.length;
-      textarea.selectionEnd = textarea.value.length;
-    } else {
-      textarea.value = textarea.value.substring(0, textarea.selectionStart) + code
-              + textarea.value.substring(textarea.selectionStart, textarea.value.length);
+function insertCode( code, textarea ) {
+  /* IE Support. (Damn you Microsoft) */
+  if( document.selection ) {
+    textarea.focus();
+    range = document.selection.createRange();
+
+    if(range.parentElement() != textarea) { 
+      return false; 
     }
-  } else if (textarea.createTextRange && textarea.caretPos) {
-    textarea.caretPos.text = code;
-  } else {
-    textarea.value += code;
+
+    range.text = code;
+    range.select();
   }
-  textarea.focus();
+  /* Firefox and others who also handle this correctly */
+  else if( textarea.selectionStart || textarea.selectionStart == '0' ) {
+    var start = textarea.selectionStart;
+    var end   = textarea.selectionEnd;
+
+    textarea.value = textarea.value.substr(0, start) + code + textarea.value.substr(end, textarea.value.length);
+
+    textarea.focus();
+    textarea.setSelectionRange( start + code.length, start + code.length );
+  }
+  /* Fallback case. You never know. */
+  else {
+    textarea += code;
+  }
 }
 
 function getText(textarea) {
-  if (document.all) {
-    if (textarea.createTextRange && textarea.caretPos) {
-      return textarea.caretPos.text;
-    } else {
-      return "";
-    }
+  if(document.selection) {
+    sel = document.selection.createRange();
+    return sel.text;
   } else if (window.getSelection) {
     return textarea.value.substring(textarea.selectionStart, textarea.selectionEnd);
   } else {
@@ -56,12 +63,14 @@ function bbcURL(type, textarea) {
   var text = getText(textarea);
   var isURL = (text.substring(0,7) == "http://");
 
-  if (type == 'img' || type == 'youtube' ) {
+  if ( type == 'img' ) {
     if (isURL) {
       var code = "[" + type + "]" + text + "[/" + type + "]";
     } else {
       var code = text + "[" + type + "]" + prompt(textarea.jsdata_url + ":","") + "[/" + type + "]";
     }
+  } else if( type == 'youtube' ) {
+    var code = "[" + type + "]" + prompt(textarea.jsdata_youtube_url + ":","") + text + "[/" + type + "]";
   } else {
     var code = "[" + type + "=" + (isURL ? text : prompt(textarea.jsdata_address + ":","")) + "]" + ((text && !isURL) ? text : prompt(textarea.jsdata_detail + ":","")) + "[/" + type + "]";
   }
@@ -81,7 +90,7 @@ function bbcFont(attrib, list, textarea) {
 /* Code to handle clickable smiley's */
 
 function insertSmiley(smiley, ta) {
-  insertCode(getText(ta) + ' ' + smiley, ta);
+  insertCode(getText(ta) + ' ' + smiley + ' ', ta);
   return false;
 }
 
@@ -203,6 +212,7 @@ function initTextarea(textarea) {
 		textarea.jsdata_address = responseData['lang']['jsdata_address'];
 		textarea.jsdata_detail = responseData['lang']['jsdata_detail'];
 		textarea.jsdata_url = responseData['lang']['jsdata_url'];
+		textarea.jsdata_youtube_url = responseData['lang']['jsdata_youtube_url'];
 
 		// Create buttons using button data
 		textarea.buildButtons(responseData['buttons']);

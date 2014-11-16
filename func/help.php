@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,31 +40,26 @@ class help extends qsfglobal
 		$this->tree($this->lang->help_available_files);
 		$this->set_title($this->lang->help_available_files);
 
-		$h = array();
-		$q = $this->db->query("SELECT help_id, help_title, help_article FROM %phelp ORDER BY help_title");
+		$help = $this->db->query("SELECT help_id, help_title, help_article FROM %phelp");
 
-		while ($r = $this->db->nqfetch($q))
+		$top = null;
+		$desc = null;
+		while ($row = $this->db->nqfetch($help))
 		{
-			$h[] = $r;
+			$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE;
+
+			$id = $row['help_id'];
+			$title = $this->format( $row['help_title'], FORMAT_HTMLCHARS );
+			$article = $this->format( $row['help_article'], $params );
+
+			$top .= eval($this->template('HELP_SIMPLE_ENTRY'));
+			$desc .= eval($this->template('HELP_DESCRIPTIVE_ENTRY'));
 		}
 
-		if ($h) {
-			$top = null;
-			foreach ($h as $ar)
-			{
-				$top .= eval($this->template('HELP_SIMPLE_ENTRY'));
-			}
-
-			$desc = null;
-			foreach ($h as $ar)
-			{
-				$desc .= eval($this->template('HELP_DESCRIPTIVE_ENTRY'));
-			}
-
+		if( $top != null )
 			return eval($this->template('HELP_FULL'));
-		} else {
+		else
 			return $this->message($this->lang->help_available_files, $this->lang->help_none);
-		}
 	}
 }
 ?>

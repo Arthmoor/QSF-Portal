@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -240,7 +240,7 @@ class search extends qsfglobal
 		}
 
 		$sql .= "
-			p.post_id, p.post_text, p.post_topic, INET_NTOA(p.post_ip) as post_ip, p.post_author, p.post_icon, p.post_time, p.post_mbcode, p.post_emoticons,
+			p.post_id, p.post_text, p.post_topic, p.post_ip, p.post_author, p.post_icon, p.post_time, p.post_mbcode, p.post_emoticons,
 			m.user_name, m.user_title, m.user_avatar_type, m.user_avatar, m.user_avatar_width, m.user_avatar_height, m.user_posts, m.user_joined, m.user_level, m.user_active,
 			m2.user_name AS Starter,
 			t.topic_title, t.topic_forum, t.topic_replies, t.topic_starter,
@@ -375,7 +375,6 @@ class search extends qsfglobal
 			$match_finder = str_replace(' ', '|', preg_quote(preg_replace('/[+\\-"><]/', '', $this->post['query']), '/'));
 		}
 
-		$i = 0;
 		$oldtime = $this->time - 900;
 
 		foreach ($topics as $topic)
@@ -397,14 +396,6 @@ class search extends qsfglobal
 						continue;
 					}
 
-					if ($i % 2 == 0) {
-						$class = 'tablelight';
-					} else {
-						$class = 'tabledark';
-					}
-
-					$i++;
-
 					$posts[$match['post_id']] = 1;
 
 					if (!isset($high_score) && isset($match['score'])) {
@@ -418,7 +409,7 @@ class search extends qsfglobal
 					}
 
 					if ($match['post_icon']) {
-						$match['post_icon'] = "<img src='./skins/$this->skin/mbicons/{$match['post_icon']}' alt='{$this->lang->search_post_icon}' style='margin-right:5px' />";
+						$match['post_icon'] = "<img src='{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/{$match['post_icon']}' alt='{$this->lang->search_post_icon}' style='margin-right:5px' />";
 					}
 
 					$match['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $match['user_joined']);
@@ -457,15 +448,7 @@ class search extends qsfglobal
 					if ($match['post_author'] != USER_GUEST_UID) {
 						$online = ($match['active_time'] && ($match['active_time'] > $oldtime) && $match['user_active']);
 
-						if (($match['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
-							if (substr($match['user_avatar'], -4) != '.swf') {
-								$match['user_avatar'] = "<img src='{$match['user_avatar']}' alt='' width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' /><br /><br />";
-							} else {
-								$match['user_avatar'] = "<object width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'><param name='movie' value='{$match['user_avatar']}'><param name='play' value='true'><param name='loop' value='true'><param name='quality' value='high'><embed src='{$match['user_avatar']}' width='{$match['user_avatar_width']}' height='{$match['user_avatar_height']}' play='true' loop='true' quality='high'></embed></object><br /><br />";
-							}
-						} else {
-							$match['user_avatar'] = null;
-						}
+						$match['user_avatar'] = $this->htmlwidgets->display_avatar( $match );
 
 						$Poster_Info = eval($this->template('SEARCH_RESULTS_MEMBER_INFO'));
 					} else {
@@ -490,14 +473,14 @@ class search extends qsfglobal
 	 **/
 	function define_mysql_version()
 	{
-		$result = mysql_query('SELECT VERSION() AS version');
-		if ($result != FALSE && @mysql_num_rows($result) > 0) {
-			$row   = mysql_fetch_array($result);
+		$result = $this->db->query('SELECT VERSION() AS version');
+		if ($result != FALSE && @$this->db->num_rows($result) > 0) {
+			$row   = $this->db->nqfetch($result);
 			$match = explode('.', $row['version']);
 		} else {
-			$result = @mysql_query('SHOW VARIABLES LIKE \'version\'');
-			if ($result != FALSE && @mysql_num_rows($result) > 0) {
-				$row   = mysql_fetch_row($result);
+			$result = @$this->db->query('SHOW VARIABLES LIKE \'version\'');
+			if ($result != FALSE && @$this->db->num_rows($result) > 0) {
+				$row   = $this->db->nqfetch_row($result);
 				$match = explode('.', $row[1]);
 			}
 		}

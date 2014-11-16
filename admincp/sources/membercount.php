@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,34 +55,9 @@ class membercount extends admin
 		$this->set_title($this->lang->mcount);
 		$this->tree($this->lang->mcount);
 
-		$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
-		$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
-
-		$this->sets['last_member'] = $member['user_name'];
-		$this->sets['last_member_id'] = $member['user_id'];
-		$this->sets['members'] = $counts['count']-1; // Subtract el guesto
+		$this->ResetMemberStats();
 		$this->write_sets();
 
-		// Try to fix user post and upload counts.
-		$users = $this->db->query( "SELECT user_id, user_posts, user_uploads FROM %pusers" );
-		while( ($user = $this->db->nqfetch($users) ) )
-		{
-			$uid = $user['user_id'];
-
-			$posts = $this->db->fetch( "SELECT COUNT(post_id) count FROM %pposts WHERE post_author=%d AND post_count=1", $uid );
-			if( $posts['count'] && $posts['count'] > 0 ) {
-				$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts['count'], $uid );
-			} else {
-				$this->db->query( "UPDATE %pusers SET user_posts=0 WHERE user_id=%d", $uid );
-			}
-
-			$files = $this->db->fetch( "SELECT COUNT(file_id) count FROM %pfiles WHERE file_submitted=%d", $uid );
-			if( $files['count'] && $files['count'] > 0 ) {
-				$this->db->query( "UPDATE %pusers SET user_uploads=%d WHERE user_id=%d", $files['count'], $uid );
-			} else {
-				$this->db->query( "UPDATE %pusers SET user_uploads=0 WHERE user_id=%d", $uid );
-			}
-		}
 		return $this->message($this->lang->mcount, $this->lang->mcount_updated);
 	}
 }

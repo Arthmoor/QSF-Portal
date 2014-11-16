@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,13 +51,20 @@ class board_stats extends modlet
 
 		$stats = $this->getStats();
 
-		$this->qsf->lang->board_stats_string = sprintf($this->qsf->lang->board_stats_string,
-		    $stats['MEMBERS'], "<a href=\"{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}\">{$stats['LASTMEMBER']}</a>",
-		    $stats['TOPICS'], $stats['REPLIES'], $stats['POSTS']);
+		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
+			$this->qsf->lang->board_stats_string = sprintf($this->qsf->lang->board_stats_string,
+			    $stats['MEMBERS'], $stats['LASTMEMBER'], $stats['TOPICS'], $stats['REPLIES'], $stats['POSTS']);
+		else
+			$this->qsf->lang->board_stats_string = sprintf($this->qsf->lang->board_stats_string,
+			    $stats['MEMBERS'], "<a href=\"{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}\">{$stats['LASTMEMBER']}</a>",
+			    $stats['TOPICS'], $stats['REPLIES'], $stats['POSTS']);
 
 		$this->qsf->lang->board_most_online = sprintf($this->qsf->lang->board_most_online, $stats['MOSTONLINE'], $stats['MOSTONLINETIME']);
 
-		$birthdays = "";
+		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
+			$stats['LASTMEMBER'] = "<a href=\"{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}\">{$stats['LASTMEMBER']}</a>";
+
+		$birthdays = '';
 		if( $arg == "true" ) {
 			$birthdays = "<strong>{$this->qsf->lang->board_birthdays}</strong><br />\n" . $this->getuser_birthdays();
 		}
@@ -108,7 +115,10 @@ class board_stats extends modlet
 		{
 			$year = explode('-', $m['user_birthday']);
 			$day = $this->qsf->mbdate('Y') - $year[0];
-			$links[] = "<a href=\"{$this->qsf->self}?a=profile&amp;w={$m['user_id']}\" class=\"bdaylink\">{$m['user_name']}</a> ($day)";
+			if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
+				$links[] = "<a href=\"{$this->qsf->self}?a=profile&amp;w={$m['user_id']}\" class=\"bdaylink\">{$m['user_name']}</a> ($day)";
+			else
+				$links[] = "{$m['user_name']} ($day)";
 		}
 		return implode(', ', $links);
 	}

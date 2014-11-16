@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2010 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.5.1';          // QSF Portal version @var string
+	var $version = '1.6';             // QSF Portal version @var int
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -50,10 +50,12 @@ class qsfglobal
 	var $sets    = array();           // Settings @var array
 	var $modules = array();           // Module Settings @var array
 	var $censor  = array();           // Curse words to filter @var array
+	var $emoticons = array();	  // Array of emoticons used for processing post formatting
 	var $nohtml  = false;             // To display no board wrapper @var bool
 	var $time;                        // The current Unix time @var int
 	var $ip;                          // The user's IP address @var string
 	var $agent;                       // The browser's user agent @var string
+	var $referrer;                    // The browser's referrer setting @var string
 	var $self;                        // Alias for $PHP_SELF @var string
 	var $mainfile = 'index.php';	  // Combined with set['loc_of_board'] to make full url
 	var $db;                          // Database object @var object
@@ -64,6 +66,8 @@ class qsfglobal
 	var $etable;                      // End to an HTML table @var string
 	var $lang;                        // Loaded words @var object
 	var $query;                       // The query string @var string
+	var $serverload;                  // Load average for the server
+	var $time_exec;                   // Execution time for the whole page
 	var $feed_links = null;		  // HTML of RSS link tags
 
 	var $attachmentutil;		  // Attachment handler @var object
@@ -84,21 +88,49 @@ class qsfglobal
 	 **/
 	function qsfglobal($db=null)
 	{
-		$this->db      = $db;
-		$this->time    = time();
-		$this->query   = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
-		$this->ip      = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-		$this->agent   = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
-		$this->agent   = substr($this->agent, 0, 99); // Cut off after 100 characters.
-		$this->self    = $_SERVER['PHP_SELF'];
-		$this->server  = $_SERVER;
-		$this->get     = $_GET;
-		$this->post    = $_POST;
-		$this->cookie  = $_COOKIE;
-		$this->files   = $_FILES;
-		$this->query   = htmlspecialchars($this->query);
+		$this->db       = $db;
+		$this->time     = time();
+		$this->query    = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
+		$this->ip       = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$this->agent    = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
+		$this->agent    = substr($this->agent, 0, 99); // Cut off after 100 characters.
+		$this->referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'N/A';
+		$this->self     = $_SERVER['PHP_SELF'];
+		$this->server   = $_SERVER;
+		$this->get      = $_GET;
+		$this->post     = $_POST;
+		$this->cookie   = $_COOKIE;
+		$this->files    = $_FILES;
+		$this->query    = htmlspecialchars($this->query);
+
+		if( version_compare( PHP_VERSION, "5.3.0", "<" ) ) {
+			// Undo any magic quote slashes!
+			if (get_magic_quotes_gpc()) {
+				$this->unset_magic_quotes_gpc($this->get);
+				$this->unset_magic_quotes_gpc($this->post);
+				$this->unset_magic_quotes_gpc($this->cookie);
+			}
+		}
 	}
-	
+
+ 	/**
+	 * Sets magic_quotes_gpc to off
+	 *
+	 * @param array $array Array to stripslashes
+	 **/
+	function unset_magic_quotes_gpc(&$array)
+	{
+		$keys = array_keys($array);
+		for($i = 0; $i < count($array); $i++)
+		{
+			if (is_array($array[$keys[$i]])) {
+				$this->unset_magic_quotes_gpc($array[$keys[$i]]);
+			} else {
+				$array[$keys[$i]] = stripslashes($array[$keys[$i]]);
+			}
+		}
+	}
+
 	/**
 	 * Post constructor initaliser. By this time we have a user and a database
 	 *
@@ -132,6 +164,15 @@ class qsfglobal
 		while ($r = $this->db->nqfetch($replace))
 		{
 			$this->censor[] = '/' . $r['replacement_search'] . '/i';
+		}
+
+		$emotes = $this->db->query('SELECT * FROM %pemoticons');
+		while( $e = $this->db->nqfetch($emotes) )
+		{
+			if( $e['emote_clickable'] == 1 )
+				$this->emoticons['click_replacement'][$e['emote_string']] = '<img src="' . $this->site . '/emoticons/' . $e['emote_image'] . '" alt="' . $e['emote_string'] . '" />';
+			else
+				$this->emoticons['replacement'][$e['emote_string']] = '<img src="' . $this->site . '/emoticons/' . $e['emote_image'] . '" alt="' . $e['emote_string'] . '" />';
 		}
 
 		$this->set_table();
@@ -374,7 +415,7 @@ class qsfglobal
 				return 0;
 			}
 
-			$load = split('load averages?: ', $load);
+			$load = preg_split('/load average:/', $load);
 			$load = explode(',', $load[1]);
 		}
 
@@ -392,23 +433,32 @@ class qsfglobal
 	 **/
 	function get_messages($seen = false, $folder = 0)
 	{
+		if($this->perms->is_guest)
+			return 0;
+
 		$count = $this->db->fetch("SELECT COUNT(pm_id) AS messages FROM %ppmsystem WHERE pm_to=%d AND pm_folder=%d" . (!$seen ? " AND pm_read=0" : null),
 			$this->user['user_id'], $folder);
 		return $count['messages'];
 	}
 
-	/**
-	 * Loads settings
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.1.0
-	 * @return array Settings
-	 **/
-	function get_settings($sets)
+	function get_files()
 	{
-		$settings = $this->db->fetch("SELECT settings_data FROM %psettings LIMIT 1");
+		$count = 0;
 
-		return array_merge($sets, unserialize($settings['settings_data']));
+		if($this->perms->is_guest)
+			return 0;
+
+		if($this->perms->auth('is_admin'))
+			return $this->sets['code_approval'];
+
+		$query = $this->db->query( "SELECT file_catid FROM %pfiles WHERE file_approved=0" );
+		while( $file = $this->db->nqfetch($query) )
+		{
+			if( !$this->file_perms->auth( 'approve_files', $file['file_catid'] ) )
+				continue;
+			$count++;
+		}
+		return $count;
 	}
 
 	function cidrmatch( $cidr )
@@ -421,6 +471,11 @@ class qsfglobal
 		for( $i = strlen($cidr); $i < 32; $i++ )
 			$cidr = "0$cidr";
 		return !strcmp( substr($ip, 0, $bits), substr($cidr, 0, $bits) );
+	}
+
+	function is_ipv6( $ip )
+	{
+		return( substr_count( $ip, ":" ) > 0 && substr_count( $ip, "." ) == 0 );
 	}
 
 	/**
@@ -439,7 +494,14 @@ class qsfglobal
 		if ($this->sets['banned_ips']) {
 			foreach ($this->sets['banned_ips'] as $ip)
 			{
-				if (preg_match("/$ip/", $this->ip) || (strstr($ip, '/') && $this->cidrmatch(stripslashes($ip))) ) {
+				$ip = stripslashes($ip);
+
+				if( $this->is_ipv6( $this->ip ) ) {
+					if( strcasecmp( $ip, $this->ip ) == 0 )
+						return true;
+				}
+
+				if ( ( strstr($ip, '/') && $this->cidrmatch($ip) ) || strcasecmp( $ip, $this->ip ) == 0 ) {
 					return true;
 				}
 			}
@@ -716,7 +778,10 @@ class qsfglobal
 			'prefix',
 			'installed',
 			'include_path',
-			'admin_email'
+			'admin_email',
+			'meta_keywords',
+			'meta_description',
+			'settings_version'
 		);
 
 		$sets = array();
@@ -727,10 +792,68 @@ class qsfglobal
 			}
 		}
 
-		$this->db->query("UPDATE %psettings SET settings_data='%s'", serialize($sets));
+		$this->db->query("UPDATE %psettings SET settings_data='%s'", json_encode($sets));
 	}
-	
+
+	/**
+	 * Loads settings
+	 *
+	 * @author Jason Warner <jason@mercuryboard.com>
+	 * @since 1.1.0
+	 * @return array Settings
+	 **/
+	function get_settings($sets)
+	{
+		// Converts old serialized array into a json encoded array due to potential exploits in the PHP serialize/unserialize functions.
+		$settings_array = array();
+
+		$settings = $this->db->fetch("SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_data FROM %psettings LIMIT 1");
+		$sets['meta_keywords'] = $settings['settings_meta_keywords'];
+		$sets['meta_description'] = $settings['settings_meta_description'];
+
+		if( $settings['settings_version'] == 1 ) {
+			$settings_array = array_merge($sets, unserialize($settings['settings_data']));
+			$this->db->query("UPDATE %psettings SET settings_version=2");
+			$this->sets = $settings_array;
+			$this->write_sets();
+		} else {
+			$settings_array = array_merge($sets, json_decode($settings['settings_data'], true));
+		}
+		return $settings_array;
+	}
+
 	/* Forum utility functions */
+
+ 	/**
+	 * Used to update member statistics
+	 *
+	 * @author Roger Libiez [Samson] http://www.iguanadons.net
+	 * @since 1.5
+	 * @return void
+	**/
+	function ResetMemberStats()
+	{
+		$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
+		$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
+
+		$this->sets['last_member'] = $member['user_name'];
+		$this->sets['last_member_id'] = $member['user_id'];
+		$this->sets['members'] = $counts['count']-1; // Subtract el guesto
+
+		// Try to fix user post counts.
+		$users = $this->db->query( "SELECT user_id, user_posts FROM %pusers" );
+		while( ($user = $this->db->nqfetch($users) ) )
+		{
+			$uid = $user['user_id'];
+
+			$posts = $this->db->fetch( "SELECT COUNT(post_id) count FROM %pposts WHERE post_author=%d AND post_count=1", $uid );
+			if( $posts['count'] && $posts['count'] > 0 ) {
+				$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts['count'], $uid );
+			} else {
+				$this->db->query( "UPDATE %pusers SET user_posts=0 WHERE user_id=%d", $uid );
+			}
+		}
+	}
 
 	/**
 	 * Used to update topic and reply counts for every forum.
@@ -761,8 +884,6 @@ class qsfglobal
 			$this->sets['posts'] += $results['replies'];
 			$this->sets['topics'] += $results['topics'];
 		}
-
-		$this->write_sets();
 	}
 	
 	/**
@@ -924,6 +1045,21 @@ class qsfglobal
 			return false;
 
 		return true;
+	}
+
+	/**
+	 * Reformats a URL so it has no spaces in it.
+	 *
+	 * @author Roger Libiez
+	 * @return string
+	 * @since 1.6
+	 */
+	function clean_url( $link )
+	{
+		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
+		$link = str_replace( ' ', '-', $link );
+
+		return $link;
 	}
 }
 ?>

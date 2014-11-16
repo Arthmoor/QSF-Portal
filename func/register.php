@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,6 +67,9 @@ class register extends qsfglobal
 
 	function registration()
 	{
+		if( $this->sets['registrations_allowed'] == 0 )
+			return $this->message($this->lang->register_reging, $this->lang->register_registration_disabled);
+
 		if (!isset($this->post['submit'])) {
 			$math = '';
 			$tos = $this->db->fetch('SELECT settings_tos FROM %psettings');
@@ -79,20 +82,28 @@ class register extends qsfglobal
 			$token = $this->generate_token();
 
 			if ($this->sets['register_image']) {
-				$type = mt_rand(1,3);
-				$num1 = mt_rand();
-				$num2 = mt_rand();
-				$answer = 0;
+				$captcha = $this->db->fetch( 'SELECT * FROM %pcaptcha ORDER BY RAND() LIMIT 1' );
 
-				switch( $type )
-				{
-					case 1: $answer = $num1 + $num2; $op = '+'; break;
-					case 2: $answer = $num1 - $num2; $op = '-'; break;
-					case 3: $answer = $num1 * $num2; $op = '*'; break;
+				// Fallback system for those who haven't added any appropriate captcha pairs. Not terribly effective anymore :(
+				if( !$captcha ) {
+					$type = mt_rand(1,3);
+					$num1 = mt_rand();
+					$num2 = mt_rand();
+					$answer = 0;
+
+					switch( $type )
+					{
+						case 1: $answer = $num1 + $num2; $op = '+'; break;
+						case 2: $answer = $num1 - $num2; $op = '-'; break;
+						case 3: $answer = $num1 * $num2; $op = '*'; break;
+					}
+					$math_prompt = $this->lang->register_what_is . " $num1 $op $num2 ?";
+				} else {
+					$math_prompt = $captcha['cap_question'];
+					$answer = $captcha['cap_answer'];
 				}
-				$math_prompt = $this->lang->register_what_is . " $num1 $op $num2 ?";
-
 				$math = eval($this->template('REGISTER_IMAGE'));
+				$_SESSION['question'] = $math_prompt;
 				$_SESSION['answer'] = $answer;
 			}
 			$_SESSION['allow_register'] = true;
@@ -110,8 +121,12 @@ class register extends qsfglobal
 					return $this->message( $this->lang->register_reging, $this->lang->register_math_fail );
 
 				$math = $this->post['user_math'];
+				$math = mb_strtolower($math, mb_detect_encoding($math));
 
-				if( $math != $_SESSION['answer'] )
+				$str = mb_strtolower($_SESSION['answer'], mb_detect_encoding($_SESSION['answer']));
+				$acceptable_answers = explode( ',', $str );
+
+				if( !in_array( $math, $acceptable_answers ) )
 					return $this->message( $this->lang->register_reging, $this->lang->register_math_fail );
 			}
 
@@ -176,21 +191,22 @@ class register extends qsfglobal
 				$group_id = $this->sets['default_group'];
 			}
 
-                        // Store the contents of the entire $_SERVER array.
-                        $svars = serialize($_SERVER);
+                        // Store the contents of the entire $_SERVER array. Along with the captcha question. If bots get past this, knowing which question they got right may be helpful.
+			$_SERVER['cap_question'] = $_SESSION['question'];
+                        $svars = json_encode($_SERVER);
 
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
 			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_ureg'] ) {
-				require_once $this->sets['include_path'] . '/lib/Akismet.class.php';
+				require_once $this->sets['include_path'] . '/lib/akismet.php';
 
 				$spam_checked = false;
 				$akismet = null;
 
 				try {
-					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key']);
+					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
 					$akismet->setCommentAuthor($username);
 					$akismet->setCommentAuthorEmail($email);
-					$akismet->setCommentType('QSFP Registration');
+					$akismet->setCommentType('signup');
 
 					$spam_checked = true;
 				}
@@ -199,12 +215,16 @@ class register extends qsfglobal
 
 				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
 					$this->log_action('Blocked User Registration', 0, 0, 0);
+
+					$this->sets['spam_reg_count']++;
+					$this->write_sets();
+
 					return $this->message( $this->lang->register_reging, $this->lang->register_akismet_ureg_spam );
 				}
 			}
 
 			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emoticons, user_view_signatures,
-				user_language, user_email_show, user_pm, user_timezone, user_regip, user_register_email, user_server_data) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, %d, INET_ATON('%s'), '%s', '%s')",
+				user_language, user_email_show, user_pm, user_timezone, user_regip, user_register_email, user_server_data) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, %d, '%s', '%s', '%s')",
 				$username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
 				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone'], $this->ip, $email, $svars);
 

@@ -1,8 +1,8 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,10 +46,10 @@ class file_rating extends modlet
 		}
 
 		if( $can_rate && !$has_rated ) {
-			$rating = "<b><a href=\"{$this->qsf->self}?a=filerating&amp;f={$file}\" target=\"qsf_rating\" onclick=\"window.open('{$this->qsf->self}?a=filerating&amp;f={$file}','qsf_rating','width=400,height=200,resize,scrollbars=yes')\">{$this->qsf->lang->files_rating}:</a></b> <img src=\"./skins/{$this->qsf->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
+			$rating = "<b><a href=\"{$this->qsf->self}?a=filerating&amp;f={$file}\" target=\"qsf_rating\" onclick=\"CenterPopUp('{$this->qsf->self}?a=filerating&amp;f={$file}','qsf_rating',400,200)\">{$this->qsf->lang->files_rating}:</a></b> <img src=\"{$this->qsf->site}/skins/{$this->qsf->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
 		}
 		else {
-			$rating = "<b>{$this->qsf->lang->files_rating}:</b> <img src=\"./skins/{$this->qsf->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
+			$rating = "<b>{$this->qsf->lang->files_rating}:</b> <img src=\"{$this->qsf->site}/skins/{$this->qsf->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
 		}
 		return $rating;
 	}

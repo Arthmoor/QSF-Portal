@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,22 +41,20 @@ class logs extends admin
 		$this->tree($this->lang->logs_view);
 
 		$data = $this->db->query("SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC");
+		$num = $this->db->num_rows($data);
 
 		$this->lang->main();
 
 		$this->get['min'] = isset($this->get['min']) ? intval($this->get['min']) : 0;
 		$this->get['num'] = isset($this->get['num']) ? intval($this->get['num']) : 60;
-		$pages = $this->htmlwidgets->get_pages( $data, 'a=logs', $this->get['min'], $this->get['num'] );
+		$pages = $this->htmlwidgets->get_pages( $num, 'a=logs', $this->get['min'], $this->get['num'] );
 
 		$data = $this->db->query("SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT %d, %d",
                        $this->get['min'], $this->get['num']);
 
-		$this->iterator_init('tablelight', 'tabledark');
-
 		$out = null;
 		while ($log = $this->db->nqfetch($data))
 		{
-			$class = $this->iterate();
 			$date = $this->mbdate(DATE_LONG, $log['log_time']);
 			$user = $log['user_name'];
 			$action = '';
@@ -64,6 +62,11 @@ class logs extends admin
 
 			switch ($log['log_action'])
 			{
+			case 'spam_delete':
+				$action = $this->lang->logs_reported_spam;
+				$id = $this->lang->logs_post . " #" . $log['log_data1'];
+				break;
+
 			case 'post_delete':
 				$action = $this->lang->logs_deleted_post;
 				$id = $this->lang->logs_post . " #" . $log['log_data1'];

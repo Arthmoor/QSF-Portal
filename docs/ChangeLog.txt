@@ -1,9 +1,66 @@
 QSF Portal Changes
 ------------------
 
-Bugs listed as "Bug #" are old reports from qsfportal.com.
+Changes for 1.6:
 
-Bugs listed as "Issue #" are reported from Google Code.
+* HTTP server data submitted with user registrations is now shown on the member control editing screen.
+* Friendly URL support has been added for much of the forum code. Requires the use of a .htaccess file.
+* Emoticons are now handled independently of skins and can be added on the fly as desired.
+* Added a new setting to block new user registration.
+* Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
+
+   Bugs addressed:
+
+* Akismet reporting types have been corrected to conform to their API recommendations.
+* File updates were not unlinking the old files after replacing them with new ones, leading to large scale space waste.
+
+Changes for 1.5.2:
+
+* Extend Akismet protection to user profiles.
+* Fixed IP address handling so that future IPv6 addresses will be displayed properly.
+* Added support for Gravatars. See: http://en.gravatar.com/
+* Extended the size of filenames in the files module to 50 chars from 32.
+* Removed GTalk/Skype profile fields and replaced them with Twitter ID.
+* Updated the file rating pop-up to appear in the screen center instead of the corner.
+* Profile display will now show last visited date for that member.
+* Modified file size display formatting.
+* Added support to report spambot registrations to Akismet.
+* Added secondary captcha system that takes admin supplied questions and answers to challenge bots with since the math system has been defeated.
+
+   Bugs addressed:
+
+* Issue #3: Help articles don't format correctly.
+* Fixed database support to work on PHP 5.2 if a site is already installed there.
+* Fixed uncaught deprecated use of the split() function.
+* IP banning code did not work because IPs are stored with slashes.
+* Could not use multiple spoiler tags in one post.
+* Email and registration IP in member editing was being handled wrong.
+* Corrected the post box's inability to focus on the cursor position when using bbcode buttons.
+
+Changes for 1.5.1:
+
+* Slight rearranging of the forum topics display to save a bit of vertical space.
+* Groundwork laid for creating better file comments.
+* Added the ability to toggle file approvals on and off (global only).
+* Added a file version to the file data.
+* Updated the file details screen with a better layout.
+* Updated Google Analytics code.
+* It is now possible to upload to an otherwise hidden category to allow for one-way submissions.
+* Added Akismet filter protection to signature edits. Eat shit spambots.
+* Added Akismet filter protection to forum posts. Eat shit again spambots.
+* Default number of members displayed per members page raised from 10 to 25.
+* Visual update to individual news posts.
+* Moved query stats to the board statistics box on the left side.
+* Dropped the messagelink and codelink modlets in favor of inline styling for new PMs and files pending approval.
+* Updated avatar handling.
+* Massive overhaul of the installer system. Dropped unsupported converters. Will bring back if the need arises.
+* Added MySQLi support.
+
+   Bugs addressed:
+
+* File permissions module was not setting the security token.
+* Fixed BBCode size tags messing up formatting of other tags.
+* SECURITY: It was possible to view a category the user did not have permission to see using a direct link.
 
 Changes for 1.5:
 

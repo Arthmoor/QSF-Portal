@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,11 +66,8 @@ class readmarker extends forumutils
 				$this->last_read_all = intval($qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread']);
 			} else {
 				$this->last_read_all = $this->time - DAY_IN_SECONDS;
-				if( version_compare( PHP_VERSION, "5.2.0", "<" ) ) {
-					setcookie($this->sets['cookie_prefix'] . 'lastallread', $this->last_read_all, $qsf->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'].'; HttpOnly', $this->sets['cookie_secure']);
-				} else {
-					setcookie($this->sets['cookie_prefix'] . 'lastallread', $this->last_read_all, $qsf->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-				}
+
+				setcookie($this->sets['cookie_prefix'] . 'lastallread', $this->last_read_all, $qsf->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 			}
 			if (!isset($_SESSION[$this->sets['cookie_prefix'] . 'read_topics'])) {
 				$_SESSION[$this->sets['cookie_prefix'] . 'read_topics'] = array();
@@ -127,11 +124,7 @@ class readmarker extends forumutils
 					unset($_SESSION[$this->sets['cookie_prefix'] . 'read_topics'][$topic]);
 				}
 			}
-			if( version_compare( PHP_VERSION, "5.2.0", "<" ) ) {
-				setcookie($this->sets['cookie_prefix'] . 'lastallread', $time, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'].'; HttpOnly', $this->sets['cookie_secure']);
-			} else {
-				setcookie($this->sets['cookie_prefix'] . 'lastallread', $time, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			}
+			setcookie($this->sets['cookie_prefix'] . 'lastallread', $time, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 		} else {
 			$this->db->query("UPDATE %pusers SET user_lastallread=%s WHERE user_id=%d", $time, $this->user_id);
 			$this->db->query("DELETE FROM %preadmarks 

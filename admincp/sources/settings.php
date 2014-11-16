@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,123 @@ class settings extends admin
 
 		switch($this->get['s'])
 		{
+		case 'showcaptcha':
+			$this->set_title($this->lang->settings_captcha_display);
+			$this->tree($this->lang->settings_captcha_display);
+
+			$list = $this->db->query( 'SELECT * FROM %pcaptcha' );
+
+			$pairs = '';
+			while( $item = $this->db->nqfetch($list) )
+			{
+				$question = $item['cap_question'];
+				$answer = $item['cap_answer'];
+				$cap_id = $item['cap_id'];
+
+				$pairs .= eval($this->template('ADMIN_CAPTCHA_PAIR'));
+			}
+
+			return eval($this->template('ADMIN_CAPTCHA_DISPLAY'));
+			break;
+
+		case 'deletecaptcha':
+			$this->set_title($this->lang->settings_captcha_delete);
+			$this->tree($this->lang->settings_captcha_delete);
+
+			if(!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
+				$c = intval($this->get['c']);
+				if( $c < 1 )
+					return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_invalid );
+
+				$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', intval($this->get['c']) );
+
+				if( !$cap )
+					return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_no_pair );
+
+				$cap_id = $cap['cap_id'];
+				$question = $cap['cap_question'];
+				$answer = $cap['cap_answer'];
+
+				return eval($this->template('ADMIN_DELETE_CAPTCHA'));
+			}
+
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->settings_captcha_delete, $this->lang->invalid_token );
+			}
+
+			$c = intval($this->get['c']);
+			$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', $c );
+
+			if( !$cap )
+				return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_no_pair );
+
+			$this->db->query( "DELETE FROM %pcaptcha WHERE cap_id=%d", $c );
+
+			return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_deleted );
+			break;
+
+		case 'editcaptcha':
+			$this->set_title($this->lang->settings_captcha_edit);
+			$this->tree($this->lang->settings_captcha_edit);
+
+			if(!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
+				$c = intval($this->get['c']);
+				if( $c < 1 )
+					return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_invalid );
+
+				$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', intval($this->get['c']) );
+
+				if( !$cap )
+					return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_no_pair );
+
+				$cap_id = $cap['cap_id'];
+				$question = $cap['cap_question'];
+				$answer = $cap['cap_answer'];
+
+				return eval($this->template('ADMIN_EDIT_CAPTCHA'));
+			}
+
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->settings_captcha_edit, $this->lang->invalid_token );
+			}
+
+			$c = intval($this->get['c']);
+			$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', $c );
+
+			if( !$cap )
+				return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_no_pair );
+
+			$this->db->query( "UPDATE %pcaptcha SET cap_question='%s', cap_answer='%s' WHERE cap_id=%d", $this->post['cap_question'], $this->post['cap_answer'], $c );
+
+			return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_edited );
+			break;
+
+		case 'captcha':
+			$this->set_title($this->lang->settings_captcha_pair);
+			$this->tree($this->lang->settings_captcha_pair);
+
+			if(!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
+				return eval($this->template('ADMIN_ADD_CAPTCHA'));
+			}
+
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->settings_captcha_pair, $this->lang->invalid_token );
+			}
+
+			if( empty( $this->post['cap_question'] ) || empty( $this->post['cap_answer'] ) )
+				return $this->message( $this->lang->settings_captcha_pair, $this->lang->settings_captcha_missing );
+
+			$this->db->query( "INSERT INTO %pcaptcha (cap_question, cap_answer) VALUES( '%s', '%s' )", $this->post['cap_question'], $this->post['cap_answer'] );
+
+			return $this->message( $this->lang->settings_captcha_pair, $this->lang->settings_captcha_added );
+			break;
+
 		case 'add':
 			$this->set_title($this->lang->settings_new_add);
 			$this->tree($this->lang->settings_new_add);
@@ -107,13 +224,18 @@ class settings extends admin
 			$tos = $this->db->fetch("SELECT settings_tos_files FROM %psettings");
 			$tos_files_text = htmlspecialchars($tos['settings_tos_files']);
 
+			$tos = $this->db->fetch("SELECT settings_tos_files FROM %psettings");
+			$tos_files_text = htmlspecialchars($tos['settings_tos_files']);
+
+			$meta_keywords = htmlspecialchars($this->sets['meta_keywords']);
+			$meta_desc = htmlspecialchars($this->sets['meta_description']);
+
 			$attachsize = ($this->sets['attach_upload_size'] / 1024);
 			$attachtypes = implode("\r\n", $this->sets['attach_types']);
 			$defaultlang = $this->htmlwidgets->select_langs($this->sets['default_lang'], '..');
 			$avatarsize = ($this->sets['avatar_upload_size'] / 1024);
 			$spideragents = implode("\r\n", array_keys($this->sets['spider_name']));
 			$spidernames = implode("\r\n", $this->sets['spider_name']);
-			$optionalModules = implode("\r\n", $this->sets['optional_modules']);
 
 			// Set data for use in skin
 			$selectSkins = $this->htmlwidgets->select_skins($this->sets['default_skin']);
@@ -136,6 +258,8 @@ class settings extends admin
 
 			$tos_text = $this->post['tos'];
 			$tos_files_text = $this->post['tos_files'];
+			$meta_keywords = $this->post['meta_keywords'];
+			$meta_description = $this->post['meta_description'];
 
 			$vartypes = array(
 				'db_host' => 'string',
@@ -150,7 +274,6 @@ class settings extends admin
 				'loc_of_board' => 'string',
 				'closed' => 'bool',
 				'closedtext' => 'string',
-				'clickable_per_row' => 'int',
 				'attach_upload_size' => 'kilobytes',
 				'attach_types' => 'array',
 				'topics_per_page' => 'int',
@@ -181,31 +304,34 @@ class settings extends admin
 				'cookie_path' => 'string',
 				'cookie_domain' => 'string',
 				'cookie_secure' => 'bool',
-				'flash_avs' => 'bool',
 				'avatar_width' => 'int',
 				'avatar_height' => 'int',
 				'avatar_upload_size' => 'kilobytes',
-				'output_buffer' => 'bool',
 				'servertime' => 'float',
 				'max_load' => 'float',
 				'analytics_id' => 'string',
 				'spider_active' => 'bool',
 				'spider_agent' => 'array',
 				'spider_name' => 'array',
+				'registrations_allowed' => 'bool',
 				'rss_feed_posts' => 'int',
 				'rss_feed_time' => 'int',
 				'rss_feed_title' => 'string',
 				'rss_feed_desc' => 'string',
-				'optional_modules' => 'array',
 				'edit_post_age' => 'int',
 				'wordpress_api_key' => 'string',
 				'akismet_email' => 'bool',
-				'akismet_ureg' => 'bool'
+				'akismet_ureg' => 'bool',
+				'akismet_sigs' => 'bool',
+				'akismet_posts' => 'bool',
+				'akismet_profiles' => 'bool',
+				'akismet_posts_number' => 'int',
+				'file_approval' => 'bool'
 			);
 
 			foreach ($this->post as $var => $val)
 			{
-				if ($var == 'tos' || $var == 'tos_files' || $var == 'token')
+				if ($var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' )
 					continue;
 				if (($vartypes[$var] == 'int') || ($vartypes[$var] == 'bool')) {
 					$val = intval($val);
@@ -254,6 +380,8 @@ class settings extends admin
 				$this->write_sets();
 				$this->db->query("UPDATE %psettings SET settings_tos='%s'", $tos_text);
 				$this->db->query("UPDATE %psettings SET settings_tos_files='%s'", $tos_files_text);
+				$this->db->query("UPDATE %psettings SET settings_meta_keywords='%s'", $meta_keywords);
+				$this->db->query("UPDATE %psettings SET settings_meta_description='%s'", $meta_description);
 			}
 
 			return $this->message($this->lang->settings, $this->lang->settings_updated);

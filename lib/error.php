@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,7 +211,7 @@ function error_fatal($type, $message, $file, $line = 0)
   <meta name=\"robots\" content=\"noodp\" />
   <meta name=\"generator\" content=\"QSF Portal\" />
   <title>Fatal Error</title>
-  <link rel=\"stylesheet\" type=\"text/css\" href=\"skins/default/styles.css\" />
+  <link rel=\"stylesheet\" type=\"text/css\" href=\"/skins/default/styles.css\" />
  </head>
  <body>
  <div id=\"container\">
@@ -234,7 +234,7 @@ function error_fatal($type, $message, $file, $line = 0)
 
   <div id=\"bottom\">&nbsp;</div>
  </div>
- <div id=\"footer\">Powered by QSF Portal &copy; 2006-2010 The QSF Portal Development Team</div>
+ <div id=\"footer\">Powered by QSF Portal &copy; 2006-2012 The QSF Portal Development Team</div>
 </body>
 </html>" );
 }

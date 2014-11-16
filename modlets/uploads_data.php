@@ -1,8 +1,8 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,8 +38,9 @@ class uploads_data extends modlet
 
 			$lastfile = $this->qsf->lang->profile_uploads_none_yet;
 			if(isset($last['file_id'])) {
+				$furl = $this->qsf->clean_url($last['file_name']);
 				$date = $this->qsf->mbdate(DATE_LONG, $last['file_date']);
-				$lastfile = "<a href=\"{$this->qsf->self}?a=files&amp;s=viewfile&amp;fid={$last['file_id']}\">{$last['file_name']}</a><br />{$date}";
+				$lastfile = "<a href=\"{$this->qsf->site}/files/{$furl}-{$last['file_id']}/\">{$last['file_name']}</a><br />{$date}";
 			}
 
 			$usetime = ( ( ( $this->qsf->time - $user['user_joined'] ) / 86400 ) );

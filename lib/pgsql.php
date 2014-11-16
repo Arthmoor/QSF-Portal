@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -188,6 +188,34 @@ class db_pgsql extends database
 	function escape($string)
 	{
 		return pg_escape_string($string);
+	}
+
+	/**
+	 * Puts the data into the query using the escape function
+	 *
+	 * @param string $query SQL query
+	 * @param string $args Data to pass into query as escaped strings
+	 * @return string Formatted query
+	 **/
+	function _format_query($query)
+	{
+		// Format the query string
+		$args = array();
+		if (is_array($query)) {
+			$args = $query; // only use arg 1
+		} else {
+			$args  = func_get_args();
+		}
+
+		$query = array_shift($args);
+		$query = str_replace('%p', $this->prefix, $query);
+		
+		for($i=0; $i<count($args); $i++) {
+			$args[$i] = $this->escape($args[$i]);
+		}
+		array_unshift($args,$query);
+
+		return call_user_func_array('sprintf',$args);
 	}
 }
 ?>

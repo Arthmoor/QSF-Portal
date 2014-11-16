@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -72,6 +72,12 @@ define('TOPIC_PINNED', 16);
 define('TOPIC_GLOBAL', 32);
 define('TOPIC_DELETED', 64);
 define('TOPIC_PUBLISH', 128);
+
+/* Topic Types - These are not bitflags */
+define('TOPIC_TYPE_FORUM', 1);
+define('TOPIC_TYPE_FILE', 2);
+define('TOPIC_TYPE_GALLERY', 3);
+define('TOPIC_TYPE_ARTICLE', 4);
 
 /* Users */
 define('USER_GUEST_UID', 1);

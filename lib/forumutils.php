@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -225,7 +225,7 @@ require_once $set['include_path'] . '/lib/tool.php';
 			WHERE forum_parent > 0 AND forum_id IN (%s) OR forum_id=%d",
 			$forums['forum_tree'], $result['topic_forum']);
 
-		$this->update_last_post($posts['topic_forum']);
+		$this->update_last_post($TopicForum);
 
 		$this->sets['posts'] -= ($deleted+1);
 		$this->sets['topics'] -= 1;

@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,17 +103,17 @@ class email extends qsfglobal
 
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
 			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_email'] ) {
-				require_once $this->sets['include_path'] . '/lib/Akismet.class.php';
+				require_once $this->sets['include_path'] . '/lib/akismet.php';
 
 				$spam_checked = false;
 				$akismet = null;
 
 				try {
-					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key']);
+					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
 					$akismet->setCommentAuthor($this->user['user_name']);
 					$akismet->setCommentAuthorEmail($this->user['user_email']);
 					$akismet->setCommentContent($this->post['message']);
-					$akismet->setCommentType('QSFP Email');
+					$akismet->setCommentType('contact-form');
 
 					$spam_checked = true;
 				}
@@ -122,7 +122,11 @@ class email extends qsfglobal
 
 				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
 					$this->log_action('Spam Email Caught', 0, 0, 0);
-					return $this->message( $this->lang->email_email, $this->lang->settings_akismet_email_spam );
+
+					$this->sets['spam_email_count']++;
+					$this->write_sets();
+
+					return $this->message( $this->lang->email_email, $this->lang->email_akismet_email_spam );
 				}
 			}
 

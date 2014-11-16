@@ -73,45 +73,12 @@ textarea {
 	margin: 0px 0px 2px;
 }
 #header #company {
-	float: left;
-	position: absolute;
+	text-align:left;
 }
 #header #company .title {
 	background: url('./images/qsfportal_logo.png') no-repeat;
-	font: 1px Sans-serif;
-	color: black;
 	height: 100px;
 	width: 400px;
-	float: left;
-}
-#header #company .title:hover {
-	text-decoration: none;
-}
-
-/* Top Navigation */
-#header #navigation {
-	margin: 0px 8px;
-	padding: 0px;
-	list-style-type: none;
-	float: right;
-}
-#header #navigation li {
-	background: #292929;
-	padding: 6px 0px 0px;
-	float: left;
-}
-#header #navigation li a {
-	background: #292929;
-	font: 18px Arial, Sans-serif;
-	padding: 8px 8px 4px;
-	border-bottom: 1px solid #3e3e3e;
-	position: relative;
-}
-#header #navigation li.active a {
-	background: #292929;
-	border-left: 1px solid #3e3e3e;
-	border-right: 1px solid #3e3e3e;
-	border-bottom: 1px solid #3e3e3e;
 }
 
 /* Rounding */
@@ -168,6 +135,9 @@ textarea {
 	border: 1px solid #3e3e3e;
 	border-left: 3px double #3e3e3e;
 }
+#blocks span.small_text {
+	font: 10px Arial, Sans-serif;
+}
 
 /* Side Navigation */
 #blocks span a {
@@ -175,7 +145,6 @@ textarea {
 	color: #c0c0c0;
 	margin: 0px -7px 4px 4px;
 	padding: 1px 4px 1px 6px;
-	height: 1%; /* IE Hack */
 	display: block;
 }
 #blocks span a:hover {
@@ -190,10 +159,19 @@ textarea {
 	border-left: 1px double #292929;
 	display: block;
 }
+#blocks span a.attention {
+	color:yellow;
+	font-weight:bold;
+}
+#blocks a.small_text {
+	padding:0px;
+	margin:0px;
+	font: 10px Arial, Sans-serif;
+	display:inline;
+}
 #blocks span.half {
 	width: 48%;
 	padding: 0px 2% 0px 0px;
-
 	float: left;
 }
 
@@ -221,10 +199,23 @@ textarea {
 	padding: 3px 4px 2px 7px;
 	border: 1px solid #3e3e3e;
 	border-right: 3px double #3e3e3e;
-	position: relative; /* IE Hack */
 }
 
 /* Button effects */
+.smallbutton a {
+	background-position: 2px center;
+	background-repeat: no-repeat;
+        background-color:#292929;
+	font: 10px Arial, Sans-serif;
+	text-align: center;
+	text-decoration: none;
+	width: 16px;
+	height: 16px;
+	margin: 1px 1px;
+	padding: 2px;
+	border: 1px solid #3e3e3e;
+	float: left;
+}
 .button a {
 	background-position: 2px center;
 	background-repeat: no-repeat;
@@ -236,10 +227,9 @@ textarea {
 	margin: 1px 2px;
 	padding: 2px 2px 4px 22px;
 	border: 1px solid #3e3e3e;
-	float: left;
-	position: relative; /* IE Hack */
+	float: right;
 }
-.button a:hover {
+.button a:hover, .smallbutton a:hover {
 	background-color: #3e3e3e;
 	text-decoration: none;
 	border: 1px solid #484848;
@@ -248,16 +238,16 @@ textarea {
 	margin: 1px 2px 5px;
 	padding: 3px 2px 2px 22px;
 }
-.button .messenger { background-image: url('./images/icons/messenger.png'); }
-.button .email { background-image: url('./images/icons/email.png'); }
-.button .home {	background-image: url('./images/icons/homesite.png'); }
-.button .icq { background-image: url('./images/icons/icq_logo.png'); }
-.button .aim { background-image: url('./images/icons/aim_logo.png'); }
-.button .yahoo { background-image: url('./images/icons/yahoo_logo.png'); }
-.button .msn { background-image: url('./images/icons/msn_logo.png'); }
-.button .skype { background-image: url('./images/icons/skype.png'); }
-.button .gtalk { background-image: url('./images/icons/gtalk_logo.png'); }
+.smallbutton .messenger { background-image: url('./images/icons/messenger.png'); }
+.smallbutton .email { background-image: url('./images/icons/email.png'); }
+.smallbutton .home { background-image: url('./images/icons/homesite.png'); }
+.smallbutton .icq { background-image: url('./images/icons/icq_logo.png'); }
+.smallbutton .aim { background-image: url('./images/icons/aim_logo.png'); }
+.smallbutton .yahoo { background-image: url('./images/icons/yahoo_logo.png'); }
+.smallbutton .msn { background-image: url('./images/icons/msn_logo.png'); }
+.smallbutton .twitter { background-image: url('./images/icons/twitter-logo.png'); }
 .button .quotepost { background-image: url('./images/icons/comments_add.png'); }
+.button .spam { background-image: url('./images/icons/spam_delete.png'); }
 .button .delete { background-image: url('./images/icons/comment_delete.png'); }
 .button .edit { background-image: url('./images/icons/comment_edit.png'); }
 
@@ -471,15 +461,6 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 #main .article div.codetitle {
 	font-weight: bold;
 }
-#main .article .codelines {
-	width: 1em;
-	color:#333333;
-	font-family:"Courier New", Courier, serif;
-	text-align: right;
-	float: left;
-	padding: 3px;
-	overflow: auto;
-}
 
 /* Attachments */
 #main .article div.filebox {
@@ -512,7 +493,7 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	display: none;
 }
 #main .article span.member_bits {
-	width: 144px;
+	width: 192px;
 	float: right;
 }
 #main .article span.member_info {
@@ -533,9 +514,7 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	float: left;
 }
 #main .article .rounded_top {
-	background: url('./images/postbit_lip.png') no-repeat;
-	padding: 8px 0px 0px;
-	position: relative;
+	padding: 2px 0px 0px;
 }
 #main .article .rounded_top span,
 #main .article .rounded_bottom span {
@@ -548,7 +527,6 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	border-right: 1px solid #3e3e3e;
 	display: block;
 	margin: 0px;
-	position: relative;
 }
 #main .article div.postbit span.signature {
 	font: 11px Arial, Sans-serif;
@@ -715,6 +693,13 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	overflow-x: auto;
 	float: left;
 }
+#main .article span.fileversion {
+	width: 8%;
+	margin: 0px 0px 2px;
+	overflow-x: auto;
+	float: left;
+	text-align: center;
+}
 #main .article span.submitter {
 	width: 10%;
 	margin: 0px 0px 2px;
@@ -723,13 +708,13 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 #main .article span.filedate {
 	text-align: right;
-	width: 15%;
+	width: 10%;
 	overflow-x: auto;
 	float: left;
 }
 #main .article span.file_number {
 	text-align: center;
-	width: 10%;
+	width: 8%;
 	padding: 2px 0px;
 	float: left;
 }
@@ -738,6 +723,40 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	margin: 0px 0px 2px;
 	float: left;
 	text-align: center;
+}
+
+/* Spam Controls */
+#main .article span.spamaction {
+	width: 10%;
+	margin: 0px 0px 2px;
+	overflow-x: auto;
+	float: left;
+}
+#main .article span.spamtopic {
+	width: 10%;
+	margin: 0px 0px 2px;
+	overflow-x: auto;
+	float: left;
+}
+#main .article span.spamuser {
+	width: 10%;
+	margin: 0px 0px 2px;
+	float: left;
+	text-align: center;
+}
+#main .article span.spamip {
+	text-align: center;
+	width: 10%;
+	float: left;
+}
+#main .article span.spamdate {
+	text-align: center;
+	width: 15%;
+	float: left;
+}
+#main .article span.spamtext {
+	width: 40%;
+	float: left;
 }
 
 /* Topics */
@@ -773,7 +792,6 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 #main .article div.signature {
 	margin: 2px;
-	position: relative;
 }
 
 /* Topic Icon Key */
@@ -803,6 +821,11 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	clear: both;
 }
 
+/* Avatar Selection */
+#local_row  {
+	height:200px;
+}
+
 /* Footer */
 #footer, #copyright {
 	font: 10px Arial, Sans-serif;
@@ -813,38 +836,3 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 #footer a, #copyright a {
 	color: white;
 }
-
-/* Colours */
-.c1 { color: #517C97; } /* Ocean Blue - Main Text */
-.c2 { color: #739EB9; } /* Medium Blue - Large Announcement */
-.c3 { color: #87B885; } /* Light Green */
-.c4 { color: #E65757; } /* Pinky Red */
-.c5 { color: #ED9E50; } /* Orange */
-.c6 { color: #67ADC5; } /* Sky Blue */
-.c7 { color: #B8AC85; } /* Dirty Brown */
-.c8 { color: #4E8D4B; } /* Dark Green */
-
-/* Outer box for webrings */
-div.webringouter {
-border:1px solid #804000;
-background-color:#dcdcdc;
-width:400px;
-padding:2px;
-margin-left:auto;
-margin-right:auto;
-}
-
-/* Merc derivs ring */
-div.mercring {border:1px solid #804000; background-color:#ffcccc; padding:5px;}
-.mercfont  {font-family:Arial; color:black; font-weight:bold;}
-a.merclink  {font-family:Arial; color:black; font-size:10pt; text-decoration:none;}
-a:hover.merclink { text-decoration:underline; }
-
-/* Smaug ring */
-div.smaug {border:1px solid #804000; background-color:#dcdcdc; padding:5px;}
-div.slogo  {width:10%; margin-top:1%; padding-left:2px}
-div.slinks  {width:70%; float:right; text-align:center; margin-top:-50px}
-hr.smaug  {height:1px; border:0px; border-top:1px solid #ff3300;}
-.smfont    {font-family:Arial; color:black; font-weight:bold;}
-a.smlink    {font-family:Arial; font-size:10pt; color:#804000; text-decoration:none;}
-a:hover.smlink { text-decoration:underline; }

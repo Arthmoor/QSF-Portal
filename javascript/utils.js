@@ -1,5 +1,22 @@
 /* General javascript utils loaded on all pages */
 
+/* A centered pop-up window for any cases that might need one */
+function CenterPopUp( URL, name, width, height ) {
+	var left = ( screen.width - width ) / 2;
+	var top  = ( screen.height - height ) / 2;
+	var settings;
+
+	if( left < 0 ) left = 0;
+	if( top < 0 ) top = 0;
+
+	settings = 'width=' + width + ',';
+	settings += 'height=' + height + ',';
+	settings += 'top=' + top + ',';
+	settings += 'left=' + left;
+
+	window.open( URL, name, settings );
+}
+
 /* Use this when wanting a function to run onload. That way you allow
 multiple functions to run onload without needing to be aware of the other */
 function addLoadEvent(func) {
@@ -29,6 +46,29 @@ String.prototype.parseJSON = function () {
         return false;
     }
 };
+
+/* For upload forms */
+function sendForm(form) {
+    UploadBoxToggle()
+    var fd = new FormData(form);
+    var xhr = new XMLHttpRequest();
+    xhr.upload.addEventListener("progress", uploadProgress, false);
+    xhr.upload.addEventListener("load", uploadComplete, false);
+    xhr.open("POST", form.action += ((/\?/).test(form.action) ? "&" : "?") + (new Date()).getTime(), true);
+    xhr.send(fd);
+}
+
+/* For upload forms */
+function uploadProgress(evt) {
+    var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+    document.getElementById('prog').value = percentComplete;
+    document.getElementById('percent').innerHTML = percentComplete+"%<br />"+evt.loaded+" of "+evt.total;
+}
+
+/* For upload forms */
+function uploadComplete(evt) {
+    window.location = "http://yoursite.com/someredirect.php"
+}
 
 /* The below functions are for handling the XMLHttpRequest object */
 

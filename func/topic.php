@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -95,13 +95,11 @@ class topic extends qsfglobal
 		$topic = $this->db->fetch("
 			SELECT
 				t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum,
-				t.topic_icon, t.topic_edited, t.topic_replies, t.topic_poll_options, f.forum_name
+				t.topic_icon, t.topic_edited, t.topic_replies, t.topic_poll_options, t.topic_type, f.forum_name
 			FROM
 				%ptopics t, %pforums f
 			WHERE
-				t.topic_id=%d AND
-				f.forum_id=t.topic_forum",
-			$this->get['t']);
+				t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $this->get['t'], TOPIC_TYPE_FORUM);
 
 		if (!$topic) {
 			$this->set_title($this->lang->topic_not_found);
@@ -146,12 +144,12 @@ class topic extends qsfglobal
  
 			$new_topic = $this->db->fetch("
 					SELECT topic_id FROM %ptopics
-					WHERE topic_forum=%d AND
+					WHERE topic_forum=%d AND topic_type=%d AND
 						($where)
 					ORDER BY (topic_modes & %d) $order,
 						topic_edited $order
 					LIMIT 1",
-					$topic['topic_forum'], $topic['topic_edited'], TOPIC_PINNED);
+					$topic['topic_forum'], TOPIC_TYPE_FORUM, $topic['topic_edited'], TOPIC_PINNED);
 
 			if ($new_topic) {
                                 // Move to that topic
@@ -197,9 +195,9 @@ class topic extends qsfglobal
 
 		// Add RSS feed link for forum and topic
 		$this->lang->forum(); // needed for 'Forum' and 'Topic'
-		$this->add_feed($this->sets['loc_of_board'] . $this->mainfile . '?a=rssfeed&amp;f=' . $topic['topic_forum'],
+		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;f=' . $topic['topic_forum'],
 			"{$this->lang->forum_forum}: {$topic['forum_name']}");
-		$this->add_feed($this->sets['loc_of_board'] . $this->mainfile . '?a=rssfeed&amp;t=' . $this->get['t'],
+		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;t=' . $this->get['t'],
 			"{$this->lang->forum_topic}: $title_html");
 
 		if (strlen($topic['topic_title']) > 30) {
@@ -320,8 +318,8 @@ class topic extends qsfglobal
 
 		$query = $this->db->query("
 			SELECT
-			  p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, p.post_id, INET_NTOA(p.post_ip) as post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
-			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_aim, m.user_gtalk,
+			  p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
+			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_aim, m.user_twitter,
 			  m.user_icq, m.user_yahoo, m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_msn, m.user_pm, m.user_email_show, m.user_email_form, m.user_active,
 			  t.membertitle_icon,
 			  g.group_name,
@@ -348,12 +346,6 @@ class topic extends qsfglobal
 
 		while ($post = $this->db->nqfetch($query))
 		{
-			if ($i % 2 == 0) {
-				$class = 'tablelight';
-			} else {
-				$class = 'tabledark';
-			}
-
 			$newest_post_read = $post['post_time'];
 			$post['newpost'] = !$this->readmarker->is_post_read($this->get['t'], $post['post_time']);
 			if ($first_unread_post === false && $post['newpost']) {
@@ -430,10 +422,10 @@ class topic extends qsfglobal
 						'img'    => 'msn.png',
 						'target' => $this->sets['link_target']
 					),
-					'user_gtalk' => array(
-						'link'   => 'http://talk.google.com/',
-						'alt'    => sprintf($this->lang->topic_links_gtalk, $post['user_name']),
-						'img'    => 'gtalk.png',
+					'user_twitter' => array(
+						'link'   => 'http://twitter.com/' . $post['user_twitter'],
+						'alt'    => sprintf($this->lang->topic_links_twitter, $post['user_name']),
+						'img'    => 'twitter.png',
 						'target' => $this->sets['link_target']
 					),
 					'user_pm' => array(
@@ -467,15 +459,7 @@ class topic extends qsfglobal
 				}
 				$post['user_posts'] = number_format($post['user_posts'], 0, null, $this->lang->sep_thousands);
 
-				if (($post['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
-					if (substr($post['user_avatar'], -4) != '.swf') {
-						$post['user_avatar'] = "<img src='{$post['user_avatar']}' alt='' width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' /><br /><br />";
-					} else {
-						$post['user_avatar'] = "<object width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000'><param name='movie' value='{$post['user_avatar']}'><param name='play' value='true'><param name='loop' value='true'><param name='quality' value='high'><embed src='{$post['user_avatar']}' width='{$post['user_avatar_width']}' height='{$post['user_avatar_height']}' play='true' loop='true' quality='high'></embed></object><br /><br />";
-					}
-				} else {
-					$post['user_avatar'] = null;
-				}
+				$post['user_avatar'] = $this->htmlwidgets->display_avatar( $post );
 
 				if ($post['user_signature'] && $this->user['user_view_signatures']) {
 					$post['user_signature'] = '.........................<br />' . $this->format($post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
@@ -492,7 +476,7 @@ class topic extends qsfglobal
 				$post['user_aim'] = null;
 				$post['user_yahoo'] = null;
 				$post['user_msn'] = null;
-				$post['user_gtalk'] = null;
+				$post['user_twitter'] = null;
 				$post['user_pm'] = null;
 				$Poster_Info = eval($this->template('TOPIC_POSTER_GUEST'));
 				$post['user_signature'] = null;
@@ -500,7 +484,7 @@ class topic extends qsfglobal
 			}
 
 			if ($post['post_icon']) {
-				$post['post_icon'] = "<img src='./skins/$this->skin/mbicons/{$post['post_icon']}' alt='*' style='margin-right:5px' />";
+				$post['post_icon'] = "<img src='{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/{$post['post_icon']}' alt='*' style='margin-right:5px' />";
 			}
 
 			if (!$post['post_edited_by']) {

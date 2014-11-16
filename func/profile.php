@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -147,17 +147,14 @@ class profile extends qsfglobal
 			$profile['user_pm'] = null;
 		}
 
-		if ($profile['user_avatar_type'] != 'none') {
-			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"\" style=\"width:{$profile['user_avatar_width']}px; height:{$profile['user_avatar_height']}px;\" />";
-		} else {
-			$profile['user_avatar'] = null;
-		}
+		$profile['user_avatar'] = $this->htmlwidgets->display_avatar( $profile );
 
 		if ($profile['user_homepage']) {
 			$profile['user_homepage'] = "<a href=\"{$profile['user_homepage']}\">{$profile['user_homepage']}</a>";
 		}
 
 		$profile['user_joined'] = $this->mbdate(DATE_LONG, $profile['user_joined']);
+		$profile['user_lastvisit'] = $this->mbdate(DATE_LONG, $profile['user_lastvisit']);
 
 		$profile['user_email'] = null;
 		if ($this->perms->auth('email_use')) {
@@ -170,6 +167,11 @@ class profile extends qsfglobal
 					$profile['user_email'] = $this->lang->profile_private;
 				}
 			}
+		}
+
+
+		if( !$profile['user_twitter'] ) {
+			$profile['user_twitter'] = null;
 		}
 
 		if ($profile['user_signature']) {

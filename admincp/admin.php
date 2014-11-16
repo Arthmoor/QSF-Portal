@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,10 +41,6 @@ require_once $set['include_path'] . '/global.php';
  */
 class admin extends qsfglobal
 {
-	var $iterator = 0;              // The current number of iterations @var int @access protected
-	var $iterator_values = array(); // Values to be iterated @var array @access protected
-	var $iterator_last;             // Last selected value @var mixed @access protected
-
 	/**
 	 * Post constructor initaliser. Take care of admin specific stuff
 	 *
@@ -97,50 +93,6 @@ class admin extends qsfglobal
 		}
 
 		return eval($this->template('ADMIN_MESSAGE'));
-	}
-
-	/**
-	 * Starts the iterator. Parameters (unlimited) specify the values to cycle
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com
-	 * @since Beta 3.0
-	 * @return void
-	 */
-	function iterator_init()
-	{
-		$this->iterator_values = func_get_args();
-	}
-
-	/**
-	 * Returns the last selected value
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com
-	 * @since Beta 3.0
-	 * @return mixed Last selected value
-	 */
-	function lastValue()
-	{
-		return $this->iterator_last;
-	}
-
-	/**
-	 * Advances the position in the array by one
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com
-	 * @since Beta 3.0
-	 * @return mixed Current value in the array
-	 */
-	function iterate()
-	{
-		if ($this->iterator >= count($this->iterator_values)) {
-			$this->iterator = 0;
-		}
-
-		$ret = $this->iterator_values[$this->iterator];
-
-		$this->iterator++;
-		$this->iterator_last = $ret;
-		return $ret;
 	}
 
 	/**

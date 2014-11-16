@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,6 +53,8 @@ class htmlwidgets extends forumutils
 		$this->lang = &$qsf->lang;
 		$this->self = $qsf->self;
 		$this->skin = $qsf->skin;
+		$this->user = $qsf->user;
+		$this->sets = $qsf->sets;
 
 		// Need the time for timezone stuff
 		$this->time = &$qsf->time;
@@ -239,7 +241,7 @@ class htmlwidgets extends forumutils
 		{
 			if (is_dir('./avatars' . $subfolder . $file)) {
 				if ($file == 'uploaded' || $file[0] == '.') continue;
-				
+
 				$subDirs[] = $file;
 			}
 
@@ -269,7 +271,7 @@ class htmlwidgets extends forumutils
 				}
 			}
 		}
-		
+
 		return $out;
 	}
 
@@ -660,10 +662,50 @@ class htmlwidgets extends forumutils
 		foreach ($icons as $icon)
 		{
 			$msgicons .= "<li><input type=\"radio\" name=\"icon\" id=\"icon$i\" value=\"$icon\"" . (($select == $icon) ? '
-				checked=\'checked\'' : null) . " />&nbsp;<label for=\"icon$i\"><img src=\"./skins/$this->skin/mbicons/$icon\" alt=\"{$this->lang->post_icon}\" /></label></li>\n";
+				checked=\'checked\'' : null) . " />&nbsp;<label for=\"icon$i\"><img src=\"{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/$icon\" alt=\"{$this->lang->post_icon}\" /></label></li>\n";
 			$i++;
 		}
 		return $msgicons;
+	}
+
+	/**
+	 * Retreives a Gravatar URL for members who use them. See: http://en.gravatar.com/
+	 *
+	 * @param string $avatar Text containing the Gravatar email address (user specified)
+	 * @return string URL for the Gravatar image
+	 * @author Roger Libiez http://www.iguanadons.net
+	 * @since 1.5.2
+	 **/
+	function get_gravatar( $avatar )
+	{
+		$gravatar = 'http://www.gravatar.com/avatar/';
+		$gravatar .= md5( strtolower( trim($avatar) ) );
+		$gravatar .= "?s={$this->sets['avatar_width']}&amp;r=pg";
+
+		return $gravatar;
+	}
+
+	/**
+	 * Display a user's avatar when desired.
+	 *
+	 * @param string $user SQL resource array of user data
+	 * @return string URL for the desired avatar image, or NULL if not desired/unavailable.
+	 * @author Roger Libiez http://www.iguanadons.net
+	 * @since 1.5.2
+	 **/
+	function display_avatar( $user )
+	{
+		$url = null;
+		$avatar = $user['user_avatar'];
+
+		if( $user['user_avatar_type'] != 'none' && $this->user['user_view_avatars'] ) {
+			if( $user['user_avatar_type'] == 'gravatar' )
+				$avatar = $this->get_gravatar( $user['user_avatar'] );
+
+			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$user['user_avatar_width']}px; height:{$user['user_avatar_height']}px;\" />";
+		}
+
+		return $url;
 	}
 }
 ?>

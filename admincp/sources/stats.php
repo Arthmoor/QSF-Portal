@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +39,22 @@ class stats extends admin
 	{
 		$this->set_title($this->lang->stats);
 		$this->tree($this->lang->stats);
+		$graphs = null;
+
+		/**
+		 * Spam
+		 */
+		$spam_posts = $this->sets['spam_post_count'];
+		$spam_email = $this->sets['spam_email_count'];
+		$spam_reg = $this->sets['spam_reg_count'];
+		$spam_sig = $this->sets['spam_sig_count'];
+		$spam_prof = $this->sets['spam_profile_count'];
+		$spam_ham = $this->sets['ham_count'];
+		$spam_false = $this->sets['spam_false_count'];
+
+		$Stats = eval($this->template('STAT_SPAM'));
+		$title = 'Spam Statistics';
+		$graphs = eval($this->template('STAT_GRAPH'));
 
 		/**
 		 * Posts
@@ -66,7 +82,6 @@ class stats extends admin
 		if (!$data)
 			$data = array(0, 0);
 
-		$graphs = null;
 		$Stats = null;
 		$title = $this->lang->stats_post_by_month;
 		foreach( $data as $month => $stat )

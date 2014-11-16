@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2008 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,9 +36,11 @@ class bbcode
 	public function __construct(&$module)
 	{
 		$this->settings = &$module->settings; // <---- When you figure out why this works, you let me know. -- Samson
+		$this->site = &$module->site;
 		$this->skin = &$module->skin;
 		$this->db = &$module->db;
 		$this->censor = &$module->censor;
+		$this->emoticons = &$module->emoticons;
 	}
 
 	public function get_bbcode_menu()
@@ -52,10 +54,8 @@ class bbcode
 
 	public function generate_emote_links()
 	{
-		include( './skins/' . $this->skin . '/emoticons.php' );
-
 		$links = '';
-		foreach( $this->emotes['click_replacement'] as $key => $value )
+		foreach( $this->emoticons['click_replacement'] as $key => $value )
 			$links .= '<a href="#" onclick="return insertSmiley(\'' . $key . '\', textarea)">' . $value . '</a>';
 
 		return $links;
@@ -84,15 +84,13 @@ class bbcode
 
 		// Don't format emoticons!
 		if( $options & FORMAT_EMOTICONS ) {
-			include( './skins/' . $this->skin . '/emoticons.php' );
-			$strtr = array_merge($strtr, $this->emotes['click_replacement']);
-			$strtr = array_merge($strtr, $this->emotes['replacement']);
+			if( isset($this->emoticons['click_replacement']) )
+				$strtr = array_merge($strtr, $this->emoticons['click_replacement']);
+			if( isset($this->emoticons['replacement']) )
+				$strtr = array_merge($strtr, $this->emoticons['replacement']);
 		}
 
 		$in = strtr($in, $strtr);
-
-		$in = str_replace( '[tm]', '&reg;', $in );
-		$in = str_replace( '[c]', '&copy;', $in );
 
 		return $in;
 	}
@@ -119,7 +117,7 @@ class bbcode
 			'/\\[code\\](.*?)\\[\\/code\\]/ise',
 			'/\\[codebox\\](.*?)\\[\\/codebox\\]/ise',
 			'/\\[php\\](.*?)\\[\\/php\\]/ise',
-			'/\\[spoiler\\](.*)\\[\\/spoiler\\]/is',
+			'/\\[spoiler\\](.*)\\[\\/spoiler\\]/isU',
 			'/\\[b\\](.*)\\[\\/b\\]/isU',
 			'/\\[i\\](.*)\\[\\/i\\]/isU',
 			'/\\[u\\](.*)\\[\\/u\\]/isU',
@@ -129,9 +127,9 @@ class bbcode
 			'/\\[img\\](.*)\\[\\/img\\]/isU',
 			'/\\[img=(.*)\\](.*)\\[\\/img\\]/iU',
 			'/\\[email=(.*)\\](.*)\\[\\/email\\]/iU',
-			'/\\[font=(.*)\\](.*)\\[\\/font]/isU',
+			'/\\[size=([1-9])\\](.*)\\[\\/size\\]/isU',
+			'/\\[font=(.*)\\](.*)\\[\\/font\\]/isU',
 			'/\\[color=(.*)\\](.*)\\[\\/color\\]/isU',
-			'/\\[size=(.*)\\](.*)\\[\\/size]/ise',
 			'/\\[h1\\](.*)\\[\\/h1]/isU',
 			'/\\[h2\\](.*)\\[\\/h2]/isU',
 			'/\\[h3\\](.*)\\[\\/h3]/isU',
@@ -146,6 +144,9 @@ class bbcode
 			'/\\[li\\](.*)\\[\\/li\\]/isU',
 			'/\\[p\\](.*)\\[\\/p]/isU',
 			'/\\[br\\]/isU',
+			'/\\[tm\\]/isU',
+			'/\\[c\\]/isU',
+			// '/\\[topic=([:digit:])\\](.*)\\[/topic\\]/ise',
 			'/\\[youtube\\](.*?)\\[\\/youtube\\]/ise'
 			 );
 		$replace = array(
@@ -162,9 +163,9 @@ class bbcode
 			'<img src="$1" alt="" />',
 			'<img src="$1" alt="$2" />',
 			'<a href="mailto:$1">$2</a>',
+			'<span style="font-size:$1ex">$2</span>',
 			'<span style="font-family:$1">$2</span>',
 			'<span style="color:$1">$2</span>',
-			'$this->process_size(\'$1\', \'$2\')',
 			'<h1>$1</h1>', '<h2>$1</h2>', '<h3>$1</h3>', '<h4>$1</h4>', '<h5>$1</h5>', '<h6>$1</h6>',
 			'<div style="text-align:right">$1</div>',
 			'<div style="text-align:center">$1</div>',
@@ -174,6 +175,9 @@ class bbcode
 			'<li>$1</li>',
 			'<p>$1</p>',
 			'<br />',
+			'&reg;',
+			'&copy;',
+			// '$this->process_topic(\'$1\', \'$2\')',
 			'$this->process_youtube(\'$1\')'
 			 );
 		$in = preg_replace( $search, $replace, $in );
@@ -327,15 +331,24 @@ class bbcode
 
 	private function process_youtube($in)
 	{
-		$in = str_replace( 'watch?v=', 'v/', $in );
-		return '<object type="application/x-shockwave-flash" width="640" height="400" data="'.$in.'"><param name="movie" value="'.$in.'" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>';
+		if( preg_match( '/v=([^&]+)/', $in, $matches ) > 0 ) {
+			$src = $matches[1];
+
+			return '<iframe class="youtube-player" type="text/html" width="640" height="400" src="http://www.youtube.com/embed/'.$src.'" frameborder="0"></iframe>';
+		}
+
+		if( preg_match( '/youtu.be\/([^&]+)/', $in, $matches ) > 0 ) {
+			$src = $matches[1];
+
+			return '<iframe class="youtube-player" type="text/html" width="640" height="400" src="http://www.youtube.com/embed/'.$src.'" frameborder="0"></iframe>';
+		}
+
+		return $in;
 	}
 
-	private function process_size($size, $in)
+	private function process_topic($topic, $in)
 	{
-		$value = $size;
-		if( intval($value) > 10 )
-			$value = "10";
-		return '<span style="font-size:' . $value . 'ex">' . $in . '</span>';
+		return '<a href="' . $this->sets['loc_of_board'] . 'index.php?a=topic&t=' . $topic . '>' . $in . '</a>';
 	}
 }
+?>

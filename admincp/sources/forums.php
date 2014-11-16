@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,6 +156,7 @@ class forums extends admin
 			$this->set_title($this->lang->forum_recount);
 			$this->tree($this->lang->forum_recount);
 			$this->RecountForums();
+			$this->write_sets();
 			return $this->message($this->lang->forum_recount, sprintf($this->lang->recount_forums, $this->sets['topics'], $this->sets['posts']) );
 			break;
 		}
@@ -290,6 +291,7 @@ class forums extends admin
 
 		// Recount after the carnage so the board totals are correct.
 		$this->RecountForums();
+		$this->write_sets();
 
 		// Clean up any orphans that got left behind, because this process apparently isn't perfect.
 		$this->CleanOrphans();

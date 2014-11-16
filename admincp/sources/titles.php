@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,7 +91,6 @@ class titles extends admin
 			$this->tree($this->lang->titles_edit);
 
 			$out = null;
-			$this->iterator_init('tablelight', 'tabledark');
 
 			if (isset($this->get['delete']) && 1 == intval($this->get['delete'])) {
 				return $this->message($this->lang->titles_control, $this->lang->titles_nodel_default);
@@ -119,8 +118,6 @@ class titles extends admin
 			$query = $this->db->query("SELECT * FROM %pmembertitles");
 			while ($data = $this->db->nqfetch($query))
 			{
-				$class = $this->iterate();
-
 				if (!$this->get['edit'] || ($this->get['edit'] != $data['membertitle_id'])) {
 					$out .= eval($this->template('ADMIN_TITLE_ENTRY'));
 				} else {

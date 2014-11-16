@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,9 +46,10 @@ class templates extends admin
 			'ban'            => $this->lang->temps_ban,
 			'board'          => $this->lang->temps_board_index,
 			'censoring'      => $this->lang->temps_censoring,
+			'conversation'   => $this->lang->temps_conversation,
 			'cp'             => $this->lang->temps_cp,
 			'email'          => $this->lang->temps_email,
-			'emot_control'   => $this->lang->temps_emot_control,
+			'emoticon_control'   => $this->lang->temps_emoticon_control,
 			'forum'          => $this->lang->temps_forum,
 			'forums'         => $this->lang->temps_forums,
 			'groups'         => $this->lang->temps_groups,
@@ -71,6 +72,7 @@ class templates extends admin
 			'rssfeed'        => $this->lang->temps_rssfeed,
 			'search'         => $this->lang->temps_search,
 			'settings'       => $this->lang->temps_settings,
+			'spam_control'   => $this->lang->temps_spam,
 			'templates'      => $this->lang->temps_templates,
 			'titles'         => $this->lang->temps_titles,
 			'topic'          => $this->lang->temps_topics
@@ -545,22 +547,26 @@ class templates extends admin
 				return $this->message( $this->lang->export_skin, $this->lang->invalid_token );
 			}
 
+			if(!is_writeable('../packages')) {
+				return $this->message( $this->lang->export_skin, $this->lang->export_writeable );
+			}
+
 			// Dump the skin data into an XML file
-			
+
 			$skin = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='%s'", $this->post['skin']);
-			
+
 			$fullSkinName = $skin['skin_dir'] . "-" . $this->version;
-			
+
 			if (file_exists("../packages/skin_$fullSkinName.xml")) {
 				unlink("../packages/skin_$fullSkinName.xml");
 			}
 
 			$xmlFile = fopen("../packages/skin_$fullSkinName.xml", 'w');
-			
+
 			if ($xmlFile === false) {
 				return $this->message($this->lang->export_skin, "Error: Could not open file packages/skin_$fullSkinName.xml for writing");
 			}
-			
+
 			fwrite($xmlFile, "<?xml version='1.0' encoding='utf-8'?>\n");
 			fwrite($xmlFile, "<qsfmod>\n");
 			fwrite($xmlFile, "  <title>Skin: " . htmlspecialchars($skin['skin_name']) . "</title>\n");
@@ -577,8 +583,8 @@ class templates extends admin
 			}
 			fwrite($xmlFile, "  </files>\n");
 			fwrite($xmlFile, "  <templates>\n");
-			
-        	$query = $this->db->query("SELECT * FROM %ptemplates WHERE template_skin = '%s' ORDER BY template_name", $skin['skin_dir']);
+
+        	$query = $this->db->query("SELECT * FROM %ptemplates WHERE template_skin = '%s' ORDER BY template_name ASC", $skin['skin_dir']);
 	        while ($row = $this->db->nqfetch($query))
 			{
 				fwrite($xmlFile, "    <template><set>{$row['template_set']}</set><name>{$row['template_name']}</name>\n");
@@ -589,7 +595,7 @@ class templates extends admin
 				fwrite($xmlFile, "      ]]></html>\n");
 				fwrite($xmlFile, "    </template>\n");
 			}
-       		       
+
 			fwrite($xmlFile, "  </templates>\n");
 			fwrite($xmlFile, "  <install>\n");
 			fwrite($xmlFile, "    <query>\n");
@@ -611,7 +617,7 @@ class templates extends admin
 			fwrite($xmlFile, "</qsfmod>\n");
 
 			fclose($xmlFile);
-			
+
 			$tarTool = new archive_tar();
 			$tarTool->open_file_writer("../packages/skin_$fullSkinName", true);
 			// Always wise to make these first for speed
@@ -620,9 +626,9 @@ class templates extends admin
 			// Now throw in everything else
 			$tarTool->add_dir("../skins/{$skin['skin_dir']}", "skins/{$skin['skin_dir']}");
 			$filename = $tarTool->close_file();
-			
+
 			@unlink("../packages/skin_$fullSkinName.xml");
-			
+
 			$this->chmod($filename, 0777);
 
 			return $this->message($this->lang->export_skin, $this->lang->export_done, basename($filename), $filename);
@@ -909,7 +915,6 @@ class templates extends admin
 				</div></form>");
 		} elseif( !isset($this->get['i'])) {
 			$token = $this->generate_token();
-			$this->iterator_init('tablelight', 'tabledark');
 
 			$query = $this->db->query("SELECT template_displayname, template_description, template_name, template_html
 				FROM %ptemplates WHERE template_skin='%s' AND template_name='%s'", $template, $this->post['template']);
@@ -921,12 +926,10 @@ class templates extends admin
 			$list = '';
 			while ($data = $this->db->nqfetch($query))
 			{
-				$class = $this->iterate();
 				$template_name = $data['template_name'];
 				$data['template_html'] = $this->format($data['template_html'], FORMAT_HTMLCHARS);
 				$list .= eval($this->template('ADMIN_TEMPLATE_DELETE_CONTENTS'));
 			}
-			$class = $this->iterate();
 			$out = eval($this->template('ADMIN_DELETE_TEMPLATE'));
 			return $this->message($this->lang->delete_template,$out);
 		} else {
@@ -950,14 +953,11 @@ class templates extends admin
 			$query = $this->db->query("SELECT template_displayname, template_description, template_name, template_html
 				FROM %ptemplates WHERE template_skin='%s' AND template_set='%s' ORDER BY template_name", $template, $this->get['section']);
 
-			$this->iterator_init('tablelight', 'tabledark');
-
 			$out = "";
 			while ($data = $this->db->nqfetch($query))
 			{
 				$data['template_html'] = $this->format($data['template_html'], FORMAT_HTMLCHARS);
 
-				$class = $this->iterate();
 				$out .= eval($this->template('ADMIN_EDIT_TEMPLATE_ENTRY'));
 			}
 			return eval($this->template('ADMIN_EDIT_TEMPLATE'));

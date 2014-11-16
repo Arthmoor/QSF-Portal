@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,12 +116,12 @@ class forum extends qsfglobal
 		}
 		
 		// Add RSS feed link for forum
-		$this->add_feed($this->sets['loc_of_board'] . $this->mainfile . '?a=rssfeed&amp;f=' . $f,
+		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;f=' . $f,
 			"{$this->lang->forum_forum}: {$exists['forum_name']}");
 
 		$this->set_title($exists['forum_name']);
 
-		$topic = $this->db->fetch("SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=%d", $f);
+		$topic = $this->db->fetch("SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=%d AND topic_type=%d", $f, TOPIC_TYPE_FORUM);
 
 		$pagelinks = $this->htmlwidgets->get_pages($topic['count'], "a=forum&amp;f=$f&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n);
 		$SubForums = $this->getSubs($f);
@@ -227,14 +227,13 @@ class forum extends qsfglobal
 				DISTINCT(p.post_author) as dot,
 				t.topic_id, t.topic_title, t.topic_last_poster, t.topic_starter, t.topic_replies, t.topic_modes,
 				t.topic_posted, t.topic_edited, t.topic_icon, t.topic_views, t.topic_description, t.topic_moved, t.topic_forum,
-				s.user_name AS topic_starter_name, m.user_name AS topic_last_poster_name, t.topic_last_post
+				s.user_name AS topic_starter_name, m.user_name AS topic_last_poster_name, t.topic_last_post, t.topic_type
 			FROM
-				(%ptopics t,
-				%pusers s)
+				(%ptopics t, %pusers s)
 			LEFT JOIN %pposts p ON (t.topic_id = p.post_topic AND p.post_author = %d)
 			LEFT JOIN %pusers m ON m.user_id = t.topic_last_poster
 			WHERE
-				((t.topic_forum = %d) OR (t.topic_modes & %d)) AND
+				((t.topic_forum = %d) OR (t.topic_modes & %d)) AND t.topic_type=%d AND
 				s.user_id = t.topic_starter
 			GROUP BY t.topic_id
 			ORDER BY
@@ -242,7 +241,7 @@ class forum extends qsfglobal
 				$order
 			LIMIT
 				%d, %d",
-			$this->user['user_id'], $f, TOPIC_GLOBAL, TOPIC_PINNED, $min, $n);
+			$this->user['user_id'], $f, TOPIC_GLOBAL, TOPIC_TYPE_FORUM, TOPIC_PINNED, $min, $n);
 
 		while ($row = $this->db->nqfetch($query))
 		{
@@ -320,10 +319,10 @@ class forum extends qsfglobal
 			
 			$row['icon'] = $row['topic_icon']; // Store so skin can still access
 			if ($row['topic_modes'] & TOPIC_POLL) {
-				$row['topic_icon'] = '<img src="./skins/' . $this->skin . '/images/poll.png" alt="' . $this->lang->forum_icon . '" />';
+				$row['topic_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/images/poll.png" alt="' . $this->lang->forum_icon . '" />';
 			} else {
 				if ($row['topic_icon']) {
-					$row['topic_icon'] = '<img src="./skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->forum_icon . '" />';
+					$row['topic_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->forum_icon . '" />';
 				}
 			}
 

@@ -1,8 +1,8 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ class recent_posts extends modlet
 					$content .= '';
 				} else {
 					if (!$this->qsf->readmarker->is_topic_read($row['topic_id'], $row['topic_edited'])) {
-						$content .= "<img src='./skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+						$content .= "<img src='{$this->qsf->sets['loc_of_board']}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
 						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
 					} else {
 						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";
@@ -76,7 +76,7 @@ class recent_posts extends modlet
 					$content .= '';
 				} else {
 					if (!$this->qsf->readmarker->is_topic_read($row['topic_id'], $row['topic_edited'])) {
-						$content .= "<img src='./skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+						$content .= "<img src='{$this->qsf->sets['loc_of_board']}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
 						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
 					} else {
 						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";

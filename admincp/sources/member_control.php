@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,42 +106,7 @@ class member_control extends admin
 					return $this->message( $this->lang->mc_delete, $this->lang->invalid_token );
 				}
 
-				$this->db->query("UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $this->get['id']);
-				$this->db->query("UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $this->get['id']);
-				$this->db->query("UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $this->get['id']);
-				$this->db->query("UPDATE %ptopics SET topic_last_poster=%d WHERE topic_last_poster=%d", USER_GUEST_UID, $this->get['id']);
-				$this->db->query("UPDATE %plogs SET log_user=%d WHERE log_user=%d", USER_GUEST_UID, $this->get['id']);
-				$this->db->query("UPDATE %pfiles SET file_submitted=%d WHERE file_submitted=%d AND file_approved=1", USER_GUEST_UID, $this->get['id']);
-				$this->db->query("UPDATE %pfilecomments SET user_id=%d WHERE user_id=%d", USER_GUEST_UID, $this->get['id']);
-				$this->activeutil->delete($this->get['id']);
-				$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d", $this->get['id']);
-				$this->db->query("DELETE FROM %pvotes WHERE vote_user=%d", $this->get['id']);
-				$this->db->query("DELETE FROM %pfileratings WHERE user_id=%d", $this->get['id']);
-				$this->db->query("DELETE FROM %pusers WHERE user_id=%d", $this->get['id']);
-				$this->db->query("DELETE FROM %ppmsystem WHERE pm_to=%d", $this->get['id']);
-				$this->db->query("DELETE FROM %preadmarks WHERE readmark_user=%d", $this->get['id']);
-
-				$files = $this->db->query("SELECT file_id, file_md5name FROM %pfiles WHERE file_submitted=%d AND file_approved=0", $this->get['id']);
-				while( $file = $this->db->nqfetch($files) )
-				{
-					@unlink("./downloads/" . $file['file_md5name']);
-					$this->db->query( "DELETE FROM %pfiles WHERE file_id=%d", $file['file_id'] );
-				}
-
-				$updates = $this->db->query("SELECT update_id, update_md5name FROM %pupdates WHERE update_updater=%d", $this->get['id']);
-				while( $update = $this->db->nqfetch($updates) )
-				{
-					@unlink("./updates/" . $update['update_md5name']);
-					$this->db->query( "DELETE FROM %pupdates WHERE update_id=%d", $update['update_id'] );
-				}
-
-				$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
-				$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
-
-				$this->sets['last_member'] = $member['user_name'];
-				$this->sets['last_member_id'] = $member['user_id'];
-				$this->sets['members'] = $counts['count']-1;
-				$this->write_sets();
+				$this->delete_member_account( $this->get['id'] );
 
 				return $this->message($this->lang->mc_delete, $this->lang->mc_deleted);
 			}
@@ -152,13 +117,52 @@ class member_control extends admin
 
 			$this->get['id'] = intval($this->get['id']);
 
+			if( isset($this->post['memberspambot']) ) {
+				$token = $this->generate_token();
+
+				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $this->get['id']);
+
+				$this->lang->mc_confirm_bot = sprintf($this->lang->mc_confirm_bot, $member['user_name']);
+				return eval($this->template('ADMIN_MEMBER_SPAMBOT'));
+			}
+
+			if( isset($this->post['confirm_spambot']) ) {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->mc_delete, $this->lang->invalid_token );
+				}
+
+				$id = intval($this->post['member']);
+				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $id);
+
+				$svars = json_decode($member['user_server_data'], true);
+
+				require_once $this->sets['include_path'] . '/lib/akismet.php';
+				$akismet = new Akismet($this->settings['site_address'], $this->settings['wordpress_api_key'], $this->version);
+				$akismet->setCommentAuthor($member['user_name']);
+				$akismet->setCommentAuthorEmail($member['user_email']);
+				$akismet->setCommentAuthorURL($member['user_homepage']);
+				$akismet->setUserIP($member['user_regip']);
+				if( isset($member['user_interests']) )
+					$akismet->setCommentContent($member['user_interests']);
+				if( isset($svars['HTTP_REFERER']) )
+					$akismet->setReferrer($svars['HTTP_REFERER']);
+				if( isset($svars['HTTP_USER_AGENT']) )
+					$akismet->setUserAgent($svars['HTTP_USER_AGENT']);
+				$akismet->setCommentType('signup');
+
+				$akismet->submitSpam();
+
+				$this->delete_member_account( $id );
+
+				return $this->message($this->lang->mc_delete, $this->lang->mc_deleted);
+			}
+
 			if (!isset($this->post['submit'])) {
 				$token = $this->generate_token();
 
 				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $this->get['id']);
 
-				$this->iterator_init('tablelight', 'tabledark');
-				$out = "";
+				$out = '';
 
 				define('U_IGNORE', 0);
 				define('U_TEXT', 1);
@@ -196,7 +200,7 @@ class member_control extends admin
 					'user_icq'		=> array($this->lang->mc_user_icq, U_INT, 16),
 					'user_msn'		=> array($this->lang->mc_user_msn, U_TEXT, 32),
 					'user_aim'		=> array($this->lang->mc_user_aim, U_TEXT, 32),
-					'user_gtalk'		=> array($this->lang->mc_user_gtalk, U_TEXT, 32),
+					'user_twitter'		=> array($this->lang->mc_user_twitter, U_TEXT, 50),
 					'user_yahoo'		=> array($this->lang->mc_user_yahoo, U_TEXT, 100),
 					'user_email_show'	=> array($this->lang->mc_user_email_show, U_BOOL),
 					'user_pm'		=> array($this->lang->mc_user_pm, U_BOOL),
@@ -208,8 +212,9 @@ class member_control extends admin
 					'user_joined'		=> array($this->lang->mc_user_joined, U_TIME),
 					'user_lastvisit'	=> array($this->lang->mc_user_lastvisit, U_TIME),
 					'user_lastpost'		=> array($this->lang->mc_user_lastpost, U_TIME),
-					'user_regip'		=> array($this->lang->mc_user_regip, U_IP),
-                                        'user_register_email'   => array($this->lang->mc_user_regemail, U_TEXT, 100)
+					'user_regip'		=> array($this->lang->mc_user_regip, U_IGNORE),
+                                        'user_register_email'   => array($this->lang->mc_user_regemail, U_IGNORE),
+					'user_server_data'	=> array($this->lang->mc_user_server_data, U_IGNORE)
 				);
 
 				foreach ($cols as $var => $data)
@@ -227,7 +232,6 @@ class member_control extends admin
 					}
 
 					$line = '';
-					$class = $this->iterate();
 
 					switch ($data[1])
 					{
@@ -354,7 +358,7 @@ class member_control extends admin
 				$user_icq = intval($this->post['user_icq']);
 				$user_msn = $this->format($this->post['user_msn'], FORMAT_HTMLCHARS);
 				$user_aim = $this->format($this->post['user_aim'], FORMAT_HTMLCHARS);
-				$user_gtalk = $this->format($this->post['user_gtalk'], FORMAT_HTMLCHARS);
+				$user_twitter = $this->format($this->post['user_twitter'], FORMAT_HTMLCHARS);
 				$user_yahoo = $this->format($this->post['user_yahoo'], FORMAT_HTMLCHARS);
 				$user_email_show = intval($this->post['user_email_show']);
 				$user_pm = intval($this->post['user_pm']);
@@ -368,14 +372,14 @@ class member_control extends admin
 				  user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d, user_level=%d,
 				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s',
 				  user_interests='%s', user_signature='%s', user_posts=%d, user_uploads=%d,
-				  user_icq=%d, user_msn='%s', user_aim='%s', user_gtalk='%s', user_yahoo='%s',
+				  user_icq=%d, user_msn='%s', user_aim='%s', user_twitter='%s', user_yahoo='%s',
 				  user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
 				  user_view_signatures=%d, user_view_emoticons=%d WHERE user_id=%d",
 				  $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
 				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
 				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_interests,
 				  $user_signature, $user_posts, $user_uploads, $user_icq, $user_msn, $user_aim,
-				  $user_gtalk, $user_yahoo, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
+				  $user_twitter, $user_yahoo, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
 				  $user_view_signatures, $user_view_emoticons, $this->get['id'] );
 
 				if( $user_group == USER_BANNED ) {
@@ -413,7 +417,7 @@ class member_control extends admin
 	function list_user_avatar_types($val)
 	{
 		$out = "<select name='user_avatar_type'>";
-		$types = array('local', 'url', 'uploaded', 'none');
+		$types = array('local', 'url', 'uploaded', 'gravatar', 'none');
 
 		foreach ($types as $type)
 		{
@@ -444,6 +448,46 @@ class member_control extends admin
 		}
 
 		return $out . '</select>';
+	}
+
+	function delete_member_account( $id )
+	{
+		$this->db->query("UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $id);
+		$this->db->query("UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $id);
+		$this->db->query("UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $id);
+		$this->db->query("UPDATE %ptopics SET topic_last_poster=%d WHERE topic_last_poster=%d", USER_GUEST_UID, $id);
+		$this->db->query("UPDATE %plogs SET log_user=%d WHERE log_user=%d", USER_GUEST_UID, $id);
+		$this->db->query("UPDATE %pfiles SET file_submitted=%d WHERE file_submitted=%d AND file_approved=1", USER_GUEST_UID, $id);
+		$this->db->query("UPDATE %pfilecomments SET user_id=%d WHERE user_id=%d", USER_GUEST_UID, $id);
+		$this->activeutil->delete($id);
+		$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d", $id);
+		$this->db->query("DELETE FROM %pvotes WHERE vote_user=%d", $id);
+		$this->db->query("DELETE FROM %pfileratings WHERE user_id=%d", $id);
+		$this->db->query("DELETE FROM %pusers WHERE user_id=%d", $id);
+		$this->db->query("DELETE FROM %ppmsystem WHERE pm_to=%d", $id);
+		$this->db->query("DELETE FROM %preadmarks WHERE readmark_user=%d", $id);
+
+		$files = $this->db->query("SELECT file_id, file_md5name FROM %pfiles WHERE file_submitted=%d AND file_approved=0", $id);
+		while( $file = $this->db->nqfetch($files) )
+		{
+			@unlink("./downloads/" . $file['file_md5name']);
+			$this->db->query( "DELETE FROM %pfiles WHERE file_id=%d", $file['file_id'] );
+		}
+
+		$updates = $this->db->query("SELECT update_id, update_md5name FROM %pupdates WHERE update_updater=%d", $id);
+		while( $update = $this->db->nqfetch($updates) )
+		{
+			@unlink("./updates/" . $update['update_md5name']);
+			$this->db->query( "DELETE FROM %pupdates WHERE update_id=%d", $update['update_id'] );
+		}
+
+		$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
+		$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
+
+		$this->sets['last_member'] = $member['user_name'];
+		$this->sets['last_member_id'] = $member['user_id'];
+		$this->sets['members'] = $counts['count']-1;
+		$this->write_sets();
 	}
 }
 ?>

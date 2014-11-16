@@ -1,0 +1,11 @@
+Options +FollowSymlinks
+RewriteEngine On
+
+RewriteRule ^files/upload_rules/$ index.php?a=upload_rules [L]
+RewriteRule ^files/search/$ index.php?a=files&s=search [L]
+RewriteRule ^files/recent/$ index.php?a=files&s=recent [L]
+RewriteRule ^files/upload/([0-9]*)/$ index.php?a=files&s=upload&cid=$1 [L]
+RewriteRule ^files/download/([0-9]*)/$ index.php?a=files&s=download&fid=$1 [L]
+RewriteRule ^files/category/([0-9]*)/$ index.php?a=files&cid=$1 [L]
+RewriteRule ^files/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=files&s=viewfile&fname=$1&fid=$2 [L]
+RewriteRule ^files/$ index.php?a=files [L]

@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -230,10 +230,10 @@ class recent extends qsfglobal
 			}
 			$row['icon'] = $row['topic_icon']; // Store so skin can access
 			if ($row['topic_modes'] & TOPIC_POLL) {
-				$row['topic_icon'] = '<img src="./skins/' . $this->skin . '/images/poll.png" alt="' . $this->lang->recent_icon . '" />';
+				$row['topic_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/images/poll.png" alt="' . $this->lang->recent_icon . '" />';
 			} else {
 				if ($row['topic_icon']) {
-					$row['topic_icon'] = '<img src="./skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->recent_icon . '" />';
+					$row['topic_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->recent_icon . '" />';
 				}
 			}
 

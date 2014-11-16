@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@ if (!defined('QUICKSILVERFORUMS')) {
 }
 
 require_once $set['include_path'] . '/global.php';
-require_once $set['include_path'] . '/lib/imginfo.php';
 
 /**
  * User Control Panel
@@ -73,32 +72,26 @@ class cp extends qsfglobal
 		switch($this->get['s'])
 		{
 		case 'cpass':
-			$class['cpass'] = 'tabledark';
 			$control_page = $this->edit_pass();
 			break;
 
 		case 'profile':
-			$class['profile'] = 'tabledark';
 			$control_page = $this->edit_profile();
 			break;
 
 		case 'avatar':
-			$class['avatar'] = 'tabledark';
 			$control_page = $this->edit_avatar();
 			break;
 
 		case 'prefs':
-			$class['prefs'] = 'tabledark';
 			$control_page = $this->edit_prefs();
 			break;
 
 		case 'subs':
-			$class['subs'] = 'tabledark';
 			$control_page = $this->edit_subs();
 			break;
 
 		case 'sig':
-			$class['sig'] = 'tabledark';
 			$control_page = $this->edit_sig();
 			break;
 
@@ -169,11 +162,8 @@ class cp extends qsfglobal
 				$hashed_pass = md5($this->post['passA']);
 				$this->db->query("UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $hashed_pass, $this->user['user_id']);
 
-				if( version_compare( PHP_VERSION, "5.2.0", "<" ) ) {
-					setcookie($this->sets['cookie_prefix'] . 'pass', $hashed_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'].'; HttpOnly', $this->sets['cookie_secure']);
-				} else {
-					setcookie($this->sets['cookie_prefix'] . 'pass', $hashed_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-				}
+				setcookie($this->sets['cookie_prefix'] . 'pass', $hashed_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+
 				$_SESSION['pass'] = md5($hashed_pass . $this->ip);
 				$this->user['user_password'] = $hashed_pass;
 
@@ -356,13 +346,43 @@ class cp extends qsfglobal
 				return $this->message($this->lang->cp_err_updating, sprintf($this->lang->cp_not_exist, $user_birthday));
 			}
 
+			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
+			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_profiles'] && !empty($this->post['user_homepage']) ) {
+				require_once $this->sets['include_path'] . '/lib/akismet.php';
+
+				$spam_checked = false;
+				$akismet = null;
+
+				try {
+					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
+					$akismet->setCommentAuthor($this->user['user_name']);
+					$akismet->setCommentAuthorEmail($this->user['user_email']);
+					$akismet->setCommentAuthorURL($this->post['user_homepage']);
+					$akismet->setCommentContent($this->post['user_interests']);
+					$akismet->setCommentType('user-profile');
+
+					$spam_checked = true;
+				}
+				// Try and deal with it rather than say something.
+				catch(Exception $e) {}
+
+				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+					$this->log_action('Blocked Profile Update', 0, 0, 0);
+
+					$this->sets['spam_profile_count']++;
+					$this->write_sets();
+
+					return $this->message( $this->lang->cp_err_updating, $this->lang->cp_profile_spam );
+				}
+			}
+
 			$this->post['user_homepage']  = $this->format($this->post['user_homepage'], FORMAT_HTMLCHARS);
 			$this->post['user_location']  = $this->format($this->post['user_location'], FORMAT_HTMLCHARS);
 			$this->post['user_interests'] = $this->format($this->post['user_interests'], FORMAT_HTMLCHARS);
 			$this->post['user_aim']       = $this->format($this->post['user_aim'], FORMAT_HTMLCHARS);
 			$this->post['user_msn']       = $this->format($this->post['user_msn'], FORMAT_HTMLCHARS);
 			$this->post['user_yahoo']     = $this->format($this->post['user_yahoo'], FORMAT_HTMLCHARS);
-			$this->post['user_gtalk']     = $this->format($this->post['user_gtalk'], FORMAT_HTMLCHARS);
+			$this->post['user_twitter']   = $this->format($this->post['user_twitter'], FORMAT_HTMLCHARS);
 			if ($this->perms->auth('is_admin')) {
 				$query = $this->db->query("SELECT membertitle_title FROM %pmembertitles");
 				if (!isset($this->post['user_title']) || $this->post['user_title'] == '' ) {
@@ -395,11 +415,11 @@ class cp extends qsfglobal
 				UPDATE %pusers SET
 				  user_email='%s', user_birthday='%s', user_homepage='%s', user_location ='%s',
 				  user_interests='%s', user_icq=%d, user_msn='%s', user_aim='%s', user_yahoo='%s',
-				  user_gtalk='%s', user_title='%s', user_title_custom=%d, user_name='%s'
+				  user_twitter='%s', user_title='%s', user_title_custom=%d, user_name='%s'
 				WHERE user_id=%d",
 				$this->post['user_email'], $user_birthday, $this->post['user_homepage'], $this->post['user_location'],
 				$this->post['user_interests'], $icq, $this->post['user_msn'], $this->post['user_aim'],
-				$this->post['user_yahoo'], $this->post['user_gtalk'], $usertitle, $custom_title, $this->post['Newuser_name'],
+				$this->post['user_yahoo'], $this->post['user_twitter'], $usertitle, $custom_title, $this->post['Newuser_name'],
 				$this->user['user_id']);
 
 			if ($this->post['Newuser_name'] != $this->user['user_name']) {
@@ -427,28 +447,34 @@ class cp extends qsfglobal
 
 			if (empty($this->user['user_avatar'])) {
 				$this->user['user_avatar']   = "./skins/{$this->skin}/images/noavatar.png";
-				$this->user['user_avatar_width']  = 75;
-				$this->user['user_avatar_height'] = 75;
+				$this->user['user_avatar_width']  = $this->sets['avatar_width'];
+				$this->user['user_avatar_height'] = $this->sets['avatar_height'];
 			}
 
 			$checks[0] = ($this->user['user_avatar_type'] == 'local') ? ' checked=\'checked\'' : null;
 			$checks[1] = ($this->user['user_avatar_type'] == 'url') ? ' checked=\'checked\'' : null;
-			$checks[2] = ($this->user['user_avatar_type'] == 'uploaded') ? ' checked=\'checked\'' : null;
-			$checks[3] = ($this->user['user_avatar_type'] == 'none') ? ' checked=\'checked\'' : null;
+			$checks[2] = ($this->user['user_avatar_type'] == 'gravatar') ? ' checked=\'checked\'' : null;
+			$checks[3] = ($this->user['user_avatar_type'] == 'uploaded') ? ' checked=\'checked\'' : null;
+			$checks[4] = ($this->user['user_avatar_type'] == 'none') ? ' checked=\'checked\'' : null;
 
 			// In the HTML 'uploaded' is called 'use_uploaded'
 			$init = ($this->user['user_avatar_type'] == 'uploaded') ? 'use_uploaded' : null;
 
-			$avatar_url = ($this->user['user_avatar_type'] == 'url') ? $this->user['user_avatar'] : null;
+			$avatar = $this->user['user_avatar'];
+			$avatar_url = null;
+			$gravatar_url = null;
+			if( $this->user['user_avatar_type'] == 'url' ) {
+				$avatar_url = $avatar;
+			} elseif( $this->user['user_avatar_type'] == 'gravatar' )  {
+				$avatar = $this->htmlwidgets->get_gravatar( $avatar );
+				$gravatar_url = $avatar;
+			}
 
 			return eval($this->template('CP_AVATAR'));
 		} else {
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->cp_label_edit_avatar, $this->lang->invalid_token );
 			}
-
-			$this->post['user_avatar_width'] = intval($this->post['user_avatar_width']);
-			$this->post['user_avatar_height'] = intval($this->post['user_avatar_height']);
 
 			$temp = explode('.',  $this->user['user_avatar']);
 			$fileExtension  = array_pop($temp);
@@ -463,23 +489,38 @@ class cp extends qsfglobal
 					return $this->message($this->lang->cp_err_avatar, $this->lang->cp_avatar_must_select);
 				}
 
+				$image = getimagesize( $this->post['avatar_local'] );
+
+				if( $image[0] > $this->sets['avatar_width'] )
+					$image[0] = $this->sets['avatar_width'];
+				if( $image[1] > $this->sets['avatar_height'] )
+					$image[1] = $this->sets['avatar_height'];
+
+				$this->user['user_avatar_width']  = $image[0];
+				$this->user['user_avatar_height'] = $image[1];
+
 				$avatar = trim($this->post['avatar_local']);
 				$type = 'local';
 				$this->delete_avatar();
 				break;
 
 			case 'url':
-				if (($this->post['user_avatar_width'] > $this->sets['avatar_width']) || ($this->post['user_avatar_height'] > $this->sets['avatar_height'])) {
-					return $this->message($this->lang->cp_err_avatar, sprintf($this->lang->cp_size_max, $this->sets['avatar_width'], $this->sets['avatar_height']));
-				}
-
-				if (!preg_match('/\.(gif|jpg|jpeg|png|swf)$/i', $this->post['avatar_url'])) {
+				if (!preg_match('/\.(gif|jpg|jpeg|png)$/i', $this->post['avatar_url'])) {
 					return $this->message($this->lang->cp_err_avatar, $this->lang->cp_file_type);
 				}
 
-				if ((strtolower(substr($this->post['avatar_url'], 0, 4)) == '.swf') && !$this->sets['flash_avs']) {
-					return $this->message($this->lang->cp_err_avatar, $this->lang->cp_no_flash);
+				$image = getimagesize( $this->post['avatar_url'] );
+				if( $image === false ) {
+					return $this->message($this->lang->cp_err_avatar, $this->lang->cp_file_type);
 				}
+
+				if( $image[0] > $this->sets['avatar_width'] )
+					$image[0] = $this->sets['avatar_width'];
+				if( $image[1] > $this->sets['avatar_height'] )
+					$image[1] = $this->sets['avatar_height'];
+
+				$this->user['user_avatar_width']  = $image[0];
+				$this->user['user_avatar_height'] = $image[1];
 
 				$avatar = $this->format(trim($this->post['avatar_url']), FORMAT_HTMLCHARS);
 				$type = 'url';
@@ -494,16 +535,17 @@ class cp extends qsfglobal
 				// Get extension
 				$fileExtension  = array_pop(explode('.',  $this->files['avatar_upload']['name']));
 				if (!in_array($fileExtension, $this->fileExtensions)) {
-					$fileExtension = 'avtr';
+					return $this->message( $this->lang->cp_label_edit_avatar, $this->lang->cp_avatar_upload_not_image );
 				}
-				
+
 				$this->delete_avatar();
-				$upload = $this->attachmentutil->upload($this->files['avatar_upload'], './avatars/uploaded/' . $this->user['user_id'] . '.' . $fileExtension, $this->sets['avatar_upload_size'], array('jpg', 'jpeg', 'gif', 'png'));
+				$new_fname = './avatars/uploaded/' . $this->user['user_id'] . '.' . $fileExtension;
+				$upload = $this->attachmentutil->upload($this->files['avatar_upload'], $new_fname, $this->sets['avatar_upload_size'], array('jpg', 'jpeg', 'gif', 'png'));
 
 				switch($upload)
 				{
 				case UPLOAD_TOO_LARGE:
-					return $this->message($this->lang->cp_avatar_error,  sprintf($this->lang->cp_avatar_upload_too_large, round($this->sets['avatar_upload_size']/1024, 1)));
+					return $this->message($this->lang->cp_avatar_error, sprintf($this->lang->cp_avatar_upload_too_large, round($this->sets['avatar_upload_size']/1024, 1)));
 					break 2;
 
 				case UPLOAD_NOT_ALLOWED:
@@ -515,22 +557,29 @@ class cp extends qsfglobal
 					break 2;
 				}
 
-				// Get dimensions of image
-				$myImgInfo = new imginfo();
-				$data = $myImgInfo->info('./avatars/uploaded/' . $this->user['user_id'] . '.' . $fileExtension);
-				if ($data) {
-					$this->post['user_avatar_width'] = $data['X'];
-					$this->post['user_avatar_height'] = $data['Y'];
-				}
+				// Force resize the new avatar
+				$image = $this->resize_avatar( $new_fname, $new_fname, $fileExtension, $this->sets['avatar_width'], $this->sets['avatar_height'] );
+
+				$this->user['user_avatar_width']  = $image['width'];
+				$this->user['user_avatar_height'] = $image['height'];
 
 				// Allows things such as rsync to backup avatars
-				$avatar_uploaded = './avatars/uploaded/' . $this->user['user_id'] . '.' . $fileExtension;
-				$this->chmod( $avatar_uploaded , 0644, false );
+				$this->chmod( $new_fname, 0644, false );
 
 				// Deliberate fall through
 			case 'use_uploaded':
 				$avatar = './avatars/uploaded/' . $this->user['user_id'] . '.' . $fileExtension;
 				$type = 'uploaded';
+				break;
+
+			case 'gravatar':
+				if (!$this->validator->validate($this->post['avatar_gurl'], TYPE_EMAIL)) {
+					return $this->message($this->lang->cp_avatar_error, $this->lang->cp_gravatar_upload_failed);
+				}
+
+				$avatar = trim( $this->post['avatar_gurl'] );
+				$type = 'gravatar';
+				$this->delete_avatar();
 				break;
 
 			default:
@@ -540,28 +589,11 @@ class cp extends qsfglobal
 				break;
 			}
 
-			// Quick sanity check on dimensions
-			if ($this->post['user_avatar_width'] < 1) {
-				$this->post['user_avatar_width'] = 1;
-			}
-
-			if ($this->post['user_avatar_height'] < 1) {
-				$this->post['user_avatar_height'] = 1;
-			}
-
-			if ($this->post['user_avatar_width'] > $this->sets['avatar_width']) {
-				$this->post['user_avatar_width'] = $this->sets['avatar_width'];
-			}
-			if ($this->post['user_avatar_height'] > $this->sets['avatar_height']) {
-				$this->post['user_avatar_height'] = $this->sets['avatar_height'];
-			}
-
 			$this->db->query("UPDATE %pusers SET
 				  user_avatar='%s', user_avatar_type='%s',
 				  user_avatar_width=%d, user_avatar_height=%d
 				WHERE user_id=%d",
-				$avatar, $type, intval($this->post['user_avatar_width']),
-				intval($this->post['user_avatar_height']), $this->user['user_id']);
+				$avatar, $type, $this->user['user_avatar_width'], $this->user['user_avatar_height'], $this->user['user_id']);
 
 			return $this->message($this->lang->cp_updated1, $this->lang->cp_been_updated1);
 		}
@@ -636,6 +668,11 @@ class cp extends qsfglobal
 		if (!$this->perms->auth('edit_sig')) {
 			return $this->message($this->lang->cp_label_edit_sig, $this->lang->cp_no_edit_sig);
 		}
+
+		if( $this->user['user_posts'] < 5 ) {
+			return $this->message($this->lang->cp_label_edit_sig, $this->lang->cp_no_edit_sig);
+		}
+
 		$this->set_title($this->lang->cp_label_edit_sig);
 		$this->tree($this->lang->cp_cp, $this->self . '?a=cp');
 		$this->tree($this->lang->cp_label_edit_sig);
@@ -646,8 +683,37 @@ class cp extends qsfglobal
 				return $this->message( $this->lang->cp_label_edit_sig, $this->lang->invalid_token );
 			}
 
-			$this->db->query("UPDATE %pusers SET user_signature='%s' WHERE user_id=%d",
-				$this->post['sig'],  $this->user['user_id']);
+			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
+			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_sigs'] ) {
+				if( !$this->perms->auth('is_admin') && $this->user['user_posts'] < $this->sets['akismet_posts_number'] ) {
+					require_once $this->sets['include_path'] . '/lib/akismet.php';
+
+					$spam_checked = false;
+					$akismet = null;
+
+					try {
+						$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
+						$akismet->setCommentAuthor($this->user['user_name']);
+						$akismet->setCommentAuthorEmail($this->user['user_email']);
+						$akismet->setCommentContent($this->post['sig']);
+						$akismet->setCommentType('user-signature');
+
+						$spam_checked = true;
+					}
+					// Try and deal with it rather than say something.
+					catch(Exception $e) {}
+
+					if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+						$this->log_action('Blocked Signature Update', 0, 0, 0);
+
+						$this->sets['spam_sig_count']++;
+						$this->write_sets();
+
+						return $this->message( $this->lang->cp_label_edit_sig, $this->lang->cp_label_edit_sig_spam );
+					}
+				}
+			}
+			$this->db->query("UPDATE %pusers SET user_signature='%s' WHERE user_id=%d", $this->post['sig'], $this->user['user_id']);
 		}
 
 		$token = $this->generate_token();
@@ -692,6 +758,54 @@ class cp extends qsfglobal
 		if ($this->user['user_avatar_type'] == 'uploaded') {
 			@unlink($this->user['user_avatar']);
 		}
+	}
+
+	function resize_avatar( $name, $filename, $ext, $new_w, $new_h )
+	{
+		$thumb_w = 1;
+		$thumb_h = 1;
+
+		$system = explode( '.', $name );
+		$src_img = null;
+
+		if( preg_match( '/jpg|jpeg/', $ext ) )
+			$src_img = imagecreatefromjpeg($name);
+		else if ( preg_match( '/png/', $ext ) )
+			$src_img = imagecreatefrompng($name);
+		else if ( preg_match( '/gif/', $ext ) )
+			$src_img = imagecreatefromgif($name);
+		$old_x = imageSX( $src_img );
+		$old_y = imageSY( $src_img );
+
+		if( $old_x <= $new_w && $old_y <= $new_h ) {
+			$thumb_w = $old_x;
+			$thumb_h = $old_y;
+		} else {
+			if ($old_x > $old_y) {
+				$thumb_w = $new_w;
+				$thumb_h = $old_y * ( $new_h / $old_x );
+			}
+			if ($old_x < $old_y) {
+				$thumb_w = $old_x * ( $new_w / $old_y );
+				$thumb_h = $new_h;
+			}
+			if ($old_x == $old_y) {
+				$thumb_w = $new_w;
+				$thumb_h = $new_h;
+			}
+		}
+
+		$dst_img = ImageCreateTrueColor( $thumb_w, $thumb_h );
+		imagecopyresampled( $dst_img, $src_img, 0, 0, 0, 0, $thumb_w, $thumb_h, $old_x, $old_y );
+		if (preg_match( '/png/', $ext ) )
+			imagepng( $dst_img, $filename );
+		else if ( preg_match( '/jpg|jpeg/', $ext ) )
+			imagejpeg( $dst_img, $filename );
+		else
+			imagegif( $dst_img, $filename );
+		imagedestroy( $dst_img );
+		imagedestroy( $src_img );
+		return array( 'width' => $thumb_w, 'height' => $thumb_h );
 	}
 }
 ?>

@@ -1,18 +1,18 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2010 The QSF Portal Development Team
- * http://www.qsfportal.com/
+ * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
- * http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
+ * http://code.google.com/p/quicksilverforums/
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
- * http://www.mercuryboard.com/
+ * https://github.com/markelliot/MercuryBoard
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -150,6 +150,11 @@ class db_mysql extends database
 		return mysql_fetch_array($query, MYSQL_ASSOC);
 	}
 
+	function nqfetch_row($query)
+	{
+		return mysql_fetch_row($query);
+	}
+
 	/**
 	 * Gets the number of rows retrieved by a SELECT
 	 *
@@ -201,9 +206,32 @@ class db_mysql extends database
 		return mysql_error($this->connection);
 	}
 
-	function version()
+	/**
+	 * Puts the data into the query using the escape function
+	 *
+	 * @param string $query SQL query
+	 * @param string $args Data to pass into query as escaped strings
+	 * @return string Formatted query
+	 **/
+	function _format_query($query)
 	{
-		return mysql_result(mysql_query('SELECT VERSION() as version'), 0, 0);
+		// Format the query string
+		$args = array();
+		if (is_array($query)) {
+			$args = $query; // only use arg 1
+		} else {
+			$args  = func_get_args();
+		}
+
+		$query = array_shift($args);
+		$query = str_replace('%p', $this->prefix, $query);
+		
+		for($i=0; $i<count($args); $i++) {
+			$args[$i] = $this->escape($args[$i]);
+		}
+		array_unshift($args,$query);
+
+		return call_user_func_array('sprintf',$args);
 	}
 }
 ?>
