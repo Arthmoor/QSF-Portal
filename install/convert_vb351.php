@@ -39,9 +39,6 @@ $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
-// Check for any addons available
-include_addons($set['include_path'] . '/addons/');
-
 define('CONVERTER_NAME', 'vBulliten 3.5 Converter');
 define('CONVERTER_URL', 'convert_vb351.php');
 define('CONVERTER_DROPURL', 'convert_vb351.php?action=dropvb');

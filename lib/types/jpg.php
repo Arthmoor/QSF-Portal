@@ -31,7 +31,6 @@ require_once $set['include_path'] . '/lib/types/decoder.php';
  **/
 class jpg extends decoder
 {
-
 	/* returns true if data is of a jpeg type 
 	 * NOTE: we only check if the file is a jfif file type! */
 	function isType()
@@ -50,7 +49,7 @@ class jpg extends decoder
 	{
 		/* search for the frame block */
 		$wanting = 0xC0;
-		
+
 		$dat = array();
 
 		/* if it's not in the first 30 blocks then stuff it */
@@ -71,7 +70,5 @@ class jpg extends decoder
 			$this->seek_fwd($dat[2]-2);
 		}
 	}
-
 }
-
 ?>

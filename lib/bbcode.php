@@ -82,7 +82,7 @@ class bbcode extends htmltools
 	var $error;			// Array of errors in order of occurence if any
 	var $rejoin;			// Name of the current element that is being processed ( where the end tag re-joins in the stream )
 	var $options;                   // Formatting options passed from the format() call.
-	var $block_branch = array( 'code', 'php', 'url' ); // Array of elements that we don't create children of
+	var $block_branch = array( 'code', 'php' ); // Array of elements that we don't create children of
 	var $handlers = array(
 				'b'	=>	'_process_b',
 				'url'	=>	'_process_url',
@@ -577,7 +577,7 @@ class bbcode extends htmltools
 
 	function _process_lrj(&$node)
 	{
-		return '<p style="text-align:'.$node->type.'">'.$node->text.'</p>';
+		return '<div style="text-align:'.$node->type.'">'.$node->text.'</div>';
 	}
 
 	function _process_colour(&$node)

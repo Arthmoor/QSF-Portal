@@ -593,7 +593,9 @@ class topic extends qsfglobal
 
 			// Need to terminate and unlock the session at this point or the site will stall for the current user.
 			session_write_close();
-			header("Content-type: application/octet-stream");
+
+			ini_set("zlib.output_compression", "Off");
+			header("Content-Type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$data['attach_name']}\"");
 			header("Content-Length: " . $data['attach_size']);
 			header("X-Robots-Tag: noarchive, nosnippet, noindex");

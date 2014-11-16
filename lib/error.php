@@ -50,15 +50,19 @@ function get_backtrace()
 		$args = array();
 
 		if( $trace > 2 ) { // The call in the error handler is irrelevent anyway, so don't bother with the arg list
-			foreach( $frame['args'] as $arg ) {
-				if ( is_array( $arg ) && array_key_exists( 0, $arg ) ) {
-					$argument = htmlspecialchars( $arg[0] );
-				} elseif( is_string( $arg ) ) {
-					$argument = htmlspecialchars( $arg );
-				} else {
-					$argument = NULL;
+			if ( isset( $frame['args'] ) )
+			{
+				foreach( $frame['args'] as $arg )
+				{
+					if ( is_array( $arg ) && array_key_exists( 0, $arg ) && is_string( $arg[0] ) ) {
+						$argument = htmlspecialchars( $arg[0] );
+					} elseif( is_string( $arg ) ) {
+						$argument = htmlspecialchars( $arg );
+					} else {
+						$argument = NULL;
+					}
+					$args[] = "'{$argument}'";
 				}
-				$args[] = "'{$argument}'";
 			}
 		}
 

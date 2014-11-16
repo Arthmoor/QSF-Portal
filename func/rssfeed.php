@@ -124,7 +124,7 @@ class rssfeed extends qsfglobal
 			$items .= $this->get_post($row);
 		}
 
-		Header( "Content-type: text/xml", 1 );
+		Header( 'Content-type: text/xml', 1 );
 		return eval($this->template('RSSFEED_ALL_POSTS'));
 	}
 	
@@ -170,7 +170,7 @@ class rssfeed extends qsfglobal
 			$items .= $this->get_post($row);
 		}
 
-		Header( "Content-type: text/xml", 1 );
+		Header( 'Content-type: text/xml', 1 );
 		return eval($this->template('RSSFEED_FORUM'));
 	}
 
@@ -231,7 +231,7 @@ class rssfeed extends qsfglobal
 			$items .= $this->get_post($row);
 		}
 
-		Header( "Content-type: text/xml", 1 );
+		Header( 'Content-type: text/xml', 1 );
 		return eval($this->template('RSSFEED_TOPIC'));
 	}
 	
@@ -244,7 +244,7 @@ class rssfeed extends qsfglobal
 	 **/
 	function rss_error_message($error)
 	{
-		Header( "Content-type: text/xml", 1 );
+		Header( 'Content-type: text/xml', 1 );
 		return eval($this->template('RSSFEED_ERROR'));
 	}
 	
@@ -258,14 +258,14 @@ class rssfeed extends qsfglobal
 	 **/
 	function get_post($query_row)
 	{
-		$title = htmlspecialchars( $query_row['topic_title'] );
+		$title = $this->format( $query_row['topic_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 		$desc = substr( $query_row['post_text'], 0, 500 );
-		$desc = htmlspecialchars( $desc );
+		$desc = $this->format( $desc, FORMAT_HTMLCHARS | FORMAT_CENSOR );
 		$pubdate = $this->mbdate( DATE_ISO822, $query_row['post_time'], false );
 		$forum_name = 'Unknown';
 		$forum = $this->readmarker->get_forum($query_row['topic_forum']);
 		if ($forum != null) $forum_name = $forum['forum_name'];
-		$user_email = htmlspecialchars($query_row['user_name']);
+		$user_email = $this->format( $query_row['user_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 		$user_email .= ' &lt;';
 		if ($query_row['user_email_show']) {
 			$user_email .= $query_row['user_email'];

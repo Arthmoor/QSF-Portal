@@ -40,9 +40,6 @@ $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
-// Check for any addons available
-include_addons($set['include_path'] . '/addons/');
-
 define('CONVERTER_NAME', 'Invisionboard 1.31f');
 define('CONVERTER_URL', 'convert_invision131f.php');
 define('CONVERTER_DROPURL', 'convert_invision131f?action=dropinvision');

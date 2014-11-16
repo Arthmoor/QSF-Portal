@@ -92,12 +92,19 @@ class page extends qsfglobal
 	{
 		$this->tree( $this->lang->pages, "$this->self?a=page" );
 
-		$page = $this->db->fetch("SELECT page_id, page_title, page_contents FROM %ppages WHERE page_id=%d", $p);
+		$page = $this->db->fetch("SELECT page_id, page_title, page_contents, page_flags FROM %ppages WHERE page_id=%d", $p);
 
 		if ( $page ) {
-			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE | FORMAT_EMOTICONS;
+			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE;
 			$page['page_title'] = $this->format($page['page_title'], $param );
-			$page['page_contents'] = $this->format($page['page_contents'], FORMAT_CENSOR );
+
+			// This may seem a bit confusing, but it works. The page edit option "Format HTML" is really telling the code the opposite, so it needs to be flipped here.
+			if( $page['page_flags'] & FORMAT_HTMLCHARS )
+				$page['page_flags'] = $page['page_flags'] ^ FORMAT_HTMLCHARS;
+			else
+				$page['page_flags'] = $page['page_flags'] | FORMAT_HTMLCHARS;
+
+			$page['page_contents'] = $this->format($page['page_contents'], $page['page_flags']);
 			$this->tree($page['page_title']);
 			$this->set_title($page['page_title']);
 		} else {
@@ -119,7 +126,7 @@ class page extends qsfglobal
 		
 		$page = $this->db->fetch("
 		SELECT
-			page_id as id, page_title as title, page_contents as contents
+			page_id as id, page_title as title, page_contents as contents, page_flags as flags
 		FROM
 			%ppages
 		WHERE
@@ -128,11 +135,28 @@ class page extends qsfglobal
 		if ( !$page )
 			return $this->message($this->lang->page_editing, $this->lang->page_not_exist);
 
+		$bb = FORMAT_MBCODE;
+		$em = FORMAT_EMOTICONS;
+		$cn = FORMAT_CENSOR;
+		$nl = FORMAT_BREAKS;
+		$html = FORMAT_HTMLCHARS;
+
+		$bbbox = $page['flags'] & FORMAT_MBCODE ? " checked=\"checked\"" : null;
+		$embox = $page['flags'] & FORMAT_EMOTICONS ? " checked=\"checked\"" : null;
+		$cnbox = $page['flags'] & FORMAT_CENSOR ? " checked=\"checked\"" : null;
+		$nlbox = $page['flags'] & FORMAT_BREAKS ? " checked=\"checked\"" : null;
+		$htmlbox = $page['flags'] & FORMAT_HTMLCHARS ? " checked=\"checked\"" : null;
+
 		if (!isset($this->post['submit']))
  			return eval($this->template('PAGE_EDIT'));
 
-		$this->db->query("UPDATE %ppages SET page_title='%s', page_contents='%s' WHERE page_id=%d",
-			$this->post['title'], $this->post['contents'], $p );
+		$flags = 0;
+		if( isset( $this->post['flags'] ) )
+			foreach( $this->post['flags'] as $flag)
+				$flags |= intval($flag);
+
+		$this->db->query("UPDATE %ppages SET page_title='%s', page_contents='%s', page_flags=%d WHERE page_id=%d",
+			$this->post['title'], $this->post['contents'], $flags, $p );
 
 		return $this->message($this->lang->page_editing, $this->lang->page_edit_done, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}");
 	}
@@ -149,8 +173,13 @@ class page extends qsfglobal
 		if ( !isset($this->post['submit']) )
 			return eval($this->template('PAGE_CREATE'));
 
-		$this->db->query("INSERT INTO %ppages (page_title,page_contents) VALUES('%s', '%s')",
-			$this->post['title'], $this->post['contents']);
+		$flags = 0;
+		if( isset( $this->post['flags'] ) )
+			foreach( $this->post['flags'] as $flag)
+				$flags |= intval($flag);
+
+		$this->db->query("INSERT INTO %ppages (page_title,page_contents,page_flags) VALUES('%s', '%s', %d)",
+			$this->post['title'], $this->post['contents'], $flags);
 		$p = $this->db->insert_id("%ppages");
 		return $this->message($this->lang->page_creating, $this->lang->page_created, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}");
 	}

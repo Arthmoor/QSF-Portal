@@ -134,7 +134,7 @@ class pm extends qsfglobal
 					$deleteMessages[] = intval($id);
 				}
 
-				$this->db->query("DELETE FROM %ppmsystem WHERE pm_id IN (%s)", implode(', ', $deleteMessages));
+				$this->db->query('DELETE FROM %ppmsystem WHERE pm_id IN (%s) AND pm_to=%d', implode(', ', $deleteMessages), $this->user['user_id'] );
 			}
 
 			return $this->message($this->lang->pm_personal_msging, $this->lang->pm_deleted_all);

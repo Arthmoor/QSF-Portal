@@ -111,7 +111,6 @@
  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$admin->lang->charset}" />
  <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/styles.css" />
  <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/acp.css" />
- <script type="text/javascript" src="../javascript/admincp_menu.js"></script>
  <IF (strpos($admin->agent, 'MSIE') !== false)>
   <style type="text/css">
    input.button { padding: 0px; }
@@ -2816,6 +2815,7 @@
  </select>
  <input type="submit" name="detach" value="{$this->lang->post_attach_remove}" />
 </span>
+{$attached_data}
 <p class="line"></p>
       ]]></html>
     </template>
@@ -3275,7 +3275,7 @@ enable('$init');
 <div class="hidden"><a id="p{$post['post_id']}"></a><IF ($first_unread_post)><a id="unread"></a></IF></div>
 {$this->table}
  <div class="title">
-  <div style="float:left;">
+  <div style="float:left; position:relative;">
    <IF ($post['newpost'])>
     <img src="./skins/{$this->skin}/images/icons/post_new.png" alt="{$this->lang->topic_new_post}" />
    </IF>
@@ -3404,7 +3404,7 @@ enable('$init');
 {$this->table}
  <div class="title">
   <img src="./skins/{$this->skin}/images/icons/comment_add_blured.png" alt="" />
-  {$this->lang->topic_quickreply}
+  {$this->lang->topic_quickreply}: {$title_html}
  </div>
  <span class="head">
   <strong>{$this->lang->post_msg}</strong>
@@ -3491,16 +3491,24 @@ function toggleQuickReplyBox()
  <p></p>
 {$this->etable}
 
-<IF (strpos($mod_opts, '&nbsp') === false)>
 {$this->table}
- {$mod_opts}
-{$this->etable}
+<IF (strpos($mod_opts, '&nbsp') === false)>
+ <div style="float:left">{$this->lang->topic_pages}:{$pagelinks}</div>
+ <div style="text-align:right">{$mod_opts}</div>
+<ELSE>
+ {$this->lang->topic_pages}:{$pagelinks}
 </IF>
+{$this->etable}
 {$posts}
 </form>
 
 {$this->table}
+<IF (strpos($mod_opts, '&nbsp') === false)>
+ <div style="float:left">{$this->lang->topic_pages}:{$pagelinks}</div>
+ <div style="text-align:right">{$mod_opts}</div>
+<ELSE>
  {$this->lang->topic_pages}:{$pagelinks}
+</IF>
 {$this->etable}
 
 {$this->table}
@@ -3515,7 +3523,7 @@ function toggleQuickReplyBox()
  <IF $can_reply>
   <div class="bigbutton"><a class="topic_reply" href="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" title="{$this->lang->topic_reply}">{$this->lang->reply}</a></div>
  </IF>
- <IF (($this->perms->auth(('post_create'), $topic['topic_forum'])) && $quickreply)>
+ <IF ($can_reply && $quickreply)>
  <script type="text/javascript">
  <!--
   function toggleQuickReplyButton()
@@ -3528,7 +3536,7 @@ function toggleQuickReplyBox()
  <p></p>
 {$this->etable}
 
-<IF (($this->perms->auth(('post_create'), $topic['topic_forum'])) && $quickreply)>
+<IF ($can_reply && $quickreply)>
 <div class="quickreply">
  {$quickreply}
 </div>
@@ -4780,6 +4788,17 @@ function toggleQuickReplyBox()
  <span class="form"><textarea class="input" name="contents" rows="12" cols="60">{$page['contents']}</textarea></span>
 
  <p class="line"></p>
+
+ <span class="field">Options:</span>
+ <span class="form">
+   <input type="checkbox" name="flags[]" id="post_bbcode" value="{$bb}"{$bbbox} /><label for="post_bbcode">Format BBCode?</label>
+   <input type="checkbox" name="flags[]" id="post_emote" value="{$em}"{$embox} /><label for="post_emote">Format Emoticons?</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value="{$cn}"{$cnbox} /><label for="post_censor">Censor contents?</label>
+   <input type="checkbox" name="flags[]" id="post_breaks" value="{$nl}"{$nlbox} /><label for="post_breaks">Format breaks?</label>
+   <input type="checkbox" name="flags[]" id="post_html" value="{$html}"{$htmlbox} /><label for="post_html">Format HTML?</label>
+ </span>
+
+ <p class="line"></p>
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -4806,6 +4825,16 @@ function toggleQuickReplyBox()
 
  <p class="line"></p>
 
+ <span class="field">Options:</span>
+ <span class="form">
+   <input type="checkbox" name="flags[]" id="post_html" value="" /><label for="post_html">Format HTML?</label>
+   <input type="checkbox" name="flags[]" id="post_bbcode" value="" /><label for="post_bbcode">Format BBCode?</label>
+   <input type="checkbox" name="flags[]" id="post_emote" value="" /><label for="post_emote">Format Emoticons?</label>
+   <input type="checkbox" name="flags[]" id="post_breaks" value="" /><label for="post_breaks">Format breaks?</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value="" /><label for="post_censor">Censor contents?</label>
+ </span>
+
+ <p class="line"></p>
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>

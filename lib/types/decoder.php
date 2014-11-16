@@ -47,7 +47,7 @@ class decoder
 		$b1 = unpack('C', $this->read(1));
 		return $b1[1];
 	}
-	
+
 	function read_short()
 	{/* big */
 		$s1 = unpack('n', $this->read(2));
@@ -59,7 +59,7 @@ class decoder
 		$s1 = unpack('v', $this->read(2));
 		return $s1[1];
 	}
-	
+
 	function read_long()
 	{
 		$l1 = unpack('N', $this->read(4));
@@ -88,5 +88,4 @@ class decoder
 		return false;
 	}
 }
-
 ?>

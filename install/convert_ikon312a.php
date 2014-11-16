@@ -40,9 +40,6 @@ $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
-// Check for any addons available
-include_addons($set['include_path'] . '/addons/');
-
 define('CONVERTER_NAME', 'Ikonboard 3.12a');
 define('CONVERTER_URL', 'convert_ikon312a.php');
 define('CONVERTER_DROPURL', 'convert_ikon312a.php?action=dropikon');

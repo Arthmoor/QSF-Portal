@@ -43,9 +43,9 @@ class templater extends htmltools
 
 	var $macro;                     // Array of code to execute for each template
 	var $modlets = array();         // Array of modlet objects for running in templates
-	
+
 	var $debug_mode = false;	// Set to true if we want to use start/end comments
-    
+
 	/**
 	 * Constructor
 	 *
@@ -61,7 +61,7 @@ class templater extends htmltools
 		// Needed for modlets
 		$this->qsf = &$qsf;
 	}
-	
+
 	/**
 	 * Extends the existing templates array - see get_templates()
 	 *
@@ -74,7 +74,7 @@ class templater extends htmltools
 	{
 		$this->temps = array_merge($this->temps, $this->get_templates($section, 0));
 	}
-	
+
 	/**
 	 * Fetches templates and loads them into the temps property
 	 *
@@ -138,7 +138,7 @@ class templater extends htmltools
 			}
 		}
 	}
-	
+
 	/**
 	 * Quick check to see if the template exists
 	 *
@@ -158,7 +158,7 @@ class templater extends htmltools
 			return isset($this->temps[$piece]);
 		}
 	}
-	
+
 	/**
 	 * Run a modlet and return it's output
 	 *
@@ -172,7 +172,7 @@ class templater extends htmltools
 	{
 		return $this->modlets[$modlet]->run($parameter);
 	}
-	
+
 	/**
 	 * Stores if statements into an array (performance speed-up)
 	 *
@@ -226,11 +226,11 @@ class templater extends htmltools
 				return '<!-- ERROR: Modlet ' . htmlspecialchars($modlet) . ' is not a type of modlet -->';
 			}
 		}
-        
-		$this->macro[$piece][$macro_id] = '$macro_replace[' . $macro_id . '] = (isset($this)) ? $this->templater->modlet_exec("'. $modlet . '", "' . $parameter . '") : $qsf->templater->modlet_exec("'. $modlet . '", "' . $parameter . '"); ';
+
+		$this->macro[$piece][$macro_id] = '$macro_replace[' . $macro_id . '] = (isset($this)) ? $this->templater->modlet_exec("'. $modlet . '", "' . $parameter . '") : $' . ( ( 'qsfglobal' == get_parent_class( $this->qsf ) ) ? 'qsf' : 'admin' ) . '->templater->modlet_exec("'. $modlet . '", "' . $parameter . '"); ';
 		return '{' . chr(36) . 'macro_replace[' . $macro_id . ']}';
 	}
-    
+
 	/**
 	 * Returns a parsed template, for use in eval()
 	 *
@@ -253,7 +253,7 @@ class templater extends htmltools
 				$macro_output .= $macro_code;
 			}
 		}
-		
+
 		if ($this->debug_mode) {
 			return "$macro_output return \"<!-- START: $piece -->\r\n{$this->temps[$piece]}\r\n<!-- END: $piece -->\r\n\";";
 		}

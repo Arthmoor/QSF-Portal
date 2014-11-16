@@ -1761,6 +1761,8 @@ class en
 		$this->direction = 'ltr';
 		$this->edit = 'Edit';
 		$this->email = 'Email';
+		$this->error = 'Error';
+		$this->error_404 = 'The page you are trying to reach either does not exist, or has been deleted.';
 		$this->gmt = '[GMT] Greenwich Mean Time';
 		$this->gmt_nev1 = '[GMT-1:00] Azores, Cape Verde';
 		$this->gmt_nev10 = '[GMT-10:00] Hawaii, Aleutian Islands';

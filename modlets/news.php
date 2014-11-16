@@ -29,6 +29,24 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class news extends modlet
 {
+	/**
+	* Display the last 5 posted news items on the front page
+	*
+	* @param string $param unusued
+	* @author Roger Libiez [Samson] http://www.iguanadons.net
+	* @since 1.2.2
+	* @return string HTML with last 5 news items posted
+	**/
+	function run($param)
+	{
+		$args = func_get_args();
+		$this->qsf->lang->news();
+
+		foreach( $args as $k => $v )
+			$args[$k] = intval($v);
+		return $this->getposts( implode( ',', $args ) );
+	}
+
 	function getposts( $forums )
 	{
 		$items = "";
@@ -83,16 +101,6 @@ class news extends modlet
 			$items .= "</ul>";
 		}
 		return $items;
-	}
-
-	function run()
-	{
-		$args = func_get_args();
-		$this->qsf->lang->news();
-
-		foreach( $args as $k => $v )
-			$args[$k] = intval($v);
-		return $this->getposts( implode( ',', $args ) );
 	}
 }
 ?>

@@ -66,9 +66,20 @@ if (!$db->connection) {
 $settings = $db->fetch("SELECT settings_data FROM %psettings LIMIT 1");
 $set = array_merge($set, unserialize($settings['settings_data']));
 
-if (!isset($_GET['a']) || !in_array($_GET['a'], 
-		array_merge($set['optional_modules'], $modules['public_modules']))) {
+/*
+ * Logic here:
+ * If 'a' is not set, but some other query is, it's a bogus request for this software.
+ * If 'a' is set, but the module doesn't exist, it's either a malformed URL or a bogus request.
+ * Otherwise $missing remains false and no error is generated later.
+ */
+$missing = false;
+if (!isset($_GET['a']) ) {
 	$module = $modules['default_module'];
+	if( isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) )
+		$missing = true;
+} elseif ( !in_array( $_GET['a'], array_merge($set['optional_modules'], $modules['public_modules']) ) ) {
+	$module = $modules['default_module'];
+	$missing = true;
 } else {
 	$module = $_GET['a'];
 }
@@ -147,7 +158,12 @@ if ($qsf->sets['max_load'] && ($server_load > $qsf->sets['max_load'])) {
 
 $qsf->add_feed($qsf->sets['loc_of_board'] . $qsf->mainfile . '?a=rssfeed');
 
-$output = $qsf->execute();
+if( $missing ) {
+	header( 'HTTP/1.0 404 Not Found' );
+	$output = $qsf->message( $qsf->lang->error, $qsf->lang->error_404 );
+} else {
+	$output = $qsf->execute();
+}
 
 if (($qsf->get['a'] == 'forum') && isset($qsf->get['f'])) {
 	$searchlink = '&amp;f=' . intval($qsf->get['f']);

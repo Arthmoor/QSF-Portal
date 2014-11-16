@@ -1761,6 +1761,8 @@ class es
 		$this->direction = 'ltr'; //Translate
 		$this->edit = 'Edit'; //Translate
 		$this->email = 'Email'; //Translate
+		$this->error = 'Error'; //Translate
+		$this->error_404 = 'The page you are trying to reach either does not exist, or has been deleted.'; //Translate
 		$this->gmt = '[GMT] ';
 		$this->gmt_nev1 = '[GMT-1:00] ';
 		$this->gmt_nev10 = '[GMT-10:00] ';

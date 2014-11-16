@@ -31,7 +31,6 @@ require_once $set['include_path'] . '/lib/types/decoder.php';
  **/
 class png extends decoder
 {
-
 	/* returns true if data has the png signature */
 	function isType()
 	{
@@ -67,7 +66,5 @@ class png extends decoder
 			}
 		}
 	}
-
 }
-
 ?>

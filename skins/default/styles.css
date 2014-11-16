@@ -175,7 +175,7 @@ textarea {
 }
 #blocks .title {
 	background: #5ca0e6 url('./images/header_gradient.png');
-	font: 16px Arial, Sans-serif;
+	font: 18px Arial, Sans-serif;
 	color:black;
 	margin: 0px -7px 4px -2px;
 	padding: 3px 4px 2px 7px;
@@ -227,19 +227,9 @@ textarea {
 	border: 1px solid #555555;
 	border-bottom: 3px double #555555;
 }
-#main .topic_title {
-	background: #5ca0e6 url('./images/header_gradient.png');
-	font: 20px Arial, Sans-serif;
-	color: black;
-	margin: 0px -2px 4px -7px;
-	padding: 3px 4px 2px 7px;
-	border: 1px solid black;
-	border-right: 3px double black;
-	position: relative; /* IE Hack */
-}
 #main .title {
 	background: #5ca0e6 url('./images/header_gradient.png');
-	font: 16px Arial, Sans-serif;
+	font: 18px Arial, Sans-serif;
 	color: black;
 	margin: 0px -2px 4px -7px;
 	padding: 3px 4px 2px 7px;

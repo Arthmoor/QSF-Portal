@@ -40,9 +40,6 @@ $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
-// Check for any addons available
-include_addons($set['include_path'] . '/addons/');
-
 define('CONVERTER_NAME', 'Invision Power Board 2.1');
 define('CONVERTER_URL', 'convert_ipb21.php');
 define('CONVERTER_DROPURL', 'convert_ipb21.php?action=dropipb21');

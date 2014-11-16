@@ -39,9 +39,6 @@ $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
-// Check for any addons available
-include_addons($set['include_path'] . '/addons/');
-
 define('CONVERTER_NAME', 'MyBB 1.0/1.1');
 define('CONVERTER_URL', 'convert_mybb.php');
 define('CONVERTER_DROPURL', 'convert_mybb.php?action=dropmybb');

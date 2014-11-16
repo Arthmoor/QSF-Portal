@@ -95,9 +95,6 @@ require_once $set['include_path'] . '/global.php';
 
 define('INSTALLER', 1); // Used in query files
 
-// Check for any addons available
-include_addons($set['include_path'] . '/addons/');
-
 $self   = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : 'index.php';
 $failed = false;
 

@@ -1,6 +1,25 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.4.1:
+
+* Installer changed to use ENGINE instead of TYPE in table creation queries.
+* Made topic moderation links available at the top and bottom of a topic.
+* Added formatting flags to custom pages. [Fix hardcoded English]
+* Force quickreply box open when quote button is clicked.
+
+  Bugs addressed:
+
+* The quickreply icon is missing from the skin.
+* Topic titles had incorrect styling.
+* Quickreply button still appears even if a topic is locked.
+* Unset username or password during login triggers QSFP crash message instead of a graceful rejection message.
+* Censor bypass on RSS Feed.
+* E_STRICT warning in news module resolved.
+* E_STRICT warnings in image decoder library fixed.
+* Invisible text inside [center] tags fixed.
+* Return 404 errors for invalid modules.
+
 Changes for 1.4.0:
 
 * New default skin based on Syridium HForum v3 skin © 2006-2007 Syridium SC.

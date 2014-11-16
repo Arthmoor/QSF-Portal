@@ -16,6 +16,10 @@ function doQuickQuote(textarea, quote_id) {
 	
 	var dataFetcher = getHTTPObject(handler);
 	dataFetcher.requestData('jsdata', 'data', 'post', 'p', quote_id);
+
+	// Force open the quickreply box
+	quickReplyBox.style.display = 'inline';
+	toggleQuickReplyBoxStatus = 1;
 }
 
 function quickQuoteInit() {

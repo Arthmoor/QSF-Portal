@@ -10,6 +10,10 @@
  * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -22,7 +26,28 @@
  *
  **/
 
-define('LATEST', 29);   // ID of most recent upgrade script
-define('SKIN_FILE', 'skin_default.xml');
+if (!defined('INSTALLER')) {
+	exit('Use index.php to upgrade.');
+}
 
+// Upgrade from QSF Portal 1.4.0 to QSF Portal 1.4.1
+
+// Template changes - Don't forget to enclose them inside single quotes!!!
+$need_templates = array(
+	// Added templates
+	// Changed templates
+	'TOPIC_MAIN',
+	'TOPIC_POST',
+	'TOPIC_QUICKREPLY',
+	'PAGE_EDIT',
+	'PAGE_CREATE',
+	'POST_ATTACH_REMOVE'
+	);
+
+// Forum permission changes	
+
+// File permission changes
+
+// Queries to run
+$queries[] = "ALTER TABLE %ppages ADD page_flags int(10) unsigned NOT NULL default '0' AFTER page_title";
 ?>

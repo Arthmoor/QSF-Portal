@@ -31,8 +31,7 @@ require_once $set['include_path'] . '/lib/types/decoder.php';
  **/
 class gif extends decoder
 {
-
-	/* returns true if data has the png signature */
+	/* returns true if data has the gif signature */
 	function isType()
 	{
 		$this->index = 0;
@@ -50,11 +49,9 @@ class gif extends decoder
 		/* skip version bytes*/
 		$this->read_byte();
 		$this->read_short();
-		
+
 		$this->X = $this->read_short2();
 		$this->Y = $this->read_short2();
 	}
-
 }
-
 ?>

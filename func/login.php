@@ -80,12 +80,18 @@ class login extends qsfglobal
 
 			return eval($this->template('LOGIN_MAIN'));
 		} else {
+			if( !isset($this->post['user']) )
+				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
+
 			$username = str_replace('\\', '&#092;', $this->format($this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR));
 
 			$data  = $this->db->fetch("SELECT user_id, user_password FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
 				str_replace(' ', '', strtolower($username)), USER_GUEST_UID);
 			$pass  = $data['user_password'];
 			$user  = $data['user_id'];
+
+			if( !isset($this->post['pass']) )
+				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
 
 			$this->post['pass'] = str_replace('$', '', $this->post['pass']);
 			$this->post['pass'] = md5($this->post['pass']);
