@@ -65,7 +65,7 @@ class groups extends admin
 				return $this->message($this->lang->groups_create, "
 				<form action='{$this->self}?a=groups&amp;s=add' method='post'><div>
 					{$this->lang->groups_create_new} <input class='input' name='group_name' /> {$this->lang->groups_based_on} " . $this->list_groups(USER_MEMBER) . "
-					<input type='submit' name='submit' value='Submit' /></div>
+					<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
 				</form>");
 			} else {
 				if (!isset($this->post['user_group'])) {
@@ -98,7 +98,7 @@ class groups extends admin
 					</form>");
 				} else {
 					if (!isset($this->post['group'])) {
-						return $this->message($this->lang->groups_edit, 'No group was specified.');
+						return $this->message($this->lang->groups_edit, $this->lang->groups_no_group);
 					}
 
 					$this->post['group'] = intval($this->post['group']);

@@ -56,7 +56,7 @@ class query extends admin
 		if (!isset($this->post['submit'])) {
 			return $this->message($this->lang->query, "
 			<form action='{$this->self}?a=query' method='post'><div>
-				<textarea class='input' name='sql' cols='30' rows='15' style='width:100%'>SELECT * FROM {$this->pre}groups</textarea><br /><br />
+				<textarea class='input' name='sql' cols='30' rows='15' style='width:100%'>SELECT * FROM %pgroups</textarea><br /><br />
 				<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
 			</form>");
 		} else {

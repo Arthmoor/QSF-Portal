@@ -39,7 +39,7 @@ class uploads_data extends modlet
 			$lastfile = $this->qsf->lang->profile_uploads_none_yet;
 			if(isset($last['file_id'])) {
 				$date = $this->qsf->mbdate(DATE_LONG, $last['file_date']);
-				$lastfile = "<a href=\"{$this->qsf->self}?a=files&amp;s=viewfile&amp;fid={$last['file_id']}\">{$last['file_name']}</a><br />{$date}";
+				$lastfile = "<a href=\"{$this->qsf->self}?a=files&amp;s=viewfile&amp;fid={$last['file_id']}\" rel=\"nofollow\">{$last['file_name']}</a><br />{$date}";
 			}
 
 			$usetime = ( ( ( $this->qsf->time - $user['user_joined'] ) / 86400 ) );
@@ -48,7 +48,7 @@ class uploads_data extends modlet
 			}
 			$uploadsPerDay = $user['user_uploads'] / $usetime;
 			$uploadsPerDay = number_format($uploadsPerDay, 2, $this->qsf->lang->sep_decimals, $this->qsf->lang->sep_thousands);
-			$uploads = "<a href=\"{$this->qsf->self}?a=files&amp;s=search&amp;uid={$uid}\">{$user['user_uploads']} {$this->qsf->lang->profile_uploads_total}, {$uploadsPerDay} {$this->qsf->lang->profile_uploads_per_day}</a>";
+			$uploads = "<a href=\"{$this->qsf->self}?a=files&amp;s=search&amp;uid={$uid}\" rel=\"nofollow\">{$user['user_uploads']} {$this->qsf->lang->profile_uploads_total}, {$uploadsPerDay} {$this->qsf->lang->profile_uploads_per_day}</a>";
 
 			return eval($this->qsf->template('PROFILE_UPLOADS'));
 		} else {

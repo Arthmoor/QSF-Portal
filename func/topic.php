@@ -84,7 +84,7 @@ class topic extends qsfglobal
                         $this->get['unread']  = false;
                 }
 		
-		$topic = $this->db->fetch('
+		$topic = $this->db->fetch("
 			SELECT
 				t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum,
 				t.topic_edited, t.topic_replies, t.topic_poll_options, f.forum_name
@@ -92,7 +92,7 @@ class topic extends qsfglobal
 				%ptopics t, %pforums f
 			WHERE
 				t.topic_id=%d AND
-				f.forum_id=t.topic_forum',
+				f.forum_id=t.topic_forum",
 			$this->get['t']);
 
 		if (!$topic) {
@@ -131,7 +131,7 @@ class topic extends qsfglobal
 					$where .= ' AND ';
 				}
 				$where .= "(topic_modes & " . TOPIC_PINNED . ") = " . TOPIC_PINNED;
-            }
+			}
  
 			$new_topic = $this->db->fetch("
 					SELECT topic_id FROM %ptopics
@@ -157,7 +157,7 @@ class topic extends qsfglobal
 		if ($this->get['unread']) {
 			// Jump to the first unread post (or the last post)
 			$timeread = $this->readmarker->topic_last_read($topic['topic_forum']);
-			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic = %d AND post_time < %d",
+			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_time < %d",
 				$this->get['t'], $timeread);
 			if ($posts) $postCount = $posts['posts'] + 1;
 			else $postCount = 0;
@@ -168,7 +168,7 @@ class topic extends qsfglobal
 		}
 		if ($this->get['p']) {
 			// We need to find what page this post exists on!
-			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic = %d AND post_id < %d",
+			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_id < %d",
 				$this->get['t'], $this->get['p']);
 			if ($posts) $postCount = $posts['posts'] + 1;
 			else $postCount = 0;
@@ -178,7 +178,7 @@ class topic extends qsfglobal
 			}
 		}
 
-		$this->db->query('UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d', $this->get['t']);
+		$this->db->query("UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d", $this->get['t']);
 
 		$topic['topic_title'] = $this->format($topic['topic_title'], FORMAT_CENSOR);
 		$title_html = $this->format($topic['topic_title'], FORMAT_HTMLCHARS);
@@ -212,14 +212,10 @@ class topic extends qsfglobal
 		$opts = array();
 
 		if ($topic['topic_modes'] & TOPIC_LOCKED) {
-			$replylink = '<img src="./skins/' . $this->skin . '/images/noreply.png" alt="' . $this->lang->topic_locked . '" />';
-
 			if ($this->perms->auth('topic_unlock', $topic['topic_forum']) || ($this->perms->auth('topic_unlock_own', $topic['topic_forum']) && $user_started_topic)) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_unlock . '</a>';
 			}
 		} else {
-			$replylink = '<a href="' . $this->self . '?a=post&amp;s=reply&amp;t=' . $this->get['t'] . '"><img src="./skins/' . $this->skin . '/images/addreply.png" alt="' . $this->lang->topic_reply . '" /></a>';
-
 			if ($this->perms->auth('topic_lock', $topic['topic_forum']) || ($this->perms->auth('topic_lock_own', $topic['topic_forum']) && $user_started_topic)) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_lock . '</a>';
 			}
@@ -372,8 +368,6 @@ class topic extends qsfglobal
 				$post['post_text'] = str_replace($this->get['hl'], "<span style='color:#FF0000; font-weight:bold'>{$this->get['hl']}</span>", $post['post_text']);
 			}
 
-			$Poster_Icons = null;
-
 			if ($post['post_author'] != USER_GUEST_UID) {
 				$online = ($post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active']);
 
@@ -428,35 +422,28 @@ class topic extends qsfglobal
 					)
 				);
 
-				if (!$post['user_email_show']) {
-					if ($post['user_email_form']) {
+				if ($this->perms->auth('email_use')) {
+					if (!$post['user_email_show']) {
+						if ($post['user_email_form']) {
+							$icons['user_email'] = array(
+								'link'   => "{$this->self}?a=email&amp;to={$post['user_id']}",
+								'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
+								'img'    => 'email.png',
+								'target' => '_self'
+							);
+						} else {
+							unset($icons['user_email']);
+						}
+					} else {
 						$icons['user_email'] = array(
-							'link'   => "{$this->self}?a=email&amp;to={$post['user_id']}",
+							'link'   => 'mailto:' . $post['user_email'],
 							'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
 							'img'    => 'email.png',
 							'target' => '_self'
 						);
-					} else {
-						unset($icons['user_email']);
 					}
-				} else {
-					$icons['user_email'] = array(
-						'link'   => 'mailto:' . $post['user_email'],
-						'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
-						'img'    => 'email.png',
-						'target' => '_self'
-					);
 				}
-
 				$post['user_posts'] = number_format($post['user_posts'], 0, null, $this->lang->sep_thousands);
-				$Poster_Icons = null;
-
-				foreach ($icons as $iname => $icon)
-				{
-					if ($post[$iname]) {
-						$Poster_Icons .= "<a href=\"{$icon['link']}\"" . ($icon['target'] ? " onclick=\"window.open(this.href,'{$icon['target']}');return false;\"" : '') . "><img src='./skins/$this->skin/images/{$icon['img']}' alt=\"{$icon['alt']}\" /></a> ";
-					}
-				}
 
 				if (($post['user_avatar_type'] != 'none') && $this->user['user_view_avatars']) {
 					if (substr($post['user_avatar'], -4) != '.swf') {
@@ -527,18 +514,20 @@ class topic extends qsfglobal
 			}
 
 			$user_created_post = ($this->user['user_id'] == $post['post_author']);
-			$options = null;
 
 			$can_edit = false; // Shortcut for skin
 			if ($this->perms->auth('post_edit', $topic['topic_forum']) || ($user_created_post && $this->perms->auth('post_edit_own', $topic['topic_forum']))) {
 				$can_edit = true;
-				$options .= '<a href="' . $this->self . '?a=mod&amp;s=edit_post&amp;p=' . $post['post_id'] . '&amp;min=' . $this->get['min'] . '"><img alt="' . $this->lang->topic_edit_post . '" src="./skins/' . $this->skin . '/images/edit.png" /></a>';
 			}
 
 			$can_delete = false; // Shortcut for skin
 			if ($this->perms->auth('post_delete', $topic['topic_forum']) || ($user_created_post && $this->perms->auth('post_delete_own', $topic['topic_forum']))) {
 				$can_delete = true;
-				$options .= ' <a href="' . $this->self . '?a=mod&amp;s=del_post&amp;p=' . $post['post_id'] . '"><img alt="' . $this->lang->topic_delete_post . '" src="./skins/' . $this->skin . '/images/delete.png" /></a>';
+			}
+
+			$can_reply = false;
+			if ($this->perms->auth('post_create', $topic['topic_forum']) && !($topic['topic_modes'] & TOPIC_LOCKED) ) {
+				$can_reply = true;
 			}
 
 			$posts .= eval($this->template('TOPIC_POST'));
@@ -548,6 +537,16 @@ class topic extends qsfglobal
 		$pagelinks = $this->htmlwidgets->get_pages($topic['topic_replies'] + 1, 'a=topic&amp;t=' . $this->get['t'], $this->get['min'], $this->get['num']);
 		
 		$this->readmarker->mark_topic_read($this->get['t'], $newest_post_read);
+
+		$can_post = false;
+		if ($this->perms->auth('post_create', $topic['topic_forum'])) {
+			$can_post = true;
+		}
+
+		$can_reply = false;
+		if ($this->perms->auth('post_create', $topic['topic_forum']) && !($topic['topic_modes'] & TOPIC_LOCKED) ) {
+			$can_reply = true;
+		}
 
 		// Quickreply
 		$this->lang->post();
@@ -589,7 +588,7 @@ class topic extends qsfglobal
 
 	function get_poll($t, $f, $title_html, $topic_modes, $options)
 	{
-		$user_voted = $this->db->fetch('SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d', $this->user['user_id'], $t);
+		$user_voted = $this->db->fetch("SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d", $this->user['user_id'], $t);
 
 		if ($user_voted || !$this->perms->auth('poll_vote', $f) || ($topic_modes & TOPIC_LOCKED) || (isset($this->get['results']) && $this->sets['vote_after_results'])) {
 			$votes = $this->db->query("SELECT vote_option FROM %pvotes WHERE vote_topic=%d AND vote_option != -1", $t);

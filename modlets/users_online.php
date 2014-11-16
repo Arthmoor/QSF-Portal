@@ -127,7 +127,7 @@ class users_online extends modlet
 
 	function usersonline()
 	{
-		$which_day = gmdate("d F Y", $this->qsf->time + $this->qsf->tz_adjust);
+		$which_day = date("d F Y", $this->qsf->time);
 		$today_date = strtotime("$which_day");
 
 		$query = $this->qsf->db->query( "SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= '%s' AND user_name NOT LIKE 'Guest' ORDER BY user_name", $today_date );
@@ -136,7 +136,7 @@ class users_online extends modlet
 		$user_names = '';
 
 		if($count_users == '0') {
-			$title_onlinetd_table = '<b>There have been no members online today.</b>';
+			$title_onlinetd_table = '<strong>There have been no members online today.</strong>';
 		} else {
 			for($i=0; $i < $count_users; $i++) {
 				$user_id = mysql_result($query, $i, "user_id");
@@ -149,10 +149,10 @@ class users_online extends modlet
 				}
 
                			if($count_users == '1') {
-					$title_onlinetd_table = "<b>There has been " . $count_users . " member online today:</b>";
+					$title_onlinetd_table = "<strong>There has been " . $count_users . " member online today:</strong>";
 				}
 				if($count_users > '1') {
-					$title_onlinetd_table = "<b>There have been " . $count_users . " members online today:</b>";
+					$title_onlinetd_table = "<strong>There have been " . $count_users . " members online today:</strong>";
 				}
 				$user_names = $user_names . '<a href="' . $this->qsf->self . '?a=profile&amp;w=' . $user_id . '">' . $user_name . '</a>' . $comma;
 			}

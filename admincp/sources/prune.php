@@ -148,22 +148,22 @@ class prune extends admin
 		while ($post = $this->db->nqfetch($posts))
 		{
 			if ($post['post_count']) {
-				$this->db->query('UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=%d', $post['post_author']);
+				$this->db->query("UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=%d", $post['post_author']);
 			}
 
 			if ($post['attach_file']) {
-				$this->db->query('DELETE FROM %pattach WHERE attach_post=%d', $post['post_id']);
+				$this->db->query("DELETE FROM %pattach WHERE attach_post=%d", $post['post_id']);
 				@unlink('./attachments/' . $post['attach_file']);
 			}
 
 			$deleted++;
 		}
 
-		$result = $this->db->fetch('SELECT topic_forum FROM %ptopics WHERE topic_id=%d', $t);
+		$result = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t);
 
-		$this->db->query('DELETE FROM %pvotes WHERE vote_topic=%d', $t);
-		$this->db->query('DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d', $t, $t);
-		$this->db->query('DELETE FROM %pposts WHERE post_topic=%d', $t);
+		$this->db->query("DELETE FROM %pvotes WHERE vote_topic=%d", $t);
+		$this->db->query("DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d", $t, $t);
+		$this->db->query("DELETE FROM %pposts WHERE post_topic=%d", $t);
 
 		$this->db->query("UPDATE %pforums SET forum_topics=forum_topics-1, forum_replies=forum_replies-%d WHERE forum_id=%d", $deleted, $result['topic_forum']);
 	}

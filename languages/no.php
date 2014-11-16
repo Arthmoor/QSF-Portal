@@ -174,6 +174,7 @@ class no
 		$this->bbcode_blue = 'Blå';
 		$this->bbcode_bold = 'Fet (CTRL-b)';
 		$this->bbcode_bold1 = 'F';
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Sjokolade';
 		$this->bbcode_code = 'Kode (CTRL-l)';
 		$this->bbcode_code1 = 'Kode';
@@ -187,6 +188,7 @@ class no
 		$this->bbcode_email = 'Epost (CTRL-e)';
 		$this->bbcode_firered = 'Mursteinsrød';
 		$this->bbcode_font = 'Skrifttype';
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Grønn';
 		$this->bbcode_huge = 'Størst';
 		$this->bbcode_image = 'Bilde (CTRL-j)';
@@ -230,6 +232,7 @@ class no
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Trefarget';
 		$this->bbcode_yellow = 'Gul';
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -342,6 +345,9 @@ class no
 		$this->cp_must_orig = 'Ditt navn må være identisk med det originale. Du får bare endre store/små bokstaver og mellomrom.';
 		$this->cp_new_notmatch = 'De nye passordene er ikke identiske.';
 		$this->cp_new_pass = 'Nytt passord';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'Flash-avatarer er ikke tillatt.';
 		$this->cp_not_exist = 'Datoen du oppga (%s) er ugyldig!';
 		$this->cp_nov = 'November'; //Translate
@@ -982,6 +988,13 @@ class no
 		$this->mod_success_unpublish = 'Emnet er fjernet fra publikasjonslisten.';
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Optimér database';
@@ -1019,10 +1032,18 @@ class no
 		$this->perms = 'Tillatelser';
 		$this->perms_board_view = 'Se på forumets innholdsliste';
 		$this->perms_board_view_closed = 'Bruke QSF Portal når det er stengt';
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'Bruke QSF Portal';
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'Endre tillatelser for';
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'Sende epost til medlemmer via diskusjonsgruppen';
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Se på forumet';
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'Tilgang til admin-kontrollpanelet';
 		$this->perms_only_user = 'Bruk kun gruppetillatelser på denne brukeren';
 		$this->perms_override_user = 'Dette vil overkjøre gruppetillatelsene for denne brukeren.';
@@ -1065,6 +1086,7 @@ class no
 		$this->perms_topic_view = 'Se på emner';
 		$this->perms_topic_view_unpublished = 'Lese upubliserte emner';
 		$this->perms_updated = 'Tillatelser har blitt oppdatert.';
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = 'Brukeren vil arve gruppens tillatelser.';
 	}
 
@@ -1609,6 +1631,7 @@ class no
 		$this->temps_member_control = 'Admin-kontrollpanel: Medlemskontroll';
 		$this->temps_members = 'Medlemsliste';
 		$this->temps_mod = 'Moderatorkontroll';
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'Personlig meldingsassistent';
 		$this->temps_polls = 'Avstemninger';
 		$this->temps_post = 'Innlegg';
@@ -1735,6 +1758,36 @@ class no
 		$this->direction = 'vth';
 		$this->edit = 'Endre';
 		$this->email = 'Epost';
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GTalk';
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

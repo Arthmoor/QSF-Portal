@@ -117,7 +117,7 @@ class login extends qsfglobal
 			return $this->message($this->lang->login_out, sprintf($this->lang->login_sure, $this->user['user_name']), $this->lang->continue, "$this->self?a=login&amp;s=off&amp;sure=1");
 		} else {
 			$this->activeutil->delete($this->user['user_id']);
-			$this->db->query('UPDATE %pusers SET user_lastvisit = %d WHERE user_id=%d',
+			$this->db->query("UPDATE %pusers SET user_lastvisit=%d WHERE user_id=%d",
 				$this->time, $this->user['user_id']);
 
 			if( version_compare( PHP_VERSION, "5.2.0", "<" ) ) {

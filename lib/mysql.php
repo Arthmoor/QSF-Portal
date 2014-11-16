@@ -157,7 +157,6 @@ class db_mysql extends database
 		return mysql_num_rows($query);
 	}
 
-
 	/**
 	 * Gets the number of rows affected by the last executed UPDATE
 	 *

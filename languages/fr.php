@@ -173,6 +173,7 @@ class fr
 		$this->bbcode_blue = 'Blue'; //Translate
 		$this->bbcode_bold = 'Bold (CTRL-b)'; //Translate
 		$this->bbcode_bold1 = 'B'; //Translate
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Chocolate'; //Translate
 		$this->bbcode_code = 'Code (CTRL-l)'; //Translate
 		$this->bbcode_code1 = 'Code'; //Translate
@@ -186,6 +187,7 @@ class fr
 		$this->bbcode_email = 'Email (CTRL-e)'; //Translate
 		$this->bbcode_firered = 'Firebrick Red'; //Translate
 		$this->bbcode_font = 'Font'; //Translate
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Green'; //Translate
 		$this->bbcode_huge = 'Huge'; //Translate
 		$this->bbcode_image = 'Image (CTRL-j)'; //Translate
@@ -229,6 +231,7 @@ class fr
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Burly Wood'; //Translate
 		$this->bbcode_yellow = 'Yellow'; //Translate
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -341,6 +344,9 @@ class fr
 		$this->cp_must_orig = 'Votre nom doit être identique à celui que vous avez choisi. Vous ne pouvez changer que la casse et l\'espacement.';
 		$this->cp_new_notmatch = 'Les deux nouveaux mots de passe que vous avez saisis sont différents.';
 		$this->cp_new_pass = 'Nouveau mot de passe';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'Les avatars au format Flash ne sont pas autorisés sur ce forum.';
 		$this->cp_not_exist = 'La date que vous avez spécifiée (%s) n\'existe pas!';
 		$this->cp_nov = 'Novembre';
@@ -981,6 +987,13 @@ class fr
 		$this->mod_success_unpublish = 'This topic has been removed from the published list.'; //Translate
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Optimiser la base de données';
@@ -1018,10 +1031,18 @@ class fr
 		$this->perms = 'Permissions'; //Translate
 		$this->perms_board_view = 'Visualisier l\'index du board';
 		$this->perms_board_view_closed = 'Utiliser QSF Portal quand celui-ci est fermé.';
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'Utiliser QSF Portal';
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'Editer les permissions de';
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'Envoyer des méls à des membres à travers le board';
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Visualiser le forum';
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'Accèder au panneau de contrôle administrateur';
 		$this->perms_only_user = 'N\'utiliser que les permissions de groupe pour cet(te) utilisateur(-trice)';
 		$this->perms_override_user = 'Ceci remplacera les permissions de groupe de cet(te) utilisateur(-trice).';
@@ -1064,6 +1085,7 @@ class fr
 		$this->perms_topic_view = 'Visualiser les sujets';
 		$this->perms_topic_view_unpublished = 'View unpublished topics'; //Translate
 		$this->perms_updated = 'Les permissions ont été mis à jour.';
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = 'L\'utilisateur(-trice) héritera les permissions de groupe.';
 	}
 
@@ -1608,6 +1630,7 @@ class fr
 		$this->temps_member_control = 'Contrôle des Membres AdminCP';
 		$this->temps_members = 'Liste des membres';
 		$this->temps_mod = 'Contrôles du modérateur';
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'Messager Privé';
 		$this->temps_polls = 'Sondages';
 		$this->temps_post = 'Message';
@@ -1734,6 +1757,36 @@ class fr
 		$this->direction = 'ltr'; //Translate
 		$this->edit = 'Editer';
 		$this->email = 'Mél';
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GT'; //Translate
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

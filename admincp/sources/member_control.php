@@ -146,7 +146,7 @@ class member_control extends admin
 			$this->get['id'] = intval($this->get['id']);
 
 			if (!isset($this->post['submit'])) {
-				$member = $this->db->fetch('SELECT * FROM %pusers WHERE user_id=%d LIMIT 1', $this->get['id']);
+				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $this->get['id']);
 
 				$this->iterator_init('tablelight', 'tabledark');
 				$out = "";
@@ -279,7 +279,7 @@ class member_control extends admin
 
 				return eval($this->template('ADMIN_MEMBER_PROFILE'));
 			} else {
-				$member = $this->db->fetch('SELECT user_name FROM %pusers WHERE user_id=%d LIMIT 1', $this->get['id']);
+				$member = $this->db->fetch("SELECT user_name FROM %pusers WHERE user_id=%d", $this->get['id']);
 				$guest_email = $this->post['user_email'];
 				if ($member['user_name'] != 'Guest' && !$this->validator->validate($guest_email, TYPE_EMAIL)) {
 					return $this->message($this->lang->mc_err_updating, $this->lang->mc_email_invaid);
@@ -325,7 +325,7 @@ class member_control extends admin
 				$user_avatar_height = intval($this->post['user_avatar_height']);
 				$user_level = intval($this->post['user_level']);
 				$user_birthday = $this->post['user_birthday'];
-				$user_timezone = intval($this->post['user_timezone']);
+				$user_timezone = $this->post['user_timezone'];
 				$user_location = $this->format($this->post['user_location'], FORMAT_HTMLCHARS);
 				$user_homepage = $this->format($this->post['user_homepage'], FORMAT_HTMLCHARS);
 				$user_interests = $this->format($this->post['user_interests'], FORMAT_HTMLCHARS);
@@ -347,7 +347,7 @@ class member_control extends admin
 				$this->db->query( "UPDATE %pusers SET user_name='%s', user_group=%d, user_title='%s',
 				  user_title_custom=%d, user_language='%s', user_skin='%s', user_avatar='%s',
 				  user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d, user_level=%d,
-				  user_birthday='%s', user_timezone=%d, user_location='%s', user_homepage='%s',
+				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s',
 				  user_interests='%s', user_signature='%s', user_posts=%d, user_uploads=%d,
 				  user_icq=%d, user_msn='%s', user_aim='%s', user_gtalk='%s', user_yahoo='%s',
 				  user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
@@ -377,7 +377,7 @@ class member_control extends admin
 	function list_skins($val)
 	{
 		$out = "<select name='user_skin'>";
-		$groups = $this->db->query('SELECT skin_name, skin_dir FROM %pskins ORDER BY skin_name');
+		$groups = $this->db->query("SELECT skin_name, skin_dir FROM %pskins ORDER BY skin_name");
 
 		while ($group = $this->db->nqfetch($groups))
 		{

@@ -174,6 +174,7 @@ class it
 		$this->bbcode_blue = 'Blue'; //Translate
 		$this->bbcode_bold = 'Bold (CTRL-b)'; //Translate
 		$this->bbcode_bold1 = 'B'; //Translate
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Chocolate'; //Translate
 		$this->bbcode_code = 'Code (CTRL-l)'; //Translate
 		$this->bbcode_code1 = 'Code'; //Translate
@@ -187,6 +188,7 @@ class it
 		$this->bbcode_email = 'Email (CTRL-e)'; //Translate
 		$this->bbcode_firered = 'Firebrick Red'; //Translate
 		$this->bbcode_font = 'Font'; //Translate
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Green'; //Translate
 		$this->bbcode_huge = 'Huge'; //Translate
 		$this->bbcode_image = 'Image (CTRL-j)'; //Translate
@@ -230,6 +232,7 @@ class it
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Burly Wood'; //Translate
 		$this->bbcode_yellow = 'Yellow'; //Translate
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -342,6 +345,9 @@ class it
 		$this->cp_must_orig = 'Il tuo nome deve essere identico all\'originale. Puoi cambiare solamente le lettere maiscole/minuscole e gli spazi.';
 		$this->cp_new_notmatch = 'Le nuove passwords che hai inserito non corrispondono.';
 		$this->cp_new_pass = 'Nuova Password';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'Gli avatar flash non sono permessi su questa bacheca.';
 		$this->cp_not_exist = 'La data che hai inserito (%s) non esiste!';
 		$this->cp_nov = 'Novembre';
@@ -982,6 +988,13 @@ class it
 		$this->mod_success_unpublish = 'Questa discussione verra\' rimossa dall\'elenco dei pubblicati.';
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Ottimizza Database';
@@ -1019,10 +1032,18 @@ class it
 		$this->perms = 'Permessi';
 		$this->perms_board_view = 'Mostra l\'indice della bacheca';
 		$this->perms_board_view_closed = 'Utilizza QSF Portal quando è chiuso';
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'Utilizza QSF Portal';
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'Modifica permessi per';
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'Invia email agli iscritti tramite il forum';
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Mostra la bacheca';
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'Accedi al pannello d\'amministrazione';
 		$this->perms_only_user = 'Utilizza solo i permessi del gruppo per questo utente';
 		$this->perms_override_user = 'Così ignorerai i permessi del gruppo per questo utente.';
@@ -1065,6 +1086,7 @@ class it
 		$this->perms_topic_view = 'Mostra discussioni';
 		$this->perms_topic_view_unpublished = 'Visualizza discussioni non pubblicate';
 		$this->perms_updated = 'Permessi aggiornati.';
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = 'Questo utente erediterierà i permessi del groppo.';
 	}
 
@@ -1609,6 +1631,7 @@ class it
 		$this->temps_member_control = 'AdminCP Controllo Utenti';
 		$this->temps_members = 'Lista Iscritti';
 		$this->temps_mod = 'Controlli Moderatore';
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'Messaggi Privati';
 		$this->temps_polls = 'Sondaggi';
 		$this->temps_post = 'Composizione Messaggi';
@@ -1735,6 +1758,36 @@ class it
 		$this->direction = 'ltr'; //Translate
 		$this->edit = 'Modifica';
 		$this->email = 'Email'; //Translate
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GT'; //Translate
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

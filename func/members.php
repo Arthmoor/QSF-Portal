@@ -134,26 +134,18 @@ class members extends qsfglobal
 
 			$member['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $member['user_joined']);
 
-			if (!$member['user_email_show']) {
-				if ($member['user_email_form']) {
-					$member['user_email'] = "<a href='{$this->self}?a=email&amp;to={$member['user_id']}'><img src='./skins/$this->skin/images/email.png' alt=\"{$this->lang->members_email_member}\" /></a>";
-				} else {
-					$member['user_email'] = '';
+			if ($this->perms->auth('email_use')) {
+				if ($member['user_email_show']) {
+					$member['email'] = $member['user_email'];
 				}
-			} else {
-				$member['email'] = $member['user_email']; // Store so skin can access directly
-				$member['user_email'] = "<a href='mailto:{$member['user_email']}'><img src='./skins/$this->skin/images/email.png' alt=\"{$this->lang->members_email_member}\" /></a>";
 			}
 
 			if (!empty($member['user_homepage'])) {
 				$member['homepage'] = $member['user_homepage']; // Store so skin can access directly
-				$member['user_homepage'] = "<a href=\"{$member['user_homepage']}\" onclick=\"window.open(this.href,'{$this->sets['link_target']}');return false;\"><img src='./skins/$this->skin/images/www.png' alt=\"{$this->lang->members_vist_www}\" /></a>";
 			}
 
-			if (!$member['user_pm']) {
+			if (!$member['user_pm'] || $this->perms->is_guest) {
 				$member['user_pm'] = null;
-			} else {
-				$member['user_pm'] = "<a href=\"{$this->self}?a=pm&amp;s=send&amp;to={$member['user_id']}\"><img src=\"./skins/$this->skin/images/pm.png\" alt=\"{$this->lang->members_send_pm}\" /></a>";
 			}
 
 			$Members .= eval($this->template('MEMBERS_MEMBER'));

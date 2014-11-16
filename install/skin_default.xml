@@ -1142,7 +1142,7 @@
     </tr>
     <tr>
      <td colspan="2">
-      <MODLET rssreader(http://quicksilverforums.com/qsfnews-rss.php)>
+      <MODLET rssreader(http://www.qsfportal.com/qsfnews-rss.php)>
      </td>
     </tr>    
    </table>
@@ -1689,7 +1689,7 @@
 <tr>
   <td class="tablelight" style="height:35px">
    <IF ($forum_unread)>
-    <a style="float: right" href="{$this->self}?s=mark&amp;f={$forum['forum_id']}"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->main_markforum_read}" title="{$this->lang->main_markforum_read}" /></a>
+    <a style="float: right" href="{$this->self}?a=board&amp;s=mark&amp;f={$forum['forum_id']}"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->main_markforum_read}" title="{$this->lang->main_markforum_read}" /></a>
    </IF>
    <a href="{$this->self}?a=forum&amp;f={$forum['forum_id']}">{$forum['forum_name']}</a>{$forum['forum_description']}
   </td>
@@ -2024,7 +2024,6 @@ enable('$init');
       <displayname>Board Preferences Form</displayname>
       <description>Allows users to edit their board preferences</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/timezone.js"></script>
 <form action="{$this->self}?a=cp&amp;s=prefs" method="post">
 {$this->table}
  <tr>
@@ -2342,8 +2341,10 @@ enable('$init');
 {$this->table}
  <tr>
   <td>
-   <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$f}" title="{$this->lang->forum_new_poll}">{$this->lang->new_poll}</a></div>
-   <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$f}" title="{$this->lang->forum_new_topic}">{$this->lang->new_topic}</a></div>
+   <IF $can_post>
+    <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$f}" title="{$this->lang->forum_new_poll}">{$this->lang->new_poll}</a></div>
+    <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$f}" title="{$this->lang->forum_new_topic}">{$this->lang->new_topic}</a></div>
+   </IF>
    {$this->lang->forum_pages}: {$pagelinks}
   </td>
  </tr>
@@ -2351,7 +2352,7 @@ enable('$init');
 
 {$this->table}
  <tr>
-  <td class="header" style="width:5%; text-align:center"><a href="{$this->self}?s=mark&amp;f={$f}"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->forum_mark_read}" title="{$this->lang->forum_mark_read}" /></a></td>
+  <td class="header" style="width:5%; text-align:center"><a href="{$this->self}?a=board&amp;s=mark&amp;f={$f}"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->forum_mark_read}" title="{$this->lang->forum_mark_read}" /></a></td>
   <td class="header" style="width:40%"><a href="{$this->self}?a=forum&amp;f={$f}&amp;min={$min}&amp;n={$n}&amp;order=title&amp;asc={$asc}" class="header">{$this->lang->forum_topic}</a></td>
   <td class="header" style="width:15%; text-align:center"><a href="{$this->self}?a=forum&amp;f={$f}&amp;min={$min}&amp;n={$n}&amp;order=starter&amp;asc={$asc}" class="header">{$this->lang->forum_starter}</a></td>
   <td class="header" style="width:10%; text-align:center"><a href="{$this->self}?a=forum&amp;f={$f}&amp;min={$min}&amp;n={$n}&amp;order=replies&amp;asc={$asc}" class="header">{$this->lang->forum_replies}</a></td>
@@ -2367,9 +2368,11 @@ enable('$init');
 {$this->table}
  <tr>
   <td>
-   <div class="bigbutton"><a class="subscribe" href="{$this->self}?a=cp&amp;s=addsub&amp;type=forum&amp;item={$f}" title="{$this->lang->forum_subscribe}">{$this->lang->subscribe}</a></div>
-   <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$f}" title="{$this->lang->forum_new_poll}">{$this->lang->new_poll}</a></div>
-   <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$f}" title="{$this->lang->forum_new_topic}">{$this->lang->new_topic}</a></div>
+   <IF $can_post>
+    <div class="bigbutton"><a class="subscribe" href="{$this->self}?a=cp&amp;s=addsub&amp;type=forum&amp;item={$f}" title="{$this->lang->forum_subscribe}">{$this->lang->subscribe}</a></div>
+    <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$f}" title="{$this->lang->forum_new_poll}">{$this->lang->new_poll}</a></div>
+    <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$f}" title="{$this->lang->forum_new_topic}">{$this->lang->new_topic}</a></div>
+   </IF>
    {$this->lang->forum_pages}: {$pagelinks}<br /><br />
    <select class="select" onchange="get_forum(this,'{$this->self}')">
     {$forumjump}
@@ -2737,10 +2740,10 @@ enable('$init');
 <tr>
   <td class="{$class}" style="text-align:center"><a href="{$this->self}?a=profile&amp;w={$member['user_id']}">{$member['user_name']}</a></td>
   <td class="{$class}" style="text-align:center">
-   <IF $member['user_email_show']>
+   <IF $member['user_email_show'] && $this->perms->auth('email_use')>
     <div class="button"><a class="email" href="mailto:{$member['email']}" title="{$this->lang->members_email_member}">{$this->lang->email}</a></div>
    </IF>
-   <IF (!$member['user_email_show'] && $member['user_email_form'])>
+   <IF (!$member['user_email_show'] && $member['user_email_form'] && $this->perms->auth('email_use'))>
     <div class="button"><a class="email" href="{$this->self}?a=email&amp;to={$member['user_id']}" title="{$this->lang->members_email_member}">{$this->lang->email}</a></div>
    </IF>
   </td>
@@ -4206,11 +4209,14 @@ enable('$init');
 {$this->table}
  <tr>
   <td>
-   <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_poll}">{$this->lang->new_poll}</a></div>
-   <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_topic}">{$this->lang->new_topic}</a></div>
+   <IF $can_post>
+    <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_poll}">{$this->lang->new_poll}</a></div>
+    <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_topic}">{$this->lang->new_topic}</a></div>
+   </IF>
    <IF ($topic['topic_modes'] & TOPIC_LOCKED)>
     <div class="greybutton"><span class="locked">{$this->lang->topic_locked}</span></div>
-   <ELSE>
+   </IF>
+   <IF $can_reply>
     <div class="bigbutton"><a class="topicreply" href="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" title="{$this->lang->topic_reply}">{$this->lang->reply}</a></div>
    </IF>
    {$this->lang->topic_pages}: {$pagelinks}
@@ -4241,12 +4247,15 @@ enable('$init');
 {$this->table}
  <tr>
   <td>
-   <div class="bigbutton"><a class="subscribe" href="{$this->self}?a=cp&amp;s=addsub&amp;type=topic&amp;item={$this->get['t']}" title="{$this->lang->topic_subscribe}">{$this->lang->subscribe}</a></div>
-   <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_poll}">{$this->lang->new_poll}</a></div>
-   <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_topic}">{$this->lang->new_topic}</a></div>
+   <IF $can_post>
+    <div class="bigbutton"><a class="subscribe" href="{$this->self}?a=cp&amp;s=addsub&amp;type=topic&amp;item={$this->get['t']}" title="{$this->lang->topic_subscribe}">{$this->lang->subscribe}</a></div>
+    <div class="bigbutton"><a class="poll" href="{$this->self}?a=post&amp;s=poll&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_poll}">{$this->lang->new_poll}</a></div>
+    <div class="bigbutton"><a class="topic" href="{$this->self}?a=post&amp;s=topic&amp;f={$topic['topic_forum']}" title="{$this->lang->topic_create_topic}">{$this->lang->new_topic}</a></div>
+   </IF>
    <IF ($topic['topic_modes'] & TOPIC_LOCKED)>
     <div class="greybutton"><span class="locked">{$this->lang->topic_locked}</span></div>
-   <ELSE>
+   </IF>
+   <IF $can_reply>
     <div class="bigbutton"><a class="topicreply" href="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" title="{$this->lang->topic_reply}">{$this->lang->reply}</a></div>
    </IF>
    {$this->lang->topic_pages}:{$pagelinks}
@@ -4254,7 +4263,7 @@ enable('$init');
  </tr>
 {$this->etable}
 
-<IF $this->perms->auth(('post_create'), $topic['topic_forum'])>
+<IF $can_reply>
 <div class="quickreply">
 {$quickreply}
 </div>
@@ -4287,7 +4296,9 @@ enable('$init');
       <IF $can_edit>
        <div class="button butright"><a class="edit" href="{$this->self}?a=mod&amp;s=edit_post&amp;p={$post['post_id']}" title="{$this->lang->topic_edit_post}">{$this->lang->edit}</a></div>
       </IF>
-      <div class="button butright"><a class="quotepost" href="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}&amp;f={$topic['topic_forum']}&amp;qu={$post['post_id']}" title="{$this->lang->topic_quote}">{$this->lang->quote}</a></div>
+      <IF $can_reply>
+       <div class="button butright"><a class="quotepost" href="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}&amp;f={$topic['topic_forum']}&amp;qu={$post['post_id']}" title="{$this->lang->topic_quote}">{$this->lang->quote}</a></div>
+      </IF>
       <div>{$post['post_icon']} <IF $post['newpost']><img src="./skins/{$this->skin}/images/icons/post_new.png" alt="{$this->lang->topic_new_post}" /></IF>
        {$this->lang->topic_posted} {$post['post_time']}
       </div>
@@ -4324,7 +4335,7 @@ enable('$init');
       <IF $post['user_gtalk']>
        <div class="button"><a class="gtalk" href="{$icons['user_gtalk']['link']}" title="{$icons['user_gtalk']['alt']}">{$this->lang->gtalk}</a></div>
       </IF>
-      <IF $post['user_pm']>
+      <IF $post['user_pm'] && !$this->perms->is_guest>
        <div class="button"><a class="messenger" href="{$icons['user_pm']['link']}" title="{$icons['user_pm']['alt']}">{$this->lang->private_message}</a></div>
       </IF>
      </td>
@@ -4588,7 +4599,7 @@ enable('$init');
       <html><![CDATA[
 <div class="newsfieldset">
  <div class="newslegend" style="text-align:center">{$topic}</div>
- <p>{$text}</p><br />
+ <p>{$text}</p><br />{$comments}
  <div class="newsfooter">{$this->qsf->lang->main_posted_by}: {$user} {$date}</div>
 </div><br />
       ]]></html>
@@ -4807,9 +4818,13 @@ enable('$init');
 <p>&nbsp;</p>
 <div class="header" style="text-align:center">{$this->lang->files_comment_user}: {$cfile['file_name']}</div>
 {$comments}
+<IF $can_comment>
 <div class="footer" style="text-align:center">
  <a href="{$this->self}?a=files&amp;s=addcomment&amp;cid={$cid}&amp;fid={$id}">{$this->lang->files_comment}</a>
 </div>
+<ELSE>
+<div class="footer">&nbsp;</div>
+</IF>
       ]]></html>
     </template>
     <template><set>Files</set><name>FILE_COMMENT</name>
@@ -5347,12 +5362,65 @@ enable('$init');
     </template>
     <template><set>Stats</set><name>STAT_STAT</name>
       <displayname>Statistics by Month</displayname>
-      <description>Fromat of the monthly stats screen.</description>
+      <description>Format of the monthly stats screen.</description>
       <html><![CDATA[
  <tr>
   <td class="tablelight" style="width:20%">{$month} - {$stat}</td>
   <td class="tabledark"><img src="../skins/{$this->skin}/images/vote_left.png" alt=""><img src="../skins/{$this->skin}/images/vote_bar.png" style="width:{$width}px; height: 12px" alt=""><img src="../skins/{$this->skin}/images/vote_right.png" alt=""></td>
  </tr>
+      ]]></html>
+    </template>
+    <template><set>newspost</set><name>NEWS_COMMENT</name>
+      <displayname>News Comment</displayname>
+      <description>Individual comment to a news posting.</description>
+      <html><![CDATA[
+<a id="p{$pos}"></a><div class="subheader" style="padding:3px">{$this->lang->main_posted_by}: {$c_user} {$c_date}</div>
+<div class="newscomments">
+ {$c_text}
+</div>
+<br />
+      ]]></html>
+    </template>
+    <template><set>newspost</set><name>NEWS_POST</name>
+      <displayname>News Post</displayname>
+      <description>Show a single complete news posting.</description>
+      <html><![CDATA[
+<br />
+<div class="newsfieldset">
+ <div class="newslegend" style="text-align:center">{$topic}</div>
+ <p>{$text}</p>
+ <div class="newsfooter">{$this->lang->main_posted_by}: {$user} {$date}</div>
+</div>
+
+<div class="newsfieldset">
+ <div class="newslegend" style="text-align:center">Comments:</div>
+ {$comments}
+<IF $can_post>
+<script type="text/javascript" src="./javascript/postboxplain.js"></script>
+<script type="text/javascript" src="./javascript/quickquote.js"></script>
+<form action="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" method="post" id="mbpost">
+{$this->table}
+ <tr>
+  <td>
+   <h2>Post Comment</h2>
+   <div class="tabledark">
+    <div id="quicksmilies"></div><br />
+    <textarea class="input" name="post" id="bbcodequick" rows="8" cols="75"></textarea><br />
+   </div>
+   <div class="tablelight" style="text-align:center;">
+    <input type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">Convert emoticons into images?</label>
+    <input type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">Format MbCode?</label>
+   </div>
+   <div class="footer">
+    <input type="submit" name="submit" value="{$this->lang->reply}" />
+    <input type="hidden" name="request_uri" value="{$request_uri}" />
+   </div>
+  </td>
+ </tr>
+{$this->etable}
+</form>
+</IF>
+</div>
       ]]></html>
     </template>
   </templates>

@@ -199,23 +199,23 @@ require_once $set['include_path'] . '/lib/tool.php';
 		while ($post = $this->db->nqfetch($posts))
 		{
 			if ($post['post_count']) {
-				$this->db->query('UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=%d', $post['post_author']);
+				$this->db->query("UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=%d", $post['post_author']);
 			}
 
 			if ($post['attach_file']) {
-				$this->db->query('DELETE FROM %pattach WHERE attach_post=%d', $post['post_id']);
+				$this->db->query("DELETE FROM %pattach WHERE attach_post=%d", $post['post_id']);
 				@unlink('./attachments/' . $post['attach_file']);
 			}
 
 			$deleted++;
 		}
 
-		$result = $this->db->fetch('SELECT topic_forum FROM %ptopics WHERE topic_id=%d', $t);
+		$result = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t);
 
-		$this->db->query('DELETE FROM %pvotes WHERE vote_topic=%d', $t);
-		$this->db->query('DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d', $t, $t);
-		$this->db->query('DELETE FROM %pposts WHERE post_topic=%d', $t);
-		$this->db->query('DELETE FROM %preadmarks WHERE readmark_topic=%d', $t);
+		$this->db->query("DELETE FROM %pvotes WHERE vote_topic=%d", $t);
+		$this->db->query("DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d", $t, $t);
+		$this->db->query("DELETE FROM %pposts WHERE post_topic=%d", $t);
+		$this->db->query("DELETE FROM %preadmarks WHERE readmark_topic=%d", $t);
 
 		$this->update_reply_count($result['topic_forum'], $deleted);
 
@@ -247,21 +247,21 @@ require_once $set['include_path'] . '/lib/tool.php';
 			LEFT JOIN %pattach a ON p.post_id=a.attach_post
 			WHERE p.post_id=%d AND t.topic_id=p.post_topic AND u.user_id=p.post_author", $p);
 
-		$this->db->query('UPDATE %pforums SET forum_replies=forum_replies-1 WHERE forum_id=%d', $result['topic_forum']);
-		$this->db->query('UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=%d', $result['topic_id']);
+		$this->db->query("UPDATE %pforums SET forum_replies=forum_replies-1 WHERE forum_id=%d", $result['topic_forum']);
+		$this->db->query("UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=%d", $result['topic_id']);
 		if ($result['post_count']) {
 			$posts = $result['user_posts'] - 1;
 
 			if ($posts < 0) {
 				$posts = 0;
 			}
-			$this->db->query('UPDATE %pusers SET user_posts=%d WHERE user_id=%d', $posts, $result['post_author']);
+			$this->db->query("UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts, $result['post_author']);
 		}
 
-		$this->db->query('DELETE FROM %pposts WHERE post_id=%d', $p);
+		$this->db->query("DELETE FROM %pposts WHERE post_id=%d", $p);
 
 		if ($result['attach_file']) {
-			$this->db->query('DELETE FROM %pattach WHERE attach_post=%d', $p);
+			$this->db->query("DELETE FROM %pattach WHERE attach_post=%d", $p);
 			@unlink('./attachments/' . $result['attach_file']);
 		}
 
@@ -306,16 +306,16 @@ require_once $set['include_path'] . '/lib/tool.php';
 
 	function _update_last_post($f)
 	{
-		$post = $this->db->fetch('SELECT p.post_id FROM (%pposts p, %ptopics t)
+		$post = $this->db->fetch("SELECT p.post_id FROM (%pposts p, %ptopics t)
 			WHERE t.topic_id=p.post_topic AND t.topic_forum=%d
 			ORDER BY t.topic_edited DESC, p.post_id DESC
-			LIMIT 1', $f);
+			LIMIT 1", $f);
 
 		if (!isset($post['post_id'])) {
 			$post['post_id'] = 0;
 		}
 
-		$this->db->query('UPDATE %pforums SET forum_lastpost=%d WHERE forum_id=%d', $post['post_id'], $f);
+		$this->db->query("UPDATE %pforums SET forum_lastpost=%d WHERE forum_id=%d", $post['post_id'], $f);
 	}
 
 	/**
@@ -368,10 +368,10 @@ require_once $set['include_path'] . '/lib/tool.php';
 				if (0 == $fid)
 					continue;
 
-				$this->db->query('UPDATE %pforums SET forum_replies=forum_replies-%d WHERE forum_id=%d', $ammount, $fid);
+				$this->db->query("UPDATE %pforums SET forum_replies=forum_replies-%d WHERE forum_id=%d", $ammount, $fid);
 
 				if (0 != $topic)
-					$this->db->query('UPDATE %pforums SET forum_topics=forum_topics-%d WHERE forum_id=%d',
+					$this->db->query("UPDATE %pforums SET forum_topics=forum_topics-%d WHERE forum_id=%d",
 						intval($topic), $fid);
 			}
 		}

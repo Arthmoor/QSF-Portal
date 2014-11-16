@@ -74,9 +74,8 @@ class imginfo
 
 		if (!isset($retval['type']))
 			return null;
-		
+
 		return $retval;
 	}
 }
-
 ?>

@@ -173,6 +173,7 @@ class en
 		$this->bbcode_blue = 'Blue';
 		$this->bbcode_bold = 'Bold (CTRL-b)';
 		$this->bbcode_bold1 = 'B';
+		$this->bbcode_brightcove = 'Brightcove Video';
 		$this->bbcode_chocolate = 'Chocolate';
 		$this->bbcode_code = 'Code (CTRL-l)';
 		$this->bbcode_code1 = 'Code';
@@ -186,6 +187,7 @@ class en
 		$this->bbcode_email = 'Email (CTRL-e)';
 		$this->bbcode_firered = 'Firebrick Red';
 		$this->bbcode_font = 'Font';
+		$this->bbcode_google = 'Google Video';
 		$this->bbcode_green = 'Green';
 		$this->bbcode_huge = 'Huge';
 		$this->bbcode_image = 'Image (CTRL-j)';
@@ -229,6 +231,7 @@ class en
 		$this->bbcode_verdana = 'Verdana';
 		$this->bbcode_wood = 'Burly Wood';
 		$this->bbcode_yellow = 'Yellow';
+		$this->bbcode_youtube = 'Youtube Video';
 	}
 
 	function board()
@@ -341,6 +344,9 @@ class en
 		$this->cp_must_orig = 'Your name must be identical to the original. You may only change the letter case and spacing.';
 		$this->cp_new_notmatch = 'The new passwords you entered do not match.';
 		$this->cp_new_pass = 'New Password';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.';
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.';
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.';
 		$this->cp_no_flash = 'Flash avatars are not allowed on this board.';
 		$this->cp_not_exist = 'The date you specified (%s) does not exist!';
 		$this->cp_nov = 'November';
@@ -981,6 +987,13 @@ class en
 		$this->mod_success_unpublish = 'This topic has been removed from the published list.';
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)';
+		$this->news_more = 'Read more...';
+		$this->news_previous = 'Previous news...';
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Optimize Database';
@@ -1018,10 +1031,18 @@ class en
 		$this->perms = 'Permissions';
 		$this->perms_board_view = 'View the board index';
 		$this->perms_board_view_closed = 'Use QSF Portal when it is closed';
+		$this->perms_create_pages = 'Can create custom pages';
+		$this->perms_delete_pages = 'Can delete custom pages';
 		$this->perms_do_anything = 'Use QSF Portal';
+		$this->perms_edit_avatar = 'Can edit user avatar';
 		$this->perms_edit_for = 'Edit permissions for';
+		$this->perms_edit_pages = 'Can edit custom pages';
+		$this->perms_edit_profile = 'Can edit user profile';
+		$this->perms_edit_sig = 'Can edit signatures';
 		$this->perms_email_use = 'Send emails to members via the board';
+		$this->perms_for = 'Permissions For';
 		$this->perms_forum_view = 'View the forum';
+		$this->perms_group = 'Group';
 		$this->perms_is_admin = 'Access the admin control panel';
 		$this->perms_only_user = 'Use only group permissions for this user';
 		$this->perms_override_user = 'This will override the group permissions for this user.';
@@ -1064,6 +1085,7 @@ class en
 		$this->perms_topic_view = 'View topics';
 		$this->perms_topic_view_unpublished = 'View unpublished topics';
 		$this->perms_updated = 'Permissions have been updated.';
+		$this->perms_user = 'User';
 		$this->perms_user_inherit = 'The user will inherit the group\'s permissions.';
 	}
 
@@ -1608,6 +1630,7 @@ class en
 		$this->temps_member_control = 'AdminCP Member Control';
 		$this->temps_members = 'Member List';
 		$this->temps_mod = 'Moderator Controls';
+		$this->temps_newspost = 'News Posts';
 		$this->temps_pm = 'Private Messenger';
 		$this->temps_polls = 'Polls';
 		$this->temps_post = 'Posting';
@@ -1734,6 +1757,36 @@ class en
 		$this->direction = 'ltr';
 		$this->edit = 'Edit';
 		$this->email = 'Email';
+		$this->gmt = '[GMT] Greenwich Mean Time';
+		$this->gmt_nev1 = '[GMT-1:00] Azores, Cape Verde';
+		$this->gmt_nev10 = '[GMT-10:00] Hawaii, Aleutian Islands';
+		$this->gmt_nev11 = '[GMT-11:00] Midway Island, Samoa';
+		$this->gmt_nev12 = '[GMT-12:00] International Date Line West';
+		$this->gmt_nev2 = '[GMT-2:00] Mid-Atlantic';
+		$this->gmt_nev3 = '[GMT-3:00] Buenos Aires, Greenland';
+		$this->gmt_nev35 = '[GMT-3:30] Newfoundland';
+		$this->gmt_nev4 = '[GMT-4:00] Atlantic Time Canada';
+		$this->gmt_nev5 = '[GMT-5:00] Eastern Time US & Canada';
+		$this->gmt_nev6 = '[GMT-6:00] Central Time US & Canada';
+		$this->gmt_nev7 = '[GMT-7:00] Mountain Time US & Canada';
+		$this->gmt_nev8 = '[GMT-8:00] Pacific Time US & Canada';
+		$this->gmt_nev9 = '[GMT-9:00] Alaska';
+		$this->gmt_pos1 = '[GMT+1:00] Amsterdam, Berlin, Rome, Paris';
+		$this->gmt_pos10 = '[GMT+10:00] Melbourne, Sydney, Guam';
+		$this->gmt_pos11 = '[GMT+11:00] Magadan, New Caledonia';
+		$this->gmt_pos12 = '[GMT+12:00] Auckland, Fiji';
+		$this->gmt_pos2 = '[GMT+2:00] Athens, Cairo, Jerusalem';
+		$this->gmt_pos3 = '[GMT+3:00] Baghdad, Moscow, Nairobi';
+		$this->gmt_pos35 = '[GMT+3:30] Tehran';
+		$this->gmt_pos4 = '[GMT+4:00] Abu Dhabi, Muscat, Tbilisi';
+		$this->gmt_pos45 = '[GMT+4:30] Kabul';
+		$this->gmt_pos5 = '[GMT+5:00] Islamabad, Karachi';
+		$this->gmt_pos55 = '[GMT+5:30] Bombay, Calcutta, New Delhi';
+		$this->gmt_pos6 = '[GMT+6:00] Almaty, Dhaka';
+		$this->gmt_pos7 = '[GMT+7:00] Bangkok, Jakarta';
+		$this->gmt_pos8 = '[GMT+8:00] Beijing, Hong Kong, Singapore';
+		$this->gmt_pos9 = '[GMT+9:00] Tokyo, Seoul';
+		$this->gmt_pos95 = '[GMT+9:30] Adelaide, Darwin';
 		$this->gtalk = 'GT';
 		$this->icq = 'ICQ';
 		$this->msn = 'MSN';

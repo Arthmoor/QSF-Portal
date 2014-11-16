@@ -174,14 +174,14 @@ class rssfeed extends qsfglobal
 	 **/
 	function generate_topic_feed($topic)
 	{
-		$topicdata = $this->db->fetch('
+		$topicdata = $this->db->fetch("
 			SELECT
 			    t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum, t.topic_replies, t.topic_poll_options, f.forum_name
 			FROM
 			    %ptopics t, %pforums f
 			WHERE
 			    t.topic_id=%d AND
-			    f.forum_id=t.topic_forum',
+			    f.forum_id=t.topic_forum",
 			$topic);
 
 		if (!$topicdata) {

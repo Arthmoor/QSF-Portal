@@ -174,6 +174,7 @@ class sv
 		$this->bbcode_blue = 'Blå';
 		$this->bbcode_bold = 'Fet (CTRL-b)';
 		$this->bbcode_bold1 = 'F';
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Choklad';
 		$this->bbcode_code = 'Kod (CTRL-l)';
 		$this->bbcode_code1 = 'Kod';
@@ -187,6 +188,7 @@ class sv
 		$this->bbcode_email = 'E-post (CTRL-e)';
 		$this->bbcode_firered = 'Tegelröd';
 		$this->bbcode_font = 'Teckensnitt';
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Grön';
 		$this->bbcode_huge = 'Enorm';
 		$this->bbcode_image = 'Bild (CTRL-j)';
@@ -230,6 +232,7 @@ class sv
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Beige';
 		$this->bbcode_yellow = 'Gul';
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -342,6 +345,9 @@ class sv
 		$this->cp_must_orig = 'Ditt namn måste vara identiskt med originalet. Du får endast ändra versaler och avstånd.';
 		$this->cp_new_notmatch = 'De nya lösenorden du skrev in är olika.';
 		$this->cp_new_pass = 'Nytt Lösenord';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'Flash avatarer är inte tillåtna.';
 		$this->cp_not_exist = 'Datumet du skrivit in (%s) finns inte!';
 		$this->cp_nov = 'November'; //Translate
@@ -982,6 +988,13 @@ class sv
 		$this->mod_success_unpublish = 'Ämnet har tagits bort från listan över publicerade.';
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Optimera Databasen';
@@ -1019,10 +1032,18 @@ class sv
 		$this->perms = 'Rättigheter';
 		$this->perms_board_view = 'Visa Forumets index';
 		$this->perms_board_view_closed = 'Använda Quicksilver Forumet när det är stängt';
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'Använda Quicksilver Forumet';
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'Ändra Rättigheter för';
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'Skicka e-post till medlemmarna via forumet';
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Kolla Forumet';
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'Komma åt adminkotrollpanelen';
 		$this->perms_only_user = 'Använd endast grupprättigheter för den här användaren';
 		$this->perms_override_user = 'Detta kommer att ersätta grupprättigheterna för den här användaren.';
@@ -1065,6 +1086,7 @@ class sv
 		$this->perms_topic_view = 'Kolla på ämnen';
 		$this->perms_topic_view_unpublished = 'Kolla  på ej publicerade ämnen';
 		$this->perms_updated = 'Rättigheterna har uppdaterats.';
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = 'Användaren kommer ärva gruppens rättigheter.';
 	}
 
@@ -1609,6 +1631,7 @@ class sv
 		$this->temps_member_control = 'AdminKP Medlemskontroll';
 		$this->temps_members = 'Medlemslista';
 		$this->temps_mod = 'Moderator Kontroller';
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'Snabbmeddelanden';
 		$this->temps_polls = 'Omröstningar';
 		$this->temps_post = 'Inläggshantering';
@@ -1735,6 +1758,36 @@ class sv
 		$this->direction = 'vth';
 		$this->edit = 'Ändra';
 		$this->email = 'E-post';
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GT'; //Translate
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

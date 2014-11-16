@@ -89,7 +89,7 @@ class admin extends qsfglobal
 	function message($title, $message, $link_text = null, $link = null, $redirect = null)
 	{
 		if ($link_text) {
-			$message .= "<br /><br /><a href='$link'>$link_text</a>";
+			$message .= "<br /><br /><a href=\"$link\">$link_text</a>";
 		}
 
 		if ($redirect) {
@@ -181,17 +181,17 @@ class admin extends qsfglobal
 
 	function list_groups($val, $select = 'user_group', $custom_only = false)
 	{
-		$out = "<select name='$select'>";
+		$out = "<select name=\"$select\">";
 
 		if ($custom_only) {
-			$groups = $this->db->query('SELECT group_name, group_id FROM %pgroups WHERE group_type="" ORDER BY group_name');
+			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name");
 		} else {
-			$groups = $this->db->query('SELECT group_name, group_id FROM %pgroups ORDER BY group_name');
+			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups ORDER BY group_name");
 		}
 
 		while ($group = $this->db->nqfetch($groups))
 		{
-			$out .= "<option value='{$group['group_id']}'" . (($val == $group['group_id']) ? ' selected=\'selected\'' : '') . ">" . htmlspecialchars($group['group_name']) . "</option>";
+			$out .= "<option value=\"{$group['group_id']}\"" . (($val == $group['group_id']) ? ' selected=\"selected\"' : '') . ">" . htmlspecialchars($group['group_name']) . "</option>";
 		}
 
 		return $out . '</select>';

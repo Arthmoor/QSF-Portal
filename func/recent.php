@@ -67,7 +67,8 @@ class recent extends qsfglobal
 		$min = isset($this->get['min']) ? intval($this->get['min']) : 0;
 
 		$this->set_title($this->lang->recent_active);
-        
+        	$this->tree($this->lang->recent_active);
+
 		$forums_str = $this->readmarker->create_forum_permissions_string();
 
 		// Handle the unlikely case where the user cannot view ANY forums
@@ -213,7 +214,7 @@ class recent extends qsfglobal
 			$row['topic_views']  = number_format($row['topic_views'], 0, null, $this->lang->sep_thousands);
 
 			if ($row['topic_modes'] & TOPIC_PINNED) {
-				$row['topic_title'] = "<b>" . $row['topic_title'] . "</b>";
+				$row['topic_title'] = "<strong>" . $row['topic_title'] . "</strong>";
 			}
 			if (!($row['topic_modes'] & TOPIC_PUBLISH)) {
 				$row['topic_title'] = "<i>" . $row['topic_title'] . "</i>";

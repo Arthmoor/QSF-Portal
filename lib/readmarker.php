@@ -385,5 +385,4 @@ class readmarker extends forumutils
 		$this->mark_all_read($oldest_time - 1);
 	}
 }
-
 ?>

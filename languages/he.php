@@ -173,6 +173,7 @@ class he
 		$this->bbcode_blue = 'Blue'; //Translate
 		$this->bbcode_bold = 'Bold (CTRL-b)'; //Translate
 		$this->bbcode_bold1 = 'B'; //Translate
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Chocolate'; //Translate
 		$this->bbcode_code = 'Code (CTRL-l)'; //Translate
 		$this->bbcode_code1 = 'Code'; //Translate
@@ -186,6 +187,7 @@ class he
 		$this->bbcode_email = 'Email (CTRL-e)'; //Translate
 		$this->bbcode_firered = 'Firebrick Red'; //Translate
 		$this->bbcode_font = 'Font'; //Translate
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Green'; //Translate
 		$this->bbcode_huge = 'Huge'; //Translate
 		$this->bbcode_image = 'Image (CTRL-j)'; //Translate
@@ -229,6 +231,7 @@ class he
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Burly Wood'; //Translate
 		$this->bbcode_yellow = 'Yellow'; //Translate
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -341,6 +344,9 @@ class he
 		$this->cp_must_orig = '.השם שלך חייב להיות זהה למקור. באפשרותך לשנות את גודל האות ורווחים';
 		$this->cp_new_notmatch = 'הסיסמא החדשה שהכנסת אינה תואמת.';
 		$this->cp_new_pass = 'סיסמא חדשה';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'אווטרה בפלאש אסורים בלוח זה.';
 		$this->cp_not_exist = 'אינו קיים! (%s) התאריך שציינת';
 		$this->cp_nov = 'נובמבר';
@@ -981,6 +987,13 @@ class he
 		$this->mod_success_unpublish = 'This topic has been removed from the published list.'; //Translate
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'ייעל מסד נתונים';
@@ -1018,10 +1031,18 @@ class he
 		$this->perms = 'הרשאות';
 		$this->perms_board_view = 'הצג את אינדקס הפורום';
 		$this->perms_board_view_closed = 'כשהם סגורים Quicksilver השתמש בפורומים של';
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'השתמש בפורומים של Quicksilver ';
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'ערוך הרשאות ל';
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'שליחת מיילים לחברים דרך הפורום';
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'הצג את הפורום';
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'כניסה ללוח בקרת מנהל';
 		$this->perms_only_user = 'השתמש רק בהרשאות קבוצה למשתמש זה';
 		$this->perms_override_user = '.זה יעקוף את הרשאות הקבוצה למשתמש זה';
@@ -1064,6 +1085,7 @@ class he
 		$this->perms_topic_view = 'הצגת נושאים';
 		$this->perms_topic_view_unpublished = 'View unpublished topics'; //Translate
 		$this->perms_updated = '.ההרשאות עודכנו';
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = '.המשתמש יירש את הרשאות הקבוצה/ות';
 	}
 
@@ -1608,6 +1630,7 @@ class he
 		$this->temps_member_control = 'בקרת מנהל ללוח בקרת חבר';
 		$this->temps_members = 'רשימת חברים';
 		$this->temps_mod = 'בקרת אחראים';
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'מסנג\'ר פרטי';
 		$this->temps_polls = 'סקרים';
 		$this->temps_post = 'מפרסם';
@@ -1734,6 +1757,36 @@ class he
 		$this->direction = 'rtl';
 		$this->edit = 'עריכה';
 		$this->email = 'אימייל';
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GT'; //Translate
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

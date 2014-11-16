@@ -170,8 +170,8 @@ class pm extends qsfglobal
 					}
 				} else {
 					$this->get['re'] = intval($this->get['re']);
-					$reply = $this->db->fetch('SELECT p.pm_to, p.pm_title, p.pm_message, m.user_name
-						FROM %ppmsystem p, %pusers m WHERE p.pm_id=%d AND p.pm_from=m.user_id', $this->get['re']);
+					$reply = $this->db->fetch("SELECT p.pm_to, p.pm_title, p.pm_message, m.user_name
+						FROM %ppmsystem p, %pusers m WHERE p.pm_id=%d AND p.pm_from=m.user_id", $this->get['re']);
 
 					if ($reply['pm_to'] == $this->user['user_id']) {
 						$to    = $reply['user_name'];

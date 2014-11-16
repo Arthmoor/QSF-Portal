@@ -588,7 +588,11 @@ class post extends qsfglobal
 				$mailer->doSend();
 			}
 
-			header('Location: ' . $this->self . '?a=topic&t=' . $this->get['t'] . '&p=' . $post_id . '#p' . $post_id);
+			if( isset($this->post['request_uri']) ) {
+				header('Location: ' . $this->post['request_uri']);
+			} else {
+				header('Location: ' . $this->self . '?a=topic&t=' . $this->get['t'] . '&p=' . $post_id . '#p' . $post_id);
+			}
 		}
 	}
 

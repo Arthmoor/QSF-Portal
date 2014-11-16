@@ -62,7 +62,7 @@ class ban extends admin
 
 			$banned = null;
 
-			$banned_query = $this->db->query('SELECT user_name FROM %pusers WHERE user_group=%d ORDER BY user_name ASC', USER_BANNED);
+			$banned_query = $this->db->query("SELECT user_name FROM %pusers WHERE user_group=%d ORDER BY user_name ASC", USER_BANNED);
 			while ($user = $this->db->nqfetch($banned_query))
 			{
 				$banned .= htmlspecialchars($user['user_name']) . "<br />";

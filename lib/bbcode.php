@@ -113,7 +113,10 @@ class bbcode extends htmltools
 				'h5'	=>	'_process_h',
 				'h6'	=>	'_process_h',
 				'ul'	=>	'_process_ul',
-				'li'	=>	'_process_li'
+				'li'	=>	'_process_li',
+				'youtube' =>	'_process_youtube',
+				'gvideo' =>	'_process_google_video',
+				'bcove' =>	'_process_brightcove'
 				);	// associtive array of an element and of the method to invoke to process the element/node
 
 	/**
@@ -196,6 +199,10 @@ class bbcode extends htmltools
 
 		$in = strtr($in, $strtr);
 
+		// FIXME: Hackish workaround.
+		// Bug reported: http://forums.quicksilverforums.com/index.php?a=topic&t=1134&p=6784#p6784
+		$in = str_replace( "[root]", "", $in );
+		$in = str_replace( "[/root]", "", $in );
 		return $in;
 	}
 
@@ -284,6 +291,17 @@ class bbcode extends htmltools
 				else
 					$this->allow_branch = true;
 
+				// don't allow unknown bbcode
+				if ( !array_key_exists( $element, $this->handlers ) )
+				{
+					// take into account end tags
+					if ( ( '/' !== $element{0} && !array_key_exists( substr( $element, 0 ), $this->handlers ) )
+					|| ( '/' === $element{0} && !array_key_exists( substr( $element, 1 ), $this->handlers ) ) )
+					{
+						continue;
+					}
+				}
+
 				$text = $this->_tostring( $last_node + 1, $ix );
 
 				if ( 0 != strlen( $text ) )
@@ -294,8 +312,7 @@ class bbcode extends htmltools
 				unset( $text );
 
 				if ( '/' === $element{0} ) {
-					if ( false == $this->_pop( substr( $element, 1 ) ) )
-						return false;
+					$this->_pop( substr( $element, 1 ) );
 
 					$__temp = &$curser->parent;
 					$curser = &$__temp;
@@ -623,6 +640,21 @@ class bbcode extends htmltools
 		}
 
 		return '<a href="' . $url . '">' . $node->text . '</a>';
+	}
+
+	function _process_youtube(&$node)
+	{
+		return '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/'.$node->text.'"></param><embed src="http://www.youtube.com/v/'.$node->text.'" type="application/x-shockwave-flash" width="425" height="350"></embed></object>';
+	}
+
+	function _process_google_video(&$node)
+	{
+		return '<embed style="width:400px; height:326px;" id="VideoPlayback" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docId='.$node->text.'&amp;hl=en" flashvars=""> </embed>';
+	}
+
+	function _process_brightcove(&$node)
+	{
+		return '<embed src="http://admin.brightcove.com/destination/player/player.swf" bgcolor="#FFFFFF" flashVars="allowFullScreen=true&amp;initVideoId='.$node->text.'&amp;servicesURL=http://services.brightcove.com/services&amp;viewerSecureGatewayURL=https://services.brightcove.com/services/amfgateway&amp;cdnURL=http://admin.brightcove.com&amp;autoStart=false" base="http://admin.brightcove.com" name="bcPlayer" width="486" height="412" allowFullScreen="true" allowScriptAccess="always" seamlesstabbing="false" type="application/x-shockwave-flash" swLiveConnect="true" pluginspage="http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash"></embed>';
 	}
 
 	/**

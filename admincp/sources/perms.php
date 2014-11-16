@@ -75,7 +75,7 @@ class perms extends admin
 		$this->set_title($title);
 		$this->tree($title);
 
-		$forums_only = $this->db->query('SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name');
+		$forums_only = $this->db->query("SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name");
 
 		$forums_list = array();
 		while ($forum = $this->db->nqfetch($forums_only))
@@ -88,12 +88,12 @@ class perms extends admin
 				'board_view_closed'	=> $this->lang->perms_board_view_closed,
 				'do_anything'		=> $this->lang->perms_do_anything,
 				'is_admin'		=> $this->lang->perms_is_admin,
-				'edit_avatar'		=> 'Can edit user avatar',
-				'edit_profile'		=> 'Can edit user profile',
-				'edit_sig'		=> 'Can edit signatures',
-				'page_edit'             => 'Can edit custom pages', // Added for CMS
-				'page_create'           => 'Can create custom pages', // Added for CMS
-				'page_delete'           => 'Can delete custom pages', // Added for CMS
+				'edit_avatar'		=> $this->lang->perms_edit_avatar,
+				'edit_profile'		=> $this->lang->perms_edit_profile,
+				'edit_sig'		=> $this->lang->perms_edit_sig,
+				'page_edit'             => $this->lang->perms_edit_pages, // Added for CMS
+				'page_create'           => $this->lang->perms_create_pages, // Added for CMS
+				'page_delete'           => $this->lang->perms_delete_pages, // Added for CMS
 				'email_use'		=> $this->lang->perms_email_use,
 				'topic_global'		=> $this->lang->perms_topic_global,
 				'pm_noflood'		=> $this->lang->perms_pm_noflood,
@@ -140,10 +140,10 @@ class perms extends admin
 
 			if ($mode == 'user') {
 				$query = $this->db->fetch("SELECT user_name, user_perms FROM %pusers WHERE user_id=%d", $this->post['group']);
-				$label = "User '{$query['user_name']}'";
+				$label = "{$this->lang->perms_user} '{$query['user_name']}'";
 			} else {
 				$query = $this->db->fetch("SELECT group_name FROM %pgroups WHERE group_id=%d", $this->post['group']);
-				$label = "Group '{$query['group_name']}'";
+				$label = "{$this->lang->perms_group} '{$query['group_name']}'";
 			}
 
 			$out = "
@@ -225,7 +225,7 @@ class perms extends admin
 			</script>
 
 			<form id='form' action='$this->self?a=perms$link' method='post'>
-			<div align='center'><span style='font-size:14px;'><b>Permissions For $label</b></span>";
+			<div align='center'><span style='font-size:14px;'><b>" . $this->lang->perms_for . " $label</b></span>";
 
 			if ($mode == 'user') {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />

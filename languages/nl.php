@@ -175,6 +175,7 @@ class nl
 		$this->bbcode_blue = 'Blue'; //Translate
 		$this->bbcode_bold = 'Bold (CTRL-b)'; //Translate
 		$this->bbcode_bold1 = 'B'; //Translate
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Chocolate'; //Translate
 		$this->bbcode_code = 'Code (CTRL-l)'; //Translate
 		$this->bbcode_code1 = 'Code'; //Translate
@@ -188,6 +189,7 @@ class nl
 		$this->bbcode_email = 'Email (CTRL-e)'; //Translate
 		$this->bbcode_firered = 'Firebrick Red'; //Translate
 		$this->bbcode_font = 'Font'; //Translate
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Green'; //Translate
 		$this->bbcode_huge = 'Huge'; //Translate
 		$this->bbcode_image = 'Image (CTRL-j)'; //Translate
@@ -231,6 +233,7 @@ class nl
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Burly Wood'; //Translate
 		$this->bbcode_yellow = 'Yellow'; //Translate
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -343,6 +346,9 @@ class nl
 		$this->cp_must_orig = 'U gebruikersnaam moet identiek aan het origineel zijn. U mag alleen gewone letters veranderen naar hoofdletters en cijfers toevoegen.';
 		$this->cp_new_notmatch = 'Het nieuwe wachtwoord dat u heeft opgegeven komt niet overeen.';
 		$this->cp_new_pass = 'Nieuw wachtwoord';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'Flash-avatars zijn niet toegestaan.';
 		$this->cp_not_exist = 'De datum die u heeft ingevoerd: (%s) bestaat niet!';
 		$this->cp_nov = 'November'; //Translate
@@ -983,6 +989,13 @@ class nl
 		$this->mod_success_unpublish = 'This topic has been removed from the published list.'; //Translate
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Optimaliseer de Database';
@@ -1020,10 +1033,18 @@ class nl
 		$this->perms = 'Toelatingen';
 		$this->perms_board_view = 'Bekijk de board index';
 		$this->perms_board_view_closed = 'Gebruik QSF Portal wanneer het gesloten is.';
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'Gebruik QSF Portal';
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'Pas toelatingen aan voor';
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'Verstuur e-mails naar andere gebruikers via het board';
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Bekijk het forum';
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'Verschaf toegang tot het administrators controlepaneel';
 		$this->perms_only_user = 'Gebruik alleen groepstoelatingen voor deze gebruiker';
 		$this->perms_override_user = 'This will override the group permissions for this user.'; //Translate
@@ -1066,6 +1087,7 @@ class nl
 		$this->perms_topic_view = 'Bekijk onderwerpen';
 		$this->perms_topic_view_unpublished = 'View unpublished topics'; //Translate
 		$this->perms_updated = 'Toelatingen zijn geupdate.';
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = 'De opstichter zal de groepstoelatingen erven.';
 	}
 
@@ -1610,6 +1632,7 @@ class nl
 		$this->temps_member_control = 'AdminCP Member Control'; //Translate
 		$this->temps_members = 'Gebruikerslijst';
 		$this->temps_mod = 'Moderator Opties';
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'Privé Messenger';
 		$this->temps_polls = 'Polls'; //Translate
 		$this->temps_post = 'Posting'; //Translate
@@ -1736,6 +1759,36 @@ class nl
 		$this->direction = 'ltr'; //Translate
 		$this->edit = 'Aanpassen';
 		$this->email = 'E-mail';
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GT'; //Translate
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

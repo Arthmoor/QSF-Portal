@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.3.4';          // QSF Portal version @var string
+	var $version = 'v1.3.5';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -64,7 +64,6 @@ class qsfglobal
 	var $etable;                      // End to an HTML table @var string
 	var $lang;                        // Loaded words @var object
 	var $query;                       // The query string @var string
-	var $tz_adjust;                   // Timezone offset in seconds
 	var $feed_links = null;		  // HTML of RSS link tags
 
 	var $attachmentutil;		  // Attachment handler @var object
@@ -124,18 +123,6 @@ class qsfglobal
 
 		$this->perms = new $this->modules['permissions']($this);
 		$this->file_perms = new $this->modules['file_permissions']($this);
-		
-		/* set timezone offset */
-		if ($this->user['zone_updated'] < $this->time)
-		{
-			$tz = new $this->modules['timezone']('timezone/'.$this->user['zone_name']);
-			$tz->magic2();
-			if (strlen($tz->abba)<1) $tz->abba='N/A';
-			$this->db->query("UPDATE %ptimezones SET zone_offset=%d, zone_updated=%d, zone_abbrev='%s' WHERE zone_id=%d",
-				$tz->gmt_offset, $tz->next_update, $tz->abba, $this->user['zone_id']);
-		} else {
-			$this->tz_adjust = $this->user['zone_offset'];
-		}
 		
 		$this->attachmentutil = new $this->modules['attach']($this);
 		$this->htmlwidgets = new $this->modules['widgets']($this);
@@ -465,7 +452,18 @@ class qsfglobal
 			$time = $this->time;
 		}
 
-		$time += $this->tz_adjust;
+		// Get the GMT time value based on the SERVER time...
+		$gmt_offset = date( "Z" );
+		$gmt_time = $time - $gmt_offset;
+
+		// Use the user's chosen GMT offset, ie: GMT-8 = Pacific time, US
+		$tz_offset = $this->user['user_timezone'] * 3600;
+		$time = $gmt_time + $tz_offset;
+
+		// DST adjustment if needed. Result is 1 if the date was in Daylight Saving Time
+		if( date( "I", $time ) == 1 ) {
+			$time += 3600;
+		}
 
 		if (is_int($format)) {
 			switch($format)
@@ -502,11 +500,11 @@ class qsfglobal
 			}
 
 			if (!$useToday) {
-				$date = gmdate($date_format, $time);
+				$date = date($date_format, $time);
 			} else if ($date_format) {
-				$date = gmdate($date_format, $time);
-				$today = gmdate($date_format, $this->time + $this->tz_adjust);
-				$yesterday = gmdate($date_format, ($this->time - DAY_IN_SECONDS) + $this->tz_adjust);
+				$date = date($date_format, $time);
+				$today = date($date_format, $this->time);
+				$yesterday = date($date_format, ($this->time - DAY_IN_SECONDS));
 
 				if ($today == $date) {
 					$date = $this->lang->today;
@@ -517,9 +515,9 @@ class qsfglobal
 				$date = '';
 			}
 
-			return $date . gmdate($time_format, $time);
+			return $date . date($time_format, $time);
 		} else {
-			return gmdate($format, $time);
+			return date($format, $time);
 		}
 	}
 

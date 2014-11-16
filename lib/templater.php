@@ -259,8 +259,5 @@ class templater extends htmltools
 		}
 		return "$macro_output return \"{$this->temps[$piece]}\r\n\";";
 	}
-
-
 }
-
 ?>

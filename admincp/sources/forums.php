@@ -54,7 +54,7 @@ class forums extends admin
 			$this->get['s'] = '';
 		}
 
-		$forums_exist = $this->db->fetch('SELECT COUNT(forum_id) AS count FROM %pforums');
+		$forums_exist = $this->db->fetch("SELECT COUNT(forum_id) AS count FROM %pforums");
 
 		if (!$forums_exist['count'] && ($this->get['s'] != 'add')) {
 			return $this->message($this->lang->forum_controls, $this->lang->forum_none, $this->lang->forum_create, "$this->self?a=forums&amp;s=add");

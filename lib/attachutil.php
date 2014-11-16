@@ -139,12 +139,10 @@ class attachutil
 	function delete_now($post_id, $filename, &$attached_data)
 	{
 		$this->delete($filename, $attached_data);
-		$this->db->query("DELETE FROM %pattach WHERE attach_post=%d AND attach_file = '%s'",
+		$this->db->query("DELETE FROM %pattach WHERE attach_post=%d AND attach_file='%s'",
 			$post_id, $filename);
 	}
-	
-	
-	
+
 	/**
 	 * Processes attach data and builds form elements
 	 *
@@ -164,7 +162,7 @@ class attachutil
 			$hiddennames .= "<input type='hidden' name='attached_data[$md5]' value='$file' />\n";
 		}
 	}
-	
+
 	/**
 	 * Adds an attachment record to the database
 	 *
@@ -214,7 +212,7 @@ class attachutil
 		}
 		return UPLOAD_FAILURE;
 	}
-	
+
 	/**
 	 * Fetch attachment data from database and return it as an array
 	 *
@@ -232,7 +230,7 @@ class attachutil
 		{
 			$attached_data[$row['attach_file']] = $row['attach_name'];
 		}
-		
+
 		return $attached_data;
 	}
 }

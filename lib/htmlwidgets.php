@@ -278,9 +278,9 @@ class htmlwidgets extends htmltools
 	function select_groups($val, $custom_only = false)
 	{
 		if ($custom_only) {
-			$groups = $this->db->query('SELECT group_name, group_id FROM %pgroups WHERE group_type="" ORDER BY group_name');
+			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name");
 		} else {
-			$groups = $this->db->query('SELECT group_name, group_id FROM %pgroups ORDER BY group_name');
+			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups ORDER BY group_name");
 		}
 
 		$out = null;
@@ -393,34 +393,46 @@ class htmlwidgets extends htmltools
 		return $out;
 	}
 
-	/**
-	 * Create options of different timezones
-	 *
-	 * @param int $zone current timezone id 
-	 * @return string HTML
-	 **/
 	function select_timezones($zone)
 	{
 		$out = null;
 
-		$query = $this->db->query("SELECT zone_id, zone_name, zone_offset, zone_updated, zone_abbrev FROM %ptimezones ORDER BY zone_name ASC");
-		while($row = $this->db->nqfetch($query))
+		$zones = array(
+			'-12'   => $this->lang->gmt_nev12,
+			'-11'   => $this->lang->gmt_nev11,
+			'-10'   => $this->lang->gmt_nev10,
+			'-9'    => $this->lang->gmt_nev9,
+			'-8'    => $this->lang->gmt_nev8,
+			'-7'    => $this->lang->gmt_nev7,
+			'-6'    => $this->lang->gmt_nev6,
+			'-5'    => $this->lang->gmt_nev5,
+			'-4'    => $this->lang->gmt_nev4,
+			'-3.5'  => $this->lang->gmt_nev35,
+			'-3'    => $this->lang->gmt_nev3,
+			'-2'    => $this->lang->gmt_nev2,
+			'-1'    => $this->lang->gmt_nev1,
+			'0'     => $this->lang->gmt,
+			'1'     => $this->lang->gmt_pos1,
+			'2'     => $this->lang->gmt_pos2,
+			'3'     => $this->lang->gmt_pos3,
+			'3.5'   => $this->lang->gmt_pos35,
+			'4'     => $this->lang->gmt_pos4,
+			'4.5'   => $this->lang->gmt_pos45,
+			'5'     => $this->lang->gmt_pos5,
+			'5.5'   => $this->lang->gmt_pos55,
+			'6'     => $this->lang->gmt_pos6,
+			'7'     => $this->lang->gmt_pos7,
+			'8'     => $this->lang->gmt_pos8,
+			'9'     => $this->lang->gmt_pos9,
+			'9.5'   => $this->lang->gmt_pos95,
+			'10'    => $this->lang->gmt_pos10,
+			'11'    => $this->lang->gmt_pos11,
+			'12'    => $this->lang->gmt_pos12
+		);
+
+		foreach ($zones as $offset => $zone_name)
 		{
-			if ($row['zone_updated'] < $this->time)
-			{
-				$tz = new $this->modules['timezone']('timezone/'.$row['zone_name']);
-				$tz->magic2();
-				if (strlen($tz->abba)<1) $tz->abba='N/A';
-				$this->db->query("UPDATE %ptimezones SET zone_offset=%d, zone_updated=%d, zone_abbrev='%s' WHERE zone_id=%d",
-					$tz->gmt_offset, $tz->next_update, $tz->abba, $row['zone_id']);
-				$row['zone_abbrev'] = $tz->abba;
-				$row['zone_offset'] = $tz->gmt_offset;
-			}
-
-			$padding = str_repeat('&nbsp;', 30 - strlen($row['zone_name']));
-
-			$out .= '<option value="' . $row['zone_id'] . '"' . (($zone == $row['zone_id']) ? ' selected="selected"' : null) . '>' . 
-				$row['zone_name'] . $padding  . ' ' . $row['zone_abbrev']. ' (GMT'.(($row['zone_offset'] >= 0) ? '+' : '') . ($row['zone_offset']/3600). ')</option>'."\n";
+			$out .= "<option value='$offset'" . (($offset == $zone) ? ' selected=\'selected\'' : null) . ">$zone_name</option>\n";
 		}
 
 		return $out;
@@ -648,5 +660,4 @@ class htmlwidgets extends htmltools
 		return $msgicons;
 	}
 }
-
 ?>

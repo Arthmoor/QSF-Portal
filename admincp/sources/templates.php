@@ -62,6 +62,7 @@ class templates extends admin
 			'member_control' => $this->lang->temps_member_control,
 			'members'        => $this->lang->temps_members,
 			'mod'            => $this->lang->temps_mod,
+			'newspost'       => $this->lang->temps_newspost,
 			'pm'             => $this->lang->temps_pm,
 			'poll'           => $this->lang->temps_polls,
 			'post'           => $this->lang->temps_post,
@@ -184,7 +185,7 @@ class templates extends admin
 			$didsomething = false;
 
 			/* find missing templates and dump code from default */
-			$sql = "SELECT * FROM %ptemplates WHERE template_skin = 'default'";
+			$sql = "SELECT * FROM %ptemplates WHERE template_skin='default'";
 			$query = $this->db->query($sql);
 
 			while ($row = $this->db->nqfetch($query))
@@ -203,7 +204,7 @@ class templates extends admin
 			}
 
 			/* Iterate over all our templates */
-			$query = $this->db->query("SELECT template_html, template_name FROM %ptemplates WHERE template_skin = '%s'", $skin);
+			$query = $this->db->query("SELECT template_html, template_name FROM %ptemplates WHERE template_skin='%s'", $skin);
 
 			while ($row = $this->db->nqfetch($query))
 			{
@@ -937,8 +938,6 @@ class templates extends admin
 						continue;
 					}
 				}
-
-				//$val = preg_replace('/\{lang-(.+?)\}/', '{$this->lang->\\1}', $val);
 
 				$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s' AND template_set='%s'",
 					$val, $template, $var, $this->get['section']);

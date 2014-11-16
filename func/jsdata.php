@@ -145,6 +145,24 @@ class jsdata extends qsfglobal
 				'action' => 'bbCode'
 				);
 			$results['buttons'][] = array(
+				'tag' => 'gvideo',
+				'title' => $this->lang->bbcode_google,
+				'value' => $this->lang->bbcode_google,
+				'action' => 'bbCode'
+				);
+			$results['buttons'][] = array(
+				'tag' => 'youtube',
+				'title' => $this->lang->bbcode_youtube,
+				'value' => $this->lang->bbcode_youtube,
+				'action' => 'bbCode'
+				);
+			$results['buttons'][] = array(
+				'tag' => 'bcove',
+				'title' => $this->lang->bbcode_brightcove,
+				'value' => $this->lang->bbcode_brightcove,
+				'action' => 'bbCode'
+				);
+			$results['buttons'][] = array(
 				'tag' => 'url',
 				'keynum' => 72, // h
 				'title' => $this->lang->bbcode_url,

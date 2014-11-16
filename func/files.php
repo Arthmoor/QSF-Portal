@@ -378,7 +378,7 @@ class files extends qsfglobal
 			header("Content-type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$filename}\"");
 			header("Content-Length: " . $size);
-			readfile($basepath . $md5name);
+			echo file_get_contents( './downloads/' . $md5name);
 		}
 		return $this->message($this->lang->files_approve, $this->lang->files_invalid_option, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue");
 	}
@@ -898,7 +898,7 @@ class files extends qsfglobal
 		header("Content-type: application/octet-stream");
 		header("Content-Disposition: attachment; filename=\"{$file['file_filename']}\"");
 		header("Content-Length: " . $file['file_size']);
-		readfile('./downloads/' . $file['file_md5name']);
+		echo file_get_contents( './downloads/' . $file['file_md5name']);
 	}
 
 	// NOTE: Need to change function around so it only prints a <table> if there is at least one result. -Asy
@@ -1273,6 +1273,7 @@ class files extends qsfglobal
 			$comments .= eval($this->template('FILE_COMMENT'));
 		}
 		$cid = $cfile['file_catid'];
+		$can_comment = $this->file_perms->auth('post_comment', $cid);
 		return eval($this->template('FILE_COMMENT_LIST'));
 	}
 

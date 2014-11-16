@@ -100,7 +100,7 @@ class forum extends qsfglobal
 		 * Check if the forum exists. We also cause an error if
 		 * $exists['forum_parent'] is 0 because categories can't be viewed as forums.
 		 */
-		$exists = $this->db->fetch("SELECT forum_parent, forum_name, forum_subcat FROM %pforums WHERE forum_id=%d", $f);
+		$exists = $this->db->fetch("SELECT forum_id, forum_parent, forum_name, forum_subcat FROM %pforums WHERE forum_id=%d", $f);
 		if (!isset($exists['forum_parent']) || !$exists['forum_parent']) {
 			return $this->message($this->lang->forum_forum, $this->lang->forum_noexist);
 		}
@@ -116,6 +116,11 @@ class forum extends qsfglobal
 		$pagelinks = $this->htmlwidgets->get_pages($topic['count'], "a=forum&amp;f=$f&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n);
 		$SubForums = $this->getSubs($f);
 		$forumjump = $this->htmlwidgets->select_forums($f, 0, null, true);
+
+		$can_post = false;
+		if ($this->perms->auth('topic_create', $exists['forum_id'])) {
+			$can_post = true;
+		}
 
 		if($exists['forum_subcat'] == '0') {
 			$topics = $this->getTopics($f, $min, $n, $m, $order);
@@ -167,34 +172,12 @@ class forum extends qsfglobal
 					$forum['forum_description'] = '<br />' . $forum['forum_description'];
 				}
 
-				$topic_new = "<img src='./skins/{$this->skin}/images/topic_old.png' alt='{$this->lang->main_topics_old}' title='{$this->lang->main_topics_old}' />";
 				$topic_unread = false;
 				$forum_unread = !$this->readmarker->is_forum_read($forum['forum_id'], $forum['LastTime']);
 
-				if ($this->perms->auth('topic_view', $forum['forum_id'])) {
-					if ($this->perms->auth('topic_create', $forum['forum_id'])) {
-						$topic_perms = "<a href=\"{$this->self}?a=post&amp;s=topic&amp;f={$forum['forum_id']}\"><img src=\"./skins/{$this->skin}/images/topic_write.png\" alt=\"{$this->lang->forum_write_topics}\" title=\"{$this->lang->forum_write_topics}\" /></a>";
-					} else {
-						$topic_perms = "<img src='./skins/{$this->skin}/images/topic_read.png' alt='{$this->lang->forum_can_topics}' title='{$this->lang->forum_can_topics}' />";
-					}
-
-					if ($this->perms->auth('post_create', $forum['forum_id'])) {
-						$post_perms = "<img src='./skins/{$this->skin}/images/post_write.png' alt='{$this->lang->forum_can_post}' title='{$this->lang->forum_can_post}' />";
-					} else {
-						$post_perms = "<img src='./skins/{$this->skin}/images/post_read.png' alt='{$this->lang->forum_cant_post}' title='{$this->lang->forum_cant_post}' />";
-					}
-				} else {
-					$topic_perms = "<img src='./skins/{$this->skin}/images/topic_none.png' alt='{$this->lang->forum_cant_topics}' title='{$this->lang->forum_cant_topics}' />";
-					$post_perms = "<img src='./skins/{$this->skin}/images/post_read.png' alt='{$this->lang->forum_cant_post}' title='{$this->lang->forum_cant_post}' />";
-				}
-
 				if ($forum['forum_lastpost']) {
 					$topic_unread = !$this->readmarker->is_forum_read($forum['forum_id'], $forum['LastTime']);
-					if ($topic_unread) {
-						$topic_new = "<a href=\"{$this->self}?s=mark&amp;f={$forum['forum_id']}\"><img src=\"./skins/{$this->skin}/images/topic_new.png\" alt=\"{$this->lang->main_topics_new}\" title=\"{$this->lang->main_topics_new}\" /></a>";
-					}
 
-					$forum['TopicLastTime'] = $forum['LastTime']; // Store so skin can access
 					$forum['LastTime'] = $this->mbdate(DATE_LONG, $forum['LastTime']);
 					$forum['forum_lastpost_topic'] = $forum['LastTopicID'];
 
@@ -307,7 +290,7 @@ class forum extends qsfglobal
 			$row['topic_views']  = number_format($row['topic_views'], 0, null, $this->lang->sep_thousands);
 
 			if ($row['topic_modes'] & TOPIC_PINNED) {
-				$row['topic_title'] = "<b>" . $row['topic_title'] . "</b>";
+				$row['topic_title'] = "<strong>" . $row['topic_title'] . "</strong>";
 			}
 			if (!($row['topic_modes'] & TOPIC_PUBLISH)) {
 				$row['topic_title'] = "<i>" . $row['topic_title'] . "</i>";

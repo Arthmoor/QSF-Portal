@@ -173,6 +173,7 @@ class hu
 		$this->bbcode_blue = 'Blue'; //Translate
 		$this->bbcode_bold = 'Bold (CTRL-b)'; //Translate
 		$this->bbcode_bold1 = 'B'; //Translate
+		$this->bbcode_brightcove = 'Brightcove Video'; //Translate
 		$this->bbcode_chocolate = 'Chocolate'; //Translate
 		$this->bbcode_code = 'Code (CTRL-l)'; //Translate
 		$this->bbcode_code1 = 'Code'; //Translate
@@ -186,6 +187,7 @@ class hu
 		$this->bbcode_email = 'Email (CTRL-e)'; //Translate
 		$this->bbcode_firered = 'Firebrick Red'; //Translate
 		$this->bbcode_font = 'Font'; //Translate
+		$this->bbcode_google = 'Google Video'; //Translate
 		$this->bbcode_green = 'Green'; //Translate
 		$this->bbcode_huge = 'Huge'; //Translate
 		$this->bbcode_image = 'Image (CTRL-j)'; //Translate
@@ -229,6 +231,7 @@ class hu
 		$this->bbcode_verdana = 'Verdana'; //Translate
 		$this->bbcode_wood = 'Burly Wood'; //Translate
 		$this->bbcode_yellow = 'Yellow'; //Translate
+		$this->bbcode_youtube = 'Youtube Video'; //Translate
 	}
 
 	function board()
@@ -341,6 +344,9 @@ class hu
 		$this->cp_must_orig = 'A nevednek egyeznie kell az eredetivel. Csak kis-nagybetût változtathatsz.';
 		$this->cp_new_notmatch = 'Az új jelszavak nem találnak.';
 		$this->cp_new_pass = 'Új jelszó';
+		$this->cp_no_edit_avatar = 'You are not allowed to edit your avatar.'; //Translate
+		$this->cp_no_edit_profile = 'You are not allowed to edit your profile.'; //Translate
+		$this->cp_no_edit_sig = 'You are not allowed to edit your signature.'; //Translate
 		$this->cp_no_flash = 'Tiltottak kisképe villog.';
 		$this->cp_not_exist = 'A megadott (%s) dátum nem létezik!';
 		$this->cp_nov = 'November'; //Translate
@@ -981,6 +987,13 @@ class hu
 		$this->mod_success_unpublish = 'This topic has been removed from the published list.'; //Translate
 	}
 
+	function news()
+	{
+		$this->news_comments = 'comment(s)'; //Translate
+		$this->news_more = 'Read more...'; //Translate
+		$this->news_previous = 'Previous news...'; //Translate
+	}
+
 	function optimize()
 	{
 		$this->optimize = 'Optimize Database'; //Translate
@@ -1018,10 +1031,18 @@ class hu
 		$this->perms = 'Permissions'; //Translate
 		$this->perms_board_view = 'View the board index'; //Translate
 		$this->perms_board_view_closed = 'Use QSF Portal when it is closed'; //Translate
+		$this->perms_create_pages = 'Can create custom pages'; //Translate
+		$this->perms_delete_pages = 'Can delete custom pages'; //Translate
 		$this->perms_do_anything = 'Use QSF Portal'; //Translate
+		$this->perms_edit_avatar = 'Can edit user avatar'; //Translate
 		$this->perms_edit_for = 'Edit permissions for'; //Translate
+		$this->perms_edit_pages = 'Can edit custom pages'; //Translate
+		$this->perms_edit_profile = 'Can edit user profile'; //Translate
+		$this->perms_edit_sig = 'Can edit signatures'; //Translate
 		$this->perms_email_use = 'Send emails to members via the board'; //Translate
+		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'View the forum'; //Translate
+		$this->perms_group = 'Group'; //Translate
 		$this->perms_is_admin = 'Access the admin control panel'; //Translate
 		$this->perms_only_user = 'Use only group permissions for this user'; //Translate
 		$this->perms_override_user = 'This will override the group permissions for this user.'; //Translate
@@ -1064,6 +1085,7 @@ class hu
 		$this->perms_topic_view = 'View topics'; //Translate
 		$this->perms_topic_view_unpublished = 'View unpublished topics'; //Translate
 		$this->perms_updated = 'Permissions have been updated.'; //Translate
+		$this->perms_user = 'User'; //Translate
 		$this->perms_user_inherit = 'The user will inherit the group\'s permissions.'; //Translate
 	}
 
@@ -1608,6 +1630,7 @@ class hu
 		$this->temps_member_control = 'AdminCP Member Control'; //Translate
 		$this->temps_members = 'Member List'; //Translate
 		$this->temps_mod = 'Moderator Controls'; //Translate
+		$this->temps_newspost = 'News Posts'; //Translate
 		$this->temps_pm = 'Private Messenger'; //Translate
 		$this->temps_polls = 'Polls'; //Translate
 		$this->temps_post = 'Posting'; //Translate
@@ -1734,6 +1757,36 @@ class hu
 		$this->direction = 'ltr'; //Translate
 		$this->edit = 'Edit'; //Translate
 		$this->email = 'Email'; //Translate
+		$this->gmt = '[GMT] ';
+		$this->gmt_nev1 = '[GMT-1:00] ';
+		$this->gmt_nev10 = '[GMT-10:00] ';
+		$this->gmt_nev11 = '[GMT-11:00] ';
+		$this->gmt_nev12 = '[GMT-12:00] ';
+		$this->gmt_nev2 = '[GMT-2:00] ';
+		$this->gmt_nev3 = '[GMT-3:00] ';
+		$this->gmt_nev35 = '[GMT-3:30] ';
+		$this->gmt_nev4 = '[GMT-4:00] ';
+		$this->gmt_nev5 = '[GMT-5:00] ';
+		$this->gmt_nev6 = '[GMT-6:00] ';
+		$this->gmt_nev7 = '[GMT-7:00] ';
+		$this->gmt_nev8 = '[GMT-8:00] ';
+		$this->gmt_nev9 = '[GMT-9:00] ';
+		$this->gmt_pos1 = '[GMT+1:00] ';
+		$this->gmt_pos10 = '[GMT+10:00] ';
+		$this->gmt_pos11 = '[GMT+11:00] ';
+		$this->gmt_pos12 = '[GMT+12:00] ';
+		$this->gmt_pos2 = '[GMT+2:00] ';
+		$this->gmt_pos3 = '[GMT+3:00] ';
+		$this->gmt_pos35 = '[GMT+3:30] ';
+		$this->gmt_pos4 = '[GMT+4:00] ';
+		$this->gmt_pos45 = '[GMT+4:30] ';
+		$this->gmt_pos5 = '[GMT+5:00] ';
+		$this->gmt_pos55 = '[GMT+5:30] ';
+		$this->gmt_pos6 = '[GMT+6:00] ';
+		$this->gmt_pos7 = '[GMT+7:00] ';
+		$this->gmt_pos8 = '[GMT+8:00] ';
+		$this->gmt_pos9 = '[GMT+9:00] ';
+		$this->gmt_pos95 = '[GMT+9:30] ';
 		$this->gtalk = 'GT'; //Translate
 		$this->icq = 'ICQ'; //Translate
 		$this->msn = 'MSN'; //Translate

@@ -162,5 +162,4 @@ class tool
 		return preg_match("!^$addr_spec$!", $email) ? 1 : 0;
 	}
 }
-
 ?>

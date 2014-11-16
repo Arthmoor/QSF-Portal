@@ -99,24 +99,24 @@ class profile extends qsfglobal
 					$last['topic_title'] = substr($last['topic_title'], 0, 22) . '...';
 				}
 
-				$lastpost = '<a href="' . $this->self . '?a=topic&amp;t=' . $last['topic_id'] . '">' . $this->format($last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a><br />' . $this->mbdate(DATE_LONG, $last['post_time']);
+				$lastpost = '<a href="' . $this->self . '?a=topic&amp;t=' . $last['topic_id'] . '" rel="nofollow">' . $this->format($last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a><br />' . $this->mbdate(DATE_LONG, $last['post_time']);
 			} else {
 				$lastpost = $this->lang->profile_unkown;
 			}
 
 			if (isset($final_fav['Forum'])) {
-				$posts_total = $this->db->fetch('SELECT COUNT(post_id) as count FROM %pposts WHERE post_author=%d', $user);
+				$posts_total = $this->db->fetch("SELECT COUNT(post_id) as count FROM %pposts WHERE post_author=%d", $user);
 
 				if (!$posts_total['count']) {
 					$fav_forum = $this->lang->profile_unkown;
 				} else {
-					$fav_forum = sprintf($this->lang->profile_fav_forum, "<a href='{$this->self}?a=forum&amp;f={$final_fav['Forum']}'>{$final_fav['forum_name']}</a>", round($final_fav['Forumuser_posts'] / $posts_total['count'] * 100));
+					$fav_forum = sprintf($this->lang->profile_fav_forum, "<a href=\"{$this->self}?a=forum&amp;f={$final_fav['Forum']}\" rel=\"nofollow\">{$final_fav['forum_name']}</a>", round($final_fav['Forumuser_posts'] / $posts_total['count'] * 100));
 				}
 			} else {
 				$fav_forum = $this->lang->profile_unkown;
 			}
 
-			$profile['user_posts'] = "<a href='{$this->self}?a=search&amp;id=$user'>" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
+			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$user\" rel=\"nofollow\">" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
 
 			$PostInfo = eval($this->template('PROFILE_POST_INFO'));
 		} else {
@@ -133,31 +133,32 @@ class profile extends qsfglobal
 			$profile['user_icq'] = null;
 		}
 
-		if ($profile['user_pm']) {
-			$profile['user_pm'] = "<a href='{$this->self}?a=pm&amp;s=send&amp;to={$profile['user_id']}'><img src='./skins/{$this->skin}/images/pm.png' alt='{$this->lang->profile_pm}' /></a>";
-		} else {
+		if (!$profile['user_pm'] || $this->perms->is_guest) {
 			$profile['user_pm'] = null;
 		}
 
 		if ($profile['user_avatar_type'] != 'none') {
-			$profile['user_avatar'] = "<img src='{$profile['user_avatar']}' alt='{$this->lang->profile_avatar}' width='{$profile['user_avatar_width']}' height='{$profile['user_avatar_height']}' />";
+			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"{$this->lang->profile_avatar}\" style=\"width:{$profile['user_avatar_width']}; height:{$profile['user_avatar_height']};\" />";
 		} else {
 			$profile['user_avatar'] = $this->lang->profile_none;
 		}
 
 		if ($profile['user_homepage']) {
-			$profile['user_homepage'] = "<a href='{$profile['user_homepage']}'>{$profile['user_homepage']}</a>";
+			$profile['user_homepage'] = "<a href=\"{$profile['user_homepage']}\">{$profile['user_homepage']}</a>";
 		}
 
 		$profile['user_joined'] = $this->mbdate(DATE_LONG, $profile['user_joined']);
 
-		if ($profile['user_email_show']) {
-			$profile['user_email'] = "<a href='mailto:{$profile['user_email']}'>{$profile['user_email']}</a>";
-		} else {
-			if ($profile['user_email_form']) {
-				$profile['user_email'] = "<a href='{$this->self}?a=email&amp;to={$profile['user_id']}'>{$this->lang->profile_private}</a>";
+		$profile['user_email'] = null;
+		if ($this->perms->auth('email_use')) {
+			if ($profile['user_email_show']) {
+				$profile['user_email'] = "<a href=\"mailto:{$profile['user_email']}\">{$profile['user_email']}</a>";
 			} else {
-				$profile['user_email'] = $this->lang->profile_private;
+				if ($profile['user_email_form']) {
+					$profile['user_email'] = "<a href=\"{$this->self}?a=email&amp;to={$profile['user_id']}\">{$this->lang->profile_private}</a>";
+				} else {
+					$profile['user_email'] = $this->lang->profile_private;
+				}
 			}
 		}
 

@@ -294,5 +294,4 @@ class activeutil extends bbcode
 		return $item;
 	}
 }
-
 ?>

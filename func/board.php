@@ -73,11 +73,11 @@ class board extends qsfglobal
 						$this->readmarker->mark_forum_read($forum_id, $this->time);
 						return $this->message($this->lang->board_markforum,
 							sprintf($this->lang->board_markforum1, $forum_name),
-							$this->lang->continue, $this->self, $this->self);
+							$this->lang->continue, $this->self . "?a=forum&amp;f={$forum_id}", $this->self . "?a=forum&f={$forum_id}");
 					}
 				} else {
 					$this->readmarker->mark_all_read($this->time);
-					return $this->message($this->lang->board_mark, $this->lang->board_mark1, $this->lang->continue, $this->self, $this->self);
+					return $this->message($this->lang->board_mark, $this->lang->board_mark1, $this->lang->continue, $this->sets['loc_of_board'], $this->sets['loc_of_board']);
 				}
 			} else {
 				$this->get['s'] = null;
@@ -150,35 +150,12 @@ class board extends qsfglobal
 					$forum['forum_topics'] = number_format($forum['forum_topics'], 0, null, $this->lang->sep_thousands);
 					$forum['forum_replies'] = number_format($forum['forum_replies'], 0, null, $this->lang->sep_thousands);
 
-					if ($this->perms->auth('topic_view', $forum['forum_id'])) {
-						if ($this->perms->auth('topic_create', $forum['forum_id'])) {
-							$topic_perms = "<a href=\"{$this->self}?a=post&amp;s=topic&amp;f={$forum['forum_id']}\"><img src=\"./skins/{$this->skin}/images/topic_write.png\" alt=\"{$this->lang->board_write_topics}\" title=\"{$this->lang->board_write_topics}\" /></a>";
-						} else {
-							$topic_perms = "<img src='./skins/{$this->skin}/images/topic_read.png' alt='{$this->lang->board_can_topics}' title='{$this->lang->board_can_topics}' />";
-						}
-
-						if ($this->perms->auth('post_create', $forum['forum_id'])) {
-							$post_perms = "<img src='./skins/{$this->skin}/images/post_write.png' alt='{$this->lang->board_can_post}' title='{$this->lang->board_can_post}' />";
-						} else {
-							$post_perms = "<img src='./skins/{$this->skin}/images/post_read.png' alt='{$this->lang->board_cant_post}' title='{$this->lang->board_cant_post}' />";
-						}
-					} else {
-						$topic_perms = "<img src='./skins/{$this->skin}/images/topic_none.png' alt='{$this->lang->board_cant_topics}' title='{$this->lang->board_cant_topics}' />";
-						$post_perms = "<img src='./skins/{$this->skin}/images/post_read.png' alt='{$this->lang->board_cant_post}' title='{$this->lang->board_cant_post}' />";
-					}
-
-					$topic_new = "<img src='./skins/{$this->skin}/images/topic_old.png' alt='{$this->lang->main_topics_old}' title='{$this->lang->main_topics_old}' />";
 					$topic_unread = false;
 					$forum_unread = !$this->readmarker->is_forum_read($forum['forum_id'], $forum['LastTime']);
 
 					if ($forum['forum_lastpost']) {
 						$topic_unread = !$this->readmarker->is_topic_read($forum['LastTopicID'], $forum['LastTime']);
-						if ($topic_unread) {
-							$topic_new = "<a href=\"{$this->self}?s=mark&amp;f={$forum['forum_id']}\"><img src=\"./skins/{$this->skin}/images/topic_new.png\" alt=\"{$this->lang->main_topics_new}\" title=\"{$this->lang->main_topics_new}\" /></a>";
-						}
 						
-						$forum['TopicLastTime'] = $forum['LastTime']; // store so skins can access
-
 						$forum['LastTime'] = $this->mbdate(DATE_LONG, $forum['LastTime']);
 
 						if ($forum['user_lastposterID'] != USER_GUEST_UID) {

@@ -1,0 +1,120 @@
+<?php
+/**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ **/
+
+if (!defined('QUICKSILVERFORUMS')) {
+	header('HTTP/1.0 403 Forbidden');
+	die;
+}
+
+require_once $set['include_path'] . '/global.php';
+
+/**
+ * Generate a single complete news post.
+ *
+ * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @since 1.3.5
+ **/
+class newspost extends qsfglobal
+{
+	function execute( )
+	{
+		if( !isset( $this->get['t'] ) ) {
+			return $this->message( "News", "No such article." );
+		}
+
+		$post = intval( $this->get['t'] );
+		return $this->getpost( $post );
+	}
+
+	function getpost( $post )
+	{
+		$items = "";
+
+		$row = $this->db->fetch(
+		  "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_mbcode, p.post_emoticons
+		    FROM %ptopics t
+		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
+		    LEFT JOIN %pusers u ON u.user_id=p.post_author
+		    WHERE t.topic_id=%d LIMIT 1", $post );
+
+		if( !$row ) {
+			return $this->message( "News", "No such article. (2)" );
+		}
+
+		$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
+		if ($row['post_mbcode']) {
+			$params |= FORMAT_MBCODE;
+		}
+		if ($row['post_emoticons']) {
+			$params |= FORMAT_EMOTICONS;
+		}
+
+		$topic = $row['topic_title'];
+		$uid = $row['post_author'];
+		$user = $row['user_name'];
+		$date = $this->mbdate( DATE_LONG, $row['topic_posted'] );
+		$text = $this->format($row['post_text'], $params);
+
+		$text = str_replace( "[more]", "", $text );
+
+		$comments = null;
+
+		$result = $this->db->query( "SELECT *
+		   FROM %pposts p
+		   LEFT JOIN %pusers u ON u.user_id=p.post_author
+		   WHERE post_topic=%d", $row['topic_id'] );
+
+		$show = false;
+		$pos = 0;
+		while( $comment = $this->db->nqfetch($result) )
+		{
+			// Skip the first one. The initial "comment" is really the first post.
+			if( !$show ) {
+				$show = true;
+				continue;
+			}
+
+			$pos++;
+			if ($comment['post_mbcode']) {
+				$params |= FORMAT_MBCODE;
+			}
+			if ($comment['post_emoticons']) {
+				$params |= FORMAT_EMOTICONS;
+			}
+
+			$c_user = $comment['user_name'];
+			$c_date = $this->mbdate( DATE_LONG, $comment['post_time'] );
+			$c_text = $this->format( $comment['post_text'], $params );
+
+			if( !strstr( $c_date, $this->lang->today ) && !strstr( $c_date, $this->lang->yesterday ) ) {
+				$c_date = "On " . $c_date;
+			}
+			$comments .= eval($this->template('NEWS_COMMENT'));
+		}
+
+		$can_post = false;
+		if ($this->perms->auth('post_create', $row['topic_forum'])) {
+			$can_post = true;
+		}
+
+		$request_uri = $this->self . "?" . $this->query . "#p" . ++$pos;
+
+		return eval($this->template('NEWS_POST'));
+	}
+}
+?>

@@ -102,7 +102,7 @@ class database
 		$data['query']      = $query;
 		$this->querydebug[] = $data;
 	}
-	
+
 	/**
 	 * Runs an EXPLAIN or similar on a query
 	 * Interface version
@@ -157,7 +157,7 @@ class database
 		} else {
 			$args  = func_get_args();
 		}
-		
+
 		return $this->nqfetch($this->query($args));
 	}
 
@@ -224,7 +224,7 @@ class database
 	{
 		return 0;
 	}
-	
+
 	/**
 	 * Returns a escaped string
 	 *
@@ -236,7 +236,7 @@ class database
 	{
 		return addslashes($string);
 	}
-	
+
 	/**
 	 * Puts the data into the query using the escape function
 	 *
@@ -253,7 +253,7 @@ class database
 		} else {
 			$args  = func_get_args();
 		}
-		
+
 		$query = array_shift($args);
 		$query = str_replace('%p', $this->prefix, $query);
 		
@@ -261,9 +261,8 @@ class database
 			$args[$i] = $this->escape($args[$i]);
 		}
 		array_unshift($args,$query);
-		
+
 		return call_user_func_array('sprintf',$args);
 	}
-	
 }
 ?>

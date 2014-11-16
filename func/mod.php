@@ -32,7 +32,6 @@ if (!defined('QUICKSILVERFORUMS')) {
 }
 
 require_once $set['include_path'] . '/global.php';
-// require_once $set['include_path'] . '/lib/forumutils.php';
 
 /**
  * Controls moderator actions
@@ -119,8 +118,8 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_title, topic_forum, topic_starter, topic_modes, topic_poll_options
-			FROM %ptopics WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_title, topic_forum, topic_starter, topic_modes, topic_poll_options
+			FROM %ptopics WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!isset($topic['topic_title'])) {
@@ -152,7 +151,7 @@ class mod extends qsfglobal
 				return $this->message($this->lang->mod_label_controls, $this->lang->mod_error_move_create, $this->lang->continue, "$this->self?a=topic&amp;t={$this->get['t']}");
 			}
 
-			$target = $this->db->fetch('SELECT forum_parent FROM %pforums WHERE forum_id=%d', $this->post['newforum']);
+			$target = $this->db->fetch("SELECT forum_parent FROM %pforums WHERE forum_id=%d", $this->post['newforum']);
 			if (!isset($target['forum_parent'])) {
 				return $this->message($this->lang->mod_label_controls, $this->lang->mod_error_move_forum, $this->lang->continue, "$this->self?a=topic&amp;t={$this->get['t']}");
 			} elseif (!$target['forum_parent']) {
@@ -163,22 +162,22 @@ class mod extends qsfglobal
 				$this->db->clone_row('topics', 'topic_id', $this->get['t']);
 				$newtopic = $this->db->insert_id('topics');
 
-				$this->db->query('UPDATE %ptopics SET topic_modes=%d, topic_moved=%d WHERE topic_id=%d OR topic_moved=%d',
+				$this->db->query("UPDATE %ptopics SET topic_modes=%d, topic_moved=%d WHERE topic_id=%d OR topic_moved=%d",
 					$topic['topic_modes'] | TOPIC_MOVED, $newtopic, $this->get['t'], $this->get['t']);
 			} else {
 				$newtopic = $this->get['t'];
 			}
 
-			$this->db->query('UPDATE %ptopics SET topic_forum=%d WHERE topic_id=%d', $this->post['newforum'], $newtopic);
-			$this->db->query('UPDATE %pposts SET post_topic=%d WHERE post_topic=%d', $newtopic, $this->get['t']);
-			$this->db->query('UPDATE %pvotes SET vote_topic=%d WHERE vote_topic=%d', $newtopic, $this->get['t']);
+			$this->db->query("UPDATE %ptopics SET topic_forum=%d WHERE topic_id=%d", $this->post['newforum'], $newtopic);
+			$this->db->query("UPDATE %pposts SET post_topic=%d WHERE post_topic=%d", $newtopic, $this->get['t']);
+			$this->db->query("UPDATE %pvotes SET vote_topic=%d WHERE vote_topic=%d", $newtopic, $this->get['t']);
 			$this->db->query("UPDATE %psubscriptions SET subscription_item=%d WHERE subscription_item=%d AND subscription_type='topic'",
 				$newtopic, $this->get['t']);
 
 			$this->htmlwidgets->update_last_post($topic['topic_forum']);
 			$this->htmlwidgets->update_last_post($this->post['newforum']);
 
-			$ammount = $this->db->fetch('SELECT topic_replies FROM %ptopics WHERE topic_id = %d', $newtopic);
+			$ammount = $this->db->fetch("SELECT topic_replies FROM %ptopics WHERE topic_id=%d", $newtopic);
 			$ammount = intval($ammount['topic_replies']);
 
 			$this->htmlwidgets->update_count_move($topic['topic_forum'], $this->post['newforum'], $ammount);
@@ -207,9 +206,9 @@ class mod extends qsfglobal
 		}
 
 		$this->get['p'] = intval($this->get['p']);
-		$data = $this->db->fetch('SELECT p.post_text, p.post_author, p.post_emoticons, p.post_mbcode, p.post_topic, p.post_icon, p.post_time, t.topic_forum, t.topic_replies
+		$data = $this->db->fetch("SELECT p.post_text, p.post_author, p.post_emoticons, p.post_mbcode, p.post_topic, p.post_icon, p.post_time, t.topic_forum, t.topic_replies
 			FROM %pposts p, %ptopics t
-			WHERE t.topic_id=p.post_topic AND p.post_id=%d', $this->get['p']);
+			WHERE t.topic_id=p.post_topic AND p.post_id=%d", $this->get['p']);
 
 		// Existence check
 		if (!isset($data['post_text'])) {
@@ -317,12 +316,12 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_title, topic_description, topic_starter, topic_forum, topic_modes
-			FROM %ptopics WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_title, topic_description, topic_starter, topic_forum, topic_modes
+			FROM %ptopics WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!isset($topic['topic_title'])) {
-			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic,  $this->lang->continue, "javascript:history.go(-1)");
+			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
 		// Permissions check
@@ -338,7 +337,7 @@ class mod extends qsfglobal
 
 			if ($this->perms->auth('topic_global')) {
 				if ($topic['topic_modes'] & TOPIC_GLOBAL) {
-					$checkGlob = ' checked=\'checked\'';
+					$checkGlob = ' checked="checked"';
 				} else {
 					$checkGlob = '';
 				}
@@ -357,7 +356,7 @@ class mod extends qsfglobal
 				}
 			}
 
-			$this->db->query("UPDATE %ptopics SET topic_title='%s', topic_description='%s', topic_modes='%s' WHERE topic_id=%d",
+			$this->db->query("UPDATE %ptopics SET topic_title='%s', topic_description='%s', topic_modes=%d WHERE topic_id=%d",
 				$this->post['title'], $this->post['desc'], $topic['topic_modes'], $this->get['t']);
 
 			$this->log_action('topic_edit', $this->get['t']);
@@ -384,11 +383,11 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_modes, topic_starter, topic_forum FROM %ptopics	WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_modes, topic_starter, topic_forum FROM %ptopics	WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!$topic) {
-			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic,  $this->lang->continue, "javascript:history.go(-1)");
+			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_topic, $this->lang->continue, "javascript:history.go(-1)");
 		}
 
 		// Permissions check
@@ -431,7 +430,7 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!$topic) {
@@ -478,19 +477,19 @@ class mod extends qsfglobal
 		}
 
 		$this->get['p'] = intval($this->get['p']);
-		$post = $this->db->fetch('SELECT p.post_id, p.post_author, p.post_topic, p.post_time, t.topic_id, t.topic_forum
+		$post = $this->db->fetch("SELECT p.post_id, p.post_author, p.post_topic, p.post_time, t.topic_id, t.topic_forum
 			FROM %pposts p,	%ptopics t
-			WHERE p.post_id=%d AND p.post_topic=t.topic_id', $this->get['p']);
+			WHERE p.post_id=%d AND p.post_topic=t.topic_id", $this->get['p']);
 
 		// Existence check
 		if (!isset($post['post_id'])) {
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_missing_post,  $this->lang->continue, "javascript:history.go(-1)");
 		}
 
-		$first = $this->db->fetch('SELECT p.post_id
+		$first = $this->db->fetch("SELECT p.post_id
 			FROM %pposts p,	%ptopics t
 			WHERE p.post_topic=t.topic_id AND t.topic_id=%d
-			ORDER BY p.post_time LIMIT 1', $post['topic_id']);
+			ORDER BY p.post_time LIMIT 1", $post['topic_id']);
 
 		if ($first['post_id'] == $this->get['p']) {
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_error_first_post);
@@ -539,7 +538,7 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_id, topic_forum, topic_starter FROM %ptopics WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_id, topic_forum, topic_starter FROM %ptopics WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!isset($topic['topic_id'])) {
@@ -583,7 +582,7 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_modes, topic_forum FROM %ptopics WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_modes, topic_forum FROM %ptopics WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!$topic) {
@@ -623,8 +622,8 @@ class mod extends qsfglobal
 		}
 
 		$this->get['t'] = intval($this->get['t']);
-		$topic = $this->db->fetch('SELECT topic_id, topic_forum, topic_starter, topic_title, topic_modes
-			FROM %ptopics WHERE topic_id=%d', $this->get['t']);
+		$topic = $this->db->fetch("SELECT topic_id, topic_forum, topic_starter, topic_title, topic_modes
+			FROM %ptopics WHERE topic_id=%d", $this->get['t']);
 
 		// Existence check
 		if (!isset($topic['topic_id'])) {
@@ -712,7 +711,7 @@ class mod extends qsfglobal
 	 **/
 	function lock($t, $topic_modes)
 	{
-		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
+		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d",
 			$topic_modes | TOPIC_LOCKED, $t);
 	}
 
@@ -727,7 +726,7 @@ class mod extends qsfglobal
 	 **/
 	function unlock($t, $topic_modes)
 	{
-		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
+		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d",
 			$topic_modes ^ TOPIC_LOCKED, $t);
 	}
 
@@ -742,7 +741,7 @@ class mod extends qsfglobal
 	 **/
 	function pin($t, $topic_modes)
 	{
-		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
+		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d",
 			$topic_modes | TOPIC_PINNED, $t);
 	}
 
@@ -757,9 +756,9 @@ class mod extends qsfglobal
 	 **/
 	function unpin($t, $topic_modes)
 	{
-		$topic = $this->db->fetch('SELECT topic_forum FROM %ptopics WHERE topic_id=%d', $t);
+		$topic = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t);
 
-		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d OR topic_moved=%d',
+		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d OR topic_moved=%d",
 			$topic_modes ^ TOPIC_PINNED, $t, $t);
 		$this->htmlwidgets->update_last_post($topic['topic_forum']);
 	}
@@ -773,7 +772,7 @@ class mod extends qsfglobal
 	 **/
 	function publish($t, $topic_modes)
 	{
-		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
+		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d",
 			$topic_modes | TOPIC_PUBLISH, $t);
 	}
 
@@ -786,7 +785,7 @@ class mod extends qsfglobal
 	 **/
 	function unpublish($t, $topic_modes)
 	{
-		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
+		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d",
 			$topic_modes ^ TOPIC_PUBLISH, $t);
 	}
 }

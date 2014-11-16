@@ -87,7 +87,7 @@ class mass_mail extends admin
 		if (count($this->post['groups'])) {
 			$members = $this->db->query("SELECT user_email FROM %pusers WHERE user_group IN (%s)", implode(', ', $this->post['groups']));
 		} else {
-			$members = $this->db->query("SELECT user_email FROM %pusers WHERE user_id != %d", USER_GUEST_UID);
+			$members = $this->db->query("SELECT user_email FROM %pusers WHERE user_id !=%d", USER_GUEST_UID);
 		}
 		while ($sub = $this->db->nqfetch($members))
 		{

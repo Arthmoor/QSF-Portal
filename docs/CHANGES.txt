@@ -1,6 +1,21 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.3.5:
+
+* Cleaned up member profile HTML.
+* Redirect after marking forums/board as read will use the URL from the AdminCP settings.
+* Added the ability to comment on news posts, and the use of a "more" link.
+* Overall code pruning and cleanup.
+* Better robots.txt handling by default. Inclusion of more restrictive optional robots file.
+* Support for Youtube, Google, and Brightcove video embedding in posts.
+* Removed detailed DST support. PHP date() function has sufficient support for general DST accuracy.
+
+  Bugs addressed:
+
+* Links to mark forums as read don't actually work.
+* BBcode crash if an invalid tag is only one character. Such as [1].
+
 Changes for 1.3.4:
 
 * Cosmetic improvements to the file module templates.

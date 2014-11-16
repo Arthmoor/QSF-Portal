@@ -153,7 +153,7 @@ class cp extends qsfglobal
 
 			case PASS_SUCCESS:
 				$hashed_pass = md5($this->post['passA']);
-				$this->db->query('UPDATE %pusers SET user_password=\'%s\' WHERE user_id=%d', $hashed_pass, $this->user['user_id']);
+				$this->db->query("UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $hashed_pass, $this->user['user_id']);
 
 				if( version_compare( PHP_VERSION, "5.2.0", "<" ) ) {
 					setcookie($this->sets['cookie_prefix'] . 'pass', $hashed_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'].'; HttpOnly', $this->sets['cookie_secure']);
@@ -261,7 +261,7 @@ class cp extends qsfglobal
 	function edit_profile()
 	{
 		if ( !$this->perms->auth('edit_profile')) {
-			return $this->message( $this->lang->cp_editing_profile, "You are not allowed to edit your profile." );
+			return $this->message( $this->lang->cp_editing_profile, $this->lang->cp_no_edit_profile );
 		}
 		$this->set_title($this->lang->cp_editing_profile);
 		$this->tree($this->lang->cp_cp, $this->self . '?a=cp');
@@ -366,7 +366,7 @@ class cp extends qsfglobal
 				UPDATE %pusers SET
 				  user_email='%s', user_birthday='%s', user_homepage='%s', user_location ='%s',
 				  user_interests='%s', user_icq=%d, user_msn='%s', user_aim='%s', user_yahoo='%s',
-				  user_gtalk='%s', user_title='%s', user_title_custom='%s', user_name='%s'
+				  user_gtalk='%s', user_title='%s', user_title_custom=%d, user_name='%s'
 				WHERE user_id=%d",
 				$this->post['user_email'], $user_birthday, $this->post['user_homepage'], $this->post['user_location'],
 				$this->post['user_interests'], intval($this->post['user_icq']), $this->post['user_msn'], $this->post['user_aim'],
@@ -385,7 +385,7 @@ class cp extends qsfglobal
 	function edit_avatar()
 	{
 		if ( !$this->perms->auth('edit_avatar')) {
-			return $this->message( $this->lang->cp_editing_avatar, "You are not allowed to edit your avatar." );
+			return $this->message( $this->lang->cp_editing_avatar, $this->lang->cp_no_edit_avatar );
 		}
 		$this->set_title($this->lang->cp_editing_avatar);
 		$this->tree($this->lang->cp_cp, $this->self . '?a=cp');
@@ -396,8 +396,8 @@ class cp extends qsfglobal
 
 			if (empty($this->user['user_avatar'])) {
 				$this->user['user_avatar']   = "./skins/{$this->skin}/images/noavatar.png";
-				$this->user['user_avatar_width']  = 64;
-				$this->user['user_avatar_height'] = 64;
+				$this->user['user_avatar_width']  = 75;
+				$this->user['user_avatar_height'] = 75;
 			}
 
 			$checks[0] = ($this->user['user_avatar_type'] == 'local') ? ' checked=\'checked\'' : null;
@@ -599,7 +599,7 @@ class cp extends qsfglobal
 	function edit_sig()
 	{
 		if (!$this->perms->auth('edit_sig')) {
-			return $this->message($this->lang->cp_label_edit_sig, "You are not allowed to edit your signature.");
+			return $this->message($this->lang->cp_label_edit_sig, $this->lang->cp_no_edit_sig);
 		}
 		$this->set_title($this->lang->cp_label_edit_sig);
 		$this->tree($this->lang->cp_cp, $this->self . '?a=cp');
@@ -607,7 +607,7 @@ class cp extends qsfglobal
 		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS;
 		
 		if (isset($this->post['submit'])) {
-			$this->db->query('UPDATE %pusers SET user_signature=\'%s\' WHERE user_id=%d',
+			$this->db->query("UPDATE %pusers SET user_signature='%s' WHERE user_id=%d",
 				$this->post['sig'],  $this->user['user_id']);
 		}
 		
