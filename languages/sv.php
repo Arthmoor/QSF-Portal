@@ -1,13 +1,13 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * Copyright (c) 2006-2008 The QSF Portal Development Team
  * http://www.qsfportal.com/
  *
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2008 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -567,6 +567,7 @@ class sv
 		$this->files_update_denied = 'Update has been denied and purged.'; //Translate
 		$this->files_update_deny = 'Deny Update'; //Translate
 		$this->files_update_desc = 'The description has been updated.'; //Translate
+		$this->files_update_exists = 'A file by that name already exists in the database.'; //Translate
 		$this->files_update_file = 'Update File'; //Translate
 		$this->files_update_file_need_desc = 'The description field must be filled in.'; //Translate
 		$this->files_update_not_exist = 'This file does not exist and cannot be updated.'; //Translate

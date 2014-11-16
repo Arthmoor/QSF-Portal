@@ -173,6 +173,12 @@ class page extends qsfglobal
 		$this->tree( $this->lang->pages, "$this->self?a=page" );
 		$this->tree( $this->lang->page_creating );
 
+		$bb = FORMAT_MBCODE;
+		$em = FORMAT_EMOTICONS;
+		$cn = FORMAT_CENSOR;
+		$nl = FORMAT_BREAKS;
+		$html = FORMAT_HTMLCHARS;
+
 		if ( !isset($this->post['submit']) )
 			return eval($this->template('PAGE_CREATE'));
 

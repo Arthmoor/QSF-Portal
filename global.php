@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.4.3';          // QSF Portal version @var string
+	var $version = 'v1.4.4';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -471,6 +471,7 @@ class qsfglobal
 		// Use the user's chosen GMT offset, ie: GMT-8 = Pacific time, US
 		$tz_offset = $this->user['user_timezone'] * 3600;
 		$time = $gmt_time + $tz_offset;
+		$current_tz_time = $this->time + $tz_offset;
 
 		// DST adjustment if needed. Yes, it needs to know the current time so it can trick old posts into looking right.
 		if( date( "I", $this->time ) == 1 ) {
@@ -515,8 +516,8 @@ class qsfglobal
 				$date = date($date_format, $time);
 			} else if ($date_format) {
 				$date = date($date_format, $time);
-				$today = date($date_format, $this->time);
-				$yesterday = date($date_format, ($this->time - DAY_IN_SECONDS));
+				$today = date($date_format, $current_tz_time);
+				$yesterday = date($date_format, ($current_tz_time - DAY_IN_SECONDS));
 
 				if ($today == $date) {
 					$date = $this->lang->today;

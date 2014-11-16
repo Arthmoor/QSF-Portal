@@ -202,11 +202,15 @@ if (isset($qsf->get['debug'])) {
 if (!$qsf->nohtml) {
 	$google = null;
 	if ( isset($qsf->sets['analytics_id']) && !empty($qsf->sets['analytics_id']) ) {
-		$google = "<script src=\"http://www.google-analytics.com/urchin.js\" type=\"text/javascript\"></script>
-<script type=\"text/javascript\">
-_uacct = \"{$qsf->sets['analytics_id']}\";
-urchinTracker();
-</script>";
+		$google = "<script type=\"text/javascript\">
+			var gaJsHost = ((\"https:\" == document.location.protocol) ? \"https://ssl.\" : \"http://www.\");
+			document.write(unescape(\"%3Cscript src='\" + gaJsHost + \"google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E\"));
+			</script>
+			<script type=\"text/javascript\">
+			var pageTracker = _gat._getTracker(\"{$qsf->sets['analytics_id']}\");
+			pageTracker._initData();
+			pageTracker._trackPageview();
+			</script>";
 	}
 	$servertime = $qsf->mbdate( DATE_LONG, $qsf->time, false );
 	$copyright = eval($qsf->template('MAIN_COPYRIGHT'));

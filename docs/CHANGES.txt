@@ -1,6 +1,21 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.4.4:
+
+* Copyright footers updated for 2008. [Non-essential skin change]
+* Updated Google Analytics code to the new version.
+* Query field order needs to change for mysql 5.0.54 in the user library.
+* Removed unused portions of the error reporting.
+
+   Bugs addressed:
+
+* Bad array value in installer queries.
+* Missing language setting for existing files.
+* Missing member title icon in user query.
+* Page creation does not maintain checked flags.
+* Timezone shift bug solved by Davion.
+
 Changes for 1.4.3:
 
 * Close the DB connection once we're done with it.
@@ -11,7 +26,7 @@ Changes for 1.4.3:
 * Added TOS text setting for uploads.
 * Created generic TOS links on file and forum menus.
 * Able to mark PM's as unread. - Jon
-* All copyright headers updated for 2008.
+* All copyright headers updatd for 2008.
 
    Bugs addressed:
 

@@ -2,7 +2,11 @@
         <td class='subheader' colspan='2'>QSF Portal</td>
     </tr>
     <tr>
-        <td><input type='radio' name='from' value='31' id='upgrade31' checked='checked' />
+        <td><input type='radio' name='from' value='32' id='upgrade32' checked='checked' />
+	<label for='upgrade32'>QSF Portal v1.4.3</label></td>
+    </tr>
+    <tr>
+        <td><input type='radio' name='from' value='31' id='upgrade31' />
 	<label for='upgrade31'>QSF Portal v1.4.2</label></td>
     </tr>
     <tr>
