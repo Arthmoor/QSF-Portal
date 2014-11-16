@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,44 +32,15 @@ if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
 }
 
 require_once $set['include_path'] . '/admincp/admin.php';
-require_once $set['include_path'] . '/lib/packageutil.php';
 
 /**
- * Database backup
+ * Database Backup
  *
- * @author Jason Warner <jason@mercuryboard.com>
- * @since 1.0.2
+ * @author Aaron Smith-Hayes <davionkalhen@gmail.com>
+ * @since 1.3.3
  **/
 class backup extends admin
 {
-	var $tables = array(
-		'active',
-		'attach',
-		'file_categories',
-		'filecomments',
-		'fileratings',
-		'files',
-		'forums',
-		'groups',
-		'help',
-		'logs',
-		'membertitles',
-		'pages',
-		'pmsystem',
-		'posts',
-		'readmarks',
-		'replacements',
-		'settings',
-		'skins',
-		'subscriptions',
-		'templates',
-		'timezones',
-		'topics',
-		'updates',
-		'users',
-		'votes'
-	);
-
 	/**
 	 * Database backup
 	 *
@@ -98,253 +75,97 @@ class backup extends admin
 	/**
 	 * Generate a backup
 	 *
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.0.2
+	 * @author Aaron Smith-Hayes <davionkalhen@gmail.com>
+	 * @since 1.3.3
 	 * @return string HTML
 	 **/
 	function create_backup()
 	{
-		if (!isset($this->get['option'])) {
-			return $this->message($this->lang->backup_options, "<ul>
-				<li><a href=\"{$this->self}?a=backup&amp;s=create&amp;option=download\">{$this->lang->backup_download}</a></li>
-				<li><a href=\"{$this->self}?a=backup&amp;s=create&amp;option=file\">{$this->lang->backup_createfile}</a></li>
-				</ul>");
-		} else if ($this->get['option'] == 'download') {
-			$this->nohtml = true;
-			$fullBackupName = "backup_" . $this->version . "-" . date('y-m-d-H-i-s');
-	
-			header("Content-type: application/octet-stream");
-			header("Content-Disposition: attachment; filename=\"$fullBackupName.xml\"");
-			
-			echo "<?xml version='1.0' encoding='utf-8'?>\n";
-			echo "<qsfmod>\n";
-			echo "  <title>Backup: " . $this->version . " - " . date('y-m-d-H-i-s') . "</title>\n";
-			echo "  <type>backup</type>\n";
-			echo "  <version>{$this->version}-" . date('y-m-d-H-i-s') . "</version>\n";
-			echo "  <description></description>\n";
-			echo "  <authorname>Backup Tool</authorname>\n";
-			echo "  <files>\n";
-			echo "    <file>packages/$fullBackupName.xml</file>\n";
-			echo "  </files>\n";
-			echo "  <install>\n";
-			$this->create_dump($this->tables);
-			echo "  </install>\n";
-			echo "  <uninstall>\n";
-			$this->create_truncate($this->tables);
-			echo "  </uninstall>\n";
-			echo "</qsfmod>\n";
-			
-		} else if ($this->get['option'] == 'file') {
-			$fullBackupName = "backup_" . $this->version . "-" . date('y-m-d-H-i-s');
+		if(!isset($this->post['submit'] ) )
+			return eval($this->template('ADMIN_BACKUP'));
 
-			if (file_exists("../packages/$fullBackupName.xml")) {
-				die("../packages/$fullBackupName.xml already exists!");
-			}
-			
-			$xmlFile = fopen("../packages/$fullBackupName.xml", 'w');
-			
-			if ($xmlFile === false) {
-				return $this->message($this->lang->backup_create, "Error: Could not open file ../packages/$fullBackupName.xml for writing");
-			}
-			
-			fwrite($xmlFile, "<?xml version='1.0' encoding='utf-8'?>\n");
-			fwrite($xmlFile, "<qsfmod>\n");
-			fwrite($xmlFile, "  <title>Backup: " . $this->version . " - " . date('y-m-d-H-i-s') . "</title>\n");
-			fwrite($xmlFile, "  <type>backup</type>\n");
-			fwrite($xmlFile, "  <version>{$this->version}-" . date('y-m-d-H-i-s') . "</version>\n");
-			fwrite($xmlFile, "  <description></description>\n");
-			fwrite($xmlFile, "  <authorname>Backup Tool</authorname>\n");
-			fwrite($xmlFile, "  <files>\n");
-			fwrite($xmlFile, "    <file>packages/$fullBackupName.xml</file>\n");
-			fwrite($xmlFile, "  </files>\n");
-			fwrite($xmlFile, "  <install>\n");
-			$this->create_dump($this->tables, $xmlFile);
-			fwrite($xmlFile, "  </install>\n");
-			fwrite($xmlFile, "  <uninstall>\n");
-			$this->create_truncate($this->tables, $xmlFile);
-			fwrite($xmlFile, "  </uninstall>\n");
-			fwrite($xmlFile, "</qsfmod>\n");
+		$filename = "backup_".$this->version."-".date('y-m-d-H-i-s').".sql";
+		$options = "";
 
-			fclose($xmlFile);
-						
-			$tarTool = new archive_tar();
-			$tarTool->open_file_writer("../packages/$fullBackupName", true);
-			$tarTool->add_as_file("packages/$fullBackupName.xml", 'package.txt');
-			$tarTool->add_file("../packages/$fullBackupName.xml", "packages/$fullBackupName.xml");
-			$filename = $tarTool->close_file();
-			
-			@unlink("../packages/$fullBackupName.xml");
-			
-			$this->chmod($filename, 0777);
-			
-			return $this->message($this->lang->backup_create, $this->lang->backup_done, $filename, "../packages/$filename");
+		foreach($this->post as $key => $value )
+			$$key = $value;
+		if(isset($insert))
+			$options .= " -c";
+		if(isset($droptable))
+			$options .= " --add-drop-table";
+
+		// This looks a bit strange, but it will pull all of the proper prefixed tables.
+		$tb = $this->db->query( "SHOW TABLES LIKE '%p%%'" );
+		while( $tb1 = $this->db->nqfetch($tb) )
+		{
+			foreach( $tb1 as $col => $data )
+				$tarray[] = $data;
 		}
+
+		$tables = implode( ' ', $this->get_db_tables() );
+
+		$mbdump = "mysqldump ".$options." --password=".$this->db->pass." --host=".$this->db->host." --user=".$this->db->user;
+		$mbdump .= " --result-file='../packages/".$filename."' ".$this->db->db." ".$tables;
+
+		if( ($fp = popen($mbdump, "r") ) === false )
+			return $this->message($this->lang->backup_create, $this->lang->backup_failed);
+
+		$buf = "";
+		while( $c = fgetc($fp) )
+			$buf .= $c;
+		pclose($fp);
+		$this->chmod("../packages/".$filename, 0777);
+		return $this->message($this->lang->backup_create, $this->lang->backup_created ." ../packages/".$filename."<br />". $this->lang->backup_output .": ".$buf, $filename, "../packages/".$filename);
 	}
 
 	/**
 	 * Restore a backup
 	 *
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.0.2
+	 * @author Aaron Smith-Hayes <davionkalhen@gmail.com>
+	 * @since 1.3.3
 	 * @return string HTML
 	 **/
 	function restore_backup()
 	{
-		if (!isset($this->get['restore'])) {
-			$tarTool = new archive_tar();
+		if (!isset($this->get['restore']))
+		{
+			if ( ($dir = opendir("../packages") ) === false )
+				return $this->message($this->lang->backup_restore, $this->lang->backup_no_packages);
 
-			$xmlInfo = new xmlparser();
-
-			$new_backup_box = '';
-
-			$packages = packageutil::scan_packages();
-
-			foreach ($packages as $package) {
-				if ($package['type'] != 'backup')
-					continue; // skip other mods
-
-				$new_backup_box .= "  <li><a href=\"{$this->self}?a=backup&amp;s=restore&amp;restore=";
-
-				if (strtolower(substr($package['file'], -7)) == '.tar.gz')
-				{
-					$new_backup_box .= urlencode(substr($package['file'], 0, -7)) . "\" ";
-				}
-				else
-				{
-					$new_backup_box .= urlencode(substr($package['file'], 0, -4)) . "\" ";
-				}
-
-				if ($package['desc'])
-					$new_backup_box .= "title=\"" . htmlspecialchars($package['desc']) . "\"";
-
-				$new_backup_box .= ">";
-
-				$new_backup_box .= "<strong>" . htmlspecialchars($package['title']) . "</strong></a>";
-				$new_backup_box .= " " . htmlspecialchars($package['version']);
-				$new_backup_box .= " (" . htmlspecialchars($package['author']) . ")";
-
-				$new_backup_box .= "</li>\n";
+			$backups = array();
+			while( ($file = readdir($dir) ) )
+			{
+				if(strtolower(substr($file, -4) ) != ".sql")
+					continue;
+				$backups[] = $file;
 			}
+			closedir($dir);
 
-			if ($new_backup_box) {
-				return $this->message($this->lang->backup_restore, "
-				<div>
-					{$this->lang->backup_found}:<br /><br />
-					$new_backup_box
-					
-					<b>{$this->lang->backup_warning}</b>
-				</div>");
-			} else {
+			if(count($backups) <= 0 )
 				return $this->message($this->lang->backup_restore, $this->lang->backup_none);
-			}
-		} else {
-			$tarTool = new archive_tar();
 
-			// Open and parse the XML file
-			$xmlInfo = new xmlparser();
+			$output = $this->lang->backup_warning ."<br /><br />";
+			$output .= $this->lang->backup_found .":<br /><br />";
+			$count = 0;
 
-			if (file_exists('../packages/' . $this->get['restore'] . '.xml'))
+			foreach( $backups as $bkup )
 			{
-				$xmlInfo->parse('../packages/' . $this->get['restore'] . '.xml');
+				$output .= "<a href='{$this->self}?a=backup&amp;s=restore&amp;restore=".$bkup."'>".$bkup."</a><br />";
 			}
-			else if (file_exists('../packages/' . $this->get['restore'] . '.tar'))
-			{
-				$tarTool->open_file_reader('../packages/' . $this->get['restore'] . '.tar');
-
-				$xmlFilename = $tarTool->extract_file('package.txt');
-				
-				$xmlInfo->parseTar($tarTool, $xmlFilename);
-			}
-			else if (file_exists('../packages/' . $this->get['restore'] . '.tar.gz')
-				&& $tarTool->can_gunzip())
-			{
-				$tarTool->open_file_reader('../packages/' . $this->get['restore'] . '.tar.gz');
-
-				$xmlFilename = $tarTool->extract_file('package.txt');
-				
-				$xmlInfo->parseTar($tarTool, $xmlFilename);
-			}
-			else
-			{
-				return $this->message($this->lang->backup_restore, $this->lang->backup_invalid);
-			}
-
-			// Run the uninstall queries
-			packageutil::run_queries($this->db, $xmlInfo->GetNodeByPath('QSFMOD/UNINSTALL'));
-
-			// Run the install queries
-			packageutil::run_queries($this->db, $xmlInfo->GetNodeByPath('QSFMOD/INSTALL'), true);
-
-			// Done!
-			return $this->message($this->lang->backup_restore, $this->lang->backup_restore_done);
+			return $this->message($this->lang->backup_restore, $output);
 		}
-	}
 
-	
-	/**
-	 * Dumps a database
-	 *
-	 * @param array $tables Array of table names
-	 * @param bool $fileHandle Open file to write to. If false then echo data
-	 * @since 1.3.1
-	 **/
-	function create_dump($tables, $fileHandle = false) {
-		foreach ($tables as $table)
-		{
-			$query = $this->db->query("SELECT * FROM %p$table");
-			while ($row = $this->db->nqfetch($query))
-			{
-				$insert_keys = array_keys($row);
-				$columns = count($insert_keys);
-				
-				$sql = "INSERT INTO %p$table ";
-				$sql .= '(' . implode(', ', $insert_keys) .') VALUES';
-				$sql .= '(' . implode(', ', array_fill(0, $columns, "'%s'")) .')';
-				
-				$xml ="    <query>\n      <sql>$sql</sql>\n";
-				foreach ($insert_keys as $key) {
-					$xml .= "      <data><![CDATA[" . $row[$key] . "]]></data>\n";
-				}
-				$xml .= "    </query>\n";
-				
-				if ($fileHandle === false) {
-					echo $xml;
-				} else {
-					fwrite($fileHandle, $xml);
-				}
-			}
-		}
-	}
+		if(!file_exists("../packages/".$this->get['restore']) )
+			return $this->message($this->lang->backup_restore, $this->lang->backup_noexist);
 
-	/**
-	 * Creates XML formatted queries to truncate tables
-	 *
-	 * @param array $tables Array of table names
-	 * @param bool $fileHandle Open file to write to. If false then echo data
-	 * @since 1.3.1
-	 **/
-	function create_truncate($tables, $fileHandle = false) {
-		foreach ($tables as $table)
-		{
-			$xml = "    <query>\n";
-			$xml .= "      <sql>DELETE FROM %p$table</sql>\n";
-			$xml .= "    </query>\n";
+		$mbimport = "mysql --password=".$this->db->pass." --host=".$this->db->host." --user=".$this->db->user." ".$this->db->db." < ../packages/".$this->get['restore'];
+		if( ($fp = popen($mbimport, "r") ) === false )
+			return $this->message($this->lang->backup_restore, $this->lang->backup_import_fail);
 
-			if ($fileHandle === false) {
-				echo $xml;
-			} else {
-				fwrite($fileHandle, $xml);
-			}
-		}
-	}
-
-	function htmlspecials_decode($text)
-	{
-		if ( !function_exists('htmlspecialchars_decode') ) {
-			return strtr($text, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
-		} else {
-			return htmlspecialchars_decode($text);
-		}
+		$output = "";
+		while($c = fgetc($fp) )
+			$output .= $c;
+		return $this->message($this->lang->backup_restore, $this->lang->backup_restore_done ."<br />". $this->lang->backup_output .": ".$output);
 	}
 }
 ?>

@@ -1,13 +1,15 @@
 <?php
 /**
- * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
  *
+ * Based on:
+ *
+ * Quicksilver Forums
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
+ * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -99,11 +101,12 @@ class rssfeed extends qsfglobal
 				%pposts p,
 				%pusers u
 			WHERE t.topic_forum IN (%s) AND
+				t.topic_modes & %d AND
 				p.post_topic = t.topic_id AND
 				u.user_id = p.post_author
 			ORDER BY p.post_time DESC
 			LIMIT %d",
-			$forums_str, $this->sets['rss_feed_posts']);
+			$forums_str, TOPIC_PUBLISH, $this->sets['rss_feed_posts']);
 
 
 		$items = '';
@@ -145,11 +148,12 @@ class rssfeed extends qsfglobal
 				%pposts p,
 				%pusers u
 			WHERE t.topic_forum = %d AND
+				t.topic_modes & %d AND
 				p.post_topic = t.topic_id AND
 				u.user_id = p.post_author
 			ORDER BY p.post_time DESC
 			LIMIT %d",
-			$forum, $this->sets['rss_feed_posts']);
+			$forum, TOPIC_PUBLISH, $this->sets['rss_feed_posts']);
 			
 		$items = '';
 		while( $row = $this->db->nqfetch( $query ) )
@@ -252,12 +256,14 @@ class rssfeed extends qsfglobal
 		$forum_name = 'Unknown';
 		$forum = $this->readmarker->get_forum($query_row['topic_forum']);
 		if ($forum != null) $forum_name = $forum['forum_name'];
-		$user_email = '"' . htmlspecialchars($query_row['user_name']) . '" ';
+		$user_email = htmlspecialchars($query_row['user_name']);
+		$user_email .= ' &lt;';
 		if ($query_row['user_email_show']) {
 			$user_email .= $query_row['user_email'];
 		} else {
 			$user_email .= 'nobody@example.com';
 		}
+		$user_email .= '&gt;';
 		
 		return eval($this->template('RSSFEED_ITEM'));
 	}

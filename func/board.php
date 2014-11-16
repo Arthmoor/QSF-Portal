@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,7 +86,7 @@ class board extends qsfglobal
 
 		$query = $this->db->query("
 			SELECT
-				f.forum_id, f.forum_parent, f.forum_name, f.forum_position, f.forum_description, f.forum_topics, f.forum_replies, f.forum_lastpost,
+				f.forum_id, f.forum_parent, f.forum_name, f.forum_position, f.forum_description, f.forum_topics, f.forum_replies, f.forum_lastpost, f.forum_redirect,
 				t.topic_id as LastTopicID, t.topic_title as user_lastpost, t.topic_edited as LastTime, t.topic_replies,
 				m.user_name as user_lastposter, m.user_id as user_lastposterID
 			FROM %pforums f
@@ -137,7 +143,7 @@ class board extends qsfglobal
 						$return .= $this->getForums($forums, $forum['forum_id']);
 					}
 				} else {
-					if ($forum['forum_description']) {
+					if ($forum['forum_description'] && !$forum['forum_redirect']) {
 						$forum['forum_description'] = '<br />' . $forum['forum_description'];
 					}
 
@@ -187,6 +193,7 @@ class board extends qsfglobal
 						$full_title = $this->format($full_title, FORMAT_CENSOR | FORMAT_HTMLCHARS);
 						$forum['user_lastpost'] = $this->format($forum['user_lastpost'], FORMAT_CENSOR | FORMAT_HTMLCHARS);
 
+						$forum['forum_lastpost_topic'] = $forum['LastTopicID'];
 						$forum['LastTopicID'] .= '&amp;p=' . $forum['forum_lastpost'] . '#p' . $forum['forum_lastpost'];
 
 						$user_lastpostBox = eval($this->template('BOARD_LAST_POST_BOX'));
@@ -194,7 +201,10 @@ class board extends qsfglobal
 						$user_lastpostBox = $this->lang->board_nopost;
 					}
 
-					$return .= eval($this->template('BOARD_FORUM'));
+					if($forum['forum_redirect'])
+						$return .= eval($this->template('BOARD_FORUM_URL'));
+					else
+						$return .= eval($this->template('BOARD_FORUM'));
 				}
 			}
 		}

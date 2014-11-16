@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,8 +107,11 @@ function error_fatal($type, $message, $file, $line = 0)
 	}
 
 	$details = null;
+	$backtrace = null;
 
-	$backtrace = get_backtrace();
+	if (strpos($message, 'Template not found') === false) {
+		$backtrace = get_backtrace();
+	}
 
 	if ($type != QUICKSILVER_QUERY_ERROR) {
 		if (strpos($message, 'mysql_fetch_array(): supplied argument') === false) {
@@ -110,8 +119,10 @@ function error_fatal($type, $message, $file, $line = 0)
 			$details2 = null;
 
 			if (strpos($message, 'Template not found') !== false) {
-				$file = $backtrace[2]['file'];
-				$line = $backtrace[2]['line'];
+				$backtrace = "";
+				$trace = debug_backtrace();
+				$file = $trace[2]['file'];
+				$line = $trace[2]['line'];
 			}
 
 			if (file_exists($file)) {

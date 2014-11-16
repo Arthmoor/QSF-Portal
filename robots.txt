@@ -14,7 +14,9 @@ Disallow: /index.php?a=email
 Disallow: /index.php?a=filerating
 Disallow: /index.php?a=register
 Disallow: /index.php?a=login
+Disallow: /index.php?a=recent
 Disallow: /index.php?s=mark
+Disallow: /index.php?a=files&s=search
 Disallow: /index.php?a=topic&s=attach
 
 User-agent: WebReaper

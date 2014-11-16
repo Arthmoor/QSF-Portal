@@ -1,12 +1,8 @@
 <?php
 /**
- * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- *
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,13 +37,14 @@ class filerating extends qsfglobal
         function execute()
         {
 		$this->templater->add_templates('Files');
+		$this->lang->files();
 
                 $this->nohtml = true;
                 $this->templater->debug_mode = false; // This is a stripped pop-up window.
 		$rating = "";
 
 		if (!isset($this->get['f'])) {
-			return $this->qsf->message("Rate File", "You must provide a valid file.");
+			return $this->qsf->message($this->lang->files_rate, $this->lang->files_rate_valid);
 		}
 
 		if (!isset($this->post['rate'])) {
@@ -55,19 +52,19 @@ class filerating extends qsfglobal
 
 			if( $file_rated['file_id'] != $this->get['f'] ) {
 				$rating .= "<body><form action=\"{$this->self}?a=filerating&amp;f={$this->get['f']}\" method=\"post\"><div>
-					Please rate this code:<br /><br />
+					{$this->lang->files_rate_please}:<br /><br />
 					<select name=\"rate\">
-						<option value=\"1\">1 - Sucks!</option>
-						<option value=\"2\">2 - Poor</option>
-						<option value=\"3\">3 - Average</option>
-						<option value=\"4\">4 - Good</option>
-						<option value=\"5\" selected=\"selected\">5 - Excellent!</option>
+						<option value=\"1\">1 - {$this->lang->files_rate_sucks}</option>
+						<option value=\"2\">2 - {$this->lang->files_rate_poor}</option>
+						<option value=\"3\">3 - {$this->lang->files_rate_average}</option>
+						<option value=\"4\">4 - {$this->lang->files_rate_good}</option>
+						<option value=\"5\" selected=\"selected\">5 - {$this->lang->files_rate_excellent}</option>
 					</select>
 					<input type=\"submit\" value=\"{$this->lang->submit}\" /></div>
 				</form></body></html>";
 			}
 			else {
-				$rating .= "You have already rated this code.";
+				$rating .= $this->lang->files_rate_already;
 			}
 		}
 		else {
@@ -81,7 +78,7 @@ class filerating extends qsfglobal
 			$this->db->query( "UPDATE %pfiles SET file_rating_total=%d, file_rating_votes=%d, file_rating=%d WHERE file_id=%d",
 				$file['file_rating_total'] + $this->post['rate'], $votes, $newrate, $this->get['f'] );
 
-			$rating .= "Thank you for rating this code.";
+			$rating .= $this->lang->files_rate_thank;
 		}
 		return eval($this->template('FILE_RATING'));
         }

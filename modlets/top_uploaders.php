@@ -1,12 +1,8 @@
 <?php
 /**
- * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +22,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 }
 
 /**
- * Show Top 10 Uploaders
+ * Show Top 5 Uploaders
  * 
  * @author KingOfSka <kingofska@gmail.com.com>
  * @return string HTML with Top Uploaders and link to their profile

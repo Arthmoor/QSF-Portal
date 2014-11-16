@@ -1,4 +1,4 @@
-This guide was written to help with the initial installation and configuration of QSF Portal (version 1.3.2),
+This guide was written to help with the initial installation and configuration of QSF Portal (version 1.3.3),
 a MySQL and PHP-based community portal/cms system. You can peruse the features of QSF Portal by
 [http://www.qsfportal.com/index.php?a=page&p=1 clicking here].
 

@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,10 +90,12 @@ class en
 		$this->admin_delete_template = 'Delete HTML template';
 		$this->admin_edit_emoticons = 'Edit or delete emoticons';
 		$this->admin_edit_forum = 'Edit a forum';
+		$this->admin_edit_group_file_perms = 'Edit a group\'s file permissions';
 		$this->admin_edit_group_name = 'Edit a group\'s name';
 		$this->admin_edit_group_perms = 'Edit a group\'s permissions';
 		$this->admin_edit_help = 'Edit a help article';
 		$this->admin_edit_member = 'Edit a member';
+		$this->admin_edit_member_file_perms = 'Edit a member\'s file permissions';
 		$this->admin_edit_member_perms = 'Edit a member\'s permissions';
 		$this->admin_edit_member_titles = 'Edit or delete automatic member titles';
 		$this->admin_edit_settings = 'Edit board settings';
@@ -99,7 +107,7 @@ class en
 		$this->admin_forum_order = 'Change the forum ordering';
 		$this->admin_forums = 'Forums and Categories';
 		$this->admin_groups = 'Groups';
-		$this->admin_heading = 'Quicksilver Forums Admin Control Panel';
+		$this->admin_heading = 'QSF Portal Admin Control Panel';
 		$this->admin_help = 'Help Articles';
 		$this->admin_install_emoticons = 'Install emoticons';
 		$this->admin_install_skin = 'Install a skin';
@@ -119,17 +127,28 @@ class en
 
 	function backup()
 	{
+		$this->backup = 'Backup';
+		$this->backup_add = 'Add';
+		$this->backup_add_complete = 'Add complete';
 		$this->backup_create = 'Backup Database';
+		$this->backup_created = 'Backup successfully created in';
 		$this->backup_createfile = 'Backup and create a file on server';
 		$this->backup_done = 'The database has been backed up to the packages directory.';
 		$this->backup_download = 'Backup and download (recommended)';
+		$this->backup_failed = 'Failed to create backup.';
 		$this->backup_found = 'The following backups were found in the packages directory';
+		$this->backup_import_fail = 'Failed to import backup.';
 		$this->backup_invalid = 'The backup does not appear to be valid. No changes were made to your database.';
+		$this->backup_no_packages = 'Failed to locate packages directory.';
+		$this->backup_noexist = 'Sorry, that backup does not exist.';
 		$this->backup_none = 'No backups were found in the packages directory.';
-		$this->backup_options = 'Select how you want your backup created';
+		$this->backup_options = 'Database Backup Options';
+		$this->backup_output = 'Output';
 		$this->backup_restore = 'Restore Backup';
 		$this->backup_restore_done = 'The database has been restored successfully.';
-		$this->backup_warning = 'Warning: This will overwrite all existing data used by Quicksilver Forums.';
+		$this->backup_statements = 'statements';
+		$this->backup_uncheck = 'Unchecking this will NOT empty the database tables before restoring the backup!';
+		$this->backup_warning = '<b>Warning:</b> This will overwrite all existing data used by QSF Portal.';
 	}
 
 	function ban()
@@ -222,6 +241,7 @@ class en
 		$this->board_cant_post = 'You cannot reply in this forum.';
 		$this->board_cant_topics = 'You cannot view or create topics in this forum.';
 		$this->board_forum = 'Forum';
+		$this->board_forum_url = 'URL Redirect:';
 		$this->board_guests = 'guests';
 		$this->board_last_post = 'Last Post';
 		$this->board_mark = 'Marking Posts As Read';
@@ -241,6 +261,7 @@ class en
 		$this->board_stats_string = '%s users have registered. Welcome to our newest member, %s.<br />There are %s topics and %s replies for a total of %s posts.';
 		$this->board_top_page = 'Go to the top of the page';
 		$this->board_topics = 'Topics';
+		$this->board_unread = 'Jump to oldest unread post';
 		$this->board_users = 'users';
 		$this->board_write_topics = 'You can view and create topics in this forum.';
 	}
@@ -391,6 +412,173 @@ class en
 		$this->emote_text = 'Text';
 	}
 
+	function files()
+	{
+		$this->file = 'File';
+		$this->files = 'Files';
+		$this->files_action_not_allowed = 'Action Not Allowed';
+		$this->files_action_not_permitted = 'You are not permitted to perform that action!';
+		$this->files_add_cat = 'Add Category';
+		$this->files_add_cat_desc = 'Category description';
+		$this->files_add_cat_done = 'New category has been added.';
+		$this->files_add_cat_exists = 'A category named %s already exists in %s.';
+		$this->files_add_cat_name = 'New category name';
+		$this->files_add_cat_not_allowed = 'You have not been permitted to add categories.';
+		$this->files_add_cat_parent = 'Parent category';
+		$this->files_add_cat_qperms = 'Quick Permissions';
+		$this->files_add_cat_qperms2 = 'Select an existing category to copy its permissions.';
+		$this->files_add_mod = 'Add Moderator';
+		$this->files_add_mod2 = 'Add User as Moderator';
+		$this->files_add_mod_cat = 'To which existing category?';
+		$this->files_add_mod_made = 'has been made a moderator.';
+		$this->files_add_mod_not_allowed = 'You do not have permission to add a moderator.';
+		$this->files_add_mod_nouser = 'That user was not found.';
+		$this->files_added = 'Date Added';
+		$this->files_all_fields_required = 'All fields are required.';
+		$this->files_approval_not_permitted = 'Sorry, you do not have permission to approve, deny or download this file.';
+		$this->files_approval_waiting = 'Files Awaiting Approval';
+		$this->files_approve = 'Approve Files';
+		$this->files_approve2 = 'Approve';
+		$this->files_approve_error = 'Error. You cannot go this far without a category attached.';
+		$this->files_approve_none = 'There are no files waiting for approval at this time.';
+		$this->files_approved = 'has been approved.';
+		$this->files_author = 'Author';
+		$this->files_cat = 'Category';
+		$this->files_cat_edited = 'Category has been edited.';
+		$this->files_cat_exists = 'A category named %s already exists in %s.';
+		$this->files_close_window = 'Close window.';
+		$this->files_comment = 'Add Comment';
+		$this->files_comment_empty = 'Your comment does not contain anything.';
+		$this->files_comment_not_permitted = 'You are not permitted to post comments.';
+		$this->files_comment_posted = 'Your comment has been posted.';
+		$this->files_comment_specify = 'No file was specified.';
+		$this->files_comment_user = 'User Comments For';
+		$this->files_comment_view = 'View Comments';
+		$this->files_comments = 'Comments';
+		$this->files_delete_cat = 'Delete Category';
+		$this->files_delete_cat2 = 'Delete which existing category?';
+		$this->files_delete_cat_done = 'The category has been deleted.';
+		$this->files_delete_cat_not_empty = 'The %s category is not empty. Cannot delete.';
+		$this->files_delete_cat_not_permitted = 'You have not been permitted to delete categories.';
+		$this->files_delete_confirm = 'Are you sure you want to delete';
+		$this->files_delete_file = 'Delete File';
+		$this->files_delete_file_done = 'has been deleted.';
+		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.';
+		$this->files_delete_file_specify = 'You must specify a file to delete.';
+		$this->files_delete_nocat = 'No such category.';
+		$this->files_denied = 'has been denied.';
+		$this->files_deny = 'Deny';
+		$this->files_desc = 'Description';
+		$this->files_dl = 'D/L';
+		$this->files_download = 'Download';
+		$this->files_download_not_permitted = 'You have not been permitted to download files.';
+		$this->files_download_specify = 'You must specify a file to download.';
+		$this->files_downloads = 'Downloads';
+		$this->files_downloads2 = 'downloads';
+		$this->files_edit_cat_not_parent = 'You cannot make the category its own parent!';
+		$this->files_edit_cat_not_permitted = 'You have not been permitted to edit this category.';
+		$this->files_edit_category = 'Edit Category';
+		$this->files_edit_file = 'Edit File';
+		$this->files_edit_mod = 'You can only edit categories that you moderate.';
+		$this->files_edit_not_permitted = 'You have not been permitted to edit files.';
+		$this->files_edit_root = 'You cannot edit the root category.';
+		$this->files_error_duplicate = 'Unable to process: Duplicate filename error.';
+		$this->files_error_trick = 'You tried to tricks us!';
+		$this->files_error_unknown = 'Unable to process: Unknown file error.';
+		$this->files_exists = 'A file like that already exists in the database.';
+		$this->files_fix_stats = 'Fix File Stats';
+		$this->files_fix_stats2 = 'The file stats have been corrected.';
+		$this->files_has_updated = 'has been updated with new information.';
+		$this->files_index = 'File Index';
+		$this->files_invalid_option = 'Invalid option flag';
+		$this->files_moderator = 'Moderator';
+		$this->files_modify_info = 'Modify File Information';
+		$this->files_move = 'Move';
+		$this->files_move_category = 'Move %s to which category?';
+		$this->files_move_file = 'Move File';
+		$this->files_move_no_category = 'No such category.';
+		$this->files_move_not_permitted = 'You have not been permitted to move files.';
+		$this->files_moved_file = 'has been moved.';
+		$this->files_name = 'Name';
+		$this->files_rate = 'Rate File';
+		$this->files_rate_already = 'You have already rated this file.';
+		$this->files_rate_average = 'Average';
+		$this->files_rate_excellent = 'Excellent';
+		$this->files_rate_good = 'Good';
+		$this->files_rate_please = 'Please rate this file';
+		$this->files_rate_poor = 'Poor';
+		$this->files_rate_sucks = 'Sucks!';
+		$this->files_rate_thank = 'Thank you for rating this file.';
+		$this->files_rate_valid = 'You must provide a valid file.';
+		$this->files_rating = 'Rating';
+		$this->files_recent = 'Recent Uploads';
+		$this->files_recent_uploads = 'Files uploaded in the last 10 days';
+		$this->files_remove_mod = 'Remove Moderator';
+		$this->files_remove_mod_cat = 'Which category\'s moderator would you like to remove?';
+		$this->files_remove_mod_done = 'The moderator for that category has been removed.';
+		$this->files_remove_mod_not_permitted = 'You do not have permission to remove a moderator.';
+		$this->files_revised = 'Revised on';
+		$this->files_revisions = 'Revisions';
+		$this->files_search = 'File Search';
+		$this->files_search2 = 'Search';
+		$this->files_search3 = 'Search Files';
+		$this->files_search_advanced = 'Advanced Search';
+		$this->files_search_basic = 'Basic Search';
+		$this->files_search_by = 'Search By';
+		$this->files_search_day = 'day';
+		$this->files_search_days = 'days';
+		$this->files_search_display_first = 'Display the first';
+		$this->files_search_display_more = 'Display files with more than';
+		$this->files_search_error = 'You have to search by atleast the name, author or descripton.';
+		$this->files_search_error_none = 'No files found.';
+		$this->files_search_for = 'Search For';
+		$this->files_search_in = 'Search In';
+		$this->files_search_minimum_rating = 'Minimum Rating';
+		$this->files_search_month = 'month';
+		$this->files_search_months = 'months';
+		$this->files_search_newer = 'newer';
+		$this->files_search_older = 'older';
+		$this->files_search_results = 'Search results for';
+		$this->files_search_results2 = 'results';
+		$this->files_search_week = 'week';
+		$this->files_search_weeks = 'weeks';
+		$this->files_search_year = 'year';
+		$this->files_size = 'File Size';
+		$this->files_submitted_by = 'Submitted by';
+		$this->files_top20 = 'Top 20 Downloads';
+		$this->files_type = 'File Type';
+		$this->files_update = 'Update';
+		$this->files_update_approval_not_permitted = 'You do not have the permission to approve this update.';
+		$this->files_update_approve = 'Approve Update';
+		$this->files_update_approve_failed = 'Failed to copy update into downloads directory!';
+		$this->files_update_approved = 'The update has been approved.';
+		$this->files_update_denied = 'Update has been denied and purged.';
+		$this->files_update_deny = 'Deny Update';
+		$this->files_update_desc = 'The description has been updated.';
+		$this->files_update_file = 'Update File';
+		$this->files_update_file_need_desc = 'The description field must be filled in.';
+		$this->files_update_not_exist = 'This file does not exist and cannot be updated.';
+		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!';
+		$this->files_update_not_permitted = 'You do not have the permission to update this file.';
+		$this->files_update_pending = 'Your update has been uploaded and is pending approval.';
+		$this->files_upload = 'Upload File';
+		$this->files_upload_no_root = 'Cannot upload to the Root category.';
+		$this->files_upload_not_permitted = 'You have not been permitted to upload files.';
+		$this->files_upload_pending = 'The file has been uploaded and is pending approval.';
+		$this->files_uploaded = 'The file has been uploaded.';
+		$this->files_view = 'View File';
+		$this->files_view_archive = 'Archive';
+		$this->files_view_c = 'C Source';
+		$this->files_view_cat_not_permitted = 'You are not permitted to view this category.';
+		$this->files_view_cpp = 'C++ Source';
+		$this->files_view_java = 'Java Source';
+		$this->files_view_perl = 'Perl Script';
+		$this->files_view_php = 'PHP Source';
+		$this->files_view_plain = 'Plain Text';
+		$this->files_view_python = 'Python Script';
+		$this->files_view_specify = 'You must specify a file id to view.';
+	}
+
 	function forum()
 	{
 		$this->forum_by = 'By';
@@ -432,6 +620,7 @@ class en
 		$this->forum_subscribe = 'E-mail me when posts are made in this forum';
 		$this->forum_topic = 'Topic';
 		$this->forum_topic_posted = 'Posted';
+		$this->forum_unread = 'Jump to oldest unread post';
 		$this->forum_views = 'Views';
 		$this->forum_write_topics = 'You can create topics in this forum.';
 	}
@@ -451,6 +640,7 @@ class en
 		$this->forum_edited = 'The forum was edited successfully.';
 		$this->forum_empty = 'The forum name is empty. Please go back and enter a name.';
 		$this->forum_is_subcat = 'This forum is a subcategory only.';
+		$this->forum_is_url = 'This forum is a URL redirect. The description should be the URL to redirect to.';
 		$this->forum_name = 'Name';
 		$this->forum_no_orphans = 'You cannot orphan a forum by deleting its parent.';
 		$this->forum_none = 'There are no forums to manipulate.';
@@ -463,6 +653,7 @@ class en
 		$this->forum_recount = 'Recount Topics and Replies';
 		$this->forum_select_cat = 'Select an existing category to create a forum.';
 		$this->forum_subcat = 'Subcategory';
+		$this->forum_url = 'URL Redirect';
 	}
 
 	function groups()
@@ -480,10 +671,10 @@ class en
 		$this->groups_i_confirm = 'I confirm that I want to delete this member group.';
 		$this->groups_name = 'Name';
 		$this->groups_no_action = 'No action was taken.';
-		$this->groups_no_delete = 'There are no custom groups to delete.<br />The core groups are necessary for Quicksilver Forums to function, and cannot be deleted.';
+		$this->groups_no_delete = 'There are no custom groups to delete.<br />The core groups are necessary for QSF Portal to function, and cannot be deleted.';
 		$this->groups_no_group = 'No group was specified.';
 		$this->groups_no_name = 'No group name was given.';
-		$this->groups_only_custom = 'Note: You can only delete custom member groups. The core groups are necessary for Quicksilver Forums to function.';
+		$this->groups_only_custom = 'Note: You can only delete custom member groups. The core groups are necessary for QSF Portal to function.';
 		$this->groups_the = 'The group';
 		$this->groups_to_edit = 'Group to edit';
 		$this->groups_type = 'Group Type';
@@ -534,6 +725,7 @@ class en
 
 	function login()
 	{
+		$this->login = 'Login';
 		$this->login_cant_logged = 'You could not be logged in. Check to see that your user name and password are correct.<br /><br />They are case sensitive, so \'UsErNaMe\' is different from \'Username\'. Also, check to see that cookies are enabled in your browser.';
 		$this->login_cookies = 'Cookies must be enabled to login.';
 		$this->login_forgot_pass = 'Forgot your password?';
@@ -578,11 +770,16 @@ class en
 		$this->main_activate = 'Your account has not yet been activated.';
 		$this->main_activate_resend = 'Resend Activation Email';
 		$this->main_admincp = 'Admin CP';
+		$this->main_affiliates = 'Affiliates';
 		$this->main_banned = 'You have been banned from viewing any portion of this board.';
 		$this->main_code = 'Code';
 		$this->main_cp = 'Control Panel';
+		$this->main_files = 'Files';
+		$this->main_forum = 'Forum';
 		$this->main_full = 'Full';
+		$this->main_guests = 'Guests';
 		$this->main_help = 'Help';
+		$this->main_home = 'Home';
 		$this->main_load = 'load';
 		$this->main_login = 'Login';
 		$this->main_logout = 'Logout';
@@ -590,22 +787,33 @@ class en
 		$this->main_mark1 = 'Mark all topics as read';
 		$this->main_markforum_read = 'Mark forum as read';
 		$this->main_max_load = 'We are sorry, but %s is currently unavailable, due to a massive amount of connected users.';
+		$this->main_member_newest = 'Newest Member';
 		$this->main_members = 'Members';
 		$this->main_messenger = 'Messenger';
 		$this->main_new = 'new';
+		$this->main_news = 'News';
 		$this->main_next = 'next';
+		$this->main_pages = 'Pages';
+		$this->main_posted_by = 'Posted by';
+		$this->main_posts = 'Posts';
 		$this->main_prev = 'prev';
 		$this->main_queries = 'queries';
 		$this->main_quote = 'Quote';
-		$this->main_recent = 'Recent posts';
+		$this->main_recent = 'Recent Posts';
 		$this->main_recent1 = 'View recent topics since your last visit';
+		$this->main_recent_uploads = 'Recent Uploads';
 		$this->main_register = 'Register';
 		$this->main_reminder = 'Reminder';
 		$this->main_reminder_closed = 'The board is closed and only viewable to admins.';
 		$this->main_said = 'said';
 		$this->main_search = 'Search';
+		$this->main_stats = 'Stats';
+		$this->main_top_posters = 'Top Posters';
+		$this->main_top_uploaders = 'Top Uploaders';
+		$this->main_topics = 'Topics';
 		$this->main_topics_new = 'There are new posts in this forum.';
 		$this->main_topics_old = 'There are no new posts in this forum.';
+		$this->main_users_online = 'Users Online';
 		$this->main_welcome = 'Welcome';
 		$this->main_welcome_guest = 'Welcome!';
 	}
@@ -634,7 +842,7 @@ class en
 		$this->mc_err_updating = 'Error Updating Profile';
 		$this->mc_find = 'Find members with names containing';
 		$this->mc_found = 'The following members were found. Please select one.';
-		$this->mc_guest_needed = 'The guest account is necessary for Quicksilver Forums to function.';
+		$this->mc_guest_needed = 'The guest account is necessary for QSF Portal to function.';
 		$this->mc_not_found = 'No members were found matching';
 		$this->mc_user_aim = 'AIM Name';
 		$this->mc_user_avatar = 'Avatar';
@@ -760,13 +968,38 @@ class en
 		$this->optimized = 'The tables in the database have been optimized for maximum performance.';
 	}
 
+	function page()
+	{
+		$this->page = 'Page';
+		$this->page_action_not_allowed = 'Action not allowed!';
+		$this->page_contents = 'Contents';
+		$this->page_create = 'Create Page';
+		$this->page_create2 = 'Create';
+		$this->page_create_not_permitted = 'You are not permitted to create pages.';
+		$this->page_created = 'Page created.';
+		$this->page_creating = 'Creating a page';
+		$this->page_delete = 'Delete a page';
+		$this->page_delete_confirm = 'Are you sure you want to delete this page forever? This process is irreversable.';
+		$this->page_delete_not_permitted = 'You are not permitted to delete pages.';
+		$this->page_deleted = 'Page deleted.';
+		$this->page_edit = 'Edit Page';
+		$this->page_edit_done = 'Page successfully edited.';
+		$this->page_edit_not_permitted = 'You are not permitted to edit pages.';
+		$this->page_editing = 'Editing a page';
+		$this->page_not_exist = 'That page does not exist!';
+		$this->page_title = 'Title';
+		$this->page_viewing = 'Viewing a page';
+		$this->pages = 'Pages';
+		$this->pages_none = 'There are no custom pages yet.';
+	}
+
 	function perms()
 	{
 		$this->perm = 'Permission';
 		$this->perms = 'Permissions';
 		$this->perms_board_view = 'View the board index';
-		$this->perms_board_view_closed = 'Use Quicksilver Forums when it is closed';
-		$this->perms_do_anything = 'Use Quicksilver Forums';
+		$this->perms_board_view_closed = 'Use QSF Portal when it is closed';
+		$this->perms_do_anything = 'Use QSF Portal';
 		$this->perms_edit_for = 'Edit permissions for';
 		$this->perms_email_use = 'Send emails to members via the board';
 		$this->perms_forum_view = 'View the forum';
@@ -908,7 +1141,9 @@ class en
 		$this->post_no_vote = 'You must choose an option to vote for.';
 		$this->post_option_emoticons = 'Convert emoticons into images?';
 		$this->post_option_global = 'Make this topic global?';
+		$this->post_option_lock = 'Lock topic after posting?';
 		$this->post_option_mbcode = 'Format MbCode?';
+		$this->post_option_pin = 'Pin topic after posting?';
 		$this->post_optional = 'optional';
 		$this->post_options = 'Options';
 		$this->post_poll_options = 'Poll Options';
@@ -925,17 +1160,6 @@ class en
 		$this->post_topic_title = 'Topic Title';
 		$this->post_view_topic = 'View Entire Topic';
 		$this->post_voting = 'Voting';
-	}
-
-	function printer()
-	{
-		$this->printer_back = 'Back';
-		$this->printer_not_found = 'The topic could not be found. It may have been deleted, moved, or may have never existed.';
-		$this->printer_not_found_title = 'Topic Not Found';
-		$this->printer_perm_topics = 'You do not have permission to view topics.';
-		$this->printer_perm_topics_guest = 'You do not have permission to view topics. If you register, you may be able to.';
-		$this->printer_posted_on = 'Posted';
-		$this->printer_send = 'Send to printer';
 	}
 
 	function profile()
@@ -972,6 +1196,12 @@ class en
 		$this->profile_profile = 'Profile';
 		$this->profile_signature = 'Signature';
 		$this->profile_unkown = '[ Unknown ]';
+		$this->profile_upload_last = 'Last Upload';
+		$this->profile_uploads = 'Uploads';
+		$this->profile_uploads_none = 'No uploads yet.';
+		$this->profile_uploads_none_yet = 'None yet.';
+		$this->profile_uploads_per_day = 'per day';
+		$this->profile_uploads_total = 'total';
 		$this->profile_view_profile = 'Viewing Profile';
 		$this->profile_www = 'Homepage';
 		$this->profile_yahoo = 'Yahoo Identity';
@@ -1064,7 +1294,7 @@ class en
 		$this->register_done = 'You have been registered! You can now login.';
 		$this->register_email = 'Email Address';
 		$this->register_email_invalid = 'The email address you entered is invalid.';
-		$this->register_email_msg = 'This is an automated email generated by Quicksilver Forums, and sent to you in order';
+		$this->register_email_msg = 'This is an automated email generated by QSF Portal, and sent to you in order';
 		$this->register_email_msg2 = 'for you to activate your account with';
 		$this->register_email_msg3 = 'Please click the following link, or paste it in to your web browser:';
 		$this->register_email_used = 'The email address you entered is already assigned to a member.';
@@ -1180,8 +1410,11 @@ class en
 		$this->settings_board_rssfeed_title = 'RSS Feed Title';
 		$this->settings_clickable = 'Clickable Smilies Per Row';
 		$this->settings_cookie = 'Cookie and Flood Settings';
+		$this->settings_cookie_domain = 'Cookie Domain';
 		$this->settings_cookie_path = 'Cookie Path';
 		$this->settings_cookie_prefix = 'Cookie Prefix';
+		$this->settings_cookie_secure = 'Cookie Security';
+		$this->settings_cookie_secured = 'Is your site SSL secured?';
 		$this->settings_cookie_time = 'Time to Remain Logged In';
 		$this->settings_db = 'Edit Connection Settings';
 		$this->settings_db_host = 'Database Host';
@@ -1336,6 +1569,7 @@ class en
 		$this->templates = 'Templates';
 		$this->temps_active = 'Active Users Detail';
 		$this->temps_admin = '<b>AdminCP Universal</b>';
+		$this->temps_backup = 'AdminCP Database Backup';
 		$this->temps_ban = 'AdminCP Bans';
 		$this->temps_board_index = 'Board Index';
 		$this->temps_censoring = 'AdminCP Word Censoring';

@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +33,14 @@ $time_now   = explode(' ', microtime());
 $time_start = $time_now[1] + $time_now[0];
 
 srand((double)microtime() * 1234567);
+
+// Zend_Hash_Del_Key_Or_Index Vulnerability - We don't use $_REQUEST, so kill it.
+if (@ini_get('register_globals')) {
+	foreach ( $_REQUEST as $var => $null ) {
+		unset($$var);
+		unset($$var);
+	}
+}
 
 require './settings.php';
 $set['include_path'] = '.';

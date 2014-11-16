@@ -1,6 +1,35 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.3.3:
+
+* Added language support for files module.
+* Added language support for file ratings module.
+* Added language support for custom pages module.
+* Move rsscache to the stats directory.
+* Added support for Internet Explorer HttpOnly cookies.
+* Added "quick quote" feature.
+* Post box area has been enlarged slightly.
+* Added lock and pin options to posting menu.
+* UI completion for cookie options.
+* URL redirection forum support added.
+* Links to jump to "oldest unread post".
+
+  Bugs addressed:
+
+* Adding file comments is not possible.
+* File ratings modlet was using wrong permission check.
+* RSS Feed exposes unpublished topics.
+* RSS feed email addresses were not RFC 2822 compliant.
+* New version of the bbcode parser included to address bugs in the old one.
+* Bad language pointer in the news modlet.
+* SQL backup now calls on mysqldump to address serious issues with the old backup code.
+* Board stats need to be recounted when a forum is deleted.
+* Users with over 1000 posts don't format the numbers in search results.
+* BBCode access key support was not working.
+* Fixed some queries which were using the wrong argument types.
+* File related tables need to be updated when users are deleted.
+
 Changes for 1.3.2:
 
 * Portal admins no longer require file uploads to be approved.

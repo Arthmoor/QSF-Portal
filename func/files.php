@@ -1,12 +1,8 @@
 <?php
 /**
- * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,8 +42,8 @@ class files extends qsfglobal
 		static $cat_array = false;
 		$this->cat_array = &$cat_array;
 
-                $this->tree("Files");
-                $this->set_title("Files");
+                $this->tree($this->lang->files);
+                $this->set_title($this->lang->files);
 		$dowload = false;
 
 		if (!isset($this->get['s'])) {
@@ -143,7 +139,7 @@ class files extends qsfglobal
 	function fix_filecount()
 	{
 		if( !$this->perms->auth('is_admin') ) {
-			return $this->message( "Action not allowed", "You are not permitted to perform that action!" );
+			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_action_not_permitted );
 		}
 
                 $query = $this->db->fetch( "SELECT COUNT(file_id) files FROM %pfiles WHERE file_approved=1" );
@@ -162,7 +158,7 @@ class files extends qsfglobal
 		}
 		$this->update_category_trees();
 
-		return $this->message( "Fix File Stats", "The file stats have been corrected." );
+		return $this->message( $this->lang->files_fix_stats, $this->lang->files_fix_stats2 );
 	}
 
 	function edit_file()
@@ -175,7 +171,7 @@ class files extends qsfglobal
 		    WHERE file_id=%d", $id );
 
 		if (!$this->file_perms->auth('edit_files', $file['file_catid'])) {
-			return $this->message("Edit File", "You have not been permitted to edit files.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_edit_not_permitted);
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -191,7 +187,7 @@ class files extends qsfglobal
 			return eval($this->template('FILE_EDIT'));
 		} else {
 			if (empty($this->post['file_author']) || empty($this->post['file_name']) || empty($this->post['file_description']) || empty($this->post['file_category'])) {
-				return $this->message("Edit File", "All fields are required.");
+				return $this->message($this->lang->files_edit_file, $this->lang->files_all_fields_required);
 			}
 
 			$name = $this->post['file_name'];
@@ -200,7 +196,7 @@ class files extends qsfglobal
 			$desc = $this->post['file_description'];
 
 			$this->db->query( "UPDATE %pfiles SET file_name='%s', file_catid=%d, file_author='%s', file_description='%s' WHERE file_id=%d", $name, $catid, $author, $desc, $id );
-			return $this->message( "Edit File", "{$file['file_name']} had been updated with new information.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=viewfile&amp;fid={$id}" );
+			return $this->message( $this->lang->files_edit_file, "{$file['file_name']} " . $this->lang->files_has_updated, "{$this->lang->continue}", "{$this->self}?a=files&amp;s=viewfile&amp;fid={$id}" );
 		}
 	}
 
@@ -210,31 +206,34 @@ class files extends qsfglobal
 		$file = $this->db->fetch( "SELECT file_name, file_catid FROM %pfiles WHERE file_id=%d", $id );
 
 		if (!$this->file_perms->auth('move_files', $file['file_catid'])) {
-			return $this->message("Move File", "You have not been permitted to move files.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_move_not_permitted);
 		}
 
 		if (!isset($this->post['submit'])) {
 			$list = $this->get_categories($file['file_catid']);
+			$move_file = sprintf($this->lang->files_move_category, "<strong>{$file['file_name']}</strong>");
 
-			return $this->message( "Move File", "
+			return $this->message( $this->lang->files_move_file, "
 			<form action=\"{$this->self}?a=files&amp;s=move&amp;fid={$id}\" method=\"post\">
-			 <div>Move <strong>{$file['file_name']}</strong> to which category?
+			 <div>{$move_file}
 			  <select name=\"category\">
 			   {$list}
 			  </select>
-			  <input type=\"submit\" name=\"submit\" value=\"Move\" />
+			  <input type=\"submit\" name=\"submit\" value=\"{$this->lang->files_move_file}\" />
 			 </div>
 			</form>" );
 		} else {
 			$catid = intval( $this->post['category'] );
 
-			$cat = $this->db->fetch( "SELECT name FROM %pfile_categories WHERE fcat_id=%d", $catid );
+			$cat = $this->db->fetch( "SELECT fcat_name FROM %pfile_categories WHERE fcat_id=%d", $catid );
 			if (!$cat) {
-				return $this->message( "Move File", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=move&amp;fid={$id}" );
+				return $this->message( $this->lang->files_move_file, $this->lang->files_move_no_category, "{$this->lang->continue}", "{$this->self}?a=files&amp;s=move&amp;fid={$id}" );
 			}
 
+			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count-1 WHERE fcat_id=%d", $file['file_catid'] );
+			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count+1 WHERE fcat_id=%d", $catid );
 			$this->db->query( "UPDATE %pfiles SET file_catid=%d WHERE file_id=%d", $catid, $id );
-			return $this->message( "Move File", "<strong>{$file['file_name']}</strong> has been moved.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
+			return $this->message( $this->lang->files_move_file, "<strong>{$file['file_name']}</strong> " . $this->lang->files_moved_file, "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
 		}
 	}
 
@@ -253,14 +252,14 @@ class files extends qsfglobal
 			$cid = $this->get['cid'];
 
 			if (!$this->file_perms->auth('approve_files', $cid)) {
-				return $this->message( "File Approval", "Sorry, you do not have permission to approve, deny or download this file." );
+				return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_approval_not_permitted );
 			}
 		}
 		
 		if (!$this->get['f']) {
 			$i = 0;
 
-			$files = "<div class=\"header\" style=\"text-align:center\">Files Awaiting Approval</div><br />";
+			$files = "<div class=\"header\" style=\"text-align:center\">{$this->lang->files_approval_waiting}</div><br />";
 
 			$query = $this->db->query(
 			  "SELECT f.*, u.user_name
@@ -309,13 +308,13 @@ class files extends qsfglobal
 			}
 
 			if ($i == 0) {
-				return $this->message( "Approve Files", "There are no files waiting for approval at this time." );
+				return $this->message( $this->lang->files_approve, $this->lang->files_approve_none );
 			}
 			return $files;
 		}
 
 		if(!isset($this->get['cid']) )
-			return $this->message("Approve Files", "Error. You can't go this far without a category attached.");
+			return $this->message($this->lang->files_approve, $this->lang->files_approve_error);
 		if ($this->get['f'] == 'approve')
 		{
 			$id = intval( $this->get['fid'] );
@@ -329,13 +328,13 @@ class files extends qsfglobal
 			$this->sets['code_approval']--;
 			$this->sets['file_count']++;
 			$this->write_sets();
-			return $this->message( "Approve Files", "{$file['file_name']} has been approved.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=filequeue" );
+			return $this->message( $this->lang->files_approve, "{$file['file_name']} " . $this->lang->files_approved, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue" );
 		}
 
 		if ($this->get['f'] == 'deny') {
 			$id = intval( $this->get['fid'] );
-			if(!isset($this->post['submit'] ) )
-				return eval($this->template('FILE_DENY') );
+			// if(!isset($this->post['submit'] ) )
+			//	return eval($this->template('FILE_DENY') );
 			
 			if($getUpdate)
 				return $this->deny_update($id);
@@ -347,7 +346,7 @@ class files extends qsfglobal
 
 			$this->sets['code_approval']--;
 			$this->write_sets();
-			return $this->message( "Approve Files", "{$name} has been denied.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=filequeue");
+			return $this->message( $this->lang->files_approve, "{$name} " . $this->lang->files_denied, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue");
 		}
 
 		if ($this->get['f'] == 'download') {
@@ -374,17 +373,17 @@ class files extends qsfglobal
 			header("Content-Disposition: attachment; filename=\"{$filename}\"");
 			readfile($basepath . $md5name);
 		}
-		return $this->message("Approve Files", "Invalid option flag", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=filequeue");
+		return $this->message($this->lang->files_approve, $this->lang->files_invalid_option, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue");
 	}
 
 	function edit_category($cid)
 	{
 		if (!$this->file_perms->auth('edit_category', $cid)) {
-			return $this->message("Edit Category", "You have not been permitted to edit this category.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_edit_cat_not_permitted);
 		}
 
 		if ($cid == 0) {
-			return $this->message("Edit Category", "You cannot edit the root category.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_edit_root);
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -405,11 +404,11 @@ class files extends qsfglobal
 
 			$cat = $this->db->fetch( "SELECT * FROM %pfile_categories WHERE fcat_id=%d", $cid );
 			if (!$this->file_perms->auth('edit_category', $parent)) {
-				return $this->message("Edit Category", "You can only edit categories that you moderate.");
+				return $this->message($this->lang->files_edit_category, $this->lang->files_edit_mod);
 			}
 
 			if ($this->is_parent($cat['fcat_id'], $parent) ) {
-				return $this->message("Edit Category", "You can't make the category its own parent!");
+				return $this->message($this->lang->files_edit_category, $this->lang->files_edit_cat_not_parent);
 			}
 
 			$ecat = $this->db->fetch( "SELECT fcat_id, fcat_name, fcat_parent FROM %pfile_categories WHERE fcat_name='%s'", $name );
@@ -420,7 +419,8 @@ class files extends qsfglobal
 					$path = $longpath;
 				}
 				if ($ecat['fcat_id'] != $cid) {
-					return $this->message("Edit Category", "A category named \"{$name}\" already exists in {$path}.");
+					$exists = sprintf($this->lang->files_cat_exists, $name, $path);
+					return $this->message($this->lang->files_edit_category, $exists);
 				}
 			}
 
@@ -428,7 +428,7 @@ class files extends qsfglobal
 			$this->db->query( "UPDATE %pfile_categories SET fcat_name='%s', fcat_parent=%d, fcat_longpath='%s', fcat_description='%s' WHERE fcat_id=%d", $name, $parent, $longpath, $desc, $cid );
 			$this->update_children_longpath($cat['fcat_id']);
 			$this->update_category_trees();
-			return $this->message( "Edit Category", "Category \"{$name}\" has been edited.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_edit_category, $this->lang->files_cat_edited, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 	}
 
@@ -436,22 +436,22 @@ class files extends qsfglobal
 	function add_moderator($cid)
 	{
 		if (!$this->perms->auth('is_admin'))
-			return $this->message( "Add Moderator", "You don't have permission to add a moderator." );
+			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_add_mod_not_allowed );
 		
 		if(!isset($this->post['submit']))
 		{
 			$list = $this->get_categories($cid);
 			
-			return $this->message("Add Moderator", "
+			return $this->message($this->lang->files_add_mod, "
 			<form action=\"{$this->self}?a=files&amp;s=addmoderator\" method=\"post\">
-				<div>Add User as Moderator:<br />
+				<div>{$this->lang->files_add_mod2}:<br />
 					<input type=\"text\" name=\"mod_name\" value \"\" maxlength=\"32\" /><br /> <br />
-						To which existing category?
+						{$this->lang->files_add_mod_cat}
 						<select name=\"parent\">
 			  				<option value=\"0\">/</option>
 							{$list}
 						</select>
-					<input type=\"submit\" name=\"submit\" value=\"Add\" />
+					<input type=\"submit\" name=\"submit\" value=\"{$this->lang->submit}\" />
 				</div>
 			</form>");		
 		}
@@ -460,9 +460,9 @@ class files extends qsfglobal
 			$parent = intval($this->post['parent']);
 			$name = $this->post['mod_name'];
 			if( !( $newMod = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_name='%s'", $name ) ) )
-				return $this->message( "Add Moderator", "That user was not found to add." );
+				return $this->message( $this->lang->files_add_mod, $this->lang->files_add_mod_nouser );
 			$this->db->query( "UPDATE %pfile_categories SET fcat_moderator=%d WHERE fcat_id=%d", $newMod['user_id'], $parent );
-			return $this->message( "Add Moderator", "Success! {$newMod['user_name']} has been made a moderator." );
+			return $this->message( $this->lang->files_add_mod, "{$newMod['user_name']} " . $this->lang->files_add_mod_made );
 		}
 	}
 
@@ -470,20 +470,20 @@ class files extends qsfglobal
 	function rem_moderator($cid)
 	{
 		if (!$this->perms->auth('is_admin'))
-			return $this->message( "Remove Moderator", "You don't have permission to remove a moderator." );
+			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_remove_mod_not_permitted );
 		
 		if(!isset($this->post['submit']))
 		{
 			$list = $this->get_categories($cid);
 			
-			return $this->message("Remove Moderator", "
+			return $this->message($this->lang->files_remove_mod, "
 			<form action=\"{$this->self}?a=files&amp;s=remmoderator\" method=\"post\">
-				<div>	Which categories moderator would you like to remove?
+				<div>{$this->lang->files_remove_mod_cat}
 						<select name=\"parent\">
 			  				<option value=\"0\">/</option>
 							{$list}
 						</select>
-					<input type=\"submit\" name=\"submit\" value=\"Remove\" />
+					<input type=\"submit\" name=\"submit\" value=\"{$this->lang->submit}\" />
 				</div>
 			</form>");		
 		}
@@ -491,47 +491,48 @@ class files extends qsfglobal
 		{
 			$parent = intval($this->post['parent']);
 			$this->db->query( "UPDATE %pfile_categories SET fcat_moderator=0 WHERE fcat_id=%d", $parent );
-			return $this->message( "Remove Moderator", "Success! The moderator for that category has been removed." );
+			return $this->message( $this->lang->files_remove_mod, $this->lang->files_remove_mod_done );
 		}
 	}
 
 	function delete_category($cid)
 	{
 		if (!$this->file_perms->auth('delete_category', $cid)) {
-			return $this->message("Delete Category", "You have not been permitted to delete categories.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_delete_cat_not_permitted);
 		}
 
 		if (!isset($this->post['submit'])) {
 			$list = $this->get_categories($cid);
 
-			return $this->message("Delete Category", "
+			return $this->message($this->lang->files_delete_cat, "
 			<form action=\"{$this->self}?a=files&amp;s=deletecategory\" method=\"post\">
-			 <div>Delete which existing category?
+			 <div>{$this->lang->files_delete_cat2}
 			  <select name=\"category\">
 			   {$list}
 			  </select>
-			  <input type=\"submit\" name=\"submit\" value=\"Delete\" />
+			  <input type=\"submit\" name=\"submit\" value=\"{$this->lang->delete}\" />
 			 </div>
 			</form>");
 		} else {
 			if (!isset($this->post['category'])) {
-				return $this->message("Delete Category", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files");
+				return $this->message($this->lang->files_delete_cat, $this->lang->files_delete_nocat, $this->lang->continue, "{$this->self}?a=files");
 			}
 
 			$catid = intval( $this->post['category'] );
 			if (!$this->file_perms->auth('delete_category', $catid)) {
-				return $this->message("Delete Category", "You have not been permitted to delete categories.");
+				return $this->message($this->lang->files_action_not_allowed, $this->lang->files_delete_cat_not_permitted);
 			}
 
 			$cat = $this->db->fetch( "SELECT fcat_name, fcat_parent, fcat_count FROM %pfile_categories WHERE fcat_id=%d", $catid );
 			if (!$cat) {
-				return $this->message( "Delete Category", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files" );
+				return $this->message( $this->lang->files_delete_cat, $this->lang->files_delete_nocat, $this->lang->continue, "{$this->self}?a=files" );
 			}
 
 			$count = $cat['fcat_count'];
 
 			if ($count > 0) {
-				return $this->message("Delete Category", "The {$cat['fcat_name']} category is not empty. Cannot delete.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}");
+				$not_exist = sprintf($this->lang->delete_cat_not_empty, $cat['fcat_name']);
+				return $this->message($this->lang->files_delete_cat, $this->lang->files_delete_cat_not_empty, $this->lang->continue, "{$this->self}?a=files&amp;cid={$catid}");
 			}
 
 			$this->db->query( "DELETE FROM %pfile_categories WHERE fcat_id=%d", $catid );
@@ -552,14 +553,14 @@ class files extends qsfglobal
 				$perms->update();
 			}
 
-			return $this->message( "Delete Category", "The {$cat['fcat_name']} category has been deleted.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cat['fcat_parent']}" );
+			return $this->message( $this->lang->files_delete_cat, $this->lang->files_delete_cat_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cat['fcat_parent']}" );
 		}
 	}
 
 	function add_category($cid)
 	{
 		if (!$this->file_perms->auth('add_category', $cid)) {
-			return $this->message("Add Category", "You have not been permitted to add categories.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_add_cat_not_allowed);
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -579,7 +580,7 @@ class files extends qsfglobal
 			$longpath = $this->get_longpath($parent);
 
 			if (!$this->file_perms->auth('add_category', $parent)) {
-				return $this->message("Add Category", "You have not been permitted to add categories.");
+				return $this->message($this->lang->files_action_not_allowed, $this->lang->files_add_cat_not_allowed);
 			}
 
 			$cat = $this->db->fetch( "SELECT fcat_name, fcat_parent FROM %pfile_categories WHERE fcat_name='%s'", $name );
@@ -589,7 +590,8 @@ class files extends qsfglobal
 				} else {
 					$path = $longpath;
 				}
-				return $this->message( "Add Category", "A category named \"{$name}\" already exists in {$path}." );
+				$exists = sprintf($this->lang->files_add_cat_exists, $name, $path);
+				return $this->message( $this->lang->files_add_cat, $exists );
 			}
 
 			$longpath .= "/{$name}";
@@ -631,18 +633,18 @@ class files extends qsfglobal
 				$perms->update();
 			}
 
-			return $this->message( "Add Category", "New category \"{$name}\" has been added.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$parent}" );
+			return $this->message( $this->lang->files_add_cat, $this->lang->files_add_cat_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$parent}" );
 		}
 	}
 
 	function delete_file($cid)
 	{
 		if (!$this->file_perms->auth('delete_files', $cid)) {
-			return $this->message("Delete File", "You have not been permitted to delete files.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_delete_file_not_permitted);
 		}
 
 		if (!isset($this->get['fid'])) {
-			return $this->message("Delete File", "You must specify a file to delete.");
+			return $this->message($this->lang->files_delete_file, $this->lang->files_delete_file_specify);
 		}
 
 		$id = intval($this->get['fid']);
@@ -654,7 +656,7 @@ class files extends qsfglobal
 		} else {
 			$name = $this->remove_file($id, true);
 
-			$out .= $this->message( "Delete File", "{$name} has been deleted.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			$out .= $this->message( $this->lang->files_delete_file, "{$name} " . $this->lang->files_delete_file_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 		return $out;
 	}
@@ -664,11 +666,11 @@ class files extends qsfglobal
 		$file_upload = false;
 
 		if(!$this->file_perms->auth('upload_files') || !$this->is_submitter($fid, $cid))
-			return $this->message("Update File", "You do not have the permission to update this file.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_update_not_permitted);
 
 		$file = $this->db->fetch( "SELECT file_description FROM %pfiles WHERE file_id=%d", $fid );
 		if(!$file)
-			return $this->message( "Update File", "This file does not exist and cannot be updated. Try submitting new!", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_update_file, $this->lang->files_update_not_exist, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 
 		if(!isset($this->post['submit']) )
 		{
@@ -676,7 +678,7 @@ class files extends qsfglobal
 		}
 
 		if( empty($this->post['file_description']) )
-			return $this->message("Update File", "The description field must be filled in.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}");
+			return $this->message($this->lang->files_update_file, $this->lang->files_update_file_need_desc, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}");
 
 		$desc = $this->post['file_description'];
 
@@ -692,20 +694,20 @@ class files extends qsfglobal
 
 			$update = $this->db->fetch( "SELECT update_name FROM %pupdates WHERE update_name='%s'", $filename );
 			if($update['update_name'] == $filename )
-				return $this->message( "Update File", "A file like that already exists in our database.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
+				return $this->message( $this->lang->files_update_file, $this->lang->files_update_exists, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
 
 			if( is_uploaded_file($this->files['code_update']['tmp_name']))
 			{
 				if(file_exists($path) )
-					return $this->message ("Update File", "A file like that already exists.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}"); 
+					return $this->message ($this->lang->files_update_file, $this->lang->files_exists, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}"); 
 				else
 				{
 					if(!move_uploaded_file($this->files['code_update']['tmp_name'], $path) )
-						return $this->message("Update File", "Unable to process: Unknown file error.", "{this->lang->continue}", "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}"); 
+						return $this->message($this->lang->files_update_file, $this->lang->files_error_unknown, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}"); 
 				}
-			} 
+			}
 			else 
-				return $this->message( "Update File", "You tried to tricks us!" );
+				return $this->message( $this->lang->files_update_file, $this->lang->files_error_trick );
 
 			// Permissions update to allow rsync to back this file up
 			$this->chmod( $path, 0644, false );
@@ -719,10 +721,10 @@ class files extends qsfglobal
 			$this->sets['code_approval']++;
 			$this->write_sets();
 
-			return $this->message( "Update File", "Your update has been uploaded and is pending approval.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_update_file, $this->lang->files_update_pending, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		} else {
 			$this->db->query( "UPDATE %pfiles SET file_description='%s' WHERE file_id=%d", $desc, $fid );
-			return $this->message( "Update File", "The description has been updated.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_update_file, $this->lang->files_update_desc, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 	}
 
@@ -736,31 +738,31 @@ class files extends qsfglobal
 		$this->sets['code_approval']--;
 		$this->write_sets();
 		$this->db->query( "DELETE FROM %pupdates WHERE update_id=%d", $uid );
-		return $this->message( "Deny Update", "Update has been denied and purged.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=filequeue}" );
+		return $this->message( $this->lang->files_update_deny, $this->lang->files_update_denied, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue}" );
 	}
 
 	function approve_update($cid, $uid)
 	{
 		if (!$this->file_perms->auth('approve_files', $cid)) {
-			return $this->message( "Approve Update", "You do not have the permission to approve this update.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_update_approval_not_permitted, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 		
 		$update = $this->db->fetch( "SELECT * FROM %pupdates WHERE update_id=%d", $uid );
 		if(!$update)
-			return $this->message( "Approve Update", "You can't approve updates that don't exist!", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_update_approve, $this->lang->files_update_not_exist2, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		
 		$fid = $update['update_updating'];
 		$file = $this->db->fetch( "SELECT * FROM %pfiles WHERE file_id=%d", $fid );
 		if(!$file)
-			return $this->message( "Approve Update", "Updating file has not been found.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_update_approve, $this->lang->files_update_not_exist, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
 		
 		$newpath = "./downloads/".$update['update_md5name'];
 		if($update['update_md5name'] != $file['file_md5name'] && file_exists($newpath))
-			return $this->message("Approve Update", "Cannot update. A file with that name already exists.");
+			return $this->message($this->lang->files_update_approve, $this->lang->files_update_exists);
 		
 		@unlink("./downloads/".$file['md5name']);
 		if(!copy("./updates/".$update['update_md5name'], $newpath) )
-			return $this->message("Approve Update", "Failed to copy update into downloads directory!");
+			return $this->message($this->lang->files_update_approve, $this->lang->files_update_approve_failed);
 		@unlink("./updates/".$update['update_md5name']);
 		
 		$desc = $update['update_description'];
@@ -781,13 +783,13 @@ class files extends qsfglobal
 
 		$this->sets['code_approval']--;
 		$this->write_sets();
-		return $this->message( "Approve Updates", "The update has been approved.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=filequeue" );
+		return $this->message( $this->lang->files_update_approve, $this->lang->files_update_approved, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue" );
 	}
 	
 	function upload_file($cid)
 	{
 		if (!$this->file_perms->auth('upload_files', $cid)) {
-			return $this->message("Upload File", "You have not been permitted to upload files.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_upload_not_permitted);
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -798,11 +800,11 @@ class files extends qsfglobal
 
 		$catid = intval( $this->post['file_category'] );
 		if ($catid == 0) {
-			return $this->message( "Upload File", "Cannot upload to the Root category.");
+			return $this->message( $this->lang->files_upload, $this->lang->files_upload_no_root);
 		}
 
 		if (empty($this->files['code_upload']['name']) || empty($this->post['file_author']) || empty($this->post['file_name']) || empty($this->post['file_description']) || empty($this->post['file_category'])) {
-			return $this->message("Upload File", "All fields are required for uploads.");
+			return $this->message($this->lang->files_upload, $this->lang->files_all_fields_required);
 		}
 
 		$filename = basename($this->files['code_upload']['name']);
@@ -818,19 +820,19 @@ class files extends qsfglobal
 
 		$file = $this->db->fetch( "SELECT file_filename FROM %pfiles WHERE file_filename='%s'", $filename );
 		if ($file['file_filename'] == $filename) {
-			return $this->message( "Upload File", "A file by that name already exists in the database." );
+			return $this->message( $this->lang->files_upload, $this->lang->files_update_exists );
 		}
 
 		if (is_uploaded_file($this->files['code_upload']['tmp_name'])) {
 			if (file_exists($newhome)) {
-				return $this->message( "Upload File", "Unable to process: duplicate filename error." );
+				return $this->message( $this->lang->files_upload, $this->lang->files_error_duplicate );
 			} else {
 				if (!move_uploaded_file($this->files['code_upload']['tmp_name'], $newhome)) {
-					return $this->message( "Upload File", "Unable to process: Unknown file error." );
+					return $this->message( $this->lang->files_upload, $this->lang->files_error_unknown );
 				}
 			}
 		} else {
-			return $this->message( "Upload File", "You tried to tricks us!" );
+			return $this->message( $this->lang->files_upload, $this->lang->files_error_trick );
 		}
 
 		// Permissions update to allow rsync to back this file up
@@ -848,25 +850,25 @@ class files extends qsfglobal
 		if( $approved == 0 ) {
 			$this->sets['code_approval']++;
 			$this->write_sets();
-			return $this->message( "Upload File", "The file has been uploaded and is pending approval.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
+			return $this->message( $this->lang->files_upload, $this->lang->files_upload_pending, $this->lang->continue, "{$this->self}?a=files&amp;cid={$catid}" );
 		} else {
 			$this->db->query( "UPDATE %pusers SET user_uploads=user_uploads+1 WHERE user_id=%d", $uid );
 			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count+1 WHERE fcat_id=%d", $catid );
 
 			$this->sets['file_count']++;
 			$this->write_sets();
-			return $this->message( "Upload File", "The file has been uploaded.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
+			return $this->message( $this->lang->files_upload, $this->lang->files_uploaded, $this->lang->continue, "{$this->self}?a=files&amp;cid={$catid}" );
 		}
 	}
 
 	function download_file($cid)
 	{
                 if (!$this->file_perms->auth('download_files', $cid)) {
-                        return $this->message("Download File", "You have not been permitted to download files.");
+                        return $this->message($this->lang->files_action_not_allowed, $this->lang->files_download_not_permitted);
                 }
 
 		if (!isset($this->get['fid'])) {
-			return $this->message("Download File", "You must specify a file to download.");
+			return $this->message($this->lang->files_download, $this->lang->files_download_specify);
 		}
 
 		$id = intval($this->get['fid']);
@@ -1018,7 +1020,7 @@ class files extends qsfglobal
 	function show_file($fid)
 	{
 		if ($fid == 0) {
-			return $this->message( "View File", "No file id was supplied." );
+			return $this->message( $this->lang->files_view, $this->lang->files_view_specify );
 		}
 		$file = "";
 
@@ -1032,7 +1034,7 @@ class files extends qsfglobal
 			$$key = $value;
 
 		if (!$this->file_perms->auth('category_view', $file_catid))
-			return $this->message( "Show File", "You are not permitted to view this category." );
+			return $this->message( $this->lang->files_view, $this->lang->files_view_cat_not_permitted );
 
 		$tree = $this->get_filetree($file_catid,true);
 		$cid = $file_catid;
@@ -1043,16 +1045,16 @@ class files extends qsfglobal
 		$file_extension = strtolower(substr(strrchr($file_filename,"."),1));
 		switch( $file_extension ) 
 		{
-			case "h": case "c": $fileType = "C Source"; break;
-			case "txt": $fileType = "Plain Text"; break;
-			case "php": $fileType = "Php Source"; break;
-			case "pl": $fileType = "Perl Script"; break;
-			case "py": $fileType = "Python Script"; break;
-			case "cpp": case "hh": case "hpp": case "cc": $fileType = "C++ Source"; break;
-			case "java": $fileType = "Java Source"; break;
+			case "h": case "c": $fileType = $this->lang->files_view_c; break;
+			case "txt": $fileType = $this->lang->files_view_plain; break;
+			case "php": $fileType = $this->lang->files_view_php; break;
+			case "pl": $fileType = $this->lang->files_view_perl; break;
+			case "py": $fileType = $this->lang->files_view_python; break;
+			case "cpp": case "hh": case "hpp": case "cc": $fileType = $this->lang->files_view_cpp; break;
+			case "java": $fileType = $this->lang->files_view_java; break;
 			case "gz": case "tgz": case "zip": case "rar":
-			case "bz2": case "tbz2": $fileType="Archive"; break;
-			default: $fileType=$file_extension;
+			case "bz2": case "tbz2": $fileType = $this->lang->files_view_archive; break;
+			default: $fileType = $file_extension;
 		}
 		$filesize = ceil($file_size / 1024);
 		$file_description = $this->format($file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE);
@@ -1119,7 +1121,7 @@ class files extends qsfglobal
 			$query .= $auth;
 
 		if(!$searchBy)
-			return $this->message("You have to search by atleast the name, author or descripton.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=search");
+			return $this->message($this->lang->files_search_error, $this->lang->continue, "{$this->self}?a=files&amp;s=search");
 
 		$query .= ") AND (file_downloads >= ".$this->post['downCount']." ";
 		$query .= "AND file_approved=1 ";
@@ -1163,7 +1165,7 @@ class files extends qsfglobal
 
 		$catitems = "";
 		if($this->db->num_rows($query) == 0 )
-			return $this->message("File Search", "No files found.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=search");
+			return $this->message($this->lang->files_search, $this->lang->files_search_error_none, $this->lang->continue, "{$this->self}?a=files&amp;s=search");
 		while ($row = $this->db->nqfetch($query)) {
 			$found++;
 			foreach ($row as $key => $value)
@@ -1194,7 +1196,7 @@ class files extends qsfglobal
 	function add_comment($cid)
 	{
 		if (!$this->file_perms->auth('post_comment', $cid)) {
-			return $this->message("Add Comment", "You are not permitted to post comments.");
+			return $this->message($this->lang->files_action_not_allowed, $this->lang->files_comment_not_permitted);
 		}
 
 		$id = isset($this->get['fid']) ? $this->get['fid'] : 0;
@@ -1204,13 +1206,13 @@ class files extends qsfglobal
 		} else {
 			$text = $this->post['commentbody'];
 			if (empty($text)) {
-				return $this->message("Add Comment", "Your comment doesn't contain anything.");
+				return $this->message($this->lang->files_comment, $this->lang->files_comment_empty);
 			}
 			$uid = $this->user['user_id'];
 			$this->db->query( "INSERT INTO %pfilecomments (file_id,comment_text,user_id) VALUES( %d, '%s', %d )", $id, $text, $uid );
 			$this->db->query( "UPDATE %pfiles SET file_comments=file_comments+1 WHERE file_id=%d", $id );
 
-                        return $this->message("Add Comment", "Your comment has been posted.", "{$this->lang->continue}", "{$this->self}?a=files&amp;s=viewfile&amp;fid={$id}");
+                        return $this->message($this->lang->files_comment, $this->lang->files_comment_posted, $this->lang->continue, "{$this->self}?a=files&amp;s=viewfile&amp;fid={$id}");
 		}
 	}
 
@@ -1219,11 +1221,11 @@ class files extends qsfglobal
 		$id = isset($this->get['fid']) ? $this->get['fid'] : 0;
 
 		if ($id == 0) {
-			return $this->message("View Comments", "No file was specified.");
+			return $this->message($this->lang->files_comment_view, $this->lang->files_comment_specify);
 		}
 
 		$file = $this->show_file($id);
-		$cfile = $this->db->fetch( "SELECT file_name FROM %pfiles WHERE file_id=%d", $id );
+		$cfile = $this->db->fetch( "SELECT file_name, file_catid FROM %pfiles WHERE file_id=%d", $id );
 
 		$comments = "";
 
@@ -1231,10 +1233,9 @@ class files extends qsfglobal
 		$class = "";
 
 		$query = $this->db->query(
-		  "SELECT c.*, u.user_name, f.file_catid
+		  "SELECT c.*, u.user_name
 		    FROM %pfilecomments c
 		    LEFT JOIN %pusers u ON u.user_id=c.user_id
-		    LEFT JOIN %pfiles f ON f.file_id=%d
 		    WHERE c.file_id=%d", $id, $id );
 
 		while( $row = $this->db->nqfetch( $query ) ) {
@@ -1250,7 +1251,7 @@ class files extends qsfglobal
                         }
 			$comments .= eval($this->template('FILE_COMMENT'));
 		}
-		$cid = $query['file_catid'];
+		$cid = $cfile['file_catid'];
 		return eval($this->template('FILE_COMMENT_LIST'));
 	}
 
@@ -1385,9 +1386,11 @@ class files extends qsfglobal
 		$file = $this->db->fetch( "SELECT file_submitted FROM %pfiles WHERE file_id=%d", $fid );
 		if(!$file)
 			return false;
+		if ($this->perms->is_guest)
+			return false;
 		if ($this->file_perms->auth('edit_files', $cid))
 			return true;
-		if($file['file_submitted'] != $this->user['user_id'] )
+		if($file['file_submitted'] != $this->user['user_id'])
 			return false;
 		return true;
 	}
@@ -1416,7 +1419,7 @@ class files extends qsfglobal
 
 	function get_subcat($cid)
 	{
-                $query = $this->db->query( "Select fcat_parent FROM %pfile_categories WHERE fcat_id=%d", $cid );
+                $query = $this->db->query( "SELECT fcat_parent FROM %pfile_categories WHERE fcat_id=%d", $cid );
                 if ($row = $this->db->nqfetch( $query ) ) {
                         return $row['fcat_parent'];
                 }

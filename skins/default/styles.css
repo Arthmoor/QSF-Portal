@@ -224,7 +224,7 @@ div.codetitle
 	width:1em;
 }
 
-pre.codedata
+pre.codedata, pre.phpdata
 {
 	background-color:#fefefe;
 	border:1px #555555 solid;

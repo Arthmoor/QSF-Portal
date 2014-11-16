@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,46 +144,6 @@ class admin extends qsfglobal
 	}
 
 	/**
-	 * Copies a directory and its files, recursively
-	 *
-	 * @param $from_path Source directory
-	 * @param $to_path Destination directory
-	 * @author See http://www.php.net/copy
-	 * @since Beta 3.0
-	 * @return bool True on success, false on failure
-	 */
-	function dir_copy($from_path, $to_path)
-	{
-		if (!file_exists($to_path)) {
-			$ret = @mkdir($to_path, 0777);
-
-			if (!$ret) {
-				return false;
-			}
-		}
-
-		if (file_exists($from_path) && is_dir($from_path)) {
-			$handle = opendir($from_path);
-
-			while (($file = readdir($handle)) !== false)
-			{
-				if (($file != '.') && ($file != '..') && ($file != 'CVS')) {
-					if (is_dir($from_path . $file)) {
-						$this->dir_copy($from_path . $file . '/', $to_path . $file . '/');
-					}
-
-					if (is_file($from_path . $file)) {
-						copy($from_path . $file, $to_path . $file);
-					}
-				}
-			}
-			closedir($handle);
-		}
-
-		return true;
-	}
-
-	/**
 	 * Loads a user_language. Bet you couldn't figure that out...
 	 *
 	 * @param string $lang Language to load
@@ -213,86 +179,6 @@ class admin extends qsfglobal
 		return $obj;
 	}
 
-	/**
-	 * Creates a heirarchial HTML list of all forums
-	 *
-	 * @param array $array Array of forums
-	 * @param string $link Link to plug into list
-	 * @param int $parent Used to degredate down through the recursive loop
-	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
-	 * @since Beta 2.1
-	 * @return string A heirarchial HTML list of all the forums
-	 **/
-	function Text($array, $link = "", $parent = 0)
-	{
-		$arr = $this->htmlwidgets->forum_array($array, $parent);
-
-		if ($arr) {
-			$return = null;
-			foreach ($arr as $val) {
-				$return .= '<ul>' . "
-				<li><a href='{$link}{$val['forum_id']}'>{$val['forum_name']}</a></li>" .
-				$this->Text($array, $link, $val['forum_id']) . '</ul>';
-			}
-			return $return;
-		}
-	}
-
-	/**
-	 * Creates a heirarchial list of all HTML forums with an input box in front with id _$forum_id
-	 *
-	 * @param array $array Array of forums
-	 * @param int $parent Used to degredate down through the recursive loop
-	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
-	 * @since Beta 2.1
-	 * @return string A heirarchial HTML list of all the forums with an input box in front with id _$forum_id
-	 **/
-	function InputBox($array, $parent = 0)
-	{
-		$arr = $this->htmlwidgets->forum_array($array, $parent);
-
-		if ($arr) {
-			$return = "<ul>\n";
-			foreach ($arr as $val) {
-				$return .= "<li><input class='input' name='_{$val['forum_id']}' value='{$val['forum_position']}' size='2' /> {$val['forum_name']}";
-				$return .= $this->InputBox($array, $val['forum_id']);
-				$return .= "</li>\n";
-			}
-			$return .= "</ul>\n";
-			return $return;
-		}
-	}
-
-	/**
-	 * A list of checkboxes (all forums in correct order)
-	 *
-	 * @param array $array Array of forums
-	 * @param int $select Checkbox to check
-	 * @param int $parent Used to degredate down through the recursive loop
-	 * @param string $space Used to increment the spacing before the text in the box
-	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
-	 * @since Beta 4.0
-	 * @return string Options for an HTML select box (all forums in correct order)
-	 **/
-	function CheckBox($array, $select = 0, $parent = 0, $space = '')
-	{
-		$arr = $this->htmlwidgets->forum_array($array, $parent);
-
-		if ($arr) {
-			$return = null;
-			foreach ($arr as $val) {
-				if ($val['forum_id'] == $select) {
-					$selected = " checked='checked'";
-				} else {
-					$selected = null;
-				}
-				$return .= "<input type='checkbox' id='forum_{$val['forum_id']}' name='forums[{$val['forum_id']}]'{$selected} />{$space}<label for='forum_{$val['forum_id']}'>{$val['forum_name']}</label><br />\n" .
-				$this->CheckBox($array, $select, $val['forum_id'], $space . '&nbsp; &nbsp; &nbsp;');
-			}
-			return $return;
-		}
-	}
-
 	function list_groups($val, $select = 'user_group', $custom_only = false)
 	{
 		$out = "<select name='$select'>";
@@ -312,20 +198,25 @@ class admin extends qsfglobal
 	}
 
 	/**
-	 * Executes an array of queries
+	 * Grabs the current list of table names in the database
 	 *
-	 * @param $queries
-	 * @param $db
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.0.2
-	 * @return void
+	 * @author Roger Libiez [Samson]
+	 * @since 1.3.3
+	 * @return array
 	 **/
-	function execute_queries($queries)
+	function get_db_tables()
 	{
-		foreach ($queries as $query)
+		$tarray = array();
+
+		// This looks a bit strange, but it will pull all of the proper prefixed tables.
+		$tb = $this->db->query( "SHOW TABLES LIKE '%p%%'" );
+		while( $tb1 = $this->db->nqfetch($tb) )
 		{
-			$this->db->query($query);
+			foreach( $tb1 as $col => $data )
+				$tarray[] = $data;
 		}
+
+		return $tarray;
 	}
 }
 ?>

@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -67,11 +73,16 @@ class stats extends admin
 		{
 			if ( !isset( $data[$month] ) )
 				$data[$month] = 0;
-			$width   = round($stat / $total * 100) * 2;
+
+			if ($total == 0) {
+				$width = 0;
+			} else {
+				$width = round($stat / $total * 100) * 2;
+			}
 			$Stats .= eval($this->template('STAT_STAT'));
 		}
 		$graphs .= eval($this->template('STAT_GRAPH'));
-		
+
 		/**
 		 * Registrations
 		 */
@@ -86,7 +97,7 @@ class stats extends admin
 
 		$data = array();
 		$total = 0;
-		
+
 		while ($item = $this->db->nqfetch($query))
 		{
 			$data[$item['month']] = $item['users'];
@@ -98,11 +109,15 @@ class stats extends admin
 		{
 			if ( !isset( $data[$month] ) )
 				$data[$month] = 0;
-			$width   = round($stat / $total * 100) * 2;
+			if ($total == 0) {
+				$width = 0;
+			} else {
+				$width = round($stat / $total * 100) * 2;
+			}
 			$Stats .= eval($this->template('STAT_STAT'));
 		}
 		$graphs .= eval($this->template('STAT_GRAPH'));
-		
+
 		return eval($this->template('STAT_PAGE'));
 	}
 }

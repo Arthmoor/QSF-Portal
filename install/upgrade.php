@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -165,7 +171,7 @@ class upgrade extends qsfglobal
 			// Check the default skin still exists
 			$result = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='default'");
 			if (!$result) {
-				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('QSF Comet', 'default')");
+				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('QSF Comet Portal', 'default')");
 				$full_template_list = true;
 			}
 			
@@ -209,7 +215,7 @@ class upgrade extends qsfglobal
 						$this->db->query("UPDATE %pskins SET skin_name='QSF Comet Portal' WHERE skin_dir='%s'", $skin);
 					}
 					if ($row['skin_name'] == 'Candy Corn') {
-						$this->db->query("UPDATE %pskins SET skin_name='QSF Comet' WHERE skin_dir='%s'", $skin);
+						$this->db->query("UPDATE %pskins SET skin_name='QSF Comet Portal' WHERE skin_dir='%s'", $skin);
 					}
 				}
 				else

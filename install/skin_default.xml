@@ -102,12 +102,44 @@
 </form>
       ]]></html>
     </template>
+    <template><set>backup</set><name>ADMIN_BACKUP</name>
+      <displayname>Database Backup</displayname>
+      <description>Form for making a database backup.</description>
+      <html><![CDATA[
+<form action="{$this->self}?a=backup&amp;s=create" method="post">
+<div class="mainmessage">
+{$this->table}
+ <tr>
+  <td class="header" colspan="100%" style="text-align:center">{$this->lang->backup_options}</td>
+ </tr>
+ <tr>
+  <td class="tablelight">{$this->lang->backup_add_complete} INSERT {$this->lang->backup_statements}?</td>
+  <td class="tablelight">
+   <input type="checkbox" checked="checked" name="insert" value="1" />
+  </td>
+ </tr>
+ <tr>
+  <td class="tabledark">{$this->lang->backup_add} DROP TABLE {$this->lang->backup_statements}<a href="#" title="{$this->lang->backup_uncheck}">?</a></td>
+  <td class="tabledark">
+   <input type="checkbox" checked="checked" name="droptable" value="1" />
+  </td>
+ </tr>
+ <tr>
+  <td class="footer" style="text-align:center" colspan="100%">
+   <input type="submit" name="submit" value="{$this->lang->backup}" />
+  </td>
+ </tr>
+{$this->etable}
+</div>
+</form>
+      ]]></html>
+    </template>
     <template><set>Main</set><name>MAIN_RECENT_POSTS</name>
       <displayname>MODLET: Recent Posts</displayname>
       <description>Format for the recent posts box.</description>
       <html><![CDATA[
-<div class="mb_box">
-   <div class="mb_box_header"><a href="{$this->qsf->self}?a=recent" title="{$this->qsf->lang->main_recent1}">Recent Posts</a></div>
+  <div class="mb_box">
+   <div class="mb_box_header"><a href="{$this->qsf->self}?a=recent" title="{$this->qsf->lang->main_recent1}">{$this->qsf->lang->main_recent}</a></div>
    <div class="mb_box_content">
     {$content}
    </div>
@@ -186,7 +218,7 @@
   <td class="header" style="text-align:center">{$this->lang->edit_css}: {$skin} - {$fname}</td>
  </tr>
  <tr>
-  <td class="tabledark"><textarea class="input" name="css_text" rows="25" cols="80" onclick="storeCaret(this)" onkeyup="storeCaret(this)" onfocus="storeCaret(this)" onmouseout="storeCaret(this)">{$text}</textarea>
+  <td class="tabledark"><textarea class="input" name="css_text" rows="25" cols="80">{$text}</textarea>
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">
@@ -478,6 +510,17 @@
  <tr>
   <td class="labeldark">{$this->lang->settings_cookie_path}</td>
   <td class="tabledark"><input class="input" type="text" name="cookie_path" value="{$this->sets['cookie_path']}" size="40" /></td>
+ </tr>
+ <tr>
+  <td class="labellight">{$this->lang->settings_cookie_domain}</td>
+  <td class="tablelight"><input class="input" type="text" name="cookie_domain" value="{$this->sets['cookie_domain']}" size="40" /></td>
+ </tr>
+ <tr>
+  <td class="labeldark">{$this->lang->settings_cookie_secure}<br /><span class="tiny">{$this->lang->settings_cookie_secured}</span></td>
+  <td class="tabledark">
+   <input type="radio" name="cookie_secure" value="1" <IF $this->sets['cookie_secure']>checked="checked"</IF> id="cookie_secure1" /><label for="cookie_secure1">{$this->lang->yes}</label><br />
+   <input type="radio" name="cookie_secure" value="0" <IF !$this->sets['cookie_secure']>checked="checked"</IF> id="cookie_secure2" /><label for="cookie_secure2">{$this->lang->no}</label>
+  </td>
  </tr>
  <tr>
   <td class="footer" colspan="2">&nbsp;</td>
@@ -870,6 +913,10 @@
   <td class="tabledark"><input type="checkbox" name="subcat" /></td>
  </tr>
  <tr>
+  <td class="tablelight"><b>{$this->lang->forum_url}</b><br />{$this->lang->forum_is_url}</td>
+  <td class="tabledark"><input type="checkbox" name="redirect" /></td>
+ </tr>
+ <tr>
   <td class="footer" style="text-align:center" colspan="2">
    <input type="submit" name="addforum" value="{$this->lang->submit}" />
   </td>
@@ -915,6 +962,13 @@
    <input type="checkbox" name="subcat" <IF $f['forum_subcat']>checked="checked"</IF> />
   </td>
  </tr>
+ <tr>
+  <td class="tablelight"><b>{$this->lang->forum_url}</b><br />{$this->lang->forum_is_url}</td>
+  <td class="tabledark">
+   <input type="checkbox" name="redirect" <IF $f['forum_redirect']>checked="checked"</IF> />
+  </td>
+ </tr>
+ <tr>
  <tr>
   <td class="footer" style="text-align:center" colspan="2">
    <input type="submit" name="editforum" value="{$this->lang->submit}" />
@@ -1024,7 +1078,7 @@
        <a href="{$this->self}?a=groups&amp;s=add">{$this->lang->admin_create_group}</a><br />
        <a href="{$this->self}?a=groups&amp;s=edit">{$this->lang->admin_edit_group_name}</a><br />
        <a href="{$this->self}?a=perms">{$this->lang->admin_edit_group_perms}</a><br />
-       <a href="{$this->self}?a=file_perms">Edit a group's file permissions</a><br />
+       <a href="{$this->self}?a=file_perms">{$this->lang->admin_edit_group_file_perms}</a><br />
        <a href="{$this->self}?a=groups&amp;s=delete">{$this->lang->admin_delete_group}</a>
       </div><br />
 
@@ -1033,7 +1087,7 @@
        <a href="{$this->self}?a=member_control&amp;s=profile">{$this->lang->admin_edit_member}</a><br />
        <a href="{$this->self}?a=member_control&amp;s=delete">{$this->lang->admin_delete_member}</a><br />
        <a href="{$this->self}?a=member_control&amp;s=perms">{$this->lang->admin_edit_member_perms}</a><br />
-       <a href="{$this->self}?a=member_control&amp;s=file_perms">Edit a member's file permissions</a><br />
+       <a href="{$this->self}?a=member_control&amp;s=file_perms">{$this->lang->admin_edit_member_file_perms}</a><br />
        <a href="{$this->self}?a=titles&amp;s=add">{$this->lang->admin_add_member_titles}</a><br />
        <a href="{$this->self}?a=titles">{$this->lang->admin_edit_member_titles}</a><br />
        <a href="{$this->self}?a=ban">{$this->lang->admin_ban_ips}</a><br />
@@ -1135,7 +1189,7 @@
       <li><a href="{$admin->self}?a=groups&amp;s=add">{$admin->lang->admin_create_group}</a></li>
       <li><a href="{$admin->self}?a=groups&amp;s=edit">{$admin->lang->admin_edit_group_name}</a></li>
       <li><a href="{$admin->self}?a=perms">{$admin->lang->admin_edit_group_perms}</a></li>
-      <li><a href="{$admin->self}?a=file_perms">Edit a group's file permissions</a></li>
+      <li><a href="{$admin->self}?a=file_perms">{$admin->lang->admin_edit_group_file_perms}</a></li>
       <li><a href="{$admin->self}?a=groups&amp;s=delete">{$admin->lang->admin_delete_group}</a></li>
      </ul>
     </li>
@@ -1144,7 +1198,7 @@
       <li><a href="{$admin->self}?a=member_control&amp;s=profile">{$admin->lang->admin_edit_member}</a></li>
       <li><a href="{$admin->self}?a=member_control&amp;s=delete">{$admin->lang->admin_delete_member}</a></li>
       <li><a href="{$admin->self}?a=member_control&amp;s=perms">{$admin->lang->admin_edit_member_perms}</a></li>
-      <li><a href="{$admin->self}?a=member_control&amp;s=file_perms">Edit a member's file permissions</a></li>
+      <li><a href="{$admin->self}?a=member_control&amp;s=file_perms">{$admin->lang->admin_edit_member_file_perms}</a></li>
       <li><a href="{$admin->self}?a=titles&amp;s=add">{$admin->lang->admin_add_member_titles}</a></li>
       <li><a href="{$admin->self}?a=titles">{$admin->lang->admin_edit_member_titles}</a></li>
       <li><a href="{$admin->self}?a=ban">{$admin->lang->admin_ban_ips}</a></li>
@@ -1641,12 +1695,25 @@
  </tr>
       ]]></html>
     </template>
+    <template><set>board</set><name>BOARD_FORUM_URL</name>
+      <displayname>Forum URL Redirect</displayname>
+      <description>Format the display of URL redirects.</description>
+      <html><![CDATA[
+ <tr>
+  <td class="tablelight" style="height:35px" colspan="4">
+   <img src="./skins/{$this->skin}/images/icons/globe.png" alt="" /> <strong>{$this->lang->board_forum_url}</strong> <a href="{$forum['forum_description']}">{$forum['forum_name']}</a>
+  </td>
+ </tr>
+      ]]></html>
+    </template>
     <template><set>board</set><name>BOARD_LAST_POST_BOX</name>
       <displayname>Last Post Box</displayname>
       <description>Change the look of the last poster box on the forums.</description>
       <html><![CDATA[
 <IF ($topic_unread)>
- <img src="./skins/{$this->skin}/images/icons/topic_unread.png" alt="" />
+ <a href="{$this->self}?a=topic&amp;t={$forum['forum_lastpost_topic']}&amp;unread=1#unread">
+  <img src="./skins/{$this->skin}/images/icons/topic_unread.png" alt="{$this->lang->board_unread}" title="{$this->lang->board_unread}" />
+ </a>
 </IF>
 <a href="{$this->self}?a=topic&amp;t={$forum['LastTopicID']}" class="small" title="{$full_title}">{$forum['user_lastpost']}</a><br />
 {$this->lang->board_by} {$forum['user_lastposter']}<br />
@@ -2229,7 +2296,14 @@ enable('$init');
    <IF $row['icon']>
     <img src="./skins/{$this->skin}/mbicons/{$row['icon']}" alt="{$this->lang->forum_icon}" class="topicicon" />
    </IF>
-    <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}" title="{$this->lang->forum_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}</td>
+   <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}" title="{$this->lang->forum_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages}
+   <IF $row['newpost']>
+    <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread">
+     &nbsp;<img src="./skins/{$this->skin}/images/icons/topic_unread.png" title="{$this->lang->forum_unread}" alt="{$this->lang->forum_unread}" />
+    </a>
+   </IF>
+   {$row['topic_description']}
+  </td>
   <td class="tabledark" style="text-align:center">{$row['topic_starter']}</td>
   <td class="tablelight" style="text-align:center">{$row['topic_replies']}</td>
   <td class="tablelight" style="text-align:center">{$row['topic_views']}</td>
@@ -2472,8 +2546,8 @@ enable('$init');
       <displayname>MODLET: Recent Uploads</displayname>
       <description>Formatting for the recent uploads modlet.</description>
       <html><![CDATA[
-<div class="mb_box">
-   <div class="mb_box_header"><a href="{$this->qsf->self}?a=files&amp;s=recent">Recent Uploads</a></div>
+  <div class="mb_box">
+   <div class="mb_box_header"><a href="{$this->qsf->self}?a=files&amp;s=recent">{$this->qsf->lang->main_recent_uploads}</a></div>
    <div class="mb_box_content">
     {$content}
    </div>
@@ -2504,11 +2578,11 @@ enable('$init');
       <displayname>Welcome Message - Not logged in</displayname>
       <description>Edit the menu bar for unregistered and logged out users</description>
       <html><![CDATA[
-<ul class="nav">
-   <li><a href="{$qsf->self}">Home</a></li>
-   <li><a href="{$qsf->self}?a=files">Files</a></li>
-   <li><a href="{$qsf->self}?a=board">Forum</a></li>
-   <li><a href="{$qsf->self}?a=members">{$qsf->lang->main_members}</a></li>
+  <ul class="nav">
+   <li><a href="{$qsf->sets['loc_of_board']}">{$qsf->lang->main_home}</a></li>
+   <li><a href="{$qsf->self}?a=files">{$qsf->lang->main_files}</a></li>
+   <li><a href="{$qsf->self}?a=board">{$qsf->lang->main_forum}</a></li>
+   <li><a href="{$qsf->self}?a=members">{$qsf->lang->main_members}</a><br /></li>
    <li><a href="{$qsf->self}?a=search{$searchlink}">{$qsf->lang->main_search}</a></li>
    <li><a href="{$qsf->self}?a=help">{$qsf->lang->main_help}</a></li>
    <li><a href="{$qsf->self}?a=login">{$qsf->lang->main_login}</a></li>
@@ -2521,14 +2595,14 @@ enable('$init');
       <description>Edit the menu bar for logged in members</description>
       <html><![CDATA[
   <ul class="nav">
-   <li><a href="{$qsf->self}">Home</a></li>
-   <li><a href="{$qsf->self}?a=files" class="<MODLET codelink(class)>">Files<MODLET codelink(text)></a></li>
-   <li><a href="{$qsf->self}?a=board">Forum</a></li>
+   <li><a href="{$qsf->sets['loc_of_board']}">{$qsf->lang->main_home}</a></li>
+   <li><a href="{$qsf->self}?a=files" class="<MODLET codelink(class)>">{$qsf->lang->main_files}<MODLET codelink(text)></a></li>
+   <li><a href="{$qsf->self}?a=board">{$qsf->lang->main_forum}</a></li>
    <IF $qsf->perms->auth('page_create') || $qsf->perms->auth('page_edit') || $qsf->perms->auth('page_delete')>
-    <li><a href="{$qsf->self}?a=page">Pages</a></li>
+    <li><a href="{$qsf->self}?a=page">{$qsf->lang->main_pages}</a></li>
    </IF>
-   <li><a href="{$qsf->self}?a=members">{$qsf->lang->main_members}</a></li>
-   <li><a href="{$qsf->self}?a=search{$searchlink}">{$qsf->lang->main_search}</a><br /></li>
+   <li><a href="{$qsf->self}?a=members">{$qsf->lang->main_members}</a><br /></li>
+   <li><a href="{$qsf->self}?a=search{$searchlink}">{$qsf->lang->main_search}</a></li>
    <li><a href="{$qsf->self}?a=help">{$qsf->lang->main_help}</a></li>
    <li><a href="{$qsf->self}?a=pm" class="<MODLET messagelink(class)>">{$qsf->lang->main_messenger}<MODLET messagelink(text)></a></li>
    <li><a href="{$qsf->self}?a=cp">{$qsf->lang->main_cp}</a></li>
@@ -3091,6 +3165,9 @@ enable('$init');
   <td class="header" style="text-align:center" colspan="2">{$title_html} ({$total_votes} {$this->lang->topic_votes})</td>
  </tr>
  {$out}
+ <tr>
+  <td class="footer" colspan="2">&nbsp;</td>
+ </tr>
 {$this->etable}
       ]]></html>
     </template>
@@ -3129,7 +3206,7 @@ enable('$init');
   {$smilies}
   <td class="tablelight">
    <script type="text/javascript" src="./javascript/postboxplain.js"></script>
-   <textarea class="input" name="post" id="bbcode" rows="12" cols="60" onclick="storeCaret(this)" onkeyup="storeCaret(this)" onfocus="storeCaret(this)" onmouseout="storeCaret(this)">{$quote}</textarea>
+   <textarea class="input" name="post" id="bbcode" rows="12" cols="60">{$quote}</textarea>
   </td>
  </tr>
       ]]></html>
@@ -3289,7 +3366,7 @@ enable('$init');
       <displayname>Clickable Smilies</displayname>
       <description>Table cell for clickable smilies</description>
       <html><![CDATA[
-<td class="tablelight" style="width:30%;" valign="top">
+<td class="tablelight" style="width:20%;" valign="top">
    <div><strong>{$this->lang->post_msg}</strong><br /><br /><br /></div>
    <div id="clickablesmilies"></div>
   </td>
@@ -3340,14 +3417,7 @@ enable('$init');
   <td class="tablelight"><textarea class="input" name="options" rows="12" cols="60">{$options}</textarea></td>
  </tr>
  {$post_box}
- <tr>
-  <td class="tabledark" valign="top"><b>{$this->lang->post_options}</b></td>
-  <td class="tabledark">
-   <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{$checkEmot} /> <label for="parseEmot">{$this->lang->post_option_emoticons}</label><br />
-   <input type="checkbox" name="parseCode" value="1" id="parseCode"{$checkCode} /> <label for="parseCode">{$this->lang->post_option_mbcode}</label>
-   {$universal_topic}
-  </td>
- </tr>
+ {$post_options}
  {$attach_box}
  <tr>
   <td class="footer" style="text-align:center" colspan="2">
@@ -3357,6 +3427,28 @@ enable('$init');
  </tr>
 {$this->etable}
 </form>
+      ]]></html>
+    </template>
+    <template><set>post</set><name>POST_OPTIONS</name>
+      <displayname>Post Options</displayname>
+      <description>Format for posting option checkboxes.</description>
+      <html><![CDATA[
+ <tr>
+  <td class="tabledark" valign="top"><b>{$this->lang->post_options}</b></td>
+  <td class="tabledark">
+   <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{$checkEmot} /> <label for="parseEmot">{$this->lang->post_option_emoticons}</label>
+   <br /><input type="checkbox" name="parseCode" value="1" id="parseCode"{$checkCode} /> <label for="parseCode">{$this->lang->post_option_mbcode}</label>
+   <IF $universal_topic>
+    <br /><input type="checkbox" name="global_topic" value="1" id="global_topic"{$checkGlob} /> <label for="global_topic">{$this->lang->post_option_global}</label>
+   </IF>
+   <IF $topic_lock>
+    <br /><input type="checkbox" name="locktopic" value="1" id="locktopic" /> <label for="locktopic">{$this->lang->post_option_lock}</label>
+   </IF>
+   <IF $topic_pin>
+    <br /><input type="checkbox" name="pintopic" value="1" id="pintopic" /> <label for="pintopic">{$this->lang->post_option_pin}</label>
+   </IF>
+  </td>
+ </tr>
       ]]></html>
     </template>
     <template><set>post</set><name>POST_POSTER_GUEST</name>
@@ -3423,13 +3515,7 @@ enable('$init');
   <td class="header" colspan="2">{$this->lang->post_reply_topic}</td>
  </tr>
  {$post_box}
- <tr>
-  <td class="tabledark" valign="top"><b>{$this->lang->post_options}</b></td>
-  <td class="tabledark">
-   <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{$checkEmot} /> <label for="parseEmot">{$this->lang->post_option_emoticons}</label><br />
-   <input type="checkbox" name="parseCode" value="1" id="parseCode"{$checkCode} /> <label for="parseCode">{$this->lang->post_option_mbcode}</label>
-  </td>
- </tr>
+ {$post_options}
  {$attach_box}
  <tr>
   <td class="footer" style="text-align:center" colspan="2">
@@ -3490,14 +3576,7 @@ enable('$init');
   <td class="tablelight"><input class="input" type="text" name="desc" value="{$desc}" size="60" maxlength="35" /></td>
  </tr>
  {$post_box}
- <tr>
-  <td class="tabledark" valign="top"><b>{$this->lang->post_options}</b></td>
-  <td class="tabledark">
-   <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{$checkEmot} /> <label for="parseEmot">{$this->lang->post_option_emoticons}</label><br />
-   <input type="checkbox" name="parseCode" value="1" id="parseCode"{$checkCode} /> <label for="parseCode">{$this->lang->post_option_mbcode}</label>
-   {$universal_topic}
-  </td>
- </tr>
+ {$post_options}
  {$attach_box}
  <tr>
   <td class="footer" style="text-align:center" colspan="2">
@@ -3616,6 +3695,9 @@ enable('$init');
    </table>
   </td>
  </tr>
+ <tr>
+  <td class="footer" colspan="2">&nbsp;</td>
+ </tr>
 {$this->etable}
       ]]></html>
     </template>
@@ -3733,7 +3815,8 @@ enable('$init');
    <IF $row['icon']>
     <img src="./skins/{$this->skin}/mbicons/{$row['icon']}" alt="{$this->lang->recent_icon}" class="topicicon" />
    </IF>
-   <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1" class="medium" title="{$this->lang->recent_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}</td>
+   <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread" class="medium" title="{$this->lang->recent_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}
+  </td>
   <td class="tabledark" style="text-align:center">{$row['topic_starter']}</td>
   <td class="tablelight" style="text-align:center"><a href="{$this->self}?a=forum&amp;f={$row['forum_id']}">{$row['forum_name']}</a></td>
   <td class="tabledark">
@@ -4265,6 +4348,7 @@ enable('$init');
       <description>The format of the Quick Reply box</description>
       <html><![CDATA[
 <script type="text/javascript" src="./javascript/postboxplain.js"></script>
+<script type="text/javascript" src="./javascript/quickquote.js"></script>
 <form action="{$this->self}?a=post&amp;s=reply&amp;t={$this->get['t']}" method="post" id="mbpost">
 {$this->table}
  <tr>
@@ -4313,33 +4397,33 @@ enable('$init');
 <form action="{$this->self}?a=files&amp;s=search" method="post">
 {$this->table}
  <tr>
-  <td class="header">Files</td>
+  <td class="header">{$this->lang->files}</td>
  </tr>
  <tr>
   <td class="subheader">
    <div>
-    <a href="{$this->self}?a=files">File Index</a> 
-     | <a href="{$this->self}?a=files&amp;s=search">Search</a>
-     | <a href="{$this->self}?a=files&amp;s=recent">Recent Uploads</a>
+    <a href="{$this->self}?a=files">{$this->lang->files_index}</a> 
+     | <a href="{$this->self}?a=files&amp;s=search">{$this->lang->files_search2}</a>
+     | <a href="{$this->self}?a=files&amp;s=recent">{$this->lang->files_recent}</a>
     <IF $upload>
-     | <a href="{$this->self}?a=files&amp;s=upload&amp;cid={$cid}">Upload File</a>
+     | <a href="{$this->self}?a=files&amp;s=upload&amp;cid={$cid}">{$this->lang->files_upload}</a>
     </IF>
     <IF $approve>
-     | <a href="{$this->self}?a=files&amp;s=filequeue">Approve File</a>
+     | <a href="{$this->self}?a=files&amp;s=filequeue">{$this->lang->files_approve}</a>
     </IF>
     <IF $addcat>
-     | <a href="{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}">Add Category</a>
+     | <a href="{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}">{$this->lang->files_add_cat}</a>
     </IF>
     <IF $editcat>
-     | <a href="{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}">Edit Category</a>
+     | <a href="{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}">{$this->lang->files_edit_category}</a>
     </IF>
     <IF $delcat>
-     | <a href="{$this->self}?a=files&amp;s=deletecategory&amp;cid={$cid}">Delete Category</a>
+     | <a href="{$this->self}?a=files&amp;s=deletecategory&amp;cid={$cid}">{$this->lang->files_delete_cat}</a>
     </IF>
     <IF $this->perms->auth('is_admin')>
-     | <a href="{$this->self}?a=files&amp;s=addmoderator&amp;cid={$cid}">Add Moderator</a>
-     | <a href="{$this->self}?a=files&amp;s=remmoderator&amp;cid={$cid}">Remove Moderator</a>
-     | <a href="{$this->self}?a=files&amp;s=fixcount">Fix File Stats</a>
+     | <a href="{$this->self}?a=files&amp;s=addmoderator&amp;cid={$cid}">{$this->lang->files_add_mod}</a>
+     | <a href="{$this->self}?a=files&amp;s=remmoderator&amp;cid={$cid}">{$this->lang->files_remove_mod}</a>
+     | <a href="{$this->self}?a=files&amp;s=fixcount">{$this->lang->files_fix_stats}</a>
     </IF>
    </div>
 
@@ -4372,15 +4456,15 @@ enable('$init');
 <form action="{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}" method="post">
 {$this->table}
  <tr>
-  <td class="header" style="text-align:center" colspan="2">Edit File Category</td>
+  <td class="header" style="text-align:center" colspan="2">{$this->lang->files_edit_category}</td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>Name:</strong></td>
+  <td class="tablelight"><strong>{$this->lang->files_name}:</strong></td>
   <td class="tablelight"><input type="text" name="cat_name" value="{$cat['fcat_name']}" maxlength="32" />
   </td>
  </tr>
  <tr>
-  <td class="tabledark"><strong>Parent Category:</strong></td>
+  <td class="tabledark"><strong>{$this->lang->files_add_cat_parent}:</strong></td>
   <td class="tabledark">
    <select name="parent">
     <option value="0"{$selected}>/</option>
@@ -4389,14 +4473,14 @@ enable('$init');
   </td>
  </tr>
  <tr>
-  <td class="tabledark"><strong>Category description:</strong></td>
+  <td class="tabledark"><strong>{$this->lang->files_desc}:</strong></td>
   <td class="tabledark">
    <textarea name="catdesc" cols="60" rows="3" id="catdesc">{$cat['fcat_description']}</textarea>
   </td>
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">
-   <input type="submit" name="submit" value="Edit" />
+   <input type="submit" name="submit" value="{$this->lang->edit}" />
   </td>
  </tr>
 {$this->etable}
@@ -4410,14 +4494,14 @@ enable('$init');
 <form action="{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}" method="post">
 {$this->table}
  <tr>
-  <td class="header" style="text-align:center" colspan="2">Add File Category</td>
+  <td class="header" style="text-align:center" colspan="2">{$this->lang->files_add_cat}</td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>New category name:</strong></td>
+  <td class="tablelight"><strong>{$this->lang->files_add_cat_name}:</strong></td>
   <td class="tablelight"><input type="text" name="cat_name" value="" maxlength="32" /></td>
  </tr>
  <tr>
-  <td class="tabledark"><strong>Parent category:</strong></td>
+  <td class="tabledark"><strong>{$this->lang->files_add_cat_parent}:</strong></td>
   <td class="tabledark">
    <select name="parent">
     <option value="0">/</option>
@@ -4426,14 +4510,14 @@ enable('$init');
   </td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>Category description:</strong></td>
+  <td class="tablelight"><strong>{$this->lang->files_add_cat_desc}:</strong></td>
   <td class="tablelight">
    <textarea name="catdesc" cols="60" rows="3" id="catdesc"></textarea>
   </td>
  </tr>
  <tr>
   <td class="tabledark">
-   <b>Quick Permissions</b><br />Select an existing category to copy its permissions.
+   <b>{$this->lang->files_add_cat_qperms}</b><br />{$this->lang->files_add_cat_qperms2}
   </td>
   <td class="tabledark">
    <select name="sync">
@@ -4443,7 +4527,7 @@ enable('$init');
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">
-   <input type="submit" name="submit" value="Add" />
+   <input type="submit" name="submit" value="{$this->lang->files_add_cat}" />
   </td>
  </tr>
 {$this->etable}
@@ -4459,19 +4543,19 @@ enable('$init');
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$this->lang->charset}" />
 
-<title>Rate File</title>
+<title>{$this->lang->files_rate}</title>
 <link rel="stylesheet" type="text/css" href="./skins/{$this->skin}/styles.css" media="screen" />
 </head>
 
 <body>
  <div class="container" style="border-left:1px solid black; border-right:1px solid black; min-width:0px;">
-  <div class="header" style="text-align:center">Rate File</div>
+  <div class="header" style="text-align:center">{$this->lang->files_rate}</div>
   <div class="tabledark" style="text-align:center; padding:20px">
    {$rating}
   </div>
   <div class="footer">&nbsp;</div>
  </div>
- <a href="javascript:window.close()">Close window.</a>
+ <a href="javascript:window.close()">{$this->lang->files_close_window}</a>
 </body>
 </html>
       ]]></html>
@@ -4490,7 +4574,7 @@ enable('$init');
 <div class="newsfieldset">
  <div class="newslegend" style="text-align:center">{$topic}</div>
  <p>{$text}</p><br />
- <div class="newsfooter">Posted by: {$user} {$date}</div>
+ <div class="newsfooter">{$this->qsf->lang->main_posted_by}: {$user} {$date}</div>
 </div><br />
       ]]></html>
     </template>
@@ -4516,7 +4600,7 @@ enable('$init');
  <table width="99%">
   <tr>
    <IF isset($moder)>
-    <div class="newslegend">Moderator: <a href="{$this->self}?a=profile&amp;w={$moderid}">{$moder}</a></div>
+    <div class="newslegend">{$this->lang->files_moderator}: <a href="{$this->self}?a=profile&amp;w={$moderid}">{$moder}</a></div>
     <br />
    </IF>
    <td>{$tree}</td>
@@ -4524,9 +4608,10 @@ enable('$init');
  </table>
  <br />
  <table width="99%">
-  <tr>
-   {$catlinks}
+  {$catlinks}
+  <IF ($break % 5)>
   </tr>
+  </IF>
  </table>
  <br />
 </div>
@@ -4542,21 +4627,22 @@ enable('$init');
  <div class="tabledark">{$desc}</div><br />
 </IF>
 <IF $cid == 0>
- <div class="header" style="text-align:center">Top 20 Downloads</div>
+ <div class="header" style="text-align:center">{$this->lang->files_top20}</div>
 </IF>
 <IF $i>
 {$this->table}
  <tr>
-  <td class="subheader">Name</td>
-  <td class="subheader">Submitted by</td>
-  <td class="subheader">Date Added</td>
-  <td class="subheader">D/L</td>
-  <td class="subheader">Comments</td>
-  <td class="subheader">Rating</td>
+  <td class="subheader">{$this->lang->files_name}</td>
+  <td class="subheader">{$this->lang->files_submitted_by}</td>
+  <td class="subheader">{$this->lang->files_added}</td>
+  <td class="subheader">{$this->lang->files_dl}</td>
+  <td class="subheader">{$this->lang->files_comments}</td>
+  <td class="subheader">{$this->lang->files_rating}</td>
  </tr>
  {$catitems}
 {$this->etable}
 </IF>
+<div class="footer"></div>
       ]]></html>
     </template>
     <template><set>Files</set><name>FILE_DETAILS</name>
@@ -4569,29 +4655,29 @@ enable('$init');
 
 <div class="fieldset">
  <div class="legend">{$file_name}</div><br />
- <strong>Description:</strong><br />{$file_description}<br /><br />
- <strong>Author:</strong> {$file_author} <strong>Submitted by:</strong> {$user_name} <br />
- <strong>File Size:</strong> {$filesize} KB <strong>Added:</strong> {$date} <br /><strong>Downloads:</strong> {$file_downloads}
+ <strong>{$this->lang->files_desc}:</strong><br />{$file_description}<br /><br />
+ <strong>{$this->lang->files_author}:</strong> {$file_author} <strong>{$this->lang->files_submitted_by}:</strong> {$user_name} <br />
+ <strong>{$this->lang->files_size}:</strong> {$filesize} KB <strong>{$this->lang->files_added}:</strong> {$date} <br /><strong>{$this->lang->files_downloads}:</strong> {$file_downloads}
  <IF $file_revision>
- <strong>Revisions:</strong> {$file_revision} <strong>Revised on:</strong> {$rdate}
+ <strong>{$this->lang->files_revisions}:</strong> {$file_revision} <strong>{$this->lang->files_revised}:</strong> {$rdate}
  </IF>
  <br />
- <strong>File Type:</strong> {$fileType}<br />
+ <strong>{$this->lang->files_type}:</strong> {$fileType}<br />
  <div class="filemenu">
   <MODLET file_rating({$file_id})> 
-  | <a href="{$this->self}?a=files&amp;s=download&amp;cid={$cid}&amp;fid={$file_id}" rel="nofollow">Download</a>
-  | <a href="{$this->self}?a=files&amp;s=listcomments&amp;fid={$file_id}">Comments({$file_comments})</a>
+  | <a href="{$this->self}?a=files&amp;s=download&amp;cid={$cid}&amp;fid={$file_id}" rel="nofollow">{$this->lang->files_download}</a>
+  | <a href="{$this->self}?a=files&amp;s=listcomments&amp;fid={$file_id}">{$this->lang->files_comments}({$file_comments})</a>
   <IF $this->is_submitter($file_id, $file_catid)>
-   | <a href="{$this->self}?a=files&amp;s=update&amp;fid={$file_id}&amp;cid={$file_catid}">Update</a>
+   | <a href="{$this->self}?a=files&amp;s=update&amp;fid={$file_id}&amp;cid={$file_catid}">{$this->lang->files_update}</a>
   </IF>
   <IF $move>
-   | <a href="{$this->self}?a=files&amp;s=move&amp;fid={$file_id}">Move</a>
+   | <a href="{$this->self}?a=files&amp;s=move&amp;fid={$file_id}">{$this->lang->files_move}</a>
   </IF>
   <IF $edit>
-   | <a href="{$this->self}?a=files&amp;s=edit&amp;fid={$file_id}">Edit</a>
+   | <a href="{$this->self}?a=files&amp;s=edit&amp;fid={$file_id}">{$this->lang->edit}</a>
   </IF>
   <IF $delete>
-   | <a href="{$this->self}?a=files&amp;s=delete&amp;fid={$file_id}&amp;cid={$cid}">Delete</a>
+   | <a href="{$this->self}?a=files&amp;s=delete&amp;fid={$file_id}&amp;cid={$cid}">{$this->lang->delete}</a>
   </IF>
  </div>
 </div>
@@ -4604,18 +4690,18 @@ enable('$init');
 <form action="{$this->self}?a=files&amp;s=upload" method="post" enctype="multipart/form-data">
 {$this->table}
  <tr>
-  <td class="header" colspan="2">Upload File</td>
+  <td class="header" colspan="2">{$this->lang->files_upload}</td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>Name:</strong></td>
+  <td class="tablelight"><strong>{$this->lang->files_name}:</strong></td>
   <td class="tablelight"><input class="input" type="text" name="file_name" value="" maxlength="32" /></td>
  </tr>
  <tr>
-  <td class="tabledark"><strong>Author:</strong></td>
+  <td class="tabledark"><strong>{$this->lang->files_author}:</strong></td>
   <td class="tabledark"><input class="input" type="text" name="file_author" value="" maxlength="20" /></td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>Category:</strong></td>
+  <td class="tablelight"><strong>{$this->lang->files_cat}:</strong></td>
   <td class="tablelight">
    <select name="file_category">
     {$list}
@@ -4623,19 +4709,16 @@ enable('$init');
   </td>
  </tr>
  <tr>
-  <td class="tabledark"><strong>File:</strong></td>
+  <td class="tabledark"><strong>{$this->lang->file}:</strong></td>
   <td class="tabledark"><input type="file" name="code_upload" /></td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>Description:</strong></td>
-  <td class="tablelight">
-   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
-   <textarea class="input" name="file_description" id="bbcode" rows="5" cols="60" onclick="storeCaret(this)" onkeyup="storeCaret(this)" onfocus="storeCaret(this)" onmouseout="storeCaret(this)"></textarea>
-  </td>
+  <td class="tablelight"><strong>{$this->lang->files_desc}:</strong></td>
+  <td class="tablelight"><textarea class="input" name="file_description" rows="5" cols="60"></textarea>
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">
-   <input type="submit" name="submit" value="Upload File" />
+   <input type="submit" name="submit" value="{$this->lang->files_upload}" />
   </td>
  </tr>
 {$this->etable}
@@ -4646,10 +4729,10 @@ enable('$init');
       <description>Format of the file delete form.</description>
       <html><![CDATA[
 <form action="{$this->self}?a=files&amp;s=delete&amp;fid={$file['file_id']}&amp;cid={$cid}" method="post">
-<div class="header">Delete File</div>
+<div class="header">{$this->lang->files_delete_file}</div>
 <div class="tabledark" style="text-align:center">
- Are you sure you want to delete <strong>{$file['file_name']}</strong>?<br />
- <input type="submit" name="submit" value="Delete" />
+ {$this->lang->files_delete_confirm} <strong>{$file['file_name']}</strong>?<br />
+ <input type="submit" name="submit" value="{$this->lang->delete}" />
 </div>
 <div class="footer">&nbsp;</div>
 </form>
@@ -4663,29 +4746,28 @@ enable('$init');
 <p>&nbsp;</p>
 <div class="fieldset">
  <div class="legend">{$file_name}</div><br />
- <strong>Description:</strong><br />{$file_description}<br /><br />
- <strong>Author:</strong> {$file_author} <strong>Submitted by:</strong> {$user_name}<br />
- <strong>File Size:</strong> {$filesize} KB <strong>Added:</strong> {$date} <strong>Downloads:</strong> {$file_downloads}<br />
+ <strong>{$this->lang->files_desc}:</strong><br />{$file_description}<br /><br />
+ <strong>{$this->lang->files_author}:</strong> {$file_author} <strong>{$this->lang->files_submitted_by}:</strong> {$user_name}<br />
+ <strong>{$this->lang->files_size}:</strong> {$filesize} KB <strong>{$this->lang->files_added}:</strong> {$date} <strong>{$this->lang->files_downloads}:</strong> {$file_downloads}<br />
 </div>
 
 <p></p>
 
 <form action="{$this->self}?a=files&amp;s=edit&amp;fid={$id}" method="post">
-<div class="header" style="text-align:center">Modify File Information</div>
-<div class="tabledark"><strong>Name:</strong> <input class="input" name="file_name" type="text" maxlength="32" value="{$file_name}" /></div>
-<div class="tablelight"><strong>Author:</strong> <input class="input" name="file_author" type="text" maxlength="20" value="{$file_author}" /></div>
+<div class="header" style="text-align:center">{$this->lang->files_modify_info}</div>
+<div class="tabledark"><strong>{$this->lang->files_name}:</strong> <input class="input" name="file_name" type="text" maxlength="32" value="{$file_name}" /></div>
+<div class="tablelight"><strong>{$this->lang->files_author}:</strong> <input class="input" name="file_author" type="text" maxlength="20" value="{$file_author}" /></div>
 <div class="tabledark">
- <strong>Category:</strong>
+ <strong>{$this->lang->files_cat}:</strong>
   <select name="file_category">
    {$list}
   </select>
 </div>
 <div class="tablelight">
- <script type="text/javascript" src="./javascript/postboxplain.js"></script>
- <strong>Description:</strong><br />
- <textarea class="input" name="file_description" id="bbcode" rows="5" cols="60" onclick="storeCaret(this)" onkeyup="storeCaret(this)" onfocus="storeCaret(this)" onmouseout="storeCaret(this)">{$file_description}</textarea>
+ <strong>{$this->lang->files_desc}:</strong><br />
+ <textarea class="input" name="file_description" rows="5" cols="60">{$file_description}</textarea>
 </div>
-<div class="footer"><input type="submit" name="submit" value="Submit" /></div>
+<div class="footer"><input type="submit" name="submit" value="{$this->lang->submit}" /></div>
       ]]></html>
     </template>
     <template><set>Files</set><name>FILE_COMMENT_ADD</name>
@@ -4698,7 +4780,7 @@ enable('$init');
    <td><textarea name="commentbody" cols="60" rows="6" id="commentbody"></textarea></td>
   </tr>
   <tr>
-   <td><input name="addcomment" type="submit" value="Add Comment" /></td>
+   <td><input name="addcomment" type="submit" value="{$this->lang->files_comment}" /></td>
   </tr>
  </table>
 </form>
@@ -4710,12 +4792,10 @@ enable('$init');
       <html><![CDATA[
 {$file}
 <p>&nbsp;</p>
-<div class="header" style="text-align:center">User Comments For: {$cfile['file_name']}</div>
+<div class="header" style="text-align:center">{$this->lang->files_comment_user}: {$cfile['file_name']}</div>
 {$comments}
 <div class="footer" style="text-align:center">
-<IF !$this->perms->is_guest>
- <a href="{$this->self}?a=files&amp;s=addcomment&amp;cid={$cid}&amp;fid={$id}">Add Comment</a>
-</IF>
+ <a href="{$this->self}?a=files&amp;s=addcomment&amp;cid={$cid}&amp;fid={$id}">{$this->lang->files_comment}</a>
 </div>
       ]]></html>
     </template>
@@ -4724,7 +4804,7 @@ enable('$init');
       <description>Format for an individual file comment.</description>
       <html><![CDATA[
 <div class="{$class}">
- <strong>By: {$user_name}</strong>
+ <strong>{$this->lang->board_by}: {$user_name}</strong>
  <p>&nbsp;</p>
  {$text}
 </div>
@@ -4735,19 +4815,19 @@ enable('$init');
       <description>The layout for files in the approval queue.</description>
       <html><![CDATA[
 <div class="fieldset">
- <div class="legend">{$file_name}<IF $updates> (Update)</IF></div><br />
- <strong>Description:</strong><br />{$file_description}<br /><br />
- <strong>Submitted by:</strong> {$user_name} <IF !$updates><strong>Author:</strong> {$file_author}</IF>
- <strong>File Size:</strong> {$filesize} KB<br />
- <strong>Added:</strong> {$date}<br />
+ <div class="legend">{$file_name}<IF $updates> ({$this->lang->files_update})</IF></div><br />
+ <strong>{$this->lang->files_desc}:</strong><br />{$file_description}<br /><br />
+ <strong>{$this->lang->files_submitted_by}:</strong> {$user_name} <IF !$updates><strong>{$this->lang->files_author}:</strong> {$file_author}</IF>
+ <strong>{$this->lang->files_size}:</strong> {$filesize} KB<br />
+ <strong>{$this->lang->files_added}:</strong> {$date}<br />
  <IF !$updates>
-  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={$file_id}&amp;cid={$file_catid}">Download</a> | 
-  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={$file_id}&amp;cid={$file_catid}">Approve</a> | 
-  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={$file_id}&amp;cid={$file_catid}">Deny</a>
+  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={$file_id}&amp;cid={$file_catid}">{$this->lang->files_download}</a> | 
+  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={$file_id}&amp;cid={$file_catid}">{$this->lang->files_approve2}</a> | 
+  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={$file_id}&amp;cid={$file_catid}">{$this->lang->files_deny}</a>
  <ELSE>
-  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={$update_id}&amp;cid={$file_catid}&amp;u=1">Download</a> | 
-  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={$update_id}&amp;cid={$file_catid}&amp;u=1">Approve</a> | 
-  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={$update_id}&amp;cid={$file_catid}&amp;u=1">Deny</a>
+  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={$update_id}&amp;cid={$file_catid}&amp;u=1">{$this->lang->files_download}</a> | 
+  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={$update_id}&amp;cid={$file_catid}&amp;u=1">{$this->lang->files_approve2}</a> | 
+  <a href="{$this->self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={$update_id}&amp;cid={$file_catid}&amp;u=1">{$this->lang->files_deny}</a>
  </IF>
 </div>
 <br />
@@ -4757,7 +4837,7 @@ enable('$init');
       <displayname>Portal Main</displayname>
       <description>The format for information displayed in the center box of a portal site.</description>
       <html><![CDATA[
-<div id="left">
+ <div id="left">
   <MODLET user_login()>
   <MODLET recent_uploads()>
   <MODLET board_stats()>
@@ -4772,7 +4852,7 @@ enable('$init');
  </div>
 
  <div id="middle">
-  <div class="header" style="text-align:center">News</div>
+  <div class="header" style="text-align:center">{$this->lang->main_news}</div>
   <br />
   <MODLET news(2)>
  </div>
@@ -4785,11 +4865,11 @@ enable('$init');
       <description>Format for the active users list generated by the users_online modlet.</description>
       <html><![CDATA[
   <div class="mb_box">
-   <div class="mb_box_header"><a href="{$this->qsf->self}?a=active" class="activeusers">Users Online</a></div>
+   <div class="mb_box_header"><a href="{$this->qsf->self}?a=active" class="activeusers">{$this->qsf->lang->main_users_online}</a></div>
    <div class="mb_box_content">
     {$users['USERS']}
-    <br /><br />Members: {$users['MEMBERCOUNT']}
-    <br />Guests: {$users['GUESTCOUNT']}
+    <br /><br />{$this->qsf->lang->main_members}: {$users['MEMBERCOUNT']}
+    <br />{$this->qsf->lang->main_guests}: {$users['GUESTCOUNT']}
    </div>
    <div class="mb_box_footer"></div>
   </div>
@@ -4799,34 +4879,35 @@ enable('$init');
       <displayname>Recent Uploads List</displayname>
       <description>Format of the recently uploaded files list.</description>
       <html><![CDATA[
-<div class="header">Files uploaded in the last 10 days:</div>
+<div class="header">{$this->lang->files_recent_uploads}:</div>
 <p></p>
 <table cellspacing="0" cellpadding="2" style="width:100%; border-collapse:collapse;">
  <tr>
-  <td class="subheader">Name</td>
-  <td class="subheader">Submitted by</td>
-  <td class="subheader">Date Added</td>
-  <td class="subheader">D/L</td>
-  <td class="subheader">Comments</td>
-  <td class="subheader">Rating</td>
+  <td class="subheader">{$this->lang->files_name}</td>
+  <td class="subheader">{$this->lang->files_submitted_by}</td>
+  <td class="subheader">{$this->lang->files_added}</td>
+  <td class="subheader">{$this->lang->files_dl}</td>
+  <td class="subheader">{$this->lang->files_comments}</td>
+  <td class="subheader">{$this->lang->files_rating}</td>
  </tr>
  {$catitems}
 </table>
+<div class="footer"></div>
       ]]></html>
     </template>
     <template><set>Main</set><name>MAIN_STATS</name>
       <displayname>MODLET: Board Statistics</displayname>
       <description>Format for the board statistics table.</description>
       <html><![CDATA[
-<div class="mb_box">
-   <div class="mb_box_header">Stats</div>
+  <div class="mb_box">
+   <div class="mb_box_header">{$this->qsf->lang->main_stats}</div>
    <div class="mb_box_content">
     <table width="100%" border="0">
-     <tr><td>Files</td><td>{$stats['FILES']}</td></tr>
-     <tr><td>Topics</td><td>{$stats['TOPICS']}</td></tr>
-     <tr><td>Posts</td><td>{$stats['POSTS']}</td></tr>
-     <tr><td>Members</td><td>{$stats['MEMBERS']}</td></tr>
-     <tr><td>Newest Member</td><td><a href="{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}">{$stats['LASTMEMBER']}</a></td></tr>
+     <tr><td>{$this->qsf->lang->main_files}</td><td>{$stats['FILES']}</td></tr>
+     <tr><td>{$this->qsf->lang->main_topics}</td><td>{$stats['TOPICS']}</td></tr>
+     <tr><td>{$this->qsf->lang->main_posts}</td><td>{$stats['POSTS']}</td></tr>
+     <tr><td>{$this->qsf->lang->main_members}</td><td>{$stats['MEMBERS']}</td></tr>
+     <tr><td>{$this->qsf->lang->main_member_newest}</td><td><a href="{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}">{$stats['LASTMEMBER']}</a></td></tr>
     </table>
    </div>
    <div class="mb_box_footer"></div>
@@ -4851,18 +4932,18 @@ enable('$init');
 <form action="{$this->self}?a=files&amp;s=search" method="post" id="search">
 {$this->table}
  <tr>
-  <td class="header" colspan="2">File Search</td>
+  <td class="header" colspan="2">{$this->lang->files_search}</td>
  </tr>
  <tr>
-  <td class="subheader" style="text-align:center">Basic Search</td>
-  <td class="subheader" style="text-align:center">Advanced Search</td>
+  <td class="subheader" style="text-align:center">{$this->lang->files_search_basic}</td>
+  <td class="subheader" style="text-align:center">{$this->lang->files_search_advanced}</td>
  </tr>
  <tr>
   <td class="tablelight" style="width:50%">
-   Search For:<br />
+   {$this->lang->files_search_for}:<br />
    <input class="input" type="text" style="width:100%" name="query" />
    <br /><br />
-   Search in: <a href="javascript:select_all_cats()">Select All</a><br />
+   {$this->lang->files_search_in}: <a href="javascript:select_all_cats()">{$this->lang->select_all}</a><br />
    <select class="input" name="cats[]" size="10" style="width:100%" multiple="multiple">
     {$selectItems}
    </select><br />
@@ -4870,30 +4951,30 @@ enable('$init');
   <td class="tabledark">
    {$this->table}
     <tr>
-     <td>Search By</td>
+     <td>{$this->lang->files_search_by}</td>
     </tr>
     <tr>
-     <td>Name</td>
+     <td>{$this->lang->files_name}</td>
      <td><input type="checkbox" name="sName" value="1" checked="checked" /></td>
-     <td>Description</td>
+     <td>{$this->lang->files_desc}</td>
      <td><input type="checkbox" name="sDesc" value="1" checked="checked" /></td>
-     <td>Author</td>
+     <td>{$this->lang->files_author}</td>
      <td><input type="checkbox" name="sAuth" value="1" checked="checked" /></td>
     </tr>
     <tr>
      <td colspan="100%"><hr /></td>
     </tr>
     <tr>
-     <td colspan="100%">Display files with more than <input name="downCount" type="text" value="0" size="2"> downloads</td>
+     <td colspan="100%">{$this->lang->files_search_display_more} <input name="downCount" type="text" value="0" size="2"> {$this->lang->files_downloads2}</td>
     </tr>
     <tr>
-     <td colspan="100%">Display the first <input name="dispCount" type="text" value="100" size="2" /> results</td>
+     <td colspan="100%">{$this->lang->files_search_display_first} <input name="dispCount" type="text" value="100" size="2" /> {$this->lang->files_search_results2}</td>
     </tr>
     <tr>
      <td colspan="100%"><hr /></td>
     </tr>
     <tr>
-     <td colspan="100%"><input type="checkbox" name="useRating" value="1" /> Minimum Rating</td>
+     <td colspan="100%"><input type="checkbox" name="useRating" value="1" /> {$this->lang->files_search_minimum_rating}</td>
     </tr>
     <tr>
      <td style="width:20%">1 <input type="radio" name="minRating" value="1" checked="checked" /></td>
@@ -4906,21 +4987,21 @@ enable('$init');
      <td colspan="100%"><hr/></td>
     </tr>
     <tr>
-     <td colspan="100%"><input type="checkbox" name="byTime" value="1" /> Search Files
+     <td colspan="100%"><input type="checkbox" name="byTime" value="1" /> {$this->lang->files_search3}
       <select class="select" name="time_way_select">
-       <option value="newer" selected="selected">newer</option>
-       <option value="older">older</option>
+       <option value="newer" selected="selected">{$this->lang->files_search_newer}</option>
+       <option value="older">{$this->lang->files_search_older}</option>
       </select>
       than
       <select class="select" name="time_select">
-       <option value="1">1 day</option>
-       <option value="3">3 days</option>
-       <option value="7">1 week</option>
-       <option value="14">2 weeks</option>
-       <option value="31" selected="selected">1 month</option>
-       <option value="92">3 months</option>
-       <option value="183">6 months</option>
-       <option value="365">1 year</option>
+       <option value="1">1 {$this->lang->files_search_day}</option>
+       <option value="3">3 {$this->lang->files_search_days}</option>
+       <option value="7">1 {$this->lang->files_search_week}</option>
+       <option value="14">2 {$this->lang->files_search_weeks}</option>
+       <option value="31" selected="selected">1 {$this->lang->files_search_month}</option>
+       <option value="92">3 {$this->lang->files_search_months}</option>
+       <option value="183">6 {$this->lang->files_search_months}</option>
+       <option value="365">1 {$this->lang->files_search_year}</option>
       </select>
      </td>
     </tr>
@@ -4928,7 +5009,9 @@ enable('$init');
   </td>
  </tr>
  <tr>
-  <td class="footer" colspan="100%"><input type="submit" name="submit" value="Search" /></td>
+  <td class="footer" colspan="100%" style="text-align:center">
+   <input type="submit" name="submit" value="{$this->lang->files_search2}" />
+  </td>
  </tr>
 {$this->etable}
 </form>
@@ -4940,15 +5023,15 @@ enable('$init');
       <html><![CDATA[
 {$this->table}
  <tr>
-  <td class="header" colspan="6">Search Results for '{$qString}'</td>
+  <td class="header" colspan="6">{$this->lang->files_search_results} '{$qString}'</td>
  </tr>
  <tr>
-  <td class="subheader">Name</td>
-  <td class="subheader">Submitted by</td>
-  <td class="subheader">Date Added</td>
-  <td class="subheader">D/L</td>
-  <td class="subheader">Comments</td>
-  <td class="subheader">Rating</td>
+  <td class="subheader">{$this->lang->files_name}</td>
+  <td class="subheader">{$this->lang->files_submitted_by}</td>
+  <td class="subheader">{$this->lang->files_added}</td>
+  <td class="subheader">{$this->lang->files_dl}</td>
+  <td class="subheader">{$this->lang->files_comments}</td>
+  <td class="subheader">{$this->lang->files_rating}</td>
  </tr>
  {$catitems}
  <tr>
@@ -4964,23 +5047,20 @@ enable('$init');
 <form action="{$this->self}?a=files&amp;s=update&amp;cid={$cid}&amp;fid={$fid}" method="post" enctype="multipart/form-data">
 {$this->table}
  <tr>
-  <td class="header" colspan="2">Update File</td>
+  <td class="header" colspan="2">{$this->lang->files_update_file}</td>
  </tr>
  </tr>
  <tr>
-  <td class="tabledark"><strong>File:</strong></td>
+  <td class="tabledark"><strong>{$this->lang->file}:</strong></td>
   <td class="tabledark"><input type="file" name="code_update" /></td>
  </tr>
  <tr>
-  <td class="tablelight"><strong>Description:</strong></td>
-  <td class="tablelight">
-   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
-   <textarea class="input" name="file_description" id="bbcode" rows="5" cols="60" onclick="storeCaret(this)" onkeyup="storeCaret(this)" onfocus="storeCaret(this)" onmouseout="storeCaret(this)">{$file['file_description']}</textarea>
-  </td>
+  <td class="tablelight"><strong>{$this->lang->files_desc}:</strong></td>
+  <td class="tablelight"><textarea class="input" name="file_description" rows="5" cols="60">{$file['file_description']}</textarea>
  </tr>
  <tr>
   <td class="footer" colspan="2" style="text-align:center">
-   <input type="submit" name="submit" value="Update File" />
+   <input type="submit" name="submit" value="{$this->lang->files_update_file}" />
   </td>
  </tr>
 {$this->etable}
@@ -5014,13 +5094,13 @@ enable('$init');
       <displayname>MODLET: User Upload Data</displayname>
       <description>Formatting for user upload data.</description>
       <html><![CDATA[
-<table border="0" width="100%" cellpadding="3" cellspacing="0">
+   <table border="0" width="100%" cellpadding="3" cellspacing="0">
     <tr>
-     <td style="width:30%"><b>Uploads</b></td>
+     <td style="width:30%"><b>{$this->qsf->lang->profile_uploads}</b></td>
      <td>{$uploads}</td>
     </tr>
     <tr>
-     <td><b>Last Upload</b></td>
+     <td><b>{$this->qsf->lang->profile_upload_last}</b></td>
      <td>{$lastfile}</td>
     </tr>
    </table>
@@ -5030,8 +5110,8 @@ enable('$init');
       <displayname>MODLET: Top Posters</displayname>
       <description>Format for the top posters box.</description>
       <html><![CDATA[
-<div class="mb_box">
-   <div class="mb_box_header">Top Posters</div>
+  <div class="mb_box">
+   <div class="mb_box_header">{$this->qsf->lang->main_top_posters}</div>
    <div class="mb_box_content">
     {$content}
    </div>
@@ -5043,11 +5123,11 @@ enable('$init');
       <displayname>MODLET: Affiliates</displayname>
       <description>Format for the affiliated sites box.</description>
       <html><![CDATA[
-<div class="mb_box">
-   <div class="mb_box_header">Affiliates</div>
+  <div class="mb_box">
+   <div class="mb_box_header">{$this->qsf->lang->main_affiliates}</div>
    <div class="mb_box_content">
     <div style="text-align:center">
-     <!-- Add affiliated site graphic links here -->
+     <!-- Add affiliated site links here -->
     </div>
    </div>
    <div class="mb_box_footer"></div>
@@ -5058,8 +5138,8 @@ enable('$init');
       <displayname>MODLET: Top Uploaders</displayname>
       <description>Format for the top uploaders box.</description>
       <html><![CDATA[
-<div class="mb_box">
-   <div class="mb_box_header">Top Uploaders</div>
+  <div class="mb_box">
+   <div class="mb_box_header">{$this->qsf->lang->main_top_uploaders}</div>
    <div class="mb_box_content">
     {$content}
    </div>
@@ -5074,16 +5154,16 @@ enable('$init');
 <form action="{$this->self}?a=page&amp;s=edit&amp;p={$this->get['p']}" method="post">
 {$this->table}
  <tr>
-  <td class="header" colspan="2">Edit Page</td>
+  <td class="header" colspan="2">{$this->lang->page_edit}</td>
  </tr>
  <tr>
-  <td class="tablelight" style="width:30%">Title:</td>
+  <td class="tablelight" style="width:30%">{$this->lang->page_title}:</td>
   <td class="tablelight" style="width:70%">
    <input class="input" type="text" size="40" name="title" value="{$page['title']}" />
   </td>
  </tr>
  <tr>
-  <td class="tabledark">Contents:</td>
+  <td class="tabledark">{$this->lang->page_contents}:</td>
   <td class="tabledark">
    <textarea class="input" name="contents" rows="12" cols="60">{$page['contents']}</textarea>
   </td>
@@ -5104,16 +5184,16 @@ enable('$init');
 <form action="{$this->self}?a=page&amp;s=create" method="post">
 {$this->table}
  <tr>
-  <td class="header" colspan="2">Create Page</td>
+  <td class="header" colspan="2">{$this->lang->page_create}</td>
  </tr>
  <tr>
-  <td class="tablelight" style="width:30%">Title:</td>
+  <td class="tablelight" style="width:30%">{$this->lang->page_title}:</td>
   <td class="tablelight" style="width:70%">
    <input class="input" type="text" size="40" name="title" value="" />
   </td>
  </tr>
  <tr>
-  <td class="tabledark">Contents:</td>
+  <td class="tabledark">{$this->lang->page_contents}:</td>
   <td class="tabledark">
    <textarea class="input" name="contents" rows="12" cols="60"></textarea>
   </td>
@@ -5131,9 +5211,9 @@ enable('$init');
       <displayname>MODLET: User Login</displayname>
       <description>Format for the user login modlet.</description>
       <html><![CDATA[
-<form action="{$this->qsf->self}?a=login&amp;s=on" method="post">
+ <form action="{$this->qsf->self}?a=login&amp;s=on" method="post">
   <div class="mb_box">
-   <div class="mb_box_header">Login</div>
+   <div class="mb_box_header">{$this->qsf->lang->login}</div>
    <div class="mb_box_content">
     <input type="hidden" name="request_uri" value="{$this->qsf->self}" />
     {$this->qsf->lang->login_user}:<br />
@@ -5146,7 +5226,7 @@ enable('$init');
    </div>
    <div class="mb_box_footer"></div>
   </div>
-  </form>
+ </form>
       ]]></html>
     </template>
     <template><set>Page</set><name>PAGE_ENTRY</name>
@@ -5163,17 +5243,18 @@ enable('$init');
       <description>Format for a custom page being viewed.</description>
       <html><![CDATA[
 {$this->table}
- <tr><td>{$page['page_contents']}</td></tr>
+ <tr><td class="tabledark"><h2 style="text-align:center">{$page['page_title']}</h2></td></tr>
+ <tr><td class="tabledark">{$page['page_contents']}</td></tr>
  <tr>
   <td class="footer" style="text-align:right">&nbsp;
    <IF ($this->perms->auth('page_edit'))>
-    [ <a href="{$this->self}?a=page&amp;p={$p}&amp;s=edit">edit</a> ]
+    [ <a href="{$this->self}?a=page&amp;p={$p}&amp;s=edit">{$this->lang->edit}</a> ]
    </IF>
    <IF ($this->perms->auth('page_delete'))>
-    [ <a href="{$this->self}?a=page&amp;p={$p}&amp;s=delete">delete</a> ]
+    [ <a href="{$this->self}?a=page&amp;p={$p}&amp;s=delete">{$this->lang->delete}</a> ]
    </IF>
    <IF ($this->perms->auth('page_create'))>
-    [ <a href="{$this->self}?a=page&amp;s=create">create</a> ]
+    [ <a href="{$this->self}?a=page&amp;s=create">{$this->lang->page_create2}</a> ]
    </IF>
   </td>
  </tr>
@@ -5186,13 +5267,13 @@ enable('$init');
       <html><![CDATA[
 {$this->table}
  <tr>
-  <td class="header">Pages</td>
+  <td class="header">{$this->lang->pages}</td>
  </tr>
  {$Pages}
  <tr>
   <td class="footer" style="text-align:right">&nbsp;
    <IF ($this->perms->auth('page_create'))>
-    [ <a href="{$this->self}?a=page&amp;s=create">create</a> ]
+    [ <a href="{$this->self}?a=page&amp;s=create">{$this->lang->page_create2}</a> ]
    </IF>
   </td>
  </tr>
@@ -5205,15 +5286,15 @@ enable('$init');
       <html><![CDATA[
 {$this->table}
  <tr>
-  <td class="header">Pages</td>
+  <td class="header">{$this->lang->pages}</td>
  </tr>
  <tr>
-  <td class="tabledark">There are no custom pages yet.</td>
+  <td class="tabledark">{$this->lang->pages_none}</td>
  </tr>
  <tr>
   <td class="footer" style="text-align:right">&nbsp;
    <IF ($this->perms->auth('page_create'))>
-    [ <a href="{$this->self}?a=page&amp;s=create">create</a> ]
+    [ <a href="{$this->self}?a=page&amp;s=create">{$this->lang->page_create2}</a> ]
    </IF>
   </td>
  </tr>

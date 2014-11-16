@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,9 +66,9 @@ class forums extends admin
 			$this->set_title($this->lang->forum_edit);
 
 			if (isset($this->get['id'])) {
-				$f = $this->db->fetch("SELECT forum_name, forum_description, forum_parent, forum_subcat FROM %pforums WHERE forum_id=%d", $this->get['id']);
+				$f = $this->db->fetch("SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect FROM %pforums WHERE forum_id=%d", $this->get['id']);
 
-				$this->tree('Edit a Forum', "{$this->self}?a=forums&amp;s=edit");
+				$this->tree($this->lang->forum_edit, "{$this->self}?a=forums&amp;s=edit");
 				$this->tree($f['forum_name']);
 
 				if (isset($this->post['editforum'])) {
@@ -83,7 +89,7 @@ class forums extends admin
 			if (isset($this->get['id'])) {
 				$f = $this->db->fetch("SELECT forum_name FROM %pforums WHERE forum_id=%d", intval($this->get['id']));
 
-				$this->tree('Delete a Forum', "{$this->self}?a=forums&amp;s=delete");
+				$this->tree($this->lang->forum_delete, "{$this->self}?a=forums&amp;s=delete");
 				$this->tree($f['forum_name']);
 
 				if (isset($this->get['confirm'])) {
@@ -223,6 +229,9 @@ class forums extends admin
 			$perms->update();
 		}
 
+		// Recount after the carnage so the board totals are correct.
+		$this->RecountForums();
+
 		return $this->message($this->lang->forum_delete, $this->lang->forum_deleted);
 	}
 
@@ -241,15 +250,17 @@ class forums extends admin
 		}
 
 		$subcat = isset($this->post['subcat']) ? 1 : 0;
+		$redirect = isset($this->post['redirect']) ? 1 : 0;
+
 		$forums = $this->htmlwidgets->forum_grab();
 		if (($this->post['parent'] == $id) || $this->CheckParent($forums, $id, $this->post['parent'])) {
 			return $this->message($this->lang->forum_edit, $this->lang->forum_parent);
 		}
 
 		$this->db->query("UPDATE %pforums SET
-			  forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d
+			  forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d, forum_redirect=%d
 			  WHERE forum_id=%d",
-			  $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $id);
+			  $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $id);
 
 		$this->updateForumTrees();
 
@@ -274,12 +285,13 @@ class forums extends admin
 		$forums_arr = $this->htmlwidgets->forum_array($forums, $this->post['parent']);
 		$position   = $forums_arr ? count($forums_arr) : 0;
 		$subcat     = isset($this->post['subcat']) ? 1 : 0;
+		$redirect   = isset($this->post['redirect']) ? 1 : 0;
 
 		$this->db->query("INSERT INTO %pforums
-			(forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat) VALUES
-			('%s', '%s', '%s', '%s', '%s', '%s')",
+			(forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat, forum_redirect)
+			VALUES('%s', %d, '%s', '%s', %d, %d, %d)",
 			$this->CreateTree($forums, $this->post['parent']),
-			$this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat);
+			$this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect);
 
 		$id = $this->db->insert_id("forums");
 
@@ -329,10 +341,60 @@ class forums extends admin
 		$q = $this->db->query("SELECT forum_id FROM %pforums ORDER BY forum_id ASC");
 		while ($f = $this->db->nqfetch($q))
 		{
-			$this->db->query("UPDATE %pforums SET forum_position='%s' WHERE forum_id=%d",
+			$this->db->query("UPDATE %pforums SET forum_position=%d WHERE forum_id=%d",
 				$this->post["_{$f['forum_id']}"], $f['forum_id']);
 		}
 		return $this->lang->forum_ordered;
+	}
+
+	/**
+	 * Creates a heirarchial list of all HTML forums with an input box in front with id _$forum_id
+	 *
+	 * @param array $array Array of forums
+	 * @param int $parent Used to degredate down through the recursive loop
+	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
+	 * @since Beta 2.1
+	 * @return string A heirarchial HTML list of all the forums with an input box in front with id _$forum_id
+	 **/
+	function InputBox($array, $parent = 0)
+	{
+		$arr = $this->htmlwidgets->forum_array($array, $parent);
+
+		if ($arr) {
+			$return = "<ul>\n";
+			foreach ($arr as $val) {
+				$return .= "<li><input class='input' name='_{$val['forum_id']}' value='{$val['forum_position']}' size='2' /> {$val['forum_name']}";
+				$return .= $this->InputBox($array, $val['forum_id']);
+				$return .= "</li>\n";
+			}
+			$return .= "</ul>\n";
+			return $return;
+		}
+	}
+
+	/**
+	 * Creates a heirarchial HTML list of all forums
+	 *
+	 * @param array $array Array of forums
+	 * @param string $link Link to plug into list
+	 * @param int $parent Used to degredate down through the recursive loop
+	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
+	 * @since Beta 2.1
+	 * @return string A heirarchial HTML list of all the forums
+	 **/
+	function Text($array, $link = "", $parent = 0)
+	{
+		$arr = $this->htmlwidgets->forum_array($array, $parent);
+
+		if ($arr) {
+			$return = null;
+			foreach ($arr as $val) {
+				$return .= '<ul>' . "
+				<li><a href='{$link}{$val['forum_id']}'>{$val['forum_name']}</a></li>" .
+				$this->Text($array, $link, $val['forum_id']) . '</ul>';
+			}
+			return $return;
+		}
 	}
 }
 ?>

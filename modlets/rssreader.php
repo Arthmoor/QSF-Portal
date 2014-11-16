@@ -1,12 +1,14 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,13 +169,13 @@ class rssreader extends modlet
 		$this->rssFeeds[$url] = new xmlparser();
 
 		// Check if RSS cache directory exists
-		if (!is_dir('../databases/rsscache/')) {
-			@mkdir('../databases/rsscache/');
-			$this->qsf->chmod('../databases/rsscache', 0777, false);
+		if (!is_dir('../stats/rsscache/')) {
+			@mkdir('../stats/rsscache/');
+			$this->qsf->chmod('../stats/rsscache', 0777, false);
 		}
 		
 		// Check if the cached file is there
-		$cacheFilename = '../databases/rsscache/' . md5($url) . '.xml';
+		$cacheFilename = '../stats/rsscache/' . md5($url) . '.xml';
 		$maxFileAge = time() - $this->cacheFilesFor;
 		if (!file_exists($cacheFilename) || filectime($cacheFilename) < $maxFileAge) {
 			// Download the file

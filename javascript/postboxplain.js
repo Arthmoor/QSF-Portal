@@ -169,8 +169,15 @@ function initTextarea(textarea) {
 			
 			// If there is a keynum attached then add that to our events array
 			if (buttonArray[buttonIndex].keynum) {
-				textarea.buttonEvents[buttonArray[buttonIndex].keynum] = function() {
-					buttonArray[buttonIndex].action(buttonArray[buttonIndex].tag, textarea);
+				textarea.buttonEvents[buttonArray[buttonIndex].keynum] = new Object();
+				textarea.buttonEvents[buttonArray[buttonIndex].keynum].tag = buttonArray[buttonIndex].tag;
+				textarea.buttonEvents[buttonArray[buttonIndex].keynum].action = buttonArray[buttonIndex].action;
+				textarea.buttonEvents[buttonArray[buttonIndex].keynum].runme = function() {
+					if (this.action == 'bbCode') {
+						bbCode(this.tag, textarea);
+					} else if (this.action == 'bbcURL') {
+						bbcURL(this.tag, textarea);
+					}
 				};
 			}
 			
@@ -283,7 +290,7 @@ function initTextarea(textarea) {
 		// Handles a CTRL+keynum event to see if there's a control to use for it
 		for (var eventNum in textarea.buttonEvents) {
 			if (eventNum == keynum) {
-				textarea.buttonEvents[eventNum]();
+				textarea.buttonEvents[eventNum].runme();
 				return false;
 			}
 		}

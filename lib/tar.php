@@ -1,9 +1,15 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- * 
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -72,7 +78,25 @@ class archive_tar
 		$this->gz_mode = $gzip;
 		$this->file_writing = true;
 	}
-	
+
+	function open_md5_reader($filename)
+	{
+		if ($this->file_handle !== false) {
+			// Close old file first
+			$this->close_file();
+		}
+		if (!$this->can_gunzip())
+			return false;
+		if( !( $this->file_handle = gzopen($filename, 'rb') ) )
+			return false;
+		$this->gz_mode = true;
+		$this->file_writing = false;
+		$this->full_filename = $filename;
+		$this->seek_length = 0;
+		
+		return ($this->file_handle !== false);
+	}
+
 	/**
 	 * Open an archive for reading
 	 *
@@ -284,7 +308,7 @@ class archive_tar
 		$this->currentStat['gid']   = $this->currentStat[5];
 		$this->currentStat['size']  = $this->currentStat[7];
 		$this->currentStat['mtime'] = $this->currentStat[9];
-
+		
 		if ($header['magic'] == 'ustar') {
 			$this->currentFilename = $this->getStandardURL(
 				$header['prefix'] . $header['filename']
@@ -294,7 +318,6 @@ class archive_tar
 				$header['filename']
 			    );
 		}
-		
 		// could do checksum stuff here
 		
 		return $this->currentFilename;

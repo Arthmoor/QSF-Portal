@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,6 +44,7 @@ class templates extends admin
 		$sections = array(
 			'Admin'          => $this->lang->temps_admin,
 			'active'         => $this->lang->temps_active,
+			'backup'         => $this->lang->temps_backup,
 			'ban'            => $this->lang->temps_ban,
 			'board'          => $this->lang->temps_board_index,
 			'censoring'      => $this->lang->temps_censoring,
@@ -858,7 +865,7 @@ class templates extends admin
 
 			$query = $this->db->query("SELECT template_displayname, template_description, template_name, template_html
 				FROM %ptemplates WHERE template_skin='%s' AND template_name='%s'", $template, $this->post['template']);
-			$class = $this->iterate();
+
 			$name = $this->post['template'];
 			$section = $this->get['section'];
 			$skin = $this->get['skin'];
@@ -866,8 +873,8 @@ class templates extends admin
 			$list = '';
 			while ($data = $this->db->nqfetch($query))
 			{
-				$template_name = $data['template_name'];
 				$class = $this->iterate();
+				$template_name = $data['template_name'];
 				$data['template_html'] = $this->format($data['template_html'], FORMAT_HTMLCHARS);
 				$list .= eval($this->template('ADMIN_TEMPLATE_DELETE_CONTENTS'));
 			}
@@ -894,13 +901,6 @@ class templates extends admin
 			$out = "";
 			while ($data = $this->db->nqfetch($query))
 			{
-				/*
-				$data['template_html'] = preg_replace('/\{\$this->lang->(.+?)\}/', '{lang.\\1}', $data['template_html']);
-				$data['template_html'] = preg_replace('/\{\$this->(.+?)\}/', '{this.\\1}', $data['template_html']);
-				$data['template_html'] = preg_replace('/\{\$(.+?)\[\'(.+?)\'\]\}/', '{\\1.\\2}', $data['template_html']);
-				$data['template_html'] = preg_replace('/\{\$(.+?)\}/', '{local.\\1}', $data['template_html']);
-				*/
-
 				$data['template_html'] = $this->format($data['template_html'], FORMAT_HTMLCHARS);
 
 				$class = $this->iterate();
@@ -1042,6 +1042,44 @@ class templates extends admin
 		}
 	}
 
+	/**
+	 * Copies a directory and its files, recursively
+	 *
+	 * @param $from_path Source directory
+	 * @param $to_path Destination directory
+	 * @author See http://www.php.net/copy
+	 * @since Beta 3.0
+	 * @return bool True on success, false on failure
+	 */
+	function dir_copy($from_path, $to_path)
+	{
+		if (!file_exists($to_path)) {
+			$ret = @mkdir($to_path, 0777);
+
+			if (!$ret) {
+				return false;
+			}
+		}
+
+		if (file_exists($from_path) && is_dir($from_path)) {
+			$handle = opendir($from_path);
+
+			while (($file = readdir($handle)) !== false)
+			{
+				if (($file != '.') && ($file != '..') && ($file != 'CVS')) {
+					if (is_dir($from_path . $file)) {
+						$this->dir_copy($from_path . $file . '/', $to_path . $file . '/');
+					}
+
+					if (is_file($from_path . $file)) {
+						copy($from_path . $file, $to_path . $file);
+					}
+				}
+			}
+			closedir($handle);
+		}
+		return true;
+	}
 
 	/**
 	 * Executes an array of queries

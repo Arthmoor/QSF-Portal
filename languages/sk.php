@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,10 +90,12 @@ class sk
 		$this->admin_delete_template = 'Zmaza HTML šablónu';
 		$this->admin_edit_emoticons = 'Editova alebo maza smajlíky';
 		$this->admin_edit_forum = 'Editova fórum';
+		$this->admin_edit_group_file_perms = 'Edit a group\'s file permissions'; //Translate
 		$this->admin_edit_group_name = 'Editova názov skupiny';
 		$this->admin_edit_group_perms = 'Editova práva skupiny';
 		$this->admin_edit_help = 'Editova help èlánok';
 		$this->admin_edit_member = 'Editova uívate¾a';
+		$this->admin_edit_member_file_perms = 'Edit a member\'s file permissions'; //Translate
 		$this->admin_edit_member_perms = 'Editova práva uívate¾a';
 		$this->admin_edit_member_titles = 'Editova alebo maza automatické tituly uívate¾ov';
 		$this->admin_edit_settings = 'Editova nastavenia celého fóra';
@@ -99,7 +107,7 @@ class sk
 		$this->admin_forum_order = 'Zmeni poradie fór';
 		$this->admin_forums = 'Fóra a kategórie';
 		$this->admin_groups = 'Skupiny';
-		$this->admin_heading = 'Quicksilver Forums - Ovládací Panel Administrátora';
+		$this->admin_heading = 'QSF Portal - Ovládací Panel Administrátora';
 		$this->admin_help = 'Help Èlánky';
 		$this->admin_install_emoticons = 'Inštalova smajlíky';
 		$this->admin_install_skin = 'Inštalova skin';
@@ -119,17 +127,28 @@ class sk
 
 	function backup()
 	{
+		$this->backup = 'Backup'; //Translate
+		$this->backup_add = 'Add'; //Translate
+		$this->backup_add_complete = 'Add complete'; //Translate
 		$this->backup_create = 'Zálohova Databázu';
+		$this->backup_created = 'Backup successfully created in'; //Translate
 		$this->backup_createfile = 'Backup and create a file on server'; //Translate
-		$this->backup_done = 'Databáza bola zazálohovaná v hlavnom adresári Quicksilver Forums.';
+		$this->backup_done = 'Databáza bola zazálohovaná v hlavnom adresári QSF Portal.';
 		$this->backup_download = 'Backup and download (recommended)'; //Translate
-		$this->backup_found = 'Nasledujúce zálohy boli nájdené v adresári Quicksilver Forums';
+		$this->backup_failed = 'Failed to create backup.'; //Translate
+		$this->backup_found = 'Nasledujúce zálohy boli nájdené v adresári QSF Portal';
+		$this->backup_import_fail = 'Failed to import backup.'; //Translate
 		$this->backup_invalid = 'Táto záloha nie je pouite¾ná - neplatnı formát. Do databázi neboli zapísané iadne zmeny.';
-		$this->backup_none = 'V adresári Quicksilver Forums neboli nájdené iadne zálohy.';
-		$this->backup_options = 'Select how you want your backup created'; //Translate
+		$this->backup_no_packages = 'Failed to locate packages directory.'; //Translate
+		$this->backup_noexist = 'Sorry, that backup does not exist.'; //Translate
+		$this->backup_none = 'V adresári QSF Portal neboli nájdené iadne zálohy.';
+		$this->backup_options = 'Select how you want your backup created';
+		$this->backup_output = 'Output'; //Translate
 		$this->backup_restore = 'Obnovi zo zálohy';
 		$this->backup_restore_done = 'Databáza bola úspešne obnovená zo zálohy.';
-		$this->backup_warning = 'Upozornenie: tımto budú všetky existujúce dáta Quicksilver Fóra prepísané.';
+		$this->backup_statements = 'statements'; //Translate
+		$this->backup_uncheck = 'Unchecking this will NOT empty the database tables before restoring the backup!'; //Translate
+		$this->backup_warning = '<b>Warning:</b> This will overwrite all existing data used by QSF Portal.'; //Translate
 	}
 
 	function ban()
@@ -222,6 +241,7 @@ class sk
 		$this->board_cant_post = 'V tomto fóre nemôete zasiela odpovede.';
 		$this->board_cant_topics = 'V tomto fóre nemôete ani zaklada témy, ani èíta príspevky.';
 		$this->board_forum = 'Fórum';
+		$this->board_forum_url = 'URL Redirect:'; //Translate
 		$this->board_guests = 'hosts';
 		$this->board_last_post = 'Najnovší príspevok';
 		$this->board_mark = 'Preznaè všetky príspevky na "preèítané"';
@@ -241,6 +261,7 @@ class sk
 		$this->board_stats_string = 'Registrovanıch uívate¾ov: %s. Privítajte našeho najnovšieho èlena, je to %s.<br />Vo fóre sa celkovo nachádza %s tém, %s odpovedí a %s príspevkov.';
 		$this->board_top_page = 'Na vrch stránky';
 		$this->board_topics = 'Témy';
+		$this->board_unread = 'Jump to oldest unread post'; //Translate
 		$this->board_users = 'uívatelia';
 		$this->board_write_topics = 'V tomto fóre máte právo prezera témy a vytvárat nové .';
 	}
@@ -391,6 +412,173 @@ class sk
 		$this->emote_text = 'Text'; //Translate
 	}
 
+	function files()
+	{
+		$this->file = 'File'; //Translate
+		$this->files = 'Files'; //Translate
+		$this->files_action_not_allowed = 'Action Not Allowed'; //Translate
+		$this->files_action_not_permitted = 'You are not permitted to perform that action!'; //Translate
+		$this->files_add_cat = 'Add Category'; //Translate
+		$this->files_add_cat_desc = 'Category description'; //Translate
+		$this->files_add_cat_done = 'New category has been added.'; //Translate
+		$this->files_add_cat_exists = 'A category named %s already exists in %s.'; //Translate
+		$this->files_add_cat_name = 'New category name'; //Translate
+		$this->files_add_cat_not_allowed = 'You have not been permitted to add categories.'; //Translate
+		$this->files_add_cat_parent = 'Parent category'; //Translate
+		$this->files_add_cat_qperms = 'Quick Permissions'; //Translate
+		$this->files_add_cat_qperms2 = 'Select an existing category to copy its permissions.'; //Translate
+		$this->files_add_mod = 'Add Moderator'; //Translate
+		$this->files_add_mod2 = 'Add User as Moderator'; //Translate
+		$this->files_add_mod_cat = 'To which existing category?'; //Translate
+		$this->files_add_mod_made = 'has been made a moderator.'; //Translate
+		$this->files_add_mod_not_allowed = 'You do not have permission to add a moderator.'; //Translate
+		$this->files_add_mod_nouser = 'That user was not found.'; //Translate
+		$this->files_added = 'Date Added'; //Translate
+		$this->files_all_fields_required = 'All fields are required.'; //Translate
+		$this->files_approval_not_permitted = 'Sorry, you do not have permission to approve, deny or download this file.'; //Translate
+		$this->files_approval_waiting = 'Files Awaiting Approval'; //Translate
+		$this->files_approve = 'Approve Files'; //Translate
+		$this->files_approve2 = 'Approve'; //Translate
+		$this->files_approve_error = 'Error. You cannot go this far without a category attached.'; //Translate
+		$this->files_approve_none = 'There are no files waiting for approval at this time.'; //Translate
+		$this->files_approved = 'has been approved.'; //Translate
+		$this->files_author = 'Author'; //Translate
+		$this->files_cat = 'Category'; //Translate
+		$this->files_cat_edited = 'Category has been edited.'; //Translate
+		$this->files_cat_exists = 'A category named %s already exists in %s.'; //Translate
+		$this->files_close_window = 'Close window.'; //Translate
+		$this->files_comment = 'Add Comment'; //Translate
+		$this->files_comment_empty = 'Your comment does not contain anything.'; //Translate
+		$this->files_comment_not_permitted = 'You are not permitted to post comments.'; //Translate
+		$this->files_comment_posted = 'Your comment has been posted.'; //Translate
+		$this->files_comment_specify = 'No file was specified.'; //Translate
+		$this->files_comment_user = 'User Comments For'; //Translate
+		$this->files_comment_view = 'View Comments'; //Translate
+		$this->files_comments = 'Comments'; //Translate
+		$this->files_delete_cat = 'Delete Category'; //Translate
+		$this->files_delete_cat2 = 'Delete which existing category?'; //Translate
+		$this->files_delete_cat_done = 'The category has been deleted.'; //Translate
+		$this->files_delete_cat_not_empty = 'The %s category is not empty. Cannot delete.'; //Translate
+		$this->files_delete_cat_not_permitted = 'You have not been permitted to delete categories.'; //Translate
+		$this->files_delete_confirm = 'Are you sure you want to delete'; //Translate
+		$this->files_delete_file = 'Delete File'; //Translate
+		$this->files_delete_file_done = 'has been deleted.'; //Translate
+		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
+		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
+		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_denied = 'has been denied.'; //Translate
+		$this->files_deny = 'Deny'; //Translate
+		$this->files_desc = 'Description'; //Translate
+		$this->files_dl = 'D/L'; //Translate
+		$this->files_download = 'Download'; //Translate
+		$this->files_download_not_permitted = 'You have not been permitted to download files.'; //Translate
+		$this->files_download_specify = 'You must specify a file to download.'; //Translate
+		$this->files_downloads = 'Downloads'; //Translate
+		$this->files_downloads2 = 'downloads'; //Translate
+		$this->files_edit_cat_not_parent = 'You cannot make the category its own parent!'; //Translate
+		$this->files_edit_cat_not_permitted = 'You have not been permitted to edit this category.'; //Translate
+		$this->files_edit_category = 'Edit Category'; //Translate
+		$this->files_edit_file = 'Edit File'; //Translate
+		$this->files_edit_mod = 'You can only edit categories that you moderate.'; //Translate
+		$this->files_edit_not_permitted = 'You have not been permitted to edit files.'; //Translate
+		$this->files_edit_root = 'You cannot edit the root category.'; //Translate
+		$this->files_error_duplicate = 'Unable to process: Duplicate filename error.'; //Translate
+		$this->files_error_trick = 'You tried to tricks us!'; //Translate
+		$this->files_error_unknown = 'Unable to process: Unknown file error.'; //Translate
+		$this->files_exists = 'A file like that already exists in the database.'; //Translate
+		$this->files_fix_stats = 'Fix File Stats'; //Translate
+		$this->files_fix_stats2 = 'The file stats have been corrected.'; //Translate
+		$this->files_has_updated = 'has been updated with new information.'; //Translate
+		$this->files_index = 'File Index'; //Translate
+		$this->files_invalid_option = 'Invalid option flag'; //Translate
+		$this->files_moderator = 'Moderator'; //Translate
+		$this->files_modify_info = 'Modify File Information'; //Translate
+		$this->files_move = 'Move'; //Translate
+		$this->files_move_category = 'Move %s to which category?'; //Translate
+		$this->files_move_file = 'Move File'; //Translate
+		$this->files_move_no_category = 'No such category.'; //Translate
+		$this->files_move_not_permitted = 'You have not been permitted to move files.'; //Translate
+		$this->files_moved_file = 'has been moved.'; //Translate
+		$this->files_name = 'Name'; //Translate
+		$this->files_rate = 'Rate File'; //Translate
+		$this->files_rate_already = 'You have already rated this file.'; //Translate
+		$this->files_rate_average = 'Average'; //Translate
+		$this->files_rate_excellent = 'Excellent'; //Translate
+		$this->files_rate_good = 'Good'; //Translate
+		$this->files_rate_please = 'Please rate this file'; //Translate
+		$this->files_rate_poor = 'Poor'; //Translate
+		$this->files_rate_sucks = 'Sucks!'; //Translate
+		$this->files_rate_thank = 'Thank you for rating this file.'; //Translate
+		$this->files_rate_valid = 'You must provide a valid file.'; //Translate
+		$this->files_rating = 'Rating'; //Translate
+		$this->files_recent = 'Recent Uploads'; //Translate
+		$this->files_recent_uploads = 'Files uploaded in the last 10 days'; //Translate
+		$this->files_remove_mod = 'Remove Moderator'; //Translate
+		$this->files_remove_mod_cat = 'Which category\'s moderator would you like to remove?'; //Translate
+		$this->files_remove_mod_done = 'The moderator for that category has been removed.'; //Translate
+		$this->files_remove_mod_not_permitted = 'You do not have permission to remove a moderator.'; //Translate
+		$this->files_revised = 'Revised on'; //Translate
+		$this->files_revisions = 'Revisions'; //Translate
+		$this->files_search = 'File Search'; //Translate
+		$this->files_search2 = 'Search'; //Translate
+		$this->files_search3 = 'Search Files'; //Translate
+		$this->files_search_advanced = 'Advanced Search'; //Translate
+		$this->files_search_basic = 'Basic Search'; //Translate
+		$this->files_search_by = 'Search By'; //Translate
+		$this->files_search_day = 'day'; //Translate
+		$this->files_search_days = 'days'; //Translate
+		$this->files_search_display_first = 'Display the first'; //Translate
+		$this->files_search_display_more = 'Display files with more than'; //Translate
+		$this->files_search_error = 'You have to search by atleast the name, author or descripton.'; //Translate
+		$this->files_search_error_none = 'No files found.'; //Translate
+		$this->files_search_for = 'Search For'; //Translate
+		$this->files_search_in = 'Search In'; //Translate
+		$this->files_search_minimum_rating = 'Minimum Rating'; //Translate
+		$this->files_search_month = 'month'; //Translate
+		$this->files_search_months = 'months'; //Translate
+		$this->files_search_newer = 'newer'; //Translate
+		$this->files_search_older = 'older'; //Translate
+		$this->files_search_results = 'Search results for'; //Translate
+		$this->files_search_results2 = 'results'; //Translate
+		$this->files_search_week = 'week'; //Translate
+		$this->files_search_weeks = 'weeks'; //Translate
+		$this->files_search_year = 'year'; //Translate
+		$this->files_size = 'File Size'; //Translate
+		$this->files_submitted_by = 'Submitted by'; //Translate
+		$this->files_top20 = 'Top 20 Downloads'; //Translate
+		$this->files_type = 'File Type'; //Translate
+		$this->files_update = 'Update'; //Translate
+		$this->files_update_approval_not_permitted = 'You do not have the permission to approve this update.'; //Translate
+		$this->files_update_approve = 'Approve Update'; //Translate
+		$this->files_update_approve_failed = 'Failed to copy update into downloads directory!'; //Translate
+		$this->files_update_approved = 'The update has been approved.'; //Translate
+		$this->files_update_denied = 'Update has been denied and purged.'; //Translate
+		$this->files_update_deny = 'Deny Update'; //Translate
+		$this->files_update_desc = 'The description has been updated.'; //Translate
+		$this->files_update_file = 'Update File'; //Translate
+		$this->files_update_file_need_desc = 'The description field must be filled in.'; //Translate
+		$this->files_update_not_exist = 'This file does not exist and cannot be updated.'; //Translate
+		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!'; //Translate
+		$this->files_update_not_permitted = 'You do not have the permission to update this file.'; //Translate
+		$this->files_update_pending = 'Your update has been uploaded and is pending approval.'; //Translate
+		$this->files_upload = 'Upload File'; //Translate
+		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
+		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
+		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_uploaded = 'The file has been uploaded.'; //Translate
+		$this->files_view = 'View File'; //Translate
+		$this->files_view_archive = 'Archive'; //Translate
+		$this->files_view_c = 'C Source'; //Translate
+		$this->files_view_cat_not_permitted = 'You are not permitted to view this category.'; //Translate
+		$this->files_view_cpp = 'C++ Source'; //Translate
+		$this->files_view_java = 'Java Source'; //Translate
+		$this->files_view_perl = 'Perl Script'; //Translate
+		$this->files_view_php = 'PHP Source'; //Translate
+		$this->files_view_plain = 'Plain Text'; //Translate
+		$this->files_view_python = 'Python Script'; //Translate
+		$this->files_view_specify = 'You must specify a file id to view.'; //Translate
+	}
+
 	function forum()
 	{
 		$this->forum_by = 'Napísal';
@@ -432,6 +620,7 @@ class sk
 		$this->forum_subscribe = 'Posla emailom nové príspevky v tomto fóre';
 		$this->forum_topic = 'Téma';
 		$this->forum_topic_posted = 'Posted'; //Translate
+		$this->forum_unread = 'Jump to oldest unread post'; //Translate
 		$this->forum_views = 'Videné';
 		$this->forum_write_topics = 'V tomto fóre máte povolenie zaklada témy.';
 	}
@@ -451,6 +640,7 @@ class sk
 		$this->forum_edited = 'Fórum bolo úspešne zeditované.';
 		$this->forum_empty = 'Názov fóra je prázdny. Prosím, vráte sa a zadajte názov.';
 		$this->forum_is_subcat = 'Toto fórum je iba podkategóriou.';
+		$this->forum_is_url = 'This forum is a URL redirect. The description should be the URL to redirect to.'; //Translate
 		$this->forum_name = 'Názov';
 		$this->forum_no_orphans = 'Nesmiete osirie fórum tım, e mu zmaete hierarchického rodièa.';
 		$this->forum_none = 'Nie sú k dispozícii iadne	manipulovate¾né fóra.';
@@ -463,6 +653,7 @@ class sk
 		$this->forum_recount = 'Prepoèíta Témy a Odpovede';
 		$this->forum_select_cat = 'Vyberte existujúcu kategóriu, pod ktorou chcete zaloit fórum.';
 		$this->forum_subcat = 'Podkategória';
+		$this->forum_url = 'URL Redirect'; //Translate
 	}
 
 	function groups()
@@ -535,6 +726,7 @@ class sk
 
 	function login()
 	{
+		$this->login = 'Login'; //Translate
 		$this->login_cant_logged = 'Pravdepodobne nie ste prihlásenı. Skúste skontrolova Váš login a heslo.<br /><br />Sú citlivé na ve¾ké a malé znaky, take \'UsErNaMe\' nie je to isté, èo \'Username\'. A taktie si overte, èi sú vo Vašom prehliadaèi povolené cookies.';
 		$this->login_cookies = 'Pre prihlásenie musíte povoli cookies.';
 		$this->login_forgot_pass = 'Zabudli ste Vaše heslo?';
@@ -579,11 +771,16 @@ class sk
 		$this->main_activate = 'Váš úèet ešte nebol aktivovanı.';
 		$this->main_activate_resend = 'Znovu posla aktivaènı email';
 		$this->main_admincp = 'nastavenia fór';
+		$this->main_affiliates = 'Affiliates'; //Translate
 		$this->main_banned = 'Vám bolo ia¾ komplet celé fórum zneprístupnené.';
 		$this->main_code = 'zdrojovı kód';
 		$this->main_cp = 'ovládací panel';
+		$this->main_files = 'Files'; //Translate
+		$this->main_forum = 'Forum'; //Translate
 		$this->main_full = 'Detaily';
+		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'help';
+		$this->main_home = 'Home'; //Translate
 		$this->main_load = 'záa';
 		$this->main_login = 'prihlásenie';
 		$this->main_logout = 'odhlásenie';
@@ -591,22 +788,33 @@ class sk
 		$this->main_mark1 = 'Oznaèi všetky témy ako preèítané';
 		$this->main_markforum_read = 'Mark forum as read'; //Translate
 		$this->main_max_load = 'Je nám ¾úto, ale %s momentálne nie je dostupné kvôli strašnej mase online uívate¾ov.';
+		$this->main_member_newest = 'Newest Member'; //Translate
 		$this->main_members = 'èlenovia';
 		$this->main_messenger = 'odkazovaè';
 		$this->main_new = 'nové';
+		$this->main_news = 'News'; //Translate
 		$this->main_next = 'nasledujúce';
+		$this->main_pages = 'Pages'; //Translate
+		$this->main_posted_by = 'Posted by'; //Translate
+		$this->main_posts = 'Posts'; //Translate
 		$this->main_prev = 'predošlé';
 		$this->main_queries = 'DB dotazov';
 		$this->main_quote = 'Citácia';
 		$this->main_recent = 'najnovšie príspevky';
 		$this->main_recent1 = 'Zobrazi najnovšie príspevky od poslednej návštevy';
+		$this->main_recent_uploads = 'Recent Uploads'; //Translate
 		$this->main_register = 'registrácia';
 		$this->main_reminder = 'HoSiPa';
 		$this->main_reminder_closed = 'Fórum je uzavreté a prístupné len pre adminov.';
 		$this->main_said = 'poviedali';
 		$this->main_search = 'h¾adanie';
+		$this->main_stats = 'Stats'; //Translate
+		$this->main_top_posters = 'Top Posters'; //Translate
+		$this->main_top_uploaders = 'Top Uploaders'; //Translate
+		$this->main_topics = 'Topics'; //Translate
 		$this->main_topics_new = 'V tomto fóre sú nejaké nové príspevky';
 		$this->main_topics_old = 'V tomto fóre nie sú iadne nové príspevky';
+		$this->main_users_online = 'Users Online'; //Translate
 		$this->main_welcome = 'Vitajte';
 		$this->main_welcome_guest = 'Vitajte!';
 	}
@@ -667,6 +875,7 @@ class sk
 		$this->mc_user_timezone = 'Èasové Pásmo';
 		$this->mc_user_title = 'Titul uívate¾a';
 		$this->mc_user_title_custom = 'Poui vlastnı titul uívate¾a';
+		$this->mc_user_uploads = 'Uploads'; //Translate
 		$this->mc_user_view_avatars = 'Zobrazi avatarov';
 		$this->mc_user_view_emoticons = 'Zobrazi smajlíky';
 		$this->mc_user_view_signatures = 'Zobrazi podpis';
@@ -758,6 +967,31 @@ class sk
 	{
 		$this->optimize = 'Optimalizova Databázu';
 		$this->optimized = 'Tabu¾ky v databáze boli zoptimalizované pre maximálny vıkon.';
+	}
+
+	function page()
+	{
+		$this->page = 'Page'; //Translate
+		$this->page_action_not_allowed = 'Action not allowed!'; //Translate
+		$this->page_contents = 'Contents'; //Translate
+		$this->page_create = 'Create Page'; //Translate
+		$this->page_create2 = 'Create'; //Translate
+		$this->page_create_not_permitted = 'You are not permitted to create pages.'; //Translate
+		$this->page_created = 'Page created.'; //Translate
+		$this->page_creating = 'Creating a page'; //Translate
+		$this->page_delete = 'Delete a page'; //Translate
+		$this->page_delete_confirm = 'Are you sure you want to delete this page forever? This process is irreversable.'; //Translate
+		$this->page_delete_not_permitted = 'You are not permitted to delete pages.'; //Translate
+		$this->page_deleted = 'Page deleted.'; //Translate
+		$this->page_edit = 'Edit Page'; //Translate
+		$this->page_edit_done = 'Page successfully edited.'; //Translate
+		$this->page_edit_not_permitted = 'You are not permitted to edit pages.'; //Translate
+		$this->page_editing = 'Editing a page'; //Translate
+		$this->page_not_exist = 'That page does not exist!'; //Translate
+		$this->page_title = 'Title'; //Translate
+		$this->page_viewing = 'Viewing a page'; //Translate
+		$this->pages = 'Pages'; //Translate
+		$this->pages_none = 'There are no custom pages yet.'; //Translate
 	}
 
 	function perms()
@@ -909,7 +1143,9 @@ class sk
 		$this->post_no_vote = 'Ak chcete hlasova, je vhodné zvoli si odpoveï.';
 		$this->post_option_emoticons = 'Konvertova textové smajlíky na obrázky?';
 		$this->post_option_global = 'Globalizova túto tému?';
+		$this->post_option_lock = 'Lock topic after posting?'; //Translate
 		$this->post_option_mbcode = 'Interpretova Mb-kód?';
+		$this->post_option_pin = 'Pin topic after posting?'; //Translate
 		$this->post_optional = 'nepovinné';
 		$this->post_options = 'Monosti';
 		$this->post_poll_options = 'Monosti hlasovania';
@@ -926,17 +1162,6 @@ class sk
 		$this->post_topic_title = 'Nadpis témy';
 		$this->post_view_topic = 'Ukáza celú tému';
 		$this->post_voting = 'Hlasuje sa';
-	}
-
-	function printer()
-	{
-		$this->printer_back = 'Spä';
-		$this->printer_not_found = 'Téma sa nenašla. Mono bola zmazaná, presunutá alebo vôbec nebola.';
-		$this->printer_not_found_title = 'Téma sa nenašla';
-		$this->printer_perm_topics = 'Nemáte povolenie na prezeranie tém.';
-		$this->printer_perm_topics_guest = 'Nemáte povolenie na prezeranie tém. Ak sa zaregistrujete, mono budete ma.';
-		$this->printer_posted_on = 'Zaslané: ';
-		$this->printer_send = 'Odosla na tlaèiareò';
 	}
 
 	function profile()
@@ -973,6 +1198,12 @@ class sk
 		$this->profile_profile = 'Profil';
 		$this->profile_signature = 'Podpis';
 		$this->profile_unkown = '[ Neznámo ]';
+		$this->profile_upload_last = 'Last Upload'; //Translate
+		$this->profile_uploads = 'Uploads'; //Translate
+		$this->profile_uploads_none = 'No uploads yet.'; //Translate
+		$this->profile_uploads_none_yet = 'None yet.'; //Translate
+		$this->profile_uploads_per_day = 'per day'; //Translate
+		$this->profile_uploads_total = 'total'; //Translate
 		$this->profile_view_profile = 'Prezeranie profilu';
 		$this->profile_www = 'Homepage'; //Translate
 		$this->profile_yahoo = 'Yahoo Identity'; //Translate
@@ -1181,8 +1412,11 @@ class sk
 		$this->settings_board_rssfeed_title = 'Názov RSS Feed';
 		$this->settings_clickable = 'Kliknute¾né smajlíky na jeden riadok';
 		$this->settings_cookie = 'Nastavenia Cookie a controly zahltenia';
+		$this->settings_cookie_domain = 'Cookie Domain'; //Translate
 		$this->settings_cookie_path = 'Cesta pre Cookie';
 		$this->settings_cookie_prefix = 'Predpona pre Cookie';
+		$this->settings_cookie_secure = 'Cookie Security'; //Translate
+		$this->settings_cookie_secured = 'Is your site SSL secured?'; //Translate
 		$this->settings_cookie_time = 'Doba platnosti prihlásenia';
 		$this->settings_db = 'Editova nastavenia pripojenia';
 		$this->settings_db_host = 'Databázovı server (Host)';
@@ -1337,6 +1571,7 @@ class sk
 		$this->templates = 'Šablony';
 		$this->temps_active = 'Detaily aktívneho uívate¾a';
 		$this->temps_admin = '<b>AdminCP Universal</b>'; //Translate
+		$this->temps_backup = 'AdminCP Database Backup'; //Translate
 		$this->temps_ban = 'AdminCP Blokovania';
 		$this->temps_board_index = 'Index Fór';
 		$this->temps_censoring = 'AdminCP Cenzúra Slov';

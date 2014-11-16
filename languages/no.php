@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,10 +91,12 @@ class no
 		$this->admin_delete_template = 'Slett en HTML-mal';
 		$this->admin_edit_emoticons = 'Endre eller slett smilies';
 		$this->admin_edit_forum = 'Endre et forum';
+		$this->admin_edit_group_file_perms = 'Edit a group\'s file permissions'; //Translate
 		$this->admin_edit_group_name = 'Endre et gruppenavn';
 		$this->admin_edit_group_perms = 'Endre en gruppes tillatelser';
 		$this->admin_edit_help = 'Endre en hjelpeartikkel';
 		$this->admin_edit_member = 'Endre et medlem';
+		$this->admin_edit_member_file_perms = 'Edit a member\'s file permissions'; //Translate
 		$this->admin_edit_member_perms = 'Endre et medlems tillatelser';
 		$this->admin_edit_member_titles = 'Endre eller slett automatiske medlemstitler';
 		$this->admin_edit_settings = 'Endre innstillinger';
@@ -100,7 +108,7 @@ class no
 		$this->admin_forum_order = 'Endre forumrekkefølgen';
 		$this->admin_forums = 'Fora og kategorier';
 		$this->admin_groups = 'Grupper';
-		$this->admin_heading = 'Quicksilver Forums Admin-kontrollpanel';
+		$this->admin_heading = 'QSF Portal Admin-kontrollpanel';
 		$this->admin_help = 'Hjelpeartikler';
 		$this->admin_install_emoticons = 'Installér smilies';
 		$this->admin_install_skin = 'Installér et skall';
@@ -120,17 +128,28 @@ class no
 
 	function backup()
 	{
+		$this->backup = 'Backup'; //Translate
+		$this->backup_add = 'Add'; //Translate
+		$this->backup_add_complete = 'Add complete'; //Translate
 		$this->backup_create = 'Sikkerhetskopiér database';
+		$this->backup_created = 'Backup successfully created in'; //Translate
 		$this->backup_createfile = 'Sikkerhetskopiér og lag en fil på server';
-		$this->backup_done = 'Databasen har blitt sikkerhetskopiert til Quicksilver Forums hovedregister.';
+		$this->backup_done = 'Databasen har blitt sikkerhetskopiert til QSF Portal hovedregister.';
 		$this->backup_download = 'Sikkerhetskopiér og last ned (anbefales)';
-		$this->backup_found = 'Følgende sikkerhetskopier ble funnet i Quicksilver Forums register';
+		$this->backup_failed = 'Failed to create backup.'; //Translate
+		$this->backup_found = 'Følgende sikkerhetskopier ble funnet i QSF Portal register';
+		$this->backup_import_fail = 'Failed to import backup.'; //Translate
 		$this->backup_invalid = 'Sikkerhetskopien ser ikke ut til å være korrekt. Ingen endringer i databasen har blitt lagret.';
-		$this->backup_none = 'Ingen sikkerhetskopier ble funnet i Quicksilver Forums register.';
+		$this->backup_no_packages = 'Failed to locate packages directory.'; //Translate
+		$this->backup_noexist = 'Sorry, that backup does not exist.'; //Translate
+		$this->backup_none = 'Ingen sikkerhetskopier ble funnet i QSF Portal register.';
 		$this->backup_options = 'Velg måten du vil sikkerhetskopiere på';
+		$this->backup_output = 'Output'; //Translate
 		$this->backup_restore = 'Gjenopprett sikkerhetskopi';
 		$this->backup_restore_done = 'Databasen har blitt gjenopprettet.';
-		$this->backup_warning = 'Advarsel: Dette overskriver all eksisterende data brukt av Quicksilver Forums.';
+		$this->backup_statements = 'statements'; //Translate
+		$this->backup_uncheck = 'Unchecking this will NOT empty the database tables before restoring the backup!'; //Translate
+		$this->backup_warning = '<b>Warning:</b> This will overwrite all existing data used by QSF Portal.'; //Translate
 	}
 
 	function ban()
@@ -223,6 +242,7 @@ class no
 		$this->board_cant_post = 'Du kan ikke svare i dette forumet.';
 		$this->board_cant_topics = 'Du kan ikke lese eller opprette emner i dette forumet.';
 		$this->board_forum = 'Forum'; //Translate
+		$this->board_forum_url = 'URL Redirect:'; //Translate
 		$this->board_guests = 'gjester';
 		$this->board_last_post = 'Siste innlegg';
 		$this->board_mark = 'Markér innlegg som lest';
@@ -242,6 +262,7 @@ class no
 		$this->board_stats_string = '%s brukere er registrert. Velkommen til vårt nyeste medlem, %s.<br />Det er %s emner og %s svar med en total på %s innlegg.';
 		$this->board_top_page = 'Gå til toppen av siden';
 		$this->board_topics = 'Emner';
+		$this->board_unread = 'Jump to oldest unread post'; //Translate
 		$this->board_users = 'Brukere';
 		$this->board_write_topics = 'Du kan lese og opprette emner i dette forumet.';
 	}
@@ -392,6 +413,173 @@ class no
 		$this->emote_text = 'Tekst';
 	}
 
+	function files()
+	{
+		$this->file = 'File'; //Translate
+		$this->files = 'Files'; //Translate
+		$this->files_action_not_allowed = 'Action Not Allowed'; //Translate
+		$this->files_action_not_permitted = 'You are not permitted to perform that action!'; //Translate
+		$this->files_add_cat = 'Add Category'; //Translate
+		$this->files_add_cat_desc = 'Category description'; //Translate
+		$this->files_add_cat_done = 'New category has been added.'; //Translate
+		$this->files_add_cat_exists = 'A category named %s already exists in %s.'; //Translate
+		$this->files_add_cat_name = 'New category name'; //Translate
+		$this->files_add_cat_not_allowed = 'You have not been permitted to add categories.'; //Translate
+		$this->files_add_cat_parent = 'Parent category'; //Translate
+		$this->files_add_cat_qperms = 'Quick Permissions'; //Translate
+		$this->files_add_cat_qperms2 = 'Select an existing category to copy its permissions.'; //Translate
+		$this->files_add_mod = 'Add Moderator'; //Translate
+		$this->files_add_mod2 = 'Add User as Moderator'; //Translate
+		$this->files_add_mod_cat = 'To which existing category?'; //Translate
+		$this->files_add_mod_made = 'has been made a moderator.'; //Translate
+		$this->files_add_mod_not_allowed = 'You do not have permission to add a moderator.'; //Translate
+		$this->files_add_mod_nouser = 'That user was not found.'; //Translate
+		$this->files_added = 'Date Added'; //Translate
+		$this->files_all_fields_required = 'All fields are required.'; //Translate
+		$this->files_approval_not_permitted = 'Sorry, you do not have permission to approve, deny or download this file.'; //Translate
+		$this->files_approval_waiting = 'Files Awaiting Approval'; //Translate
+		$this->files_approve = 'Approve Files'; //Translate
+		$this->files_approve2 = 'Approve'; //Translate
+		$this->files_approve_error = 'Error. You cannot go this far without a category attached.'; //Translate
+		$this->files_approve_none = 'There are no files waiting for approval at this time.'; //Translate
+		$this->files_approved = 'has been approved.'; //Translate
+		$this->files_author = 'Author'; //Translate
+		$this->files_cat = 'Category'; //Translate
+		$this->files_cat_edited = 'Category has been edited.'; //Translate
+		$this->files_cat_exists = 'A category named %s already exists in %s.'; //Translate
+		$this->files_close_window = 'Close window.'; //Translate
+		$this->files_comment = 'Add Comment'; //Translate
+		$this->files_comment_empty = 'Your comment does not contain anything.'; //Translate
+		$this->files_comment_not_permitted = 'You are not permitted to post comments.'; //Translate
+		$this->files_comment_posted = 'Your comment has been posted.'; //Translate
+		$this->files_comment_specify = 'No file was specified.'; //Translate
+		$this->files_comment_user = 'User Comments For'; //Translate
+		$this->files_comment_view = 'View Comments'; //Translate
+		$this->files_comments = 'Comments'; //Translate
+		$this->files_delete_cat = 'Delete Category'; //Translate
+		$this->files_delete_cat2 = 'Delete which existing category?'; //Translate
+		$this->files_delete_cat_done = 'The category has been deleted.'; //Translate
+		$this->files_delete_cat_not_empty = 'The %s category is not empty. Cannot delete.'; //Translate
+		$this->files_delete_cat_not_permitted = 'You have not been permitted to delete categories.'; //Translate
+		$this->files_delete_confirm = 'Are you sure you want to delete'; //Translate
+		$this->files_delete_file = 'Delete File'; //Translate
+		$this->files_delete_file_done = 'has been deleted.'; //Translate
+		$this->files_delete_file_not_permitted = 'You have not been permitted to delete files.'; //Translate
+		$this->files_delete_file_specify = 'You must specify a file to delete.'; //Translate
+		$this->files_delete_nocat = 'No such category.'; //Translate
+		$this->files_denied = 'has been denied.'; //Translate
+		$this->files_deny = 'Deny'; //Translate
+		$this->files_desc = 'Description'; //Translate
+		$this->files_dl = 'D/L'; //Translate
+		$this->files_download = 'Download'; //Translate
+		$this->files_download_not_permitted = 'You have not been permitted to download files.'; //Translate
+		$this->files_download_specify = 'You must specify a file to download.'; //Translate
+		$this->files_downloads = 'Downloads'; //Translate
+		$this->files_downloads2 = 'downloads'; //Translate
+		$this->files_edit_cat_not_parent = 'You cannot make the category its own parent!'; //Translate
+		$this->files_edit_cat_not_permitted = 'You have not been permitted to edit this category.'; //Translate
+		$this->files_edit_category = 'Edit Category'; //Translate
+		$this->files_edit_file = 'Edit File'; //Translate
+		$this->files_edit_mod = 'You can only edit categories that you moderate.'; //Translate
+		$this->files_edit_not_permitted = 'You have not been permitted to edit files.'; //Translate
+		$this->files_edit_root = 'You cannot edit the root category.'; //Translate
+		$this->files_error_duplicate = 'Unable to process: Duplicate filename error.'; //Translate
+		$this->files_error_trick = 'You tried to tricks us!'; //Translate
+		$this->files_error_unknown = 'Unable to process: Unknown file error.'; //Translate
+		$this->files_exists = 'A file like that already exists in the database.'; //Translate
+		$this->files_fix_stats = 'Fix File Stats'; //Translate
+		$this->files_fix_stats2 = 'The file stats have been corrected.'; //Translate
+		$this->files_has_updated = 'has been updated with new information.'; //Translate
+		$this->files_index = 'File Index'; //Translate
+		$this->files_invalid_option = 'Invalid option flag'; //Translate
+		$this->files_moderator = 'Moderator'; //Translate
+		$this->files_modify_info = 'Modify File Information'; //Translate
+		$this->files_move = 'Move'; //Translate
+		$this->files_move_category = 'Move %s to which category?'; //Translate
+		$this->files_move_file = 'Move File'; //Translate
+		$this->files_move_no_category = 'No such category.'; //Translate
+		$this->files_move_not_permitted = 'You have not been permitted to move files.'; //Translate
+		$this->files_moved_file = 'has been moved.'; //Translate
+		$this->files_name = 'Name'; //Translate
+		$this->files_rate = 'Rate File'; //Translate
+		$this->files_rate_already = 'You have already rated this file.'; //Translate
+		$this->files_rate_average = 'Average'; //Translate
+		$this->files_rate_excellent = 'Excellent'; //Translate
+		$this->files_rate_good = 'Good'; //Translate
+		$this->files_rate_please = 'Please rate this file'; //Translate
+		$this->files_rate_poor = 'Poor'; //Translate
+		$this->files_rate_sucks = 'Sucks!'; //Translate
+		$this->files_rate_thank = 'Thank you for rating this file.'; //Translate
+		$this->files_rate_valid = 'You must provide a valid file.'; //Translate
+		$this->files_rating = 'Rating'; //Translate
+		$this->files_recent = 'Recent Uploads'; //Translate
+		$this->files_recent_uploads = 'Files uploaded in the last 10 days'; //Translate
+		$this->files_remove_mod = 'Remove Moderator'; //Translate
+		$this->files_remove_mod_cat = 'Which category\'s moderator would you like to remove?'; //Translate
+		$this->files_remove_mod_done = 'The moderator for that category has been removed.'; //Translate
+		$this->files_remove_mod_not_permitted = 'You do not have permission to remove a moderator.'; //Translate
+		$this->files_revised = 'Revised on'; //Translate
+		$this->files_revisions = 'Revisions'; //Translate
+		$this->files_search = 'File Search'; //Translate
+		$this->files_search2 = 'Search'; //Translate
+		$this->files_search3 = 'Search Files'; //Translate
+		$this->files_search_advanced = 'Advanced Search'; //Translate
+		$this->files_search_basic = 'Basic Search'; //Translate
+		$this->files_search_by = 'Search By'; //Translate
+		$this->files_search_day = 'day'; //Translate
+		$this->files_search_days = 'days'; //Translate
+		$this->files_search_display_first = 'Display the first'; //Translate
+		$this->files_search_display_more = 'Display files with more than'; //Translate
+		$this->files_search_error = 'You have to search by atleast the name, author or descripton.'; //Translate
+		$this->files_search_error_none = 'No files found.'; //Translate
+		$this->files_search_for = 'Search For'; //Translate
+		$this->files_search_in = 'Search In'; //Translate
+		$this->files_search_minimum_rating = 'Minimum Rating'; //Translate
+		$this->files_search_month = 'month'; //Translate
+		$this->files_search_months = 'months'; //Translate
+		$this->files_search_newer = 'newer'; //Translate
+		$this->files_search_older = 'older'; //Translate
+		$this->files_search_results = 'Search results for'; //Translate
+		$this->files_search_results2 = 'results'; //Translate
+		$this->files_search_week = 'week'; //Translate
+		$this->files_search_weeks = 'weeks'; //Translate
+		$this->files_search_year = 'year'; //Translate
+		$this->files_size = 'File Size'; //Translate
+		$this->files_submitted_by = 'Submitted by'; //Translate
+		$this->files_top20 = 'Top 20 Downloads'; //Translate
+		$this->files_type = 'File Type'; //Translate
+		$this->files_update = 'Update'; //Translate
+		$this->files_update_approval_not_permitted = 'You do not have the permission to approve this update.'; //Translate
+		$this->files_update_approve = 'Approve Update'; //Translate
+		$this->files_update_approve_failed = 'Failed to copy update into downloads directory!'; //Translate
+		$this->files_update_approved = 'The update has been approved.'; //Translate
+		$this->files_update_denied = 'Update has been denied and purged.'; //Translate
+		$this->files_update_deny = 'Deny Update'; //Translate
+		$this->files_update_desc = 'The description has been updated.'; //Translate
+		$this->files_update_file = 'Update File'; //Translate
+		$this->files_update_file_need_desc = 'The description field must be filled in.'; //Translate
+		$this->files_update_not_exist = 'This file does not exist and cannot be updated.'; //Translate
+		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!'; //Translate
+		$this->files_update_not_permitted = 'You do not have the permission to update this file.'; //Translate
+		$this->files_update_pending = 'Your update has been uploaded and is pending approval.'; //Translate
+		$this->files_upload = 'Upload File'; //Translate
+		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
+		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
+		$this->files_upload_pending = 'The file has been uploaded and is pending approval.'; //Translate
+		$this->files_uploaded = 'The file has been uploaded.'; //Translate
+		$this->files_view = 'View File'; //Translate
+		$this->files_view_archive = 'Archive'; //Translate
+		$this->files_view_c = 'C Source'; //Translate
+		$this->files_view_cat_not_permitted = 'You are not permitted to view this category.'; //Translate
+		$this->files_view_cpp = 'C++ Source'; //Translate
+		$this->files_view_java = 'Java Source'; //Translate
+		$this->files_view_perl = 'Perl Script'; //Translate
+		$this->files_view_php = 'PHP Source'; //Translate
+		$this->files_view_plain = 'Plain Text'; //Translate
+		$this->files_view_python = 'Python Script'; //Translate
+		$this->files_view_specify = 'You must specify a file id to view.'; //Translate
+	}
+
 	function forum()
 	{
 		$this->forum_by = 'Av';
@@ -433,6 +621,7 @@ class no
 		$this->forum_subscribe = 'Motta epost når det kommer nye innlegg i dette forum.';
 		$this->forum_topic = 'Emne';
 		$this->forum_topic_posted = 'Posted'; //Translate
+		$this->forum_unread = 'Jump to oldest unread post'; //Translate
 		$this->forum_views = 'Visninger';
 		$this->forum_write_topics = 'Du kan lage nye emner i dette forumet.';
 	}
@@ -452,6 +641,7 @@ class no
 		$this->forum_edited = 'Forumet ble endret.';
 		$this->forum_empty = 'Forumtittelen er blank. Vennligst gå tilbake og skriv inn et navn.';
 		$this->forum_is_subcat = 'Dette forumet er kun en underkategori.';
+		$this->forum_is_url = 'This forum is a URL redirect. The description should be the URL to redirect to.'; //Translate
 		$this->forum_name = 'Navn';
 		$this->forum_no_orphans = 'Du kan ikke slette et forum ved å slette forumet over.';
 		$this->forum_none = 'Det finnes ingen fora å jobbe med.';
@@ -464,6 +654,7 @@ class no
 		$this->forum_recount = 'Regn om emner og svar';
 		$this->forum_select_cat = 'Velg en eksisterende kategori for å lage et forum.';
 		$this->forum_subcat = 'Underkategori';
+		$this->forum_url = 'URL Redirect'; //Translate
 	}
 
 	function groups()
@@ -481,10 +672,10 @@ class no
 		$this->groups_i_confirm = 'Jeg bekrefter at jeg vil slette denne medlemsgruppen.';
 		$this->groups_name = 'Navn';
 		$this->groups_no_action = 'Ingen handling ble gjort.';
-		$this->groups_no_delete = 'Det finnes ingen egendefinerte grupper å slette.<br />Kjernegruppene er nødvendige for at Quicksilver Forums skal fungere og kan ikke slettes.';
+		$this->groups_no_delete = 'Det finnes ingen egendefinerte grupper å slette.<br />Kjernegruppene er nødvendige for at QSF Portal skal fungere og kan ikke slettes.';
 		$this->groups_no_group = 'Ingen gruppe spesifisert.';
 		$this->groups_no_name = 'Intet gruppenavn spesifisert.';
-		$this->groups_only_custom = 'Merk: Du kan kun slette egendefinerte medlemsgrupper. Kjernegruppene er nødvendige for at Quicksilver Forums skal fungere.';
+		$this->groups_only_custom = 'Merk: Du kan kun slette egendefinerte medlemsgrupper. Kjernegruppene er nødvendige for at QSF Portal skal fungere.';
 		$this->groups_the = 'Gruppen';
 		$this->groups_to_edit = 'Gruppe som skal endres';
 		$this->groups_type = 'Type gruppe';
@@ -535,6 +726,7 @@ class no
 
 	function login()
 	{
+		$this->login = 'Login'; //Translate
 		$this->login_cant_logged = 'Du kunne ikke logges inn. Forsikre deg om at brukernavn og passord er riktig.<br /><br />Pass på store og små bokstaver, slik \'UsErNaMe\' ikke er det samme som \'Username\'. Informasjonskapsler (cookies) må være aktivert.';
 		$this->login_cookies = 'Informasjonskapsler (cookies) må være aktivert for å kunne logge inn.';
 		$this->login_forgot_pass = 'Glemt passordet?';
@@ -579,11 +771,16 @@ class no
 		$this->main_activate = 'Ditt brukernavn er ikke aktivert ennå.';
 		$this->main_activate_resend = 'Send aktivasjonsepost på nytt';
 		$this->main_admincp = 'Admin-kontrollpanel';
+		$this->main_affiliates = 'Affiliates'; //Translate
 		$this->main_banned = 'Du har blitt utelukket fra dette forumet.';
 		$this->main_code = 'Kode';
 		$this->main_cp = 'Kontrollpanel';
+		$this->main_files = 'Files'; //Translate
+		$this->main_forum = 'Forum'; //Translate
 		$this->main_full = 'Full'; //Translate
+		$this->main_guests = 'Guests'; //Translate
 		$this->main_help = 'Hjelp';
+		$this->main_home = 'Home'; //Translate
 		$this->main_load = 'Belastning';
 		$this->main_login = 'Logg inn';
 		$this->main_logout = 'Logg ut';
@@ -591,22 +788,33 @@ class no
 		$this->main_mark1 = 'Markér alle emner som lest';
 		$this->main_markforum_read = 'Markér forum som lest';
 		$this->main_max_load = 'Dessverre er %s utilgjengelig pga. for mange samtidige brukere.';
+		$this->main_member_newest = 'Newest Member'; //Translate
 		$this->main_members = 'Medlemmer';
 		$this->main_messenger = 'Meldinger';
 		$this->main_new = 'Ny';
+		$this->main_news = 'News'; //Translate
 		$this->main_next = 'Neste';
+		$this->main_pages = 'Pages'; //Translate
+		$this->main_posted_by = 'Posted by'; //Translate
+		$this->main_posts = 'Posts'; //Translate
 		$this->main_prev = 'Forrige';
 		$this->main_queries = 'Uttrekk';
 		$this->main_quote = 'Sitere';
 		$this->main_recent = 'Nye innlegg';
 		$this->main_recent1 = 'Vis innlegg siden sist du besøkte forumet';
+		$this->main_recent_uploads = 'Recent Uploads'; //Translate
 		$this->main_register = 'Registrere';
 		$this->main_reminder = 'Påminnelse';
 		$this->main_reminder_closed = 'Dette forumet er stengt og kan bare leses av administratoren.';
 		$this->main_said = 'sa';
 		$this->main_search = 'Søk';
+		$this->main_stats = 'Stats'; //Translate
+		$this->main_top_posters = 'Top Posters'; //Translate
+		$this->main_top_uploaders = 'Top Uploaders'; //Translate
+		$this->main_topics = 'Topics'; //Translate
 		$this->main_topics_new = 'Det finnes nye innlegg i dette forumet.';
 		$this->main_topics_old = 'Det finnes ingen nye innlegg i dette forumet.';
+		$this->main_users_online = 'Users Online'; //Translate
 		$this->main_welcome = 'Velkommen';
 		$this->main_welcome_guest = 'Velkommen!';
 	}
@@ -635,7 +843,7 @@ class no
 		$this->mc_err_updating = 'Kunne ikke oppdatere profilen';
 		$this->mc_find = 'Finn medlemmer med navn som inneholder';
 		$this->mc_found = 'Følgende medlemmer ble funnet. Vennligst velg et medlem.';
-		$this->mc_guest_needed = 'Gjestekontoen er nødvendig for at Quicksilver Forums skal fungere.';
+		$this->mc_guest_needed = 'Gjestekontoen er nødvendig for at QSF Portal skal fungere.';
 		$this->mc_not_found = 'Ingen medlemmer funnet som passet';
 		$this->mc_user_aim = 'AIM-navn';
 		$this->mc_user_avatar = 'Avatar'; //Translate
@@ -667,6 +875,7 @@ class no
 		$this->mc_user_timezone = 'Tidssone';
 		$this->mc_user_title = 'Medlemstittel';
 		$this->mc_user_title_custom = 'Bruk egendefinert medlemstittel';
+		$this->mc_user_uploads = 'Uploads'; //Translate
 		$this->mc_user_view_avatars = 'Kan se avatarer';
 		$this->mc_user_view_emoticons = 'Kan se smilies';
 		$this->mc_user_view_signatures = 'Kan se signaturer';
@@ -760,13 +969,38 @@ class no
 		$this->optimized = 'Tabellene i databasen har blitt optimert for maksimal utnyttelse.';
 	}
 
+	function page()
+	{
+		$this->page = 'Page'; //Translate
+		$this->page_action_not_allowed = 'Action not allowed!'; //Translate
+		$this->page_contents = 'Contents'; //Translate
+		$this->page_create = 'Create Page'; //Translate
+		$this->page_create2 = 'Create'; //Translate
+		$this->page_create_not_permitted = 'You are not permitted to create pages.'; //Translate
+		$this->page_created = 'Page created.'; //Translate
+		$this->page_creating = 'Creating a page'; //Translate
+		$this->page_delete = 'Delete a page'; //Translate
+		$this->page_delete_confirm = 'Are you sure you want to delete this page forever? This process is irreversable.'; //Translate
+		$this->page_delete_not_permitted = 'You are not permitted to delete pages.'; //Translate
+		$this->page_deleted = 'Page deleted.'; //Translate
+		$this->page_edit = 'Edit Page'; //Translate
+		$this->page_edit_done = 'Page successfully edited.'; //Translate
+		$this->page_edit_not_permitted = 'You are not permitted to edit pages.'; //Translate
+		$this->page_editing = 'Editing a page'; //Translate
+		$this->page_not_exist = 'That page does not exist!'; //Translate
+		$this->page_title = 'Title'; //Translate
+		$this->page_viewing = 'Viewing a page'; //Translate
+		$this->pages = 'Pages'; //Translate
+		$this->pages_none = 'There are no custom pages yet.'; //Translate
+	}
+
 	function perms()
 	{
 		$this->perm = 'Tillatelse';
 		$this->perms = 'Tillatelser';
 		$this->perms_board_view = 'Se på forumets innholdsliste';
-		$this->perms_board_view_closed = 'Bruke Quicksilver Forums når det er stengt';
-		$this->perms_do_anything = 'Bruke Quicksilver Forums';
+		$this->perms_board_view_closed = 'Bruke QSF Portal når det er stengt';
+		$this->perms_do_anything = 'Bruke QSF Portal';
 		$this->perms_edit_for = 'Endre tillatelser for';
 		$this->perms_email_use = 'Sende epost til medlemmer via diskusjonsgruppen';
 		$this->perms_forum_view = 'Se på forumet';
@@ -908,7 +1142,9 @@ class no
 		$this->post_no_vote = 'Du må velge et alternativ når du skal stemme.';
 		$this->post_option_emoticons = 'Konvertere smilies til bilder?';
 		$this->post_option_global = 'Gjøre dette emnet globalt?';
+		$this->post_option_lock = 'Lock topic after posting?'; //Translate
 		$this->post_option_mbcode = 'Formatere MbKod?';
+		$this->post_option_pin = 'Pin topic after posting?'; //Translate
 		$this->post_optional = 'Valgfri';
 		$this->post_options = 'Alternativ';
 		$this->post_poll_options = 'Avstemningsvalg';
@@ -925,17 +1161,6 @@ class no
 		$this->post_topic_title = 'Emnetittel';
 		$this->post_view_topic = 'Vise alle innlegg';
 		$this->post_voting = 'Stemmer';
-	}
-
-	function printer()
-	{
-		$this->printer_back = 'Tilbake';
-		$this->printer_not_found = 'Emnet finnes ikke. Det kan ha blitt slettet, flyttet eller det har aldri eksistert.';
-		$this->printer_not_found_title = 'Emnet finnes ikke';
-		$this->printer_perm_topics = 'Du har ikke tillatelse til å se på emner.';
-		$this->printer_perm_topics_guest = 'Du har ikke tillatelse til å se emner. Hvis du registrerer deg kan du ha mulighet til å gjøre dette.';
-		$this->printer_posted_on = 'Skrevet';
-		$this->printer_send = 'Skriv ut';
 	}
 
 	function profile()
@@ -972,6 +1197,12 @@ class no
 		$this->profile_profile = 'Profil';
 		$this->profile_signature = 'Signatur';
 		$this->profile_unkown = '[ Ukjent ]';
+		$this->profile_upload_last = 'Last Upload'; //Translate
+		$this->profile_uploads = 'Uploads'; //Translate
+		$this->profile_uploads_none = 'No uploads yet.'; //Translate
+		$this->profile_uploads_none_yet = 'None yet.'; //Translate
+		$this->profile_uploads_per_day = 'per day'; //Translate
+		$this->profile_uploads_total = 'total'; //Translate
 		$this->profile_view_profile = 'Viser profil';
 		$this->profile_www = 'Hjemmeside';
 		$this->profile_yahoo = 'Yahoo!-navn';
@@ -1064,7 +1295,7 @@ class no
 		$this->register_done = 'Du er registrert! Du kan nå logge inn.';
 		$this->register_email = 'Epostadresse';
 		$this->register_email_invalid = 'Epostadressen du skrev inn er ugyldig.';
-		$this->register_email_msg = 'Dette er en automatisk epost laget av Quicksilver Forums og sendt deg';
+		$this->register_email_msg = 'Dette er en automatisk epost laget av QSF Portal og sendt deg';
 		$this->register_email_msg2 = 'for å la deg aktivere kontoen din hos';
 		$this->register_email_msg3 = 'Vennligst klikk på følgende link eller lim den inn i nettleseren din:';
 		$this->register_email_used = 'Epostadressen du skrev inn er allerede i bruk.';
@@ -1180,8 +1411,11 @@ class no
 		$this->settings_board_rssfeed_title = 'Tittel for RSS';
 		$this->settings_clickable = 'Klikkbare smilies pr. rad';
 		$this->settings_cookie = 'Innstillinger for informasjonskapsler og overflod';
+		$this->settings_cookie_domain = 'Cookie Domain'; //Translate
 		$this->settings_cookie_path = 'Sti for informasjonskapsler';
 		$this->settings_cookie_prefix = 'Prefiks for informasjonskapsler';
+		$this->settings_cookie_secure = 'Cookie Security'; //Translate
+		$this->settings_cookie_secured = 'Is your site SSL secured?'; //Translate
 		$this->settings_cookie_time = 'Innloggingstid';
 		$this->settings_db = 'Endre tilkoblingsinnstillinger';
 		$this->settings_db_host = 'Database-vert';
@@ -1293,7 +1527,7 @@ class no
 		$this->edit_css = 'Redigér CSS';
 		$this->edit_skin = 'Endre skall';
 		$this->edit_templates = 'Endre maler';
-		$this->export_done = 'Skallet ble eksportert til hovedregisteret til Quicksilver Forums.';
+		$this->export_done = 'Skallet ble eksportert til hovedregisteret til QSF Portal.';
 		$this->export_select = 'Velg et skall å eksportere';
 		$this->export_skin = 'Eksportér skall';
 		$this->install_done = 'Skallet ble installert.';
@@ -1317,7 +1551,7 @@ class no
 		$this->skin_name = 'Du må skrive inn et skallnavn.';
 		$this->skin_none = 'Det finnes ikke noen skall å installere.';
 		$this->skin_set = 'Skallsett';
-		$this->skins_found = 'Følgende skall ble funnet i Quicksilver Forums register';
+		$this->skins_found = 'Følgende skall ble funnet i QSF Portal register';
 		$this->template_about = 'Om variabler';
 		$this->template_about2 = 'Variabler er deler av tekst som blir byttet ut med dynamisk data. Variabler begynner alltid med et dollartegn og er av og til satt mellom {klammer}.';
 		$this->template_add = 'Legg til';
@@ -1336,6 +1570,7 @@ class no
 		$this->templates = 'Maler';
 		$this->temps_active = 'Detaljer om aktive brukere';
 		$this->temps_admin = '<b>Admin-kontrollpanel universalt</b>';
+		$this->temps_backup = 'AdminCP Database Backup'; //Translate
 		$this->temps_ban = 'Admin-kontrollpanel: Blokkeringer';
 		$this->temps_board_index = 'Gruppeinnhold';
 		$this->temps_censoring = 'Admin-kontrollpanel: Sensur av ord';

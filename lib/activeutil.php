@@ -1,8 +1,14 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -283,7 +289,6 @@ class activeutil extends bbcode
 		{
 		case 'forum': $item = isset($this->get['f']) ? intval($this->get['f']) : 0; break;
 		case 'topic': $item = isset($this->get['t']) ? intval($this->get['t']) : 0; break;
-		case 'printer': $item = isset($this->get['t']) ? intval($this->get['t']) : 0; break;
 		case 'profile': $item = isset($this->get['w']) ? intval($this->get['w']) : 0; break;
 		}
 		return $item;

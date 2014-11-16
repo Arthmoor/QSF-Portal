@@ -1,12 +1,8 @@
 <?php
 /**
- * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
- * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,8 +56,8 @@ class page extends qsfglobal
 		if ($p) // Specific page asked for
 			return $this->view_page($p);
 
-		$this->set_title("Pages");
-		$this->tree("Pages");
+		$this->set_title($this->lang->pages);
+		$this->tree($this->lang->pages);
 
 		$result = $this->db->query("SELECT page_id, page_title, page_contents FROM %ppages");
 
@@ -86,7 +82,7 @@ class page extends qsfglobal
 
 	function view_page($p)
 	{
-		$this->tree("Pages","$this->self?a=page");
+		$this->tree( $this->lang->pages, "$this->self?a=page" );
 
 		$page = $this->db->fetch("SELECT page_id, page_title, page_contents FROM %ppages WHERE page_id=%d", $p);
 
@@ -97,21 +93,21 @@ class page extends qsfglobal
 			$this->tree($page['page_title']);
 			$this->set_title($page['page_title']);
 		} else {
-			$this->set_title("Viewing a page");
-			$this->tree("Viewing a page");
-			return $this->message("Page","That page doesn't exist!");
+			$this->set_title($this->lang->pages_viewing);
+			$this->tree($this->lang->pages_viewing);
+			return $this->message($this->lang->page, $this->lang->page_not_exist);
 		}
 		return eval($this->template('PAGE_PAGE'));
 	}
 
 	function edit_page($p)
 	{
-		$this->set_title("Editing a page");
-		$this->tree("Pages","$this->self?a=page");
-		$this->tree("Editing a page");
-
 		if (!$this->perms->auth('page_edit'))
-			return $this->message("Page editor", "You don't have permission to edit pages.");
+			return $this->message($this->lang->page_action_not_allowed, $this->lang->page_edit_not_permitted);
+
+		$this->set_title( $this->lang->page_editing );
+		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->page_editing );
 		
 		$page = $this->db->fetch("
 		SELECT
@@ -122,7 +118,7 @@ class page extends qsfglobal
 			page_id=%d", $p);
 
 		if ( !$page )
-			return $this->message("Page", "That page doesn't exist!");
+			return $this->message($this->lang->page_editing, $this->lang->page_not_exist);
 
 		if (!isset($this->post['submit']))
  			return eval($this->template('PAGE_EDIT'));
@@ -130,17 +126,17 @@ class page extends qsfglobal
 		$this->db->query("UPDATE %ppages SET page_title='%s', page_contents='%s' WHERE page_id=%d",
 			$this->post['title'], $this->post['contents'], $p );
 
-		return $this->message("Page editor", "Page successfully edited", $this->lang->continue,	"{$this->self}?a=page&amp;p={$p}");
+		return $this->message($this->lang->page_editing, $this->lang->page_edit_done, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}");
 	}
 
 	function create_page()
 	{
-		$this->set_title( "Creating a page" );
-		$this->tree( "Pages","$this->self?a=page" );
-		$this->tree( "Creating a page" );
-
 		if ( !$this->perms->auth('page_create') )
-			return $this->message( "Page editor", "You don't have permission to create pages." );
+			return $this->message( $this->lang->page_action_not_allowed, $this->lang->page_create_not_permitted );
+
+		$this->set_title( $this->lang->page_creating );
+		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->page_creating );
 
 		if ( !isset($this->post['submit']) )
 			return eval($this->template('PAGE_CREATE'));
@@ -148,29 +144,29 @@ class page extends qsfglobal
 		$this->db->query("INSERT INTO %ppages (page_title,page_contents) VALUES('%s', '%s')",
 			$this->post['title'], $this->post['contents']);
 		$p = $this->db->insert_id("%ppages");
-		return $this->message("Page editor","Page created", $this->lang->continue, "{$this->self}?a=page&amp;p={$p}");
+		return $this->message($this->lang->page_creating, $this->lang->page_created, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}");
 	}
 
 	function delete_page($p)
 	{
-		$this->set_title("Deleting a page");
-		$this->tree("Pages","$this->self?a=page");
-		$this->tree("Deleting a page");
-
 		if ( !$this->perms->auth('page_delete') )
-			return $this->message("Page editor", "You don't have permission to delete pages.");
+			return $this->message($this->lang->page_action_not_allowed, $this->lang->page_delete_not_permitted);
+
+		$this->set_title( $this->lang->page_delete );
+		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->page_delete );
 
 		$page = $this->db->fetch("SELECT page_id FROM %ppages WHERE page_id=%d", $p);
 
 		if ( !$page )
-			return $this->message("Page editor", "That page does not exist.");
+			return $this->message($this->lang->page_delete, $this->lang->page_not_exist);
 
 		if ( !isset($this->get['confirm']) )
-			return $this->message("Page editor", "Are you sure you want to delete this page forever? This process is irreversable.",
+			return $this->message($this->lang->page_delete, $this->lang->page_delete_confirm,
 			$this->lang->continue, "{$this->self}?a=page&amp;p={$p}&amp;&amp;s=delete&amp;confirm=1" );
 
 		$this->db->query("DELETE FROM %ppages WHERE page_id=%d", $p);
-		return $this->message("Page editor","Page deleted.", $this->lang->continue, "$this->self?a=page");
+		return $this->message($this->lang->page_delete, $this->lang->page_deleted, $this->lang->continue, "$this->self?a=page");
 	}
 }
 ?>

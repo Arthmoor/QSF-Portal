@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,6 +120,7 @@ $queries[] = "CREATE TABLE %pforums (
   forum_replies int(12) unsigned NOT NULL default '0',
   forum_lastpost int(12) unsigned NOT NULL default '0',
   forum_subcat tinyint(1) unsigned NOT NULL default '0',
+  forum_redirect tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY Parent (forum_parent)
 ) TYPE=MyISAM";
@@ -867,6 +874,8 @@ $sets['closed'] = 0;
 $sets['closedtext'] = 'We are upgrading to the latest version of QSF Portal. Please check back later.';
 $sets['cookie_path'] = '/';
 $sets['cookie_prefix'] = 'qsf_';
+$sets['cookie_domain'] = '';
+$sets['cookie_secure'] = 0;
 $sets['emailactivation'] = 1;
 $sets['flash_avs'] = 1;
 $sets['flood_time'] = 30;

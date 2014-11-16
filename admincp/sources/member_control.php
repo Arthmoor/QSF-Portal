@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -98,12 +104,29 @@ class member_control extends admin
 				$this->db->query("UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $this->get['id']);
 				$this->db->query("UPDATE %ptopics SET topic_last_poster=%d WHERE topic_last_poster=%d", USER_GUEST_UID, $this->get['id']);
 				$this->db->query("UPDATE %plogs SET log_user=%d WHERE log_user=%d", USER_GUEST_UID, $this->get['id']);
+				$this->db->query("UPDATE %pfiles SET file_submitted=%d WHERE file_submitted=%d AND file_approved=1", USER_GUEST_UID, $this->get['id']);
+				$this->db->query("UPDATE %pfilecomments SET user_id=%d WHERE user_id=%d", USER_GUEST_UID, $this->get['id']);
 				$this->activeutil->delete($this->get['id']);
 				$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d", $this->get['id']);
 				$this->db->query("DELETE FROM %pvotes WHERE vote_user=%d", $this->get['id']);
+				$this->db->query("DELETE FROM %pfileratings WHERE user_id=%d", $this->get['id']);
 				$this->db->query("DELETE FROM %pusers WHERE user_id=%d", $this->get['id']);
 				$this->db->query("DELETE FROM %ppmsystem WHERE pm_to=%d", $this->get['id']);
-				$this->db->query('DELETE FROM %preadmarks WHERE readmark_user=%d', $this->get['id']);
+				$this->db->query("DELETE FROM %preadmarks WHERE readmark_user=%d", $this->get['id']);
+
+				$files = $this->db->query("SELECT file_id, file_md5name FROM %pfiles WHERE file_submitted=%d AND file_approved=0", $this->get['id']);
+				while( $file = $this->db->nqfetch($files) )
+				{
+					@unlink("./downloads/" . $file['file_md5name']);
+					$this->db->query( "DELETE FROM %pfiles WHERE file_id=%d", $file['file_id'] );
+				}
+
+				$updates = $this->db->query("SELECT update_id, update_md5name FROM %pupdates WHERE update_updater=%d", $this->get['id']);
+				while( $update = $this->db->nqfetch($updates) )
+				{
+					@unlink("./updates/" . $update['update_md5name']);
+					$this->db->query( "DELETE FROM %pupdates WHERE update_id=%d", $update['update_id'] );
+				}
 
 				$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
 				$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
@@ -343,19 +366,6 @@ class member_control extends admin
 		default:
 			return $this->message($this->lang->mc, "<a href='{$this->self}?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br />");
 		}
-	}
-
-	function list_groups($val)
-	{
-		$out = "<select name='user_group'>";
-		$groups = $this->db->query('SELECT group_name, group_id FROM %pgroups ORDER BY group_name');
-
-		while ($group = $this->db->nqfetch($groups))
-		{
-			$out .= "<option value='{$group['group_id']}'" . (($val == $group['group_id']) ? ' selected=\'selected\'' : '') . ">{$group['group_name']}</option>";
-		}
-
-		return $out . '</select>';
 	}
 
 	function list_skins($val)

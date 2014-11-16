@@ -1,12 +1,18 @@
 <?php
 /**
+ * QSF Portal
+ * Copyright (c) 2006-2007 The QSF Portal Development Team
+ * http://www.qsfportal.com/
+ *
+ * Based on:
+ *
  * Quicksilver Forums
- * Copyright (c) 2005 The Quicksilver Forums Development Team
- *  http://www.quicksilverforums.com/
+ * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * http://www.quicksilverforums.com/
  * 
- * based off MercuryBoard
- * Copyright (c) 2001-2005 The Mercury Development Team
- *  http://www.mercuryboard.com/
+ * MercuryBoard
+ * Copyright (c) 2001-2006 The Mercury Development Team
+ * http://www.mercuryboard.com/
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,8 +37,6 @@ class settings extends admin
 {
 	function execute()
 	{
-		$this->iterator_init('light', 'dark');
-
 		if (!isset($this->get['s'])) {
 			$this->get['s'] = null;
 		}
@@ -156,6 +160,8 @@ class settings extends admin
 				'flood_time_search' => 'int',
 				'cookie_prefix' => 'string',
 				'cookie_path' => 'string',
+				'cookie_domain' => 'string',
+				'cookie_secure' => 'bool',
 				'flash_avs' => 'bool',
 				'avatar_width' => 'int',
 				'avatar_height' => 'int',
@@ -193,6 +199,16 @@ class settings extends admin
 					}
 				} elseif ($vartypes[$var] == 'string') {
 					$val = $val;
+				}
+
+				if ($var == 'cookie_path' && $val != '/') {
+					$newval = '';
+					if ($val{0} != '/')
+						$newval .= '/';
+					$newval .= $val;
+					if ($val{strlen($val)-1} != '/')
+						$newval .= '/';
+					$val = $newval;
 				}
 
 				$this->sets[$var] = $val;
