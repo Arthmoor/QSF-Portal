@@ -61,6 +61,9 @@ class recent_posts extends modlet
 				if (!$this->qsf->perms->auth('topic_view_unpublished', $row['topic_forum']) || !$this->qsf->perms->auth('topic_view', $row['topic_forum'])) {
 					$content .= '';
 				}else{
+					if (!$this->qsf->readmarker->is_topic_read($row['topic_id'], $row['topic_edited'])) {
+						$content .= "<img src='./skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+					}
 					$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'><i>".$topic_title."</i></a><br />";
 					$content .= $date ." ". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">". $row['user_name']."</a><hr />";
 				}
@@ -68,6 +71,9 @@ class recent_posts extends modlet
 				if (!$this->qsf->perms->auth('topic_view', $row['topic_forum'])) {
 					$content .= '';
 				} else {
+					if (!$this->qsf->readmarker->is_topic_read($row['topic_id'], $row['topic_edited'])) {
+						$content .= "<img src='./skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+					}
 				        $content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>".$topic_title."</a><br />";
 					$content .= $date ." ". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">".$row['user_name']."</a><hr />";
 				}

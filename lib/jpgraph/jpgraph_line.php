@@ -3,14 +3,13 @@
 // File: 	JPGRAPH_LINE.PHP
 // Description:	Line plot extension for JpGraph
 // Created: 	2001-01-08
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_line.php 72 2005-06-22 21:28:32Z ljp $
+// Ver:		$Id: jpgraph_line.php 857 2007-03-23 19:03:13Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
 
-require_once ('jpgraph_plotmark.inc');
+require_once ('jpgraph_plotmark.inc.php');
 
 // constants for the (filled) area
 DEFINE("LP_AREA_FILLED", true);
@@ -45,7 +44,7 @@ class LinePlot extends Plot{
 
     // Set style, filled or open
     function SetFilled($aFlag=true) {
-    	JpGraphError::Raise('LinePlot::SetFilled() is deprecated. Use SetFillColor()');
+    	JpGraphError::RaiseL(10001);//('LinePlot::SetFilled() is deprecated. Use SetFillColor()');
     }
 	
     function SetBarCenter($aFlag=true) {
@@ -83,11 +82,18 @@ class LinePlot extends Plot{
 	
     function Legend(&$graph) {
 	if( $this->legend!="" ) {
-	    if( $this->filled ) {
+	    if( $this->filled && !$this->fillgrad ) {
 		$graph->legend->Add($this->legend,
 				    $this->fill_color,$this->mark,0,
 				    $this->legendcsimtarget,$this->legendcsimalt);
-	    } else {
+	    } 
+	    elseif( $this->fillgrad ) {
+		$color=array($this->fillgrad_fromcolor,$this->fillgrad_tocolor);
+		// In order to differentiate between gradients and cooors specified as an RGB triple
+		$graph->legend->Add($this->legend,$color,"",-2 /* -GRAD_HOR */,
+				    $this->legendcsimtarget,$this->legendcsimalt);
+	    }	
+	    else {
 		$graph->legend->Add($this->legend,
 				    $this->color,$this->mark,$this->line_style,
 				    $this->legendcsimtarget,$this->legendcsimalt);
@@ -157,7 +163,7 @@ class LinePlot extends Plot{
 		// Just ignore
 	    }
 	    else {
-		JpGraphError::Raise('Plot too complicated for fast line Stroke. Use standard Stroke()');
+		JpGraphError::RaiseL(10002);//('Plot too complicated for fast line Stroke. Use standard Stroke()');
 		return;
 	    }
 	    ++$pnts;
@@ -168,10 +174,12 @@ class LinePlot extends Plot{
     }
 	
     function Stroke(&$img,&$xscale,&$yscale) {
+	$idx=0;
 	$numpoints=count($this->coords[0]);
 	if( isset($this->coords[1]) ) {
 	    if( count($this->coords[1])!=$numpoints )
-		JpGraphError::Raise("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])." Number of Y-points:$numpoints");
+		JpGraphError::RaiseL(2003,count($this->coords[1]),$numpoints);
+//("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])." Number of Y-points:$numpoints");
 	    else
 		$exist_x = true;
 	}
@@ -206,17 +214,19 @@ class LinePlot extends Plot{
 			    $yscale->Translate($this->coords[0][$startpoint]));
 
 	if( $this->filled ) {
-	    $cord[] = $xscale->Translate($xs);
 	    $min = $yscale->GetMinVal();
 	    if( $min > 0 || $this->fillFromMin )
-		$cord[] = $yscale->Translate($min);
+		$fillmin = $yscale->scale_abs[0];//Translate($min);
 	    else
-		$cord[] = $yscale->Translate(0);
+		$fillmin = $yscale->Translate(0);
+
+	    $cord[$idx++] = $xscale->Translate($xs);
+	    $cord[$idx++] = $fillmin;
 	}
 	$xt = $xscale->Translate($xs);
 	$yt = $yscale->Translate($this->coords[0][$startpoint]);
-	$cord[] = $xt;
-	$cord[] = $yt;
+	$cord[$idx++] = $xt;
+	$cord[$idx++] = $yt;
 	$yt_old = $yt;
 	$xt_old = $xt;
 	$y_old = $this->coords[0][$startpoint];
@@ -254,10 +264,10 @@ class LinePlot extends Plot{
 			$yt_old = $yt;
 			$xt_old = $xt;
 		    }
-		    $cord[] = $xt;
-		    $cord[] = $yt_old;
-		    $cord[] = $xt;
-		    $cord[] = $yt;
+		    $cord[$idx++] = $xt;
+		    $cord[$idx++] = $yt_old;
+		    $cord[$idx++] = $xt;
+		    $cord[$idx++] = $yt;
 		}
 		elseif( $firstnonumeric==false ) {
 		    $firstnonumeric = true;
@@ -266,19 +276,39 @@ class LinePlot extends Plot{
 		}
 	    }
 	    else {
-		if( is_numeric($y) || (is_string($y) && $y != "-") ) {
-		    $tmp1=$this->coords[0][$pnts];
-		    $tmp2=$this->coords[0][$pnts-1]; 		 			
-		    if( is_numeric($tmp1)  && (is_numeric($tmp2) || $tmp2=="-" ) ) { 
+		$tmp1=$y;
+		$prev=$this->coords[0][$pnts-1]; 		 			
+		if( $tmp1==='' || $tmp1===NULL || $tmp1==='X' ) $tmp1 = 'x';
+		if( $prev==='' || $prev===null || $prev==='X' ) $prev = 'x';
+
+		if( is_numeric($y) || (is_string($y) && $y != '-') ) {
+		    if( is_numeric($y) && (is_numeric($prev) || $prev === '-' ) ) { 
 			$img->StyleLineTo($xt,$yt);
 		    } 
 		    else {
 			$img->SetStartPoint($xt,$yt);
 		    }
-		    if( is_numeric($tmp1)  && 
-			(is_numeric($tmp2) || $tmp2=="-" || ($this->filled && $tmp2=='') ) ) { 
-			$cord[] = $xt;
-			$cord[] = $yt;
+		}
+		if( $this->filled && $tmp1 !== '-' ) {
+		    if( $tmp1 === 'x' ) { 
+			$cord[$idx++] = $cord[$idx-3];
+			$cord[$idx++] = $fillmin;
+		    }
+		    elseif( $prev === 'x' ) {
+			$cord[$idx++] = $xt;
+			$cord[$idx++] = $fillmin;
+			$cord[$idx++] = $xt;
+			$cord[$idx++] = $yt; 			    
+		    }
+		    else {
+			$cord[$idx++] = $xt;
+			$cord[$idx++] = $yt;
+		    }
+		}
+		else {
+		    if( is_numeric($tmp1)  && (is_numeric($prev) || $prev === '-' ) ) {
+			$cord[$idx++] = $xt;
+			$cord[$idx++] = $yt;
 		    } 
 		}
 	    }
@@ -292,11 +322,11 @@ class LinePlot extends Plot{
 	}	
 
 	if( $this->filled  ) {
-	    $cord[] = $xt;
+	    $cord[$idx++] = $xt;
 	    if( $min > 0 || $this->fillFromMin )
-		$cord[] = $yscale->Translate($min);
+		$cord[$idx++] = $yscale->Translate($min);
 	    else
-		$cord[] = $yscale->Translate(0);
+		$cord[$idx++] = $yscale->Translate(0);
 	    if( $this->fillgrad ) {
 		$img->SetLineWeight(1);
 		$grad = new Gradient($img);
@@ -406,16 +436,18 @@ class AccLinePlot extends Plot {
 //---------------
 // PUBLIC METHODS	
     function Legend(&$graph) {
-	foreach( $this->plots as $p )
-	    $p->DoLegend($graph);
+	$n=count($this->plots);
+	for($i=0; $i < $n; ++$i )
+	    $this->plots[$i]->DoLegend($graph);
     }
 	
     function Max() {
 	list($xmax) = $this->plots[0]->Max();
 	$nmax=0;
-	for($i=0; $i<count($this->plots); ++$i) {
-	    $n = count($this->plots[$i]->coords[0]);
-	    $nmax = max($nmax,$n);
+	$n = count($this->plots);
+	for($i=0; $i < $n; ++$i) {
+	    $nc = count($this->plots[$i]->coords[0]);
+	    $nmax = max($nmax,$nc);
 	    list($x) = $this->plots[$i]->Max();
 	    $xmax = Max($xmax,$x);
 	}
@@ -438,9 +470,10 @@ class AccLinePlot extends Plot {
     function Min() {
 	$nmax=0;
 	list($xmin,$ysetmin) = $this->plots[0]->Min();
-	for($i=0; $i<count($this->plots); ++$i) {
-	    $n = count($this->plots[$i]->coords[0]);
-	    $nmax = max($nmax,$n);
+	$n = count($this->plots);
+	for($i=0; $i < $n; ++$i) {
+	    $nc = count($this->plots[$i]->coords[0]);
+	    $nmax = max($nmax,$nc);
 	    list($x,$y) = $this->plots[$i]->Min();
 	    $xmin = Min($xmin,$x);
 	    $ysetmin = Min($y,$ysetmin);

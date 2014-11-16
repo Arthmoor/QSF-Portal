@@ -1,6 +1,31 @@
 QSF Portal Changes
 ------------------
 
+Changes for 1.4.0:
+
+* New default skin based on Syridium HForum v3 skin © 2006-2007 Syridium SC.
+* Fixed the 0.png to be a single transparent pixel.
+* Changed template color change can be difficult or impossible to see on LCD monitors.
+* Limit the maximum size of fonts in posts.
+* Unnecessary password restrictions removed.
+* Added "Last Updated" field to the file displays.
+* Added file category select box for navigation aid.
+* Safety checks to prevent blocking access to the portal.
+* Added code to adjust parent category counts when needed.
+
+  Bugs addressed:
+
+* Proper bbcode fix for the [root] tags which was only band-aided before.
+* Upgrade installer did not add new templates to skins.
+* Banning a user does not cancel subscriptions.
+* No HTML formatting on category/forum names.
+* Undefined offset in error handler.
+* Subscriptions still active if moved into a private forum. - Jon
+* IIS does not use $_SERVER['QUERY_STRING'] the same way Apache does. - Jon
+* Attachments to news posts do not produce a link in the text.
+* File description is not formatted properly when editing a file entry.
+* Recent posts listing did not check board_view permissions.
+
 Changes for 1.3.5:
 
 * Cleaned up member profile HTML.

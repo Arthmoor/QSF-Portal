@@ -43,6 +43,14 @@ class forum extends qsfglobal
 {
 	function execute()
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		if (!isset($this->get['f'])) {
 			return $this->message($this->lang->forum_forum, $this->lang->forum_noexist);
 		}
@@ -185,7 +193,9 @@ class forum extends qsfglobal
 						$forum['user_lastposter'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $forum['user_lastposterID'] . '" class="small">' . $forum['user_lastposter'] . '</a>';
 					}
 
-					$full_title = $forum['user_lastpost'];
+					$full_title = $this->format( $forum['user_lastpost'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+					$forum['user_lastpost'] = $this->format( $forum['user_lastpost'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+
 					if (strlen($forum['user_lastpost']) > 19) {
 						$forum['user_lastpost'] = substr($forum['user_lastpost'], 0, 19) . '...';
 					}
@@ -262,6 +272,7 @@ class forum extends qsfglobal
 				$state = 'moved';
 				$row['topic_id'] = $row['topic_moved'];
 
+				$Pages = $this->htmlwidgets->get_pages_topic($row['topic_replies'], 'a=topic&amp;t=' . $row['topic_id'] . '&amp;f=' . $f, ', ', 0, $m);
 			} elseif ($row['topic_modes'] & TOPIC_LOCKED) {
 				if ($row['newpost']) {
 					$state = 'new';

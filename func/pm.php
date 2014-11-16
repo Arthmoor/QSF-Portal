@@ -43,6 +43,14 @@ class pm extends qsfglobal
 {
 	function execute()
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		$this->set_title($this->lang->pm_messenger);
 		$this->tree($this->lang->pm_messenger);
 
@@ -107,12 +115,14 @@ class pm extends qsfglobal
 					$pm['pm_read'] = null;
 				}
 
+				// aWest's PM Preview mod
+				$preview = ((strlen($pm['pm_message']) > 200)) ? (substr($pm['pm_message'], 0, 197) . '...') : $pm['pm_message'];
+				$preview = $this->format( $preview, FORMAT_HTMLCHARS | FORMAT_CENSOR);
+
 				$pm['pm_title'] = $this->format($pm['pm_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR);
 				$pm['pm_message'] = $this->format($pm['pm_message'], FORMAT_HTMLCHARS | FORMAT_CENSOR);
 				$pm['pm_time']  = $this->mbdate(DATE_LONG, $pm['pm_time']);
 
-				// aWest's PM Preview mod
-				$preview = ((strlen($pm['pm_message']) > 200)) ? (substr($pm['pm_message'], 0, 197) . '...') : $pm['pm_message'];
 				$messages .= eval($this->template('PM_FOLDER_MESSAGE'));
 			}
 		} else {

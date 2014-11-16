@@ -112,7 +112,7 @@ class prune extends admin
 			} else {
 				// Delete them!
 				foreach ($this->post['topics'] as $t) {
-					$this->delete_topic($t);
+					$this->htmlwidgets->delete_topic($t);
 				}
 				
 			}
@@ -124,48 +124,6 @@ class prune extends admin
 			
 			return $this->message($this->lang->prune_title, $this->lang->prune_success);
 		}
-	}
-
-	/**
-	 * Deletes a single topic
-	 *
-	 * Copied from mod.php
-	 *
-	 * @param int $t Topic ID
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 4.0
-	 * @return void
-	 **/
-	function delete_topic($t)
-	{
-		$posts = $this->db->query("SELECT t.topic_forum, t.topic_id, a.attach_file, p.post_author, p.post_id, p.post_count
-			FROM (%ptopics t, %pposts p)
-			LEFT JOIN %pattach a ON p.post_id=a.attach_post
-			WHERE t.topic_id=%d AND t.topic_id=p.post_topic", $t);
-
-		$deleted = 0;
-
-		while ($post = $this->db->nqfetch($posts))
-		{
-			if ($post['post_count']) {
-				$this->db->query("UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=%d", $post['post_author']);
-			}
-
-			if ($post['attach_file']) {
-				$this->db->query("DELETE FROM %pattach WHERE attach_post=%d", $post['post_id']);
-				@unlink('./attachments/' . $post['attach_file']);
-			}
-
-			$deleted++;
-		}
-
-		$result = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t);
-
-		$this->db->query("DELETE FROM %pvotes WHERE vote_topic=%d", $t);
-		$this->db->query("DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d", $t, $t);
-		$this->db->query("DELETE FROM %pposts WHERE post_topic=%d", $t);
-
-		$this->db->query("UPDATE %pforums SET forum_topics=forum_topics-1, forum_replies=forum_replies-%d WHERE forum_id=%d", $deleted, $result['topic_forum']);
 	}
 }
 ?>

@@ -183,6 +183,7 @@ class new_install extends qsfglobal
 			$this->sets['last_member_id'] = $admin_uid;
 			$this->sets['admin_incoming'] = $this->post['admin_email'];
 			$this->sets['admin_outgoing'] = $this->post['admin_email'];
+			$this->sets['admin_email'] = $this->post['admin_email'];
 			$this->sets['members']++;
 			$this->sets['installed'] = 1;
 
@@ -196,9 +197,9 @@ class new_install extends qsfglobal
 				$forumId = $this->create_forum($forumName, $forumDesc, $categoryId);
 				
 				// Create Topic
-				$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_edited, topic_last_poster, topic_modes) 
-					VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d)",
-					$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $admin_uid, TOPIC_PUBLISH);
+				$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 
+					VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
+					$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, TOPIC_PUBLISH);
 				$topicId = $this->db->insert_id("topics");
 				
 				// Create Post
@@ -248,6 +249,7 @@ class new_install extends qsfglobal
 					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars($this->post['db_port']) . "\" />\n
 					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars($this->post['db_socket']) . "\" />\n
 					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars($this->post['prefix']) . "\" />\n
+					<input type=\"hidden\" name=\"admin_email\" value=\"" . htmlspecialchars($this->post['admin_email']) . "\" />\n
 					<input type=\"submit\" value=\"Download settings.php\" />
 					</form>
 					<br/>\n
@@ -270,6 +272,7 @@ class new_install extends qsfglobal
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
 			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
+			$this->sets['admin_email'] = $this->post['admin_email'];
 
 			$settingsFile = $this->create_settings_file();
 			ob_clean();

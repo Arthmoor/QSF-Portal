@@ -47,6 +47,14 @@ class cp extends qsfglobal
 
 	function execute()
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		if (!isset($this->get['s'])) {
 			$this->get['s'] = null;
 		}
@@ -115,12 +123,12 @@ class cp extends qsfglobal
 			return PASS_NOT_VERIFIED;
 		}
 
-		if (!preg_match('/[a-z0-9_\- ]+/i', $passA)) {
-			return PASS_INVALID;
-		}
-
 		if ($passA != $passB) {
 			return PASS_NO_MATCH;
+		}
+
+		if (!$this->validator->validate($passA, TYPE_PASSWORD)) {
+			return PASS_INVALID;
 		}
 
 		return PASS_SUCCESS;
@@ -360,7 +368,10 @@ class cp extends qsfglobal
 				$usertitle = $this->user['user_title'];
 				$custom_title = $this->user['user_title_custom'];
 			}
-			$this->post['user_icq']       = intval($this->post['user_icq']);
+
+			$icq = isset($this->post['user_icq']) ? intval($this->post['user_icq']) : 0;
+			if ($icq < 0 || $icq > 999999999999999)
+				$icq = 0;
 
 			$this->db->query("
 				UPDATE %pusers SET
@@ -369,7 +380,7 @@ class cp extends qsfglobal
 				  user_gtalk='%s', user_title='%s', user_title_custom=%d, user_name='%s'
 				WHERE user_id=%d",
 				$this->post['user_email'], $user_birthday, $this->post['user_homepage'], $this->post['user_location'],
-				$this->post['user_interests'], intval($this->post['user_icq']), $this->post['user_msn'], $this->post['user_aim'],
+				$this->post['user_interests'], $icq, $this->post['user_msn'], $this->post['user_aim'],
 				$this->post['user_yahoo'], $this->post['user_gtalk'], $usertitle, $custom_title, $this->post['Newuser_name'],
 				$this->user['user_id']);
 

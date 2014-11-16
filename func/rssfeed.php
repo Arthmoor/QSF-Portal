@@ -46,6 +46,15 @@ class rssfeed extends qsfglobal
 	 **/
 	function execute()
 	{
+		// Gives IE7 fits about being unable to read the feed, but we don't want unauthorized visitors with this anyway.
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		$this->nohtml = true;
 		$this->templater->debug_mode = false; // or else we end up with invalid XML
 		

@@ -147,82 +147,7 @@ class perms extends admin
 			}
 
 			$out = "
-			<script type='text/javascript'>
-			<!--
-			function checkrow(element, check)
-			{
-				var elements = document.forms['form'].elements;
-				var count    = elements.length;
-
-				for (var i=0; i<count; i++) {
-					var current = elements[i];
-					var temp = current.name.split('[');
-
-					if (!temp[1]) continue;
-					temp2 = temp[1].split(']');
-
-					if (temp2[0] == element) {
-						current.checked = check;
-					}
-				}
-			}
-
-			function changeall(element, check)
-			{
-				if (!check) {
-					checkallbox(element, false);
-				} else if (areallchecked(element)) {
-					checkallbox(element, true);
-				}
-			}
-
-			function checkallbox(element, check)
-			{
-				var elements = document.forms['form'].elements;
-				var count    = elements.length;
-
-				var allchecked = true;
-
-				for (var i=0; i<count; i++) {
-					var current = elements[i];
-
-					if (current.name == ('perms[' + element + '][-1]')) {
-						current.checked = check;
-					}
-				}
-			}
-
-			function areallchecked(element)
-			{
-				var elements = document.forms['form'].elements;
-				var count    = elements.length;
-
-				var allchecked = true;
-
-				for (var i=0; i<count; i++) {
-					var current = elements[i];
-
-					if (current.name == ('perms[' + element + '][-1]')) {
-						continue;
-					}
-
-					var temp = current.name.split('[');
-
-					if (!temp[1]) continue;
-					temp2 = temp[1].split(']');
-
-					if (temp2[0] == element) {
-						if (!current.checked) {
-							allchecked = false;
-							break;
-						}
-					}
-				}
-
-				return allchecked;
-			}
-			//-->
-			</script>
+			<script type='text/javascript' src='../javascript/permissions.js'></script>
 
 			<form id='form' action='$this->self?a=perms$link' method='post'>
 			<div align='center'><span style='font-size:14px;'><b>" . $this->lang->perms_for . " $label</b></span>";
@@ -293,6 +218,16 @@ class perms extends admin
 				$this->post['perms'] = array();
 			}
 
+			if ($mode == 'user') {
+				if ((!isset($this->post['perms']['do_anything'])) && ($this->post['group'] == USER_GUEST_UID)) {
+					return $this->message($this->lang->perms, $this->lang->perms_guest1);
+				}
+			} else {
+				if ((!isset($this->post['perms']['do_anything'])) && ($this->post['group'] == USER_GUEST)) {
+					return $this->message($this->lang->perms, $this->lang->perms_guest2);
+				}
+			}
+
 			foreach ($this->post['perms'] as $name => $data)
 			{
 				if (isset($data[-1]) || isset($data['-1']) || (count($data) == count($forums_list))) {
@@ -306,6 +241,8 @@ class perms extends admin
 			}
 
 			$perms_obj->update();
+
+			$this->check_subscriptions($mode, $this->post['group']);
 
 			return $this->message($this->lang->perms, $this->lang->perms_updated);
 		}
@@ -322,6 +259,75 @@ class perms extends admin
 		}
 
 		return $out . '</tr>';
+	}
+
+	/**
+	 * Delete subscriptions that have now been made
+	 * illegal due to permissions change
+	 *
+	 * @param string $mode contains group or user
+	 * @param integer $group group or user id
+	 * @author Jonathan West <jon@quicksilverforums.com>
+	 * @since 1.3.2
+	 **/
+	function check_subscriptions($mode, $group)
+	{
+		if ($mode == 'user') {
+			$query = $this->db->query("SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, u.user_perms
+				FROM %psubscriptions s, %pusers u
+				WHERE s.subscription_user=%d
+				AND s.subscription_user=u.user_id", $group);
+
+			while ($sub = $this->db->nqfetch($query))//if the user has subscriptions
+			{ 
+				$perms = new permissions;
+				$perms->db = &$this->db;
+				$perms->pre = &$this->pre;
+				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['user_perms']);
+
+				if ($sub['subscription_type'] == 'forum') {
+					if (!$perms->auth('forum_view', $sub['subscription_item'])) { //if user can no longer view forum
+						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item']);
+					}
+				} else {
+					$check = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item']);
+
+					if (!$perms->auth('forum_view', $check['topic_forum'])) { //if user can no longer view forum
+						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item']);
+					}
+				}
+			}
+		} else { //if a member of the group has subscriptions
+			$query = $this->db->query("SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, g.group_perms
+				FROM %psubscriptions s, %pusers u, %pgroups g
+				WHERE g.group_id=%d
+                                    AND u.user_group=g.group_id
+                                    AND s.subscription_user=u.user_id", $group);
+
+			while ($sub = $this->db->nqfetch($query))
+			{
+				$perms = new permissions;
+				$perms->db = &$this->db;
+				$perms->pre = &$this->pre;
+				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['group_perms']);
+
+				if ($sub['subscription_type'] == 'forum') {
+					if (!$perms->auth('forum_view', $sub['subscription_item'])) { //if user can no longer view forum
+						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item']);
+					}
+				} else {
+					$check = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item']);
+
+					if (!$perms->auth('forum_view', $check['topic_forum'])) { //if user can no longer view forum
+						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item']);
+					}
+				}
+			}
+		}
 	}
 }
 ?>

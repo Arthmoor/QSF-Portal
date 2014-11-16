@@ -570,6 +570,7 @@ class he
 		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!'; //Translate
 		$this->files_update_not_permitted = 'You do not have the permission to update this file.'; //Translate
 		$this->files_update_pending = 'Your update has been uploaded and is pending approval.'; //Translate
+		$this->files_updated = 'Last Updated'; //Translate
 		$this->files_upload = 'Upload File'; //Translate
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
@@ -866,6 +867,7 @@ class he
 		$this->mc_err_updating = 'שגיאה בעדכון הפרופיל';
 		$this->mc_find = 'מצא חברים עם שמות המכילים';
 		$this->mc_found = 'החברים הבאים נמצאו. אנא בחר אחד.';
+		$this->mc_guest_banned = 'You cannot ban Guests, this would cause your board to become unusable.'; //Translate
 		$this->mc_guest_needed = 'Quicksilver חשבון האורח חיוני לפעילות הפורומים של';
 		$this->mc_not_found = 'לא נמצאו חברים מתאימים';
 		$this->mc_user_aim = 'AIM שם';
@@ -1043,6 +1045,8 @@ class he
 		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'הצג את הפורום';
 		$this->perms_group = 'Group'; //Translate
+		$this->perms_guest1 = 'You cannot stop Guests from using the board. The board would become unusable by anyone.'; //Translate
+		$this->perms_guest2 = 'You cannot stop the Guest Group from using the board. The board would become unusable by anyone.'; //Translate
 		$this->perms_is_admin = 'כניסה ללוח בקרת מנהל';
 		$this->perms_only_user = 'השתמש רק בהרשאות קבוצה למשתמש זה';
 		$this->perms_override_user = '.זה יעקוף את הרשאות הקבוצה למשתמש זה';

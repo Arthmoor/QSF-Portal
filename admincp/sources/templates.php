@@ -712,7 +712,7 @@ class templates extends admin
 			fwrite( $fp, $text );
 			fclose($fp);
 
-			return $this->message($this->lang->edit_css, $this->lang->css_edited );
+			return $this->message($this->lang->edit_css, $this->lang->css_edited, $this->lang->continue, "$this->self?a=templates&amp;skin=$skin" );
 		}
 	}
 

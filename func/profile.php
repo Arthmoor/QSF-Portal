@@ -43,6 +43,14 @@ class profile extends qsfglobal
 {
 	function execute()
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		$this->set_title($this->lang->profile_view_profile);
 
 		$this->tree($this->lang->profile_list, $this->self . '?a=members');
@@ -138,7 +146,7 @@ class profile extends qsfglobal
 		}
 
 		if ($profile['user_avatar_type'] != 'none') {
-			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"{$this->lang->profile_avatar}\" style=\"width:{$profile['user_avatar_width']}; height:{$profile['user_avatar_height']};\" />";
+			$profile['user_avatar'] = "<img src=\"{$profile['user_avatar']}\" alt=\"{$this->lang->profile_avatar}\" style=\"width:{$profile['user_avatar_width']}px; height:{$profile['user_avatar_height']}px;\" />";
 		} else {
 			$profile['user_avatar'] = $this->lang->profile_none;
 		}

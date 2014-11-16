@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.3.5';          // QSF Portal version @var string
+	var $version = 'v1.4.0';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -88,7 +88,7 @@ class qsfglobal
 		$this->time    = time();
 		$this->query   = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
 		$this->ip      = $_SERVER['REMOTE_ADDR'];
-		$this->agent   = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
+		$this->agent   = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
 		$this->agent   = substr($this->agent, 0, 99); // Cut off after 100 characters.
 		$this->self    = $_SERVER['PHP_SELF'];
 		$this->server  = $_SERVER;
@@ -460,8 +460,8 @@ class qsfglobal
 		$tz_offset = $this->user['user_timezone'] * 3600;
 		$time = $gmt_time + $tz_offset;
 
-		// DST adjustment if needed. Result is 1 if the date was in Daylight Saving Time
-		if( date( "I", $time ) == 1 ) {
+		// DST adjustment if needed. Yes, it needs to know the current time so it can trick old posts into looking right.
+		if( date( "I", $this->time ) == 1 ) {
 			$time += 3600;
 		}
 
@@ -655,10 +655,12 @@ class qsfglobal
 			'db_user'   => $this->sets['db_user'],
 			'dbtype'    => $this->sets['dbtype'],
 			'prefix'    => $this->sets['prefix'],
-			'installed' => $this->sets['installed']
+			'installed' => $this->sets['installed'],
+			'admin_email' => $this->sets['admin_email']
 			);
 				
-		$file = "<?php\n\$set = array();\n";
+		$file = "<?php\n\$set = array();\n\nif (!defined('QUICKSILVERFORUMS')) {\n       header('HTTP/1.0 403 Forbidden');\n       die;\n}\n\n";
+
 		foreach ($settings as $set => $val)
 		{
 			$file .= "\$set['$set'] = '" . str_replace(array('\\', '\''), array('\\\\', '\\\''), $val) . "';\n";
@@ -716,7 +718,8 @@ class qsfglobal
 			'dbtype',
 			'prefix',
 			'installed',
-			'include_path'
+			'include_path',
+			'admin_email'
 		);
 
 		$sets = array();

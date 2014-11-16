@@ -132,6 +132,8 @@ class board extends qsfglobal
 		{
 			foreach ($category as $forum)
 			{
+				$forum['forum_name'] = $this->format( $forum['forum_name'], FORMAT_HTMLCHARS );
+
 				if ($forum['forum_parent'] == 0) {
 					if ($endCat) {
 						$return .= eval($this->template('BOARD_CATEGORY_END'));

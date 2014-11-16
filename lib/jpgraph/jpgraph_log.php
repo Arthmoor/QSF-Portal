@@ -3,8 +3,7 @@
 // File: 	JPGRAPH_LOG.PHP
 // Description:	Log scale plot extension for JpGraph
 // Created: 	2001-01-08
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_log.php 56 2005-06-06 20:14:44Z ljp $
+// Ver:		$Id: jpgraph_log.php 820 2006-12-14 01:04:01Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -36,11 +35,13 @@ class LogScale extends LinearScale {
     function Translate($a) {
 	if( !is_numeric($a) ) {
 	    if( $a != '' && $a != '-' && $a != 'x' ) 
-		JpGraphError::Raise('Your data contains non-numeric values.');
+		JpGraphError::RaiseL(11001);
+//('Your data contains non-numeric values.');
 	    return 1;
 	}
 	if( $a < 0 ) {
-	    JpGraphError::Raise("Negative data values can not be used in a log scale.");
+	    JpGraphError::RaiseL(11002);
+//("Negative data values can not be used in a log scale.");
 	    exit(1);
 	}
 	if( $a==0 ) $a=1;
@@ -53,7 +54,8 @@ class LogScale extends LinearScale {
     function RelTranslate($a) {
 	if( !is_numeric($a) ) {
 	    if( $a != '' && $a != '-' && $a != 'x' ) 
-		JpGraphError::Raise('Your data contains non-numeric values.');
+		JpGraphError::RaiseL(11001);
+//('Your data contains non-numeric values.');
 	    return 1;
 	}
 	if( $a==0 ) $a=1;
@@ -85,10 +87,27 @@ class LogScale extends LinearScale {
 	if( $min==0 ) $min=1;
 	
 	if( $max <= 0 ) {
-	    JpGraphError::Raise('Scale error for logarithmic scale. You have a problem with your data values. The max value must be greater than 0. It is mathematically impossible to have 0 in a logarithmic scale.');
+	    JpGraphError::RaiseL(11004);
+//('Scale error for logarithmic scale. You have a problem with your data values. The max value must be greater than 0. It is mathematically impossible to have 0 in a logarithmic scale.');
 	}
-	$smin = floor(log10($min));
-	$smax = ceil(log10($max));
+	if( is_numeric($this->autoscale_min) ) {
+	    $smin = round($this->autoscale_min);
+	    $smax = ceil(log10($max));
+	    if( $min >= $max ) {
+		JpGraphError::RaiseL(25071);//('You have specified a min value with SetAutoMin() which is larger than the maximum value used for the scale. This is not possible.');
+	    }
+	}
+	else {
+	    $smin = floor(log10($min));
+	    if( is_numeric($this->autoscale_max) ) {
+		$smax = round($this->autoscale_max);
+		if( $smin >= $smax ) {
+		    JpGraphError::RaiseL(25072);//('You have specified a max value with SetAutoMax() which is smaller than the miminum value used for the scale. This is not possible.');
+		}
+	    }
+	    else
+		$smax = ceil(log10($max));
+	}
 	$this->Update($img,$smin,$smax);					
     }
 //---------------
@@ -123,7 +142,8 @@ class LogTicks extends Ticks{
     }
 
     function SetTextLabelStart($aStart) {
-	JpGraphError::Raise('Specifying tick interval for a logarithmic scale is undefined. Remove any calls to SetTextLabelStart() or SetTextTickInterval() on the logarithmic scale.');
+	JpGraphError::RaiseL(11005);
+//('Specifying tick interval for a logarithmic scale is undefined. Remove any calls to SetTextLabelStart() or SetTextTickInterval() on the logarithmic scale.');
     }
 
     function SetXLabelOffset($dummy) {

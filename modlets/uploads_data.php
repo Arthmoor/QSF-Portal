@@ -52,7 +52,7 @@ class uploads_data extends modlet
 
 			return eval($this->qsf->template('PROFILE_UPLOADS'));
 		} else {
-			return $this->qsf->lang->profile_uploads_none;
+			return "";
 		}
 	}
 }

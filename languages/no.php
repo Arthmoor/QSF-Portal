@@ -571,6 +571,7 @@ class no
 		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!'; //Translate
 		$this->files_update_not_permitted = 'You do not have the permission to update this file.'; //Translate
 		$this->files_update_pending = 'Your update has been uploaded and is pending approval.'; //Translate
+		$this->files_updated = 'Last Updated'; //Translate
 		$this->files_upload = 'Upload File'; //Translate
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
@@ -867,6 +868,7 @@ class no
 		$this->mc_err_updating = 'Kunne ikke oppdatere profilen';
 		$this->mc_find = 'Finn medlemmer med navn som inneholder';
 		$this->mc_found = 'Følgende medlemmer ble funnet. Vennligst velg et medlem.';
+		$this->mc_guest_banned = 'You cannot ban Guests, this would cause your board to become unusable.'; //Translate
 		$this->mc_guest_needed = 'Gjestekontoen er nødvendig for at QSF Portal skal fungere.';
 		$this->mc_not_found = 'Ingen medlemmer funnet som passet';
 		$this->mc_user_aim = 'AIM-navn';
@@ -1044,6 +1046,8 @@ class no
 		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Se på forumet';
 		$this->perms_group = 'Group'; //Translate
+		$this->perms_guest1 = 'You cannot stop Guests from using the board. The board would become unusable by anyone.'; //Translate
+		$this->perms_guest2 = 'You cannot stop the Guest Group from using the board. The board would become unusable by anyone.'; //Translate
 		$this->perms_is_admin = 'Tilgang til admin-kontrollpanelet';
 		$this->perms_only_user = 'Bruk kun gruppetillatelser på denne brukeren';
 		$this->perms_override_user = 'Dette vil overkjøre gruppetillatelsene for denne brukeren.';

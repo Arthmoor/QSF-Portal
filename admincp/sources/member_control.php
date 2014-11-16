@@ -280,6 +280,11 @@ class member_control extends admin
 				return eval($this->template('ADMIN_MEMBER_PROFILE'));
 			} else {
 				$member = $this->db->fetch("SELECT user_name FROM %pusers WHERE user_id=%d", $this->get['id']);
+
+				if (($this->post['user_group'] == USER_BANNED) && ($this->get['id'] == USER_GUEST_UID)) {
+					return $this->message($this->lang->mc, $this->lang->mc_guest_banned);
+				}
+
 				$guest_email = $this->post['user_email'];
 				if ($member['user_name'] != 'Guest' && !$this->validator->validate($guest_email, TYPE_EMAIL)) {
 					return $this->message($this->lang->mc_err_updating, $this->lang->mc_email_invaid);
@@ -359,6 +364,10 @@ class member_control extends admin
 				  $user_gtalk, $user_yahoo, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
 				  $user_view_signatures, $user_view_emoticons, $this->get['id'] );
 
+				if( $user_group == USER_BANNED ) {
+					$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d",
+						$this->get['id'] );
+				}
 				if (($this->get['id'] == $this->sets['last_member_id'])
 				&& ($this->post['user_name'] != $this->sets['last_member'])) {
 					$this->sets['last_member'] = $this->post['user_name'];

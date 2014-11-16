@@ -15,4 +15,5 @@ $set['db_user'] = '';
 $set['dbtype'] = 'mysql';
 $set['installed'] = '0';
 $set['prefix'] = 'qsf_';
+$set['admin_email'] = '';
 ?>

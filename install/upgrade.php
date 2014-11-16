@@ -103,11 +103,6 @@ class upgrade extends qsfglobal
 				break;
 			}
 
-			if (!is_writeable('../settings.php')) {
-				echo "settings.php cannot be updated.<br /><br />CHMOD settings.php to 0666.";
-				break;
-			}
-
 			$queries = array();
 			$pre = $this->sets['prefix'];
 			$full_template_list = false;
@@ -143,11 +138,6 @@ class upgrade extends qsfglobal
 				}
 			}
 
-			if (!$this->write_db_sets('../settings.php')) {
-				echo 'settings.php could not be updated.<br /><br />CHMOD settings.php to 0666.';
-				break;
-			}
-
 			/**
 			 * The order this next block executes is important.
 			 * 1. Verify we can upgrade templates
@@ -171,7 +161,7 @@ class upgrade extends qsfglobal
 			// Check the default skin still exists
 			$result = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='default'");
 			if (!$result) {
-				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('QSF Comet Portal', 'default')");
+				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Blue Comet', 'default')");
 				$full_template_list = true;
 			}
 			
@@ -184,7 +174,7 @@ class upgrade extends qsfglobal
 				$skin = $row['skin_dir'];
 
 				// QSF or MB default skin in default location
-				if (($row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
+				if (($row['skin_name'] == 'Blue Comet' || $row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
 					if ($full_template_list || $template_list) {
 						if ($full_template_list) {
 							$template_list = null;
@@ -211,11 +201,8 @@ class upgrade extends qsfglobal
 						
 						$didsomething = true;
 					}
-					if ($row['skin_name'] == 'QSF Comet') {
-						$this->db->query("UPDATE %pskins SET skin_name='QSF Comet Portal' WHERE skin_dir='%s'", $skin);
-					}
-					if ($row['skin_name'] == 'Candy Corn') {
-						$this->db->query("UPDATE %pskins SET skin_name='QSF Comet Portal' WHERE skin_dir='%s'", $skin);
+					if ($row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'Candy Corn') {
+						$this->db->query("UPDATE %pskins SET skin_name='Blue Comet' WHERE skin_dir='%s'", $skin);
 					}
 				}
 				else
@@ -224,7 +211,7 @@ class upgrade extends qsfglobal
 					$xmlInfo = new xmlparser();
 					$xmlInfo->parse(SKIN_FILE);
 					$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
-					packageutil::list_templates($templatesNode);
+					$temp_names = packageutil::list_templates($templatesNode);
 					$temps_to_insert = array();
 						
 					foreach ($temp_names as $temp_name)

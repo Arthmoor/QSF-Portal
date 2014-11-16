@@ -42,6 +42,15 @@ class logs extends admin
 
 		$data = $this->db->query("SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC");
 
+		$this->lang->main();
+
+		$this->get['min'] = isset($this->get['min']) ? intval($this->get['min']) : 0;
+		$this->get['num'] = isset($this->get['num']) ? intval($this->get['num']) : 60;
+		$pages = $this->htmlwidgets->get_pages( $data, 'a=logs', $this->get['min'], $this->get['num'] );
+
+		$data = $this->db->query("SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT %d, %d",
+                       $this->get['min'], $this->get['num']);
+
 		$this->iterator_init('tablelight', 'tabledark');
 
 		$out = null;

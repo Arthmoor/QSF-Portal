@@ -33,6 +33,14 @@ class newspost extends qsfglobal
 {
 	function execute( )
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		if( !isset( $this->get['t'] ) ) {
 			return $this->message( "News", "No such article." );
 		}
@@ -46,7 +54,7 @@ class newspost extends qsfglobal
 		$items = "";
 
 		$row = $this->db->fetch(
-		  "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_mbcode, p.post_emoticons
+		  "SELECT t.*, u.user_name, p.post_id, p.post_author, p.post_text, p.post_mbcode, p.post_emoticons
 		    FROM %ptopics t
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
@@ -54,6 +62,32 @@ class newspost extends qsfglobal
 
 		if( !$row ) {
 			return $this->message( "News", "No such article. (2)" );
+		}
+
+		$query = $this->db->query("
+			SELECT
+			  attach_id, attach_name, attach_downloads, attach_size
+			FROM
+			  %pattach
+			WHERE
+			  attach_post=%d", $row['post_id'] );
+
+		$this->lang->topic();
+		$this->templater->add_templates('topic');
+		$attachments = null;
+
+		while ($file = $this->db->nqfetch($query))
+		{
+			if ($this->perms->auth('post_attach_download', $row['topic_forum'])) {
+				$ext = strtolower(substr($file['attach_name'], -4));
+
+				if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png') || ($ext == '.bmp')) {
+					$row['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->self}?a=topic&amp;s=attach&amp;id={$file['attach_id']}' alt='{$file['attach_name']}' />";
+					continue;
+				}
+			}
+			$filesize = ceil($file['attach_size'] / 1024);
+			$attachments .= eval($this->template('TOPIC_POST_ATTACHMENT'));
 		}
 
 		$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
@@ -69,6 +103,7 @@ class newspost extends qsfglobal
 		$user = $row['user_name'];
 		$date = $this->mbdate( DATE_LONG, $row['topic_posted'] );
 		$text = $this->format($row['post_text'], $params);
+		$text .= $attachments;
 
 		$text = str_replace( "[more]", "", $text );
 

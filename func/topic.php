@@ -43,6 +43,14 @@ class topic extends qsfglobal
 {
 	function execute()
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		if (!isset($this->get['s'])) {
 			$this->get['s'] = '';
 		}
@@ -87,7 +95,7 @@ class topic extends qsfglobal
 		$topic = $this->db->fetch("
 			SELECT
 				t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum,
-				t.topic_edited, t.topic_replies, t.topic_poll_options, f.forum_name
+				t.topic_icon, t.topic_edited, t.topic_replies, t.topic_poll_options, f.forum_name
 			FROM
 				%ptopics t, %pforums f
 			WHERE
@@ -265,6 +273,11 @@ class topic extends qsfglobal
 			$opts[] = '<a href="' . $this->self . '?a=topic&amp;s=split&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_split . '</a>';
 		}
 
+		$topic_icon = null;
+		if ($topic['topic_icon']) {
+			$topic_icon = $topic['topic_icon'];
+		}
+
 		if (!$opts) {
 			$mod_opts = '&nbsp;';
 		} else {
@@ -366,6 +379,12 @@ class topic extends qsfglobal
 
 			if (isset($this->get['hl'])) {
 				$post['post_text'] = str_replace($this->get['hl'], "<span style='color:#FF0000; font-weight:bold'>{$this->get['hl']}</span>", $post['post_text']);
+			}
+
+			if ($this->perms->auth('post_viewip', $topic['topic_forum'])) {
+				$post['post_ip'] = "{$this->lang->topic_ip}: {$post['post_ip']}";
+			} else {
+				$post['post_ip'] = null;
 			}
 
 			if ($post['post_author'] != USER_GUEST_UID) {
@@ -488,12 +507,6 @@ class topic extends qsfglobal
 				$edited = sprintf($this->lang->topic_edited, $post['post_edited_time'], $post['post_edited_by']);
 			}
 
-			if ($this->perms->auth('post_viewip', $topic['topic_forum'])) {
-				$post['post_ip'] = "{$this->lang->topic_ip}: {$post['post_ip']}";
-			} else {
-				$post['post_ip'] = null;
-			}
-
 			if (isset($attachments[$post['post_id']])) {
 				$download_perm = $this->perms->auth('post_attach_download', $topic['topic_forum']);
 
@@ -530,6 +543,7 @@ class topic extends qsfglobal
 				$can_reply = true;
 			}
 
+			$post_num = ($i + 1) + $this->get['min'];
 			$posts .= eval($this->template('TOPIC_POST'));
 			$i++;
 		}
@@ -577,10 +591,13 @@ class topic extends qsfglobal
 			$this->nohtml = true;
 			$this->db->query("UPDATE %pattach SET attach_downloads=attach_downloads+1 WHERE attach_id=%d", $this->get['id']);
 
+			// Need to terminate and unlock the session at this point or the site will stall for the current user.
+			session_write_close();
 			header("Content-type: application/octet-stream");
 			header("Content-Disposition: attachment; filename=\"{$data['attach_name']}\"");
 			header("Content-Length: " . $data['attach_size']);
-			readfile('./attachments/' . $data['attach_file']);
+			header("X-Robots-Tag: noarchive, nosnippet, noindex");
+			echo file_get_contents('./attachments/' . $data['attach_file']);
 		} else {
 			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);
 		}

@@ -571,6 +571,7 @@ class ru
 		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!'; //Translate
 		$this->files_update_not_permitted = 'You do not have the permission to update this file.'; //Translate
 		$this->files_update_pending = 'Your update has been uploaded and is pending approval.'; //Translate
+		$this->files_updated = 'Last Updated'; //Translate
 		$this->files_upload = 'Upload File'; //Translate
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
@@ -867,6 +868,7 @@ class ru
 		$this->mc_err_updating = 'Error Updating Profile'; //Translate
 		$this->mc_find = 'Find members with names containing'; //Translate
 		$this->mc_found = 'The following members were found. Please select one.'; //Translate
+		$this->mc_guest_banned = 'You cannot ban Guests, this would cause your board to become unusable.'; //Translate
 		$this->mc_guest_needed = 'The guest account is necessary for QSF Portal to function.'; //Translate
 		$this->mc_not_found = 'No members were found matching'; //Translate
 		$this->mc_user_aim = 'AIM Name'; //Translate
@@ -1044,6 +1046,8 @@ class ru
 		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'View the forum'; //Translate
 		$this->perms_group = 'Group'; //Translate
+		$this->perms_guest1 = 'You cannot stop Guests from using the board. The board would become unusable by anyone.'; //Translate
+		$this->perms_guest2 = 'You cannot stop the Guest Group from using the board. The board would become unusable by anyone.'; //Translate
 		$this->perms_is_admin = 'Access the admin control panel'; //Translate
 		$this->perms_only_user = 'Use only group permissions for this user'; //Translate
 		$this->perms_override_user = 'This will override the group permissions for this user.'; //Translate

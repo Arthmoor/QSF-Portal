@@ -3,13 +3,12 @@
 // File:	JPGRAPH_SCATTER.PHP
 // Description: Scatter (and impuls) plot extension for JpGraph
 // Created: 	2001-02-11
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_scatter.php 53 2005-06-06 18:12:54Z ljp $
+// Ver:		$Id: jpgraph_scatter.php 858 2007-03-23 19:03:33Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
 */
-require_once ('jpgraph_plotmark.inc');
+require_once ('jpgraph_plotmark.inc.php');
 
 //===================================================
 // CLASS FieldArrow
@@ -33,7 +32,7 @@ class FieldArrow {
 	$this->iColor = $aColor;
     }
 
-    function Stroke($aImg,$x,$y,$a) {
+    function Stroke(&$aImg,$x,$y,$a) {
 	// First rotate the center coordinates
 	list($x,$y) = $aImg->Rotate($x,$y);
 
@@ -66,9 +65,9 @@ class FieldPlot extends Plot {
     var $iCallback='';
     function FieldPlot($datay,$datax,$angles) {
 	if( (count($datax) != count($datay)) )
-	    JpGraphError::Raise("Fieldplots must have equal number of X and Y points.");
+	    JpGraphError::RaiseL(20001);//("Fieldplots must have equal number of X and Y points.");
 	if( (count($datax) != count($angles)) )
-	    JpGraphError::Raise("Fieldplots must have an angle specified for each X and Y points.");
+	    JpGraphError::RaiseL(20002);//("Fieldplots must have an angle specified for each X and Y points.");
 	
 	$this->iAngles = $angles;
 
@@ -135,7 +134,7 @@ class ScatterPlot extends Plot {
 // CONSTRUCTOR
     function ScatterPlot($datay,$datax=false) {
 	if( (count($datax) != count($datay)) && is_array($datax))
-	    JpGraphError::Raise("Scatterplot must have equal number of X and Y points.");
+	    JpGraphError::RaiseL(20003);//("Scatterplot must have equal number of X and Y points.");
 	$this->Plot($datay,$datax);
 	$this->mark = new PlotMark();
 	$this->mark->SetType(MARK_SQUARE);
@@ -166,7 +165,7 @@ class ScatterPlot extends Plot {
 	    $yzero=$yscale->scale_abs[0];
 	    
 	$this->csimareas = '';
-	for( $i=0; $i<$this->numpoints; ++$i ) {
+	for( $i=0; $i < $this->numpoints; ++$i ) {
 
 	    // Skip null values
 	    if( $this->coords[0][$i]==="" || $this->coords[0][$i]==='-' || $this->coords[0][$i]==='x')

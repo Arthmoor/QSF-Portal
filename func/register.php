@@ -88,7 +88,11 @@ class register extends qsfglobal
 			$pass2    = $this->post['passB'];
 
 			if ($this->sets['register_image']) {
-				$image = strtoupper($this->post['imagetext']);
+				if( isset($this->post['imagetext']) ) {
+					$image = strtoupper($this->post['imagetext']);
+				} else {
+					error(QUICKSILVER_NOTICE, "BAD BOT! You know better. But if you're a user you shoudln't be seeing this unless your browser malfunctioned.");
+				}
 			} else {
 				$image = '-';
 			}
@@ -138,17 +142,17 @@ class register extends qsfglobal
 				return $this->message($this->lang->register_reging, $this->lang->register_email_invalid);
 			}
 
-			if (!preg_match("/^[a-z0-9_\- ]{5,}$/i", $pass)) {
-				return $this->message($this->lang->register_reging, $this->lang->register_pass_invalid);
+			if ($pass != $pass2) {
+				return $this->message($this->lang->register_reging, $this->lang->register_pass_match);
 			}
+
+			if (!$this->validator->validate($pass, TYPE_PASSWORD)) {
+ 				return $this->message($this->lang->register_reging, $this->lang->register_pass_invalid);
+ 			}
 
 			$eexists = $this->db->fetch("SELECT user_email FROM %pusers WHERE user_email='%s'", $email);
 			if ($eexists) {
 				return $this->message($this->lang->register_reging, $this->lang->register_email_used);
-			}
-
-			if ($pass != $pass2) {
-				return $this->message($this->lang->register_reging, $this->lang->register_pass_match);
 			}
 
 			$pass = md5($pass);

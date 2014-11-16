@@ -90,7 +90,7 @@ $queries[] = "CREATE TABLE %pfiles (
   file_id int(12) unsigned NOT NULL auto_increment,
   file_catid int(10) unsigned NOT NULL default '0',
   file_submitted int(10) unsigned NOT NULL default '0',
-  file_author varchar(20) NOT NULL default '',
+  file_author varchar(30) NOT NULL default '',
   file_name varchar(32) NOT NULL default '',
   file_filename varchar(255) NOT NULL default '',
   file_md5name varchar(32) NOT NULL default '',
@@ -538,6 +538,7 @@ $sets['optional_modules'] = array(
 	'help',
 	'members',
 	'mod',
+	'newspost',
 	'page',
 	'pm',
 	'profile',
@@ -547,6 +548,6 @@ $sets['optional_modules'] = array(
 );
 $settings = serialize($sets);
 $queries[] = "INSERT INTO %psettings (settings_id, settings_data) VALUES (1, '{$settings}')";
-$queries[] = "INSERT INTO %pskins (skin_name, skin_dir) VALUES ('QSF Comet Portal', 'default')";
+$queries[] = "INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Blue Comet', 'default')";
 $queries[] = "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)";
 ?>

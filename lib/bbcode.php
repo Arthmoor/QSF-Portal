@@ -199,10 +199,6 @@ class bbcode extends htmltools
 
 		$in = strtr($in, $strtr);
 
-		// FIXME: Hackish workaround.
-		// Bug reported: http://forums.quicksilverforums.com/index.php?a=topic&t=1134&p=6784#p6784
-		$in = str_replace( "[root]", "", $in );
-		$in = str_replace( "[/root]", "", $in );
 		return $in;
 	}
 
@@ -312,10 +308,11 @@ class bbcode extends htmltools
 				unset( $text );
 
 				if ( '/' === $element{0} ) {
-					$this->_pop( substr( $element, 1 ) );
-
-					$__temp = &$curser->parent;
-					$curser = &$__temp;
+					if ( $this->_pop( substr( $element, 1 ) ) )
+					{
+						$__temp = &$curser->parent;
+						$curser = &$__temp;
+					}
 				} else {
 					if ( false == $this->_push( $element ) )
 						return false;
@@ -417,13 +414,11 @@ class bbcode extends htmltools
 		}
 	}
 
-	function _get_code_html($lines)
+	function _get_code_html()
 	{
-		$height = ($lines * 14) + 14;
-		
 		$code_html = array();
-		$code_html['start_php'] = '<div class="code phpcode"><div class="codetitle">PHP:</div><pre style="height:' . $height . 'px;" class="phpdata">';
-		$code_html['start_code'] = '<div class="code"><div class="codetitle">Code:</div><pre style="height:' . $height . 'px;" class="codedata">';
+		$code_html['start_php'] = '<div class="code phpcode"><div class="codetitle">PHP:</div><pre class="phpdata">';
+		$code_html['start_code'] = '<div class="code"><div class="codetitle">Code:</div><pre class="codedata">';
 		$code_html['end'] = '</pre></div>';
 		return $code_html;
 	}
@@ -486,7 +481,7 @@ class bbcode extends htmltools
 			$start++;
 		}
 		
-		$codehtml = $this->_get_code_html($count);
+		$codehtml = $this->_get_code_html();
 
 		$return = '';
 		if ($php) {
@@ -597,7 +592,10 @@ class bbcode extends htmltools
 
 	function _process_size(&$node)
 	{
-		return '<span style="font-size:'.$node->attribute.'ex">'.$node->text.'</span>';
+		$value = $node->attribute;
+		if( intval($value) > 10 )
+			$value = "10";
+		return '<span style="font-size:'.$value.'ex">'.$node->text.'</span>';
 	}
 	
 	function _process_spoiler(&$node)

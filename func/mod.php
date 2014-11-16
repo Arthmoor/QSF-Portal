@@ -50,6 +50,14 @@ class mod extends qsfglobal
 	 **/
 	function execute()
 	{
+		if (!$this->perms->auth('board_view')) {
+			$this->lang->board();
+			return $this->message(
+				sprintf($this->lang->board_message, $this->sets['forum_name']),
+				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+			);
+		}
+
 		$this->set_title($this->lang->mod_label_controls);
 
 		if (!isset($this->get['s'])) {
@@ -171,9 +179,8 @@ class mod extends qsfglobal
 			$this->db->query("UPDATE %ptopics SET topic_forum=%d WHERE topic_id=%d", $this->post['newforum'], $newtopic);
 			$this->db->query("UPDATE %pposts SET post_topic=%d WHERE post_topic=%d", $newtopic, $this->get['t']);
 			$this->db->query("UPDATE %pvotes SET vote_topic=%d WHERE vote_topic=%d", $newtopic, $this->get['t']);
-			$this->db->query("UPDATE %psubscriptions SET subscription_item=%d WHERE subscription_item=%d AND subscription_type='topic'",
-				$newtopic, $this->get['t']);
 
+			$this->update_subscriptions( $newtopic );
 			$this->htmlwidgets->update_last_post($topic['topic_forum']);
 			$this->htmlwidgets->update_last_post($this->post['newforum']);
 
@@ -787,6 +794,42 @@ class mod extends qsfglobal
 	{
 		$this->db->query("UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d",
 			$topic_modes ^ TOPIC_PUBLISH, $t);
+	}
+
+	/**
+	 * Checks Subscriptions to make sure subscribed members can
+	 * still view the forum where the topic has been moved too
+	 *
+	 * @param $newtopic integer of the selected topic
+	 * @author Jonathan West <jon@quicksilverforums.com>
+	 * @since 1.3.2
+	 **/
+	function update_subscriptions($newtopic)
+	{
+		$query = $this->db->query("SELECT s.subscription_user, s.subscription_item, s.subscription_type,
+				u.user_id, u.user_group, u.user_perms,
+				g.group_id, g.group_perms,
+				t.topic_forum
+				FROM (%psubscriptions s, %pusers u, %pgroups g, %ptopics t)
+				WHERE s.subscription_user=u.user_id
+				AND u.user_group=g.group_id
+				AND t.topic_id=%d", $this->get['t']);
+
+		while ($sub = $this->db->nqfetch($query))
+		{
+			$perms = new $this->modules['permissions']($this);
+			$perms->db = &$this->db;
+			$perms->pre = &$this->pre;
+			$perms->get_perms($sub['user_group'], $sub['user_id'], ($sub['user_perms'] ? $sub['user_perms'] : $sub['group_perms']));
+
+			if(!$perms->auth('forum_view', $sub['topic_forum'])) {
+				$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+				$sub['user_id'], $sub['subscription_item']);
+			} else {
+				$this->db->query("UPDATE %psubscriptions SET subscription_item=%d WHERE subscription_item=%d AND subscription_type='topic'",
+				$newtopic, $this->get['t']);
+			}
+		}
 	}
 }
 ?>

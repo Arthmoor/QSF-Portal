@@ -34,9 +34,39 @@ class user_login extends modlet
 			$this->qsf->lang->login(); // For login words
 			$this->qsf->lang->register(); // For registration word
 
+			$request_uri = $this->get_uri();
+			if (substr($request_uri, -8) == 'register') {
+				$request_uri = $this->qsf->self;
+			}
 			return eval($this->qsf->template('MAIN_USER_LOGIN'));
 		}
 		return "";
+	}
+
+	function get_uri()
+	{
+		if (!isset($this->qsf->server['REQUEST_URI'])) {
+			return $this->qsf->sets['loc_of_board'];
+		}
+
+		$url = @parse_url($this->qsf->server['REQUEST_URI']);
+		if ($url === false) {
+			return $this->qsf->sets['loc_of_board'];
+		}
+
+		if (isset($this->query) && strpos( "http://", $this->query ) !== false ) {
+			error(QUICKSILVER_NOTICE, "BAD BOT! You should know better than that!");
+		}
+
+		if (!isset($url['path'])) {
+			return $this->qsf->sets['loc_of_board'];
+		}
+
+		if (!empty($url['query']) && !stristr($url['query'], 'login')) {
+			return $this->qsf->format($url['path'] . (!empty($url['query']) ? '?' . $url['query'] : null), FORMAT_HTMLCHARS);
+		} else {
+			return $this->qsf->sets['loc_of_board'];
+		}
 	}
 }
 ?>

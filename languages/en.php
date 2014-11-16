@@ -570,6 +570,7 @@ class en
 		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!';
 		$this->files_update_not_permitted = 'You do not have the permission to update this file.';
 		$this->files_update_pending = 'Your update has been uploaded and is pending approval.';
+		$this->files_updated = 'Last Updated';
 		$this->files_upload = 'Upload File';
 		$this->files_upload_no_root = 'Cannot upload to the Root category.';
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.';
@@ -866,6 +867,7 @@ class en
 		$this->mc_err_updating = 'Error Updating Profile';
 		$this->mc_find = 'Find members with names containing';
 		$this->mc_found = 'The following members were found. Please select one.';
+		$this->mc_guest_banned = 'You cannot ban Guests, this would cause your board to become unusable.';
 		$this->mc_guest_needed = 'The guest account is necessary for QSF Portal to function.';
 		$this->mc_not_found = 'No members were found matching';
 		$this->mc_user_aim = 'AIM Name';
@@ -1043,6 +1045,8 @@ class en
 		$this->perms_for = 'Permissions For';
 		$this->perms_forum_view = 'View the forum';
 		$this->perms_group = 'Group';
+		$this->perms_guest1 = 'You cannot stop Guests from using the board. The board would become unusable by anyone.';
+		$this->perms_guest2 = 'You cannot stop the Guest Group from using the board. The board would become unusable by anyone.';
 		$this->perms_is_admin = 'Access the admin control panel';
 		$this->perms_only_user = 'Use only group permissions for this user';
 		$this->perms_override_user = 'This will override the group permissions for this user.';

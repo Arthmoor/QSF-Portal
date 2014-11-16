@@ -46,7 +46,7 @@ class stats extends admin
 		$query = $this->db->query("
 		SELECT
 		    COUNT(post_id) AS posts,
-		    FROM_UNIXTIME(post_time, '%%b %%y') AS month
+		    FROM_UNIXTIME(post_time, '%%b %%Y') AS month
 		FROM %pposts
 		GROUP BY month
 		ORDER BY post_time");
@@ -77,7 +77,7 @@ class stats extends admin
 			if ($total == 0) {
 				$width = 0;
 			} else {
-				$width = round($stat / $total * 100) * 2;
+				$width = round(($stat / $total) * 100) * 6;
 			}
 			$Stats .= eval($this->template('STAT_STAT'));
 		}
@@ -89,7 +89,7 @@ class stats extends admin
 		$query = $this->db->query("
 		SELECT
 		    COUNT(user_id) AS users,
-		    FROM_UNIXTIME(user_joined, '%%b %%y') AS month
+		    FROM_UNIXTIME(user_joined, '%%b %%Y') AS month
 		FROM %pusers
 		WHERE user_joined != 0
 		GROUP BY month
@@ -112,7 +112,7 @@ class stats extends admin
 			if ($total == 0) {
 				$width = 0;
 			} else {
-				$width = round($stat / $total * 100) * 2;
+				$width = round(($stat / $total) * 100) * 6;
 			}
 			$Stats .= eval($this->template('STAT_STAT'));
 		}

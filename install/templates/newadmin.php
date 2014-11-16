@@ -15,5 +15,5 @@
     </tr>
     <tr>
         <td><input class='input' type='text' name='admin_email' /></td>
-        <td><b>Email</b></td>
+        <td><b>Email</b><br /><span class='tiny'>Also used for sending system messages</span></td>
     </tr>

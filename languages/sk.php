@@ -570,6 +570,7 @@ class sk
 		$this->files_update_not_exist2 = 'You cannot approve updates that do not exist!'; //Translate
 		$this->files_update_not_permitted = 'You do not have the permission to update this file.'; //Translate
 		$this->files_update_pending = 'Your update has been uploaded and is pending approval.'; //Translate
+		$this->files_updated = 'Last Updated'; //Translate
 		$this->files_upload = 'Upload File'; //Translate
 		$this->files_upload_no_root = 'Cannot upload to the Root category.'; //Translate
 		$this->files_upload_not_permitted = 'You have not been permitted to upload files.'; //Translate
@@ -867,6 +868,7 @@ class sk
 		$this->mc_err_updating = 'Error Updating Profile'; //Translate
 		$this->mc_find = 'Nájs užívate¾ov, ktorých meno obsahuje';
 		$this->mc_found = 'Boli nájdení nasledujúci užívatelia. Prosím, vyberte jedného.';
+		$this->mc_guest_banned = 'You cannot ban Guests, this would cause your board to become unusable.'; //Translate
 		$this->mc_guest_needed = 'Konto guest je potrebné pre chod Quicksilver Fóra.';
 		$this->mc_not_found = 'Neboli nájdení žiadni užívatelia';
 		$this->mc_user_aim = 'AIM Name'; //Translate
@@ -1044,6 +1046,8 @@ class sk
 		$this->perms_for = 'Permissions For'; //Translate
 		$this->perms_forum_view = 'Zobrazi fórum';
 		$this->perms_group = 'Group'; //Translate
+		$this->perms_guest1 = 'You cannot stop Guests from using the board. The board would become unusable by anyone.'; //Translate
+		$this->perms_guest2 = 'You cannot stop the Guest Group from using the board. The board would become unusable by anyone.'; //Translate
 		$this->perms_is_admin = 'Prístup k administrátorskému ovládaciemu panelu (CP)';
 		$this->perms_only_user = 'Pre tohoto užívate¾a aplikova iba práva jeho skupiny';
 		$this->perms_override_user = 'Týmto prekryjete práva skupiny pre tohoto užívate¾a.';

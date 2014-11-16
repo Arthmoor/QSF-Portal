@@ -3,8 +3,7 @@
 // File: 	JPGRAPH_STOCK.PHP
 // Description:	Stock plot extension for JpGraph
 // Created: 	2003-01-27
-// Author:	Johan Persson (johanp@aditus.nu)
-// Ver:		$Id: jpgraph_stock.php 41 2005-06-06 10:46:10Z ljp $
+// Ver:		$Id: jpgraph_stock.php 782 2006-10-08 08:09:02Z ljp $
 //
 // Copyright (c) Aditus Consulting. All rights reserved.
 //========================================================================
@@ -22,7 +21,7 @@ class StockPlot extends Plot {
 // CONSTRUCTOR
     function StockPlot(&$datay,$datax=false) {
 	if( count($datay) % $this->iTupleSize ) {
-	    JpGraphError::Raise('Data values for Stock charts must contain an even multiple of '.$this->iTupleSize.' data points.');
+	    JpGraphError::RaiseL(21001,$this->iTupleSize);//('Data values for Stock charts must contain an even multiple of '.$this->iTupleSize.' data points.');
 	}
 	$this->Plot($datay,$datax);
 	$this->numpoints /= $this->iTupleSize;
@@ -58,13 +57,14 @@ class StockPlot extends Plot {
 	$graph->SetTextScaleOff($b);						
     }
 	
-    // Method description
-    function Stroke($img,$xscale,$yscale) {
+    // Stroke stock plot
+    function Stroke(&$img,$xscale,$yscale) {
 	$n=$this->numpoints;
 	if( $this->center ) $n--;
 	if( isset($this->coords[1]) ) {
 	    if( count($this->coords[1])!=$n )
-		JpGraphError::Raise("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])." Number of Y-points:$numpoints");
+		JpGraphError::RaiseL(2003,count($this->coords[1]),$numpoints);
+//("Number of X and Y points are not equal. Number of X-points:".count($this->coords[1])." Number of Y-points:$numpoints");
 	    else
 		$exist_x = true;
 	}
@@ -167,7 +167,7 @@ class BoxPlot extends StockPlot {
 	$this->iNColor = $aNeg;
     }
 
-    function ModBox($img,$xscale,$yscale,$i,$xl,$xr,$neg) {
+    function ModBox(&$img,$xscale,$yscale,$i,$xl,$xr,$neg) {
 	if( $neg ) 
 	    $img->SetColor($this->iNColor);
 	else

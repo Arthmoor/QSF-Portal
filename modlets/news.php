@@ -29,7 +29,7 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class news extends modlet
 {
-	function getposts( $forum )
+	function getposts( $forums )
 	{
 		$items = "";
 
@@ -38,15 +38,12 @@ class news extends modlet
 		    FROM %ptopics t
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
-		    WHERE t.topic_forum=%d GROUP BY t.topic_id ORDER BY t.topic_posted DESC", $forum );
+		    WHERE topic_forum IN ($forums) GROUP BY t.topic_id ORDER BY t.topic_posted DESC" );
 
 		// Display the first 5 news posts in the normal boxes.
 		$x = 0;
 		while( $row = $this->qsf->db->nqfetch($result) )
 		{
-			if( ++$x == 5 )
-				break;
-
 			$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
 			if ($row['post_mbcode']) {
 				$params |= FORMAT_MBCODE;
@@ -70,6 +67,9 @@ class news extends modlet
 
 			$comments = "<a href=\"{$this->qsf->self}?a=newspost&amp;t={$row['topic_id']}\">{$row['topic_replies']} {$this->qsf->lang->news_comments}</a>";
 			$items .= eval($this->qsf->template('MAIN_NEWS_ITEM'));
+
+			if( ++$x == 5 )
+				break;
 		}
 
 		// Make simple links to the rest.
@@ -85,12 +85,14 @@ class news extends modlet
 		return $items;
 	}
 
-	function run( $arg )
+	function run()
 	{
-		$forum = intval( $arg );
-
+		$args = func_get_args();
 		$this->qsf->lang->news();
-		return $this->getposts( $forum );
+
+		foreach( $args as $k => $v )
+			$args[$k] = intval($v);
+		return $this->getposts( implode( ',', $args ) );
 	}
 }
 ?>
