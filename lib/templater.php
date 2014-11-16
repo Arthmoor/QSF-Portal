@@ -116,7 +116,8 @@ class templater extends forumutils
 		while ($template = $this->db->nqfetch($temp_query))
 		{
 			// Check for MODLET with optional parameter
-			$template['template_html'] = preg_replace('/<MODLET\s+(.*?)\((.*?)\)\s*>/se', '$this->_modlets_callback(\'\\1\', \'\\2\', $template[\'template_name\'])', $template['template_html']);
+			$y = $template['template_name'];
+			$template['template_html'] = preg_replace_callback( '/<MODLET\s+(.*?)\((.*?)\)\s*>/s', function($x) use ($y) { return $this->_modlets_callback($x, $y); }, $template['template_html'] );
 			// Check for IF statements
 			$template['template_html'] = $this->parse_ifs($template['template_html'], $template['template_name']);
 			$templates[$template['template_name']] = $template['template_html'];
@@ -370,8 +371,11 @@ class templater extends forumutils
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @return string replace modlet statements with a var
 	 **/
-	function _modlets_callback($modlet, $parameter, $piece)
+	function _modlets_callback( $matches = array(), $piece )
 	{
+		$modlet = $matches[1];
+		$parameter = $matches[2];
+
 		$macro_id = isset($this->macro[$piece]) ? count($this->macro[$piece]) : 0;
         
 		// Check the modlet uses valid characters

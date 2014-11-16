@@ -82,7 +82,7 @@ class admin extends qsfglobal
 	 * @since Beta 2.1
 	 * @return string HTML
 	 */
-	function message($title, $message, $link_text = null, $link = null, $redirect = null)
+	function message($title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4)
 	{
 		if ($link_text) {
 			$message .= "<br /><br /><a href=\"$link\">$link_text</a>";

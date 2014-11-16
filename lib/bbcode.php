@@ -114,16 +114,12 @@ class bbcode
 	private function bbcode_parse( $in )
 	{
 		$search = array(
-			'/\\[code\\](.*?)\\[\\/code\\]/ise',
-			'/\\[codebox\\](.*?)\\[\\/codebox\\]/ise',
-			'/\\[php\\](.*?)\\[\\/php\\]/ise',
 			'/\\[spoiler\\](.*)\\[\\/spoiler\\]/isU',
 			'/\\[b\\](.*)\\[\\/b\\]/isU',
 			'/\\[i\\](.*)\\[\\/i\\]/isU',
 			'/\\[u\\](.*)\\[\\/u\\]/isU',
 			'/\\[s\\](.*)\\[\\/s\\]/isU',
 			'/\\[pre\\](.*?)\\[\\/pre\\]/isU',
-			'/\\[url=(.*)\\](.*)\\[\\/url\\]/ieU',
 			'/\\[img\\](.*)\\[\\/img\\]/isU',
 			'/\\[img=(.*)\\](.*)\\[\\/img\\]/iU',
 			'/\\[email=(.*)\\](.*)\\[\\/email\\]/iU',
@@ -146,20 +142,14 @@ class bbcode
 			'/\\[br\\]/isU',
 			'/\\[tm\\]/isU',
 			'/\\[c\\]/isU',
-			// '/\\[topic=([:digit:])\\](.*)\\[/topic\\]/ise',
-			'/\\[youtube\\](.*?)\\[\\/youtube\\]/ise'
 			 );
 		$replace = array(
-			'$this->format_code(\'$1\', false, false)',
-			'$this->format_code(\'$1\', false, true)',
-			'$this->format_code(\'$1\', true, false)',
 			'<div class="spoilerbox"><strong>Spoiler:</strong><div class="spoiler">$1</div></div>',
 			'<strong>$1</strong>',
 			'<em>$1</em>',
 			'<span style="text-decoration:underline">$1</span>',
 			'<s>$1</s>',
 			'<pre>$1</pre>',
-			'$this->process_url(\'$1\', \'$2\')',
 			'<img src="$1" alt="" />',
 			'<img src="$1" alt="$2" />',
 			'<a href="mailto:$1">$2</a>',
@@ -177,9 +167,20 @@ class bbcode
 			'<br />',
 			'&reg;',
 			'&copy;',
-			// '$this->process_topic(\'$1\', \'$2\')',
-			'$this->process_youtube(\'$1\')'
 			 );
+
+			// '/\\[topic=([:digit:])\\](.*)\\[/topic\\]/ise',
+			// '$this->process_topic(\'$1\', \'$2\')',
+
+		// This, this right here, all because some yahoo in charge of PHP decision making decided something was wrong with the old ways.
+		// If this looks really stupid to you, it's because it *IS* really stupid.
+		$in = preg_replace_callback( '/\\[code\\](.*?)\\[\\/code\\]/is', function($x) { return $this->bbcode_parse_code_callback($x); }, $in );
+		$in = preg_replace_callback( '/\\[codebox\\](.*?)\\[\\/codebox\\]/is', function($x) { return $this->bbcode_parse_codebox_callback($x); }, $in );
+		$in = preg_replace_callback( '/\\[php\\](.*?)\\[\\/php\\]/is', function($x) { return $this->bbcode_parse_php_callback($x); }, $in );
+		$in = preg_replace_callback( '/\\[url=(.*)\\](.*)\\[\\/url\\]/iU', function($x) { return $this->process_url($x); }, $in );
+		$in = preg_replace_callback( '/\\[youtube\\](.*?)\\[\\/youtube\\]/is', function($x) { return $this->process_youtube($x); }, $in );
+
+		// This is what was always perfectly fine before, yet still seems fine for everything but the precious 'e' tag deprecation.
 		$in = preg_replace( $search, $replace, $in );
 		return $this->parse_quotes( $in );
 	}
@@ -188,12 +189,33 @@ class bbcode
 	{
 		$parse = array(
 			'matches' => array('~(^|\s)([a-z0-9-_.]+@[a-z0-9-.]+\.[a-z0-9-_.]+)~i',
-				'~(^|\s)(http|https|ftp)://(\w+[^\s\[\]]+)~ise'),
+				'~(^|\s)(http|https|ftp)://(\w+[^\s\[\]]+)~is'),
 			'replacements' => array('\\1[email=\\2]\\2[/email]',
 				'\'\\1[url=\\2://\\3]\\2://\\3[/url]\'')
 		);
 
 		return preg_replace($parse['matches'], $parse['replacements'], $in);
+	}
+
+	private function bbcode_parse_code_callback( $matches = array() )
+	{
+		$text = $this->format_code( $matches[1], false, false );
+
+		return $text;
+	}
+
+	private function bbcode_parse_codebox_callback( $matches = array() )
+	{
+		$text = $this->format_code( $matches[1], false, true );
+
+		return $text;
+	}
+
+	private function bbcode_parse_php_callback( $matches = array() )
+	{
+		$text = $this->format_code( $matches[1], true, false );
+
+		return $text;
 	}
 
 	private function parse_quotes( $in )
@@ -306,8 +328,20 @@ class bbcode
 		return $return;
 	}
 
-	private function process_url( $url, $text )
+	private function process_url( $matches = array() )
 	{
+		$url = $matches[1];
+		$text = $matches[2];
+
+		// No HTTP attached? Add it.
+		$pos = strpos( $url, 'http://' );
+		if( $pos === FALSE ) {
+			$pos = strpos( $url, 'https://' );
+			if( $pos === FALSE ) {
+				$url = 'http://' . $url;
+			}
+		}
+
 		// Check for a query string.
 		if ( !empty( $_SERVER['QUERY_STRING'] ) ) {
 			$queryString = '?' . $_SERVER['QUERY_STRING'];
@@ -326,21 +360,24 @@ class bbcode
 				return '<a href="' . $url . '">' . $text . '</a>';
 			}
 		}
+
 		return '<a href="' . $url . '">' . $text . '</a>';
 	}
 
 	private function process_youtube($in)
 	{
-		if( preg_match( '/v=([^&]+)/', $in, $matches ) > 0 ) {
-			$src = $matches[1];
+		$in = $matches[1];
 
-			return '<iframe class="youtube-player" type="text/html" width="640" height="400" src="http://www.youtube.com/embed/'.$src.'" frameborder="0"></iframe>';
+		if( preg_match( '/v=([^&]+)/', $in, $newmatches ) > 0 ) {
+			$src = $newmatches[1];
+
+			return '<iframe class="youtube-player" width="640" height="400" src="http://www.youtube.com/embed/'.$src.'"></iframe>';
 		}
 
-		if( preg_match( '/youtu.be\/([^&]+)/', $in, $matches ) > 0 ) {
-			$src = $matches[1];
+		if( preg_match( '/youtu.be\/([^&]+)/', $in, $newmatches ) > 0 ) {
+			$src = $newmatches[1];
 
-			return '<iframe class="youtube-player" type="text/html" width="640" height="400" src="http://www.youtube.com/embed/'.$src.'" frameborder="0"></iframe>';
+			return '<iframe class="youtube-player" width="640" height="400" src="http://www.youtube.com/embed/'.$src.'"></iframe>';
 		}
 
 		return $in;

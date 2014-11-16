@@ -234,7 +234,7 @@ function error_fatal($type, $message, $file, $line = 0)
 
   <div id=\"bottom\">&nbsp;</div>
  </div>
- <div id=\"footer\">Powered by QSF Portal &copy; 2006-2012 The QSF Portal Development Team</div>
+ <div id=\"footer\">Powered by QSF Portal &copy; 2006-2015 The QSF Portal Development Team</div>
 </body>
 </html>" );
 }

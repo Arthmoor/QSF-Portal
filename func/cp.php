@@ -669,7 +669,7 @@ class cp extends qsfglobal
 			return $this->message($this->lang->cp_label_edit_sig, $this->lang->cp_no_edit_sig);
 		}
 
-		if( $this->user['user_posts'] < 5 ) {
+		if( $this->user['user_group'] == USER_MEMBER && $this->user['user_posts'] < 5 ) {
 			return $this->message($this->lang->cp_label_edit_sig, $this->lang->cp_no_edit_sig);
 		}
 
