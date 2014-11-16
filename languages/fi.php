@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -39,14 +39,16 @@ class fi
 		$this->active_modules_active = 'Tarkkaili aktiivisia käyttäjiä';
 		$this->active_modules_board = 'Katsoi keskustelualueen etusivua';
 		$this->active_modules_cp = 'Käytti ohjauspaneelia';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Luki huonetta: %s';
 		$this->active_modules_help = 'Luki ohjeistusta';
 		$this->active_modules_login = 'Kirjautui tai poistui';
 		$this->active_modules_members = 'Luki käyttäjälistaa';
 		$this->active_modules_mod = 'Suoritti valvojan toimenpiteitä';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Käytti viestijärjestelmää';
 		$this->active_modules_post = 'Kirjoitti viestiä';
-		$this->active_modules_printer = 'Tulosti keskustelua: %s';
 		$this->active_modules_profile = 'Luki profiilia: %s';
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = 'Suoritti hakua';
@@ -277,6 +279,7 @@ class fi
 		$this->cp_been_updated_prefs = 'Asetuksesi on päivitetty.';
 		$this->cp_changing_pass = 'Vaihdetaan salasanaa';
 		$this->cp_contact_pm = 'Salli toisten käyttäjien ottaa sinuun yhteyttä viestittimellä?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Ohjauspaneeli';
 		$this->cp_current_avatar = 'Nykyinen avatar';
 		$this->cp_current_time = 'Nyt on %s.';
@@ -428,6 +431,7 @@ class fi
 		$this->forum_sub_topics = 'Keskustelua';
 		$this->forum_subscribe = 'Lähetä sähköpostia kun tähän huoneeseen kirjoitetaan viestejä';
 		$this->forum_topic = 'Keskustelu';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Näytetty';
 		$this->forum_write_topics = 'Voit aloittaa keskustelun tässä huoneessa.';
 	}
@@ -655,6 +659,7 @@ class fi
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -856,6 +861,7 @@ class fi
 		$this->pm_sendamsg = 'Lähetä viesti';
 		$this->pm_sendingpm = 'Lähetä viesti viestittimellä';
 		$this->pm_sendon = 'Lähetetty';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Viestisi lähettäminen onnistui.';
 		$this->pm_sure_del = 'Haluatko varmasti poistaa tämän viestin?';
 		$this->pm_sure_delall = 'Haluatko varmasti poistaa kaikki viestit tästä kansiosta?';
@@ -1043,6 +1049,7 @@ class fi
 		$this->recent_sub_topics = 'Keskustelua';
 		$this->recent_subscribe = 'Lähetä sähköpostia kun tähän huoneeseen kirjoitetaan viestejä';
 		$this->recent_topic = 'Keskustelu';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Näytetty';
 		$this->recent_write_topics = 'Voit aloittaa keskustelun tässä huoneessa.';
 	}

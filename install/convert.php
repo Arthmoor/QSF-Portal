@@ -32,7 +32,7 @@ require_once $set['include_path'] . '/lib/packageutil.php';
 /**
  * Convert From Another Board
  *
- * @author Roger Libiez (Samson)
+ * @author Roger Libiez [Samson]
  * @Since 1.1.5
  */
 class convert extends qsfglobal
@@ -179,7 +179,9 @@ class convert extends qsfglobal
 			// Create template
 			$xmlInfo = new xmlparser();
 			$xmlInfo->parse(SKIN_FILE);
-			packageutil::insert_templates('default', $this->db, $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES'));
+			$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
+			packageutil::insert_templates('default', $this->db, $templatesNode);
+			unset($templatesNode);
 			$xmlInfo = null;
 
 			$this->pre  = $this->sets['prefix'];

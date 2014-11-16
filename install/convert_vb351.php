@@ -24,7 +24,7 @@
  * vBulliten Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] <http://quicksilverforums.afkmud.com>
+ * Roger Libiez [Samson]
  *
  * This convertor has only had limited testing on a vBulliten 3.5.1 live demo database
  **/

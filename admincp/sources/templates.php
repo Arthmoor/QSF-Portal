@@ -58,7 +58,6 @@ class templates extends admin
 			'pm'             => $this->lang->temps_pm,
 			'poll'           => $this->lang->temps_polls,
 			'post'           => $this->lang->temps_post,
-			'printer'        => $this->lang->temps_printer,
 			'profile'        => $this->lang->temps_profile,
 			'prune'          => $this->lang->temps_topic_prune,
 			'recent'	 => $this->lang->temps_recent,

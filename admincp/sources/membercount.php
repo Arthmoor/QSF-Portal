@@ -41,6 +41,7 @@ class membercount extends admin
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 3.0
 	 * @version 1.0.0
+	 * @Intensive queries, but not used much.
 	 * @return string Message
 	 **/
 	function execute()
@@ -56,6 +57,26 @@ class membercount extends admin
 		$this->sets['members'] = $counts['count']-1; // Subtract el guesto
 		$this->write_sets();
 
+		// Try to fix user post and upload counts.
+		$users = $this->db->query( "SELECT user_id, user_posts, user_uploads FROM %pusers" );
+		while( ($user = $this->db->nqfetch($users) ) )
+		{
+			$uid = $user['user_id'];
+
+			$posts = $this->db->fetch( "SELECT COUNT(post_id) count FROM %pposts WHERE post_author=%d AND post_count=1", $uid );
+			if( $posts['count'] && $posts['count'] > 0 ) {
+				$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts['count'], $uid );
+			} else {
+				$this->db->query( "UPDATE %pusers SET user_posts=0 WHERE user_id=%d", $uid );
+			}
+
+			$files = $this->db->fetch( "SELECT COUNT(file_id) count FROM %pfiles WHERE file_submitted=%d", $uid );
+			if( $files['count'] && $files['count'] > 0 ) {
+				$this->db->query( "UPDATE %pusers SET user_uploads=%d WHERE user_id=%d", $files['count'], $uid );
+			} else {
+				$this->db->query( "UPDATE %pusers SET user_uploads=0 WHERE user_id=%d", $uid );
+			}
+		}
 		return $this->message($this->lang->mcount, $this->lang->mcount_updated);
 	}
 }

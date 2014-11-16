@@ -34,7 +34,8 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class recent_uploads extends modlet
 {	
-	function run() {
+	function run($param)
+	{
 		$content = "";
 		$result = $this->qsf->db->query(
 		  "SELECT f.*, u.user_name, c.fcat_name
@@ -47,11 +48,12 @@ class recent_uploads extends modlet
 		while($file = $this->qsf->db->nqfetch($result))
 		{
 			$filesize = ceil($file['file_size'] / 1024);
-			$fname = $this->qsf->format($file['file_name'], FORMAT_HTMLCHARS );
+			$fname = $this->qsf->format($file['file_name'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 			$title = "Downloads: {$file['file_downloads']}  Size: {$filesize} KB";
+			$author = $this->qsf->format($file['file_author'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			$content .= "<a href=\"". $this->qsf->self . "?a=files&amp;s=viewfile&amp;fid={$file['file_id']}\" title=\"{$title}\">{$fname}</a>";
-			$content .= "<br />Author: {$file['file_author']}<br />Submitted by: <a href=\"{$this->qsf->self}?a=profile&amp;w={$file['file_submitted']}\">{$file['user_name']}</a><hr />";
+			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->self}?a=profile&amp;w={$file['file_submitted']}\">{$file['user_name']}</a><hr />";
 		}
 		return eval($this->qsf->template('MAIN_RECENT_UPLOADS'));
 	}

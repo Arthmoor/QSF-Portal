@@ -429,16 +429,16 @@ class post extends qsfglobal
 				$this->sets['topics']++;
 
 				if ($s != 'poll') {
-					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_edited, topic_last_poster, topic_modes)
-						VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d)",
+					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes)
+						VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
 						$this->post['title'], $this->get['f'], $this->post['desc'], $this->user['user_id'],
-						$this->post['icon'], $this->time, $this->user['user_id'], $mode);
+						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode);
 				} else {
 					$mode |= TOPIC_POLL;
-					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_edited, topic_last_poster, topic_modes, topic_poll_options) VALUES
-						('%s', %d, '%s', %d, '%s', %d, %d, %d, '%s')",
+					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_poll_options) VALUES
+						('%s', %d, '%s', %d, '%s', %d, %d, %d, %d, '%s')",
 						$this->post['title'], $this->get['f'], $this->post['desc'], $this->user['user_id'],
-						$this->post['icon'], $this->time, $this->user['user_id'], $mode, $this->post['options']);
+						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, $this->post['options']);
 				}
 
 				$this->get['t'] = $this->db->insert_id("topics");

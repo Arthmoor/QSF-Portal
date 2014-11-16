@@ -77,5 +77,4 @@ $queries[] = "ALTER TABLE %pattach ROW_FORMAT=FIXED";
 $queries[] = "ALTER TABLE %pmembertitles ROW_FORMAT=FIXED";
 $queries[] = "ALTER TABLE %pskins ROW_FORMAT=FIXED";
 $queries[] = "ALTER TABLE %ptimezones ROW_FORMAT=FIXED";
-
 ?>

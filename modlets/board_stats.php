@@ -28,7 +28,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Generate board statistics information
  *
- * @author Roger Libiez <samson@afkmud.com>
+ * @author Roger Libiez [Samson]
  * @since 1.2.2
  **/
 class board_stats extends modlet

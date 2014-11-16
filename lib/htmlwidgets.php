@@ -46,7 +46,7 @@ class htmlwidgets extends htmltools
 		// Need the time for timezone stuff
 		$this->time = &$qsf->time;
 	}
-	
+
 	/**
 	 * Creates HTML-formatted page numbers
 	 *

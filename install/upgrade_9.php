@@ -24,6 +24,8 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.0.2 to 1.1.0
+
 $need_templates = true;
 
 $queries[] = "CREATE TABLE %plogs (
@@ -54,8 +56,7 @@ $this->sets['attach_types'] = array('jpg', 'gif', 'png', 'bmp', 'zip', 'tgz', 'g
 $this->sets['default_skin'] = 'default';
 $this->sets['register_image'] = 0;
  
-$settings = addslashes(serialize($this->sets));
+$settings = serialize($this->sets);
 $queries[] = "INSERT INTO %psettings (settings_id, settings_data) VALUES (1, '{$settings}')";
-
-$queries[] = "ALTER TABLE %pusers ADD user_active tinyint(1) unsigned NOT NULL AFTER user_pm DEFAULT '1'";
+$queries[] = "ALTER TABLE %pusers ADD user_active tinyint(1) unsigned NOT NULL DEFAULT '1' AFTER user_pm";
 ?>

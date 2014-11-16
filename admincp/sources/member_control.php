@@ -61,6 +61,8 @@ class member_control extends admin
 					$link = 'a=member_control&amp;s=profile';
 				} elseif ($this->get['s'] == 'perms') {
 					$link = 'a=perms&amp;s=user';
+				} elseif ($this->get['s'] == 'file_perms') {
+					$link = 'a=file_perms&amp;s=user';
 				} else {
 					$link = 'a=member_control&amp;s=delete';
 				}
@@ -101,6 +103,7 @@ class member_control extends admin
 				$this->db->query("DELETE FROM %pvotes WHERE vote_user=%d", $this->get['id']);
 				$this->db->query("DELETE FROM %pusers WHERE user_id=%d", $this->get['id']);
 				$this->db->query("DELETE FROM %ppmsystem WHERE pm_to=%d", $this->get['id']);
+				$this->db->query('DELETE FROM %preadmarks WHERE readmark_user=%d', $this->get['id']);
 
 				$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
 				$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
@@ -156,6 +159,7 @@ class member_control extends admin
 					'user_interests'	=> array($this->lang->mc_user_interests, U_BLOB, 255),
 					'user_signature'	=> array($this->lang->mc_user_signature, U_BLOB, 255),
 					'user_posts'		=> array($this->lang->mc_user_posts, U_INT, 10),
+					'user_uploads'		=> array($this->lang->mc_user_uploads, U_INT, 10),
 					'user_icq'		=> array($this->lang->mc_user_icq, U_INT, 16),
 					'user_msn'		=> array($this->lang->mc_user_msn, U_TEXT, 32),
 					'user_aim'		=> array($this->lang->mc_user_aim, U_TEXT, 32),
@@ -163,6 +167,7 @@ class member_control extends admin
 					'user_yahoo'		=> array($this->lang->mc_user_yahoo, U_TEXT, 100),
 					'user_email_show'	=> array($this->lang->mc_user_email_show, U_BOOL),
 					'user_pm'		=> array($this->lang->mc_user_pm, U_BOOL),
+					'user_pm_mail'		=> array($this->lang->mc_user_pm_mail, U_BOOL),
 					'user_view_avatars'	=> array($this->lang->mc_user_view_avatars, U_BOOL),
 					'user_view_signatures'	=> array($this->lang->mc_user_view_signatures, U_BOOL),
 					'user_view_emoticons'	=> array($this->lang->mc_user_view_emoticons, U_BOOL),
@@ -245,31 +250,85 @@ class member_control extends admin
 
 				return eval($this->template('ADMIN_MEMBER_PROFILE'));
 			} else {
-				$data = null;
-
-				foreach ($this->post as $var => $val)
-				{
-					if (($var == 'submit') or ($var == 'PHPSESSID')) {
-						continue;
-					}
-
-					if ($var == 'user_name') {
-						$val = $this->format($val, FORMAT_HTMLCHARS);
-					}
-
-					if ($var == 'user_email') {
-						$member = $this->db->fetch('SELECT user_name FROM %pusers WHERE user_id=%d LIMIT 1', $this->get['id']);
-						$guest_email = $val;
-						if ($member['user_name'] != 'Guest' && !$this->validator->validate($guest_email, TYPE_EMAIL)) {
-							return $this->message($this->lang->mc_err_updating, $this->lang->mc_email_invaid);
-						}
-					}
-					$data .= "$var='" . $this->db->escape($val) . "', ";
+				$member = $this->db->fetch('SELECT user_name FROM %pusers WHERE user_id=%d LIMIT 1', $this->get['id']);
+				$guest_email = $this->post['user_email'];
+				if ($member['user_name'] != 'Guest' && !$this->validator->validate($guest_email, TYPE_EMAIL)) {
+					return $this->message($this->lang->mc_err_updating, $this->lang->mc_email_invaid);
 				}
 
-				$data = substr($data, 0, -2);
+				if (!isset($this->post['user_view_avatars'])) {
+					$this->post['user_view_avatars'] = 0;
+				}
 
-				$this->db->query("UPDATE %pusers SET $data WHERE user_id=%d", $this->get['id']);
+				if (!isset($this->post['user_view_signatures'])) {
+					$this->post['user_view_signatures'] = 0;
+				}
+
+				if (!isset($this->post['user_view_emoticons'])) {
+					$this->post['user_view_emoticons'] = 0;
+				}
+
+				if (!isset($this->post['user_email_show'])) {
+					$this->post['user_email_show'] = 0;
+				}
+
+				if (!isset($this->post['user_pm'])) {
+					$this->post['user_pm'] = 0;
+				}
+
+				if (!isset($this->post['user_pm_mail'])) {
+					$this->post['user_pm_mail'] = 0;
+				}
+
+				if (!empty($this->post['user_homepage']) && (substr($this->post['user_homepage'], 0, 7) != 'http://')) {
+					$this->post['user_homepage'] = 'http://' . $this->post['user_homepage'];
+				}
+
+				$user_name = $this->format($this->post['user_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR);
+				$user_group = intval($this->post['user_group']);
+				$user_title = $this->post['user_title'];
+				$user_title_custom = intval($this->post['user_title_custom']);
+				$user_language = $this->post['user_language'];
+				$user_skin = $this->post['user_skin'];
+				$user_avatar = $this->post['user_avatar'];
+				$user_avatar_type = $this->post['user_avatar_type'];
+				$user_avatar_width = intval($this->post['user_avatar_width']);
+				$user_avatar_height = intval($this->post['user_avatar_height']);
+				$user_level = intval($this->post['user_level']);
+				$user_birthday = $this->post['user_birthday'];
+				$user_timezone = intval($this->post['user_timezone']);
+				$user_location = $this->format($this->post['user_location'], FORMAT_HTMLCHARS);
+				$user_homepage = $this->format($this->post['user_homepage'], FORMAT_HTMLCHARS);
+				$user_interests = $this->format($this->post['user_interests'], FORMAT_HTMLCHARS);
+				$user_signature = $this->post['user_signature'];
+				$user_posts = intval($this->post['user_posts']);
+				$user_uploads = intval($this->post['user_uploads']);
+				$user_icq = intval($this->post['user_icq']);
+				$user_msn = $this->format($this->post['user_msn'], FORMAT_HTMLCHARS);
+				$user_aim = $this->format($this->post['user_aim'], FORMAT_HTMLCHARS);
+				$user_gtalk = $this->format($this->post['user_gtalk'], FORMAT_HTMLCHARS);
+				$user_yahoo = $this->format($this->post['user_yahoo'], FORMAT_HTMLCHARS);
+				$user_email_show = intval($this->post['user_email_show']);
+				$user_pm = intval($this->post['user_pm']);
+				$user_pm_mail = intval($this->post['user_pm_mail']);
+				$user_view_avatars = intval($this->post['user_view_avatars']);
+				$user_view_signatures = intval($this->post['user_view_signatures']);
+				$user_view_emoticons = intval($this->post['user_view_emoticons']);
+
+				$this->db->query( "UPDATE %pusers SET user_name='%s', user_group=%d, user_title='%s',
+				  user_title_custom=%d, user_language='%s', user_skin='%s', user_avatar='%s',
+				  user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d, user_level=%d,
+				  user_birthday='%s', user_timezone=%d, user_location='%s', user_homepage='%s',
+				  user_interests='%s', user_signature='%s', user_posts=%d, user_uploads=%d,
+				  user_icq=%d, user_msn='%s', user_aim='%s', user_gtalk='%s', user_yahoo='%s',
+				  user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
+				  user_view_signatures=%d, user_view_emoticons=%d WHERE user_id=%d",
+				  $user_name, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
+				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
+				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_interests,
+				  $user_signature, $user_posts, $user_uploads, $user_icq, $user_msn, $user_aim,
+				  $user_gtalk, $user_yahoo, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
+				  $user_view_signatures, $user_view_emoticons, $this->get['id'] );
 
 				if (($this->get['id'] == $this->sets['last_member_id'])
 				&& ($this->post['user_name'] != $this->sets['last_member'])) {

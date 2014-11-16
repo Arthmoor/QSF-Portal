@@ -25,7 +25,7 @@
  *
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] <http://quicksilverforums.afkmud.com>
+ * Roger Libiez [Samson]
  *
  * This convertor has been tested on YaBB SE 1.5.5c as obtained from sourceforge.net.
  * I make no guarantees of it working with something older than that.

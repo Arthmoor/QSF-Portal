@@ -145,7 +145,9 @@ class new_install extends qsfglobal
 			// Create template
 			$xmlInfo = new xmlparser();
 			$xmlInfo->parse(SKIN_FILE);
-			packageutil::insert_templates('default', $this->db, $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES'));
+			$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
+			packageutil::insert_templates('default', $this->db, $templatesNode);
+			unset($templatesNode);
 			$xmlInfo = null;
 
 			$this->sets = $this->get_settings($this->sets);
@@ -207,6 +209,14 @@ class new_install extends qsfglobal
 				
 				$this->sets['topics']++;
 				$this->sets['posts']++;
+			}
+
+			// Stupid as this may look, it appears to be quite necessary to allow categories to work.
+			$perms = new $this->modules['file_permissions']($this);
+			while ($perms->get_group())
+			{
+				$perms->add_z(0);
+				$perms->update();
 			}
 
 			$writeSetsWorked = $this->write_db_sets('../settings.php');

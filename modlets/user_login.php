@@ -33,7 +33,7 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class user_login extends modlet
 {	
-	function run() {
+	function run($param) {
 		if( $this->qsf->perms->is_guest ) {
 			$this->qsf->lang->login(); // For login words
 			$this->qsf->lang->register(); // For registration word

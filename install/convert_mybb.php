@@ -24,7 +24,7 @@
  * myBB Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] <http://quicksilverforums.afkmud.com>
+ * Roger Libiez [Samson]
  *
  * This convertor has been tested on unmodified databases for MyBB 1.0 and 1.1
  **/

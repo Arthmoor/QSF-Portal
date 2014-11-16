@@ -35,7 +35,7 @@ class recent_posts extends modlet
 	* @since 1.2.0
 	* @return string HTML with current online users and total membercount
 	**/
-	function run()
+	function run($param)
 	{	
 		if (!isset($this->qsf->lang->board_active_users)) {
 			$this->qsf->lang->board();
@@ -45,7 +45,7 @@ class recent_posts extends modlet
 		$forums_str = $this->qsf->readmarker->create_forum_permissions_string();
 
 		// Handle the unlikely case where the user cannot view ANY forums
-		if ($forums_str == "()") {
+		if ($forums_str == "") {
 			return $content;
 		}
 
@@ -58,21 +58,21 @@ class recent_posts extends modlet
 
 		while( $row = $this->qsf->db->nqfetch($query) )
 		{
-			$date = $row['topic_edited'];
-			$date = date( 'M j, Y g:i a', $date );
+			$date = $this->qsf->mbdate(DATE_LONG, $row['topic_edited']);
+			$topic_title = $this->qsf->format($row['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS);
 
 			if (!($row['topic_modes'] & TOPIC_PUBLISH)) {
 				if (!$this->qsf->perms->auth('topic_view_unpublished', $row['topic_forum']) || !$this->qsf->perms->auth('topic_view', $row['topic_forum'])) {
 					$content .= '';
 				}else{
-					$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'><i>".htmlentities($row['topic_title'])."</i></a><br />";
+					$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'><i>".$topic_title."</i></a><br />";
 					$content .= $date ." ". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">". $row['user_name']."</a><hr />";
 				}
 			}else{
 				if (!$this->qsf->perms->auth('topic_view', $row['topic_forum'])) {
 					$content .= '';
 				} else {
-				        $content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>".htmlentities($row['topic_title'])."</a><br />";
+				        $content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>".$topic_title."</a><br />";
 					$content .= $date ." ". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">".$row['user_name']."</a><hr />";
 				}
 			}

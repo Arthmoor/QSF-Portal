@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -41,14 +41,16 @@ class nl
 		$this->active_modules_active = 'Bekijkt actieve gebruikers';
 		$this->active_modules_board = 'Bekijkt index';
 		$this->active_modules_cp = 'Gebruikt controlepaneel';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Het bekijken van een forum: %s';
 		$this->active_modules_help = 'Gebruikt help';
 		$this->active_modules_login = 'Logt in/uit';
 		$this->active_modules_members = 'Bekijkt Gebruikerslijst';
 		$this->active_modules_mod = 'Modereren';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Gebruikt Messenger';
 		$this->active_modules_post = 'Bezig met een bericht te plaatsen';
-		$this->active_modules_printer = 'Onderwerp afdrukken %s';
 		$this->active_modules_profile = 'Het bekijken van profiel: %s';
 		$this->active_modules_recent = 'Recente berichten bekijken';
 		$this->active_modules_search = 'Zoekt';
@@ -279,6 +281,7 @@ class nl
 		$this->cp_been_updated_prefs = 'Uw instellingen zijn gewijzigd.';
 		$this->cp_changing_pass = 'Verander je wachtwoord';
 		$this->cp_contact_pm = 'Sta toe dat anderen je privé berichten sturen?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Controlepaneel';
 		$this->cp_current_avatar = 'Huidige avatar';
 		$this->cp_current_time = 'Het is nu %s.';
@@ -430,6 +433,7 @@ class nl
 		$this->forum_sub_topics = 'Onderwerpen';
 		$this->forum_subscribe = 'Stuur mij een e-mail als er berichten geplaatst zijn in dit onderwerp';
 		$this->forum_topic = 'Onderwerp';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Bekeken';
 		$this->forum_write_topics = 'U kan onderwerpen aanmaken in dit forum.';
 	}
@@ -657,6 +661,7 @@ class nl
 		$this->mc_user_msn = 'MSN Messenger';
 		$this->mc_user_name = 'Naam';
 		$this->mc_user_pm = 'Accepteer privé berichten';
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Berichten';
 		$this->mc_user_signature = 'Handtekening';
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -858,6 +863,7 @@ class nl
 		$this->pm_sendamsg = 'Stuur een bericht';
 		$this->pm_sendingpm = 'Stuur een PB';
 		$this->pm_sendon = 'Verstuurd op';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Je privé bericht is met succes verstuurd';
 		$this->pm_sure_del = 'Weet je zeker dat u dit bericht wilt verwijderen?';
 		$this->pm_sure_delall = 'Weet je zeker dat je alle berichten wilt verwijderen in deze map??';
@@ -1045,6 +1051,7 @@ class nl
 		$this->recent_sub_topics = 'Onderwerpen';
 		$this->recent_subscribe = 'Stuur een e-mail als er berichten geplaatst zijn in dit onderwerp';
 		$this->recent_topic = 'Onderwerp';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Bekeken';
 		$this->recent_write_topics = 'Je kan onderwerpen aanmaken in dit forum.';
 	}

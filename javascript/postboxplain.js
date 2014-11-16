@@ -141,15 +141,7 @@ function createButton(descriptor, textarea) {
 }
 
 // Note: This is normally run onfocus on the text area it's associated with
-function bbcodeInit() {
-	var textarea = document.getElementById("bbcode");
-	
-	if (!textarea) {
-		textarea = document.getElementById("bbcodequick");
-	}
-	
-	if (!textarea) return; // bail out
-	
+function initTextarea(textarea) {
 	textarea.buttonEvents = new Array();
 		
 	textarea.buildButtons = function(buttonArray) {
@@ -297,6 +289,21 @@ function bbcodeInit() {
 		}
 		return true;
 	};
+}
+
+function bbcodeInit() {
+	var textarea = document.getElementById("bbcode");
+	
+	if (!textarea) {
+		textarea = document.getElementById("bbcodequick");
+		if (!textarea) return; // bail out
+	
+		textarea.onfocus = function() {
+			initTextarea(textarea);
+		}
+	} else {
+		initTextarea(textarea);
+	}
 }
 
 addLoadEvent(bbcodeInit);

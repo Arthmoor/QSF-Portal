@@ -24,7 +24,7 @@
  * Invisionboard 1.31f Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] <http://quicksilverforums.afkmud.com>
+ * Roger Libiez [Samson]
  *
  * Script tested on an unmodified Invisionboard 1.31f database.
  * Use with any other version is not advised!

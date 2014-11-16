@@ -24,6 +24,8 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.1.4 to 1.1.5
+
 $query = $db->query("DELETE FROM %pactive;");
 
 $need_templates = array(
@@ -97,31 +99,21 @@ $this->sets['rss_feed_desc'] = "";
 $this->sets['spider_active'] = 1;
 $this->sets['spider_name'] = array(
 	'googlebot' 	=> 'Google',
-	'lycos' 	=> 'Google',
-	'ask jeeves' 	=> 'Google',
-	'scooter'	=> 'Altavista',
-	'fast-webcrawler'=>'AlltheWeb',
-	'slurp@inktomi' => 'Inktomi',
-	'turnitinbot'	=> 'Turnitin.com',
-	'gigabot'	=> 'Gigabot',
 	'yahoo'		=> 'Yahoo! Slurp',
-	'msnbot'	=> 'MSN Search',
-	'mediapartners-google'=>'AdSense',
-	'naverbot'	=> 'Naver',
-	'jetbot'	=> 'JetEye',
-	'alexa'		=> 'Alexa',
-	'ArchitextSpider'=>'Excite-Bot',
-	'pipeLiner'	=> 'PipeLine Spider'
+	'msnbot'	=> 'MSN Search'
 );
 $this->sets['optional_modules'] = array(
 	'active',
+	'board',
 	'cp',
 	'email',
+	'files',
+	'filerating',
 	'help',
 	'members',
 	'mod',
+	'page',
 	'pm',
-	'printer',
 	'profile',
 	'search',
 	'recent',

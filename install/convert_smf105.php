@@ -24,7 +24,7 @@
  * Simple Machines Forum 1.05 Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] <http://quicksilverforums.afkmud.com>
+ * Roger Libiez [Samson]
  *
  * This convertor has been tested on SMF 1.05.
  * I make no guarantees of it working with something older than that.

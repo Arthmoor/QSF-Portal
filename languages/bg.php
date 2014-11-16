@@ -39,14 +39,16 @@ class bg
 		$this->active_modules_active = 'Преглежда активните потребители';
 		$this->active_modules_board = 'Преглежда Главната страница';
 		$this->active_modules_cp = 'Използва контролния си панел';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Viewing a forum: %s'; //Translate
 		$this->active_modules_help = 'Използва Помощ';
 		$this->active_modules_login = 'Влиза/Излиза';
 		$this->active_modules_members = 'Преглежда списъка с потребителите';
 		$this->active_modules_mod = 'Модерира';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Използва Messenger';
 		$this->active_modules_post = 'Пише мнение';
-		$this->active_modules_printer = 'Printing a topic: %s'; //Translate
 		$this->active_modules_profile = 'Viewing a profile: %s'; //Translate
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = 'Търси из форума';
@@ -277,6 +279,7 @@ class bg
 		$this->cp_been_updated_prefs = 'Настройките бяха обновени успешно.';
 		$this->cp_changing_pass = 'Редакция на парола';
 		$this->cp_contact_pm = 'Позволяваш ли другите потребители да се свързват с теб посредством месинджър?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Контролен панел';
 		$this->cp_current_avatar = 'Сегашен аватар';
 		$this->cp_current_time = 'В момента е %s.';
@@ -428,6 +431,7 @@ class bg
 		$this->forum_sub_topics = 'Теми';
 		$this->forum_subscribe = 'Уведоми ме, когато някой напише ново мнение';
 		$this->forum_topic = 'Тема';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Прегледа';
 		$this->forum_write_topics = 'Можете да пускате нова тема.';
 	}
@@ -655,6 +659,7 @@ class bg
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Подпис';
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -856,6 +861,7 @@ class bg
 		$this->pm_sendamsg = 'Изпрати съобщение';
 		$this->pm_sendingpm = 'Изпрати ЛС';
 		$this->pm_sendon = 'Изпратено';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Съобщението е изпратено успешно.';
 		$this->pm_sure_del = 'Сигурен ли си, че искаш да изтриеш това съобщение?';
 		$this->pm_sure_delall = 'Сигурен ли си, че искаш да изтриеш всички съощения в тази папка?';
@@ -1043,6 +1049,7 @@ class bg
 		$this->recent_sub_topics = 'Теми';
 		$this->recent_subscribe = 'Уведоми ме, когато някой напише ново мнение';
 		$this->recent_topic = 'Тема';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Прегледа';
 		$this->recent_write_topics = 'Можете да пускате нова тема.';
 	}

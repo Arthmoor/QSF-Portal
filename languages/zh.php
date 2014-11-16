@@ -39,14 +39,16 @@ class zh
 		$this->active_modules_active = '��;�Ծ�û�';
 		$this->active_modules_board = '�����ҳ';
 		$this->active_modules_cp = 'ʹ�ÿ������';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Viewing a forum: %s'; //Translate
 		$this->active_modules_help = 'ʹ�ð���';
 		$this->active_modules_login = '��¼/�ǳ�';
 		$this->active_modules_members = '�鿴��Ա�б�';
 		$this->active_modules_mod = '���й���';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'ʹ�ö���';
 		$this->active_modules_post = '����';
-		$this->active_modules_printer = 'Printing a topic: %s'; //Translate
 		$this->active_modules_profile = 'Viewing a profile: %s'; //Translate
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = '����';
@@ -277,6 +279,7 @@ class zh
 		$this->cp_been_updated_prefs = '���ϲ�������Ѿ����¡�';
 		$this->cp_changing_pass = '�������';
 		$this->cp_contact_pm = '���������û�ͨ�����Ϣjϵ����';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = '�������';
 		$this->cp_current_avatar = '��ǰͷ��';
 		$this->cp_current_time = '������%s��';
@@ -428,6 +431,7 @@ class zh
 		$this->forum_sub_topics = '����';
 		$this->forum_subscribe = '����̳�������ʼ����ҵ�Email�';
 		$this->forum_topic = '����';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = '���';
 		$this->forum_write_topics = '������ڸ���̳�������⡣';
 	}
@@ -655,6 +659,7 @@ class zh
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -856,6 +861,7 @@ class zh
 		$this->pm_sendamsg = '���Ͷ���Ϣ';
 		$this->pm_sendingpm = '���Ͷ���Ϣ';
 		$this->pm_sendon = '��Ԥ��';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = '�����Ϣ�Ѿ��ɹ����͡�';
 		$this->pm_sure_del = '��ȷ��Ҫɾ�����Ϣ��';
 		$this->pm_sure_delall = '��Ҫȷ��ɾ����ļ��е�����������';
@@ -1043,6 +1049,7 @@ class zh
 		$this->recent_sub_topics = '����';
 		$this->recent_subscribe = '����̳�������ʼ����ҵ�Email�';
 		$this->recent_topic = '����';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = '���';
 		$this->recent_write_topics = '������ڸ���̳�������⡣';
 	}

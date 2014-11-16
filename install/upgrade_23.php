@@ -79,9 +79,7 @@ $need_templates = array(
 	'PROFILE_MAIN'
 	);
 
-// Permission changes	
-$new_permissions['submit_files'] = false;
-$new_permissions['download_files'] = true;
+// Forum permission changes	
 $new_permissions['page_create'] = false;
 $new_permissions['page_delete'] = false;
 $new_permissions['page_edit'] = false;
@@ -161,7 +159,7 @@ $queries[] = "CREATE TABLE %ppages (
   page_title varchar(255) NOT NULL default '',
   page_contents text NOT NULL default '',
   PRIMARY KEY  (page_id)
-) ENGINE=MyISAM";
+) TYPE=MyISAM";
 
 $this->sets['file_count'] = 0;
 $this->sets['code_approval'] = 0;

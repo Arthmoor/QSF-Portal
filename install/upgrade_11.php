@@ -24,6 +24,8 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.1.1 to 1.1.2
+
 $need_templates = true;
 
 $queries[] = "ALTER TABLE %pactive ADD active_item INT( 10 ) UNSIGNED NOT NULL AFTER active_action";

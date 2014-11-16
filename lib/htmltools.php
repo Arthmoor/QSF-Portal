@@ -34,7 +34,7 @@ class htmltools extends forumutils
 	var $replaces_loaded;
 	var $censor;		// Curse words to filter @var array
 	var $emotes;            // Text strings to be replaced with images @var array
-	
+
 	/**
 	 * Constructor
 	 *
@@ -48,14 +48,14 @@ class htmltools extends forumutils
 		$this->lang = &$qsf->lang;
 		$this->self = $qsf->self;
 		$this->skin = $qsf->skin;
-		
+
 		// Make the properties static (even on PHP 4)
 		static $replaces_loaded = false;
 		static $censor = array();
 		static $emotes = array(
 			'replacement' => array(),
 			'replacement_clickable' => array());
-			
+
 		$this->replaces_loaded =& $replaces_loaded;
 		$this->censor =& $censor;
 		$this->emotes =& $emotes;
@@ -113,8 +113,5 @@ class htmltools extends forumutils
 			}
 		}
 	}
-	
-
 }
-
 ?>

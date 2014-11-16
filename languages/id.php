@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -39,14 +39,16 @@ class id
 		$this->active_modules_active = 'Lihat aktif';
 		$this->active_modules_board = 'Lihat Index';
 		$this->active_modules_cp = 'Menggunakan Control Panel';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Viewing a forum: %s'; //Translate
 		$this->active_modules_help = 'Memakai Bantuan';
 		$this->active_modules_login = 'Logging In/Out';
 		$this->active_modules_members = 'Lihat Daftar Anggota';
 		$this->active_modules_mod = 'Moderating'; //Translate
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Memakai Messenger';
 		$this->active_modules_post = 'Posting'; //Translate
-		$this->active_modules_printer = 'Printing a topic: %s'; //Translate
 		$this->active_modules_profile = 'Viewing a profile: %s'; //Translate
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = 'Mencari';
@@ -277,6 +279,7 @@ class id
 		$this->cp_been_updated_prefs = 'Preference berhasil diupdate.';
 		$this->cp_changing_pass = 'Editing Password'; //Translate
 		$this->cp_contact_pm = 'Memperbolehkan yang lain untuk menghubungi anda via messenger?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Control Panel'; //Translate
 		$this->cp_current_avatar = 'Avatar digunakan';
 		$this->cp_current_time = 'It is currently %s.'; //Translate
@@ -428,6 +431,7 @@ class id
 		$this->forum_sub_topics = 'Topik';
 		$this->forum_subscribe = 'Kirimkan E-mail ke saya ketika topik ini dibalas';
 		$this->forum_topic = 'Topik';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Dilihat';
 		$this->forum_write_topics = 'Anda dapat membuat topik di forum ini.';
 	}
@@ -655,6 +659,7 @@ class id
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -856,6 +861,7 @@ class id
 		$this->pm_sendamsg = 'Kirim pesan';
 		$this->pm_sendingpm = 'Mengirim Pesan Pribadi';
 		$this->pm_sendon = 'Terkirim pada';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Pesan anda berhasil dikirim.';
 		$this->pm_sure_del = 'Anda yakin ingin menghapus pesan ini?';
 		$this->pm_sure_delall = 'Anda yakin ingin menghapus semua pesan dalam folder ini?';
@@ -1043,6 +1049,7 @@ class id
 		$this->recent_sub_topics = 'Topik';
 		$this->recent_subscribe = 'Kirimkan E-mail ke saya ketika topik ini dibalas';
 		$this->recent_topic = 'Topik';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Dilihat';
 		$this->recent_write_topics = 'Anda dapat membuat topik di forum ini.';
 	}

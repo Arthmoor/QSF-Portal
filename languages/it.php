@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -40,14 +40,16 @@ class it
 		$this->active_modules_active = 'Visualizza Attività Utenti';
 		$this->active_modules_board = 'Visualizza Indice';
 		$this->active_modules_cp = 'Usa Pannello di Controllo';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Visita il forum: %s';
 		$this->active_modules_help = 'Usa Help';
 		$this->active_modules_login = 'In Connessione o Disconnessione';
 		$this->active_modules_members = 'Visualizza Lista Iscritti';
 		$this->active_modules_mod = 'Modera';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Usa Messaggi Privati';
 		$this->active_modules_post = 'Scrive un Messaggio';
-		$this->active_modules_printer = 'Stampa la discussione: %s';
 		$this->active_modules_profile = 'Visualizza il profilo di: %s';
 		$this->active_modules_recent = 'Mostra i messaggi recenti';
 		$this->active_modules_search = 'Cerca';
@@ -278,6 +280,7 @@ class it
 		$this->cp_been_updated_prefs = 'Le tue preferenze sono state aggiornate.';
 		$this->cp_changing_pass = 'Modifica Password';
 		$this->cp_contact_pm = 'Permetti agli altri iscritti di contattarti via messenger?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Pannello di Controllo';
 		$this->cp_current_avatar = 'Avatar Attuale';
 		$this->cp_current_time = 'Attualmente sono le %s.';
@@ -429,6 +432,7 @@ class it
 		$this->forum_sub_topics = 'Argomenti';
 		$this->forum_subscribe = 'Mandami una e-mail quando qualcuno apre una nuova discussione';
 		$this->forum_topic = 'Discussioni';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Visite';
 		$this->forum_write_topics = 'Puoi aprire nuove discussioni in questo forum.';
 	}
@@ -656,6 +660,7 @@ class it
 		$this->mc_user_msn = 'Identità MSN';
 		$this->mc_user_name = 'Nome';
 		$this->mc_user_pm = 'Accetta Messaggi Privati';
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Messaggi';
 		$this->mc_user_signature = 'Firma';
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -857,6 +862,7 @@ class it
 		$this->pm_sendamsg = 'Invia un Messaggio';
 		$this->pm_sendingpm = 'Invio un PM';
 		$this->pm_sendon = 'Inviato il';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Il tuo messaggio è stato inviato.';
 		$this->pm_sure_del = 'Vuoi veramente eliminare questo messaggio?';
 		$this->pm_sure_delall = 'Vuoi veramente eliminare tutti i messaggi in questa cartella?';
@@ -1044,6 +1050,7 @@ class it
 		$this->recent_sub_topics = 'Argomenti';
 		$this->recent_subscribe = 'Mandami una e-mail quando qualcuno apre una nuova discussione';
 		$this->recent_topic = 'Discussioni';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Visite';
 		$this->recent_write_topics = 'Puoi aprire nuove discussioni in questo forum.';
 	}

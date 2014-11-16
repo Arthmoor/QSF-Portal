@@ -31,10 +31,9 @@ if (!defined('QUICKSILVERFORUMS')) {
  * @author KingOfSka <kingofska@gmail.com.com>
  * @return string HTML with Top Uploaders and link to their profile
 **/
-
 class top_uploaders extends modlet
 {
-	function run()
+	function run($param)
 	{
 		$content = "";
 		$result = $this->qsf->db->query( "SELECT user_id, user_name, user_uploads FROM %pusers ORDER BY user_uploads DESC LIMIT 5" );

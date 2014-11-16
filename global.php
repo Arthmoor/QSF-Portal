@@ -33,8 +33,8 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class qsfglobal
 {
-	var $name    = 'Quicksilver Forums'; // The name of the software @var string
-	var $version = 'v1.3.1';            // Quicksilver Forums' version @var string
+	var $name    = 'QSF Portal'; // The name of the software @var string
+	var $version = 'v1.3.2';            // Quicksilver Forums' version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -52,6 +52,7 @@ class qsfglobal
 	var $mainfile = 'index.php';	  // Combined with set['loc_of_board'] to make full url
 	var $db;                          // Database object @var object
 	var $perms;                       // Permissions object @var object
+	var $file_perms;		  // File permissions object @var object
 	var $skin;                        // The user's selected skin @var string
 	var $table;                       // Start to an HTML table @var string
 	var $etable;                      // End to an HTML table @var string
@@ -116,6 +117,7 @@ class qsfglobal
 		}
 
 		$this->perms = new $this->modules['permissions']($this);
+		$this->file_perms = new $this->modules['file_permissions']($this);
 		
 		/* set timezone offset */
 		if ($this->user['zone_updated'] < $this->time)

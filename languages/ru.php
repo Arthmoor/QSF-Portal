@@ -40,14 +40,16 @@ class ru
 		$this->active_modules_active = 'Просматривает список активных пользователей';
 		$this->active_modules_board = 'Сидит на главной';
 		$this->active_modules_cp = 'Лазит в контрольной панели';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Просматривает форум: %s';
 		$this->active_modules_help = 'Читает хелпы';
 		$this->active_modules_login = 'Логинится';
 		$this->active_modules_members = 'Смотрит список пользователей';
 		$this->active_modules_mod = 'Модерирует';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Пишет приватное сообщение';
 		$this->active_modules_post = 'Пишет сообщение';
-		$this->active_modules_printer = 'Печатает тему: %s';
 		$this->active_modules_profile = 'Смотрит профиль: %s';
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = 'Ищет';
@@ -278,6 +280,7 @@ class ru
 		$this->cp_been_updated_prefs = 'Твои настройки были обновлены.';
 		$this->cp_changing_pass = 'Изменение пароля';
 		$this->cp_contact_pm = 'Разрешить другим писать тебе личные сообщения?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Контрольная панель';
 		$this->cp_current_avatar = 'Текущая автара';
 		$this->cp_current_time = 'Сейчас %s.';
@@ -429,6 +432,7 @@ class ru
 		$this->forum_sub_topics = 'Тем';
 		$this->forum_subscribe = 'Уведомить по e-mail об ответах в этом форуме';
 		$this->forum_topic = 'Тема';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Просмотров';
 		$this->forum_write_topics = 'Ты можешь создавать темы в этом форуме.';
 	}
@@ -656,6 +660,7 @@ class ru
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -857,6 +862,7 @@ class ru
 		$this->pm_sendamsg = 'Послать сообщение';
 		$this->pm_sendingpm = 'Посылаю сообщение';
 		$this->pm_sendon = 'Послано';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Твое сообщение было успешно послано.';
 		$this->pm_sure_del = 'Ты действительно хочешь удалить это сообщение?';
 		$this->pm_sure_delall = 'Ты действительно хочешь удалить все сообщения в этой папке?';
@@ -1044,6 +1050,7 @@ class ru
 		$this->recent_sub_topics = 'Тем';
 		$this->recent_subscribe = 'Уведомить по e-mail об ответах в этом форуме';
 		$this->recent_topic = 'Тема';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Просмотров';
 		$this->recent_write_topics = 'Ты можешь создавать темы в этом форуме.';
 	}

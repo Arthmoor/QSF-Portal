@@ -1,8 +1,15 @@
     <tr>
+        <td class='subheader' colspan='2'>QSF Portal</td>
+    </tr>
+    <tr>
+        <td><input type='radio' name='from' value='24' id='upgrade24' checked='checked' />
+	<label for='upgrade24'>QSF Portal v1.3.1</label></td>
+    </tr>
+    <tr>
         <td class='subheader' colspan='2'>Quicksilver Forums</td>
     </tr>
     <tr>
-        <td><input type='radio' name='from' value='23' id='upgrade23' checked='checked' />
+        <td><input type='radio' name='from' value='23' id='upgrade23' />
 	<label for='upgrade23'>Quicksilver Forums v1.3.1</label></td>
     </tr>
     <tr>

@@ -39,14 +39,16 @@ class sk
 		$this->active_modules_active = 'Prezeranie aktívnych uívate¾ov';
 		$this->active_modules_board = 'Prezeranie indexu';
 		$this->active_modules_cp = 'Pouitie ovládacieho panela';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Prezeranie fóra: %s';
 		$this->active_modules_help = 'Pouívanie helpu';
 		$this->active_modules_login = 'Logging In/Out';
 		$this->active_modules_members = 'Prezeranie zoznamu èlenov';
 		$this->active_modules_mod = 'Moderovanie';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Pouívanie odkazovaèa';
 		$this->active_modules_post = 'Prispievanie';
-		$this->active_modules_printer = 'Vytlaèenie témy: %s';
 		$this->active_modules_profile = 'Prezeranie profilu: %s';
 		$this->active_modules_recent = 'Prezeranie najnovších príspevkov';
 		$this->active_modules_search = 'Vyh¾adávanie';
@@ -277,6 +279,7 @@ class sk
 		$this->cp_been_updated_prefs = 'Vaše nastavenia boli aktualizované.';
 		$this->cp_changing_pass = 'Zmena hesla';
 		$this->cp_contact_pm = 'Dovolíte ostatnım, aby Vás kontaktovali cez odkazovaè?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Ovládací panel';
 		$this->cp_current_avatar = 'Aktuálny avatar';
 		$this->cp_current_time = 'Teraz je %s.';
@@ -428,6 +431,7 @@ class sk
 		$this->forum_sub_topics = 'Témy';
 		$this->forum_subscribe = 'Posla emailom nové príspevky v tomto fóre';
 		$this->forum_topic = 'Téma';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Videné';
 		$this->forum_write_topics = 'V tomto fóre máte povolenie zaklada témy.';
 	}
@@ -656,6 +660,7 @@ class sk
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Meno';
 		$this->mc_user_pm = 'Prijíma osobné odkazy (PM)';
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Príspevky';
 		$this->mc_user_signature = 'Podpis';
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -858,6 +863,7 @@ class sk
 		$this->pm_sendamsg = 'Posla odkaz';
 		$this->pm_sendingpm = 'Posielanie odkazu';
 		$this->pm_sendon = 'Odoslané v';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Váš odkaz bol úspešne zaslanı.';
 		$this->pm_sure_del = 'Urèite chcete zmaza tento odkaz?';
 		$this->pm_sure_delall = 'Urèite chcete zmaza všetky odkazy v tomto adresári?';
@@ -1045,6 +1051,7 @@ class sk
 		$this->recent_sub_topics = 'Témy';
 		$this->recent_subscribe = 'Posla emailom nové príspevky v tomto fóre';
 		$this->recent_topic = 'Téma';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Videné';
 		$this->recent_write_topics = 'V tomto fóre máte povolenie zaklada témy.';
 	}

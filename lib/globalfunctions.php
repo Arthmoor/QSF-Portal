@@ -35,7 +35,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 function error($type, $message, $file = null, $line = 0)
 {
 	global $set; // Get the settings!
-	
+
 	if (isset($_GET['debug']) || function_exists('error_fatal') || !(error_reporting() & $type)) {
 		return;
 	}

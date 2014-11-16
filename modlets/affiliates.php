@@ -33,7 +33,8 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class affiliates extends modlet
 {	
-	function run() {
+	function run($param)
+	{
 		return eval($this->qsf->template('MAIN_AFFILIATES'));
 	}
 }

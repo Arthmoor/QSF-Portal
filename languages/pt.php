@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -39,14 +39,16 @@ class pt
 		$this->active_modules_active = 'Viewing Active Users';
 		$this->active_modules_board = 'Vendo índice';
 		$this->active_modules_cp = 'Usando Painel de controle';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Vendo Forum: %s';
 		$this->active_modules_help = 'usando Help';
 		$this->active_modules_login = 'Logando';
 		$this->active_modules_members = 'Vendo Lista';
 		$this->active_modules_mod = 'Moderando';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Using Messenger';
 		$this->active_modules_post = 'Postando';
-		$this->active_modules_printer = 'Imprimindo tópico: %s';
 		$this->active_modules_profile = 'Vendo Profile: %s';
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = 'Procurando';
@@ -277,6 +279,7 @@ class pt
 		$this->cp_been_updated_prefs = 'Preferências ajustadas.';
 		$this->cp_changing_pass = 'Trocando senha';
 		$this->cp_contact_pm = 'Permitir contato de outros via mensageiro ?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Painel de controle';
 		$this->cp_current_avatar = 'Figura atual';
 		$this->cp_current_time = 'Atualmente %s.';
@@ -428,6 +431,7 @@ class pt
 		$this->forum_sub_topics = 'Topicos';
 		$this->forum_subscribe = 'Enviar email quando tiverem postagens';
 		$this->forum_topic = 'Topico';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Visualizações';
 		$this->forum_write_topics = 'Você pode criar tópicos neste forum.';
 	}
@@ -655,6 +659,7 @@ class pt
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -856,6 +861,7 @@ class pt
 		$this->pm_sendamsg = 'Envia mensagem';
 		$this->pm_sendingpm = 'Enviando mensagem privativa';
 		$this->pm_sendon = 'Sent on';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Mensagem enviada.';
 		$this->pm_sure_del = 'Tem certeza que quer apagar ?';
 		$this->pm_sure_delall = 'Apagar todas as mensagens da caixa de entrada ?';
@@ -1043,6 +1049,7 @@ class pt
 		$this->recent_sub_topics = 'Topicos';
 		$this->recent_subscribe = 'Enviar email quando tiverem postagens';
 		$this->recent_topic = 'Topico';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Visualizações';
 		$this->recent_write_topics = 'Você pode criar tópicos neste forum.';
 	}

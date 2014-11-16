@@ -200,10 +200,14 @@ class pm extends qsfglobal
 			$bad_pm = array();
 			$ok_pm = array();
 
+			$mailer = new $this->modules['mailer']($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
+			$mailer->setSubject("{$this->sets['forum_name']} - {$this->lang->pm_personal}");
+			$mailer->setServer($this->sets['mailserver']);
+
 			foreach ($users as $username)
 			{
 				$username = str_replace('\\', '&#092;', $this->format(trim($username), FORMAT_HTMLCHARS | FORMAT_CENSOR));
-				$who = $this->db->fetch("SELECT user_id, user_pm, user_name FROM %pusers
+				$who = $this->db->fetch("SELECT user_id, user_pm, user_name, user_email, user_pm_mail FROM %pusers
 					WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
 					str_replace(' ', '', strtolower($username)), USER_GUEST_UID);
 
@@ -221,7 +225,19 @@ class pm extends qsfglobal
 
 				$this->db->query("INSERT INTO %ppmsystem (pm_to, pm_from, pm_ip, pm_title, pm_time, pm_message, pm_folder)
 					VALUES (%d, %d, INET_ATON('%s'), '%s', %d, '%s', 0)",
-					$who['user_id'], $this->user['user_id'], $this->ip, $this->post['title'],  $this->time, $this->post['message']);
+					$who['user_id'], $this->user['user_id'], $this->ip, $this->post['title'], $this->time, $this->post['message']);
+
+				$message_id = $this->db->insert_id("pmsystem");
+				if ($who['user_pm_mail']) {
+					$message  = "{$this->sets['forum_name']}\n";
+					$message .= "{$this->sets['loc_of_board']}{$this->mainfile}?a=pm&s=view&m={$message_id}\n\n";
+					$message .= $this->user['user_name'] . " " . $this->lang->pm_sent_mail . "\n\n";
+					$message .= $this->lang->pm_title . ": " . $this->format($this->post['title'], FORMAT_CENSOR);
+
+					$mailer->setMessage($message);
+					$mailer->setRecipient($who['user_email']);
+					$mailer->doSend();
+				}
 			}
 
 			$this->db->query("INSERT INTO %ppmsystem (pm_to, pm_from, pm_ip, pm_bcc, pm_title, pm_time, pm_message, pm_folder, pm_read)

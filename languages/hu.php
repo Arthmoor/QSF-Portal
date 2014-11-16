@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -39,14 +39,16 @@ class hu
 		$this->active_modules_active = 'Aktív tagok';
 		$this->active_modules_board = 'Index';
 		$this->active_modules_cp = 'Beállítások megjelenítése';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Viewing a forum: %s'; //Translate
 		$this->active_modules_help = 'Segítség';
 		$this->active_modules_login = 'Ki/Bejelentkezés';
 		$this->active_modules_members = 'Tagok listája';
 		$this->active_modules_mod = 'Moderálás';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Üzenetküldõ';
 		$this->active_modules_post = 'Beírás';
-		$this->active_modules_printer = 'Printing a topic: %s'; //Translate
 		$this->active_modules_profile = 'Viewing a profile: %s'; //Translate
 		$this->active_modules_recent = 'Viewing recent posts'; //Translate
 		$this->active_modules_search = 'Keresés';
@@ -277,6 +279,7 @@ class hu
 		$this->cp_been_updated_prefs = 'Beállításaid frissítve.';
 		$this->cp_changing_pass = 'Jelszó szerkesztése';
 		$this->cp_contact_pm = 'Megengeded, hogy a többiek priviben felkeressenek?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Beállítópult';
 		$this->cp_current_avatar = 'Aktuális kiskép';
 		$this->cp_current_time = 'Most %s.';
@@ -428,6 +431,7 @@ class hu
 		$this->forum_sub_topics = 'Témák';
 		$this->forum_subscribe = 'E-mail küldése új bejegyzéskor';
 		$this->forum_topic = 'Téma';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Megjelenítések';
 		$this->forum_write_topics = 'Nyithatsz témákat ebben a fórumban.';
 	}
@@ -655,6 +659,7 @@ class hu
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -856,6 +861,7 @@ class hu
 		$this->pm_sendamsg = 'Üzenet küldése';
 		$this->pm_sendingpm = 'Privát üzenet küldése';
 		$this->pm_sendon = 'Elküldve';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Sikeres küldés.';
 		$this->pm_sure_del = 'Biztos, hogy törölni akarod ezt az üzenetet?';
 		$this->pm_sure_delall = 'Biztos, hogy törölni akarsz minden üzenetet?';
@@ -1043,6 +1049,7 @@ class hu
 		$this->recent_sub_topics = 'Témák';
 		$this->recent_subscribe = 'E-mail küldése új bejegyzéskor';
 		$this->recent_topic = 'Téma';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Megjelenítések';
 		$this->recent_write_topics = 'Nyithatsz témákat ebben a fórumban.';
 	}

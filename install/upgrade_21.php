@@ -80,7 +80,7 @@ while( $row = $db->nqfetch($query) )
 	// Ripped the code from update_last_post_topic in mod.php for this.
 	$last = $db->fetch("
 	SELECT
-		p.post_id, p.post_author, p.post_time
+		p.post_id, p.post_time
 	FROM
 		%pposts p,
 		%ptopics t
@@ -91,7 +91,6 @@ while( $row = $db->nqfetch($query) )
 		p.post_time DESC
 	LIMIT 1", $topic_id);
 
-	$db->query("UPDATE %ptopics SET topic_last_post=%d, topic_last_poster=%d, topic_edited=%d WHERE topic_id=%d",
-		$last['post_id'], $last['post_author'], $last['post_time'], $row['topic_id']);
+	$db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $last['post_id'], $topic_id);
 }
 ?>

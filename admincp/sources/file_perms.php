@@ -27,15 +27,16 @@ if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
 
 require_once $set['include_path'] . '/admincp/admin.php';
 
-class perms extends admin
+class file_perms extends admin
 {
 	function execute()
 	{
-		$perms_obj = new $this->modules['permissions']($this);
+		$this->lang->perms(); // Load up permissions related translations
+		$perms_obj = new $this->modules['file_permissions']($this);
 
 		if (isset($this->get['s']) && ($this->get['s'] == 'user')) {
 			if (!isset($this->get['id'])) {
-				header("Location: $this->self?a=member&amp;s=perms");
+				header("Location: $this->self?a=member_control&amp;s=file_perms");
 			}
 
 			$this->post['group'] = intval($this->get['id']);
@@ -48,7 +49,7 @@ class perms extends admin
 		} else {
 			if (!isset($this->post['group'])) {
 				return $this->message('User Groups', "
-				<form action='$this->self?a=perms' method='post'><div>
+				<form action='$this->self?a=file_perms' method='post'><div>
 					{$this->lang->perms_edit_for}
 					<select name='group'>
 					" . $this->htmlwidgets->select_groups(-1) . "
@@ -69,71 +70,34 @@ class perms extends admin
 		$this->set_title($title);
 		$this->tree($title);
 
-		$forums_only = $this->db->query('SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name');
+		$cats_only = $this->db->query("SELECT fcat_id, fcat_name FROM %pfile_categories ORDER BY fcat_name");
 
-		$forums_list = array();
-		while ($forum = $this->db->nqfetch($forums_only))
+		$cats_list = array();
+		$cats_list[] = array( 'fcat_id' => 0, 'fcat_name' => 'Root' );
+		while ($cat = $this->db->nqfetch($cats_only))
 		{
-			$forums_list[] = $forum;
+			$cats_list[] = $cat;
 		}
 
 		$perms = array(
-				'board_view'		=> $this->lang->perms_board_view,
-				'board_view_closed'	=> $this->lang->perms_board_view_closed,
-				'do_anything'		=> $this->lang->perms_do_anything,
-				'is_admin'		=> $this->lang->perms_is_admin,
-				'edit_avatar'		=> 'Can edit user avatar',
-				'edit_profile'		=> 'Can edit user profile',
-				'edit_sig'		=> 'Can edit signatures',
-				'page_edit'             => 'Can edit custom pages', // Added for CMS
-				'page_create'           => 'Can create custom pages', // Added for CMS
-				'page_delete'           => 'Can delete custom pages', // Added for CMS
-				'email_use'		=> $this->lang->perms_email_use,
-				'topic_global'		=> $this->lang->perms_topic_global,
-				'pm_noflood'		=> $this->lang->perms_pm_noflood,
-				'search_noflood'	=> $this->lang->perms_search_noflood,
-				'forum_view'		=> $this->lang->perms_forum_view,
-				'post_viewip'		=> $this->lang->perms_post_viewip,
-				'topic_view'		=> $this->lang->perms_topic_view,
-				'topic_view_unpublished' => $this->lang->perms_topic_view_unpublished,
-				'poll_create'		=> $this->lang->perms_poll_create,
-				'poll_vote'		=> $this->lang->perms_poll_vote,
-				'post_create'		=> $this->lang->perms_post_create,
-				'topic_create'		=> $this->lang->perms_topic_create,
-				'post_inc_userposts'	=> $this->lang->perms_post_inc_userposts,
-				'post_noflood'		=> $this->lang->perms_post_noflood,
-				'post_delete'		=> $this->lang->perms_post_delete,
-				'post_delete_own'	=> $this->lang->perms_post_delete_own,
-				'topic_delete'		=> $this->lang->perms_topic_delete,
-				'topic_delete_own'	=> $this->lang->perms_topic_delete_own,
-				'post_edit'		=> $this->lang->perms_post_edit,
-				'post_edit_own'		=> $this->lang->perms_post_edit_own,
-				'topic_edit'		=> $this->lang->perms_topic_edit,
-				'topic_edit_own'	=> $this->lang->perms_topic_edit_own,
-				'topic_lock'		=> $this->lang->perms_topic_lock,
-				'topic_lock_own'	=> $this->lang->perms_topic_lock_own,
-				'topic_unlock'		=> $this->lang->perms_topic_unlock,
-				'topic_unlock_mod'	=> $this->lang->perms_topic_unlock_mod,
-				'topic_unlock_own'	=> $this->lang->perms_topic_unlock_own,
-				'topic_pin'		=> $this->lang->perms_topic_pin,
-				'topic_pin_own'		=> $this->lang->perms_topic_pin_own,
-				'topic_publish'		=> $this->lang->perms_topic_publish,
-				'topic_publish_auto'	=> $this->lang->perms_topic_publish_auto,
-				'topic_split'		=> $this->lang->perms_topic_split,
-				'topic_split_own'	=> $this->lang->perms_topic_split_own,
-				'topic_unpin'		=> $this->lang->perms_topic_unpin,
-				'topic_unpin_own'	=> $this->lang->perms_topic_unpin_own,
-				'topic_move'		=> $this->lang->perms_topic_move,
-				'topic_move_own'	=> $this->lang->perms_topic_move_own,
-				'post_attach'		=> $this->lang->perms_post_attach,
-				'post_attach_download'	=> $this->lang->perms_post_attach_download
+                                'download_files'        => 'Download files',
+                                'upload_files'          => 'Upload files',
+				'approve_files'		=> 'Approve files',
+				'edit_files'		=> 'Edit files',
+				'move_files'		=> 'Move files',
+				'delete_files'		=> 'Delete files',
+				'post_comment'		=> 'Post comments',
+				'category_view'		=> 'View category',
+				'edit_category'		=> 'Edit category',
+				'delete_category'	=> 'Delete category',
+				'add_category'		=> 'Add category'
 		);
 
 		if (!isset($this->post['submit'])) {
-			$count = count($forums_list) + 1;
+			$count = count($cats_list) + 1;
 
 			if ($mode == 'user') {
-				$query = $this->db->fetch("SELECT user_name, user_perms FROM %pusers WHERE user_id=%d", $this->post['group']);
+				$query = $this->db->fetch("SELECT user_name, user_file_perms FROM %pusers WHERE user_id=%d", $this->post['group']);
 				$label = "User '{$query['user_name']}'";
 			} else {
 				$query = $this->db->fetch("SELECT group_name FROM %pgroups WHERE group_id=%d", $this->post['group']);
@@ -218,12 +182,12 @@ class perms extends admin
 			//-->
 			</script>
 
-			<form id='form' action='$this->self?a=perms$link' method='post'>
-			<div align='center'><span style='font-size:14px;'><b>Permissions For $label</b></span>";
+			<form id='form' action='$this->self?a=file_perms$link' method='post'>
+			<div align='center'><span style='font-size:14px;'><b>File Permissions For $label</b></span>";
 
 			if ($mode == 'user') {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />
-				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
+				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_file_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
 			}
 
 			$out .= "</div>" .
@@ -232,7 +196,7 @@ class perms extends admin
 				<td colspan='" . ($count + 1) . "' class='header'>$label</td>
 			</tr>";
 
-			$out .= $this->show_headers($forums_list);
+			$out .= $this->show_headers($cats_list);
 
 			$this->iterator_init('tablelight', 'tabledark');
 
@@ -247,17 +211,17 @@ class perms extends admin
 					</td>";
 
 				if (!isset($perms_obj->globals[$perm])) {
-					foreach ($forums_list as $forum)
+					foreach ($cats_list as $cat)
 					{
-						if ($perms_obj->auth($perm, $forum['forum_id'])) {
+						if ($perms_obj->auth($perm, $cat['fcat_id'])) {
 							$checked = " checked='checked'";
 						} else {
 							$checked = '';
 						}
 
-						$out .= "\n<td class='" . $this->lastValue() . "' align='center'><input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked /></td>";
+						$out .= "\n<td class='" . $this->lastValue() . "' align='center'><input type='checkbox' name='perms[$perm][{$cat['fcat_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked /></td>";
 					}
-				} elseif ($forums_list) {
+				} elseif ($cats_list) {
 					$out .= "\n<td class='" . $this->lastValue() . "' colspan='$count' align='center'>N/A</td>";
 				}
 
@@ -266,13 +230,13 @@ class perms extends admin
 
 				$i++;
 				if (($i % 12) == 0) {
-					$out .= $this->show_headers($forums_list);
+					$out .= $this->show_headers($cats_list);
 				}
 			}
 
 			return $out . "
 			<tr>
-				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update Permissions' /></td>
+				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update File Permissions' /></td>
 			</tr>" . $this->etable . "</form>";
 		} else {
 			if (($mode == 'user') && isset($this->post['usegroup'])) {
@@ -289,12 +253,12 @@ class perms extends admin
 
 			foreach ($this->post['perms'] as $name => $data)
 			{
-				if (isset($data[-1]) || isset($data['-1']) || (count($data) == count($forums_list))) {
+				if (isset($data[-1]) || isset($data['-1']) || (count($data) == count($cats_list))) {
 					$perms_obj->set_xy($name, true);
 				} else {
-					foreach ($data as $forum => $on)
+					foreach ($data as $cat => $on)
 					{
-						$perms_obj->set_xyz($name, intval($forum), true);
+						$perms_obj->set_xyz($name, intval($cat), true);
 					}
 				}
 			}
@@ -305,14 +269,14 @@ class perms extends admin
 		}
 	}
 
-	function show_headers($forums_list)
+	function show_headers($cats_list)
 	{
 		$out = "<tr>
 		<td class='subheader' colspan='2' valign='bottom'>{$this->lang->perm}</td>";
 
-		foreach ($forums_list as $forum)
+		foreach ($cats_list as $cat)
 		{
-			$out .= "\n<td class='subheader' align='center' valign='middle'>{$forum['forum_name']}</td>";
+			$out .= "\n<td class='subheader' align='center' valign='middle'>{$cat['fcat_name']}</td>";
 		}
 
 		return $out . '</tr>';

@@ -24,6 +24,8 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.1.2 to 1.1.3
+
 $need_templates = true;
 
 $this->sets['banned_ips'] = array();

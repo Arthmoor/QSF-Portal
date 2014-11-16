@@ -24,7 +24,7 @@
  * Display a file rating, and provide a rating link.
  * Useful for download type sites.
  *
- * @author Roger Libiez (Samson) <samson@afkmud.com>
+ * @author Roger Libiez [Samson]
  **/
 class file_rating extends modlet
 {

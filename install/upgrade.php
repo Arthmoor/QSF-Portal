@@ -107,6 +107,7 @@ class upgrade extends qsfglobal
 			$full_template_list = false;
 			$template_list = array();
 			$new_permissions = array();
+			$new_file_perms = array();
 
 			$this->sets['installed'] = 1;
 
@@ -119,6 +120,7 @@ class upgrade extends qsfglobal
 			}
 
 			$this->perms = new $this->modules['permissions']($this);
+			$this->file_perms = new $this->modules['file_permissions']($this);
 
 			while ($this->get['from'] <= LATEST)
 			{
@@ -196,7 +198,9 @@ class upgrade extends qsfglobal
 						// Create template
 						$xmlInfo = new xmlparser();
 						$xmlInfo->parse(SKIN_FILE);
-						packageutil::insert_templates('default', $this->db, $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES'), $template_list);
+						$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
+						packageutil::insert_templates('default', $this->db, $templatesNode, $template_list);
+						unset($templatesNode);
 						$xmlInfo = null;
 						
 						$didsomething = true;
@@ -213,7 +217,8 @@ class upgrade extends qsfglobal
 					// Other skins
 					$xmlInfo = new xmlparser();
 					$xmlInfo->parse(SKIN_FILE);
-					$temp_names = packageutil::list_templates($xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES'));
+					$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
+					packageutil::list_templates($templatesNode);
 					$temps_to_insert = array();
 						
 					foreach ($temp_names as $temp_name)
@@ -228,9 +233,11 @@ class upgrade extends qsfglobal
 					}
 					
 					if ($temps_to_insert) {
-						packageutil::insert_templates($skin, $this->db, $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES'), $temps_to_insert);
+						$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
+						packageutil::insert_templates($skin, $this->db, $templatesNode, $temps_to_insert);
 						$didsomething = true;
 					}
+					unset($templatesNode);
 					$xmlInfo = null;
 				}
 
@@ -399,6 +406,28 @@ class upgrade extends qsfglobal
 						if ($this->perms->is_guest) $perm_on = false;
 						$this->perms->add_perm($id, $perm_on);
 						$this->perms->update();
+					}
+				}
+			}
+
+			// Check if new file permissions need to be added
+			if (!empty($new_file_perms)) {
+				foreach ($new_file_perms as $id => $default)
+				{
+					// Groups
+					while ($this->file_perms->get_group())
+					{
+						$perm_on = $default;
+						$this->file_perms->add_perm($id, $perm_on);
+						$this->file_perms->update();
+					}
+			
+					// Users
+					while ($this->file_perms->get_group(true))
+					{
+						$perm_on = $default;
+						$this->file_perms->add_perm($id, $perm_on);
+						$this->file_perms->update();
 					}
 				}
 			}

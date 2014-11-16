@@ -220,7 +220,7 @@ class forum extends qsfglobal
 			SELECT
 				DISTINCT(p.post_author) as dot,
 				t.topic_id, t.topic_title, t.topic_last_poster, t.topic_starter, t.topic_replies, t.topic_modes,
-				t.topic_edited, t.topic_icon, t.topic_views, t.topic_description, t.topic_moved, t.topic_forum,
+				t.topic_posted, t.topic_edited, t.topic_icon, t.topic_views, t.topic_description, t.topic_moved, t.topic_forum,
 				s.user_name AS topic_starter_name, m.user_name AS topic_last_poster_name, p.post_id AS topic_last_post
 			FROM
 				(%ptopics t,
@@ -310,6 +310,8 @@ class forum extends qsfglobal
 					$row['topic_icon'] = '<img src="./skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->forum_icon . '" />';
 				}
 			}
+
+			$topic_posted = $this->mbdate(DATE_LONG, $row['topic_posted']);
 
 			if (!($row['topic_modes'] & TOPIC_PUBLISH)) {
 				if (!$this->perms->auth('topic_view_unpublished', $row['topic_forum'])) {

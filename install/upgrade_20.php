@@ -37,6 +37,4 @@ $need_templates = array(
 
 // Queries to run
 // $queries[] = "SQL";
-
-
 ?>

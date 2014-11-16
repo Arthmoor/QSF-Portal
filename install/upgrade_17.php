@@ -31,7 +31,4 @@ $need_templates = array(
 	'MAIN',
 	'POST_BOX_PLAIN'
 	);
-
-
 ?>
-

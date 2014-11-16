@@ -172,6 +172,7 @@ class cp extends qsfglobal
 			$user_email_showCheck = $this->user['user_email_show'] ? ' checked=\'checked\'' : null;
 			$EmailFormCheck = $this->user['user_email_form'] ? ' checked=\'checked\'' : null;
 			$user_pmCheck   = $this->user['user_pm'] ? ' checked=\'checked\'' : null;
+			$user_pm_mailCheck   = $this->user['user_pm_mail'] ? ' checked=\'checked\'' : null;
 			$active_check   = $this->user['user_active'] ? ' checked=\'checked\'' : null;
 
 			$time_list  = $this->htmlwidgets->select_timezones($this->user['user_timezone']);
@@ -206,6 +207,10 @@ class cp extends qsfglobal
 				$this->post['user_pm'] = 0;
 			}
 
+			if (!isset($this->post['user_pm_mail'])) {
+				$this->post['user_pm_mail'] = 0;
+			}
+
 			if (!isset($this->post['user_active'])) {
 				$this->post['user_active'] = 0;
 			}
@@ -228,15 +233,15 @@ class cp extends qsfglobal
 
 			$this->post['user_language'] = preg_replace('/[^a-zA-Z0-9\-]/', '', $this->post['user_language']);
 
-			$this->db->query('
+			$this->db->query("
 				UPDATE %pusers SET user_view_avatars=%d, user_view_signatures=%d, user_view_emoticons=%d,
-				  user_email_show=%d, user_email_form=%d, user_active=%d, user_pm=%d,
-				  user_timezone=\'%s\', user_skin=\'%s\', user_language=\'%s\',
+				  user_email_show=%d, user_email_form=%d, user_active=%d, user_pm=%d, user_pm_mail=%d,
+				  user_timezone='%s', user_skin='%s', user_language='%s',
 				  user_topics_page=%d, user_posts_page=%d
-				WHERE user_id=%d',
+				WHERE user_id=%d",
 				intval($this->post['user_view_avatars']), intval($this->post['user_view_signatures']), intval($this->post['user_view_emoticons']),
 				intval($this->post['user_email_show']), intval($this->post['user_email_form']), intval($this->post['user_active']),
-				intval($this->post['user_pm']), $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
+				intval($this->post['user_pm']), intval($this->post['user_pm_mail']), $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
 				intval($this->post['user_topics_page']),  intval($this->post['user_posts_page']), $this->user['user_id']);
 
 			return $this->message($this->lang->cp_updated_prefs, $this->lang->cp_been_updated_prefs);
@@ -286,7 +291,7 @@ class cp extends qsfglobal
 				return $this->message($this->lang->cp_err_updating, $this->lang->cp_email_invaid);
 			}
 
-			if ($this->db->fetch('SELECT user_email FROM %pusers WHERE user_email=\'%s\' AND user_id != %d',
+			if ($this->db->fetch("SELECT user_email FROM %pusers WHERE user_email='%s' AND user_id !=%d",
 				 $this->post['user_email'], $this->user['user_id']))
 			{
 				return $this->message($this->lang->cp_err_updating, $this->lang->cp_already_member);
@@ -395,7 +400,8 @@ class cp extends qsfglobal
 			$this->post['user_avatar_width'] = intval($this->post['user_avatar_width']);
 			$this->post['user_avatar_height'] = intval($this->post['user_avatar_height']);
 
-			$fileExtension  = array_pop(explode('.',  $this->user['user_avatar']));
+			$temp = explode('.',  $this->user['user_avatar']);
+			$fileExtension  = array_pop($temp);
 			if (!in_array($fileExtension, $this->fileExtensions)) {
 				$fileExtension = 'avtr';
 			}

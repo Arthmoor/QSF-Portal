@@ -24,12 +24,10 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.0.0 to 1.0.1
+
 $need_templates = true;
 
-$queries[] = "ALTER TABLE %psubscriptions
-ADD subscription_id int(12) unsigned NOT NULL auto_increment,
-ADD PRIMARY KEY (subscription_id)";
-
-$queries[] = "ALTER TABLE %pusers
-ADD user_email_form tinyint(1) unsigned NOT NULL AFTER user_email_show DEFAULT '1'";
+$queries[] = "ALTER TABLE %psubscriptions ADD subscription_id int(12) unsigned NOT NULL auto_increment, ADD PRIMARY KEY (subscription_id)";
+$queries[] = "ALTER TABLE %pusers ADD user_email_form tinyint(1) unsigned NOT NULL default '1' AFTER user_email_show";
 ?>

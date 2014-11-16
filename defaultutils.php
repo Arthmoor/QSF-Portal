@@ -28,6 +28,8 @@ require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 $modules['database'] = 'db_' . $set['dbtype'];
 require_once $set['include_path'] .  '/lib/perms.php';
 $modules['permissions'] = 'permissions';
+require_once $set['include_path'] .  '/lib/file_perms.php';
+$modules['file_permissions'] = 'file_permissions';
 require_once $set['include_path'] .  '/lib/user.php';
 $modules['user'] = 'user';
 require_once $set['include_path'] .  '/lib/mailer.php';
@@ -57,7 +59,6 @@ $modules['public_modules'] = array(
 	'help',
 	'jsdata',
 	'jslang',
-	'mod',
 	'post',
 	'register',
 	'login',
@@ -69,6 +70,7 @@ $modules['admin_modules'] = array(
 	'censoring',
 	'cms',
 	'emot_control',
+	'file_perms',
 	'forums',
 	'groups',
 	'help',

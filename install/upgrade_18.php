@@ -25,6 +25,7 @@ if (!defined('INSTALLER')) {
 }
 
 // Upgrade from 1.1.8 to 1.1.9
+
 $need_templates = array(
 	'BOARD_CATEGORY_END',	// New Templates
 	'PM_FOLDER',		// Changed Templates

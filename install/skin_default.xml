@@ -207,14 +207,14 @@
    <a href=".." style="font-weight:bold">{$admin->lang->admin_your_board}</a>
   </td>
   <td class="footer" style="width:50%; text-align:center;">
-   <a href="http://www.quicksilverforums.com" style="font-weight:bold">{$admin->name}</a>
+   <a href="http://www.qsfportal.com" style="font-weight:bold">{$admin->name}</a>
   </td>
  </tr>
 {$admin->etable}
 
 <p class="copyright">
- {$admin->lang->powered} QSF Portal [{$admin->version}] &copy; 2006-2007 The QSF Portal Development Team<br />
- {$admin->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>{$admin->name}</b></a> v1.3.1 &copy; 2005-2006 The {$admin->name} Development Team<br />
+ {$admin->lang->powered} <a href="http://www.qsfportal.com" class="small"><b>{$admin->name}</b></a> [{$admin->version}] &copy; 2006-2007 The {$admin->name} Development Team<br />
+ {$admin->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2006 The Quicksilver Forums Development Team<br />
  {$admin->lang->based_on} <a href="http://www.mercuryboard.com" class="small"><b>MercuryBoard</b></a> &copy; 2001-2005 The Mercury Development Team<br />
  <b>{$time_exec}</b> seconds - <b>{$admin->db->querycount}</b> queries - <b>{$server_load}</b> load
 </p>
@@ -1024,6 +1024,7 @@
        <a href="{$this->self}?a=groups&amp;s=add">{$this->lang->admin_create_group}</a><br />
        <a href="{$this->self}?a=groups&amp;s=edit">{$this->lang->admin_edit_group_name}</a><br />
        <a href="{$this->self}?a=perms">{$this->lang->admin_edit_group_perms}</a><br />
+       <a href="{$this->self}?a=file_perms">Edit a group's file permissions</a><br />
        <a href="{$this->self}?a=groups&amp;s=delete">{$this->lang->admin_delete_group}</a>
       </div><br />
 
@@ -1032,6 +1033,7 @@
        <a href="{$this->self}?a=member_control&amp;s=profile">{$this->lang->admin_edit_member}</a><br />
        <a href="{$this->self}?a=member_control&amp;s=delete">{$this->lang->admin_delete_member}</a><br />
        <a href="{$this->self}?a=member_control&amp;s=perms">{$this->lang->admin_edit_member_perms}</a><br />
+       <a href="{$this->self}?a=member_control&amp;s=file_perms">Edit a member's file permissions</a><br />
        <a href="{$this->self}?a=titles&amp;s=add">{$this->lang->admin_add_member_titles}</a><br />
        <a href="{$this->self}?a=titles">{$this->lang->admin_edit_member_titles}</a><br />
        <a href="{$this->self}?a=ban">{$this->lang->admin_ban_ips}</a><br />
@@ -1133,6 +1135,7 @@
       <li><a href="{$admin->self}?a=groups&amp;s=add">{$admin->lang->admin_create_group}</a></li>
       <li><a href="{$admin->self}?a=groups&amp;s=edit">{$admin->lang->admin_edit_group_name}</a></li>
       <li><a href="{$admin->self}?a=perms">{$admin->lang->admin_edit_group_perms}</a></li>
+      <li><a href="{$admin->self}?a=file_perms">Edit a group's file permissions</a></li>
       <li><a href="{$admin->self}?a=groups&amp;s=delete">{$admin->lang->admin_delete_group}</a></li>
      </ul>
     </li>
@@ -1141,6 +1144,7 @@
       <li><a href="{$admin->self}?a=member_control&amp;s=profile">{$admin->lang->admin_edit_member}</a></li>
       <li><a href="{$admin->self}?a=member_control&amp;s=delete">{$admin->lang->admin_delete_member}</a></li>
       <li><a href="{$admin->self}?a=member_control&amp;s=perms">{$admin->lang->admin_edit_member_perms}</a></li>
+      <li><a href="{$admin->self}?a=member_control&amp;s=file_perms">Edit a member's file permissions</a></li>
       <li><a href="{$admin->self}?a=titles&amp;s=add">{$admin->lang->admin_add_member_titles}</a></li>
       <li><a href="{$admin->self}?a=titles">{$admin->lang->admin_edit_member_titles}</a></li>
       <li><a href="{$admin->self}?a=ban">{$admin->lang->admin_ban_ips}</a></li>
@@ -1992,6 +1996,7 @@ enable('$init');
    <input type="checkbox" name="user_email_show" id="user_email_show" value="1"{$user_email_showCheck} /> <label for="user_email_show">{$this->lang->cp_show_email}</label><br />
    <input type="checkbox" name="user_email_form" id="user_email_form" value="1"{$EmailFormCheck} /> <label for="user_email_form">{$this->lang->cp_email_form}</label><br />
    <input type="checkbox" name="user_pm" id="user_pm" value="1"{$user_pmCheck} /> <label for="user_pm">{$this->lang->cp_contact_pm}</label><br />
+   <input type="checkbox" name="user_pm_mail" id="user_pm_mail" value="1"{$user_pm_mailCheck} /> <label for="user_pm_mail">{$this->lang->cp_contact_pm_email}</label><br />
    <input type="checkbox" name="user_active" id="user_active" value="1"{$active_check} /> <label for="user_active">{$this->lang->cp_show_active}</label>
   </td>
  </tr>
@@ -2224,7 +2229,7 @@ enable('$init');
    <IF $row['icon']>
     <img src="./skins/{$this->skin}/mbicons/{$row['icon']}" alt="{$this->lang->forum_icon}" class="topicicon" />
    </IF>
-    <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}</td>
+    <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}" title="{$this->lang->forum_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}</td>
   <td class="tabledark" style="text-align:center">{$row['topic_starter']}</td>
   <td class="tablelight" style="text-align:center">{$row['topic_replies']}</td>
   <td class="tablelight" style="text-align:center">{$row['topic_views']}</td>
@@ -2481,8 +2486,8 @@ enable('$init');
       <description>Format the look of the copyright on the board.&lt;br&gt;&lt;br&gt;&lt;b&gt;Warning: Modification to anything other than the style of this copyright will result in a violation of your terms of service&lt;/b&gt;</description>
       <html><![CDATA[
 <p class="copyright">
- {$qsf->lang->powered} QSF Portal &copy; 2006 The QSF Portal Development Team<br />
- {$qsf->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>{$qsf->name}</b></a> &copy; 2005-2006 The {$qsf->name} Development Team<br />
+ {$qsf->lang->powered} <a href="http://www.qsfportal.com" class="small"><b>{$qsf->name}</b></a> &copy; 2006-2007 The {$qsf->name} Development Team<br />
+ {$qsf->lang->based_on} <a href="http://www.quicksilverforums.com" class="small"><b>Quicksilver Forums</b></a> &copy; 2005-2006 The Quicksilver Forums Development Team<br />
  {$qsf->lang->based_on} <a href="http://www.mercuryboard.com" class="small"><b>MercuryBoard</b></a> &copy; 2001-2005 The Mercury Development Team
 </p>
       ]]></html>
@@ -3728,7 +3733,7 @@ enable('$init');
    <IF $row['icon']>
     <img src="./skins/{$this->skin}/mbicons/{$row['icon']}" alt="{$this->lang->recent_icon}" class="topicicon" />
    </IF>
-   <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1" class="medium">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}</td>
+   <a href="{$this->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1" class="medium" title="{$this->lang->recent_topic_posted}: {$topic_posted}">{$row['topic_title']}</a> {$Pages}{$row['topic_description']}</td>
   <td class="tabledark" style="text-align:center">{$row['topic_starter']}</td>
   <td class="tablelight" style="text-align:center"><a href="{$this->self}?a=forum&amp;f={$row['forum_id']}">{$row['forum_name']}</a></td>
   <td class="tabledark">
@@ -4316,17 +4321,22 @@ enable('$init');
     <a href="{$this->self}?a=files">File Index</a> 
      | <a href="{$this->self}?a=files&amp;s=search">Search</a>
      | <a href="{$this->self}?a=files&amp;s=recent">Recent Uploads</a>
-    <IF $this->perms->auth('submit_files')>
+    <IF $upload>
      | <a href="{$this->self}?a=files&amp;s=upload&amp;cid={$cid}">Upload File</a>
     </IF>
-    <IF $this->is_moderator($cid)>
+    <IF $approve>
      | <a href="{$this->self}?a=files&amp;s=filequeue">Approve File</a>
+    </IF>
+    <IF $addcat>
      | <a href="{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}">Add Category</a>
+    </IF>
+    <IF $editcat>
      | <a href="{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}">Edit Category</a>
+    </IF>
+    <IF $delcat>
      | <a href="{$this->self}?a=files&amp;s=deletecategory&amp;cid={$cid}">Delete Category</a>
     </IF>
     <IF $this->perms->auth('is_admin')>
-     | <a href="{$this->self}?a=files&amp;s=restrict&amp;cid={$cid}">Toggle Restriction</a>
      | <a href="{$this->self}?a=files&amp;s=addmoderator&amp;cid={$cid}">Add Moderator</a>
      | <a href="{$this->self}?a=files&amp;s=remmoderator&amp;cid={$cid}">Remove Moderator</a>
      | <a href="{$this->self}?a=files&amp;s=fixcount">Fix File Stats</a>
@@ -4355,6 +4365,91 @@ enable('$init');
 <p></p>
       ]]></html>
     </template>
+    <template><set>Files</set><name>FILE_EDIT_CAT</name>
+      <displayname>Edit File Category</displayname>
+      <description>Form to edit a file category.</description>
+      <html><![CDATA[
+<form action="{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}" method="post">
+{$this->table}
+ <tr>
+  <td class="header" style="text-align:center" colspan="2">Edit File Category</td>
+ </tr>
+ <tr>
+  <td class="tablelight"><strong>Name:</strong></td>
+  <td class="tablelight"><input type="text" name="cat_name" value="{$cat['fcat_name']}" maxlength="32" />
+  </td>
+ </tr>
+ <tr>
+  <td class="tabledark"><strong>Parent Category:</strong></td>
+  <td class="tabledark">
+   <select name="parent">
+    <option value="0"{$selected}>/</option>
+    {$list}
+   </select>
+  </td>
+ </tr>
+ <tr>
+  <td class="tabledark"><strong>Category description:</strong></td>
+  <td class="tabledark">
+   <textarea name="catdesc" cols="60" rows="3" id="catdesc">{$cat['fcat_description']}</textarea>
+  </td>
+ </tr>
+ <tr>
+  <td class="footer" colspan="2" style="text-align:center">
+   <input type="submit" name="submit" value="Edit" />
+  </td>
+ </tr>
+{$this->etable}
+</form>
+      ]]></html>
+    </template>
+    <template><set>Files</set><name>FILE_ADD_CAT</name>
+      <displayname>Add File Category</displayname>
+      <description>Form to add a file category.</description>
+      <html><![CDATA[
+<form action="{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}" method="post">
+{$this->table}
+ <tr>
+  <td class="header" style="text-align:center" colspan="2">Add File Category</td>
+ </tr>
+ <tr>
+  <td class="tablelight"><strong>New category name:</strong></td>
+  <td class="tablelight"><input type="text" name="cat_name" value="" maxlength="32" /></td>
+ </tr>
+ <tr>
+  <td class="tabledark"><strong>Parent category:</strong></td>
+  <td class="tabledark">
+   <select name="parent">
+    <option value="0">/</option>
+    {$list}
+   </select>
+  </td>
+ </tr>
+ <tr>
+  <td class="tablelight"><strong>Category description:</strong></td>
+  <td class="tablelight">
+   <textarea name="catdesc" cols="60" rows="3" id="catdesc"></textarea>
+  </td>
+ </tr>
+ <tr>
+  <td class="tabledark">
+   <b>Quick Permissions</b><br />Select an existing category to copy its permissions.
+  </td>
+  <td class="tabledark">
+   <select name="sync">
+    {$quickperms}
+   </select>
+  </td>
+ </tr>
+ <tr>
+  <td class="footer" colspan="2" style="text-align:center">
+   <input type="submit" name="submit" value="Add" />
+  </td>
+ </tr>
+{$this->etable}
+</form>
+      ]]></html>
+    </template>
     <template><set>Files</set><name>FILE_RATING</name>
       <displayname>MODLET: File Ratings</displayname>
       <description>Visual format for the file ratings pop-up window.</description>
@@ -4381,6 +4476,13 @@ enable('$init');
 </html>
       ]]></html>
     </template>
+    <template><set>Files</set><name>MAIN_STATIC_CONTENT</name>
+      <displayname>MODLET: Static Content</displayname>
+      <description>Utility template to handle passing static content files through the system.</description>
+      <html><![CDATA[
+<MODLET mod_include({$page})>
+      ]]></html>
+    </template>
     <template><set>Main</set><name>MAIN_NEWS_ITEM</name>
       <displayname>MODLET: Frontpage News Items</displayname>
       <description>Format for the frontpage news items.</description>
@@ -4390,6 +4492,20 @@ enable('$init');
  <p>{$text}</p><br />
  <div class="newsfooter">Posted by: {$user} {$date}</div>
 </div><br />
+      ]]></html>
+    </template>
+    <template><set>Files</set><name>FILE_CATITEM</name>
+      <displayname>File Category Item</displayname>
+      <description>Format of each row in a file category.</description>
+      <html><![CDATA[
+ <tr>
+  <td class="{$class}"><a href="{$this->self}?a=files&amp;s=viewfile&amp;fid={$file_id}">{$file_name}</a></td>
+  <td class="{$class}"><a href="{$this->self}?a=profile&amp;w={$user_id}">{$user_name}</a></td>
+  <td class="{$class}">{$date}</td>
+  <td class="{$class}" style="text-align:center">{$file_downloads}</td>
+  <td class="{$class}" style="text-align:center">{$file_comments}</td>
+  <td class="{$class}"><img src="./skins/{$this->skin}/images/{$file_rating}.png" alt="" /></td>
+ </tr>
       ]]></html>
     </template>
     <template><set>Files</set><name>FILE_CATS</name>
@@ -4422,14 +4538,14 @@ enable('$init');
       <displayname>File Category</displayname>
       <description>Format for the contents of a file category.</description>
       <html><![CDATA[
+<IF $desc>
+ <div class="tabledark">{$desc}</div><br />
+</IF>
 <IF $cid == 0>
  <div class="header" style="text-align:center">Top 20 Downloads</div>
 </IF>
-<IF strstr($this->agent, 'MSIE')>
+<IF $i>
 {$this->table}
-<ELSE>
-<table cellspacing="0" cellpadding="2" style="width:100%; border-collapse:collapse;">
-</IF>
  <tr>
   <td class="subheader">Name</td>
   <td class="subheader">Submitted by</td>
@@ -4439,25 +4555,8 @@ enable('$init');
   <td class="subheader">Rating</td>
  </tr>
  {$catitems}
-<IF strstr($this->agent, 'MSIE')>
 {$this->etable}
-<ELSE>
-</table>
 </IF>
-      ]]></html>
-    </template>
-    <template><set>Files</set><name>FILE_CATITEM</name>
-      <displayname>File Category Item</displayname>
-      <description>Format of each row in a file category.</description>
-      <html><![CDATA[
-<tr>
-  <td class="{$class}"><a href="{$this->self}?a=files&amp;s=viewfile&amp;fid={$file_id}">{$file_name}</a></td>
-  <td class="{$class}"><a href="{$this->self}?a=profile&amp;w={$user_id}">{$user_name}</a></td>
-  <td class="{$class}">{$date}</td>
-  <td class="{$class}" style="text-align:center">{$file_downloads}</td>
-  <td class="{$class}" style="text-align:center">{$file_comments}</td>
-  <td class="{$class}"><img src="./skins/{$this->skin}/images/{$file_rating}.png" alt="" /></td>
- </tr>
       ]]></html>
     </template>
     <template><set>Files</set><name>FILE_DETAILS</name>
@@ -4485,9 +4584,13 @@ enable('$init');
   <IF $this->is_submitter($file_id, $file_catid)>
    | <a href="{$this->self}?a=files&amp;s=update&amp;fid={$file_id}&amp;cid={$file_catid}">Update</a>
   </IF>
-  <IF $this->is_moderator($file_catid)>
+  <IF $move>
    | <a href="{$this->self}?a=files&amp;s=move&amp;fid={$file_id}">Move</a>
+  </IF>
+  <IF $edit>
    | <a href="{$this->self}?a=files&amp;s=edit&amp;fid={$file_id}">Edit</a>
+  </IF>
+  <IF $delete>
    | <a href="{$this->self}?a=files&amp;s=delete&amp;fid={$file_id}&amp;cid={$cid}">Delete</a>
   </IF>
  </div>
@@ -4611,7 +4714,7 @@ enable('$init');
 {$comments}
 <div class="footer" style="text-align:center">
 <IF !$this->perms->is_guest>
- <a href="{$this->self}?a=files&amp;s=addcomment&amp;fid={$id}">Add Comment</a>
+ <a href="{$this->self}?a=files&amp;s=addcomment&amp;cid={$cid}&amp;fid={$id}">Add Comment</a>
 </IF>
 </div>
       ]]></html>
@@ -5115,6 +5218,41 @@ enable('$init');
   </td>
  </tr>
 {$this->etable}
+      ]]></html>
+    </template>
+    <template><set>Stats</set><name>STAT_GRAPH</name>
+      <displayname>Statistics Graph</displayname>
+      <description>Format for statistical graph.</description>
+      <html><![CDATA[
+ <tr>
+  <td class="subheader" colspan="2">{$title}</td>
+ </tr>
+ {$Stats}
+      ]]></html>
+    </template>
+    <template><set>Stats</set><name>STAT_PAGE</name>
+      <displayname>Main Stats</displayname>
+      <description>Format of the main stats page.</description>
+      <html><![CDATA[
+{$this->table}
+ <tr>
+  <td class="header" colspan="2">{$this->lang->stats}</td>
+ </tr>
+ {$graphs}
+ <tr>
+  <td class="footer" colspan="2">&nbsp;</td>
+ </tr>
+{$this->etable}
+      ]]></html>
+    </template>
+    <template><set>Stats</set><name>STAT_STAT</name>
+      <displayname>Statistics by Month</displayname>
+      <description>Fromat of the monthly stats screen.</description>
+      <html><![CDATA[
+ <tr>
+  <td class="tablelight" style="width:20%">{$month} - {$stat}</td>
+  <td class="tabledark"><img src="../skins/{$this->skin}/images/vote_left.png" alt=""><img src="../skins/{$this->skin}/images/vote_bar.png" style="width:{$width}px; height: 12px" alt=""><img src="../skins/{$this->skin}/images/vote_right.png" alt=""></td>
+ </tr>
       ]]></html>
     </template>
   </templates>

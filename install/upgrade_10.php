@@ -24,5 +24,7 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.1.0 to 1.1.1
+
 $need_templates = true;
 ?>

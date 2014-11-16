@@ -26,8 +26,5 @@ if (!defined('INSTALLER')) {
 
 // Upgrade from 1.1.6 to 1.1.7
 
-$need_templates = array(
-	);
-
-
+$need_templates = array();
 ?>

@@ -44,11 +44,16 @@ class optimize extends admin
 		$tables = array(
 			'%pactive',
 			'%pattach',
+			'%pfile_categories',
+			'%pfiles',
+			'%pfilecomments',
+			'%pfileratings',
 			'%pforums',
 			'%pgroups',
 			'%phelp',
 			'%plogs',
 			'%pmembertitles',
+			'%ppages',
 			'%ppmsystem',
 			'%pposts',
 			'%preplacements',
@@ -58,6 +63,7 @@ class optimize extends admin
 			'%ptemplates',
 			'%ptimezones',
 			'%ptopics',
+			'%pupdates',
 			'%pusers',
 			'%pvotes'
 		);

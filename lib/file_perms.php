@@ -26,12 +26,13 @@ if (!defined('QUICKSILVERFORUMS')) {
 }
 
 /**
- * Permissions class
+ * File permissions class
  *
  * @author Jason Warner <jason@mercuryboard.com>
- * @since Beta 4.0
+ * @since 1.3.2
+ * @Copied from forum permissions
  **/
-class permissions
+class file_permissions
 {
 	var $cube = array();
 	var $group;
@@ -40,72 +41,20 @@ class permissions
 	var $pre;
 	var $is_guest;
 	var $standard = array(
-		'board_view' => false,
-		'board_view_closed' => false,
-		'do_anything' => false,
-		'email_use' => false,
-		'is_admin' => false,
-		'edit_avatar' => false,
-		'edit_profile' => false,
-		'edit_sig' => false,
-                'page_edit' => false, // Added for CMS
-                'page_create' => false, // Added for CMS
-                'page_delete' => false, // Added for CMS
-		'topic_global' => false,
-		'forum_view' => false,
-		'pm_noflood' => false,
-		'poll_create' => false,
-		'poll_vote' => false,
-		'post_attach' => false,
-		'post_attach_download' => false,
-		'post_create' => false,
-		'post_delete' => false,
-		'post_delete_own' => false,
-		'post_edit' => false,
-		'post_edit_own' => false,
-		'post_noflood' => false,
-		'post_viewip' => false,
-		'post_inc_userposts' => false,
-		'search_noflood' => false,
-		'topic_create' => false,
-		'topic_delete' => false,
-		'topic_delete_own' => false,
-		'topic_edit' => false,
-		'topic_edit_own' => false,
-		'topic_lock' => false,
-		'topic_lock_own' => false,
-		'topic_move' => false,
-		'topic_move_own' => false,
-		'topic_pin' => false,
-		'topic_pin_own' => false,
-		'topic_publish' => false,
-		'topic_publish_auto' => false,
-		'topic_split' => false,
-		'topic_split_own' => false,
-		'topic_unlock' => false,
-		'topic_unlock_mod' => false,
-		'topic_unlock_own' => false,
-		'topic_unpin' => false,
-		'topic_unpin_own' => false,
-		'topic_view' => false,
-		'topic_view_unpublished' => false
+                'download_files' => false,
+                'upload_files' => false,
+		'approve_files' => false,
+		'edit_files' => false,
+		'move_files' => false,
+		'delete_files' => false,
+		'post_comment' => false,
+		'category_view' => false,
+		'edit_category' => false,
+		'delete_category' => false,
+		'add_category' => false
 	);
 
 	var $globals = array(
-		'board_view' => true,
-		'board_view_closed' => true,
-		'do_anything' => true,
-		'email_use' => true,
-		'is_admin' => true,
-		'edit_avatar' => true,
-		'edit_profile' => true,
-		'edit_sig' => true,
-                'page_edit' => true, // Added for CMS                                              
-                'page_create' => true, // Added for CMS                                              
-                'page_delete' => true, // Added for CMS 
-		'pm_noflood' => true,
-		'search_noflood' => true,
-		'topic_global' => true
 	);
 	
 	/**
@@ -114,13 +63,13 @@ class permissions
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
-	function permissions(&$qsf)
+	function file_permissions(&$qsf)
 	{
 		$this->db  = &$qsf->db;
 		$this->pre = &$qsf->pre;
 		if (!empty($qsf->user)) {
 			$this->get_perms($qsf->user['user_group'], $qsf->user['user_id'],
-				($qsf->user['user_perms'] ? $qsf->user['user_perms'] : $qsf->user['group_perms']));
+				($qsf->user['user_file_perms'] ? $qsf->user['user_file_perms'] : $qsf->user['group_file_perms']));
 		}
 	}
 
@@ -135,11 +84,11 @@ class permissions
 	{
 		if (!$perms) {
 			if ($group != -1) {
-				$data  = $this->db->fetch("SELECT group_perms FROM %pgroups WHERE group_id=%d", $group);
-				$perms = $data['group_perms'];
+				$data  = $this->db->fetch("SELECT group_file_perms FROM %pgroups WHERE group_id=%d", $group);
+				$perms = $data['group_file_perms'];
 			} else {
-				$data  = $this->db->fetch("SELECT user_perms, user_group FROM %pusers WHERE user_id=%d", $user);
-				$perms = $data['user_perms'];
+				$data  = $this->db->fetch("SELECT user_file_perms, user_group FROM %pusers WHERE user_id=%d", $user);
+				$perms = $data['user_file_perms'];
 				$group = $data['user_group'];
 			}
 		}
@@ -158,7 +107,7 @@ class permissions
 	 * Query if a permission is turned on or not
 	 *
 	 * @param string $y Indentifier of the permission being queried
-	 * @param mixed $z Forum to check the permission against
+	 * @param mixed $z Category to check the permission against
 	 *
 	 * @return true if found the permission and it is on
 	 **/
@@ -183,18 +132,19 @@ class permissions
 	function reset_cube($bool)
 	{
 		$cube = $this->standard;
-		$forums = array();
+		$cats = array();
 
-		$query = $this->db->query("SELECT forum_id FROM %pforums ORDER BY forum_id");
-		while ($forum = $this->db->nqfetch($query))
+		$cats[0] = $bool; // Root category
+		$query = $this->db->query("SELECT fcat_id FROM %pfile_categories ORDER BY fcat_id");
+		while ($cat = $this->db->nqfetch($query))
 		{
-			$forums[$forum['forum_id']] = $bool;
+			$cats[$cat['fcat_id']] = $bool;
 		}
 
 		foreach ($cube as $y => $z)
 		{
-			if (!isset($this->globals[$y]) && $forums) {
-				$cube[$y] = $forums;
+			if (!isset($this->globals[$y]) && $cats) {
+				$cube[$y] = $cats;
 			} else {
 				$cube[$y] = $bool;
 			}
@@ -204,7 +154,7 @@ class permissions
 	}
 
 	/**
-	 * Turn on or off a specific permission. Also turn on or off for all forums
+	 * Turn on or off a specific permission. Also turn on or off for all categories
 	 * that permission applies to
 	 *
 	 * @param string $y Indentifier of the permission being queried
@@ -245,7 +195,7 @@ class permissions
 	}
 
 	/**
-	 * Turn on or off a specific permission for a specific forum
+	 * Turn on or off a specific permission for a specific category
 	 *
 	 * @param string $y Indentifier of the permission being queried
 	 * @param int $z Forum to check the permission against
@@ -253,18 +203,18 @@ class permissions
 	 **/
 	function set_xyz($y, $z, $bool)
 	{
-		// Only allow z modifications on non-global permissions if there are forums
+		// Only allow z modifications on non-global permissions if there are categories
 		if (!isset($this->globals[$y]) && is_array($this->cube[$y])) {
 			$this->cube[$y][$z] = $bool;
 		}
 	}
 
 	/**
-	 * Run through the cube and add a new forum
+	 * Run through the cube and add a new category
 	 *
 	 * @param int $z Forum to create
-	 * @param mixed $bool Forum to copy permissions from. -1 if this is the first
-	 *	forum/category and to use a default. true or false to set all values to that
+	 * @param mixed $bool Category to copy permissions from. -1 if this is the first
+	 *	category and to use a default. true or false to set all values to that
 	 **/
 	function add_z($z, $bool = -1)
 	{
@@ -287,9 +237,9 @@ class permissions
 	}
 
 	/**
-	 * Run through the cube and remove the specified forum
+	 * Run through the cube and remove the specified category
 	 *
-	 * @param int $z Forum to remove
+	 * @param int $z Category to remove
 	 **/
 	function remove_z($z)
 	{
@@ -329,9 +279,9 @@ class permissions
 			$start = false;
 
 			if ($users) {
-				$query = $this->db->query("SELECT user_id, user_perms FROM %pusers WHERE user_perms != ''");
+				$query = $this->db->query("SELECT user_id, user_file_perms FROM %pusers WHERE user_file_perms != ''");
 			} else {
-				$query = $this->db->query("SELECT group_id, group_perms FROM %pgroups");
+				$query = $this->db->query("SELECT group_id, group_file_perms FROM %pgroups");
 			}
 
 			while ($group = $this->db->nqfetch($query))
@@ -342,9 +292,9 @@ class permissions
 
 		if ($p < count($groups)) {
 			if ($users) {
-				$this->get_perms(-1, $groups[$p]['user_id'], $groups[$p]['user_perms']);
+				$this->get_perms(-1, $groups[$p]['user_id'], $groups[$p]['user_file_perms']);
 			} else {
-				$this->get_perms($groups[$p]['group_id'], -1, $groups[$p]['group_perms']);
+				$this->get_perms($groups[$p]['group_id'], -1, $groups[$p]['group_file_perms']);
 			}
 
 			$p++;
@@ -360,7 +310,7 @@ class permissions
 	}
 	
 	/**
-	 * Turn on or off a specific permission for a specific forum
+	 * Turn on or off a specific permission for a specific category
 	 *
 	 * Note: This is only used for upgrades
 	 *
@@ -372,11 +322,11 @@ class permissions
 		$new_global = isset($this->globals[$y]);
 		if (!isset($this->standard[$y])) return; // Don't allow the action!
 		
-		$forum_view_array = $this->cube['forum_view']; // Use this to find the exisitng forums
+		$category_view_array = $this->cube['category_view']; // Use this to find the exisitng forums
 		
-		if (!$new_global && is_array($forum_view_array)) {
-			foreach (array_keys($forum_view_array) as $forum) {
-				$this->cube[$y][$forum] = $bool;
+		if (!$new_global && is_array($category_view_array)) {
+			foreach (array_keys($category_view_array) as $cat) {
+				$this->cube[$y][$cat] = $bool;
 			}
 		} else {
 			$this->cube[$y] = $bool;
@@ -396,10 +346,10 @@ class permissions
 		}
 
 		if ($this->user == -1) {
-			$this->db->query("UPDATE %pgroups SET group_perms='%s' WHERE group_id=%d",
+			$this->db->query("UPDATE %pgroups SET group_file_perms='%s' WHERE group_id=%d",
 				$serialized, $this->group);
 		} else {
-			$this->db->query("UPDATE %pusers SET user_perms='%s' WHERE user_id=%d",
+			$this->db->query("UPDATE %pusers SET user_file_perms='%s' WHERE user_id=%d",
 				$serialized, $this->user);
 		}
 	}

@@ -30,7 +30,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Downloads file browser
  *
- * @author 
+ * @author Roger Libiez [Samson], Davion, Asylumius
  * @since 1.2.2
  **/
 class files extends qsfglobal
@@ -52,7 +52,7 @@ class files extends qsfglobal
 
 		if (!isset($this->get['s'])) {
 			$this->get['s'] = null;
-		} 
+		}
 
 		$cid = isset($this->get['cid']) ? $this->get['cid'] : 0;
 		$fid = isset($this->get['fid']) ? $this->get['fid'] : 0;
@@ -73,9 +73,6 @@ class files extends qsfglobal
 			case 'deletecategory':
 				$file_page = $this->delete_category($cid);
 				break;
-			case 'restrict':
-				$file_page = $this->toggle_restrict($cid);
-				break;
 			case 'addmoderator':
 				$file_page = $this->add_moderator($cid);
 				break;
@@ -86,7 +83,7 @@ class files extends qsfglobal
 				$file_page = $this->show_file($fid);
 				break;
 			case 'download':
-				return $this->download_file();
+				return $this->download_file($cid);
 				break;
 			case 'upload':
 				$file_page = $this->upload_file($cid);
@@ -107,7 +104,7 @@ class files extends qsfglobal
 				$file_page = $this->file_search();
 				break;
 			case 'addcomment':
-				$file_page = $this->add_comment();
+				$file_page = $this->add_comment($cid);
 				break;
 			case 'listcomments':
 				$file_page = $this->list_comments();
@@ -120,6 +117,26 @@ class files extends qsfglobal
 				$file_page = $this->display_categories($cid);
 				break;
 		}
+
+		$upload = false;
+		if ($this->file_perms->auth('upload_files', $cid))
+			$upload = true;
+
+		$approve = false;
+		if ($this->file_perms->auth('approve_files', $cid))
+			$approve = true;
+
+		$addcat = false;
+		if ($this->file_perms->auth('add_category', $cid))
+			$addcat = true;
+
+		$editcat = false;
+		if ($this->file_perms->auth('edit_category', $cid))
+			$editcat = true;
+
+		$delcat = false;
+		if ($this->file_perms->auth('delete_category', $cid))
+			$delcat = true;
 		return eval($this->template('FILES_MAIN'));
 	}
 
@@ -144,7 +161,8 @@ class files extends qsfglobal
 			$this->db->query( "UPDATE %pfile_categories SET fcat_count=%d WHERE fcat_id=%d", $count['files'], $cat['fcat_id'] );
 		}
 		$this->update_category_trees();
-		return $this->message( "Fix File Stats", "The file count has been corrected." );
+
+		return $this->message( "Fix File Stats", "The file stats have been corrected." );
 	}
 
 	function edit_file()
@@ -156,7 +174,7 @@ class files extends qsfglobal
 		    LEFT JOIN %pusers u ON user_id=file_submitted
 		    WHERE file_id=%d", $id );
 
-		if (!$this->is_moderator( $file['file_catid']) ) {
+		if (!$this->file_perms->auth('edit_files', $file['file_catid'])) {
 			return $this->message("Edit File", "You have not been permitted to edit files.");
 		}
 
@@ -190,8 +208,9 @@ class files extends qsfglobal
 	{
 		$id = intval( $this->get['fid'] );
 		$file = $this->db->fetch( "SELECT file_name, file_catid FROM %pfiles WHERE file_id=%d", $id );
-		if (!$this->is_moderator($file['file_catid']) ){
-			return $this->message("Edit File", "You have not been permitted to edit files.");
+
+		if (!$this->file_perms->auth('move_files', $file['file_catid'])) {
+			return $this->message("Move File", "You have not been permitted to move files.");
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -229,11 +248,13 @@ class files extends qsfglobal
 		else
 			$getUpdate = false;
 
-		if(isset($this->get['cid']) )
+		if(isset($this->get['cid']))
 		{
 			$cid = $this->get['cid'];
-			if(!$this->is_moderator($cid) )
+
+			if (!$this->file_perms->auth('approve_files', $cid)) {
 				return $this->message( "File Approval", "Sorry, you do not have permission to approve, deny or download this file." );
+			}
 		}
 		
 		if (!$this->get['f']) {
@@ -252,7 +273,7 @@ class files extends qsfglobal
 			{
 	                        foreach($file as $key => $value)
 	                                $$key = $value;
-				if(!$this->is_moderator($file_catid) )
+				if (!$this->file_perms->auth('approve_files', $file_catid))
 					continue;
 				$i++;
 				$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
@@ -274,7 +295,7 @@ class files extends qsfglobal
 				foreach($update as $key => $value)
 					$$key = $value;
 
-				if(!$this->is_moderator($file_catid) )
+				if (!$this->file_perms->auth('approve_files', $file_catid))
 					continue;
 
 				$i++;
@@ -358,8 +379,8 @@ class files extends qsfglobal
 
 	function edit_category($cid)
 	{
-		if (!$this->is_moderator($cid)) {
-			return $this->message("Edit Category", "You have not been permitted to edit categories.");
+		if (!$this->file_perms->auth('edit_category', $cid)) {
+			return $this->message("Edit Category", "You have not been permitted to edit this category.");
 		}
 
 		if ($cid == 0) {
@@ -367,123 +388,51 @@ class files extends qsfglobal
 		}
 
 		if (!isset($this->post['submit'])) {
-			$cat = $this->db->fetch( "SELECT fcat_name, fcat_parent, fcat_restricted FROM %pfile_categories WHERE fcat_id=%d", $cid );
+			$cat = $this->db->fetch( "SELECT fcat_name, fcat_parent, fcat_description FROM %pfile_categories WHERE fcat_id=%d", $cid );
 			$list = $this->get_categories($cat['fcat_parent']);
 
 			$selected = "";
 			if ($cat['fcat_parent'] == 0) {
 				$selected = " selected=\"selected\"";
 			}
-			$restricted = $cat['fcat_restricted'];
 
-			return $this->message("Edit Category", "
-			<form action=\"{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}\" method=\"post\">
-			 <div>Name: <input type=\"text\" name=\"cat_name\" value=\"{$cat['fcat_name']}\" maxlength=\"32\" /></div>
-			 <div>Parent Category:
-			  <select name=\"parent\">
-			   <option value=\"0\"{$selected}>/</option>
-			   {$list}
-			  </select>
-			 </div>
-			 <input type=\"checkbox\" name=\"restricted\" value=\"1\" id=\"restricted\" /><label for\"restricted\">Category is restricted?</label><br /><br />
-			 <div><input type=\"submit\" name=\"submit\" value=\"Edit\" /></div>
-			</form>" );
+			return eval($this->template("FILE_EDIT_CAT"));
 		} else {
 			$parent = intval($this->post['parent']);
 			$name = $this->post['cat_name'];
+			$desc = $this->post['catdesc'];
 			$longpath = $this->get_longpath($parent);
 
 			$cat = $this->db->fetch( "SELECT * FROM %pfile_categories WHERE fcat_id=%d", $cid );
-			if(!$this->is_moderator($parent) )
+			if (!$this->file_perms->auth('edit_category', $parent)) {
 				return $this->message("Edit Category", "You can only edit categories that you moderate.");
+			}
+
 			if ($this->is_parent($cat['fcat_id'], $parent) ) {
 				return $this->message("Edit Category", "You can't make the category its own parent!");
 			}
 
-			$ecat = $this->db->fetch( "SELECT fcat_name, fcat_parent FROM %pfile_categories WHERE fcat_name='%s'", $name );
+			$ecat = $this->db->fetch( "SELECT fcat_id, fcat_name, fcat_parent FROM %pfile_categories WHERE fcat_name='%s'", $name );
 			if ($ecat && $ecat['fcat_parent'] == $parent) {
 				if ($parent == 0) {
 					$path = "Root";
 				} else {
 					$path = $longpath;
 				}
-				return $this->message("Edit Category", "A category named \"{$name}\" already exists in {$path}.");
+				if ($ecat['fcat_id'] != $cid) {
+					return $this->message("Edit Category", "A category named \"{$name}\" already exists in {$path}.");
+				}
 			}
 
-			$restricted = isset($this->post['restricted']) ? 1 : 0;
-
 			$longpath .= "/{$name}";
-			$this->db->query( "UPDATE %pfile_categories SET fcat_name='%s', fcat_parent=%d, fcat_longpath='%s', fcat_restricted=%d WHERE id=%d", $name, $parent, $longpath, $restricted, $cid );
-			$this->update_children_longpath($cat['id']);
+			$this->db->query( "UPDATE %pfile_categories SET fcat_name='%s', fcat_parent=%d, fcat_longpath='%s', fcat_description='%s' WHERE fcat_id=%d", $name, $parent, $longpath, $desc, $cid );
+			$this->update_children_longpath($cat['fcat_id']);
 			$this->update_category_trees();
 			return $this->message( "Edit Category", "Category \"{$name}\" has been edited.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
 		}
 	}
 
-	function delete_category($cid)
-	{
-		if (!$this->is_moderator($cid)) {
-			return $this->message("Delete Category", "You have not been permitted to delete categories.");
-		}
-
-		if (!isset($this->post['submit'])) {
-			$list = $this->get_categories($cid);
-
-			return $this->message("Delete Category", "
-			<form action=\"{$this->self}?a=files&amp;s=deletecategory\" method=\"post\">
-			 <div>Delete which existing category?
-			  <select name=\"category\">
-			   {$list}
-			  </select>
-			  <input type=\"submit\" name=\"submit\" value=\"Delete\" />
-			 </div>
-			</form>");
-		} else {
-			if (!isset($this->post['category'])) {
-				return $this->message("Delete Category", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files");
-			}
-
-			$catid = intval( $this->post['category'] );
-			if (!$this->is_moderator($catid)) {
-				return $this->message("Delete Category", "You have not been permitted to delete categories.");
-			}
-
-			$cat = $this->db->fetch( "SELECT fcat_name, fcat_parent, fcat_count FROM %pfile_categories WHERE fcat_id=%d", $catid );
-			if (!$cat) {
-				return $this->message( "Delete Category", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files" );
-			}
-
-			$count = $cat['fcat_count'];
-
-			if ($count > 0) {
-				return $this->message("Delete Category", "The {$cat['fcat_name']} category is not empty. Cannot delete.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}");
-			}
-
-			$this->db->query( "DELETE FROM %pfile_categories WHERE fcat_id=%d", $catid );
-
-			return $this->message( "Delete Category", "The {$cat['fcat_name']} category has been deleted.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cat['fcat_parent']}" );
-		}
-	}
-
-	function toggle_restrict($cid)
-	{
-		if (!$this->perms->auth('is_admin'))
-                        return $this->message( "Toggle Restriction", "You don't have permission to toggle the restricted flag.", "{$this->lang->continue}", "{$this->self}?a=files&cid={$cid}");
-		
-		$cat = $this->db->fetch( "SELECT fcat_restricted, fcat_name FROM %pfile_categories WHERE fcat_id=%d", $cid );
-		if( $cat == NULL )
-			return $this->message( "Toggle Restriction", "We could not grab that category. Try again.", "{$this->lang->continue}", "{$this->self}?a=files&cid={$cid}" );
-		
-		if( $cat['fcat_restricted'] == 0 )
-		{
-			$this->db->query( "UPDATE %pfile_categories SET fcat_restricted=1 WHERE fcat_id=%d", $cid );
-			return $this->message("Toggle Restriction", "This category is now restricted.", "{$this->lang->continue}", "{$this->self}?a=files&cid={$cid}");
-		}
-
-		$this->db->query( "UPDATE %pfile_categories SET fcat_restricted=0 WHERE fcat_id=%d", $cid );
-		return $this->message("Toggle Restriction", "This is category is no longer restricted.", "{$this->lang->continue}", "{$this->self}?a=files&cid={$cid}" );
-	}
-
+	// FIXME: There's work to be done here. Appropriate permissions on the user need to be set.
 	function add_moderator($cid)
 	{
 		if (!$this->perms->auth('is_admin'))
@@ -517,6 +466,7 @@ class files extends qsfglobal
 		}
 	}
 
+	// FIXME: There's work to be done here. Appropriate permissions on the user need to be unset.
 	function rem_moderator($cid)
 	{
 		if (!$this->perms->auth('is_admin'))
@@ -545,34 +495,90 @@ class files extends qsfglobal
 		}
 	}
 
-	function add_category($cid)
+	function delete_category($cid)
 	{
-		if (!$this->is_moderator($cid)) {
-			return $this->message("Add Category", "You have not been permitted to add categories.");
+		if (!$this->file_perms->auth('delete_category', $cid)) {
+			return $this->message("Delete Category", "You have not been permitted to delete categories.");
 		}
 
 		if (!isset($this->post['submit'])) {
 			$list = $this->get_categories($cid);
 
-			return $this->message("Add Category", "
-			<form action=\"{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}\" method=\"post\">
-			 <div>Add new category named:<br />
-			 <input type=\"text\" name=\"cat_name\" value=\"\" maxlength=\"32\" /><br /><br />
-			 To which existing category?
-			  <select name=\"parent\">
-			   <option value=\"0\">/</option>
+			return $this->message("Delete Category", "
+			<form action=\"{$this->self}?a=files&amp;s=deletecategory\" method=\"post\">
+			 <div>Delete which existing category?
+			  <select name=\"category\">
 			   {$list}
-			  </select><br />
-			  <input type=\"checkbox\" name=\"restricted\" value=\"0\" id=\"restricted\" /><label for\"restricted\">Category is restricted?</label><br /><br />
-			  <input type=\"submit\" name=\"submit\" value=\"Add\" />
+			  </select>
+			  <input type=\"submit\" name=\"submit\" value=\"Delete\" />
 			 </div>
 			</form>");
+		} else {
+			if (!isset($this->post['category'])) {
+				return $this->message("Delete Category", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files");
+			}
+
+			$catid = intval( $this->post['category'] );
+			if (!$this->file_perms->auth('delete_category', $catid)) {
+				return $this->message("Delete Category", "You have not been permitted to delete categories.");
+			}
+
+			$cat = $this->db->fetch( "SELECT fcat_name, fcat_parent, fcat_count FROM %pfile_categories WHERE fcat_id=%d", $catid );
+			if (!$cat) {
+				return $this->message( "Delete Category", "No such category.", "{$this->lang->continue}", "{$this->self}?a=files" );
+			}
+
+			$count = $cat['fcat_count'];
+
+			if ($count > 0) {
+				return $this->message("Delete Category", "The {$cat['fcat_name']} category is not empty. Cannot delete.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}");
+			}
+
+			$this->db->query( "DELETE FROM %pfile_categories WHERE fcat_id=%d", $catid );
+
+			$perms = new $this->modules['file_permissions']($this);
+
+			// Groups
+			while ($perms->get_group())
+			{
+				$perms->remove_z($catid);
+				$perms->update();
+			}
+
+			// Users
+			while ($perms->get_group(true))
+			{
+				$perms->remove_z($catid);
+				$perms->update();
+			}
+
+			return $this->message( "Delete Category", "The {$cat['fcat_name']} category has been deleted.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cat['fcat_parent']}" );
+		}
+	}
+
+	function add_category($cid)
+	{
+		if (!$this->file_perms->auth('add_category', $cid)) {
+			return $this->message("Add Category", "You have not been permitted to add categories.");
+		}
+
+		if (!isset($this->post['submit'])) {
+			$list = $this->get_categories($cid);
+			$cats_exist = $this->db->fetch('SELECT COUNT(fcat_id) AS count FROM %pfile_categories');
+
+			if ($cats_exist['count']) {
+				$quickperms = $list;
+			} else {
+				$quickperms = "<option value='0' selected='selected'>Root</option>";
+			}
+
+			return eval($this->template("FILE_ADD_CAT"));
 		} else {
 			$parent = intval($this->post['parent']);
 			$name = $this->post['cat_name'];
 			$longpath = $this->get_longpath($parent);
 
-			if (!$this->is_moderator($parent)) {
+			if (!$this->file_perms->auth('add_category', $parent)) {
 				return $this->message("Add Category", "You have not been permitted to add categories.");
 			}
 
@@ -586,16 +592,44 @@ class files extends qsfglobal
 				return $this->message( "Add Category", "A category named \"{$name}\" already exists in {$path}." );
 			}
 
-			$restricted = isset($this->post['restricted']) ? 1 : 0;
-
 			$longpath .= "/{$name}";
+			$desc = $this->post['catdesc'];
 
 			$cats = $this->category_array();
 			$tree = '';
 			if( $parent != 0 )
 				$tree = $this->create_tree( $cats, $parent );
 
-			$this->db->query( "INSERT INTO %pfile_categories (fcat_parent, fcat_name, fcat_longpath, fcat_restricted, fcat_tree) VALUES( %d, '%s', '%s', %d, '%s' )", $parent, $name, $longpath, $restricted, $tree );
+			$this->db->query( "INSERT INTO %pfile_categories (fcat_parent, fcat_name, fcat_longpath, fcat_tree, fcat_description)
+			 VALUES( %d, '%s', '%s', '%s', '%s' )", $parent, $name, $longpath, $tree, $desc );
+
+			$newid = $this->db->insert_id("file_categories");
+			$perms = new $this->modules['file_permissions']($this);
+
+			while ($perms->get_group())
+			{
+				// Full permissions (note: the banned group is still false)
+				if ($this->post['sync'] == -2) {
+					$perms->add_z($newid, ($perms->group != USER_BANNED));
+
+				// No permissions
+				} elseif ($this->post['sync'] == -1) {
+					$perms->add_z($newid, false);
+
+				// Copy another category
+				} else {
+					$perms->add_z($newid, false);
+
+					foreach ($perms->standard as $perm => $false)
+					{
+						if (!isset($perms->globals[$perm])) {
+							$perms->set_xyz($perm, $newid, $perms->auth($perm, $this->post['sync']));
+						}
+					}
+				}
+
+				$perms->update();
+			}
 
 			return $this->message( "Add Category", "New category \"{$name}\" has been added.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$parent}" );
 		}
@@ -603,7 +637,7 @@ class files extends qsfglobal
 
 	function delete_file($cid)
 	{
-		if (!$this->is_moderator($cid)) {
+		if (!$this->file_perms->auth('delete_files', $cid)) {
 			return $this->message("Delete File", "You have not been permitted to delete files.");
 		}
 
@@ -629,7 +663,7 @@ class files extends qsfglobal
 	{
 		$file_upload = false;
 
-		if(!$this->perms->auth('submit_files') || !$this->is_submitter($fid, $cid))
+		if(!$this->file_perms->auth('upload_files') || !$this->is_submitter($fid, $cid))
 			return $this->message("Update File", "You do not have the permission to update this file.");
 
 		$file = $this->db->fetch( "SELECT file_description FROM %pfiles WHERE file_id=%d", $fid );
@@ -707,8 +741,9 @@ class files extends qsfglobal
 
 	function approve_update($cid, $uid)
 	{
-		if(!$this->is_moderator($cid) )
+		if (!$this->file_perms->auth('approve_files', $cid)) {
 			return $this->message( "Approve Update", "You do not have the permission to approve this update.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$cid}" );
+		}
 		
 		$update = $this->db->fetch( "SELECT * FROM %pupdates WHERE update_id=%d", $uid );
 		if(!$update)
@@ -751,13 +786,8 @@ class files extends qsfglobal
 	
 	function upload_file($cid)
 	{
-		if (!$this->perms->auth('submit_files')) {
+		if (!$this->file_perms->auth('upload_files', $cid)) {
 			return $this->message("Upload File", "You have not been permitted to upload files.");
-		}
-
-		$cat = $this->db->fetch( "SELECT fcat_restricted FROM %pfile_categories WHERE fcat_id=%d", $cid );
-		if ($cat['fcat_restricted'] && !$this->is_moderator($cid)) {
-			return $this->message("Upload File", "This category is not available for general uploads.");
 		}
 
 		if (!isset($this->post['submit'])) {
@@ -766,8 +796,13 @@ class files extends qsfglobal
 			return eval($this->template('FILE_UPLOAD'));
 		}
 
+		$catid = intval( $this->post['file_category'] );
+		if ($catid == 0) {
+			return $this->message( "Upload File", "Cannot upload to the Root category.");
+		}
+
 		if (empty($this->files['code_upload']['name']) || empty($this->post['file_author']) || empty($this->post['file_name']) || empty($this->post['file_description']) || empty($this->post['file_category'])) {
-			return $this->message("Submit File", "All fields are required for uploads.");
+			return $this->message("Upload File", "All fields are required for uploads.");
 		}
 
 		$filename = basename($this->files['code_upload']['name']);
@@ -776,7 +811,6 @@ class files extends qsfglobal
 
 		$name = $this->post['file_name'];
 		$size = intval( $this->files['code_upload']['size'] );
-		$catid = intval( $this->post['file_category'] );
 		$author = $this->post['file_author'];
 		$desc = $this->post['file_description'];
 		$uid = $this->user['user_id'];
@@ -784,37 +818,50 @@ class files extends qsfglobal
 
 		$file = $this->db->fetch( "SELECT file_filename FROM %pfiles WHERE file_filename='%s'", $filename );
 		if ($file['file_filename'] == $filename) {
-			return $this->message( "Submit File", "A file by that name already exists in the database." );
+			return $this->message( "Upload File", "A file by that name already exists in the database." );
 		}
 
 		if (is_uploaded_file($this->files['code_upload']['tmp_name'])) {
 			if (file_exists($newhome)) {
-				return $this->message( "Submit File", "Unable to process: duplicate filename error." );
+				return $this->message( "Upload File", "Unable to process: duplicate filename error." );
 			} else {
 				if (!move_uploaded_file($this->files['code_upload']['tmp_name'], $newhome)) {
-					return $this->message( "Submit File", "Unable to process: Unknown file error." );
+					return $this->message( "Upload File", "Unable to process: Unknown file error." );
 				}
 			}
 		} else {
-			return $this->message( "Submit File", "You tried to tricks us!" );
+			return $this->message( "Upload File", "You tried to tricks us!" );
 		}
 
 		// Permissions update to allow rsync to back this file up
 		$this->chmod( $newhome, 0644, false );
 
-		$this->db->query( "INSERT INTO %pfiles 
-		 (file_name, file_catid, file_filename, file_md5name, file_author, file_size, file_date, file_submitted, file_description)
-		 VALUES( '%s', %d, '%s', '%s', '%s', %d, %d, %d, '%s' )",
-		  $name, $catid, $filename, $md5name, $author, $size, $date, $uid, $desc );
+		$approved = 0;
+		if( $this->perms->auth('is_admin') ) // Because admins shouldn't have to get approval
+			$approved = 1;
 
-		$this->sets['code_approval']++;
-		$this->write_sets();
-		return $this->message( "Submit File", "The file has been uploaded and is pending approval.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
+		$this->db->query( "INSERT INTO %pfiles 
+		 (file_name, file_catid, file_filename, file_md5name, file_author, file_size, file_date, file_submitted, file_description, file_approved)
+		 VALUES( '%s', %d, '%s', '%s', '%s', %d, %d, %d, '%s', %d )",
+		  $name, $catid, $filename, $md5name, $author, $size, $date, $uid, $desc, $approved );
+
+		if( $approved == 0 ) {
+			$this->sets['code_approval']++;
+			$this->write_sets();
+			return $this->message( "Upload File", "The file has been uploaded and is pending approval.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
+		} else {
+			$this->db->query( "UPDATE %pusers SET user_uploads=user_uploads+1 WHERE user_id=%d", $uid );
+			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count+1 WHERE fcat_id=%d", $catid );
+
+			$this->sets['file_count']++;
+			$this->write_sets();
+			return $this->message( "Upload File", "The file has been uploaded.", "{$this->lang->continue}", "{$this->self}?a=files&amp;cid={$catid}" );
+		}
 	}
 
-	function download_file()
+	function download_file($cid)
 	{
-                if (!$this->perms->auth('download_files')) {
+                if (!$this->file_perms->auth('download_files', $cid)) {
                         return $this->message("Download File", "You have not been permitted to download files.");
                 }
 
@@ -838,12 +885,14 @@ class files extends qsfglobal
 	function display_categories($cid)
 	{
 		$break = 0;
+		$desc = "";
 
 		if( $cid != 0 ) {
-			$cat = $this->db->fetch( "SELECT fcat_id, fcat_moderator FROM %pfile_categories WHERE fcat_id=%d", $cid );
+			$cat = $this->db->fetch( "SELECT fcat_id, fcat_moderator, fcat_description FROM %pfile_categories WHERE fcat_id=%d", $cid );
 			if (!$cat && $cid != 0 ) {
 				return $this->message( "Error", "The category does not exist. It may have been deleted, or never existed." );
 			}
+			$desc = $cat['fcat_description'];
 		}
 
 		$tree = $this->get_filetree($cid);
@@ -856,6 +905,10 @@ class files extends qsfglobal
 				continue;
 
 			$id = $category['fcat_id'];
+
+			if (!$this->file_perms->auth('category_view', $id))
+				continue;
+
 			$name = $category['fcat_name'];
 			$count = $category['fcat_count'];
 
@@ -875,7 +928,7 @@ class files extends qsfglobal
 			$moderid = $someMod['user_id'];
 		}
 
-		$displaycat = $this->display_category($cid);
+		$displaycat = $this->display_category($cid,$desc);
 		return eval($this->template('FILE_CATS'));
 	}
 
@@ -897,6 +950,9 @@ class files extends qsfglobal
 			foreach($row as $key => $value)
 				$$key = $value;
 
+			if (!$this->file_perms->auth('category_view', $file_catid))
+				continue;
+
 			$i++;
                         if ($i % 2 == 0) {
                                 $class = 'tablelight';
@@ -916,7 +972,7 @@ class files extends qsfglobal
 		}
 	}
 
-	function display_category($cid)
+	function display_category($cid,$desc)
 	{
 		$i = 0;
 		$catitems = "";
@@ -942,6 +998,9 @@ class files extends qsfglobal
 			foreach($row as $key => $value)
 				$$key = $value;
 
+			if (!$this->file_perms->auth('category_view', $file_catid))
+				continue;
+
 			$i++;
                         if ($i % 2 == 0) {
                                 $class = 'tablelight';
@@ -953,12 +1012,7 @@ class files extends qsfglobal
 
 			$catitems .= eval($this->template('FILE_CATITEM'));
 		}
-		if( $i < 1 ) {
-			return "";
-		}
-		else {
-			return eval($this->template('FILE_CATEGORY'));
-		}
+		return eval($this->template('FILE_CATEGORY'));
 	}
 
 	function show_file($fid)
@@ -976,6 +1030,9 @@ class files extends qsfglobal
 
 		foreach($query as $key => $value)
 			$$key = $value;
+
+		if (!$this->file_perms->auth('category_view', $file_catid))
+			return $this->message( "Show File", "You are not permitted to view this category." );
 
 		$tree = $this->get_filetree($file_catid,true);
 		$cid = $file_catid;
@@ -999,6 +1056,16 @@ class files extends qsfglobal
 		}
 		$filesize = ceil($file_size / 1024);
 		$file_description = $this->format($file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE);
+
+		$move = false;
+		if ($this->file_perms->auth('move_files', $cid))
+			$move = true;
+		$edit = false;
+		if ($this->file_perms->auth('edit_files', $cid))
+			$edit = true;
+		$delete = false;
+		if ($this->file_perms->auth('delete_files', $cid))
+			$delete = true;
 
 		return eval($this->template('FILE_DETAILS'));
 	}
@@ -1101,6 +1168,10 @@ class files extends qsfglobal
 			$found++;
 			foreach ($row as $key => $value)
 				$$key = $value;
+
+			if (!$this->file_perms->auth('category_view', $file_catid))
+				continue;
+
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 			$filesize = ceil($file_size / 1024);
 			$user = $this->db->fetch( "SELECT user_name, user_id FROM %pusers WHERE user_id=%d", $file_submitted );
@@ -1120,10 +1191,10 @@ class files extends qsfglobal
 		return eval($this->template('FILES_SEARCHRESULT'));
 	}
 
-	function add_comment()
+	function add_comment($cid)
 	{
-		if ($this->perms->auth('is_guest')) {
-			return $this->message("Add Comment", "Guests may not post file comments.");
+		if (!$this->file_perms->auth('post_comment', $cid)) {
+			return $this->message("Add Comment", "You are not permitted to post comments.");
 		}
 
 		$id = isset($this->get['fid']) ? $this->get['fid'] : 0;
@@ -1160,10 +1231,11 @@ class files extends qsfglobal
 		$class = "";
 
 		$query = $this->db->query(
-		  "SELECT c.*, u.user_name
+		  "SELECT c.*, u.user_name, f.file_catid
 		    FROM %pfilecomments c
 		    LEFT JOIN %pusers u ON u.user_id=c.user_id
-		    WHERE c.file_id=%d", $id );
+		    LEFT JOIN %pfiles f ON f.file_id=%d
+		    WHERE c.file_id=%d", $id, $id );
 
 		while( $row = $this->db->nqfetch( $query ) ) {
 			$fid = $row['file_id'];
@@ -1178,12 +1250,13 @@ class files extends qsfglobal
                         }
 			$comments .= eval($this->template('FILE_COMMENT'));
 		}
+		$cid = $query['file_catid'];
 		return eval($this->template('FILE_COMMENT_LIST'));
 	}
 
 	// Utility Functions
 
-	function nestedSelect($cid = 0, $nest = 0, &$selectArray = array())
+	function nestedSelect($cid = 0, $nest = 0, $selectArray = array())
 	{
 		$cats = $this->db->query( "SELECT fcat_name, fcat_id, fcat_parent FROM %pfile_categories WHERE fcat_parent=%d", $cid );
 		if($cats && $this->db->num_rows($cats) <= 0 )
@@ -1194,8 +1267,8 @@ class files extends qsfglobal
 			$nestSpace .= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		while( $row = $this->db->nqfetch($cats) )
 		{
-			$sArray=array();
-			$toAdd = $this->nestedSelect($row['fcat_id'], $nest+1, &$sArray);
+			$sArray = array();
+			$toAdd = $this->nestedSelect($row['fcat_id'], $nest+1, $sArray);
 			array_push($selectArray, $row['fcat_id']);
 			$selectArray = array_merge($selectArray, $sArray);
 			array_push($sArray, $row['fcat_id']);
@@ -1216,6 +1289,7 @@ class files extends qsfglobal
 		$this->db->query( "DELETE FROM %pfileratings WHERE file_id=%d", $id );
 		$this->db->query( "DELETE FROM %pfilecomments WHERE file_id=%d", $id );
 		if ($count) {
+			$this->db->query( "UPDATE %pfile_categories SET fcat_count=fcat_count-1 WHERE fcat_id=%d", $file['file_catid'] );
 			$this->db->query( "UPDATE %pusers SET user_uploads=user_uploads-1 WHERE user_id=%d", $file['file_submitted'] );
 			$this->sets['file_count']--;
 			$this->write_sets();
@@ -1299,7 +1373,7 @@ class files extends qsfglobal
 				$selected = " selected=\"selected\"";
 			}
 
-			if($cat['fcat_restricted'] && !$this->is_moderator($cat['fcat_id']))
+			if(!$this->file_perms->auth('category_view', $cat['fcat_id']))
 				continue;
 			$list .= "<option value=\"{$cat['fcat_id']}\"{$selected}>{$cat['fcat_longpath']}</option>\n";
 		}
@@ -1311,45 +1385,11 @@ class files extends qsfglobal
 		$file = $this->db->fetch( "SELECT file_submitted FROM %pfiles WHERE file_id=%d", $fid );
 		if(!$file)
 			return false;
-		if($this->is_moderator($cid) )
+		if ($this->file_perms->auth('edit_files', $cid))
 			return true;
 		if($file['file_submitted'] != $this->user['user_id'] )
 			return false;
 		return true;
-	}
-
-	/*
-	 * Runs the category array to see if the current user is the moderator of category $cid.
-	 */
-	function is_moderator($cid)
-	{
-		if( $this->perms->auth('is_admin') )
-			return true;
-
-		if( $cid == 0 )
-			return false;
-
-		$cats = $this->category_array();
-
-		// First pass: Category is directly assigned to user.
-		foreach( $cats as $category )
-		{
-			if( $category['fcat_id'] == $cid && $category['fcat_moderator'] == $this->user['user_id'] )
-				return true;
-		}
-
-		// Second pass: Climb up the category tree and see if this user moderates the parent.
-		// Moderating the parent means you moderate all of its children too.
-		$onCat = $cid;
-		while( $parent = $cats[$onCat]['fcat_parent'] )
-		{
-			if( $cats[$parent]['fcat_moderator'] == $this->user['user_id'] )
-				return true;
-			if( $parent == 0 )
-				break;
-			$onCat = $parent;
-		}
-		return false;
 	}
 
 	function get_longpath($cid)
@@ -1402,9 +1442,9 @@ class files extends qsfglobal
 
 	function create_tree($array, $id)
 	{
-		for ($i = 1; $i < count($array); $i++) {
-			if ($array[$i]['fcat_id'] == $id) {
-				return preg_replace('/^,/', '', $array[$i]['fcat_tree'] . ",$id");
+		foreach ($array as $cat) {
+			if ($cat['fcat_id'] == $id) {
+				return preg_replace('/^,/', '', $cat['fcat_tree'] . ",$id");
 			}
 		}
 	}

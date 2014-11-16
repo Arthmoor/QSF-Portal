@@ -27,15 +27,13 @@ if (!defined('QUICKSILVERFORUMS')) {
 
 /**
  * Show Top 10 Posters
- *
  * 
- * @author KingOfSka <kingofska@gmail.com.com>
+ * @author KingOfSka <kingofska@gmail.com>
  * @return string HTML with Top Posters and link to their profile
 **/
-
 class top_posters extends modlet
 {
-	function run()
+	function run($param)
 	{
 		$content = "";
 		$result = $this->qsf->db->query( "SELECT user_id, user_name, user_posts FROM %pusers ORDER BY user_posts DESC LIMIT 5" );

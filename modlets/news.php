@@ -28,7 +28,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Generate front page news items
  *
- * @author Roger Libiez <samson@afkmud.com>
+ * @author Roger Libiez [Samson]
  * @since 1.2.2
  **/
 class news extends modlet

@@ -76,7 +76,7 @@ class decoder
 		$this->data = $data;
 	}
 
-	function isType($bin)
+	function isType()
 	{
 		return false;
 	}

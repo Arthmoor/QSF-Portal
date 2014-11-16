@@ -26,6 +26,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 }
 
 require_once $set['include_path'] . '/global.php';
+// require_once $set['include_path'] . '/lib/forumutils.php';
 
 /**
  * Controls moderator actions
@@ -168,14 +169,13 @@ class mod extends qsfglobal
 			$this->db->query("UPDATE %psubscriptions SET subscription_item=%d WHERE subscription_item=%d AND subscription_type='topic'",
 				$newtopic, $this->get['t']);
 
-			$this->update_last_post($topic['topic_forum']);
-			$this->update_last_post($this->post['newforum']);
+			$this->htmlwidgets->update_last_post($topic['topic_forum']);
+			$this->htmlwidgets->update_last_post($this->post['newforum']);
 
 			$ammount = $this->db->fetch('SELECT topic_replies FROM %ptopics WHERE topic_id = %d', $newtopic);
 			$ammount = intval($ammount['topic_replies']);
 
-			echo 'ammount='.$ammount;
-			$this->update_count_move($topic['topic_forum'], $this->post['newforum'], $ammount);
+			$this->htmlwidgets->update_count_move($topic['topic_forum'], $this->post['newforum'], $ammount);
 
 			$this->log_action('topic_move', $this->get['t'], $topic['topic_forum'], $this->post['newforum']);
 
@@ -512,9 +512,7 @@ class mod extends qsfglobal
 		  
 		$jump = '&amp;p=' . $prev['prev_post'] . '#p' . $prev['prev_post'];
 
-		$this->delete_post($this->get['p']);
-		$this->update_last_post($post['topic_forum']);
-		$this->update_last_post_topic($post['topic_id']);
+		$this->htmlwidgets->delete_post($this->get['p']);
 
 		$this->log_action('post_delete', $this->get['p']);
 
@@ -558,8 +556,8 @@ class mod extends qsfglobal
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_confirm_topic_delete, $this->lang->continue, "$this->self?a=mod&amp;s=del_topic&amp;t={$this->get['t']}&amp;confirm=1");
 		}
 
-		$this->delete_topic($this->get['t']);
-		$this->update_last_post($topic['topic_forum']);
+		$this->htmlwidgets->delete_topic($this->get['t']);
+
 		$this->log_action('topic_delete', $this->get['t']);
 
 		return $this->message($this->lang->mod_label_controls, $this->lang->mod_success_topic_delete, $this->lang->continue, "{$this->self}?a=forum&amp;f={$topic['topic_forum']}", "$this->self?a=forum&f={$topic['topic_forum']}");
@@ -682,7 +680,7 @@ class mod extends qsfglobal
 						$this->post['topic'][$x], $where[$x]['count'], $mode, $id);
 					$this->db->query("UPDATE %pposts SET post_topic=%d WHERE post_id IN (%s)", $id, implode(',', $where[$x]['posts']));
 
-					$this->update_last_post_topic($id);
+					$this->htmlwidgets->update_last_post_topic($id);
 
 					$posts = $this->db->fetch("SELECT post_author, post_icon, post_time FROM %pposts WHERE post_topic=%d ORDER BY post_time ASC", $id);
 					$this->db->query("UPDATE %ptopics SET topic_starter=%d, topic_icon='%s' WHERE topic_id=%d",
@@ -693,106 +691,12 @@ class mod extends qsfglobal
 			$this->db->query("UPDATE %ptopics SET topic_replies=topic_replies-%d WHERE topic_id=%d",
 				$moved, $this->get['t']);
 
-			$this->update_last_post_topic($this->get['t']);
-			$this->update_last_post($topic['topic_forum']);
+			$this->htmlwidgets->update_last_post_topic($this->get['t']);
+			$this->htmlwidgets->update_last_post($topic['topic_forum']);
 			$this->log_action('topic_split', $this->get['t']);
 
 			return $this->message($this->lang->mod_label_controls, $this->lang->mod_success_split);
 		}
-	}
-
-	/**
-	 * Deletes a single topic
-	 *
-	 * @param int $t Topic ID
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 4.0
-	 * @return void
-	 **/
-	function delete_topic($t)
-	{
-		$posts = $this->db->query("
-			SELECT t.topic_forum, t.topic_id, a.attach_file, p.post_author, p.post_id, p.post_count, u.user_posts
-			FROM (%ptopics t, %pposts p, %pusers u)
-			LEFT JOIN %pattach a ON p.post_id=a.attach_post
-			WHERE t.topic_id=%d AND t.topic_id=p.post_topic", $t);
-
-		$deleted = -1;
-
-		while ($post = $this->db->nqfetch($posts))
-		{
-			if ($post['post_count']) {
-				$uposts = $post['user_posts'] - 1;
-
-				if ($uposts < 0) {
-					$uposts = 0;
-				}
-				$this->db->query('UPDATE %pusers SET user_posts=%d WHERE user_id=%d', $uposts, $post['post_author']);
-			}
-
-			if ($post['attach_file']) {
-				$this->db->query('DELETE FROM %pattach WHERE attach_post=%d', $post['post_id']);
-				@unlink('./attachments/' . $post['attach_file']);
-			}
-
-			$deleted++;
-		}
-
-		$result = $this->db->fetch('SELECT topic_forum FROM %ptopics WHERE topic_id=%d', $t);
-
-		$this->db->query('DELETE FROM %pvotes WHERE vote_topic=%d', $t);
-		$this->db->query('DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d', $t, $t);
-		$this->db->query('DELETE FROM %pposts WHERE post_topic=%d', $t);
-
-		$this->update_reply_count($result['topic_forum'], $deleted);
-
-		// Update all parent forums if any
-		$forums = $this->db->fetch("SELECT forum_tree FROM %pforums WHERE forum_id=%d", $result['topic_forum']);
-		$this->db->query("UPDATE %pforums SET forum_topics=forum_topics-1
-			WHERE forum_parent > 0 AND forum_id IN (%s) OR forum_id=%d",
-			$forums['forum_tree'], $result['topic_forum']);
-
-		$this->sets['posts'] -= ($deleted+1);
-		$this->sets['topics'] -= 1;
-		$this->write_sets();
-	}
-
-	/**
-	 * Deletes a single post
-	 *
-	 * @param int $p Post ID
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 4.0
-	 * @return void
-	 **/
-	function delete_post($p)
-	{
-		$result = $this->db->fetch("SELECT t.topic_forum, t.topic_id, a.attach_file, p.post_author, p.post_count, u.user_posts
-			FROM (%ptopics t, %pposts p, %pusers u)
-			LEFT JOIN %pattach a ON p.post_id=a.attach_post
-			WHERE p.post_id=%d AND t.topic_id=p.post_topic", $p);
-
-		$this->db->query('UPDATE %pforums SET forum_replies=forum_replies-1 WHERE forum_id=%d', $result['topic_forum']);
-		$this->db->query('UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=%d', $result['topic_id']);
-		if ($result['post_count']) {
-			$posts = $result['user_posts'] - 1;
-
-			if ($posts < 0) {
-				$posts = 0;
-			}
-			$this->db->query('UPDATE %pusers SET user_posts=%d WHERE user_id=%d', $posts, $result['post_author']);
-		}
-
-		$this->db->query('DELETE FROM %pposts WHERE post_id=%d', $p);
-
-		if ($result['attach_file']) {
-			$this->db->query('DELETE FROM %pattach WHERE attach_post=%d', $p);
-			@unlink('./attachments/' . $result['attach_file']);
-		}
-
-		$this->update_last_post_topic($result['topic_id']);
-		$this->sets['posts'] -= 1;
-		$this->write_sets();
 	}
 
 	/**
@@ -855,7 +759,7 @@ class mod extends qsfglobal
 
 		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d OR topic_moved=%d',
 			$topic_modes ^ TOPIC_PINNED, $t, $t);
-		$this->update_last_post($topic['topic_forum']);
+		$this->htmlwidgets->update_last_post($topic['topic_forum']);
 	}
 
 	/**
@@ -882,119 +786,6 @@ class mod extends qsfglobal
 	{
 		$this->db->query('UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d',
 			$topic_modes ^ TOPIC_PUBLISH, $t);
-	}
-
-	/**
-	 * Decrements a forum and all it's parents by the given value.
-	 *
-	 * @param int $f the forum identifier
-	 * @param int $ammount how much to decrement by
-	 * @author Matthew Lawrence <matt@quicksilverforums.co.uk>
-	 * @since 1.3.0
-	 * @returns void
-	**/
-	function update_reply_count($f, $ammount, $topic = 0)
-	{
-		if (0 == $ammount && 0 == $topic) // nothing to do
-			return;
-
-		/* decrement the parent forums */
-		$forums = $this->db->fetch("SELECT forum_tree FROM %pforums WHERE forum_id=%d", $f);
-
-		if (isset($forums['forum_tree']) && 0 != strlen($forums['forum_tree']))
-		{
-			$wip = explode(',', $forums['forum_tree']);
-
-			array_push($wip, $f);
-
-			foreach ($wip as $fid)
-			{
-				$fid = intval($fid);
-
-				if (0 == $fid)
-					continue;
-
-				$this->db->query('UPDATE %pforums SET forum_replies=forum_replies-%d WHERE forum_id=%d', $ammount, $fid);
-
-				if (0 != $topic)
-					$this->db->query('UPDATE %pforums SET forum_topics=forum_topics-%d WHERE forum_id=%d',
-						intval($topic), $fid);
-
-			}
-		}
-	}
-
-	function update_count_move($f_from, $f_to, $ammount)
-	{
-		$this->update_reply_count($f_from, $ammount,  1);
-		$this->update_reply_count($f_to, 0-$ammount, -1);
-	}
-
-	/**
-	 * Updates the last post of a forum
-	 *
-	 * @param int $f Forum ID
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 4.0
-	 * @return void
-	 **/
-	function update_last_post($f)
-	{
-		/* update any parent forums */
-		$forums = $this->db->fetch("SELECT forum_tree FROM %pforums WHERE forum_id=%d", $f);
-
-		if (isset($forums['forum_tree']) && 0 != strlen($forums['forum_tree']))
-		{
-			$wip = explode(',', $forums['forum_tree']);
-
-			foreach ($wip as $fid)
-			{
-				$fid = intval($fid);
-
-				/* handle weird cases */
-				if (0 == $fid)
-					continue;
-
-				$this->_update_last_post($fid);
-			}
-		}
-
-		/* update the specified forum */
-		$this->_update_last_post($f);
-	}
-
-	function _update_last_post($f)
-	{
-		$post = $this->db->fetch('SELECT p.post_id FROM (%pposts p, %ptopics t)
-			WHERE t.topic_id=p.post_topic AND t.topic_forum=%d
-			ORDER BY t.topic_edited DESC, p.post_id DESC
-			LIMIT 1', $f);
-
-		if (!isset($post['post_id'])) {
-			$post['post_id'] = 0;
-		}
-
-		$this->db->query('UPDATE %pforums SET forum_lastpost=%d WHERE forum_id=%d', $post['post_id'], $f);
-	}
-
-	/**
-	 * Updates the last post of a topic
-	 *
-	 * @param int $t Topic ID
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.1.1
-	 * @return void
-	 **/
-	function update_last_post_topic($t)
-	{
-		$last = $this->db->fetch("SELECT p.post_id, p.post_author, p.post_time
-			FROM %pposts p, %ptopics t
-			WHERE p.post_topic=t.topic_id AND t.topic_id=%d
-			ORDER BY p.post_time DESC
-			LIMIT 1", $t);
-
-		$this->db->query("UPDATE %ptopics SET topic_last_post=%d, topic_last_poster=%d, topic_edited=%d WHERE topic_id=%d",
-			$last['post_id'], $last['post_author'], $last['post_time'], $t);
 	}
 
 	/**

@@ -25,6 +25,7 @@ if (!defined('INSTALLER')) {
 }
 
 // Upgrade from 1.1.9 to 1.2.0
+
 $need_templates = array(
 	'TOPIC_QUICKREPLY',	// Added templates
 	'RSSFEED_ALL_POSTS',
@@ -81,6 +82,4 @@ $queries[] = "UPDATE %ptopics SET topic_modes=topic_modes | " . TOPIC_PUBLISH; /
 $queries[] = "INSERT INTO %ptimezones VALUES (384, 'America/Moncton', 'AST', -14400, 1143950460)";
 $queries[] = "INSERT INTO %ptimezones VALUES (385, 'America/Indiana/Petersburg', 'EST', -18000, 1143961200)";
 $queries[] = "INSERT INTO %ptimezones VALUES (386, 'America/Indiana/Vincennes', 'EST', -18000, 1143961200)";
-
-
 ?>

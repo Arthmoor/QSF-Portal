@@ -30,7 +30,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Portal front page view
  *
- * @author Roger Libiez[Samson] <samson@afkmud.com>
+ * @author Roger Libiez [Samson]
  * @since 1.2.2
  **/
 class main extends qsfglobal

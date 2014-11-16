@@ -39,14 +39,16 @@ class he
 		$this->active_modules_active = 'צופה ברשימת משתמשים פעילים';
 		$this->active_modules_board = 'באינדקס הפורומים';
 		$this->active_modules_cp = 'משתמש בלוח בקרה אישי';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = '%s :מציג את הפורום';
 		$this->active_modules_help = 'משתמש בעזרה';
 		$this->active_modules_login = 'מתחבר\מתנתק';
 		$this->active_modules_members = 'צופה ברשימת חברי הפורום';
 		$this->active_modules_mod = 'מסדר פורומים';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'משתמש המסנג\'ר פרטי';
 		$this->active_modules_post = 'מפרסם הודעה';
-		$this->active_modules_printer = '%s :מדפיס את ההודעה';
 		$this->active_modules_profile = '%s :מציג את הפרופיל';
 		$this->active_modules_recent = 'מציג את ההודעות האחרונות';
 		$this->active_modules_search = 'מחפש';
@@ -277,6 +279,7 @@ class he
 		$this->cp_been_updated_prefs = 'הגדרות שלך עודכנו.';
 		$this->cp_changing_pass = 'עריכת סיסמא';
 		$this->cp_contact_pm = 'הרשה לאחרים לשלוח לך הודעות פרטיות?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'לוח בקרה';
 		$this->cp_current_avatar = 'אווטרה';
 		$this->cp_current_time = 'השעה עכשיו %s.';
@@ -428,6 +431,7 @@ class he
 		$this->forum_sub_topics = 'נושאים';
 		$this->forum_subscribe = 'שלח לי הודעת מייל כשיגיבו לפורום זה';
 		$this->forum_topic = 'נושא';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'צפיות';
 		$this->forum_write_topics = 'הינך מורשה ליצור הודעות בפורום זה.';
 	}
@@ -655,6 +659,7 @@ class he
 		$this->mc_user_msn = 'חשבון MSN';
 		$this->mc_user_name = 'שם';
 		$this->mc_user_pm = 'קבלת הודעות פרטיות';
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'תגובות';
 		$this->mc_user_signature = 'חתימה';
 		$this->mc_user_skin = 'סקין';
@@ -856,6 +861,7 @@ class he
 		$this->pm_sendamsg = 'שלח הודעה פרטית';
 		$this->pm_sendingpm = 'שולח הודעה פרטית';
 		$this->pm_sendon = 'נשלח ב';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'הודעה שלך נשלחה בהצלחה.';
 		$this->pm_sure_del = 'הינן בטוח\ה שברצונך למחוק הודעה זו?';
 		$this->pm_sure_delall = 'הינך בטוח שברצונך למחוק כל ההודעות?';
@@ -1043,6 +1049,7 @@ class he
 		$this->recent_sub_topics = 'נושאים';
 		$this->recent_subscribe = 'שלח לי מייל כשהגיבו בפורום זה';
 		$this->recent_topic = 'נושא';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'צפיות';
 		$this->recent_write_topics = '.באפשרותך ליצור נושאים בפורום זה';
 	}

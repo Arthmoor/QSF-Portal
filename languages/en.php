@@ -39,14 +39,16 @@ class en
 		$this->active_modules_active = 'Viewing the active users';
 		$this->active_modules_board = 'Viewing the board index';
 		$this->active_modules_cp = 'Using the control panel';
+		$this->active_modules_file_rating = 'Rating a file';
+		$this->active_modules_files = 'Browsing files';
 		$this->active_modules_forum = 'Viewing a forum: %s';
 		$this->active_modules_help = 'Viewing a help topic';
 		$this->active_modules_login = 'Logging in or out';
 		$this->active_modules_members = 'Viewing the member list';
 		$this->active_modules_mod = 'Moderating';
+		$this->active_modules_pages = 'Viewing a custom page';
 		$this->active_modules_pm = 'Using the messenger';
 		$this->active_modules_post = 'Posting';
-		$this->active_modules_printer = 'Printing a topic: %s';
 		$this->active_modules_profile = 'Viewing a profile: %s';
 		$this->active_modules_recent = 'Viewing recent posts';
 		$this->active_modules_search = 'Searching';
@@ -277,6 +279,7 @@ class en
 		$this->cp_been_updated_prefs = 'Your preferences have been updated.';
 		$this->cp_changing_pass = 'Editing Password';
 		$this->cp_contact_pm = 'Allow others to contact you via the messenger?';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?';
 		$this->cp_cp = 'Control Panel';
 		$this->cp_current_avatar = 'Current Avatar';
 		$this->cp_current_time = 'It is currently %s.';
@@ -428,6 +431,7 @@ class en
 		$this->forum_sub_topics = 'Topics';
 		$this->forum_subscribe = 'E-mail me when posts are made in this forum';
 		$this->forum_topic = 'Topic';
+		$this->forum_topic_posted = 'Posted';
 		$this->forum_views = 'Views';
 		$this->forum_write_topics = 'You can create topics in this forum.';
 	}
@@ -655,12 +659,14 @@ class en
 		$this->mc_user_msn = 'MSN Identity';
 		$this->mc_user_name = 'Name';
 		$this->mc_user_pm = 'Accepting Private Messages';
+		$this->mc_user_pm_mail = 'Email Private Messages';
 		$this->mc_user_posts = 'Posts';
 		$this->mc_user_signature = 'Signature';
 		$this->mc_user_skin = 'Skin';
 		$this->mc_user_timezone = 'Time Zone';
 		$this->mc_user_title = 'Member Title';
 		$this->mc_user_title_custom = 'Use a Custom Member Title';
+		$this->mc_user_uploads = 'Uploads';
 		$this->mc_user_view_avatars = 'Viewing Avatars';
 		$this->mc_user_view_emoticons = 'Viewing Emoticons';
 		$this->mc_user_view_signatures = 'Viewing Signatures';
@@ -856,6 +862,7 @@ class en
 		$this->pm_sendamsg = 'Send A Message';
 		$this->pm_sendingpm = 'Sending A PM';
 		$this->pm_sendon = 'Sent';
+		$this->pm_sent_mail = 'has sent you a private message.';
 		$this->pm_success = 'Your message was sent successfully.';
 		$this->pm_sure_del = 'Are you sure you want to delete this message?';
 		$this->pm_sure_delall = 'Are you sure you want to delete all messages from this folder?';
@@ -1043,6 +1050,7 @@ class en
 		$this->recent_sub_topics = 'Topics';
 		$this->recent_subscribe = 'E-mail me when posts are made in this forum';
 		$this->recent_topic = 'Topic';
+		$this->recent_topic_posted = 'Posted';
 		$this->recent_views = 'Views';
 		$this->recent_write_topics = 'You can create topics in this forum.';
 	}

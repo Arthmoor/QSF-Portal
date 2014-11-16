@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Quicksilver Forums
  * Copyright (c) 2005 The Quicksilver Forums Development Team
@@ -39,14 +39,16 @@ class cs
 		$this->active_modules_active = 'Prohlíí si aktivní uivatele';
 		$this->active_modules_board = 'Je na úvodní stránce';
 		$this->active_modules_cp = 'Pouívá kontrolní panel';
+		$this->active_modules_file_rating = 'Rating a file'; //Translate
+		$this->active_modules_files = 'Browsing files'; //Translate
 		$this->active_modules_forum = 'Prohlíí si fórum: %s';
 		$this->active_modules_help = 'Pouívá nápovìdu';
 		$this->active_modules_login = 'Vstupuje/Odchází';
 		$this->active_modules_members = 'Prohlíí si seznam èlenù';
 		$this->active_modules_mod = 'Moderovat';
+		$this->active_modules_pages = 'Viewing a custom page'; //Translate
 		$this->active_modules_pm = 'Pouívá Messenger';
 		$this->active_modules_post = 'Píe nový pøíspìvek';
-		$this->active_modules_printer = 'Tiskne si téma: %s';
 		$this->active_modules_profile = 'Prohlíí si profil: %s';
 		$this->active_modules_recent = 'Prohlíí si nové pøíspìvky';
 		$this->active_modules_search = 'Hledání';
@@ -123,7 +125,7 @@ class cs
 		$this->backup_download = 'Backup and download (recommended)'; //Translate
 		$this->backup_found = 'The following backups were found in the Quicksilver Forums directory';
 		$this->backup_invalid = 'The backup does not appear to be valid. No changes were made to your database.'; //Translate
-		$this->backup_none = 'No backups were found in the Quicksilver Forums directory.'; //Translate
+		$this->backup_none = 'No backups were found in the Quicksilver Forums directory.';
 		$this->backup_options = 'Select how you want your backup created'; //Translate
 		$this->backup_restore = 'Restore Backup'; //Translate
 		$this->backup_restore_done = 'The database has been restored successfully.'; //Translate
@@ -248,7 +250,7 @@ class cs
 		$this->censor = 'Cenzorovaná slova';
 		$this->censor_one_per_line = 'Jedno na øádek.';
 		$this->censor_regex_allowed = 'Regular expressions are allowed. You can use a single * as a wildcard for one or more characters.'; //Translate
-		$this->censor_updated = 'Slovník byl aktualizován.'; //Translate
+		$this->censor_updated = 'Slovník byl aktualizován.';
 	}
 
 	function cp()
@@ -277,6 +279,7 @@ class cs
 		$this->cp_been_updated_prefs = 'Nastavení bylo zmìnìno.';
 		$this->cp_changing_pass = 'Zmìnit heslo';
 		$this->cp_contact_pm = 'Umonit ostatním uivatelùm, aby mi mohli zasílat soukromé zprávy';
+		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?'; //Translate
 		$this->cp_cp = 'Nastavení';
 		$this->cp_current_avatar = 'Stávající avatar';
 		$this->cp_current_time = 'Nyní je %s.';
@@ -385,7 +388,7 @@ class cs
 		$this->emote_install_done = 'Emoticons have been successfully reinstalled.'; //Translate
 		$this->emote_install_warning = 'This will erase all existing emoticon settings and import uploaded emoticons from your currently selected skin into the database.'; //Translate
 		$this->emote_no_text = 'No emoticon text was given.'; //Translate
-		$this->emote_text = 'Text';
+		$this->emote_text = 'Text'; //Translate
 	}
 
 	function forum()
@@ -428,6 +431,7 @@ class cs
 		$this->forum_sub_topics = 'Témat';
 		$this->forum_subscribe = 'Informovat mnì e-mailem o nových pøíspìvcích';
 		$this->forum_topic = 'Téma';
+		$this->forum_topic_posted = 'Posted'; //Translate
 		$this->forum_views = 'Schlédnuto';
 		$this->forum_write_topics = 'V tomto fóru mùete vytváøet témata.';
 	}
@@ -655,6 +659,7 @@ class cs
 		$this->mc_user_msn = 'MSN Identity'; //Translate
 		$this->mc_user_name = 'Name'; //Translate
 		$this->mc_user_pm = 'Accepting Private Messages'; //Translate
+		$this->mc_user_pm_mail = 'Email Private Messages'; //Translate
 		$this->mc_user_posts = 'Posts'; //Translate
 		$this->mc_user_signature = 'Signature'; //Translate
 		$this->mc_user_skin = 'Skin'; //Translate
@@ -817,7 +822,7 @@ class cs
 
 	function pm()
 	{
-		$this->pm_avatar = 'Avatar';
+		$this->pm_avatar = 'Avatar'; //Translate
 		$this->pm_cant_del = 'Nemáte oprávnìní smazat tuto zprávu.';
 		$this->pm_delallmsg = 'Smazat vechny zprávy';
 		$this->pm_delete = 'Smazat';
@@ -834,7 +839,7 @@ class cs
 		$this->pm_group = 'Skupina';
 		$this->pm_guest = 'Jako HOST nemùete pouívat Messenger. Prosím pøihlate se nebo se zaregistrujte.';
 		$this->pm_joined = 'Zaloeno';
-		$this->pm_messenger = 'Messenger';
+		$this->pm_messenger = 'Messenger'; //Translate
 		$this->pm_msgtext = 'Text zprávy';
 		$this->pm_multiple = 'Více pøíjemcù mezi sebou oddìlte støedníkem - ;';
 		$this->pm_no_folder = 'Musíte vybrat adresáø.';
@@ -856,6 +861,7 @@ class cs
 		$this->pm_sendamsg = 'Poslat privátní zprávu';
 		$this->pm_sendingpm = 'Poslat privátní zprávu';
 		$this->pm_sendon = 'Posláno';
+		$this->pm_sent_mail = 'has sent you a private message.'; //Translate
 		$this->pm_success = 'Vae zpráva byla úspìnì odeslána.';
 		$this->pm_sure_del = 'Jste si jisti, e chcete smazat tuto zprávu?';
 		$this->pm_sure_delall = 'Jste si jisti, e chcete smazat vechny zprávy v této sloce?';
@@ -935,7 +941,7 @@ class cs
 	{
 		$this->profile_aim_sn = 'AIM';
 		$this->profile_av_sign = 'Avatar a podpis';
-		$this->profile_avatar = 'Avatar';
+		$this->profile_avatar = 'Avatar'; //Translate
 		$this->profile_bday = 'Vìk / narozeniny';
 		$this->profile_contact = 'Kontakt';
 		$this->profile_email_address = 'E-mailová adresa';
@@ -1005,7 +1011,7 @@ class cs
 
 	function recent()
 	{
-		$this->recent_active = 'Aktivní témata od vaí návtìvy'; //Translate
+		$this->recent_active = 'Aktivní témata od vaí návtìvy';
 		$this->recent_by = 'Od';
 		$this->recent_can_post = 'V tomto fóru mùete odpovídat.';
 		$this->recent_can_topics = 'V tomto fóru mùete prohlíet témata.';
@@ -1043,6 +1049,7 @@ class cs
 		$this->recent_sub_topics = 'Témat';
 		$this->recent_subscribe = 'Informovat mnì e-mailem o nových pøíspìvcích';
 		$this->recent_topic = 'Téma';
+		$this->recent_topic_posted = 'Posted'; //Translate
 		$this->recent_views = 'Schlédnuto';
 		$this->recent_write_topics = 'V tomto fóru mùete vytváøet témata.';
 	}
@@ -1096,7 +1103,7 @@ class cs
 	function search()
 	{
 		$this->search_advanced = 'Rozíøené hledání';
-		$this->search_avatar = 'Avatar';
+		$this->search_avatar = 'Avatar'; //Translate
 		$this->search_basic = 'Zákládní hledání';
 		$this->search_characters = 'znakù z pøíspìvku';
 		$this->search_day = 'den';
@@ -1109,7 +1116,7 @@ class cs
 		$this->search_guest = 'Host';
 		$this->search_in = 'Hledat v';
 		$this->search_in_posts = 'Hledat jen v pøíspìvcích';
-		$this->search_ip = 'IP';
+		$this->search_ip = 'IP'; //Translate
 		$this->search_joined = 'Zaloeno';
 		$this->search_level = 'Úroveò';
 		$this->search_match = 'vyhledat jen pøesnì zadaný výraz (napø. zadáte-li "AIM", ve výsledcích budou jen pøíspìvky, které obsahují právì slovo "AIM"';
@@ -1151,7 +1158,7 @@ class cs
 	{
 		$this->settings = 'Nastavení';
 		$this->settings_active = 'Active Users Settings'; //Translate
-		$this->settings_allow = 'Povolit'; //Translate
+		$this->settings_allow = 'Povolit';
 		$this->settings_antibot = 'Anti-Robot Registration'; //Translate
 		$this->settings_attach_ext = 'Attachments - File Extensions'; //Translate
 		$this->settings_attach_one_per = 'One per line. No periods.'; //Translate
@@ -1388,7 +1395,7 @@ class cs
 		$this->topic_attached_perm = 'Nemáte oprávnìní stáhnout tento soubor.';
 		$this->topic_attached_size = 'Velikost:';
 		$this->topic_attached_title = 'Pøíloha';
-		$this->topic_avatar = 'Avatar';
+		$this->topic_avatar = 'Avatar'; //Translate
 		$this->topic_bottom = 'Pøejít dolù na stránku';
 		$this->topic_create_poll = 'Vytvoøit nové téma s anketou';
 		$this->topic_create_topic = 'Vytvoøit nové téma';
@@ -1400,7 +1407,7 @@ class cs
 		$this->topic_error = 'Chyba';
 		$this->topic_group = 'Skupina';
 		$this->topic_guest = 'Host';
-		$this->topic_ip = 'IP';
+		$this->topic_ip = 'IP'; //Translate
 		$this->topic_joined = 'Zaloeno';
 		$this->topic_level = 'Úroveò';
 		$this->topic_links_aim = 'Poslat AIM zprávu uivateli %s';
@@ -1460,26 +1467,26 @@ class cs
 
 	function universal()
 	{
-		$this->aim = 'AIM';
+		$this->aim = 'AIM'; //Translate
 		$this->based_on = 'based on';
 		$this->board_by = 'Od:';
 		$this->charset = 'utf-8';
 		$this->continue = 'Pokraèovat';
-		$this->date_long = 'M j, Y';
-		$this->date_short = 'n/j/y';
+		$this->date_long = 'M j, Y'; //Translate
+		$this->date_short = 'n/j/y'; //Translate
 		$this->delete = 'Smazat';
-		$this->direction = 'ltr';
+		$this->direction = 'ltr'; //Translate
 		$this->edit = 'Editovat';
-		$this->email = 'Email';
-		$this->gtalk = 'GT';
-		$this->icq = 'ICQ';
-		$this->msn = 'MSN';
+		$this->email = 'Email'; //Translate
+		$this->gtalk = 'GT'; //Translate
+		$this->icq = 'ICQ'; //Translate
+		$this->msn = 'MSN'; //Translate
 		$this->new_message = 'Nová zpráva';
 		$this->new_poll = 'Nová anketa';
 		$this->new_topic = 'Nové téma';
 		$this->no = 'Ne';
-		$this->powered = 'Powered by';
-		$this->private_message = 'PM';
+		$this->powered = 'Powered by'; //Translate
+		$this->private_message = 'PM'; //Translate
 		$this->quote = 'Citovat';
 		$this->recount_forums = 'Recounted forums! Total topics: %d. Total posts: %d.'; //Translate
 		$this->reply = 'Odpovìdìt';
@@ -1493,11 +1500,10 @@ class cs
 		$this->time_long = ', g:i a'; //Translate
 		$this->time_only = 'g:i a'; //Translate
 		$this->today = 'dnes';
-		$this->website = 'WWW';
-		$this->yahoo = 'Yahoo';
+		$this->website = 'WWW'; //Translate
+		$this->yahoo = 'Yahoo'; //Translate
 		$this->yes = 'Ano';
 		$this->yesterday = 'vèera';
 	}
 }
 ?>
-

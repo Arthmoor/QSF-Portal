@@ -39,11 +39,16 @@ class backup extends admin
 	var $tables = array(
 		'active',
 		'attach',
+		'file_categories',
+		'filecomments',
+		'fileratings',
+		'files',
 		'forums',
 		'groups',
 		'help',
 		'logs',
 		'membertitles',
+		'pages',
 		'pmsystem',
 		'posts',
 		'readmarks',
@@ -51,7 +56,10 @@ class backup extends admin
 		'settings',
 		'skins',
 		'subscriptions',
+		'templates',
+		'timezones',
 		'topics',
+		'updates',
 		'users',
 		'votes'
 	);
@@ -118,8 +126,6 @@ class backup extends admin
 			echo "  <files>\n";
 			echo "    <file>packages/$fullBackupName.xml</file>\n";
 			echo "  </files>\n";
-			echo "  <templates>\n";
-			echo "  </templates>\n";
 			echo "  <install>\n";
 			$this->create_dump($this->tables);
 			echo "  </install>\n";
@@ -151,8 +157,6 @@ class backup extends admin
 			fwrite($xmlFile, "  <files>\n");
 			fwrite($xmlFile, "    <file>packages/$fullBackupName.xml</file>\n");
 			fwrite($xmlFile, "  </files>\n");
-			fwrite($xmlFile, "  <templates>\n");
-			fwrite($xmlFile, "  </templates>\n");
 			fwrite($xmlFile, "  <install>\n");
 			$this->create_dump($this->tables, $xmlFile);
 			fwrite($xmlFile, "  </install>\n");
@@ -269,7 +273,7 @@ class backup extends admin
 			packageutil::run_queries($this->db, $xmlInfo->GetNodeByPath('QSFMOD/UNINSTALL'));
 
 			// Run the install queries
-			packageutil::run_queries($this->db, $xmlInfo->GetNodeByPath('QSFMOD/INSTALL'));
+			packageutil::run_queries($this->db, $xmlInfo->GetNodeByPath('QSFMOD/INSTALL'), true);
 
 			// Done!
 			return $this->message($this->lang->backup_restore, $this->lang->backup_restore_done);
@@ -299,7 +303,7 @@ class backup extends admin
 				
 				$xml ="    <query>\n      <sql>$sql</sql>\n";
 				foreach ($insert_keys as $key) {
-					$xml .= "      <data>" . htmlspecialchars($row[$key]) . "</data>\n";
+					$xml .= "      <data><![CDATA[" . $row[$key] . "]]></data>\n";
 				}
 				$xml .= "    </query>\n";
 				
@@ -331,6 +335,15 @@ class backup extends admin
 			} else {
 				fwrite($fileHandle, $xml);
 			}
+		}
+	}
+
+	function htmlspecials_decode($text)
+	{
+		if ( !function_exists('htmlspecialchars_decode') ) {
+			return strtr($text, array_flip(get_html_translation_table(HTML_SPECIALCHARS)));
+		} else {
+			return htmlspecialchars_decode($text);
 		}
 	}
 }

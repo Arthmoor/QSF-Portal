@@ -1,18 +1,21 @@
 --------------------------------
-== FAQ for Quicksilver Forums ==
+== FAQ for QSF Portal ==
 --------------------------------
 
 === GENERAL ===
 
-* Q. What is Quicksilver Forums?
-* A. Quicksilver Forums is a bulletin board system written in PHP 4 and MySQL. http://www.quicksilverforums.com/
+* Q. What is QSF Portal?
+* A. QSF Portal is a community portal and lightweight CMS system written in PHP and MySQL. It is based on Quicksilver Forums.
 
-* Q. What is Mercuryboard?
-* A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. http://www.mercuryboard.com/
+* Q. Ok, so what is Quicksilver Forums?
+* A. Quicksilver Forums is a bulletin board system written in PHP and MySQL. It is based on the MercuryBoard code. http://www.quicksilverforums.com/
+
+* Q. Fine, then what is MercuryBoard?
+* A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. MercuryBoard is a lightweight, fast, PHP and MySQL forum script. http://www.mercuryboard.com/
 
 === INSTALLATION ===
 
-* Q. QuickSilver Forums keeps saying that it cannot update settings.php when I install it.
+* Q. QSF Portal keeps saying that it cannot update settings.php when I install it.
 * A. This is because the CHMOD setting are lower than 0666 or if you're running a windows server the file is not writable by the webserver.
 
 * Q. How do you change the CHMOD settings on Dreamweaver?
@@ -21,11 +24,11 @@
 * Q. It wants details for a MySQL database. I don't know how to create one!
 * A. http://dev.mysql.com/doc/refman/5.0/en/database-use.html Also your hosting provider may have created tools to help you manage MySQL. Speak to your hosting provider, they are there to help you.
 
-* Q. Does Quicksilver Forums work on databases other than MySQL?
-* A. No.
+* Q. Does QSF Portal work on databases other than MySQL?
+* A. No. Not at this time.
 
 * Q. I can't post! / How do you create forums?
-* A. Go into "admin cp -> Create a forum" and create a CATEGORY and set the permissions to default. Now go to" Create a forum" again and create a forum using that category and using the permissions from that category.
+* A. Go into "admin cp -> Create a forum" and create a CATEGORY and set the permissions to default. Now go to "Create a forum" again and create a forum using that category and using the permissions from that category.
 
 * Q. Why do I have to create categories?
 * A. Every forum must exist within a category. And forums can act as a category for other forums. You can make a very complex hierarchy if you wish but it must have at least 1 category and 1 forum.
@@ -38,7 +41,7 @@
 
 === OPERATION ===
 
-* Q. The board is blank or gabled.
+* Q. The board is blank or garbled.
 * A. In your Admin CP, go to Edit Board Settings and disable GZIP. 
 
 === ADVANCED ===
@@ -52,10 +55,14 @@
 * Q. I think I found a bug?
 * A. Visit the website, search to see if someone found it already, if not then report what happened and how to repeat it.
 
-* Q. Can I help the Quicksilver Forums team?
+* Q. Can I help the QSF Portal team?
 * A. Visit the website and jump right in. It's an open house party!
 
+* Q. How much of the code do QSF and QSF Portal share in common?
+* A. A lot. Many things which affect the QSF code also affect the QSF Portal code, and to some extent both are still affected by things they share in common with MercuryBoard.
+
 If you need further help please go to:
+http://www.qsfportal.com/index.php?a=forum&f=7
+
+Or you can also visit:
 http://forums.quicksilverforums.com/index.php?a=forum&f=7
-
-

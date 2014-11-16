@@ -24,7 +24,7 @@
  * phpBB2 Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] <http://quicksilverforums.afkmud.com>
+ * Roger Libiez [Samson]
  *
  * This convertor has been tested on unmodified databases for versions 2.0.4 and 2.0.14 without errors.
  * It should be reasonably safe to use on any phpBB2 2.0.x version.

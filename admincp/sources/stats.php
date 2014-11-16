@@ -34,81 +34,76 @@ class stats extends admin
 		$this->set_title($this->lang->stats);
 		$this->tree($this->lang->stats);
 
-		include '../lib/jpgraph/jpgraph.php';
-		include '../lib/jpgraph/jpgraph_bar.php';
-
-		if (!defined('IMG_PNG')) {
-			JpGraphError::Raise("This PHP installation is not configured with PNG support. Please recompile PHP with GD and JPEG support to run JpGraph. (Constant IMG_PNG does not exist)");
-		}
-
 		/**
 		 * Posts
 		 */
-		$query = $this->db->query("SELECT COUNT(post_id) AS posts, FROM_UNIXTIME(post_time, '%%b %%y') AS month
-			FROM %pposts GROUP BY month	ORDER BY post_time");
+		$query = $this->db->query("
+		SELECT
+		    COUNT(post_id) AS posts,
+		    FROM_UNIXTIME(post_time, '%%b %%y') AS month
+		FROM %pposts
+		GROUP BY month
+		ORDER BY post_time");
 
 		$data = array();
+		$total = 0;
 		while ($item = $this->db->nqfetch($query))
 		{
-			$data[$item['month']] = $item['posts'];
+			if ( isset($item['posts']) )
+				$data[$item['month']] = $item['posts'];
+			else
+				$item['posts'] = 0;
+			
+			$total += intval($item['posts']);
 		}
 
-		if (!$data) {
+		if (!$data)
 			$data = array(0, 0);
+
+		$graphs = null;
+		$Stats = null;
+		$title = $this->lang->stats_post_by_month;
+		foreach( $data as $month => $stat )
+		{
+			if ( !isset( $data[$month] ) )
+				$data[$month] = 0;
+			$width   = round($stat / $total * 100) * 2;
+			$Stats .= eval($this->template('STAT_STAT'));
 		}
-
-		$graph = new Graph(400, 300, 'auto');
-		$graph->SetScale('textint');
-
-		$graph->SetColor('aliceblue');
-		$graph->SetMarginColor('white');
-
-		$graph->xaxis->SetTickLabels(array_keys($data));
-		$graph->yaxis->scale->SetGrace(20);
-		$graph->title->Set($this->lang->stats_post_by_month);
-
-		$temp = array_values($data);
-		$barplot = new BarPlot($temp);
-		$barplot->SetFillColor('darkorange');
-
-		$graph->add($barplot);
-		$graph->Stroke("../stats/{$this->time}1.png");
-
+		$graphs .= eval($this->template('STAT_GRAPH'));
+		
 		/**
 		 * Registrations
 		 */
-		$query = $this->db->query("SELECT COUNT(user_id) AS users, FROM_UNIXTIME(user_joined, '%%b %%y') AS month
-			FROM %pusers
-			WHERE user_joined != 0
-			GROUP BY month
-			ORDER BY user_joined");
+		$query = $this->db->query("
+		SELECT
+		    COUNT(user_id) AS users,
+		    FROM_UNIXTIME(user_joined, '%%b %%y') AS month
+		FROM %pusers
+		WHERE user_joined != 0
+		GROUP BY month
+		ORDER BY user_joined");
 
 		$data = array();
+		$total = 0;
+		
 		while ($item = $this->db->nqfetch($query))
 		{
 			$data[$item['month']] = $item['users'];
+			$total += intval($item['users']);
 		}
-
-		$graph = new Graph(400, 300, 'auto');
-		$graph->SetScale('textint');
-
-		$graph->SetColor('aliceblue');
-		$graph->SetMarginColor('white');
-
-		$graph->xaxis->SetTickLabels(array_keys($data));
-		$graph->yaxis->scale->SetGrace(20);
-		$graph->title->Set($this->lang->stats_reg_by_month);
-
-		$temp = array_values($data);
-		$barplot = new BarPlot($temp);
-		$barplot->SetFillColor('darkorange');
-
-		$graph->add($barplot);
-		$graph->Stroke("../stats/{$this->time}2.png");
-
-		return $this->message($this->lang->stats,
-		"<img src='../stats/{$this->time}1.png' alt='{$this->lang->stats_post_by_month}' /><br /><br />
-		<img src='../stats/{$this->time}2.png' alt='{$this->lang->stats_reg_by_month}' />");
+		$Stats = null;
+		$title = $this->lang->stats_reg_by_month;
+		foreach( $data as $month => $stat )
+		{
+			if ( !isset( $data[$month] ) )
+				$data[$month] = 0;
+			$width   = round($stat / $total * 100) * 2;
+			$Stats .= eval($this->template('STAT_STAT'));
+		}
+		$graphs .= eval($this->template('STAT_GRAPH'));
+		
+		return eval($this->template('STAT_PAGE'));
 	}
 }
 ?>

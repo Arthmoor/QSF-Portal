@@ -27,6 +27,12 @@ if (!defined('QUICKSILVERFORUMS') && !defined('QSF_ADMIN') ) {
 
 require_once $set['include_path'] . '/global.php';
 
+/**
+ * Custom pages code. Lightweight CMS.
+ *
+ * @author Kiasyn
+ * @since 1.3.1
+ **/
 class page extends qsfglobal
 {
 	function execute()

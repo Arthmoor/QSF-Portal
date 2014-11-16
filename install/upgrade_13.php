@@ -24,6 +24,8 @@ if (!defined('INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
+// Upgrade from 1.1.3 to 1.1.4
+
 $need_templates = array(
 	'BOARD_CATEGORY',
 	'BOARD_FORUM',
