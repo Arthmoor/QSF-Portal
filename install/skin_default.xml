@@ -1,11 +1,27 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <qsfmod>
   <title>Skin: Blue Comet</title>
   <type folder="default">skin</type>
-  <version>v1.4.5</version>
+  <version>v1.4.6</version>
   <description></description>
   <authorname>Skin Exporter</authorname>
   <templates>
+    <template><set>emot_control</set><name>ADMIN_MEMBER_DELETE</name>
+      <displayname>Delete User</displayname>
+      <description>Confirmation form for user deletion</description>
+      <html><![CDATA[
+<form action="{$this->self}?a=member_control&amp;s=delete&amp;id={$this->get['id']}" method="post">
+{$this->table}
+ <div class="title">{$this->lang->mc_delete}: {$member['user_name']}</div>
+ {$this->lang->mc_confirm} <b>{$member['user_name']}</b>?
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
+ <input type="submit" name="submit" value="{$this->lang->submit}" />
+{$this->etable}
+</form>
+      ]]></html>
+    </template>
     <template><set>emot_control</set><name>ADMIN_EMOTICONS_ENTRY</name>
       <displayname>Edit Emoticons - One Entry</displayname>
       <description>Format of one row on the emoticon editing form</description>
@@ -21,13 +37,29 @@
 <p class="list_line"></p>
       ]]></html>
     </template>
+    <template><set>forums</set><name>ADMIN_FORUM_DELETE</name>
+      <displayname>Delete Forum</displayname>
+      <description>Confirmation for deleting a forum</description>
+      <html><![CDATA[
+<form action="{$this->self}?a=forums&s=delete&id={$this->get['id']}" method="post">
+{$this->table}
+ <div class="title">{$this->lang->forum_delete}: {$f['forum_name']}</div>
+ {$this->lang->forum_delete_warning}
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
+ <input type="submit" name="submit" value="{$this->lang->submit}" />
+{$this->etable}
+</form>
+      ]]></html>
+    </template>
     <template><set>forums</set><name>ADMIN_FORUM_EDIT</name>
       <displayname>Edit Forum</displayname>
       <description>Change the display of the forum editor</description>
       <html><![CDATA[
 <form action="{$this->self}?a=forums&amp;s=edit&amp;id={$this->get['id']}" method="post">
 {$this->table}
- <div class="title">{$this->lang->forum_create}</div>
+ <div class="title">{$this->lang->forum_edit}: {$f['forum_name']}</div>
  <span class="field">{$this->lang->forum_parent_cat}</span>
  <span class="form">
   <select name="parent">
@@ -36,23 +68,21 @@
    {$forum}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_name}</span>
  <span class="form"><input name="name" value="{$f['forum_name']}" size="60" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_description}</span>
  <span class="form"><textarea name="description" rows="8" cols="60">{$f['forum_description']}</textarea></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_subcat}<br /><span class="tiny">{$this->lang->forum_is_subcat}</span></span>
  <span class="form"><input type="checkbox" name="subcat" <IF $f['forum_subcat']>checked="checked"</IF> /></span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="editforum" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -68,19 +98,17 @@
   <div class="title">{$this->lang->edit_skin}</div>
   <span class="field">{$this->lang->display_name}</span>
   <span class="form"><input type="text" name="skin_name" value="{$skin['skin_name']}" size="50" /></span>
-
   <p class="line"></p>
 
   <span class="field">{$this->lang->directory}</span>
   <span class="form"><input type="text" name="skin_dir" value="{$skin['skin_dir']}" size="50" /></span>
-
   <p class="line"></p>
 
   <span class="field">{$this->lang->delete}</span>
   <span class="form"><input class="check" type="checkbox" name="deleteskin" /></span>
-
   <p class="line"></p>
 
+  <input type="hidden" name="token" value="$token" />
   <input type="submit" name="submit" value="{$this->lang->edit_skin}" />
  {$this->etable}
 </form>
@@ -111,12 +139,6 @@
  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$admin->lang->charset}" />
  <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/styles.css" />
  <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/acp.css" />
- <IF (strpos($admin->agent, 'MSIE') !== false)>
-  <style type="text/css">
-   input.button { padding: 0px; }
-   input.check { border: none; margin: -2px 0px 0px; }
-  </style>
- </IF>
 </head>
 
 <body>
@@ -268,11 +290,9 @@
  </span>
  <input type="submit" name="submitTemps" value="{$this->lang->edit_templates}" style="float:right" />
  {$data['template_description']}
-
  <p class="line"></p>
 
  <textarea onchange="this.style.backgroundColor='#FCFCF8'; changed=true" name="code[{$data['template_name']}]" class="template_text" rows="18" cols="80" wrap="off">{$data['template_html']}</textarea>
-
  <p class="line"></p>
 
  <input type="submit" name="submitTemps" value="{$this->lang->edit_templates}" />
@@ -294,17 +314,14 @@
    {$select}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_name}</span>
  <span class="form"><input name="name" size="60" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_description}</span>
  <span class="form"><textarea name="description" rows="8" cols="60"></textarea></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_quickperms}<br /><span class="tiny">{$this->lang->forum_quickperm_select}</span></span>
@@ -313,13 +330,13 @@
    {$quickperms}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->forum_subcat}<br /><span class="tiny">{$this->lang->forum_is_subcat}</span></span>
  <span class="form"><input type="checkbox" name="subcat" /></span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="addforum" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -408,9 +425,9 @@
 <form action="{$this->self}?a=mass_mail" method="post" id="mailer">
 {$this->table}
  <div class="title">{$this->lang->mail}</div>
+
  <span class="field">Subject</span>
  <span class="form"><input type="text" name="subject" size="60" value="{$announcement}" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->mail_groups}<br />[<a href="javascript:select_all_groups();">{$this->lang->mail_select_all}</a>]</span>
@@ -419,13 +436,13 @@
    {$group_list}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->mail_message}</span>
  <span class="form"><textarea name="message" rows="12" cols="60" class="input"></textarea></span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="massmail" value="{$this->lang->mail_send}" />
 {$this->etable}
 </form>
@@ -463,6 +480,8 @@
  <div class="title">{$this->lang->forum_ordering}</div>
  {$forum}
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="orderforum" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -475,21 +494,20 @@
 <form action="{$this->self}?a=groups&amp;s=edit" method="post">
 {$this->table}
  <div class="title">{$this->lang->groups_edit}</div>
+
  <span class="field">{$this->lang->groups_type}</span>
  <span class="form">{$old['group_type']}</span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->groups_name}</span>
  <span class="form"><input name="group_name" value="{$oldGroupName}" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->groups_formatting}</span>
  <span class="form"><input name="group_format" value="{$oldGroupFormat}" /></span>
-
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input type="hidden" name="group" value="{$this->post['group']}" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
@@ -550,7 +568,6 @@
    <option value="8760">{$this->lang->prune_age_year}</option>
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->prune_forums}</span>
@@ -559,9 +576,9 @@
    {$forum_options}
   </select>
  </span>
-
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -594,6 +611,7 @@
 {$this->table}
  <div class="title">{$this->lang->mc}</div>
  {$out}
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -603,14 +621,12 @@
       <displayname>Admin CP Pruning topic list display</displayname>
       <description>Edit the display of the list of topics to prune</description>
       <html><![CDATA[
-<script type="text/javascript" src="../javascript/selectallboxes.js"></script>
 <form action="{$this->self}?a=prune" method="post" name="prune">
  <input type="hidden" name="forums" value="{$forums}" />
  {$this->table}
   <div class="title">{$this->lang->prune_select_topics}</div>
   {$topics}
   <input type="button" value="{$this->lang->select_all}" onclick="return select_all_boxes();" />
-
   <p class="line"></p>
 
   <span class="field">{$this->lang->prune_action}</span>
@@ -618,7 +634,6 @@
    <input class="check" type="radio" name="prune_action" value="move" id="move" checked="checked" /> <label for="move">{$this->lang->prune_move}</label>
    <input class="check" type="radio" name="prune_action" value="delete" id="delete" /> <label for="delete">{$this->lang->delete}</label>
   </span>
-
   <p class="line"></p>
 
   <span class="field">{$this->lang->prune_moveto_forum}</span>
@@ -627,6 +642,9 @@
     {$movetoForum}
    </select>
   </span>
+  <p class="line"></p>
+
+  <input type="hidden" name="token" value="$token" />
   <input type="submit" name="submit" value="{$this->lang->submit}" />
  {$this->etable}
 </form>
@@ -649,14 +667,16 @@
  </span>
 
  <div class="signature">{$preview}</div>
- <p class="line"></p><br />
+ <p class="line"></p>
+
  <span class="field" id="clickablesmilies">&nbsp;</span>
  <span class="form">
   <textarea name="sig" id="bbcode" rows="8" cols="10">{$edit}</textarea>
  </span>
-
  <br /><br />
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input class="button" type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -719,21 +739,17 @@
 
  <span class="field">{$this->lang->cp_format}</span>
  <span class="form"><input type="text" name="Newuser_name" value="{$this->user['user_name']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_email}</span>
  <span class="form"><input type="text" name="user_email" value="{$this->user['user_email']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">
   {$this->lang->cp_pass}<br />
   <span class="tiny">{$this->lang->cp_pass2}</span>
  </span>
-
  <span class="form"><input type="password" name="passA" value="" size="40" autocomplete="off" /></span>
- 
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_bday}</span>
@@ -742,56 +758,47 @@
   <select name="day">{$day_list}</select>
   <select name="year">{$year_list}</select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_www}</span>
  <span class="form"><input type="text" name="user_homepage" value="{$this->user['user_homepage']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_location}</span>
  <span class="form"><input type="text" name="user_location" value="{$this->user['user_location']}" size="40" /></span>
-
  <p class="line"></p>
 
  <IF $this->perms->auth('is_admin')>
   <span class="field">{$this->lang->cp_custom_title}<br /><span class="tiny">{$this->lang->cp_custom_title2}</span></span>
   <span class="form"><input type="text" name="user_title" value="{$this->user['user_title']}" size="40" /></span>
-
   <p class="line"></p>
  </IF>
 
  <span class="field">{$this->lang->cp_interest}</span>
  <span class="form"><textarea name="user_interests" cols="39" rows="8">{$this->user['user_interests']}</textarea></span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->cp_icq}</span>
  <span class="form"><input type="text" name="user_icq" value="{$this->user['user_icq']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_aim}</span>
  <span class="form"><input type="text" name="user_aim" value="{$this->user['user_aim']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_msn}</span>
  <span class="form"><input type="text" name="user_msn" value="{$this->user['user_msn']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_yahoo}</span>
  <span class="form"><input type="text" name="user_yahoo" value="{$this->user['user_yahoo']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field"><IF ($this->user['user_gtalk'] && (strpos($this->user['user_gtalk'], '@') === false))><em>Skype</em><ELSE>Skype</IF> / <IF ($this->user['user_gtalk'] && (strpos($this->user['user_gtalk'], '@') !== false))><em>{$this->lang->cp_gtalk}</em><ELSE>{$this->lang->cp_gtalk}</IF></span>
  <span class="form"><input type="text" name="user_gtalk" value="{$this->user['user_gtalk']}" size="40" /></span>
-
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input class="button" type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -810,7 +817,7 @@
       <html><![CDATA[
 {$this->table}
  <div class="title">
-  <img src="./skins/{$this->skin}/images/icons/comment.png" alt="" />
+  <img src="./skins/{$this->skin}/images/icons/topic.png" alt="" />
   {$this->lang->profile_posts}
  </div>
  <span class="field">{$this->lang->profile_posts}</span>
@@ -889,19 +896,17 @@
 
  <span class="field">{$this->lang->email_to}</span>
  <span class="form"><input name="to" size="60" value="{$this->get['to']}" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->email_subject}</span>
  <span class="form"><input name="subject" size="60" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->email_msgtext}</span>
  <span class="form"><textarea name="message" cols="60" rows="12"></textarea></span>
-
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input name="submit" type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -924,6 +929,7 @@
  {$this->lang->template_universal2}
 {$this->etable}
 {$out}
+<input type="hidden" name="token" value="$token" />
 </form>
       ]]></html>
     </template>
@@ -932,6 +938,7 @@
       <description>Form for editing the board settings</description>
       <html><![CDATA[
 <form action="{$this->self}?a=settings&amp;s=update" method="post">
+<input type="hidden" name="token" value="$token" />
 {$this->table}
  <div class="title">{$this->lang->settings_general}</div>
  <span class="field">{$this->lang->settings_board_enabled}</span>
@@ -939,7 +946,6 @@
   <input class="check" type="radio" name="closed" value="0" <IF !$this->sets['closed']>checked="checked"</IF> id="closed2" /><label for="closed2">{$this->lang->settings_enabled}</label><br />
   <input class="check" type="radio" name="closed" value="1" <IF $this->sets['closed']>checked="checked"</IF> id="closed1" /><label for="closed1">{$this->lang->settings_disabled}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_debug_mode}</span>
@@ -947,62 +953,50 @@
   <input class="check" type="radio" name="debug_mode" value="0" <IF !$this->sets['debug_mode']>checked="checked"</IF> id="debug2" /><label for="debug2">{$this->lang->settings_disabled}</label><br />
   <input class="check" type="radio" name="debug_mode" value="1" <IF $this->sets['debug_mode']>checked="checked"</IF> id="debug1" /><label for="debug1">{$this->lang->settings_enabled}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_disabled_notice}<br /><span class="tiny">{$this->lang->settings_show_notice}</span></span>
  <span class="form"><input type="text" name="closedtext" value="{$this->sets['closedtext']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_board_name}</span>
  <span class="form"><input type="text" name="forum_name" value="{$this->sets['forum_name']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_board_location}<br /><span class="tiny">URL</span></span>
  <span class="form"><input type="text" name="loc_of_board" value="{$this->sets['loc_of_board']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_clickable}</span>
  <span class="form"><input type="text" name="clickable_per_row" value="{$this->sets['clickable_per_row']}" size="40" maxlength="5" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_max_attach_size}<br /><span class="tiny">{$this->lang->settings_kilobytes}</span></span>
  <span class="form"><input type="text" name="attach_upload_size" value="{$attachsize}" size="40" maxlength="5" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_attach_ext}<br /><span class="tiny">{$this->lang->settings_attach_one_per}</span></span>
  <span class="form"><textarea name="attach_types" rows="5" cols="37">{$attachtypes}</textarea></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_topics_page}</span>
  <span class="form"><input type="text" name="topics_per_page" value="{$this->sets['topics_per_page']}" size="40" /></span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->settings_posts_topic}</span>
  <span class="form"><input type="text" name="posts_per_page" value="{$this->sets['posts_per_page']}" size="40" /></span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->settings_hot_topic}</span>
  <span class="form"><input type="text" name="hot_limit" value="{$this->sets['hot_limit']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_edit_post_age}</span>
  <span class="form"><input type="text" name="edit_post_age" value="{$this->sets['edit_post_age']}" size="40" /></span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->settings_foreign_link}<br /><span class="tiny">{$this->lang->settings_blank}</span></span>
  <span class="form"><input type="text" name="link_target" value="{$this->sets['link_target']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_antibot}</span>
@@ -1010,22 +1004,18 @@
   <input class="check" type="radio" name="register_image" value="1" <IF $this->sets['register_image']>checked="checked"</IF> id="register_image1" /><label for="register_image1">{$this->lang->settings_enabled}</label><br />
   <input class="check" type="radio" name="register_image" value="0" <IF !$this->sets['register_image']>checked="checked"</IF> id="register_image2" /><label for="register_image2">{$this->lang->settings_disabled}</label>
  </span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->settings_enabled_modules}<br /><span class="tiny">{$this->lang->settings_modname_only}</span></span>
  <span class="form"><textarea name="optional_modules" rows="5" cols="37">{$optionalModules}</textarea></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_tos}</span>
  <span class="form"><textarea name="tos" rows="10" cols="37">{$tos_text}</textarea></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_tos_files}</span>
  <span class="form"><textarea name="tos_files" rows="10" cols="37">{$tos_files_text}</textarea></span>
-
  <p class="line"></p>
 
  <input type="submit" value="{$this->lang->submit}" />
@@ -1035,22 +1025,18 @@
  <div class="title">{$this->lang->settings_members}</div>
  <span class="field">{$this->lang->settings_default_skin}</span>
  <span class="form"><select name="default_skin">{$selectSkins}</select></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_default_lang}</span>
  <span class="form"><select name="default_lang">{$defaultlang}</select></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_group_after}</span>
  <span class="form"><select name="default_group">{$selectGroups}</select></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_timezone}</span>
  <span class="form"><select class="timezone" name="default_timezone">{$selectTimezones}</select></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_show_avatars}</span>
@@ -1058,7 +1044,6 @@
   <input class="check" type="radio" name="default_view_avatars" value="1" <IF $this->sets['default_view_avatars']>checked="checked"</IF> id="default_view_avatars1" /><label for="default_view_avatars1">{$this->lang->settings_default_yes}</label><br />
   <input class="check" type="radio" name="default_view_avatars" value="0" <IF !$this->sets['default_view_avatars']>checked="checked"</IF> id="default_view_avatars2" /><label for="default_view_avatars2">{$this->lang->settings_default_no}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_show_sigs}</span>
@@ -1066,7 +1051,6 @@
   <input class="check" type="radio" name="default_view_sigs" value="1" <IF $this->sets['default_view_sigs']>checked="checked"</IF> id="default_view_sigs1" /><label for="default_view_sigs1">{$this->lang->settings_default_yes}</label><br />
   <input class="check" type="radio" name="default_view_sigs" value="0" <IF !$this->sets['default_view_sigs']>checked="checked"</IF> id="default_view_sigs2" /><label for="default_view_sigs2">{$this->lang->settings_default_no}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_show_emotes}</span>
@@ -1074,7 +1058,6 @@
   <input class="check" type="radio" name="default_view_emots" value="1" <IF $this->sets['default_view_emots']>checked="checked"</IF> id="default_view_emots1" /><label for="default_view_emots1">{$this->lang->settings_default_yes}</label><br />
   <input class="check" type="radio" name="default_view_emots" value="0" <IF !$this->sets['default_view_emots']>checked="checked"</IF> id="default_view_emots2" /><label for="default_view_emots2">{$this->lang->settings_default_no}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_show_pm}</span>
@@ -1082,7 +1065,6 @@
   <input class="check" type="radio" name="default_pm" value="1" <IF $this->sets['default_pm']>checked="checked"</IF> id="default_pm1" /><label for="default_pm1">{$this->lang->settings_default_yes}</label><br />
   <input class="check" type="radio" name="default_pm" value="0" <IF !$this->sets['default_pm']>checked="checked"</IF> id="default_pm2" /><label for="default_pm2">{$this->lang->settings_default_no}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_show_email}</span>
@@ -1090,7 +1072,6 @@
   <input class="check" type="radio" name="default_email_shown" value="1" <IF $this->sets['default_email_shown']>checked="checked"</IF> id="default_email_shown1" /><label for="default_email_shown1">{$this->lang->settings_default_yes}</label><br />
   <input class="check" type="radio" name="default_email_shown" value="0" <IF !$this->sets['default_email_shown']>checked="checked"</IF> id="default_email_shown2" /><label for="default_email_shown2">{$this->lang->settings_default_no}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_polls}</span>
@@ -1098,29 +1079,25 @@
   <input class="check" type="radio" name="vote_after_results" value="1" <IF $this->sets['vote_after_results']>checked="checked"</IF> id="vote_after_results1" /><label for="vote_after_results1">{$this->lang->settings_polls_yes}</label><br />
   <input class="check" type="radio" name="vote_after_results" value="0" <IF !$this->sets['vote_after_results']>checked="checked"</IF> id="vote_after_results2" /><label for="vote_after_results2">{$this->lang->settings_polls_no}</label>
  </span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
 {$this->table}
  <div class="title">{$this->lang->settings_email}</div>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_email_reply}<br /><span class="tiny">{$this->lang->settings_email_real}</span></span>
  <span class="form"><input type="text" name="admin_incoming" value="{$this->sets['admin_incoming']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_email_smtp}</span>
  <span class="form"><input type="text" name="mailserver" value="{$this->sets['mailserver']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_email_from}<br /><span class="tiny">{$this->lang->settings_email_fake}</span></span>
  <span class="form"><input type="text" name="admin_outgoing" value="{$this->sets['admin_outgoing']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_email_valid}</span>
@@ -1128,49 +1105,41 @@
   <input class="check" type="radio" name="emailactivation" value="1" <IF $this->sets['emailactivation']>checked="checked"</IF> id="emailactivation1" /><label for="emailactivation1">{$this->lang->settings_email_place1} <i>{$group['group_name']}</i> {$this->lang->settings_email_place2}</label><br />
   <input class="check" type="radio" name="emailactivation" value="0" <IF !$this->sets['emailactivation']>checked="checked"</IF> id="emailactivation2" /><label for="emailactivation2">{$this->lang->settings_email_place3}</label>
  </span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
 {$this->table}
  <div class="title">{$this->lang->settings_cookie}</div>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_cookie_time}<br /><span class="tiny">{$this->lang->seconds}</span></span>
  <span class="form"><input type="text" name="logintime" value="{$this->sets['logintime']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_post_flood}<br /><span class="tiny">{$this->lang->seconds}. {$this->lang->settings_post_min_time}</span></span>
  <span class="form"><input type="text" name="flood_time" value="{$this->sets['flood_time']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_pm_flood}<br /><span class="tiny">{$this->lang->seconds}. {$this->lang->settings_pm_min_time}</span></span>
  <span class="form"><input type="text" name="flood_time_pm" value="{$this->sets['flood_time_pm']}" size="40" /></span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->settings_search_flood}<br /><span class="tiny">{$this->lang->seconds}. {$this->lang->settings_search_min_time}</span></span>
  <span class="form"><input type="text" name="flood_time_search" value="{$this->sets['flood_time_search']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_cookie_prefix}</span>
  <span class="form"><input type="text" name="cookie_prefix" value="{$this->sets['cookie_prefix']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_cookie_path}</span>
  <span class="form"><input type="text" name="cookie_path" value="{$this->sets['cookie_path']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_cookie_domain}</span>
  <span class="form"><input type="text" name="cookie_domain" value="{$this->sets['cookie_domain']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_cookie_secure}<br /><span class="tiny">{$this->lang->settings_cookie_secured}</span></span>
@@ -1178,8 +1147,8 @@
   <input type="radio" name="cookie_secure" value="1" <IF ($this->sets['cookie_secure'])>checked="checked"</IF> id="cookie_secure1" /><label for="cookie_secure1">{$this->lang->yes}</label><br />
   <input type="radio" name="cookie_secure" value="0" <IF (!$this->sets['cookie_secure'])>checked="checked"</IF> id="cookie_secure2" /><label for="cookie_secure2">{$this->lang->no}</label>
  </span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
@@ -1190,23 +1159,20 @@
   <input class="check" type="radio" name="flash_avs" value="1" <IF $this->sets['flash_avs']>checked="checked"</IF> id="flash_avs1" /><label for="flash_avs1">{$this->lang->settings_allow}</label><br />
   <input class="check" type="radio" name="flash_avs" value="0" <IF !$this->sets['flash_avs']>checked="checked"</IF> id="flash_avs2" /><label for="flash_avs2">{$this->lang->settings_no_allow}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_avatar_max_width}<br /><span class="tiny">{$this->lang->settings_pixels}</span></span>
  <span class="form"><input type="text" name="avatar_width" value="{$this->sets['avatar_width']}" size="40" maxlength="5" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_avatar_max_height}<br /><span class="tiny">{$this->lang->settings_pixels}</span></span>
  <span class="form"><input type="text" name="avatar_height" value="{$this->sets['avatar_height']}" size="40" maxlength="5" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_avatar_upload}<br /><span class="tiny">{$this->lang->settings_kilobytes}</span></span>
  <span class="form"><input type="text" name="avatar_upload_size" value="{$avatarsize}" size="40" maxlength="5" /></span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
@@ -1214,7 +1180,6 @@
  <div class="title">Akismet {$this->lang->settings}</div>
  <span class="field">{$this->lang->settings_wordpress_id}<br /><span class="tiny">{$this->lang->settings_wordpress_msg}</span></span>
  <span class="form"><input class="input" type="text" name="wordpress_api_key" value="{$this->sets['wordpress_api_key']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_akismet_email_enable}<br /><span class="tiny">{$this->lang->settings_akismet_email_enable_msg}</span></span>
@@ -1222,7 +1187,6 @@
   <input class="check" type="radio" name="akismet_email" value="1" <IF $this->sets['akismet_email']>checked="checked"</IF> id="akismet_email1" /><label for="akismet_email1">{$this->lang->settings_enabled}</label><br />
   <input class="check" type="radio" name="akismet_email" value="0" <IF !$this->sets['akismet_email']>checked="checked"</IF> id="akismet_email2" /><label for="akismet_email2">{$this->lang->settings_disabled}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_akismet_ureg_enable}<br /><span class="tiny">{$this->lang->settings_akismet_ureg_enable_msg}</span></span>
@@ -1230,8 +1194,8 @@
   <input class="check" type="radio" name="akismet_ureg" value="1" <IF $this->sets['akismet_ureg']>checked="checked"</IF> id="akismet_ureg1" /><label for="akismet_ureg1">{$this->lang->settings_enabled}</label><br />
   <input class="check" type="radio" name="akismet_ureg" value="0" <IF !$this->sets['akismet_ureg']>checked="checked"</IF> id="akismet_ureg2" /><label for="akismet_ureg2">{$this->lang->settings_disabled}</label>
  </span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
@@ -1242,23 +1206,20 @@
   <input class="check" type="radio" name="output_buffer" value="1" <IF $this->sets['output_buffer']>checked="checked"</IF> id="output_buffer1" /><label for="output_buffer1">{$this->lang->settings_enabled}</label><br />
   <input class="check" type="radio" name="output_buffer" value="0" <IF !$this->sets['output_buffer']>checked="checked"</IF> id="output_buffer2" /><label for="output_buffer2">{$this->lang->settings_disabled}</label>
  </span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->settings_server_timezone}</span>
  <span class="form"><select class="timezone" name="servertime">{$severTimezones}</select></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_server_maxload}<br /><span class="tiny">{$this->lang->settings_server_maxload_msg}</span></span>
  <span class="form"><input type="text" name="max_load" value="{$this->sets['max_load']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_google_id}<br /><span class="tiny">{$this->lang->settings_google_msg}</span></span>
  <span class="form"><input class="input" type="text" name="analytics_id" value="{$this->sets['analytics_id']}" size="40" /></span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
@@ -1269,18 +1230,16 @@
   <input class="check" type="radio" name="spider_active" value="1" <IF $this->sets['spider_active']>checked="checked"</IF> id="spider_active1" /><label for="spider_active1">{$this->lang->yes}</label>
   <input class="check" type="radio" name="spider_active" value="0" <IF !$this->sets['spider_active']>checked="checked"</IF> id="spider_active2" /><label for="spider_active2">{$this->lang->no}</label>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_spider_agent}<br /><span class="tiny">{$this->lang->settings_spider_agent_msg}<br /><br />{$this->lang->settings_one_per}</span></span>
  <span class="form"><textarea name="spider_agent" rows="10" cols="39">{$spideragents}</textarea></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_spider_name}<br /><span class="tiny">{$this->lang->settings_spider_name_msg}</span></span>
  <span class="form"><textarea name="spider_name" rows="10" cols="39">{$spidernames}</textarea></span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 
@@ -1288,23 +1247,20 @@
  <div class="title">{$this->lang->settings_board_rss}</div>
  <span class="field">{$this->lang->settings_board_rssfeed_title}</span>
  <span class="form"><input class="check" type="text" name="rss_feed_title" value="{$this->sets['rss_feed_title']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_board_rssfeed_desc}</span>
  <span class="form"><input class="check" type="text" name="rss_feed_desc" value="{$this->sets['rss_feed_desc']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_board_rssfeed_posts}</span>
  <span class="form"><input class="check" type="text" name="rss_feed_posts" value="{$this->sets['rss_feed_posts']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_board_rssfeed_time}</span>
  <span class="form"><input type="text" name="rss_feed_time" value="{$this->sets['rss_feed_time']}" size="40" /></span>
-
  <p class="line"></p>
+
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -1352,9 +1308,9 @@
 {$this->table}
  <div class="title">{$this->lang->edit_css}: {$skin} - {$fname}</div>
  <textarea name="css_text" rows="25" cols="80">{$text}</textarea>
-
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -1369,13 +1325,15 @@
  <div class="title">{$this->lang->censor}</div>
  {$this->lang->censor_one_per_line}<br />
  {$this->lang->censor_regex_allowed}
-
  <p class="line"></p>
 
  <em>Hell</em> automatically matches <em>hello</em> and <em>HeLL</em>.
  <p class="line"></p>
+
  <textarea name="words" rows="15" cols="70" class="input">{$words}</textarea>
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -1417,35 +1375,30 @@
  <div class="title">{$this->lang->template_set}</div>
  <span class="field">{$this->lang->add_in}</span>
  <span class="form"><select name="template_set">{$template_box}</select></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->or_new}</span>
  <span class="form"><input type="text" name="ntemplate_set" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->template_title}</span>
  <span class="form"><input type="text" name="title" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->template_name}<br /> <span class="tiny">(ie: BOARD_MAIN - FORUM_TOPIC - etc)</span></span>
  <span class="form"><input type="text" name="name" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->template_description}</span>
  <span class="form"><input type="text" name="desc" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->template_html}</span>
  <span class="form"><textarea name="html" rows="30" cols="70"></textarea></span>
-
  <p class="line"></p>
 
- <input type="hidden" name="template" value="{$template}" />
+ <input type="hidden" name="template" value="$template" />
+ <input type="hidden" name="token" value="$token" />
  <input type="hidden" name="form" value="true" />
  <input type="submit" value="{$this->lang->template_add}" />
  <input type="reset" value="{$this->lang->template_clear}" />
@@ -1474,8 +1427,11 @@
  {$this->lang->ban_regex_allowed}<br />
  {$this->lang->ban_cidr}
  <p class="line"></p>
+
  <textarea name="banned_ips" rows="12" cols="70" class="input">{$ips}</textarea>
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->ban}" />
 {$this->etable}
 </form>
@@ -1608,7 +1564,6 @@
       <displayname>Forum Topics List</displayname>
       <description>The display of topic listings in a forum</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/forumjump.js"></script>
 {$this->table}
  <a href="{$this->self}?a=board&amp;s=mark&amp;f={$f}" class="mark_read"><img src="./skins/{$this->skin}/images/icons/forum_read.png" alt="{$this->lang->forum_mark_read}" title="{$this->lang->forum_mark_read}" /></a>
  <IF $can_post>
@@ -1620,7 +1575,7 @@
 
 {$this->table}
  <div class="title">
-  <img src="./skins/{$this->skin}/images/icons/comment.png" alt="" />
+  <img src="./skins/{$this->skin}/images/icons/topic.png" alt="" />
   {$exists['forum_name']}
  </div>
 
@@ -1741,15 +1696,6 @@
   <link rel="stylesheet" type="text/css" href="./skins/{$qsf->skin}/print.css" media="print" />
   {$qsf->feed_links}
   <script src="./javascript/utils.js" type="text/javascript"></script>
-  <!--[if lt IE 7]>
-   <script src="./javascript/pngfix.js" type="text/javascript"></script>
-  <![endif]-->
-  <IF (strpos($qsf->agent, 'MSIE') !== false)>
-   <style type="text/css">
-    input.button { padding: 0px; }
-    input.check { border: none; margin: -2px 0px 0px; }
-   </style>
-  </IF>
  </head>
 
  <body>
@@ -2110,8 +2056,6 @@
       <displayname>Folder</displayname>
       <description>A view of the personal messages list</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/folderjump.js"></script>
-<script type="text/javascript" src="./javascript/selectallboxes.js"></script>
 {$this->table}
  <span class="big_button_align">
   <a href="{$this->self}?a=pm&amp;f=0">{$this->lang->pm_folder_inbox}</a>
@@ -2667,7 +2611,7 @@
 <IF ($avatar_center = ($this->user['user_avatar_width'] ? (($this->user['user_avatar_width'] / 2) - 3) : 22))></IF>
 {$this->table}
  <div class="title">
-  <img src="./skins/{$this->skin}/images/icons/comment.png" alt="" />
+  <img src="./skins/{$this->skin}/images/icons/topic.png" alt="" />
   {$preview_title}
  </div>
  {$Poster_Info}
@@ -2899,28 +2843,29 @@
    {$this->lang->cp_avatar_url}&nbsp;&nbsp;
    <input type="text" name="avatar_url" value="{$avatar_url}" size="40" />
   </div>
-
   <p class="line"></p>
+
   <div id="upload_row">
    <input class="check" type="radio" name="user_avatar_type" value="upload" id="upload_radio" />
    {$this->lang->cp_avatar_upload}&nbsp;&nbsp;
    <input type="file" name="avatar_upload" size="40" />
   </div>
-
   <p class="line"></p>
+
   <div id="uploaded_row">
    <input class="check" type="radio" name="user_avatar_type" value="use_uploaded" id="uploaded_radio" {$checks[2]} />
    {$this->lang->cp_avatar_use}
   </div>
-
   <p class="line"></p>
+
   <div id="none_row">
    <input class="check" type="radio" name="user_avatar_type" value="none" id="none_radio" {$checks[3]} />
    {$this->lang->cp_avatar_none}
   </div>
  </div>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="hidden" name="old_avatar" value="{$this->user['user_avatar']}" />
  <input class="button" type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
@@ -2991,7 +2936,6 @@ enable('$init');
       <displayname>Recent View</displayname>
       <description>Change the appearance of the recent topics lists</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/forumjump.js"></script>
 {$this->table}
  <div class="title">
   <img src="./skins/{$this->skin}/images/icons/topic_unread.png" alt="" />
@@ -3240,11 +3184,11 @@ enable('$init');
 <?xml version="1.0" encoding="{$this->lang->charset}"?>
 <rss version="2.0">
  <channel>
-  <title>{$this->sets['rss_feed_title']} - {$this->lang->rssfeed_forum} {$exists['forum_name']}</title>
+  <title>$rss_title_block</title>
   <link>{$this->link}</link>
-  <description>{$this->sets['rss_feed_desc']} - {$exists['forum_description']}</description>
+  <description>$rss_desc_block</description>
   <language>{$this->user['user_language']}</language>
-  <generator>{$this->sets['forum_name']}</generator>
+  <generator>$rss_forum_name</generator>
   <ttl>{$this->sets['rss_feed_time']}</ttl>
   {$items}
  </channel>
@@ -3329,7 +3273,7 @@ enable('$init');
     <img src="./skins/{$this->skin}/images/icons/post_new.png" alt="{$this->lang->topic_new_post}" />
    </IF>
    <IF !($post['newpost']) && !($post['post_icon'])>
-    <img src="./skins/{$this->skin}/images/icons/comment.png" alt="{$this->lang->topic_new_post}" />
+    <img src="./skins/{$this->skin}/images/icons/topic.png" alt="{$this->lang->topic_new_post}" />
    <ELSE>
     {$post['post_icon']}
    </IF>
@@ -3746,7 +3690,6 @@ function toggleQuickReplyBox()
       <displayname>Display List Page</displayname>
       <description>This page shows the list of forums and input for entering search terms</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/selectallforums.js"></script>
 <form action="{$this->self}?a=search" method="post" id="search">
 {$this->table}
  <div class="title">
@@ -3856,40 +3799,36 @@ function toggleQuickReplyBox()
 <form action="{$this->self}?a=settings&amp;s=update&amp;db=1" method="post">
 {$this->table}
  <div class="title">{$this->lang->settings_db}</div>
+
  <span class="field">{$this->lang->settings_db_host}</span>
  <span class="form"><input type="text" name="db_host" value="{$this->sets['db_host']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_db_name}</span>
  <span class="form"><input type="text" name="db_name" value="{$this->sets['db_name']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_db_username}</span>
  <span class="form"><input type="text" name="db_user" value="{$this->sets['db_user']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_db_password}</span>
  <span class="form"><input type="password" name="db_pass" value="{$this->sets['db_pass']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_db_port}<br /><span class="tiny">{$this->lang->settings_db_leave_blank}</span></span>
  <span class="form"><input type="text" name="db_port" value="{$this->sets['db_port']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_db_socket}<br /><span class="tiny">{$this->lang->settings_db_leave_blank}</span></span>
  <span class="form"><input type="text" name="db_socket" value="{$this->sets['db_socket']}" size="40" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_db_prefix}<br /><span class="tiny">{$this->lang->settings_db_multiple}</span></span>
  <span class="form"><input type="text" name="prefix" value="{$this->sets['prefix']}" size="40" /></span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -3912,7 +3851,6 @@ function toggleQuickReplyBox()
    {$time_list}
   </select><br />{$current_time}
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_skin}</span>
@@ -3921,7 +3859,6 @@ function toggleQuickReplyBox()
    {$skin_list}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_language}</span>
@@ -3930,7 +3867,6 @@ function toggleQuickReplyBox()
    {$lang_list}
   </select>
  </span>
-
  <p class="line"></p>
  
  <span class="field">{$this->lang->cp_topic_option}</span>
@@ -3941,7 +3877,6 @@ function toggleQuickReplyBox()
   <input type="text" name="user_topics_page" size="2" value="{$this->user['user_topics_page']}" /> {$this->lang->cp_topics_page}<br />
   <input type="text" name="user_posts_page" size="2" value="{$this->user['user_posts_page']}" /> {$this->lang->cp_posts_page}
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->cp_privacy}</span>
@@ -3952,9 +3887,9 @@ function toggleQuickReplyBox()
   <input class="check" type="checkbox" name="user_pm_mail" id="user_pm_mail" value="1"{$user_pm_mailCheck} /> <label for="user_pm_mail">{$this->lang->cp_contact_pm_email}</label><br />
   <input class="check" type="checkbox" name="user_active" id="user_active" value="1"{$active_check} /> <label for="user_active">{$this->lang->cp_show_active}</label>
  </span>
-
  <p class="line"></p>
 
+ <input type="hidden" name="token" value="$token" />
  <input class="button" type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -3974,12 +3909,16 @@ function toggleQuickReplyBox()
  <span class="field">{$this->lang->cp_old_pass}</span>
  <span class="form"><input type="password" name="old_pass" size="40" /></span>
  <p class="line"></p>
+
  <span class="field">{$this->lang->cp_new_pass}</span>
  <span class="form"><input type="password" name="passA" size="40" /></span>
  <p class="line"></p>
+
  <span class="field">{$this->lang->cp_repeat_pass}</span>
  <span class="form"><input type="password" name="passB" size="40" /></span>
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input class="button" type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
 </form>
@@ -4070,7 +4009,6 @@ function toggleQuickReplyBox()
       <displayname>Files Main View</displayname>
       <description>The format of the first page of file data.</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/filejump.js"></script>
 <form action="{$this->self}?a=files&amp;s=search" method="post">
 {$this->table}
  <div class="title">
@@ -4212,7 +4150,6 @@ function toggleQuickReplyBox()
  <div class="title">{$this->lang->files_add_cat}</div>
  <span class="field"><strong>{$this->lang->files_add_cat_name}:</strong></span>
  <span class="form"><input type="text" name="cat_name" value="" maxlength="32" /></span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_add_cat_parent}:</strong></span>
@@ -4221,12 +4158,10 @@ function toggleQuickReplyBox()
    {$list}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_add_cat_desc}:</strong></span>
  <span class="form"><textarea name="catdesc" cols="60" rows="3" id="catdesc"></textarea></span>
-
  <p class="line"></p>
 
  <span class="field">
@@ -4237,8 +4172,9 @@ function toggleQuickReplyBox()
    {$quickperms}
   </select>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->files_add_cat}" />
 {$this->etable}
 </form>
@@ -4307,12 +4243,10 @@ function toggleQuickReplyBox()
  <div class="title">{$this->lang->files_upload}</div>
  <span class="field">{$this->lang->files_name}:</span>
  <span class="form"><input class="input" type="text" name="file_name" value="" size="32" maxlength="32" /></span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_author}:</strong></span>
  <span class="form"><input class="input" type="text" name="file_author" value="" size="30" maxlength="30" /></span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_cat}:</strong></span>
@@ -4321,12 +4255,10 @@ function toggleQuickReplyBox()
    {$list}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->file}:</strong></span>
  <span class="form"><input type="file" name="code_upload" /></span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_desc}:</strong></span>
@@ -4334,8 +4266,9 @@ function toggleQuickReplyBox()
   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60"></textarea>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->files_upload}" />
 {$this->etable}
       ]]></html>
@@ -4348,6 +4281,7 @@ function toggleQuickReplyBox()
 {$this->table}
  <div class="title">{$this->lang->files_delete_file}</div>
  {$this->lang->files_delete_confirm} <strong>{$file['file_name']}</strong>?<br />
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->delete}" />
 {$this->etable}
 </form>
@@ -4373,12 +4307,10 @@ function toggleQuickReplyBox()
  <div class="title" style="text-align:center">{$this->lang->files_modify_info}</div>
  <span class="field">{$this->lang->files_name}:</span>
  <span class="form"><input class="input" name="file_name" type="text" size="32" maxlength="32" value="{$file_name}" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->files_author}:</span>
  <span class="form"><input class="input" name="file_author" type="text" size="30" maxlength="30" value="{$file_author}" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->files_cat}:</span>
@@ -4387,7 +4319,6 @@ function toggleQuickReplyBox()
    {$list}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->files_desc}:</span>
@@ -4395,8 +4326,9 @@ function toggleQuickReplyBox()
   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{$file_description}</textarea>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->submit}" />
 {$this->etable}
       ]]></html>
@@ -4566,7 +4498,7 @@ function toggleQuickReplyBox()
       <description>Format of individual category links.</description>
       <html><![CDATA[
 <span class="file_folder">
- <img src="./skins/{$this->skin}/images/icons/folder.gif" height="14" width="14" alt="" />
+ <img src="./skins/{$this->skin}/images/icons/folder.png" alt="" />
  <a href="{$this->self}?a=files&amp;cid={$id}">{$name}</a> ({$count})
 </span>
       ]]></html>
@@ -4575,7 +4507,6 @@ function toggleQuickReplyBox()
       <displayname>File search template</displayname>
       <description>Template for the file search.</description>
       <html><![CDATA[
-<script type="text/javascript" src="./javascript/selectallcats.js"></script>
 <form action="{$this->self}?a=files&amp;s=search" method="post" id="search">
 {$this->table}
  <div class="title">
@@ -4674,7 +4605,6 @@ function toggleQuickReplyBox()
  <div class="title">{$this->lang->files_update_file}</div>
  <span class="field">{$this->lang->file}:</span>
  <span class="form"><input type="file" name="code_update" /></span>
-
  <p class="line"></p>
 
  <span class="field">{$this->lang->files_desc}:</span>
@@ -4682,8 +4612,9 @@ function toggleQuickReplyBox()
   <script type="text/javascript" src="./javascript/postboxplain.js"></script>
   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{$file['file_description']}</textarea>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->files_update_file}" />
 {$this->etable}
       ]]></html>
@@ -4757,7 +4688,6 @@ function toggleQuickReplyBox()
  <div class="title">{$this->lang->files_edit_category}</div>
  <span class="field"><strong>{$this->lang->files_name}:</strong></span>
  <span class="form"><input type="text" name="cat_name" value="{$cat['fcat_name']}" maxlength="32" /></span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_add_cat_parent}:</strong></span>
@@ -4766,15 +4696,15 @@ function toggleQuickReplyBox()
    {$list}
   </select>
  </span>
-
  <p class="line"></p>
 
  <span class="field"><strong>{$this->lang->files_desc}:</strong></span>
  <span class="form">
   <textarea name="catdesc" cols="60" rows="3" id="catdesc">{$cat['fcat_description']}</textarea>
  </span>
-
  <p class="line"></p>
+
+ <input type="hidden" name="token" value="$token" />
  <input type="submit" name="submit" value="{$this->lang->edit}" />
 {$this->etable}
 </form>

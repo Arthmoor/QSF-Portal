@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -72,8 +72,13 @@ class forums extends admin
 				$this->tree($f['forum_name']);
 
 				if (isset($this->post['editforum'])) {
+					if( !$this->is_valid_token() ) {
+						return $this->message( $this->lang->forum_edit, $this->lang->invalid_token );
+					}
 					return $this->EditForum($this->get['id']);
 				} else {
+					$token = $this->generate_token();
+
 					$forum = $this->htmlwidgets->select_forums($f['forum_parent']);
 					return eval($this->template('ADMIN_FORUM_EDIT'));
 				}
@@ -92,10 +97,15 @@ class forums extends admin
 				$this->tree($this->lang->forum_delete, "{$this->self}?a=forums&amp;s=delete");
 				$this->tree($f['forum_name']);
 
-				if (isset($this->get['confirm'])) {
+				if (isset($this->post['submit'])) {
+					if( !$this->is_valid_token() ) {
+						return $this->message( $this->lang->forum_edit, $this->lang->invalid_token );
+					}
 					return $this->DeleteForum($this->get['id']);
 				} else {
-					return $this->message($this->lang->forum_delete, $this->lang->forum_delete_warning, $this->lang->forum_delete, "$this->self?a=forums&s=delete&id={$this->get['id']}&amp;confirm=1");
+					$token = $this->generate_token();
+
+					return eval($this->template('ADMIN_FORUM_DELETE'));
 				}
 			} else {
 				$this->tree($this->lang->forum_delete);
@@ -108,8 +118,14 @@ class forums extends admin
 			$this->tree($this->lang->forum_create);
 
 			if (isset($this->post['addforum'])) {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->forum_create, $this->lang->invalid_token );
+				}
+
 				return $this->message($this->lang->forum_create, $this->AddForum());
 			} else {
+				$token = $this->generate_token();
+
 				$select = $this->htmlwidgets->select_forums();
 
 				if ($forums_exist['count']) {
@@ -126,8 +142,12 @@ class forums extends admin
 			$this->tree($this->lang->forum_ordering);
 
 			if (isset($this->post['orderforum'])) {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->forum_ordering, $this->lang->invalid_token );
+				}
 				return $this->message($this->lang->forum_ordering, $this->OrderUpdate());
 			}
+			$token = $this->generate_token();
 			$forum = $this->InputBox($this->htmlwidgets->forum_grab());
 			return eval($this->template('ADMIN_FORUM_ORDER'));
 			break;

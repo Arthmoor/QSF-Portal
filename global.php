@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = 'v1.4.5';          // QSF Portal version @var string
+	var $version = 'v1.4.6';          // QSF Portal version @var string
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -97,13 +97,6 @@ class qsfglobal
 		$this->cookie  = $_COOKIE;
 		$this->files   = $_FILES;
 		$this->query   = htmlspecialchars($this->query);
-
-		// Undo any magic quote slashes!
-		if (get_magic_quotes_gpc()) {
-			$this->unset_magic_quotes_gpc($this->get);
-			$this->unset_magic_quotes_gpc($this->post);
-			$this->unset_magic_quotes_gpc($this->cookie);
-		}
 	}
 	
 	/**
@@ -586,24 +579,6 @@ class qsfglobal
 	}
 
 	/**
-	 * Sets magic_quotes_gpc to off
-	 *
-	 * @param array $array Array to stripslashes
-	 **/
-	function unset_magic_quotes_gpc(&$array)
-	{
-		$keys = array_keys($array);
-		for($i = 0; $i < count($array); $i++)
-		{
-			if (is_array($array[$keys[$i]])) {
-				$this->unset_magic_quotes_gpc($array[$keys[$i]]);
-			} else {
-				$array[$keys[$i]] = stripslashes($array[$keys[$i]]);
-			}
-		}
-	}
-
-	/**
 	 * Sets the title of the page
 	 *
 	 * @param string $title The title
@@ -647,7 +622,9 @@ class qsfglobal
 			if ($subtitle) {
 				$subtitle = ' - ' . $subtitle;
 			}
-			$this->feed_links .= "<link rel=\"alternate\" title=\"{$this->sets['rss_feed_title']}$subtitle\" href=\"$url\" type=\"application/rss+xml\" />\n";
+			$title = htmlspecialchars( $this->sets['rss_feed_title'] );
+			$subtitle = htmlspecialchars( $subtitle );
+			$this->feed_links .= "<link rel=\"alternate\" title=\"$title$subtitle\" href=\"$url\" type=\"application/rss+xml\" />\n";
 		}
 	}
 	
@@ -899,6 +876,47 @@ class qsfglobal
 		$this->db->query("INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3)
 			VALUES (%d, %d, '%s', %d, %d, %d)",
 			$this->user['user_id'], $this->time, $action, $data1, $data2, $data3);
+	}
+
+	/**
+	 * Generates a random security token for forms.
+	 *
+	 * @author Roger Libiez
+	 * @return string Generated security token.
+	 * @since 1.1.9
+	 */
+	function generate_token()
+	{
+		$token = md5(uniqid(mt_rand(), true));
+		$_SESSION['token'] = $token;
+		$_SESSION['token_time'] = $this->time + 7200; // Token is valid for 2 hours.
+
+		return $token;
+	}
+
+	/**
+	 * Checks to be sure a submitted security token matches the one the form is expecting.
+	 *
+	 * @author Roger Libiez
+	 * @return false if invalid, true if valid
+	 * @since 1.1.9
+	 */
+	function is_valid_token()
+	{
+		if( !isset($_SESSION['token']) || !isset($_SESSION['token_time']) || !isset($this->post['token']) ) {
+			return false;
+		}
+
+		if( $_SESSION['token'] != $this->post['token'] ) {
+			return false;
+		}
+
+		$age = $this->time - $_SESSION['token_time'];
+
+		if( $age > 7200 )
+			return false;
+
+		return true;
 	}
 }
 ?>

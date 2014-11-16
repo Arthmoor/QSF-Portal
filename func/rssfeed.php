@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * This program is free software; you can redistribute it and/or
@@ -146,7 +146,12 @@ class rssfeed extends qsfglobal
 		if (!isset($exists['forum_parent']) || !$exists['forum_parent'] || $exists['forum_subcat']) {
 			return $this->rss_error_message($this->lang->rssfeed_cannot_find_forum);
 		}
-		
+
+		$rss_title_block = htmlspecialchars( $this->sets['rss_feed_title'] . ' - ' . $this->lang->rssfeed_forum . ' ' . $exists['forum_name'] );
+		$rss_desc_block = htmlspecialchars( $this->sets['rss_feed_desc'] . ' - ' . $exists['forum_description'] );
+		$rss_forum_name = htmlspecialchars($this->sets['forum_name']);
+		$rss_image_title = htmlspecialchars($this->sets['rss_feed_title']);
+
 		$query = $this->db->query( "SELECT
 				t.topic_id,
 				t.topic_title,

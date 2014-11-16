@@ -146,12 +146,6 @@ class convert extends qsfglobal
 			$this->sets['db_socket'] = $this->post['db_socket'];
 			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
 
-			if (get_magic_quotes_gpc()) {
-				$this->unset_magic_quotes_gpc($this->get);
-				$this->unset_magic_quotes_gpc($this->post);
-				$this->unset_magic_quotes_gpc($this->cookie);
-			}
-
 			$this->sets['installed'] = 1;
 
 			if (!$this->write_db_sets('../settings.php')) {

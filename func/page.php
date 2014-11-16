@@ -95,7 +95,10 @@ class page extends qsfglobal
 		$page = $this->db->fetch("SELECT page_id, page_title, page_contents, page_flags FROM %ppages WHERE page_id=%d", $p);
 
 		if ( $page ) {
-			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE;
+			$this->tree($page['page_title']);
+			$this->set_title($page['page_title']);
+
+			$param = FORMAT_HTMLCHARS | FORMAT_CENSOR;
 			$page['page_title'] = $this->format($page['page_title'], $param );
 
 			// This may seem a bit confusing, but it works. The page edit option "Format HTML" is really telling the code the opposite, so it needs to be flipped here.
@@ -105,8 +108,6 @@ class page extends qsfglobal
 				$page['page_flags'] = $page['page_flags'] | FORMAT_HTMLCHARS;
 
 			$page['page_contents'] = $this->format($page['page_contents'], $page['page_flags']);
-			$this->tree($page['page_title']);
-			$this->set_title($page['page_title']);
 		} else {
 			$this->set_title($this->lang->page_viewing);
 			$this->tree($this->lang->page_viewing);

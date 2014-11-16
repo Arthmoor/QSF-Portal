@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -207,7 +207,6 @@ class topic extends qsfglobal
 		} else {
 			$title_short = $topic['topic_title'];
 		}
-		$title_short = $this->format($title_short, FORMAT_HTMLCHARS);
 
 		$this->set_title($this->lang->topic_viewing . ': ' . $title_html);
 

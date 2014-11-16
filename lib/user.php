@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -48,7 +48,6 @@ class user
 	{
 		$this->db  = &$qsf->db;
 		$this->pre = &$qsf->pre;
-		$this->session = &$qsf->session;
 		$this->server  = &$qsf->server;
 		$this->cookie  = &$qsf->cookie;
 		$this->sets    = &$qsf->sets;
@@ -74,9 +73,9 @@ class user
 				      m.user_password='%s' AND
 				      s.skin_dir=m.user_skin AND
 				      g.group_id=m.user_group LIMIT 1",	$cookie_user, $cookie_pass);
-		} else if(isset($this->session['user']) && isset($this->session['pass'])) {
-			$session_user = intval($this->session['user']);
-			$session_pass = $this->session['pass'];
+		} else if(isset($_SESSION['user']) && isset($_SESSION['pass'])) {
+			$session_user = intval($_SESSION['user']);
+			$session_pass = $_SESSION['pass'];
 			$user = $this->db->fetch("SELECT m.*, s.skin_dir, g.group_perms, g.group_file_perms, g.group_name, t.membertitle_icon
 				FROM (%pskins s, %pgroups g, %pusers m)
 				LEFT JOIN %pmembertitles t ON t.membertitle_id = m.user_level

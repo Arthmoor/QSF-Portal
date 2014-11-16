@@ -56,11 +56,11 @@ function bbcURL(type, textarea) {
   var text = getText(textarea);
   var isURL = (text.substring(0,7) == "http://");
 
-  if (type == 'img') {
+  if (type == 'img' || type == 'youtube' ) {
     if (isURL) {
-      var code = "[img]" + text + "[/img]";
+      var code = "[" + type + "]" + text + "[/" + type + "]";
     } else {
-      var code = text + "[img]" + prompt(textarea.jsdata_url + ":","") + "[/img]";
+      var code = text + "[" + type + "]" + prompt(textarea.jsdata_url + ":","") + "[/" + type + "]";
     }
   } else {
     var code = "[" + type + "=" + (isURL ? text : prompt(textarea.jsdata_address + ":","")) + "]" + ((text && !isURL) ? text : prompt(textarea.jsdata_detail + ":","")) + "[/" + type + "]";

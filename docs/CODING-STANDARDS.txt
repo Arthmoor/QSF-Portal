@@ -193,7 +193,7 @@ standards.
  with function_exists(). Don't bother coding for PHP3.
 
  All code must work with all possible configurations of PHP, including various
- values for register_globals, magic_quotes_gpc, etc.
+ values for register_globals, etc.
 
  All HTML must work as intended in all popular browsers, including Internet
  Explorer 5+, Netscape 4+, Mozilla, and recent versions of Opera.

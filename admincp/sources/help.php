@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -67,15 +67,24 @@ class help extends admin
 		{
 		case 'new':
 			if (!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				return $this->message($this->lang->help_add,"
-				<form action='{$this->self}?a=help&amp;s=new&amp;' method='post'><div>
+				<form action='{$this->self}?a=help&amp;s=new&amp;' method='post'>
+				<div>
 				<b>{$this->lang->help_title}:</b><br />
 				<input name='title' type='text' size='40' class='input' /><br /><br />
 				<b>{$this->lang->help_content}</b>
 				<textarea name='article' cols='100' rows='15' id='article' class='input'></textarea><br /><br />
-				<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
+				<input type='hidden' name='token' value='$token' />
+				<input type='submit' name='submit' value='{$this->lang->submit}' />
+				</div>
 				</form>");
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->help_add, $this->lang->invalid_token );
+				}
+
 				if (trim($this->post['title']) == '') {
 					return $this->message($this->lang->help_add, $this->lang->help_no_title);
 				}
@@ -103,6 +112,8 @@ class help extends admin
 				}
 			} else {
 				if (!isset($this->post['submit'])) {
+					$token = $this->generate_token();
+
 					$id = intval($this->get['id']);
 
 					$query = $this->db->query("SELECT * FROM %phelp WHERE help_id=%d", $id);
@@ -116,19 +127,26 @@ class help extends admin
 						$article = $this->format($content['help_article'], FORMAT_HTMLCHARS);
 
 						return $this->message($this->lang->help_edit, "
-						<form action='{$this->self}?a=help&amp;s=edit&amp;id={$id}' method='post'><div>
+						<form action='{$this->self}?a=help&amp;s=edit&amp;id={$id}' method='post'>
+						<div>
 						<b>{$this->lang->help_title}:</b><br />
 						<input name='title' type='text' value='{$title}' size='40' class='input' /><br /><br />
 						<b>{$this->lang->help_content}:</b><br />
 						<textarea name='article' cols='100' rows='15' id='article' class='input'>{$article}</textarea>
-						<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
+						<input type='hidden' name='token' value='$token' />
+						<input type='submit' name='submit' value='{$this->lang->submit}' />
+						</div>
 						</form>");
 					}
 				} else {
+					if( !$this->is_valid_token() ) {
+						return $this->message( $this->lang->help_edit, $this->lang->invalid_token );
+					}
+
 					$id = intval($this->get['id']);
 
 					if (trim($this->post['title']) == '') {
-						return $this->message($this->lang->help_add, $this->lang->help_no_title);
+						return $this->message($this->lang->help_edit, $this->lang->help_no_title);
 					}
 
 					$query = $this->db->query("UPDATE %phelp SET help_title='%s', help_article='%s' WHERE help_id=%d",
@@ -155,18 +173,26 @@ class help extends admin
 						return $this->message($this->lang->help_delete, "{$this->lang->help_select_delete}:<br /><br />$ret");
 					}
 				} else {
+					$token = $this->generate_token();
+
 					$query   = $this->db->query("SELECT help_id, help_title FROM %phelp WHERE help_id=%d", intval($this->get['id']));
 					$content = $this->db->nqfetch($query);
 
 					$ret = "{$this->lang->help_confirm} <b>{$content['help_title']}</b>?<br /><br />
-							<form action='{$this->self}?a=help&amp;s=delete&amp;id={$this->get['id']}' method='post'><div>
-							<input type='submit' name='submit' value='{$this->lang->delete}' /></div>
+							<form action='{$this->self}?a=help&amp;s=delete&amp;id={$this->get['id']}' method='post'>
+							<div>
+							<input type='hidden' name='token' value='$token' />
+							<input type='submit' name='submit' value='{$this->lang->delete}' />
+							</div>
 							</form>";
 
 					return $this->message($this->lang->help_delete, $ret);
 				}
 
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->help_delete, $this->lang->invalid_token );
+				}
 				$query = $this->db->query("DELETE FROM %phelp WHERE help_id=%d", intval($this->get['id']));
 				return $this->message($this->lang->help_delete, $this->lang->help_deleted);
 			}

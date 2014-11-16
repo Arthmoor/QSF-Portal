@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -124,12 +124,12 @@ class register extends qsfglobal
 				}
 			}
 			
-			if (!isset($this->session['allow_register'])) {
+			if (!isset($_SESSION['allow_register'])) {
 				// They must allow sessions to register! The session can only be set by loading the form
 				return $this->message($this->lang->register_reging, sprintf($this->lang->register_flood, $this->sets['flood_time']));
 			}
 			// Do some quick checks to prevent flooding registration
-			if (isset($this->session['last_register']) && $this->session['last_register'] > ($this->time - $this->sets['flood_time'])) {
+			if (isset($_SESSION['last_register']) && $_SESSION['last_register'] > ($this->time - $this->sets['flood_time'])) {
 				return $this->message($this->lang->register_reging, sprintf($this->lang->register_flood, $this->sets['flood_time']));
 			}
 			$_SESSION['last_register'] = $this->time;

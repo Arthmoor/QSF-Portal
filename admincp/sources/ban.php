@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -54,6 +54,8 @@ class ban extends admin
 		$this->tree($this->lang->ban_ip);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$ips = implode("\n", $this->sets['banned_ips']);
 			$ips = stripslashes($ips); // Leave here. IP ban data is stored with leading slashes.
 
@@ -74,6 +76,10 @@ class ban extends admin
 
 			return eval($this->template('ADMIN_BAN_FORM'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->ban_ip, $this->lang->invalid_token );
+			}
+
 			$banned_ips = trim($this->post['banned_ips']);
 
 			if ($banned_ips) {

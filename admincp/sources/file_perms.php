@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -103,6 +103,8 @@ class file_perms extends admin
 		);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$count = count($cats_list) + 1;
 
 			if ($mode == 'user') {
@@ -173,6 +175,10 @@ class file_perms extends admin
 				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update File Permissions' /></td>
 			</tr>" . $this->etable . "</form>";
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->perms, $this->lang->invalid_token );
+			}
+
 			if (($mode == 'user') && isset($this->post['usegroup'])) {
 				$perms_obj->cube = '';
 				$perms_obj->update();

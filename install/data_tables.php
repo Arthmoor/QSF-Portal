@@ -526,8 +526,8 @@ $sets['members'] = 0;
 $sets['spider_active'] = 1;
 $sets['spider_name'] = array(
 	'googlebot' 	=> 'Google',
-	'yahoo'		=> 'Yahoo! Slurp',
-	'msnbot'	=> 'MSN Search'
+	'yahoo'		=> 'Yahoo!',
+	'msnbot'	=> 'Bing'
 );
 $sets['debug_mode'] = 0;
 $sets['file_count'] = 0;

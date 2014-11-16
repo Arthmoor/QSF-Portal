@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * This program is free software; you can redistribute it and/or
@@ -37,10 +37,16 @@ class prune extends admin
 		$this->tree($this->lang->prune_title);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			// Stage 1
 			$forum_options = $this->htmlwidgets->select_forums(-1, 0);
 			return eval($this->template('ADMIN_PRUNE_FORM'));
 		} else if (isset($this->post['age'])) {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->prune_title, $this->lang->invalid_token );
+			}
+
 			// Stage 2
 			
 			if (!$this->validator->validate($this->post['age'], TYPE_UINT)) {
@@ -75,10 +81,15 @@ class prune extends admin
 				$topics .= eval($this->template('ADMIN_PRUNE_TOPIC'));
 				$topicCount++;
 			}
-			
+
+			$token = $this->generate_token();
 			$movetoForum = $this->htmlwidgets->select_forums(0, 0, null, false);
 			return eval($this->template('ADMIN_PRUNE_TOPICLIST'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->prune_title, $this->lang->invalid_token );
+			}
+
 			// Stage 3
 			if (!isset($this->post['forums'])) {
 				return $this->message($this->lang->prune_title, $this->lang->prune_novalidforum);

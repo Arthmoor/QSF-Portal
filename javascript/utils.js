@@ -120,3 +120,78 @@ function load_js_lang(func) {
 	}
 	return false; // Can't do it
 }
+
+function select_all_forums()
+{
+  opts = document.forms['search'].elements['forums[]'].options
+  for(i=0; i<opts.length; i++)
+  {
+    opts[i].selected = true;
+  }
+}
+
+function select_all_cats()
+{
+  opts = document.forms['search'].elements['cats[]'].options
+  for(i=0; i<opts.length; i++)
+  {
+    opts[i].selected = true;
+  }
+}
+
+function select_all_children(toSelect)
+{
+  var id;
+  var pid;
+
+  opts = document.forms['search'].elements['cats[]'].options
+  for(i=0; i<opts.length; i++)
+  {
+    for(n = 0; n < select_all_children.arguments.length ; n++)
+    {
+      id = Number(select_all_children.arguments[n]);
+      cid = Number(opts[i].value);
+      if(id == cid)
+        opts[i].selected = true;
+    }
+  }
+}
+
+function select_all_boxes()
+{
+  formElements = document.getElementsByTagName('input');
+  for(i=0; i<formElements.length; i++)
+  {
+    if (formElements[i].type == 'checkbox') {
+      formElements[i].checked = true;
+    }
+  }
+}
+
+function select_all_groups()
+{
+  opts = document.forms['mailer'].elements['groups[]'].options
+  for (i=0; i<opts.length; i++)
+  {
+    opts[i].selected = true;
+  }
+}
+
+function get_forum(select,link)
+{
+  if(select.value.substring(0, 1) == '.'){
+    self.location.href = link + '?a=board&c=' + select.value.substring(1, select.value.length);
+  }else{
+    self.location.href = link + '?a=forum&f=' + select.value;
+  }
+}
+
+function get_folder(select,link)
+{
+  self.location.href = link + '?a=pm&f=' + select.value;
+}
+
+function get_filecat(select,link)
+{
+   self.location.href = link + '?a=files&cid=' + select.value;
+}

@@ -1,6 +1,24 @@
 QSF Portal Changes
 ------------------
 
+Bugs listed by number address reported issues on the qsfportal.com forum.
+
+Changes for 1.4.6:
+
+* Removed support for the IE6 pngfix. If you're still using IE6, upgrade.
+* Duplicate content discovered by Google Webmasters removed from the skin.
+* General optimization of the default skin. Removal of unused files.
+* Applied Kiasyn's patch to declutter the forum group permissions menu.
+
+   Bugs addressed:
+
+* SECURITY: Added protection against cross-site request forgery attacks.
+* Bug #192: Clicking on the search link in the files menu led to an infinite nesting loop that would exhaust the PHP memory limit.
+* Bug #168: Subscription check causes crash when editing group perms.
+* Bug #193: Youtube BBCode tag is not XHTML compliant. Also raised the size of the video preview box to 640x400.
+* Bug #194: Forumjump.js uses the wrong URL target.
+* Corrected more XHTML validation issues.
+
 Changes for 1.4.5:
 
 * Removed all non-English language files from the base package.
@@ -14,16 +32,17 @@ Changes for 1.4.5:
 
    Bugs addressed:
 
-* External http links are not setting _blank targets as needed. [Fixed by Detruire]
-* BBCode parser crashes on bad multibyte characters. [Fix by Kiasyn]
+* SECURITY: Secunia Advisory SA32823 fixed. 
+* Bug #169: External http links are not setting _blank targets as needed. [Fixed by Detruire]
+* Bug #178: BBCode parser crashes on bad multibyte characters. [Fix by Kiasyn]
 * Topic locks and pins were not tracked if the action was done using the post reply form.
 * Registration process errors out when bots submit unset forms that are missing data.
-* Improper usage of the rel="nofollow" tag has been corrected.
+* Bug #183: The nofollow link attribute is being used improperly.
 * Missing avatars generate errors in the HTTP logs even though they shouldn't have.
-* Editing a root level file category added an extra forward slash to the long path name.
+* Bug #180: Editing a root level file category added an extra forward slash to the long path name.
 * ACP Member controls crashed due to missing language elements.
-* Unread post links are not loading the correct posts.
-* Time display for "yesterday" and "today" was not displayed correctly.
+* Bug #184: Unread post links are not loading the correct posts.
+* Bug #186: Times on posts not displaying correctly.
 * HTML error in the TOPIC_MAIN template for the locked topic icon.
 * 7zip files should now identify properly in the files module.
 * Bad language text in the error message for a non-empty category.

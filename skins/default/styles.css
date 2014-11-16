@@ -81,12 +81,6 @@ textarea {
 	float: left;
 	position: absolute;
 }
-#header #company .logo {
-	background: white url('./images/logo.png');
-	height: 50px;
-	width: 50px;
-	float: left;
-}
 #header #company .title {
 	background: url('./images/qsfportal_logo.png') no-repeat;
 	font: 1px Sans-serif;

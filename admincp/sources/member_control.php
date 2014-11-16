@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -95,10 +95,17 @@ class member_control extends admin
 				return $this->message($this->lang->mc_delete, $this->lang->mc_guest_needed);
 			}
 
-			if (!isset($this->get['confirm'])) {
+			if (!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				$member = $this->db->fetch("SELECT user_name FROM %pusers WHERE user_id=%d", $this->get['id']);
-				return $this->message($this->lang->mc_delete, "{$this->lang->mc_confirm} <b>{$member['user_name']}</b>?<br /><br /><a href='$this->self?a=member_control&amp;s=delete&amp;id={$this->get['id']}&amp;confirm=1'>{$this->lang->continue}</a>");
+
+				return eval($this->template('ADMIN_MEMBER_DELETE'));
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->mc_delete, $this->lang->invalid_token );
+				}
+
 				$this->db->query("UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $this->get['id']);
 				$this->db->query("UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $this->get['id']);
 				$this->db->query("UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $this->get['id']);
@@ -146,6 +153,8 @@ class member_control extends admin
 			$this->get['id'] = intval($this->get['id']);
 
 			if (!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $this->get['id']);
 
 				$this->iterator_init('tablelight', 'tabledark');
@@ -280,6 +289,10 @@ class member_control extends admin
 
 				return eval($this->template('ADMIN_MEMBER_PROFILE'));
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->mc_edit, $this->lang->invalid_token );
+				}
+
 				$member = $this->db->fetch("SELECT user_name FROM %pusers WHERE user_id=%d", $this->get['id']);
 
 				if (($this->post['user_group'] == USER_BANNED) && ($this->get['id'] == USER_GUEST_UID)) {

@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -48,6 +48,8 @@ class titles extends admin
 			$this->tree($this->lang->titles_add);
 
 			if (!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				return $this->message($this->lang->titles_add, "
 				<form action='$this->self?a=titles&amp;s=add' method='post'>
 				<div align='center' style='width:400px'>
@@ -62,10 +64,15 @@ class titles extends admin
 
 					<label class='free' for='new_posts'>{$this->lang->titles_minpost}:</label>
 					<input class='freec' name='new_posts' id='new_posts' /><br class='free' /><br class='free' />
+					<input type='hidden' name='token' value='$token' />
 					<input type='submit' name='submit' value='{$this->lang->submit}' />
 				</div>
 				</form>");
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->titles_control, $this->lang->invalid_token );
+				}
+
 				if ((trim($this->post['new_title']) == '') || (trim($this->post['new_posts']) == '')) {
 					return $this->message($this->lang->titles_control, $this->lang->titles_error);
 				}

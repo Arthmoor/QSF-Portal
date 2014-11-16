@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -66,6 +66,8 @@ class email extends qsfglobal
 		}
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$this->get['to'] = isset($this->get['to']) ? intval($this->get['to']) : '';
 
 			if ($this->get['to']) {
@@ -80,6 +82,10 @@ class email extends qsfglobal
 
 			return eval($this->template('EMAIL_MAIN'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->email_email, $this->lang->invalid_token );
+			}
+
 			if (empty($this->post['to']) || empty($this->post['message']) || empty($this->post['subject'])) {
 				return $this->message($this->lang->email_email, $this->lang->email_no_fields);
 			}

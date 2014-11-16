@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -41,8 +41,14 @@ class mass_mail extends admin
 		$this->tree($this->lang->mail);
 
 		if (isset($this->post['massmail'])) {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->mail, $this->lang->invalid_token );
+			}
+
 			return $this->send_mail();
 		} else {
+			$token = $this->generate_token();
+
 			$group_list = $this->group_list();
 
 			$announcement = "{$this->lang->mail_announce} " . $this->format($this->sets['forum_name'], FORMAT_HTMLCHARS);

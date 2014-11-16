@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * This program is free software; you can redistribute it and/or
@@ -154,7 +154,7 @@ class jsdata extends qsfglobal
 				'tag' => 'youtube',
 				'title' => $this->lang->bbcode_youtube,
 				'value' => $this->lang->bbcode_youtube,
-				'action' => 'bbCode'
+				'action' => 'bbcURL'
 				);
 			$results['buttons'][] = array(
 				'tag' => 'bcove',

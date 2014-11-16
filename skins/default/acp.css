@@ -6,6 +6,28 @@ li {
 	list-style-type: none;
 }
 
+/* Permissions Tables */
+#main .article td.header {
+	background: #5ca0e6 url('./images/header_gradient.png');
+	font: 18px Arial, Sans-serif;
+	color: black;
+	padding: 0px 4px 0px 4px;
+	border: 1px solid black;
+	border-right: 3px double black;
+}
+#main .article td.footer {
+	background: #5ca0e6 url('./images/header_gradient.png');
+	border: 1px solid black;
+	color:black;
+	font: 14px Arial, Sans-serif;
+}
+#main .article td.subheader {
+	background-color:#5ca0e6;
+	border:1px solid black;
+	color:black;
+	font: 14px Arial, Sans-serif;
+}
+
 /* Template Editor */
 #main .article .template_text {
 	font: 12px 'courier new', courier, monospaced, serif;

@@ -206,6 +206,7 @@ class files extends qsfglobal
 			foreach($file as $key => $value)
 				$$key = $value;
 
+			$token = $this->generate_token();
 			$tree = $this->get_filetree($file_catid, true);
 			$list = $this->get_categories($file_catid);
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
@@ -214,6 +215,10 @@ class files extends qsfglobal
 
 			return eval($this->template('FILE_EDIT'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_edit_file, $this->lang->invalid_token );
+			}
+
 			if (empty($this->post['file_author']) || empty($this->post['file_name']) || empty($this->post['file_description']) || empty($this->post['file_category'])) {
 				return $this->message($this->lang->files_edit_file, $this->lang->files_all_fields_required);
 			}
@@ -241,6 +246,7 @@ class files extends qsfglobal
 		if (!isset($this->post['submit'])) {
 			$list = $this->get_categories($file['file_catid']);
 			$move_file = sprintf($this->lang->files_move_category, "<strong>{$file['file_name']}</strong>");
+			$token = $this->generate_token();
 
 			return $this->message( $this->lang->files_move_file, "
 			<form action=\"{$this->self}?a=files&amp;s=move&amp;fid={$id}\" method=\"post\">
@@ -248,10 +254,15 @@ class files extends qsfglobal
 			  <select name=\"category\">
 			   {$list}
 			  </select>
+			  <input type=\"hidden\" name=\"token\" value=\"$token\" />
 			  <input type=\"submit\" name=\"submit\" value=\"{$this->lang->files_move_file}\" />
 			 </div>
 			</form>" );
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_move_file, $this->lang->invalid_token );
+			}
+
 			$catid = intval( $this->post['category'] );
 
 			$cat = $this->db->fetch( 'SELECT fcat_name FROM %pfile_categories WHERE fcat_id=%d', $catid );
@@ -425,11 +436,17 @@ class files extends qsfglobal
 		}
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$cat = $this->db->fetch( 'SELECT fcat_name, fcat_parent, fcat_description FROM %pfile_categories WHERE fcat_id=%d', $cid );
 			$list = $this->get_categories($cat['fcat_parent']);
 
 			return eval($this->template('FILE_EDIT_CAT'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_edit_category, $this->lang->invalid_token );
+			}
+
 			$parent = intval($this->post['parent']);
 			$name = $this->post['cat_name'];
 			$desc = $this->post['catdesc'];
@@ -479,7 +496,9 @@ class files extends qsfglobal
 		if(!isset($this->post['submit']))
 		{
 			$list = $this->get_categories($cid);
-			
+
+			$token = $this->generate_token();
+
 			return $this->message($this->lang->files_add_mod, "
 			<form action=\"{$this->self}?a=files&amp;s=addmoderator\" method=\"post\">
 				<span class=\"field\">{$this->lang->files_add_mod2}:</span>
@@ -488,14 +507,18 @@ class files extends qsfglobal
 					<select name=\"parent\">
 						{$list}
 					</select></span>
-
 					<p class=\"line\"></p>
 
+					<input type=\"hidden\" name=\"token\" value=\"$token\" />
 					<input type=\"submit\" name=\"submit\" value=\"{$this->lang->submit}\" />
 			</form>");		
 		}
 		else
 		{
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_add_mod, $this->lang->invalid_token );
+			}
+
 			$parent = intval($this->post['parent']);
 			$name = $this->post['mod_name'];
 			if( !( $newMod = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_name='%s'", $name ) ) )
@@ -515,19 +538,26 @@ class files extends qsfglobal
 		if(!isset($this->post['submit']))
 		{
 			$list = $this->get_categories($cid);
-			
+
+			$token = $this->generate_token();
+
 			return $this->message($this->lang->files_remove_mod, "
 			<form action=\"{$this->self}?a=files&amp;s=remmoderator\" method=\"post\">
 				<div>{$this->lang->files_remove_mod_cat}
 						<select name=\"parent\">
 							{$list}
 						</select>
+					<input type=\"hidden\" name=\"token\" value=\"$token\" />
 					<input type=\"submit\" name=\"submit\" value=\"{$this->lang->submit}\" />
 				</div>
 			</form>");		
 		}
 		else
 		{
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_remove_mod, $this->lang->invalid_token );
+			}
+
 			$parent = intval($this->post['parent']);
 			$this->db->query( 'UPDATE %pfile_categories SET fcat_moderator=0 WHERE fcat_id=%d', $parent );
 			$this->log_action( 'file_rem_moderator', $parent );
@@ -544,16 +574,23 @@ class files extends qsfglobal
 		if (!isset($this->post['submit'])) {
 			$list = $this->get_categories($cid);
 
+			$token = $this->generate_token();
+
 			return $this->message($this->lang->files_delete_cat, "
 			<form action=\"{$this->self}?a=files&amp;s=deletecategory\" method=\"post\">
 			 <div>{$this->lang->files_delete_cat2}
 			  <select name=\"category\">
 			   {$list}
 			  </select>
+			  <input type=\"hidden\" name=\"token\" value=\"$token\" />
 			  <input type=\"submit\" name=\"submit\" value=\"{$this->lang->delete}\" />
 			 </div>
 			</form>");
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_delete_cat, $this->lang->invalid_token );
+			}
+
 			if (!isset($this->post['category'])) {
 				return $this->message($this->lang->files_delete_cat, $this->lang->files_delete_nocat, $this->lang->continue, "{$this->self}?a=files");
 			}
@@ -613,6 +650,8 @@ class files extends qsfglobal
 			$list = $this->get_categories($cid);
 			$cats_exist = $this->db->fetch('SELECT COUNT(fcat_id) AS count FROM %pfile_categories');
 
+			$token = $this->generate_token();
+
 			if ($cats_exist['count']) {
 				$quickperms = $list;
 			} else {
@@ -621,6 +660,10 @@ class files extends qsfglobal
 
 			return eval($this->template('FILE_ADD_CAT'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_add_cat, $this->lang->invalid_token );
+			}
+
 			$parent = intval($this->post['parent']);
 			$name = $this->post['cat_name'];
 			$longpath = $this->get_longpath($parent);
@@ -701,10 +744,16 @@ class files extends qsfglobal
 		$id = intval($this->get['fid']);
 		$out = "";
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$file = $this->db->fetch( 'SELECT file_name, file_id FROM %pfiles WHERE file_id=%d', $id );
 
 			$out .= eval($this->template('FILE_DELETE'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->files_delete_file, $this->lang->invalid_token );
+			}
+
 			$name = $this->remove_file($id, true);
 			$this->log_action( 'file_delete', $id );
 			$out .= $this->message( $this->lang->files_delete_file, "{$name} " . $this->lang->files_delete_file_done, $this->lang->continue, "{$this->self}?a=files&amp;cid={$cid}" );
@@ -725,7 +774,13 @@ class files extends qsfglobal
 
 		if(!isset($this->post['submit']) )
 		{
+			$token = $this->generate_token();
+
 			return eval($this->template('FILE_UPDATE'));
+		}
+
+		if( !$this->is_valid_token() ) {
+			return $this->message( $this->lang->files_update_file, $this->lang->invalid_token );
 		}
 
 		if( empty($this->post['file_description']) )
@@ -849,7 +904,13 @@ class files extends qsfglobal
 		if (!isset($this->post['submit'])) {
 			$list = $this->get_categories($cid);
 
+			$token = $this->generate_token();
+
 			return eval($this->template('FILE_UPLOAD'));
+		}
+
+		if( !$this->is_valid_token() ) {
+			return $this->message( $this->lang->files_upload, $this->lang->invalid_token );
 		}
 
 		$catid = intval( $this->post['file_category'] );
@@ -1063,7 +1124,7 @@ class files extends qsfglobal
 			    FROM %pfiles f
 			    LEFT JOIN %pusers u ON u.user_id=f.file_submitted
 			    WHERE f.file_catid=%d AND file_approved=1
-			    ORDER BY f.file_name ASC', $cid );
+			    ORDER BY f.file_date DESC', $cid );
 		}
 
 		while( $row = $this->db->nqfetch( $query ) )
@@ -1139,6 +1200,7 @@ class files extends qsfglobal
 		}
 		$filesize = ceil($file_size / 1024);
 		$file_description = $this->format($file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE);
+		$filename = $this->format($file_filename, FORMAT_HTMLCHARS);
 
 		$move = false;
 		if ($this->file_perms->auth('move_files', $cid))
@@ -1348,7 +1410,7 @@ class files extends qsfglobal
 
 	function nestedSelect($cid = 0, $nest = 0, $selectArray = array())
 	{
-		$cats = $this->db->query( 'SELECT fcat_name, fcat_id, fcat_parent FROM %pfile_categories WHERE fcat_parent=%d', $cid );
+		$cats = $this->db->query( 'SELECT fcat_name, fcat_id, fcat_parent FROM %pfile_categories WHERE fcat_parent=%d AND fcat_id != 0', $cid );
 		if($cats && $this->db->num_rows($cats) <= 0 )
 			return '';
 

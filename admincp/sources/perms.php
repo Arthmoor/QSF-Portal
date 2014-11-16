@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -137,7 +137,9 @@ class perms extends admin
 		);
 
 		if (!isset($this->post['submit'])) {
-			$count = count($forums_list) + 1;
+			$token = $this->generate_token();
+
+			$count = count($perms) + 1;
 
 			if ($mode == 'user') {
 				$query = $this->db->fetch("SELECT user_name, user_perms FROM %pusers WHERE user_id=%d", $this->post['group']);
@@ -151,7 +153,7 @@ class perms extends admin
 			<script type='text/javascript' src='../javascript/permissions.js'></script>
 
 			<form id='form' action='$this->self?a=perms$link' method='post'>
-			<div align='center'><span style='font-size:14px;'><b>" . $this->lang->perms_for . " $label</b></span>";
+			<div class='article'><div class='title'>{$this->lang->perms_for} $label</div>";
 
 			if ($mode == 'user') {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />
@@ -161,52 +163,85 @@ class perms extends admin
 			$out .= "</div>" .
 			$this->table . "
 			<tr>
-				<td colspan='" . ($count + 1) . "' class='header'>$label</td>
+				<td colspan='8' class='header'>{$this->lang->perms_global}</td>
 			</tr>";
-
-			$out .= $this->show_headers($forums_list);
 
 			$this->iterator_init('tablelight', 'tabledark');
 
-			$i = 0;
-			foreach ($perms as $perm => $label)
-			{
-				$out .= "
-				<tr>
-					<td class='" . $this->iterate() . "'>$label</td>
-					<td class='" . $this->lastValue() . "' align='center'>
-						<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All
-					</td>";
+			$globals = array();
+			$locals = array();
 
-				if (!isset($perms_obj->globals[$perm])) {
-					foreach ($forums_list as $forum)
-					{
-						if ($perms_obj->auth($perm, $forum['forum_id'])) {
-							$checked = " checked='checked'";
-						} else {
-							$checked = '';
-						}
-
-						$out .= "\n<td class='" . $this->lastValue() . "' align='center'><input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked /></td>";
-					}
-				} elseif ($forums_list) {
-					$out .= "\n<td class='" . $this->lastValue() . "' colspan='$count' align='center'>N/A</td>";
-				}
-
-				$out .= "
-				</tr>";
-
-				$i++;
-				if (($i % 12) == 0) {
-					$out .= $this->show_headers($forums_list);
-				}
+			foreach( $perms as $perm => $label ) {
+				if ( isset($perms_obj->globals[$perm]) )
+					$globals[$perm] = $label;
+				else
+					$locals[$perm] = $label;
 			}
 
-			return $out . "
+			$i = 0;
+			$out .= "<tr>\n";
+			$this->iterate();
+			foreach ($globals as $perm => $label)
+			{
+				$out .= "<td class='" . $this->lastValue() . "' style='width:15%'>$label</td>\n" . "<td class='" . $this->lastValue() . "' align='center'>\n" . 
+					"<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All\n" .
+					"</td>\n";
+				if ( ++$i == 4 ) {
+					$i = 0;
+					$out .= "</tr><tr>";
+					$this->iterate();
+				}					
+			}
+			while ( $i++ < 4 ) {
+				$out .= "<td class='" . $this->lastValue() . "'></td><td class='" . $this->lastValue() . "'></td>";
+			}
+			$out .= "</tr>";
+			$out .= "<tr>
+				<td colspan='8' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+			</tr>" . $this->etable;
+
+			$out .= $this->table . "<tr><td colspan='" . ($count + 1) . "' class='header'>{$this->lang->perms_forum}</td></tr>";
+			$chunks = array_chunk($locals,8, true);
+			foreach( $chunks as $perms_chunk ) {
+				if ( $perms_chunk != $chunks[0] )
+
+				$out .= "
+					<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+				</tr>";
+				$out .= "<tr>\n";
+				$out .= $this->show_perm_headers( $perms_obj, $perms_chunk );
+				$i = count($perms_chunk);
+				while( $i++ < count($chunks[0]) )
+					$out .= "<td class='subheader'></td>";
+				$out .= "</tr>";
+				foreach ($forums_list as $forum) {
+					$shade = $this->iterate();
+					$out .= "<tr>\n";
+					$out .= "  <td class='$shade'>{$forum['forum_name']}</td>\n";
+					$i = 0;
+					foreach( $perms_chunk as $perm => $label ) {
+						$checked = ($perms_obj->auth($perm, $forum['forum_id'])) ? " checked='checked'" : '';
+						$out .= "  <td class='$shade' align='center'>\n";
+						$out .= "    <input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked />\n";
+						$out .= "  </td>\n";
+						$i++;
+					}
+					while( $i++ < count($chunks[0]) )
+						$out .= "<td class='$shade'></td>";
+					$out .= "</tr>\n";
+				}
+			}
+			$out .= "
 			<tr>
-				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update Permissions' /></td>
-			</tr>" . $this->etable . "</form>";
+				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+			</tr>";
+			$out .= $this->etable . "</form>";
+			return $out;
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->perms, $this->lang->invalid_token );
+			}
+
 			if (($mode == 'user') && isset($this->post['usegroup'])) {
 				$perms_obj->cube = '';
 				$perms_obj->update();
@@ -262,6 +297,17 @@ class perms extends admin
 		return $out . '</tr>';
 	}
 
+	function show_perm_headers( &$perms_obj, $perms )
+	{
+		$out = "<td class='subheader' valign='bottom'>{$this->lang->perm}</td>\n";
+		foreach ($perms as $perm => $label) {
+			if ( isset($perms_obj->globals[$perm]) )
+				continue;
+			$out .= "  <td class='subheader' align='center' valign='middle'>$label</td>";
+		}
+		return $out;
+	}
+
 	/**
 	 * Delete subscriptions that have now been made
 	 * illegal due to permissions change
@@ -281,9 +327,7 @@ class perms extends admin
 
 			while ($sub = $this->db->nqfetch($query))//if the user has subscriptions
 			{ 
-				$perms = new permissions;
-				$perms->db = &$this->db;
-				$perms->pre = &$this->pre;
+				$perms = new permissions($this);
 				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['user_perms']);
 
 				if ($sub['subscription_type'] == 'forum') {
@@ -309,9 +353,7 @@ class perms extends admin
 
 			while ($sub = $this->db->nqfetch($query))
 			{
-				$perms = new permissions;
-				$perms->db = &$this->db;
-				$perms->pre = &$this->pre;
+				$perms = new permissions($this);
 				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['group_perms']);
 
 				if ($sub['subscription_type'] == 'forum') {

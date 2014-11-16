@@ -29,6 +29,8 @@
 define('QUICKSILVERFORUMS', true);
 define('QSF_ADMIN', true);
 
+date_default_timezone_set('America/Los_Angeles');
+
 $time_now   = explode(' ', microtime());
 $time_start = $time_now[1] + $time_now[0];
 
@@ -40,13 +42,14 @@ if (!$set['installed']) {
 	header('Location: ../install/index.php');
 }
 
-ob_start();
+ob_start('ob_gzhandler');
+
+header( 'P3P: CP="CAO PSA OUR"' );
 session_start();
 
 set_error_handler('error');
 
 error_reporting(E_ALL);
-set_magic_quotes_runtime(0);
 
 // Check for any addons available
 include_addons($set['include_path'] . '/addons/');

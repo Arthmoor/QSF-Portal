@@ -42,8 +42,6 @@ class activeutil extends bbcode
 	var $totalGuests    = 0; // Total guest users online
 	var $totalMembers   = 0; // Total members online
 	
-	var $sessionid = null;
-
 	/**
 	 * Constructor
 	 *
@@ -59,7 +57,6 @@ class activeutil extends bbcode
 		$this->ip = $qsf->ip;
 		$this->agent = $qsf->agent;
 		$this->self = $qsf->self;
-		if (isset($qsf->session['id'])) $this->sessionid = $qsf->session['id'];
 	}
 
 	/**
@@ -73,9 +70,9 @@ class activeutil extends bbcode
 		if (!$this->doneUpdate) {
 			$item = $this->_get_item($action);
 	
-			$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
-				VALUES (%d, '%s', %d, %d, INET_ATON('%s'), '%s', '%s')",
-				$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid);
+			$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent) 
+				VALUES (%d, '%s', %d, %d, INET_ATON('%s'), '%s')",
+				$userid, $action, $item, $this->time, $this->ip, $this->agent);
 			$this->doneUpdate = true; // Flag to make sure we only call once
 		}
 	}

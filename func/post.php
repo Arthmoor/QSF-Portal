@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -149,7 +149,7 @@ class post extends qsfglobal
 				$shortened_title = $topic['topic_title'];
 			}
 
-			$shortened_title = $this->format($topic['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS);
+			$shortened_title = $this->format($topic['topic_title'], FORMAT_CENSOR);
 
 			$this->get['f'] = $topic['forum_id'];
 

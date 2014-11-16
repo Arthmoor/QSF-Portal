@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -141,8 +141,14 @@ class cp extends qsfglobal
 		$this->tree($this->lang->cp_changing_pass);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			return eval($this->template('CP_PASS'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->cp_changing_pass, $this->lang->invalid_token );
+			}
+
 			$result = $this->check_pass($this->post['passA'], $this->post['passB'], $this->post['old_pass']);
 
 			switch($result)
@@ -184,6 +190,8 @@ class cp extends qsfglobal
 		$this->tree($this->lang->cp_preferences);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$ViewAvCheck    = $this->user['user_view_avatars']   ? ' checked=\'checked\'' : null;
 			$ViewSiCheck    = $this->user['user_view_signatures']  ? ' checked=\'checked\'' : null;
 			$ViewEmCheck    = $this->user['user_view_emoticons'] ? ' checked=\'checked\'' : null;
@@ -201,6 +209,10 @@ class cp extends qsfglobal
 
 			return eval($this->template('CP_PREFS'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->cp_updated_prefs, $this->lang->invalid_token );
+			}
+
 			if (!isset($this->post['user_view_avatars'])) {
 				$this->post['user_view_avatars'] = 0;
 			}
@@ -276,6 +288,8 @@ class cp extends qsfglobal
 		$this->tree($this->lang->cp_editing_profile);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			list($year, $mon, $day) = explode('-', $this->user['user_birthday']);
 
 			$day_list   = $this->htmlwidgets->select_days($day);
@@ -288,6 +302,10 @@ class cp extends qsfglobal
 
 			return eval($this->template('CP_PROFILE'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->cp_updated, $this->lang->invalid_token );
+			}
+
 			$this->post['Newuser_name'] = str_replace('\\', '&#092;', $this->format($this->post['Newuser_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR));
 
 			if ($this->db->fetch("SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d",
@@ -403,6 +421,8 @@ class cp extends qsfglobal
 		$this->tree($this->lang->cp_editing_avatar);
 
 		if (!isset($this->post['submit'])) {
+			$token = $this->generate_token();
+
 			$avatar_list = $this->htmlwidgets->select_avatars($this->user['user_avatar']);
 
 			if (empty($this->user['user_avatar'])) {
@@ -423,6 +443,10 @@ class cp extends qsfglobal
 
 			return eval($this->template('CP_AVATAR'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->cp_label_edit_avatar, $this->lang->invalid_token );
+			}
+
 			$this->post['user_avatar_width'] = intval($this->post['user_avatar_width']);
 			$this->post['user_avatar_height'] = intval($this->post['user_avatar_height']);
 
@@ -618,10 +642,15 @@ class cp extends qsfglobal
 		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS;
 		
 		if (isset($this->post['submit'])) {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->cp_label_edit_sig, $this->lang->invalid_token );
+			}
+
 			$this->db->query("UPDATE %pusers SET user_signature='%s' WHERE user_id=%d",
 				$this->post['sig'],  $this->user['user_id']);
 		}
-		
+
+		$token = $this->generate_token();
 		$query = $this->db->query("SELECT user_signature FROM %pusers WHERE user_id=%d", $this->user['user_id']);
 		$pr = $this->db->nqfetch($query);
 		$preview = $this->format($pr['user_signature'], $params);

@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -48,16 +48,23 @@ class settings extends admin
 			$this->tree($this->lang->settings_new_add);
 
 			if(!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				return $this->message($this->lang->settings_new, "
 				<form action='{$this->self}?a=settings&amp;s=add' method='post'>
 				<div>
 				{$this->lang->settings_new_name}:  <input class='input' name='new_setting' type='text' value='' /><br /><br />
 				{$this->lang->settings_new_value}: <input class='input' name='new_value' type='text' value='' /><br />
+				<input type='hidden' name='token' value='$token' />
 				<input type='submit' name='submit' value='{$this->lang->submit}' />
 				</div>
 				</form>" );
 			}
 			else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->settings_new, $this->lang->invalid_token );
+				}
+
 				if(empty($this->post['new_setting'])) {
 					return $this->message($this->lang->settings_new, $this->lang->settings_new_required);
 				}
@@ -80,12 +87,16 @@ class settings extends admin
 			$this->set_title($this->lang->settings_db);
 			$this->tree($this->lang->settings_db);
 
+			$token = $this->generate_token();
+
 			return eval($this->template('ADMIN_EDIT_DB_SETTINGS'));
 			break;
 
 		case 'basic':
 			$this->set_title($this->lang->settings_basic);
 			$this->tree($this->lang->settings_basic);
+
+			$token = $this->generate_token();
 
 			$this->sets['closedtext'] = $this->format($this->sets['closedtext'], FORMAT_HTMLCHARS);
 			$this->sets['forum_name'] = $this->format($this->sets['forum_name'], FORMAT_HTMLCHARS);
@@ -117,6 +128,10 @@ class settings extends admin
 			if (!$this->post) {
 				return $this->message($this->lang->settings, $this->lang->settings_nodata);
 				break;
+			}
+
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->settings, $this->lang->invalid_token );
 			}
 
 			$tos_text = $this->post['tos'];
@@ -190,7 +205,7 @@ class settings extends admin
 
 			foreach ($this->post as $var => $val)
 			{
-				if ($var == 'tos' || $var == 'tos_files')
+				if ($var == 'tos' || $var == 'tos_files' || $var == 'token')
 					continue;
 				if (($vartypes[$var] == 'int') || ($vartypes[$var] == 'bool')) {
 					$val = intval($val);

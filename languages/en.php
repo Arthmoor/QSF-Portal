@@ -1066,7 +1066,9 @@ class en
 		$this->perms_edit_sig = 'Can edit signatures';
 		$this->perms_email_use = 'Send emails to members via the board';
 		$this->perms_for = 'Permissions For';
+		$this->perms_forum = 'Forum Permissions';
 		$this->perms_forum_view = 'View the forum';
+		$this->perms_global = 'Global Permissions';
 		$this->perms_group = 'Group';
 		$this->perms_guest1 = 'You cannot stop Guests from using the board. The board would become unusable by anyone.';
 		$this->perms_guest2 = 'You cannot stop the Guest Group from using the board. The board would become unusable by anyone.';
@@ -1112,6 +1114,7 @@ class en
 		$this->perms_topic_unpin_own = 'Unpin only topics the user has created';
 		$this->perms_topic_view = 'View topics';
 		$this->perms_topic_view_unpublished = 'View unpublished topics';
+		$this->perms_update = 'Update Permissions';
 		$this->perms_updated = 'Permissions have been updated.';
 		$this->perms_user = 'User';
 		$this->perms_user_inherit = 'The user will inherit the group\'s permissions.';
@@ -1602,6 +1605,7 @@ class en
 		$this->credit = 'Please do not remove our only credit!';
 		$this->css_edited = 'CSS file has been updated.';
 		$this->css_fioerr = 'The file could not be written to, you will need to CHMOD the file manually.';
+		$this->deleted = 'Template Deleted';
 		$this->delete_template = 'Delete Template';
 		$this->directory = 'Directory';
 		$this->display_name = 'Display Name';
@@ -1830,6 +1834,7 @@ class en
 		$this->gmt_pos95 = '[GMT+9:30] Adelaide, Darwin';
 		$this->gtalk = 'GT';
 		$this->icq = 'ICQ';
+		$this->invalid_token = 'Invalid or expired security token. Please go back and try again.';
 		$this->msn = 'MSN';
 		$this->new_message = 'New Message';
 		$this->new_poll = 'New Poll';

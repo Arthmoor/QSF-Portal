@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -167,16 +167,24 @@ class templates extends admin
 	{
 		if (!isset($this->post['skin'])) {
 			$skin_box = $this->htmlwidgets->select_skins($this->skin);
+			$token = $this->generate_token();
 
 			return $this->message($this->lang->select_skin, "
-			<form action='{$this->self}?a=templates&amp;s=upgradeskin' method='post'><div>
+			<form action='{$this->self}?a=templates&amp;s=upgradeskin' method='post'>
+				<div>
 				{$this->lang->upgrade_skin_detail}:<br /><br />
 				<select name='skin'>
 					{$skin_box}
 				</select>
-				<input type='submit' value='{$this->lang->upgrade_skin}' /></div>
+				<input type='hidden' name='token' value='$token' />
+				<input type='submit' value='{$this->lang->upgrade_skin}' />
+				</div>
 			</form>");
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->upgrade_skin, $this->lang->invalid_token );
+			}
+
 			$skin = $this->post['skin'];
 			$new_temps = array();
 			$updated_temps = array();
@@ -512,16 +520,24 @@ class templates extends admin
 	{
 		if (!isset($this->post['skin'])) {
 			$skin_box = $this->htmlwidgets->select_skins($this->skin);
+			$token = $this->generate_token();
 
 			return $this->message($this->lang->export_skin, "
 			{$this->lang->export_select}:<br /><br />
-			<form action='{$this->self}?a=templates&amp;s=export' method='post'><div>
+			<form action='{$this->self}?a=templates&amp;s=export' method='post'>
+				<div>
 				<select name='skin'>
 					{$skin_box}
 				</select>
-				<input type='submit' value='{$this->lang->export_skin}' /></div>
+				<input type='hidden' name='token' value='$token' />
+				<input type='submit' value='{$this->lang->export_skin}' />
+				</div>
 			</form>");
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->export_skin, $this->lang->invalid_token );
+			}
+
 			// Dump the skin data into an XML file
 			
 			$skin = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='%s'", $this->post['skin']);
@@ -610,18 +626,27 @@ class templates extends admin
 	{
 		if (!isset($this->post['skin'])) {
 			$skin_box = $this->htmlwidgets->select_skins($this->skin);
+			$token = $this->generate_token();
 
 			return $this->message($this->lang->select_skin, "
-			<form action='{$this->self}?a=templates&amp;s=editskin' method='post'><div>
+			<form action='{$this->self}?a=templates&amp;s=editskin' method='post'>
+				<div>
 				{$this->lang->select_skin_edit}:<br /><br />
 				<select name='skin'>
 					{$skin_box}
 				</select>
-				<input type='submit' value='{$this->lang->edit_skin}' /></div>
+				<input type='hidden' name='token' value='$token' />
+				<input type='submit' value='{$this->lang->edit_skin}' />
+				</div>
 			</form>");
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->edit_skin, $this->lang->invalid_token );
+			}
+
 			if (!isset($this->post['submit'])) {
 				$skin = $this->db->fetch("SELECT skin_name, skin_dir FROM %pskins WHERE skin_dir='%s'", $this->post['skin']);
+				$token = $this->generate_token();
 
 				return eval($this->template('ADMIN_EDIT_SKIN'));
 			} else {
@@ -688,8 +713,14 @@ class templates extends admin
 			$text = fread( $fp, filesize($file) );
 			fclose($fp);
 
+			$token = $this->generate_token();
+
 			return eval($this->template('ADMIN_CSS_EDIT'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->edit_css, $this->lang->invalid_token );
+			}
+
 			if (!isset($this->get['file'])) {
 				return $this->message( $this->lang->edit_css, $this->lang->no_file );
 			}
@@ -806,6 +837,7 @@ class templates extends admin
 	{
 		if (!isset($this->post['form'])) {
 			$skin_box = $this->htmlwidgets->select_skins($template);
+			$token = $this->generate_token();
 			$template_box = '';
 
 			$query = $this->db->query("SELECT DISTINCT(template_set) as temp_set FROM %ptemplates WHERE template_skin='%s'", $template);
@@ -818,6 +850,10 @@ class templates extends admin
 			}
 			return eval($this->template('ADMIN_ADD_TEMPLATE'));
         	} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->add, $this->lang->invalid_token );
+			}
+
 		        $template = $this->post['template'];
 		        $template_set = !empty($this->post['ntemplate_set']) ? $this->post['ntemplate_set'] : $this->post['template_set'];
 
@@ -851,6 +887,9 @@ class templates extends admin
 			{
 			   $out .= "<option value='{$data['template_name']}'>" . $data['template_name'] . "</option>";
 			}
+
+			$token = $this->generate_token();
+
 			return $this->message($this->lang->delete_template, "
 				<form action='{$this->self}?a=templates&amp;s=delete&amp;section={$this->get['section']}&amp;skin={$this->get['skin']}' method='post'>
 				<div>
@@ -858,6 +897,7 @@ class templates extends admin
 				<select name='template'>
 					{$out}
 				</select>
+				<input type='hidden' name='token' value='$token' />
 				<input type='submit' name='submit' value='{$this->lang->delete_template}' />
 				</div></form>");
 		} elseif( !isset($this->get['i'])) {
@@ -882,8 +922,12 @@ class templates extends admin
 			$out = eval($this->template('ADMIN_DELETE_TEMPLATE'));
 			return $this->message($this->lang->delete_template,$out);
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->delete_template, $this->lang->invalid_token );
+			}
+
 			$this->db->query("DELETE FROM %ptemplates WHERE template_skin='%s' AND template_name='%s'", $this->get['skin'], $this->post['submitTemp']);
-			return $this->message($this->lang->delete_template,"Template Deleted");
+			return $this->message($this->lang->delete_template,$this->lang->deleted);
 		}
 	}
 
@@ -893,6 +937,8 @@ class templates extends admin
 		$this->tree($title);
 
 		if (!isset($this->post['submitTemps'])) {
+			$token = $this->generate_token();
+
 			$query = $this->db->query("SELECT template_displayname, template_description, template_name, template_html
 				FROM %ptemplates WHERE template_skin='%s' AND template_set='%s' ORDER BY template_name", $template, $this->get['section']);
 
@@ -908,6 +954,10 @@ class templates extends admin
 			}
 			return eval($this->template('ADMIN_EDIT_TEMPLATE'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->templates, $this->lang->invalid_token );
+			}
+
 			$evil = 0;
 
 			foreach ($this->post['code'] as $var => $val)
@@ -955,16 +1005,24 @@ class templates extends admin
 	{
 		if (!isset($this->post['submit'])) {
 			$skin_box = $this->htmlwidgets->select_skins(0);
+			$token = $this->generate_token();
 
 			return $this->message($this->lang->create_skin, "
-			<form action='{$this->self}?a=templates&amp;s=skin' method='post'><div>
+			<form action='{$this->self}?a=templates&amp;s=skin' method='post'>
+				<div>
 				{$this->lang->create_new} <input type='text' name='new_name' size='24' maxlength='32' class='input' /> {$this->lang->based_on}
 				<select name='new_based'>
 					{$skin_box}
 				</select><br /><br />
-				<input type='submit' name='submit' value='{$this->lang->create_skin}' /></div>
+				<input type='hidden' name='token' value='$token' />
+				<input type='submit' name='submit' value='{$this->lang->create_skin}' />
+				</div>
 			</form>");
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->create_skin, $this->lang->invalid_token );
+			}
+
 			if (trim($this->post['new_name']) == '') {
 				return $this->message($this->lang->create_skin, $this->lang->skin_name);
 			}
@@ -993,20 +1051,20 @@ class templates extends admin
 			return $this->message($this->lang->create_skin, $this->lang->skin_created, $this->lang->continue, "$this->self?a=templates&amp;s=html&amp;skin=$name");
 		}
 	}
-	
+
 	function recursive_dir($dirname, $virtual_path)
 	{
 		$files = array();
-		
+
 		$dp = opendir($dirname);
-	
+
 		while (($file = readdir($dp)) !== false)
 		{
 			if ($file{0} == '.') {
 				// Don't include hidden files
 				continue;
 			}
-	
+
 			$real_path = $dirname . '/' . $file;
 	
 			if (is_dir($real_path)) {
@@ -1015,12 +1073,12 @@ class templates extends admin
 				$files[] = $virtual_path . '/' . $file;
 			}
 		}
-	
+
 		closedir($dp);
-		
+
 		return $files;
 	}
-	
+
 	function _make_dir($filename)
 	{
 		$path_parts = explode('/', $filename);
@@ -1030,12 +1088,12 @@ class templates extends admin
 		for ($i = 0; $i < count($path_parts); $i++)
 		{
 			$check_dir_exists .= $path_parts[$i];
-			
+
 			if (!is_dir($check_dir_exists)) {
 				mkdir($check_dir_exists);
 				$this->chmod($check_dir_exists, 0777);
 			}
-				
+
 			$check_dir_exists .= '/';
 		}
 	}

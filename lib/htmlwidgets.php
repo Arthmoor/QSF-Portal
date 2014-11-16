@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -580,6 +580,7 @@ class htmlwidgets extends htmltools
 	 **/
 	function tree($label, $link = null)
 	{
+		$label = htmlspecialchars($label);
 		$this->tree .= ' <b>&raquo;</b> ' . ($link ? "<a href='$link'>$label</a>" : $label);
 	}
 

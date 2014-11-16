@@ -29,18 +29,14 @@
 define('QUICKSILVERFORUMS', true);
 define('QSF_PUBLIC', true);
 
+date_default_timezone_set('America/Los_Angeles');
+
 $time_now   = explode(' ', microtime());
 $time_start = $time_now[1] + $time_now[0];
 
 srand((double)microtime() * 1234567);
 
-// Zend_Hash_Del_Key_Or_Index Vulnerability - We don't use $_REQUEST, so kill it.
-if (@ini_get('register_globals')) {
-	foreach ( $_REQUEST as $var => $null ) {
-		unset($$var);
-		unset($$var);
-	}
-}
+$_REQUEST = array();
 
 require './settings.php';
 $set['include_path'] = '.';
@@ -53,7 +49,6 @@ if (!$set['installed']) {
 set_error_handler('error');
 
 error_reporting(E_ALL);
-set_magic_quotes_runtime(0);
 
 // Check for any addons available
 include_addons($set['include_path'] . '/addons/');
@@ -98,18 +93,7 @@ $qsf->get['a'] = $module;
 $qsf->sets     = $set;
 $qsf->modules  = $modules;
 
-// If zlib isn't available, then trying to use it doesn't make much sense.
-if (extension_loaded('zlib')) {
-	if ($qsf->sets['output_buffer'] && isset($qsf->server['HTTP_ACCEPT_ENCODING']) && stristr($qsf->server['HTTP_ACCEPT_ENCODING'], 'gzip')) {
-		if( !@ob_start('ob_gzhandler') ) {
-			ob_start();
-		}
-	} else {
-		ob_start();
-	}
-} else {
-	ob_start();
-}
+ob_start('ob_gzhandler');
 
 header( 'P3P: CP="CAO PSA OUR"' );
 session_start();
@@ -117,8 +101,6 @@ session_start();
 $qsf->user_cl = new $modules['user']($qsf);
 $qsf->user    = $qsf->user_cl->login();
 $qsf->lang    = $qsf->get_lang($qsf->user['user_language'], $qsf->get['a']);
-$qsf->session = &$_SESSION;
-$qsf->session['id'] = session_id();
 
 if (!isset($qsf->get['skin'])) {
 	$qsf->skin = $qsf->user['skin_dir'];
@@ -128,13 +110,13 @@ if (!isset($qsf->get['skin'])) {
 
 $qsf->init();
 
-$server_load = $qsf->get_load();
-
-$qsf->tree($qsf->sets['forum_name'], "$qsf->self?a=board");
-
 if ($qsf->is_banned()) {
 	error(QUICKSILVER_NOTICE, $qsf->lang->main_banned);
 }
+
+$server_load = $qsf->get_load();
+
+$qsf->tree($qsf->sets['forum_name'], "$qsf->self?a=board");
 
 $reminder = null;
 $reminder_text = null;

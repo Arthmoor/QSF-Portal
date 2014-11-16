@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -62,12 +62,21 @@ class groups extends admin
 			$this->tree($this->lang->groups_create);
 
 			if (!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				return $this->message($this->lang->groups_create, "
-				<form action='{$this->self}?a=groups&amp;s=add' method='post'><div>
+				<form action='{$this->self}?a=groups&amp;s=add' method='post'>
+					<div>
 					{$this->lang->groups_create_new} <input class='input' name='group_name' /> {$this->lang->groups_based_on} " . $this->list_groups(USER_MEMBER) . "
-					<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
+					<input type='hidden' name='token' value='$token' />
+					<input type='submit' name='submit' value='{$this->lang->submit}' />
+					</div>
 				</form>");
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->groups_create, $this->lang->invalid_token );
+				}
+
 				if (!isset($this->post['user_group'])) {
 					$this->post['user_group'] = USER_MEMBER;
 				}
@@ -97,6 +106,8 @@ class groups extends admin
 						<input type='submit' name='choose_group' value='{$this->lang->submit}' /></div>
 					</form>");
 				} else {
+					$token = $this->generate_token();
+
 					if (!isset($this->post['group'])) {
 						return $this->message($this->lang->groups_edit, $this->lang->groups_no_group);
 					}
@@ -114,6 +125,10 @@ class groups extends admin
 					return eval($this->template('ADMIN_GROUP_EDIT'));
 				}
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->groups_edit, $this->lang->invalid_token );
+				}
+
 				if (!isset($this->post['group'])) {
 					return $this->message($this->lang->groups_edit, $this->lang->groups_no_group);
 				}
@@ -145,17 +160,26 @@ class groups extends admin
 			}
 
 			if (!isset($this->post['submit'])) {
+				$token = $this->generate_token();
+
 				return $this->message($this->lang->groups_delete, "
-				<form action='$this->self?a=groups&amp;s=delete' method='post'><div>
+				<form action='$this->self?a=groups&amp;s=delete' method='post'>
+					<div>
 					{$this->lang->groups_the} " . $this->list_groups(-1, 'old_group', true) . " {$this->lang->groups_will_be}<br />
 					{$this->lang->groups_will_become} " . $this->list_groups(USER_MEMBER, 'new_group') . "<br /><br />
 					<hr>
 					<input type='checkbox' name='confirm' id='confirm' /> <label for='confirm'>{$this->lang->groups_i_confirm}</label>
 					<hr /><br />
 					{$this->lang->groups_only_custom}<br /><br />
-					<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
+					<input type='hidden' name='token' value='$token' />
+					<input type='submit' name='submit' value='{$this->lang->submit}' />
+					</div>
 				</form>");
 			} else {
+				if( !$this->is_valid_token() ) {
+					return $this->message( $this->lang->groups_delete, $this->lang->invalid_token );
+				}
+
 				if (!isset($this->post['old_group']) || !isset($this->post['confirm'])) {
 					return $this->message($this->lang->groups_delete, $this->lang->groups_no_action);
 				}

@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  * 
  * MercuryBoard
@@ -55,6 +55,7 @@ class censoring extends admin
 
 		if (!isset($this->post['submit'])) {
 			$words = null;
+			$token = $this->generate_token();
 
 			$query = $this->db->query("SELECT * FROM %preplacements WHERE replacement_type='censor' ORDER BY replacement_id");
 			while ($word = $this->db->nqfetch($query))
@@ -66,6 +67,10 @@ class censoring extends admin
 
 			return eval($this->template('ADMIN_CENSOR_FORM'));
 		} else {
+			if( !$this->is_valid_token() ) {
+				return $this->message( $this->lang->censor, $this->lang->invalid_token );
+			}
+
 			$words = preg_replace('/[^a-zA-Z0-9\s\*"\'=]/', '', $this->post['words']);
 			$words = str_replace('*', '(.*?)', $words);
 			$words = explode("\n", $words);

@@ -7,7 +7,7 @@
  * Based on:
  *
  * Quicksilver Forums
- * Copyright (c) 2005-2006 The Quicksilver Forums Development Team
+ * Copyright (c) 2005-2009 The Quicksilver Forums Development Team
  * http://www.quicksilverforums.com/
  *
  * This program is free software; you can redistribute it and/or
@@ -657,7 +657,8 @@ class bbcode extends htmltools
 
 	function _process_youtube(&$node)
 	{
-		return '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/'.$node->text.'"></param><embed src="http://www.youtube.com/v/'.$node->text.'" type="application/x-shockwave-flash" width="425" height="350"></embed></object>';
+		$node->text = str_replace( 'watch?v=', 'v/', $node->text );
+		return '<object type="application/x-shockwave-flash" width="640" height="400" data="'.$node->text.'"><param name="movie" value="'.$node->text.'" /><param name="allowscriptaccess" value="always" /><param name="wmode" value="transparent" /></object>';
 	}
 
 	function _process_google_video(&$node)
