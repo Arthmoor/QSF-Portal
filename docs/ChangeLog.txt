@@ -8,6 +8,7 @@ Changes for 1.6:
 * Emoticons are now handled independently of skins and can be added on the fly as desired.
 * Added a new setting to block new user registration.
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
+* Default skin is now served as HTML5 instead of XHTML 1.1.
 
    Bugs addressed:
 

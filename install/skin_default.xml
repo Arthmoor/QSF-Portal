@@ -1024,14 +1024,14 @@
       <displayname>AdminCP Index</displayname>
       <description>The index page for the AdminCP</description>
       <html><![CDATA[
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$admin->user['user_language']}" dir="{$admin->lang->direction}">
-<head>
- <title>{$title}</title>
- <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$admin->lang->charset}" />
- <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/styles.css" />
- <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/acp.css" />
-</head>
+<!DOCTYPE html>
+<html lang="{$admin->user['user_language']}">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset={$admin->lang->charset}" />
+  <title>{$title}</title>
+  <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/styles.css" />
+  <link rel="stylesheet" type="text/css" href="../skins/{$admin->skin}/acp.css" />
+ </head>
 
 <body>
  <div id="container">	
@@ -2961,10 +2961,10 @@ enable('$init');
       <displayname>Universal Template</displayname>
       <description>Change the header and footer that will appear on every page.</description>
       <html><![CDATA[
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$qsf->user['user_language']}" dir="{$qsf->lang->direction}">
+<!DOCTYPE html>
+<html lang="{$qsf->user['user_language']}">
  <head>
-  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={$qsf->lang->charset}" />
+  <meta http-equiv="Content-Type" content="text/html; charset={$qsf->lang->charset}" />
   <meta name="keywords" content="{$meta_keywords}" />
   <meta name="description" content="{$meta_desc}" />
   <title>{$title}</title>
@@ -3003,7 +3003,7 @@ enable('$init');
   </div>
   <div id="footer">
    {$copyright}
-   <br />100% Valid &lsaquo;&rsaquo; <a href="http://validator.w3.org/check?uri=referer">XHTML1.1</a> <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+   <br />100% Valid &lsaquo;&rsaquo; <a href="http://validator.w3.org/check?uri=referer">HTML5</a> <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a>
    Best viewed at 1024x768 or better resolution.
    <br />{$servertime}
   </div>

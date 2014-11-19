@@ -816,6 +816,21 @@ class qsfglobal
 			$this->db->query("UPDATE %psettings SET settings_version=2");
 			$this->sets = $settings_array;
 			$this->write_sets();
+
+			$perms = $this->db->query( 'SELECT group_id, group_perms, group_file_perms FROM %pgroups' );
+
+			// Settings version 1 also means the perm arrays are not updated so they need fixing now too.
+			while( ($perm = $this->db->nqfetch($perms)) )
+			{
+				$forum_array = unserialize( $perm['group_perms'] );
+				$file_array = unserialize( $perm['group_file_perms'] );
+
+				$new_forum_array = json_encode( $forum_array );
+				$new_file_array = json_encode( $file_array );
+
+				$this->db->query( "UPDATE %pgroups SET group_perms='%s', group_file_perms='%s' WHERE group_id=%d",
+					$new_forum_array, $new_file_array, $perm['group_id'] );
+			}
 		} else {
 			$settings_array = array_merge($sets, json_decode($settings['settings_data'], true));
 		}

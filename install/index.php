@@ -171,8 +171,8 @@ if ($mode) {
 		$mysqli_client = '';
 	}
 
-	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
+	echo "<!DOCTYPE html>
+<html lang=\"en-US\">
 <head>
  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
  <title>{$qsf->name} Installer</title>
@@ -230,7 +230,7 @@ if ($mode) {
    <div id='bottom'>&nbsp;</div>
   </div>
   <div id='footer'>
-   <a href='http://www.qsfportal.com'>{$qsf->name}</a> {$qsf->version} &copy; 2005-2011 The {$qsf->name} Development Team<br />
+   <a href='https://github.com/Arthmoor/QSF-Portal'>{$qsf->name}</a> {$qsf->version} &copy; 2005-2015 The {$qsf->name} Development Team<br />
   </div>
  </body>
 </html>";
