@@ -2666,7 +2666,7 @@ enable('$init');
       <displayname>File Upload</displayname>
       <description>Format for the file submission form.</description>
       <html><![CDATA[
-<form action="{$this->site}/files/upload/" method="post" enctype="multipart/form-data">
+<form action="{$this->self}?a=files&amp;s=upload" method="post" enctype="multipart/form-data">
 {$this->table}
  <div class="title">{$this->lang->files_upload}</div>
  <span class="field">{$this->lang->files_name}:</span>
