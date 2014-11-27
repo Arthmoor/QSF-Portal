@@ -251,7 +251,7 @@ class register extends qsfglobal
 		$message .= "{$this->lang->register_email_msg}\n";
 		$message .= "{$this->lang->register_email_msg2} {$this->sets['forum_name']}.\n\n";
 		$message .= "{$this->lang->register_email_msg3}\n";
-		$message .= "{$this->sets['loc_of_board']}{$this->mainfile}?a=register&s=activate&e=" . md5($email . $username . $pass . $jointime) ."\n\n";
+		$message .= "{$this->site}/index.php?a=register&s=activate&e=" . md5($email . $username . $pass . $jointime) ."\n\n";
 
 		$mailer->setSubject("{$this->sets['forum_name']} - {$this->lang->register_activating}");
 		$mailer->setMessage($message);
