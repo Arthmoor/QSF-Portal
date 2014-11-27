@@ -165,7 +165,7 @@ class bbcode
 			'<li>$1</li>',
 			'<p>$1</p>',
 			'<br />',
-			'&reg;',
+			'&trade;',
 			'&copy;',
 			 );
 
@@ -364,7 +364,7 @@ class bbcode
 		return '<a href="' . $url . '">' . $text . '</a>';
 	}
 
-	private function process_youtube($in)
+	private function process_youtube( $matches = array() )
 	{
 		$in = $matches[1];
 
