@@ -839,7 +839,7 @@
 </form>
       ]]></html>
     </template>
-    <template><set>forums</set><name>ADMIN_EMOTICONS_DISPLAY</name>
+    <template><set>emoticon_control</set><name>ADMIN_EMOTICONS_DISPLAY</name>
       <displayname>AdminCP Emoticons Display</displayname>
       <description>Format for individual emoticons in the display list.</description>
       <html><![CDATA[
@@ -853,7 +853,7 @@
   </tr>
       ]]></html>
     </template>
-    <template><set>forums</set><name>ADMIN_EMOTICONS_EDIT</name>
+    <template><set>emoticon_control</set><name>ADMIN_EMOTICONS_EDIT</name>
       <displayname>AdminCP Emoticon Editing</displayname>
       <description>Format for individual emoticons in the editing screen.</description>
       <html><![CDATA[
@@ -871,7 +871,7 @@
   </tr>
       ]]></html>
     </template>
-    <template><set>forums</set><name>ADMIN_EMOTICONS_EDIT_CONTROL</name>
+    <template><set>emoticon_control</set><name>ADMIN_EMOTICONS_EDIT_CONTROL</name>
       <displayname>AdminCP Emoticons Edit Controller</displayname>
       <description>Format for the emoticon editing screen.</description>
       <html><![CDATA[
