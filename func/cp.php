@@ -199,57 +199,61 @@ class cp extends qsfglobal
 
 			return eval($this->template('CP_PREFS'));
 		} else {
+			$view_avatars = $view_sigs = $view_emotes = $show_email = $email_form = $user_pm = $pm_mail = $active = 0;
+
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->cp_updated_prefs, $this->lang->invalid_token );
 			}
 
-			if (!isset($this->post['user_view_avatars'])) {
-				$this->post['user_view_avatars'] = 0;
+			if (isset($this->post['user_view_avatars'])) {
+				$view_avatars = 1;
 			}
 
-			if (!isset($this->post['user_view_signatures'])) {
-				$this->post['user_view_signatures'] = 0;
+			if (isset($this->post['user_view_signatures'])) {
+				$view_sigs = 1;
 			}
 
-			if (!isset($this->post['user_view_emoticons'])) {
-				$this->post['user_view_emoticons'] = 0;
+			if (isset($this->post['user_view_emoticons'])) {
+				$view_emotes = 1;
 			}
 
-			if (!isset($this->post['user_email_show'])) {
-				$this->post['user_email_show'] = 0;
+			if (isset($this->post['user_email_show'])) {
+				$show_email = 1;
 			}
 
-			if (!isset($this->post['user_email_form'])) {
-				$this->post['user_email_form'] = 0;
+			if (isset($this->post['user_email_form'])) {
+				$email_form = 1;
 			}
 
-			if (!isset($this->post['user_pm'])) {
-				$this->post['user_pm'] = 0;
+			if (isset($this->post['user_pm'])) {
+				$user_pm = 1;
 			}
 
-			if (!isset($this->post['user_pm_mail'])) {
-				$this->post['user_pm_mail'] = 0;
+			if (isset($this->post['user_pm_mail'])) {
+				$pm_mail = 1;
 			}
 
-			if (!isset($this->post['user_active'])) {
-				$this->post['user_active'] = 0;
+			if (isset($this->post['user_active'])) {
+				$active = 1;
 			}
 
-			if (!isset($this->post['user_posts_page'])) {
-				$this->post['user_posts_page'] = 0;
-			} else {
-				if ($this->post['user_posts_page'] > 99) {
-					$this->post['user_posts_page'] = 99;
-				}
+			$posts_per_page = $this->sets['posts_per_page'];
+			if (isset($this->post['user_posts_page'])) {
+				$posts_per_page = intval($this->post['user_posts_page']);
 			}
+			if ( $posts_per_page < 0 )
+				$posts_per_page = 0;
+			if ($posts_per_page > 99)
+				$post_per_page = 99;
 
-			if (!isset($this->post['user_topics_page'])) {
-				$this->post['user_topics_page'] = 0;
-			} else {
-				if ($this->post['user_topics_page'] > 99) {
-					$this->post['user_topics_page'] = 99;
-				}
+			$topic_per_page = $this->sets['topics_per_page'];
+			if (isset($this->post['user_topics_page'])) {
+				$topics_per_page = intval($this->post['user_topics_page']);
 			}
+			if( $topics_per_page < 0 )
+				$topics_per_page = 0;
+			if( $topics_per_page > 99 )
+				$topics_per_page = 99;
 
 			$this->post['user_language'] = preg_replace('/[^a-zA-Z0-9\-]/', '', $this->post['user_language']);
 
@@ -259,10 +263,9 @@ class cp extends qsfglobal
 				  user_timezone='%s', user_skin='%s', user_language='%s',
 				  user_topics_page=%d, user_posts_page=%d
 				WHERE user_id=%d",
-				intval($this->post['user_view_avatars']), intval($this->post['user_view_signatures']), intval($this->post['user_view_emoticons']),
-				intval($this->post['user_email_show']), intval($this->post['user_email_form']), intval($this->post['user_active']),
-				intval($this->post['user_pm']), intval($this->post['user_pm_mail']), $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
-				intval($this->post['user_topics_page']),  intval($this->post['user_posts_page']), $this->user['user_id']);
+				$view_avatars, $view_sigs, $view_emotes, $show_email, $email_form, $active,
+				$user_pm, $pm_mail, $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
+				$topic_per_page, $posts_per_page, $this->user['user_id']);
 
 			return $this->message($this->lang->cp_updated_prefs, $this->lang->cp_been_updated_prefs);
 		}
@@ -734,19 +737,19 @@ class cp extends qsfglobal
 			return $this->message($this->lang->cp_cp, $this->lang->cp_sub_no_params);
 		}
 
-		$this->get['item'] = intval($this->get['item']);
+		$item = intval($this->get['item']);
 
 		$expires = $this->time + 2592000; // 30 days
 
 		$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_type='%s' AND subscription_item=%d",
-			$this->user['user_id'], $this->get['type'], $this->get['item']);
+			$this->user['user_id'], $this->get['type'], $item);
 		$this->db->query("INSERT INTO %psubscriptions (subscription_user, subscription_type, subscription_item, subscription_expire)
 			VALUES (%d, '%s', %d, %d)",
-			$this->user['user_id'], $this->get['type'], $this->get['item'], $expires);
+			$this->user['user_id'], $this->get['type'], $item, $expires);
 
 		return $this->message($this->lang->cp_cp, sprintf($this->lang->cp_sub_success, $this->get['type']));
 	}
-	
+
 	/**
 	 * Delete the old uploaded avatar if any
 	 *

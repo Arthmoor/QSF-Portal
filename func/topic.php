@@ -67,29 +67,42 @@ class topic extends qsfglobal
 
 	function get_topic()
 	{
+		$num = $min = $topicnum = $postnum = 0;
+		$unread = false;
+
 		if (isset($this->get['num'])) {
-			$this->get['num'] = intval($this->get['num']);
-		} elseif ($this->user['user_posts_page'] != 0) {
-			$this->get['num'] = $this->user['user_posts_page'];
+			$num = intval($this->get['num']);
+		} elseif ($this->user['user_posts_page'] > 0) {
+			$num = $this->user['user_posts_page'];
 		} else {
-			$this->get['num'] = $this->sets['posts_per_page'];
+			$num = $this->sets['posts_per_page'];
 		}
-		$this->get['min'] = isset($this->get['min']) ? intval($this->get['min']) : 0;
-		$this->get['t']   = isset($this->get['t'])   ? intval($this->get['t'])   : 0;
+
+		$min = isset($this->get['min']) ? intval($this->get['min']) : 0;
+		$topicnum = isset($this->get['t']) ? intval($this->get['t']) : 0;
+
+		if( $min < 0 )
+			$min = 0;
+		if( $num <= 0 )
+			$num = $this->sets['posts_per_page'];
+		if( $topicnum < 0 )
+			$topicnum = 0;
+
 		if (isset($this->get['view'])) {
                         $this->validator->validate($this->get['view'], TYPE_STRING, array('newer', 'older'), false);
                 } else {
                         $this->get['view']  = false;
                 }
+
 		if (isset($this->get['p'])) {
-                        $this->validator->validate($this->get['p'], TYPE_UINT);
+			$postnum = intval($this->get['p']);
+                        $this->validator->validate($postnum, TYPE_UINT);
                 } else {
-                        $this->get['p']  = false;
+                        $postnum = false;
                 }
+
 		if (isset($this->get['unread'])) {
-                        $this->get['unread']  = true;
-                } else {
-                        $this->get['unread']  = false;
+                        $unread = true;
                 }
 		
 		$topic = $this->db->fetch("
@@ -99,7 +112,7 @@ class topic extends qsfglobal
 			FROM
 				%ptopics t, %pforums f
 			WHERE
-				t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $this->get['t'], TOPIC_TYPE_FORUM);
+				t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $topicnum, TOPIC_TYPE_FORUM);
 
 		if (!$topic) {
 			$this->set_title($this->lang->topic_not_found);
@@ -164,31 +177,32 @@ class topic extends qsfglobal
 				}
 			}
                 }
-		if ($this->get['unread']) {
+
+		if ($unread) {
 			// Jump to the first unread post (or the last post)
-			$timeread = $this->readmarker->topic_last_read($this->get['t']);
-			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_time < %d",
-				$this->get['t'], $timeread);
+			$timeread = $this->readmarker->topic_last_read($topicnum);
+			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_time < %d", $topicnum, $timeread);
 			if ($posts) $postCount = $posts['posts'] + 1;
 			else $postCount = 0;
-			$this->get['min'] = 0; // Start at the first page regardless
-			while ($postCount >= ($this->get['min'] + $this->get['num'])) {
-				$this->get['min'] += $this->get['num'];
-			}
-		}
-		if ($this->get['p']) {
-			// We need to find what page this post exists on!
-			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_id < %d",
-				$this->get['t'], $this->get['p']);
-			if ($posts) $postCount = $posts['posts'] + 1;
-			else $postCount = 0;
-			$this->get['min'] = 0; // Start at the first page regardless
-			while ($postCount > ($this->get['min'] + $this->get['num'])) {
-				$this->get['min'] += $this->get['num'];
+			$min = 0; // Start at the first page regardless
+			while ($postCount >= ($min + $num)) {
+				$min += $num;
 			}
 		}
 
-		$this->db->query("UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d", $this->get['t']);
+		if ($postnum) {
+			// We need to find what page this post exists on!
+			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_id < %d",
+				$topicnum, $postnum);
+			if ($posts) $postCount = $posts['posts'] + 1;
+			else $postCount = 0;
+			$min = 0; // Start at the first page regardless
+			while ($postCount > ($min + $num)) {
+				$min += $num;
+			}
+		}
+
+		$this->db->query("UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d", $topicnum);
 
 		$topic['topic_title'] = $this->format($topic['topic_title'], FORMAT_CENSOR);
 		$title_html = $this->format($topic['topic_title'], FORMAT_HTMLCHARS);
@@ -197,7 +211,7 @@ class topic extends qsfglobal
 		$this->lang->forum(); // needed for 'Forum' and 'Topic'
 		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;f=' . $topic['topic_forum'],
 			"{$this->lang->forum_forum}: {$topic['forum_name']}");
-		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;t=' . $this->get['t'],
+		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;t=' . $topicnum,
 			"{$this->lang->forum_topic}: $title_html");
 
 		if (strlen($topic['topic_title']) > 30) {
@@ -222,43 +236,43 @@ class topic extends qsfglobal
 
 		if ($topic['topic_modes'] & TOPIC_LOCKED) {
 			if ($this->perms->auth('topic_unlock', $topic['topic_forum']) || ($this->perms->auth('topic_unlock_own', $topic['topic_forum']) && $user_started_topic)) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_unlock . '</a>';
+				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_unlock . '</a>';
 			}
 		} else {
 			if ($this->perms->auth('topic_lock', $topic['topic_forum']) || ($this->perms->auth('topic_lock_own', $topic['topic_forum']) && $user_started_topic)) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_lock . '</a>';
+				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_lock . '</a>';
 			}
 		}
 
 		if ($topic['topic_modes'] & TOPIC_PINNED) {
 			if ($this->perms->auth('topic_unpin', $topic['topic_forum']) || ($this->perms->auth('topic_unpin_own', $topic['topic_forum']) && $user_started_topic)) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_unpin . '</a>';
+				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_unpin . '</a>';
 			}
 		} else {
 			if ($this->perms->auth('topic_pin', $topic['topic_forum']) || ($this->perms->auth('topic_pin_own', $topic['topic_forum']) && $user_started_topic)) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_pin . '</a>';
+				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_pin . '</a>';
 			}
 		}
 
 		if ($this->perms->auth('topic_delete', $topic['topic_forum']) || ($this->perms->auth('topic_delete_own', $topic['topic_forum']) && $user_started_topic)) {
-			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=del_topic&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_delete . '</a>';
+			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=del_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_delete . '</a>';
 		}
 
 		if ($this->perms->auth('topic_move', $topic['topic_forum']) || ($this->perms->auth('topic_move_own', $topic['topic_forum']) && $user_started_topic)) {
-			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=move&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_move . '</a>';
+			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=move&amp;t=' . $topicnum . '">' . $this->lang->topic_move . '</a>';
 		}
 
 		if ($this->perms->auth('topic_edit', $topic['topic_forum']) || ($this->perms->auth('topic_edit_own', $topic['topic_forum']) && $user_started_topic)) {
-			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=edit_topic&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_edit . '</a>';
+			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=edit_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_edit . '</a>';
 		}
 
 		if ($topic['topic_modes'] & TOPIC_PUBLISH) {
 			if ($this->perms->auth('topic_publish', $topic['topic_forum'])) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_unpublish . '</a>';
+				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_unpublish . '</a>';
 			}
 		} else {
 			if ($this->perms->auth('topic_publish', $topic['topic_forum'])) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_publish . '</a>';
+				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_publish . '</a>';
 			}
 		}
 		$splitmode = false;
@@ -267,11 +281,11 @@ class topic extends qsfglobal
 			if ($this->get['s'] == 'split') {
 				$this->templater->add_templates('mod');
 				$splitmode = true;
-				$this->get['min'] = 0;
-				$this->get['num'] = $topic['topic_replies'] + 1;
+				$min = 0;
+				$num = $topic['topic_replies'] + 1;
 			}
 
-			$opts[] = '<a href="' . $this->self . '?a=topic&amp;s=split&amp;t=' . $this->get['t'] . '">' . $this->lang->topic_split . '</a>';
+			$opts[] = '<a href="' . $this->self . '?a=topic&amp;s=split&amp;t=' . $topicnum . '">' . $this->lang->topic_split . '</a>';
 		}
 
 		$topic_icon = null;
@@ -287,7 +301,7 @@ class topic extends qsfglobal
 
 		if ($topic['topic_modes'] & TOPIC_POLL) {
 			$this->templater->add_templates('poll');
-			$PollDisplay = $this->get_poll($this->get['t'], $topic['topic_forum'], $title_html, $topic['topic_modes'], $topic['topic_poll_options']);
+			$PollDisplay = $this->get_poll($topicnum, $topic['topic_forum'], $title_html, $topic['topic_modes'], $topic['topic_poll_options']);
  		} else {
 			$PollDisplay = null;
 		}
@@ -303,7 +317,7 @@ class topic extends qsfglobal
 			WHERE
 			  p.post_topic = %d AND
 			  a.attach_post = p.post_id",
-			$this->get['t']);
+			$topicnum);
 
 		$attachments = array();
 
@@ -336,7 +350,7 @@ class topic extends qsfglobal
 			ORDER BY
 			  p.post_time
 			LIMIT %d, %d",
-			$this->get['t'], $this->get['min'], $this->get['num']);
+			$topicnum, $min, $num);
 
 		$i = 0;
 		$split = '';
@@ -347,7 +361,7 @@ class topic extends qsfglobal
 		while ($post = $this->db->nqfetch($query))
 		{
 			$newest_post_read = $post['post_time'];
-			$post['newpost'] = !$this->readmarker->is_post_read($this->get['t'], $post['post_time']);
+			$post['newpost'] = !$this->readmarker->is_post_read($topicnum, $post['post_time']);
 			if ($first_unread_post === false && $post['newpost']) {
 				$first_unread_post = true;
 			} else if ($first_unread_post === true) {
@@ -541,14 +555,14 @@ class topic extends qsfglobal
 				$can_reply = true;
 			}
 
-			$post_num = ($i + 1) + $this->get['min'];
+			$post_num = ($i + 1) + $min;
 			$posts .= eval($this->template('TOPIC_POST'));
 			$i++;
 		}
 
-		$pagelinks = $this->htmlwidgets->get_pages($topic['topic_replies'] + 1, 'a=topic&amp;t=' . $this->get['t'], $this->get['min'], $this->get['num']);
-		
-		$this->readmarker->mark_topic_read($this->get['t'], $newest_post_read);
+		$pagelinks = $this->htmlwidgets->get_pages($topic['topic_replies'] + 1, 'a=topic&amp;t=' . $topicnum, $min, $num);
+
+		$this->readmarker->mark_topic_read($topicnum, $newest_post_read);
 
 		$can_post = false;
 		if ($this->perms->auth('post_create', $topic['topic_forum'])) {
@@ -575,7 +589,10 @@ class topic extends qsfglobal
 			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);
 		}
 
-		$this->get['id'] = intval($this->get['id']);
+		$id = intval($this->get['id']);
+
+		if( $id < 0 )
+			$id = 0;
 
 		$data = $this->db->fetch("
 			SELECT
@@ -585,11 +602,11 @@ class topic extends qsfglobal
 			WHERE
 			  a.attach_post = p.post_id AND
 			  p.post_topic = t.topic_id AND
-			  a.attach_id = %d", $this->get['id']);
+			  a.attach_id = %d", $id);
 
 		if ($this->perms->auth('post_attach_download', $data['topic_forum'])) {
 			$this->nohtml = true;
-			$this->db->query("UPDATE %pattach SET attach_downloads=attach_downloads+1 WHERE attach_id=%d", $this->get['id']);
+			$this->db->query("UPDATE %pattach SET attach_downloads=attach_downloads+1 WHERE attach_id=%d", $id);
 
 			// Need to terminate and unlock the session at this point or the site will stall for the current user.
 			session_write_close();

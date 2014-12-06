@@ -54,7 +54,7 @@ class conversation extends qsfglobal
 
 		if (isset($this->get['num'])) {
 			$n = intval($this->get['num']);
-		} elseif ($this->user['user_topics_page'] != 0) {
+		} elseif ($this->user['user_topics_page'] > 0) {
 			$n = $this->user['user_topics_page'];
 		} else {
 			$n = $this->sets['topics_per_page'];
