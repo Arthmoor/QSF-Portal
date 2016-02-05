@@ -365,7 +365,7 @@ $queries[] = "DROP TABLE IF EXISTS %pusers";
 $queries[] = "CREATE TABLE %pusers (
   user_id int(10) unsigned NOT NULL auto_increment,
   user_name varchar(255) NOT NULL default '',
-  user_password varchar(32) NOT NULL default '',
+  user_password varchar(255) NOT NULL default '',
   user_joined int(10) unsigned NOT NULL default '0',
   user_level tinyint(3) unsigned NOT NULL default '1',
   user_title varchar(100) NOT NULL default '',

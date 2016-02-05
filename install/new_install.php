@@ -258,7 +258,7 @@ break;
 			$this->sets['loc_of_board'] = $this->post['site_url'];
 			$this->sets['forum_name'] = $this->post['site_name'];
 
-			$this->post['admin_pass'] = md5($this->post['admin_pass']);
+			$admin_pass = $this->qsfp_password_hash($this->post['admin_pass']);
 
 			$this->post['admin_name'] = str_replace(
 				array('&amp;#', '\''),
@@ -348,7 +348,7 @@ break;
 
 			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height)
 				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', %d, '%s', '%s', %d, %d)",
-				$this->post['admin_name'], $this->post['admin_pass'], USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime'], './avatars/avatar.jpg', 'local', 100, 100);
+				$this->post['admin_name'], $admin_pass, USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime'], './avatars/avatar.jpg', 'local', 100, 100);
 			$admin_uid = $this->db->insert_id("users");
 
 			$this->sets['last_member'] = $this->post['admin_name'];
@@ -461,7 +461,7 @@ Have fun and enjoy your new site!";
 			$this->write_sets();
 
 			setcookie($this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			setcookie($this->sets['cookie_prefix'] . 'pass', $this->post['admin_pass'], $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			setcookie($this->sets['cookie_prefix'] . 'pass', $admin_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 
 			if (!$writeSetsWorked) {
 				echo "Congratulations! Your board has been installed.<br />

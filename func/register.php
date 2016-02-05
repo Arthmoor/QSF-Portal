@@ -182,7 +182,7 @@ class register extends qsfglobal
 				return $this->message($this->lang->register_reging, $this->lang->register_email_used);
 			}
 
-			$pass = md5($pass);
+			$pass = $this->qsfp_password_hash($pass);
 			$level = $this->get_level(0);
 
 			if ($this->sets['emailactivation']) {

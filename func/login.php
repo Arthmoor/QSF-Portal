@@ -93,10 +93,7 @@ class login extends qsfglobal
 			if( !isset($this->post['pass']) )
 				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
 
-			$this->post['pass'] = str_replace('$', '', $this->post['pass']);
-			$this->post['pass'] = md5($this->post['pass']);
-
-			if ($this->post['pass'] == $pass) {
+			if( password_verify( $this->post['pass'], $pass ) ) {
 				setcookie($this->sets['cookie_prefix'] . 'user', $user, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 				setcookie($this->sets['cookie_prefix'] . 'pass', $pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 
@@ -155,7 +152,7 @@ class login extends qsfglobal
 			$message .= "Someone has requested a password reset for your forum account, {$this->post['user']}.\n";
 			$message .= "If you do not want to reset your password, please ignore or delete this email.\n\n";
 			$message .= "Go to the below URL to continue with the password reset:\n";
-			$message .= "{$this->sets['loc_of_board']}{$this->mainfile}?a=login&s=request&e=" . md5($target['user_email'] . $target['user_name'] . $target['user_password'] . $target['user_joined']) . "\n\n";
+			$message .= "{$this->sets['loc_of_board']}/{$this->mainfile}?a=login&s=request&e=" . md5($target['user_email'] . $target['user_name'] . $target['user_password'] . $target['user_joined']) . "\n\n";
 			$message .= "Request IP: {$this->ip}";
 
 			$mailer->setSubject("{$this->sets['forum_name']} - Reset Password");
@@ -187,10 +184,11 @@ class login extends qsfglobal
 		$mailer = new $this->modules['mailer']($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
 
 		$newpass = $this->generate_pass(8);
+		$dbpass = $this->qsfp_password_hash($newpass);
 
 		$message  = "{$this->sets['forum_name']}\n\n";
 		$message .= "Your password has been reset to:\n$newpass\n\n";
-		$message .= "{$this->sets['loc_of_board']}{$this->mainfile}?a=login";
+		$message .= "{$this->sets['loc_of_board']}/{$this->mainfile}?a=login";
 
 		$mailer->setSubject("{$this->sets['forum_name']} - Reset Password");
 		$mailer->setMessage($message);
@@ -198,8 +196,7 @@ class login extends qsfglobal
 		$mailer->setServer($this->sets['mailserver']);
 		$mailer->doSend();
 
-		$this->db->query("UPDATE %pusers SET user_password='%s' WHERE user_id=%d",
-			md5($newpass), $target['user_id']);
+		$this->db->query( "UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $dbpass, $target['user_id'] );
 
 		return $this->message($this->lang->login_pass_reset, $this->lang->login_pass_sent);
 	}

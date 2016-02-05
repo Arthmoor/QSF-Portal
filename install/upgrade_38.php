@@ -45,7 +45,8 @@ $this->sets['registrations_allowed'] = 1;
 // File permission changes
 
 // Queries to run
-$queries[] = "ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id";
+$queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
+$queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
 
 $queries[] = "CREATE TABLE %pemoticons (
   emote_id int(10) unsigned NOT NULL auto_increment,

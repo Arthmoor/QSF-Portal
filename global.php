@@ -293,7 +293,22 @@ class qsfglobal
 	{
 		$this->htmlwidgets->tree($label, $link);
 	}
-	
+
+	/**
+	 * Hash a given string into a password suitable for database use
+	 *
+	 * @param string $pass The supplied password to hash
+	 * @author Samson
+	 * @since 1.6
+	 */
+	function qsfp_password_hash($pass)
+	{
+		$options = [ 'cost' => 12, ];
+		$newpass = password_hash( $pass, PASSWORD_DEFAULT, $options );
+
+		return $newpass;
+	}
+
 	/**
 	 * Generates a random pronounceable password
 	 *

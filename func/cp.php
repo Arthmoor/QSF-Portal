@@ -112,7 +112,7 @@ class cp extends qsfglobal
 
 	function check_pass($passA, $passB, $old_pass)
 	{
-		if (md5($old_pass) != $this->user['user_password']) {
+		if( !password_verify( $old_pass, $this->user['user_password'] ) ) {
 			return PASS_NOT_VERIFIED;
 		}
 
@@ -159,7 +159,7 @@ class cp extends qsfglobal
 				break;
 
 			case PASS_SUCCESS:
-				$hashed_pass = md5($this->post['passA']);
+				$hashed_pass = $this->qsfp_password_hash($this->post['passA']);
 				$this->db->query("UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $hashed_pass, $this->user['user_id']);
 
 				setcookie($this->sets['cookie_prefix'] . 'pass', $hashed_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );

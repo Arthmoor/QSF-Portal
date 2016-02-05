@@ -4,11 +4,12 @@ QSF Portal Changes
 Changes for 1.6:
 
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
-* Friendly URL support has been added for much of the forum code. Requires the use of a .htaccess file.
+* Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
 * Emoticons are now handled independently of skins and can be added on the fly as desired.
 * Added a new setting to block new user registration.
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
 * Default skin is now served as HTML5 instead of XHTML 1.1.
+* Password security has been updated to stronger hashing standards. As a result, PHP 5.5.0 or higher is now required.
 
    Bugs addressed:
 

@@ -60,7 +60,7 @@ In order for QSF Portal to function, the following are required prior to install
 * A functioning web server, like [http://www.apache.org/ Apache], or a web hosting service;
 * FTP or SSH access to your webspace;
 * [http://www.mysql.com/ MySQL] version 4.1 or higher; and
-* [http://www.php.net/ PHP] version 5.3.0 or higher.
+* [http://www.php.net/ PHP] version 5.5.0 or higher.
 
 Also, it is helpful to know the following:
 
