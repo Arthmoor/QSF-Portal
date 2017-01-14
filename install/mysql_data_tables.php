@@ -217,7 +217,7 @@ $queries[] = "CREATE TABLE %ppmsystem (
   pm_to int(10) unsigned NOT NULL default '0',
   pm_from int(10) unsigned NOT NULL default '0',
   pm_ip varchar(40) NOT NULL default '127.0.0.1',
-  pm_bcc text NOT NULL default '',
+  pm_bcc text,
   pm_title varchar(255) NOT NULL default '[No Title]',
   pm_time int(10) unsigned NOT NULL default '0',
   pm_message text NOT NULL default '',
@@ -342,7 +342,7 @@ $queries[] = "CREATE TABLE %ptopics (
   topic_views smallint(5) unsigned NOT NULL default '0',
   topic_modes int(10) unsigned NOT NULL default '0',
   topic_moved smallint(3) unsigned NOT NULL default '0',
-  topic_poll_options text NOT NULL default '',
+  topic_poll_options text,
   PRIMARY KEY  (topic_id),
   KEY Forum (topic_forum)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";

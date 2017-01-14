@@ -86,7 +86,7 @@ class qsfglobal
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.0
 	 **/
-	function qsfglobal($db=null)
+	function __construct($db=null)
 	{
 		$this->db       = $db;
 		$this->time     = time();
