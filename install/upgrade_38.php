@@ -47,6 +47,8 @@ $this->sets['registrations_allowed'] = 1;
 // Queries to run
 $queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
 $queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
+$queries[] = "ALTER TABLE %pusers CHANGE user_birthday user_birthday NOT NULL default '1900-01-01'";
+$queries[] = "UPDATE qsfp_users SET user_birthday='1900-01-01' WHERE CAST(user_birthday AS CHAR(10)) = '0000-00-00'";
 
 $queries[] = "CREATE TABLE %pemoticons (
   emote_id int(10) unsigned NOT NULL auto_increment,

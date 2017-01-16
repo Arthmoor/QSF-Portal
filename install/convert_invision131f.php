@@ -262,7 +262,7 @@ class conversion
 				if( $row['bday_year'] != '' && $row['bday_month'] != '' && $row['bday_day'] != '' )
 					$bday = sprintf( "%04d-%02d-%02d", $row['bday_year'], $row['bday_month'], $row['bday_day'] );
 				else
-					$bday = "0000-00-00";
+					$bday = "1900-01-01";
 
 				$icq = 0;
 				if( $row['icq_number'] )

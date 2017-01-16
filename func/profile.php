@@ -135,7 +135,7 @@ class profile extends qsfglobal
 
 		$online = ($profile['active_time'] && ($profile['active_time'] > ($this->time - 900)) && $profile['user_active']);
 
-		if ($profile['user_birthday'] == '0000-00-00') {
+		if ($profile['user_birthday'] == '1900-01-01') {
 			$profile['user_birthday'] = null;
 		}
 

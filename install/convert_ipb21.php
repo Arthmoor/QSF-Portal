@@ -290,7 +290,7 @@ class conversion
 				if( $row['bday_year'] != '' && $row['bday_month'] != '' && $row['bday_day'] != '' )
 					$bday = sprintf( "%04d-%02d-%02d", $row['bday_year'], $row['bday_month'], $row['bday_day'] );
 				else
-					$bday = "0000-00-00";
+					$bday = "1900-01-01";
 
 				$this->qsf->db->query( "INSERT INTO %pusers
 					(user_id, user_name, user_password, user_joined, user_title, user_group, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_email, user_email_show, user_birthday, user_homepage, user_posts, user_location, user_icq, user_msn, user_aim, user_yahoo, user_interests, user_signature, user_lastvisit, user_lastpost, user_pm_mail, user_view_signatures, user_view_avatars, user_regip)

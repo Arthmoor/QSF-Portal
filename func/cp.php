@@ -345,7 +345,7 @@ class cp extends qsfglobal
 
 			$user_birthday = $this->post['year'] . '-' . $this->post['month'] . '-' . $this->post['day'];
 
-			if (!checkdate($this->post['month'], $this->post['day'], $this->post['year']) && ($user_birthday != '0000-00-00')) {
+			if (!checkdate($this->post['month'], $this->post['day'], $this->post['year']) && ($user_birthday != '1900-01-01')) {
 				return $this->message($this->lang->cp_err_updating, sprintf($this->lang->cp_not_exist, $user_birthday));
 			}
 
