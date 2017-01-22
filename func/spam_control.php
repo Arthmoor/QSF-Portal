@@ -158,8 +158,8 @@ class spam_control extends qsfglobal
 		$spams = null;
 		while( $spam = $this->db->nqfetch($result) )
 		{
-			$ham_link = $this->sets['loc_of_board'] . 'index.php?a=spam_control&amp;s=report_ham&amp;c=' . $spam['spam_id'];
-			$delete_link = $this->sets['loc_of_board'] . 'index.php?a=spam_control&amp;s=delete_spam&amp;c=' . $spam['spam_id'];
+			$ham_link = $this->sets['loc_of_board'] . '/index.php?a=spam_control&amp;s=report_ham&amp;c=' . $spam['spam_id'];
+			$delete_link = $this->sets['loc_of_board'] . '/index.php?a=spam_control&amp;s=delete_spam&amp;c=' . $spam['spam_id'];
 
 			$topic = $this->db->fetch( "SELECT topic_id, topic_title FROM %ptopics WHERE topic_id=%d", $spam['spam_topic'] );
 			$user = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_id=%d", $spam['spam_author'] );

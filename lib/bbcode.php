@@ -385,7 +385,7 @@ class bbcode
 
 	private function process_topic($topic, $in)
 	{
-		return '<a href="' . $this->sets['loc_of_board'] . 'index.php?a=topic&t=' . $topic . '>' . $in . '</a>';
+		return '<a href="' . $this->sets['loc_of_board'] . '/index.php?a=topic&t=' . $topic . '>' . $in . '</a>';
 	}
 }
 ?>

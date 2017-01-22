@@ -623,7 +623,7 @@ class post extends qsfglobal
 					WHERE t.topic_id=%d AND t.topic_forum=f.forum_id", $this->get['t']);
 
 				$message  = "{$this->sets['forum_name']}\n";
-				$message .= "{$this->sets['loc_of_board']}{$this->mainfile}?a=topic&t={$this->get['t']}\n\n";
+				$message .= "{$this->sets['loc_of_board']}/{$this->mainfile}?a=topic&t={$this->get['t']}\n\n";
 				$message .= "A new post has been made in a topic or forum you are subscribed to.\n\n";
 				$message .= "Forum: {$emailtopic['forum_name']}\n";
 				$message .= "Topic: " . $this->format($emailtopic['topic_title'], FORMAT_CENSOR);
