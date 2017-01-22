@@ -276,9 +276,9 @@
 
 <div id="footer">
  {$admin->lang->powered} <a href="https://github.com/Arthmoor/QSF-Portal" class="small"><b>{$admin->name}</b></a> [{$admin->version}] &copy; 2006-2015 The {$admin->name} Development Team<br />
- {$admin->lang->based_on} <a href="http://code.google.com/p/quicksilverforums/" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2011 The Quicksilver Forums Development Team<br />
+ {$admin->lang->based_on} <a href="https://code.google.com/p/quicksilverforums/" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2011 The Quicksilver Forums Development Team<br />
  {$admin->lang->based_on} <a href="https://github.com/markelliot/MercuryBoard" class="small"><b>MercuryBoard</b></a> &copy; 2001-2009 The Mercury Development Team<br />
- Ashlander 3 by Roger Libiez [<a href="http://www.iguanadons.net">Samson</a>]. {$admin->lang->based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a><br />
+ Ashlander 3 by Roger Libiez [<a href="https://www.iguanadons.net">Samson</a>]. {$admin->lang->based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a><br />
  {$time_exec} seconds - {$admin->db->querycount} queries - {$server_load} load
 </div>
       ]]></html>
@@ -3032,9 +3032,9 @@ enable('$init');
       <description>Format the look of the copyright on the board.&lt;br&gt;&lt;br&gt;&lt;b&gt;Warning: Modification to anything other than the style of this copyright will result in a violation of your terms of service&lt;/b&gt;</description>
       <html><![CDATA[
 {$qsf->lang->powered} <a href="https://github.com/Arthmoor/QSF-Portal">{$qsf->name}</a> &copy; 2006-2015 The {$qsf->name} Development Team<br />
- {$qsf->lang->based_on} <a href="http://code.google.com/p/quicksilverforums/">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br />
+ {$qsf->lang->based_on} <a href="https://code.google.com/p/quicksilverforums/">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br />
  {$qsf->lang->based_on} <a href="https://github.com/markelliot/MercuryBoard">MercuryBoard</a> &copy; 2001-2009 The Mercury Development Team<br />
- Ashlander 3 by Roger Libiez [<a href="http://www.iguanadons.net">Samson</a>]. {$qsf->lang->based_on} HForumv3.1 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a>
+ Ashlander 3 by Roger Libiez [<a href="https://www.iguanadons.net">Samson</a>]. {$qsf->lang->based_on} HForumv3.1 skin &copy; 2006-2007 <a href="http://www.syridium.com/">Syridium SC</a>
       ]]></html>
     </template>
     <template><set>Main</set><name>MAIN_ETABLE</name>
@@ -4334,7 +4334,7 @@ enable('$init');
    <p class="line"></p>
    <span class="field">{$this->lang->twitter}</span>
    <span class="form">
-    <span class="smallbutton"><a class="twitter" href="http://twitter.com/{$profile['user_twitter']}"></a></span>
+    <span class="smallbutton"><a class="twitter" href="https://twitter.com/{$profile['user_twitter']}"></a></span>
    </span>
   </IF>
   <IF ($profile['user_aim'])>
