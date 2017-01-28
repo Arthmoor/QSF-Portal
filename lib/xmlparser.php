@@ -39,7 +39,7 @@ class xmlparser
     var $xml_obj = null;
     var $output = array();
     
-    function xmlparser()
+    function __construct()
     {
        $this->xml_obj = xml_parser_create();
        xml_set_object($this->xml_obj,$this);
