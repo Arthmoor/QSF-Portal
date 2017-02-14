@@ -331,7 +331,7 @@ class cp extends qsfglobal
 				return $this->message($this->lang->cp_err_updating, $this->lang->cp_already_member);
 			}
 
-			if (!empty($this->post['user_homepage']) && (substr($this->post['user_homepage'], 0, 7) != 'http://')) {
+			if (!empty($this->post['user_homepage']) && ( (substr($this->post['user_homepage'], 0, 7) != 'http://') && (substr($this->post['user_homepage'], 0, 8) != 'https://') ) ) {
 				$this->post['user_homepage'] = 'http://' . $this->post['user_homepage'];
 			}
 
