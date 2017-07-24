@@ -71,10 +71,12 @@ class activeutil extends forumutils
 	{
 		if (!$this->doneUpdate) {
 			$item = $this->_get_item($action);
-	
-			$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
-				VALUES (%d, '%s', %d, %d, '%s', '%s', '%s')",
-				$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid);
+
+			if( $item >= 0 && $item < 4000000000 ) {
+				$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
+					VALUES (%d, '%s', %d, %d, '%s', '%s', '%s')",
+					$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid);
+			}
 			$this->doneUpdate = true; // Flag to make sure we only call once
 		}
 	}
