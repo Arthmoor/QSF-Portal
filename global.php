@@ -86,7 +86,7 @@ class qsfglobal
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.0
 	 **/
-	function __construct($db=null)
+	function __construct( $db = null )
 	{
 		$this->db       = $db;
 		$this->time     = time();
@@ -103,31 +103,8 @@ class qsfglobal
 		$this->files    = $_FILES;
 		$this->query    = htmlspecialchars($this->query);
 
-		if( version_compare( PHP_VERSION, "5.3.0", "<" ) ) {
-			// Undo any magic quote slashes!
-			if (get_magic_quotes_gpc()) {
-				$this->unset_magic_quotes_gpc($this->get);
-				$this->unset_magic_quotes_gpc($this->post);
-				$this->unset_magic_quotes_gpc($this->cookie);
-			}
-		}
-	}
-
- 	/**
-	 * Sets magic_quotes_gpc to off
-	 *
-	 * @param array $array Array to stripslashes
-	 **/
-	function unset_magic_quotes_gpc(&$array)
-	{
-		$keys = array_keys($array);
-		for($i = 0; $i < count($array); $i++)
-		{
-			if (is_array($array[$keys[$i]])) {
-				$this->unset_magic_quotes_gpc($array[$keys[$i]]);
-			} else {
-				$array[$keys[$i]] = stripslashes($array[$keys[$i]]);
-			}
+		if( version_compare( PHP_VERSION, "5.5.0", "<" ) ) {
+			die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
 		}
 	}
 
@@ -140,7 +117,7 @@ class qsfglobal
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
-	function init($admin = false)
+	function init( $admin = false )
 	{
 		if ($this->sets['debug_mode']) {
 			$this->debug_mode = true;

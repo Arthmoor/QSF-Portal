@@ -8,7 +8,7 @@
 * A. QSF Portal is a community portal and lightweight CMS system written in PHP and MySQL. It is based on Quicksilver Forums.
 
 * Q. Ok, so what is Quicksilver Forums?
-* A. Quicksilver Forums is a bulletin board system written in PHP and MySQL. It is based on the MercuryBoard code. http://code.google.com/p/quicksilverforums/
+* A. Quicksilver Forums is a bulletin board system written in PHP and MySQL. It is based on the MercuryBoard code.
 
 * Q. Fine, then what is MercuryBoard?
 * A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. MercuryBoard is a lightweight, fast, PHP and MySQL forum script.
@@ -23,7 +23,7 @@
 * A. Go to the ftp log and type in <tt>site CHMOD 666 /myForumFolder/settings.php</tt>. We recommend using another FTP program such as Smart FTP. Dreamweaver is not well suited to moving files around.
 
 * Q. It wants details for a MySQL database. I don't know how to create one!
-* A. http://dev.mysql.com/doc/refman/5.0/en/database-use.html Also your hosting provider may have created tools to help you manage MySQL. Speak to your hosting provider, they are there to help you.
+* A. https://dev.mysql.com/doc/refman/5.0/en/database-use.html Also your hosting provider may have created tools to help you manage MySQL. Speak to your hosting provider, they are there to help you.
 
 * Q. Does QSF Portal work on databases other than MySQL?
 * A. No. Not at this time.

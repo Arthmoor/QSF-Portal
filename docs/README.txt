@@ -47,7 +47,7 @@
  This software is released under the GNU General Public License (GPL). For the
  terms of the license, see the file docs/license.txt included in this
  distribution. The license is also available in many languages at
- http://www.gnu.org
+ https://www.gnu.org
 
 === How You Can Help ===
  If you know PHP and MySQL, and would like to help develop QSF Portal,
