@@ -533,18 +533,18 @@ class post extends qsfglobal
 					$akismet = null;
 
 					try {
-						$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
-						$akismet->setCommentAuthor($this->user['user_name']);
-						$akismet->setCommentAuthorEmail($this->user['user_email']);
-						$akismet->setCommentContent($this->post['post']);
-						$akismet->setCommentType('forum-post');
+						$akismet = new Akismet( $this );
+						$akismet->set_comment_author( $this->user['user_name'] );
+						$akismet->set_comment_author_email( $this->user['user_email'] );
+						$akismet->set_comment_content( $this->post['post'] );
+						$akismet->set_comment_type( 'forum-post' );
 
 						$spam_checked = true;
 					}
 					// Try and deal with it rather than say something.
 					catch(Exception $e) {}
 
-					if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+					if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
 						$this->log_action('Possible Spam Posted', 0, 0, 0);
 
 						// Store the contents of the entire $_SERVER array.

@@ -1228,10 +1228,10 @@ class files extends qsfglobal
                         return $this->message( $this->lang->files_view, $this->lang->files_comment_specify );
 		}
 
-		if( $this->clean_url( $query['file_name'] ) != $this->get['fname'] ) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message( $this->lang->files_view, $this->lang->files_invalid_file );
-		}
+		//if( $this->clean_url( $query['file_name'] ) != $this->get['fname'] ) {
+		//	header('HTTP/1.0 404 Not Found');
+		//	return $this->message( $this->lang->files_view, $this->lang->files_invalid_file );
+		//}
 
 		foreach($query as $key => $value)
 			$$key = $value;

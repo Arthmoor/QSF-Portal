@@ -674,16 +674,18 @@ class mod extends qsfglobal
 		if( $spam ) {
 			// Time to report the spammer before we delete the post. Hopefully this is enough info to strike back with.
 			$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $post['post_author'] );
-			require_once $this->sets['include_path'] . '/lib/akismet.php';
-			$akismet = new Akismet($this->settings['site_address'], $this->settings['wordpress_api_key'], $this->version);
-			$akismet->setCommentAuthor($user['user_name']);
-			$akismet->setCommentContent($post['post_text']);
-			$akismet->setUserIP($post['post_ip']);
-			$akismet->setReferrer($post['post_referrer']);
-			$akismet->setUserAgent($post['post_agent']);
-			$akismet->setCommentType('QSFP Forum Post');
 
-			$akismet->submitSpam();
+			require_once $this->sets['include_path'] . '/lib/akismet.php';
+			$akismet = new Akismet( $this );
+			$akismet->set_comment_author( $user['user_name'] );
+			$akismet->set_comment_content( $post['post_text'] );
+			$akismet->set_comment_ip( $post['post_ip'] );
+			$akismet->set_comment_referrer( $post['post_referrer'] );
+			$akismet->set_comment_useragent( $post['post_agent'] );
+			$akismet->set_comment_type( 'forum-post' );
+			$akismet->set_comment_time( $post['post_time'] );
+
+			$akismet->submit_spam();
 
 			$this->sets['spam_post_count']++;
 			$this->sets['spam_false_count']++;

@@ -10,6 +10,7 @@ Changes for 1.6:
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
 * Default skin is now served as HTML5 instead of XHTML 1.1.
 * Password security has been updated to stronger hashing standards. As a result, PHP 5.5.0 or higher is now required.
+* Replaced the Akismet library with my own hand rolled version.
 
    Bugs addressed:
 
@@ -21,7 +22,7 @@ Changes for 1.5.2:
 
 * Extend Akismet protection to user profiles.
 * Fixed IP address handling so that future IPv6 addresses will be displayed properly.
-* Added support for Gravatars. See: http://en.gravatar.com/
+* Added support for Gravatars. See: https://en.gravatar.com/
 * Extended the size of filenames in the files module to 50 chars from 32.
 * Removed GTalk/Skype profile fields and replaced them with Twitter ID.
 * Updated the file rating pop-up to appear in the screen center instead of the corner.

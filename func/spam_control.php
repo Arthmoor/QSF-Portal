@@ -115,15 +115,16 @@ class spam_control extends qsfglobal
 
 		// Setup and deliver the information to flag this comment as legit with Akismet.
 		require_once $this->sets['include_path'] . '/lib/akismet.php';
-		$akismet = new Akismet($this->settings['loc_of_board'], $this->settings['wordpress_api_key'], $this->version);
-		$akismet->setCommentAuthor($user['user_name']);
-		$akismet->setCommentContent($spam['spam_text']);
-		$akismet->setUserIP($spam['spam_ip']);
-		$akismet->setReferrer($svars['HTTP_REFERER']);
-		$akismet->setUserAgent($svars['HTTP_USER_AGENT']);
-		$akismet->setCommentType('forum-post');
+		$akismet = new Akismet( $this );
+		$akismet->set_comment_author( $user['user_name'] );
+		$akismet->set_comment_content( $spam['spam_text'] );
+		$akismet->set_comment_ip( $spam['spam_ip'] );
+		$akismet->set_comment_referrer( $svars['HTTP_REFERER'] );
+		$akismet->set_comment_useragent( $svars['HTTP_USER_AGENT'] );
+		$akismet->set_comment_type( 'forum-post' );
+		$akismet->set_comment_time( $spam['spam_time'] );
 
-		$akismet->submitHam();
+		$akismet->submit_ham();
 
 		$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
 			VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",

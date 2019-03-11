@@ -137,20 +137,18 @@ class member_control extends admin
 				$svars = json_decode($member['user_server_data'], true);
 
 				require_once $this->sets['include_path'] . '/lib/akismet.php';
-				$akismet = new Akismet($this->settings['site_address'], $this->settings['wordpress_api_key'], $this->version);
-				$akismet->setCommentAuthor($member['user_name']);
-				$akismet->setCommentAuthorEmail($member['user_email']);
-				$akismet->setCommentAuthorURL($member['user_homepage']);
-				$akismet->setUserIP($member['user_regip']);
-				if( isset($member['user_interests']) )
-					$akismet->setCommentContent($member['user_interests']);
-				if( isset($svars['HTTP_REFERER']) )
-					$akismet->setReferrer($svars['HTTP_REFERER']);
-				if( isset($svars['HTTP_USER_AGENT']) )
-					$akismet->setUserAgent($svars['HTTP_USER_AGENT']);
-				$akismet->setCommentType('signup');
+				$akismet = new Akismet( $this );
+				$akismet->set_comment_author( $member['user_name'] );
+				$akismet->set_comment_author_email( $member['user_email'] );
+				$akismet->set_comment_author_url( $member['user_homepage'] );
+				$akismet->set_comment_ip( $member['user_regip'] );
+				if( isset( $member['user_interests'] ) )
+					$akismet->set_comment_content( $member['user_interests'] );
+				$akismet->set_comment_referrer( $svars['HTTP_REFERER'] );
+				$akismet->set_comment_useragent( $svars['HTTP_USER_AGENT'] );
+				$akismet->set_comment_type( 'signup' );
 
-				$akismet->submitSpam();
+				$akismet->submit_spam();
 
 				$this->delete_member_account( $id );
 

@@ -203,17 +203,17 @@ class register extends qsfglobal
 				$akismet = null;
 
 				try {
-					$akismet = new Akismet($this->sets['loc_of_board'], $this->sets['wordpress_api_key'], $this->version);
-					$akismet->setCommentAuthor($username);
-					$akismet->setCommentAuthorEmail($email);
-					$akismet->setCommentType('signup');
+					$akismet = new Akismet( $this );
+					$akismet->set_comment_author( $username );
+					$akismet->set_comment_author_email( $email );
+					$akismet->set_comment_type( 'signup' );
 
 					$spam_checked = true;
 				}
 				// Try and deal with it rather than say something.
 				catch(Exception $e) {}
 
-				if( $spam_checked && $akismet != null && $akismet->isCommentSpam() ) {
+				if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
 					$this->log_action('Blocked Registration', 0, 0, 0);
 
 					$this->sets['spam_reg_count']++;
