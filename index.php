@@ -29,7 +29,7 @@
 define('QUICKSILVERFORUMS', true);
 define('QSF_PUBLIC', true);
 
-date_default_timezone_set('America/Los_Angeles');
+date_default_timezone_set('UTC');
 
 $time_now   = explode(' ', microtime());
 $time_start = $time_now[1] + $time_now[0];
@@ -49,9 +49,6 @@ if (!$set['installed']) {
 set_error_handler('error');
 
 error_reporting(E_ALL);
-if( version_compare( PHP_VERSION, "5.3.0", "<" ) ) {
-	set_magic_quotes_runtime(0);
-}
 
 // Check for any addons available
 include_addons($set['include_path'] . '/addons/');
@@ -100,7 +97,6 @@ $qsf->sets     = $qsf->get_settings($set);
 $qsf->site     = $qsf->sets['loc_of_board']; // Will eventually replace $qsf->self once the SEO URL changes are done.
 $qsf->modules  = $modules;
 
-header( 'P3P: CP="CAO PSA OUR"' );
 session_start();
 
 $qsf->user_cl = new $modules['user']($qsf);

@@ -507,84 +507,56 @@ class qsfglobal
 	 *
 	 * @param mixed $format Date format using date() keywords. Either a date constant or a string.
 	 * @param int $time Timestamp. If left out, uses current time
-	 * @param bool $useToday true if dates should substitute date with 'today' or 'yesterday'
+	 * @param bool $useToday [no longer used]
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.1
 	 * @return string Human-readable, formatted Unix timestamp
 	 **/
-	function mbdate($format, $time = 0, $useToday = true)
+	function mbdate( $format, $time = 0, $useToday = true )
 	{
-		if (!$time) {
+		if( !$time ) {
 			$time = $this->time;
 		}
 
-		// Get the GMT time value based on the SERVER time...
-		$gmt_offset = date( "Z" );
-		$gmt_time = $time - $gmt_offset;
+		$timezone = $this->user['user_timezone'];
+		if( $this->user['user_id'] == USER_GUEST_UID )
+			$timezone = $this->sets['servertime'];
 
-		// Use the user's chosen GMT offset, ie: GMT-8 = Pacific time, US
-		$tz_offset = $this->user['user_timezone'] * 3600;
-		$time = $gmt_time + $tz_offset;
-		$current_tz_time = $this->time;
+		$dt = new DateTime();
+		$dt->setTimezone( new DateTimeZone( $timezone ) );
+		$dt->setTimestamp( $time );
 
-		// DST adjustment if needed. Yes, it needs to know the current time so it can trick old posts into looking right.
-		if( date( "I", $current_tz_time ) == 1 ) {
-			$time += 3600;
-		}
-
-		if (is_int($format)) {
+		if( is_int( $format ) ) {
 			switch($format)
 			{
 			case DATE_LONG:
-				$date_format = $this->lang->date_long;
-				$time_format = $this->lang->time_long;
+				$date_format = $this->lang->date_long . $this->lang->time_long;
 				break;
 
 			case DATE_SHORT:
-				$date_format = $this->lang->date_short;
-				$time_format = $this->lang->time_long;
+				$date_format = $this->lang->date_short . $this->lang->time_long;
 				break;
 
 			case DATE_ONLY_LONG:
 				$date_format = $this->lang->date_long;
-				$time_format = '';
 				break;
 
 			case DATE_TIME:
-				$date_format = '';
-				$time_format = $this->lang->time_only;
+				$date_format = $this->lang->time_only;
 				break;
 
 			case DATE_ISO822: // Standard, no localisation
-				$date_format = 'D, j M Y';
-				$time_format = ' H:i:s T';
+				$date_format = 'D, j M Y H:i:s T';
 				break;
 
 			default: // DATE_ONLY_SHORT
 				$date_format = $this->lang->date_short;
-				$time_format = '';
 				break;
 			}
 
-			if (!$useToday) {
-				$date = date($date_format, $time);
-			} else if ($date_format) {
-				$date = date($date_format, $time);
-				$today = date($date_format, $current_tz_time);
-				$yesterday = date($date_format, ($current_tz_time - DAY_IN_SECONDS));
-
-				if ($today == $date) {
-					$date = $this->lang->today;
-				} elseif ($yesterday == $date) {
-					$date = $this->lang->yesterday;
-				}
-			} else {
-				$date = '';
-			}
-
-			return $date . date($time_format, $time);
+			return $dt->format( $date_format );
 		} else {
-			return date($format, $time);
+			return $dt->format( $format );
 		}
 	}
 

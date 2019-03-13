@@ -44,7 +44,6 @@ if (!$set['installed']) {
 
 ob_start('ob_gzhandler');
 
-header( 'P3P: CP="CAO PSA OUR"' );
 session_start();
 
 set_error_handler('error');
