@@ -89,7 +89,7 @@ class Akismet
 		return $response;
 	}
 
-	private function create_query_string( $query )
+	private function create_query_string( )
 	{
 		foreach( $_SERVER as $key => $value ) {
 			if( !in_array( $key, $this->server_vars_ignored ) ) {
