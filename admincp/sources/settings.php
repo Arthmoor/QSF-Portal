@@ -309,7 +309,7 @@ class settings extends admin
 				'avatar_upload_size' => 'kilobytes',
 				'servertime' => 'string',
 				'max_load' => 'float',
-				'analytics_id' => 'string',
+				'analytics_code' => 'string',
 				'spider_active' => 'bool',
 				'spider_agent' => 'array',
 				'spider_name' => 'array',

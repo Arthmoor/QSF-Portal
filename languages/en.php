@@ -1592,8 +1592,8 @@ class en
 		$this->settings_file_approval = 'File Uploads - Approval Required?';
 		$this->settings_foreign_link = 'Foreign Link Target';
 		$this->settings_general = 'General Settings';
-		$this->settings_google_id = 'Google Analytics ID';
-		$this->settings_google_msg = 'Leave blank if you do not have an Analytics account, or if you do not want to track this site using Analytics.';
+		$this->settings_google_id = 'Google Analytics Code';
+		$this->settings_google_msg = 'Copy and paste the Javascript Tracking Code snippet from your Google Analytics account for this site here to enable Analytics.';
 		$this->settings_group_after = 'Group After Registration';
 		$this->settings_hot_topic = 'Posts for a Hot Topic';
 		$this->settings_kilobytes = 'Kilobytes';

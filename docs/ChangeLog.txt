@@ -11,6 +11,7 @@ Changes for 1.6:
 * Default skin is now served as HTML5 instead of XHTML 1.1.
 * Password security has been updated to stronger hashing standards. As a result, PHP 5.5.0 or higher is now required.
 * Replaced the Akismet library with my own hand rolled version.
+* Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
 
    Bugs addressed:
 

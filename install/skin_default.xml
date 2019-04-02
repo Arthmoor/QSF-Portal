@@ -630,7 +630,7 @@
  <p class="line"></p>
 
  <span class="field">{$this->lang->settings_google_id}<br /><span class="tiny">{$this->lang->settings_google_msg}</span></span>
- <span class="form"><input class="input" type="text" name="analytics_id" value="{$this->sets['analytics_id']}" size="40" /></span>
+ <span class="form"><textarea name="analytics_code" rows="12">{$this->sets['analytics_code']}</textarea></span>
  <p class="line"></p>
 
  <input type="submit" value="{$this->lang->submit}" />
