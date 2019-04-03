@@ -25,7 +25,7 @@ if (!defined('QUICKSILVERFORUMS')) {
  * Invision Power Board 2.1 Conversion Script
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] http://www.iguanadons.net
+ * Roger Libiez [Samson] 
  *
  * Script tested on an unmodified Invision Power Board 2.1 database.
  * Use with any other version has not been validated!

@@ -646,7 +646,7 @@ class qsfglobal
 	 *
 	 * @param string $url Url to access the feed
 	 * @param string $subtitle Title to indentify the feed as (optional)
-	 * @author Geoffrey Dunn <geoff@warmage.com
+	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 **/
 	function add_feed($url, $subtitle='')
@@ -806,7 +806,7 @@ class qsfglobal
  	/**
 	 * Used to update member statistics
 	 *
-	 * @author Roger Libiez [Samson] http://www.iguanadons.net
+	 * @author Roger Libiez [Samson]
 	 * @since 1.5
 	 * @return void
 	**/

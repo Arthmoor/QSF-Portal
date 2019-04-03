@@ -25,7 +25,7 @@ if (!defined('QUICKSILVERFORUMS')) {
  * Ikonboard 3.12a Conversion Script.
  * Based on work by Yazinin Nick <admin@vk.net.ru>
  *
- * Roger Libiez [Samson] http://www.iguanadons.net
+ * Roger Libiez [Samson] 
  *
  * Script tested on an unmodified Ikonboard 3.12a database.
  * Use with any other version is not advised!

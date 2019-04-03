@@ -34,7 +34,7 @@ require_once $set['include_path'] . '/lib/packageutil.php';
 /**
  * Convert From Another Board
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @Since 1.1.5
  */
 class convert extends qsfglobal

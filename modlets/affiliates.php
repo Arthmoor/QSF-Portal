@@ -24,7 +24,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Throw up the affiliated site box.
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.2.2
  **/
 class affiliates extends modlet

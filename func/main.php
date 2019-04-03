@@ -26,7 +26,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Portal front page view
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.2.2
  **/
 class main extends qsfglobal

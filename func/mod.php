@@ -897,7 +897,7 @@ class mod extends qsfglobal
 	/**
 	 * Lists IPs used by a member when posting
 	 *
-	 * @author Roger Libiez [Samson] http://www.iguanadons.net
+	 * @author Roger Libiez [Samson] 
 	 * @since 1.4.3
 	 * @return evaluated HTML template
 	 **/

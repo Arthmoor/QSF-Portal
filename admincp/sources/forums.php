@@ -208,7 +208,7 @@ class forums extends admin
 	/**
 	 * Cleans up orphaned topics and posts that no longer have valid hierarchy data.
 	 *
-	 * @author Roger Libiez [Samson] http://www.iguanadons.net
+	 * @author Roger Libiez [Samson] 
 	 * @since 1.4.3
 	**/
 	function CleanOrphans()

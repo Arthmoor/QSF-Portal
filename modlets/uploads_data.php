@@ -24,7 +24,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Add user upload data to profile view
  * 
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
 **/
 class uploads_data extends modlet
 {

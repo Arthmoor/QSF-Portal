@@ -26,7 +26,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Generate a single complete news post.
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.3.5
  **/
 class newspost extends qsfglobal

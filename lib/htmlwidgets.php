@@ -689,7 +689,7 @@ class htmlwidgets extends forumutils
 	 *
 	 * @param string $avatar Text containing the Gravatar email address (user specified)
 	 * @return string URL for the Gravatar image
-	 * @author Roger Libiez http://www.iguanadons.net
+	 * @author Roger Libiez 
 	 * @since 1.5.2
 	 **/
 	function get_gravatar( $avatar )
@@ -706,7 +706,7 @@ class htmlwidgets extends forumutils
 	 *
 	 * @param string $user SQL resource array of user data
 	 * @return string URL for the desired avatar image, or NULL if not desired/unavailable.
-	 * @author Roger Libiez http://www.iguanadons.net
+	 * @author Roger Libiez 
 	 * @since 1.5.2
 	 **/
 	function display_avatar( $user )

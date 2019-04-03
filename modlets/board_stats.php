@@ -30,7 +30,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Generate board statistics information
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.2.2
  **/
 class board_stats extends modlet

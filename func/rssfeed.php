@@ -33,7 +33,7 @@ require_once $set['include_path'] . '/global.php';
  * RSS Feed Generator
  *
  * @author Kristopher Powell <klpowell@trenden.net>
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.1.5
  **/
 class rssfeed extends qsfglobal

@@ -37,7 +37,7 @@ require_once $set['include_path'] . '/lib/database.php';
  * MySQLi Abstraction Class
  *
  * @author Jason Warner <jason@mercuryboard.com>
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.5.1
  **/
 class db_mysqli extends database

@@ -24,7 +24,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Generate front page news items
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.2.2
  **/
 class news extends modlet
@@ -33,7 +33,7 @@ class news extends modlet
 	* Display the last 5 posted news items on the front page
 	*
 	* @param string $param unusued
-	* @author Roger Libiez [Samson] http://www.iguanadons.net
+	* @author Roger Libiez [Samson] 
 	* @since 1.2.2
 	* @return string HTML with last 5 news items posted
 	**/

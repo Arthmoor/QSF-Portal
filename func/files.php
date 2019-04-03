@@ -26,7 +26,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Downloads file browser
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net, Davion, Asylumius
+ * @author Roger Libiez [Samson], Davion, Asylumius
  * @since 1.2.2
  **/
 class files extends qsfglobal

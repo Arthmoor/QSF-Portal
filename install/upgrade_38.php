@@ -8,7 +8,7 @@
  *
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
- * https://code.google.com/p/quicksilverforums/
+ * https://github.com/Arthmoor/Quicksilver-Forums
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
@@ -40,6 +40,7 @@ $this->sets['registrations_allowed'] = 1;
 $this->sets['analytics_code'] = '';
 
 // Deleted settings
+unset( $this->sets['analyrics_id'] );
 
 // Forum permission changes	
 

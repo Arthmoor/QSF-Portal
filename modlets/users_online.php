@@ -30,7 +30,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 /**
  * Generate the list of active users
  *
- * @author Roger Libiez [Samson] http://www.iguanadons.net
+ * @author Roger Libiez [Samson] 
  * @since 1.2.2
  **/
 class users_online extends modlet
