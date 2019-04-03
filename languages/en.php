@@ -716,6 +716,7 @@ class en
 	{
 		$this->groups_bad_format = 'You must use %s in the format, which represents the group name.';
 		$this->groups_based_on = 'based on';
+		$this->groups_controls = 'Group Controls';
 		$this->groups_create = 'Create Group';
 		$this->groups_create_new = 'Create a new user group named';
 		$this->groups_created = 'Group Created';
@@ -736,27 +737,6 @@ class en
 		$this->groups_type = 'Group Type';
 		$this->groups_will_be = 'will be deleted.';
 		$this->groups_will_become = 'Users from the deleted group will become';
-	}
-
-	function help()
-	{
-		$this->help_add = 'Add Help Article';
-		$this->help_article = 'Help Article Control';
-		$this->help_available_files = 'Help';
-		$this->help_confirm = 'Are you sure you want to delete';
-		$this->help_content = 'Article content';
-		$this->help_delete = 'Delete Help Article';
-		$this->help_deleted = 'Help Article Deleted.';
-		$this->help_edit = 'Edit Help Article';
-		$this->help_edited = 'Help article updated.';
-		$this->help_inserted = 'Article inserted into the database.';
-		$this->help_no_articles = 'No help articles were found in the database.';
-		$this->help_no_title = 'You can\'t create a help article without a title.';
-		$this->help_none = 'There are no help files in the database.';
-		$this->help_not_exist = 'That help article does not exist.';
-		$this->help_select = 'Please select a help article to edit';
-		$this->help_select_delete = 'Please select a help article to delete';
-		$this->help_title = 'Title';
 	}
 
 	function home()

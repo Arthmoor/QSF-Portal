@@ -172,14 +172,6 @@ $queries[] = "CREATE TABLE %pgroups (
   PRIMARY KEY  (group_id)
 ) ENGINE=MyISAM";
 
-$queries[] = "DROP TABLE IF EXISTS %phelp";
-$queries[] = "CREATE TABLE %phelp (
-  help_id smallint(3) NOT NULL auto_increment,
-  help_title varchar(255) NOT NULL default '',
-  help_article text NOT NULL default '',
-  PRIMARY KEY  (help_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8";
-
 $queries[] = "DROP TABLE IF EXISTS %plogs";
 $queries[] = "CREATE TABLE %plogs (
   log_id int(10) unsigned NOT NULL auto_increment,

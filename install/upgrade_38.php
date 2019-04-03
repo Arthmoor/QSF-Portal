@@ -54,6 +54,8 @@ $queries[] = 'ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255
 $queries[] = "UPDATE %pusers SET user_birthday='1900-01-01' WHERE CAST(user_birthday AS CHAR(10)) = '0000-00-00'";
 $queries[] = "UPDATE %pusers SET user_timezone='Europe/London'";
 
+$queries[] = "DROP TABLE IF EXISTS %phelp";
+
 $queries[] = "CREATE TABLE %pemoticons (
   emote_id int(10) unsigned NOT NULL auto_increment,
   emote_string varchar(15) NOT NULL default '',
