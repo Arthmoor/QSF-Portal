@@ -8,7 +8,7 @@
  *
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
- * http://code.google.com/p/quicksilverforums/
+ * https://github.com/Arthmoor/Quicksilver-Forums
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team

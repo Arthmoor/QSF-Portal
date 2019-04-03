@@ -2,7 +2,7 @@
 /**
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
- * http://code.google.com/p/quicksilverforums/
+ * https://github.com/Arthmoor/Quicksilver-Forums
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -3,7 +3,7 @@
 -------------------------------------------
 
 Please follow these guidelines when modifying or adding to the Quicksilver
-Forums source. They are slightly modified PEAR (http://pear.php.net) coding
+Forums source. They are slightly modified PEAR (https://pear.php.net) coding
 standards.
 
 == Indenting and Space ==
@@ -93,7 +93,7 @@ standards.
 
 == Comments ==
  Inline source documentation should work with phpDocumentor. More information
- about PHPDoc can be found here: http://www.phpdoc.org
+ about PHPDoc can be found here: https://www.phpdoc.org
 
  Non-documentation comments are strongly encouraged. A general rule of thumb is
  that if you look at a section of code and think "Wow, I don't want to try and
@@ -138,7 +138,7 @@ standards.
 
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  * 
  * This program is free software; you can redistribute it and/or

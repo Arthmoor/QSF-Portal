@@ -6,9 +6,11 @@
 
 * Q. What is QSF Portal?
 * A. QSF Portal is a community portal and lightweight CMS system written in PHP and MySQL. It is based on Quicksilver Forums.
+     https://github.com/Arthmoor/QSF-Portal
 
 * Q. Ok, so what is Quicksilver Forums?
 * A. Quicksilver Forums is a bulletin board system written in PHP and MySQL. It is based on the MercuryBoard code.
+     https://github.com/Arthmoor/Quicksilver-Forums
 
 * Q. Fine, then what is MercuryBoard?
 * A. Mercuryboard is kind of like the father of Quicksilver Forums. QSF was created using it as a starting point. MercuryBoard is a lightweight, fast, PHP and MySQL forum script.

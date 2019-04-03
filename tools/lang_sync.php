@@ -1,14 +1,14 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
- * http://code.google.com/p/quicksilverforums/
+ * https://github.com/Arthmoor/Quicksilver-Forums
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
@@ -149,14 +149,14 @@ foreach ($result as $lang_name => $lang_words)
 	$out[$lang_name] = '<?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
  *
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
- * http://code.google.com/p/quicksilverforums/
+ * https://github.com/Arthmoor/Quicksilver-Forums
  * 
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
