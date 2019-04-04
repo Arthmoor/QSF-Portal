@@ -92,7 +92,6 @@ $admin->modules  = $modules;
 $admin->user_cl  = new $admin->modules['user']($admin);
 $admin->user     = $admin->user_cl->login();
 $admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get['a'] );
-$server_load     = $admin->get_load();
 
 if( !isset( $admin->get['skin'] ) ) {
 	$admin->skin = $admin->user['skin_dir'];
@@ -194,7 +193,6 @@ if( $admin->nohtml ) {
 
 	$xtpl->assign( 'time_exec', $time_exec );
 	$xtpl->assign( 'query_count', $admin->db->querycount );
-	$xtpl->assign( 'server_load', $server_load );
 
 	$xtpl->parse( 'Index' );
 

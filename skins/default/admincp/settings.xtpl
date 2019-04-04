@@ -316,10 +316,6 @@
  <span class="form"><select class="timezone" name="servertime">{severTimezones}</select></span>
  <p class="line"></p>
 
- <span class="field">{settings_server_maxload}<br /><span class="tiny">{settings_server_maxload_msg}</span></span>
- <span class="form"><input type="text" name="max_load" value="{max_load}" size="40" /></span>
- <p class="line"></p>
-
  <span class="field">{settings_google_id}<br /><span class="tiny">{settings_google_msg}</span></span>
  <span class="form"><textarea name="analytics_code" rows="12">{analytics_code}</textarea></span>
  <p class="line"></p>

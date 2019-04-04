@@ -841,7 +841,6 @@ class en
 		$this->main_mark = 'Mark all';
 		$this->main_mark1 = 'Mark all topics as read';
 		$this->main_markforum_read = 'Mark forum as read';
-		$this->main_max_load = 'We are sorry, but %s is currently unavailable, due to a massive amount of connected users.';
 		$this->main_member_newest = 'Newest Member';
 		$this->main_members = 'Members';
 		$this->main_messenger = 'Messenger';
@@ -1608,8 +1607,6 @@ class en
 		$this->settings_search_flood = 'Search Flood Control';
 		$this->settings_search_min_time = 'Minimum time between searches.';
 		$this->settings_server = 'Server Settings';
-		$this->settings_server_maxload = 'Maximum Server Load';
-		$this->settings_server_maxload_msg = 'Disables board under excessive server strain. Enter 0 to disable.';
 		$this->settings_server_timezone = 'Server Time Zone';
 		$this->settings_show_avatars = 'Show Avatars';
 		$this->settings_show_email = 'Show Email Address';

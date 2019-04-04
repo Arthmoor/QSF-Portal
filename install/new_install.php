@@ -307,7 +307,6 @@ break;
 			$this->sets['hot_limit'] = 20;
 			$this->sets['logintime'] = 31536000;
 			$this->sets['mailserver'] = 'localhost';
-			$this->sets['max_load'] = 0;
 			$this->sets['analytics_code'] = '';
 			$this->sets['mostonline'] = 0;
 			$this->sets['mostonlinetime'] = 0;

@@ -112,8 +112,6 @@ if( $qsf->is_banned() ) {
 	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
 }
 
-$qsf->server_load = $qsf->get_load();
-
 $qsf->tree( $qsf->sets['forum_name'], "$qsf->self?a=board" );
 
 $reminder = null;
@@ -135,10 +133,6 @@ if( $qsf->user['user_group'] == USER_AWAIT ) {
 
 if( $reminder_text ) {
 	$reminder = eval( $qsf->template( 'MAIN_REMINDER' ) );
-}
-
-if( $qsf->sets['max_load'] && ($qsf->server_load > $qsf->sets['max_load'] ) ) {
-	error(QUICKSILVER_NOTICE, sprintf($qsf->lang->main_max_load, $qsf->sets['forum_name']));
 }
 
 $qsf->add_feed( $qsf->site . '/index.php?a=rssfeed' );
@@ -203,7 +197,7 @@ if( !$qsf->nohtml ) {
 
 	if( isset( $qsf->get['debug'] ) ) {
 		$dumpthis = eval( $qsf->template( 'MAIN' ) );
-		$output = $qsf->show_debug( $qsf->server_load, $qsf->time_exec );
+		$output = $qsf->show_debug( 0, $qsf->time_exec );
 		echo $output;
 	} else {
 		$quicksilverforums = $output;
@@ -214,7 +208,7 @@ if( !$qsf->nohtml ) {
 	@flush();
 } else {
 	if( isset( $qsf->get['debug'] ) ) {
-		$output = $qsf->show_debug( $qsf->server_load, $qsf->time_exec );
+		$output = $qsf->show_debug( 0, $qsf->time_exec );
 		echo $output;
 	} else {
 		echo $output;

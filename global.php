@@ -65,7 +65,6 @@ class qsfglobal
 	var $etable;                      // End to an HTML table @var string
 	var $lang;                        // Loaded words @var object
 	var $query;                       // The query string @var string
-	var $serverload;                  // Load average for the server
 	var $time_exec;                   // Execution time for the whole page
 	var $feed_links = null;		  // HTML of RSS link tags
 

@@ -42,6 +42,7 @@ $this->sets['analytics_code'] = '';
 // Deleted settings
 unset( $this->sets['analytics_id'] );
 unset( $this->sets['link_target'] );
+unset( $this->sets['max_load'] );
 
 // Forum permission changes	
 

@@ -618,9 +618,6 @@ class settings extends admin
 			$xtpl->assign( 'settings_server_timezone', $this->lang->settings_server_timezone );
 			$severTimezones = $this->htmlwidgets->select_timezones( $this->sets['servertime'] );
 			$xtpl->assign( 'severTimezones', $severTimezones );
-			$xtpl->assign( 'settings_server_maxload', $this->lang->settings_server_maxload );
-			$xtpl->assign( 'settings_server_maxload_msg', $this->lang->settings_server_maxload_msg );
-			$xtpl->assign( 'max_load', $this->sets['max_load'] );
 			$xtpl->assign( 'settings_google_id', $this->lang->settings_google_id );
 			$xtpl->assign( 'settings_google_msg', $this->lang->settings_google_msg );
 			$xtpl->assign( 'analytics_code', $this->sets['analytics_code'] );
