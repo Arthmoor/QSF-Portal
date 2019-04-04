@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -38,59 +38,37 @@ if (!defined('QUICKSILVERFORUMS')) {
  * @since Beta 2.0
  * @return void
  **/
-function error($type, $message, $file = null, $line = 0)
+function error( $type, $message, $file = null, $line = 0 )
 {
 	global $set; // Get the settings!
 
-	if (isset($_GET['debug']) || function_exists('error_fatal') || !(error_reporting() & $type)) {
+	if( isset( $_GET['debug'] ) || function_exists( 'error_fatal' ) || !( error_reporting() & $type ) ) {
 		return;
 	}
 
 	include $set['include_path'] . '/lib/error.php';
 
-	switch($type)
+	switch( $type )
 	{
 	// Triggered Quicksilver Forums errors
 	case QUICKSILVER_ERROR:
-		exit(error_warning($message, $file, $line));
+		exit( error_warning( $message, $file, $line ) );
 		break;
 
 	// Triggered Quicksilver Forums notices and alerts
 	case QUICKSILVER_NOTICE:
-		exit(error_notice($message));
+		exit( error_notice( $message ) );
 		break;
 
 	// Database errors
 	case QUICKSILVER_QUERY_ERROR:
-		exit(error_fatal($type, $message, $file, $line));
+		exit( error_fatal( $type, $message, $file, $line ) );
 		break;
 
 	// PHP errors
 	default:
-		exit(error_fatal($type, $message, $file, $line));
+		exit( error_fatal( $type, $message, $file, $line ) );
 		break;
-	}
-}
-
-/**
- * Runs require_once on all addons
- *
- * @param string $dir Folder to check for php files
- * @author Geoffrey Dunn <geoff@warmage.com>
- * @since 1.2
- **/
-function include_addons($dir)
-{
-	if (is_dir($dir)) {
-		if ($dh = opendir($dir)) {
-			while (($file = readdir($dh)) !== false) {
-				if (filetype($dir . $file) == 'file' && preg_match('/^[^\.]+\.php$/', $file) ) {
-					// Include it!
-					include_once($dir . $file);
-				}
-			}
-			closedir($dh);
-		}
 	}
 }
 ?>

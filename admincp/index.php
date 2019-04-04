@@ -48,10 +48,7 @@ session_start();
 
 set_error_handler( 'error' );
 
-error_reporting(E_ALL);
-
-// Check for any addons available
-include_addons( $set['include_path'] . '/addons/' );
+error_reporting( E_ALL );
 
 /*
  * Logic here:
@@ -79,10 +76,10 @@ if( strstr( $module, '/' ) || strstr( $module, '\\' ) ) {
 
 require './sources/' . $module . '.php';
 
-$db = new $modules['database']($set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix']);
+$db = new $modules['database']( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
 
 if( !$db->connection ) {
-	exit( '<center><font face="verdana" size="4" color="#000000"><b>A connection to the database could not be established and/or the specified database could not be found.</font></center>' );
+	error( QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__ );
 }
 
 $admin = new $module( $db );

@@ -48,15 +48,12 @@ if( !$set['installed'] ) {
 
 set_error_handler( 'error' );
 
-error_reporting(E_ALL);
-
-// Check for any addons available
-include_addons( $set['include_path'] . '/addons/' );
+error_reporting( E_ALL );
 
 // Open connection to database
 $db = new $modules['database']( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
 if( !$db->connection ) {
-    error( QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__ );
+	error( QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__ );
 }
 
 /*
