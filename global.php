@@ -40,7 +40,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 class qsfglobal
 {
 	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = '1.6';             // QSF Portal version @var int
+	var $version = '2.0';             // QSF Portal version @var int
 	var $server  = array();           // Alias for $_SERVER @var array
 	var $get     = array();           // Alias for $_GET @var array
 	var $post    = array();           // Alias for $_POST @var array
@@ -79,6 +79,7 @@ class qsfglobal
 	var $activeutil;		  // Handler user activity
 	
 	var $debug_mode = false;	  // Switch to tell if debugging info is allowed
+	var $xtpl = null;
 
 	/**
 	 * Constructor; sets up variables
@@ -812,8 +813,8 @@ class qsfglobal
 	**/
 	function ResetMemberStats()
 	{
-		$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
-		$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
+		$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
+		$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
 
 		$this->sets['last_member'] = $member['user_name'];
 		$this->sets['last_member_id'] = $member['user_id'];
@@ -821,7 +822,7 @@ class qsfglobal
 
 		// Try to fix user post counts.
 		$users = $this->db->query( "SELECT user_id, user_posts FROM %pusers" );
-		while( ($user = $this->db->nqfetch($users) ) )
+		while( ( $user = $this->db->nqfetch( $users ) ) )
 		{
 			$uid = $user['user_id'];
 

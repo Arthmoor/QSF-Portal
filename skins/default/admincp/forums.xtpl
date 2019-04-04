@@ -1,0 +1,99 @@
+<!-- BEGIN: Forums -->
+<!-- BEGIN: EditForm -->
+<form action="{self}?a=forums&amp;s=edit&amp;id={id}" method="post">
+<div class="article">
+ <div class="title">{forum_edit}: {forum_name}</div>
+ <span class="field">{forum_parent_cat}</span>
+ <span class="form">
+  <select name="parent">
+   <option value="0">{forum_create_cat}</option>
+   <option value="0">----------------------------</option>
+   {forum_select}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{forum_edit_name}</span>
+ <span class="form"><input name="name" value="{forum_name}" size="60" /></span>
+ <p class="line"></p>
+
+ <span class="field">{forum_edit_description}</span>
+ <span class="form"><textarea name="description" rows="8" cols="60">{forum_description}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{forum_subcat}<br /><span class="tiny">{forum_is_subcat}</span></span>
+ <span class="form"><input type="checkbox" name="subcat" {checked} /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="editforum" value="{submit}" />
+</div>
+</form>
+<!-- END: EditForm -->
+
+<!-- BEGIN: DeleteForm -->
+<form action="{self}?a=forums&s=delete&id={id}" method="post">
+<div class="article">
+ <div class="title">{forum_delete}: {forum_name}</div>
+ {forum_delete_warning}
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: DeleteForm -->
+
+<!-- BEGIN: AddForm -->
+<form action="{self}?a=forums&amp;s=add" method="post">
+<div class="article">
+ <div class="title">{forum_create}</div>
+ <span class="field">{forum_parent_cat}<br /><span class="tiny">{forum_select_cat}</span></span>
+ <span class="form">
+  <select name="parent">
+   <option value="0">{forum_create_cat}</option>
+   <option value="0">-----------------------------</option>
+   {forum_select}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{forum_name}</span>
+ <span class="form"><input name="name" size="60" /></span>
+ <p class="line"></p>
+
+ <span class="field">{forum_description}</span>
+ <span class="form"><textarea name="description" rows="8" cols="60"></textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{forum_quickperms}<br /><span class="tiny">{forum_quickperm_select}</span></span>
+ <span class="form">
+  <select name="sync">
+   {quickperms}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{forum_subcat}<br /><span class="tiny">{forum_is_subcat}</span></span>
+ <span class="form"><input type="checkbox" name="subcat" /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="addforum" value="{submit}" />
+</div>
+</form>
+<!-- END: AddForm -->
+
+<!-- BEGIN: OrderForm -->
+<form action="{self}?a=forums&amp;s=order" method="post">
+<div class="article">
+ <div class="title">{forum_ordering}</div>
+ {forum}
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="orderforum" value="{submit}" />
+</div>
+</form>
+<!-- END: OrderForm -->
+<!-- END: Forums -->

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -34,7 +34,7 @@ require_once $set['include_path'] . '/lib/packageutil.php';
 /**
  * Convert From Another Board
  *
- * @author Roger Libiez [Samson] 
+ * @author Roger Libiez [Samson]
  * @Since 1.1.5
  */
 class convert extends qsfglobal
@@ -368,11 +368,10 @@ break;
 			$this->sets['emailactivation'] = 1;
 			$this->sets['flood_time'] = 30;
 			$this->sets['hot_limit'] = 20;
-			$this->sets['link_target'] = '_blank';
 			$this->sets['logintime'] = 31536000;
 			$this->sets['mailserver'] = 'localhost';
 			$this->sets['max_load'] = 0;
-			$this->sets['analytics_id'] = '';
+			$this->sets['analytics_code'] = '';
 			$this->sets['mostonline'] = 0;
 			$this->sets['mostonlinetime'] = 0;
 			$this->sets['posts'] = 0;

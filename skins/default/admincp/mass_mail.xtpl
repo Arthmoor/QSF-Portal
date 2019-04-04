@@ -1,0 +1,27 @@
+<!-- BEGIN: MassMail -->
+<script src="../javascript/groupselect.js"></script>
+<form action="{self}?a=mass_mail" method="post" id="mailer">
+<div class="article">
+ <div class="title">{mail}</div>
+
+ <span class="field">{mail_subject}</span>
+ <span class="form"><input type="text" name="subject" size="60" value="{announcement}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{mail_groups}<br />[<a href="javascript:select_all_groups();">{mail_select_all}</a>]</span>
+ <span class="form">
+  <select name="groups[]" size="8" multiple="multiple" class="full">
+   {group_list}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{mail_message}</span>
+ <span class="form"><textarea name="message" rows="12" cols="60" class="input"></textarea></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="massmail" value="{mail_send}" />
+</div>
+</form>
+<!-- END: MassMail -->

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -37,8 +37,8 @@ class stats extends admin
 {
 	function execute()
 	{
-		$this->set_title($this->lang->stats);
-		$this->tree($this->lang->stats);
+		$this->set_title( $this->lang->stats );
+		$this->tree( $this->lang->stats );
 		$graphs = null;
 
 		/**
@@ -52,88 +52,100 @@ class stats extends admin
 		$spam_ham = $this->sets['ham_count'];
 		$spam_false = $this->sets['spam_false_count'];
 
-		$Stats = eval($this->template('STAT_SPAM'));
-		$title = 'Spam Statistics';
-		$graphs = eval($this->template('STAT_GRAPH'));
+		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/stats.xtpl' );
+
+		$xtpl->assign( 'stats', $this->lang->stats );
+		$xtpl->assign( 'stats_spam_statistics', $this->lang->stats_spam_statistics );
+		$xtpl->assign( 'stats_forum_posts', $this->lang->stats_forum_posts );
+		$xtpl->assign( 'spam_posts', $spam_posts );
+		$xtpl->assign( 'stats_false_pos', $this->lang->stats_false_pos );
+		$xtpl->assign( 'spam_ham', $spam_ham );
+		$xtpl->assign( 'stats_false_neg', $this->lang->stats_false_neg );
+		$xtpl->assign( 'spam_false', $spam_false );
+		$xtpl->assign( 'email', $this->lang->email );
+		$xtpl->assign( 'spam_email', $spam_email );
+		$xtpl->assign( 'stats_reg', $this->lang->stats_reg );
+		$xtpl->assign( 'spam_reg', $spam_reg );
+		$xtpl->assign( 'stats_sig', $this->lang->stats_sig );
+		$xtpl->assign( 'spam_sig', $spam_sig );
+		$xtpl->assign( 'stats_prof', $this->lang->stats_prof );
+		$xtpl->assign( 'spam_prof', $spam_prof );
 
 		/**
 		 * Posts
 		 */
-		$query = $this->db->query("
-		SELECT
-		    COUNT(post_id) AS posts,
-		    FROM_UNIXTIME(post_time, '%%b %%Y') AS month
-		FROM %pposts
-		GROUP BY month
-		ORDER BY post_time");
+		$query = $this->db->query( "SELECT COUNT(post_id) AS posts, FROM_UNIXTIME(post_time, '%%b %%Y') AS month FROM %pposts GROUP BY month ORDER BY post_time" );
 
 		$data = array();
 		$total = 0;
-		while ($item = $this->db->nqfetch($query))
+		while( $item = $this->db->nqfetch( $query ) )
 		{
-			if ( isset($item['posts']) )
+			if( isset( $item['posts'] ) )
 				$data[$item['month']] = $item['posts'];
 			else
 				$item['posts'] = 0;
 			
-			$total += intval($item['posts']);
+			$total += intval( $item['posts'] );
 		}
 
-		if (!$data)
-			$data = array(0, 0);
+		if( !$data )
+			$data = array( 0, 0 );
 
-		$Stats = null;
-		$title = $this->lang->stats_post_by_month;
+		$xtpl->assign( 'stats_post_by_month', $this->lang->stats_post_by_month );
+
 		foreach( $data as $month => $stat )
 		{
-			if ( !isset( $data[$month] ) )
+			if( !isset( $data[$month] ) )
 				$data[$month] = 0;
 
-			if ($total == 0) {
+			if( $total == 0 ) {
 				$width = 0;
 			} else {
-				$width = round(($stat / $total) * 100) * 6;
+				$width = round( ( $stat / $total ) * 100 ) * 6;
 			}
-			$Stats .= eval($this->template('STAT_STAT'));
+
+			$xtpl->assign( 'month', $month );
+			$xtpl->assign( 'stat', $stat );
+			$xtpl->assign( 'width', $width );
+
+			$xtpl->parse( 'Stats.Post' );
 		}
-		$graphs .= eval($this->template('STAT_GRAPH'));
 
 		/**
 		 * Registrations
 		 */
-		$query = $this->db->query("
-		SELECT
-		    COUNT(user_id) AS users,
-		    FROM_UNIXTIME(user_joined, '%%b %%Y') AS month
-		FROM %pusers
-		WHERE user_joined != 0
-		GROUP BY month
-		ORDER BY user_joined");
+		$query = $this->db->query( "SELECT COUNT(user_id) AS users, FROM_UNIXTIME(user_joined, '%%b %%Y') AS month FROM %pusers WHERE user_joined != 0 GROUP BY month ORDER BY user_joined" );
 
 		$data = array();
 		$total = 0;
 
-		while ($item = $this->db->nqfetch($query))
+		while( $item = $this->db->nqfetch( $query ) )
 		{
 			$data[$item['month']] = $item['users'];
-			$total += intval($item['users']);
+			$total += intval( $item['users'] );
 		}
-		$Stats = null;
-		$title = $this->lang->stats_reg_by_month;
+
+		$xtpl->assign( 'stats_reg_by_month', $this->lang->stats_reg_by_month );
+
 		foreach( $data as $month => $stat )
 		{
-			if ( !isset( $data[$month] ) )
+			if( !isset( $data[$month] ) )
 				$data[$month] = 0;
-			if ($total == 0) {
+			if( $total == 0 ) {
 				$width = 0;
 			} else {
-				$width = round(($stat / $total) * 100) * 6;
+				$width = round( ( $stat / $total ) * 100 ) * 6;
 			}
-			$Stats .= eval($this->template('STAT_STAT'));
-		}
-		$graphs .= eval($this->template('STAT_GRAPH'));
 
-		return eval($this->template('STAT_PAGE'));
+			$xtpl->assign( 'month', $month );
+			$xtpl->assign( 'stat', $stat );
+			$xtpl->assign( 'width', $width );
+
+			$xtpl->parse( 'Stats.Registration' );
+		}
+
+		$xtpl->parse( 'Stats' );
+		return $xtpl->text( 'Stats' );
 	}
 }
 ?>

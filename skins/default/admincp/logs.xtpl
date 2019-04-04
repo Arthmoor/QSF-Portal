@@ -1,0 +1,26 @@
+<!-- BEGIN: Logs -->
+<div class="article">
+ {pages}
+</div>
+
+<div class="article">
+ <div class="title">{logs_view}</div>
+ <span class="head">
+  <span class="quarter">{logs_time}</span>
+  <span class="quarter">{logs_user}</span>
+  <span class="quarter">{logs_action}</span>
+  <span class="quarter">{logs_id}</span>
+ </span>
+<!-- BEGIN: Entry -->
+ <span class="quarter">{date}</span>
+ <span class="quarter">{user}</span>
+ <span class="quarter">{action}</span>
+ <span class="quarter">{id}</span>
+ <p class="line"></p>
+<!-- END: Entry -->
+</div>
+
+<div class="article">
+ {pages}
+</div>
+<!-- END: Logs -->

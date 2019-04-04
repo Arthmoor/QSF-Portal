@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -37,104 +37,126 @@ class member_control extends admin
 {
 	function execute()
 	{
-		$this->set_title($this->lang->mc);
-		$this->tree($this->lang->mc, "$this->self?a=member_control&amp;s=profile");
+		$this->set_title( $this->lang->mc );
+		$this->tree( $this->lang->mc, "$this->self?a=member_control&amp;s=profile" );
 
-		if (!isset($this->get['s'])) {
+		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = null;
 		}
 
-		if (!isset($this->get['id'])) {
-			if (!isset($this->post['membername'])) {
-				return $this->message($this->lang->mc, "
-				<form action='{$this->self}?a=member_control&amp;s={$this->get['s']}' method='post'>
-				<div>
-					{$this->lang->mc_find}:<br /><br />
-					<input type='text' name='membername' size='30' class='input' />
-					<input type='submit' name='submit' value='{$this->lang->submit}' />
-				</div>
-				</form>");
-			} else {
-				$query = $this->db->query("SELECT user_id, user_name FROM %pusers WHERE user_name LIKE '%%%s%%' LIMIT 250", $this->post['membername']);
+		if( !isset( $this->get['id'] ) ) {
+			if( !isset( $this->post['membername'] ) ) {
+				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
-				if (!$this->db->num_rows($query)) {
-					return $this->message($this->lang->mc, "{$this->lang->mc_not_found} \"{$this->post['membername']}\"");
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 's', $this->get['s'] );
+				$xtpl->assign( 'mc', $this->lang->mc );
+				$xtpl->assign( 'mc_find', $this->lang->mc_find );
+				$xtpl->assign( 'submit', $this->lang->submit );
+
+				$xtpl->parse( 'MemberControl.ChooseForm' );
+				$xtpl->parse( 'MemberControl' );
+
+				return $xtpl->text( 'MemberControl' );
+			} else {
+				$query = $this->db->query( "SELECT user_id, user_name FROM %pusers WHERE user_name LIKE '%%%s%%' LIMIT 250", $this->post['membername'] );
+
+				if( !$this->db->num_rows( $query ) ) {
+					return $this->message( $this->lang->mc, "{$this->lang->mc_not_found} \"{$this->post['membername']}\"" );
 				}
 
 				$ret = null;
 
-				if ($this->get['s'] == 'profile') {
+				if( $this->get['s'] == 'profile' ) {
 					$link = 'a=member_control&amp;s=profile';
-				} elseif ($this->get['s'] == 'perms') {
+				} elseif( $this->get['s'] == 'perms' ) {
 					$link = 'a=perms&amp;s=user';
-				} elseif ($this->get['s'] == 'file_perms') {
+				} elseif( $this->get['s'] == 'file_perms' ) {
 					$link = 'a=file_perms&amp;s=user';
 				} else {
 					$link = 'a=member_control&amp;s=delete';
 				}
 
-				while ($member = $this->db->nqfetch($query))
+				while( $member = $this->db->nqfetch( $query ) )
 				{
 					$ret .= "<a href='{$this->self}?$link&amp;id=" . $member['user_id'] . "'>{$member['user_name']}</a><br />";
 				}
 
-				return $this->message($this->lang->mc, "{$this->lang->mc_found}<br /><br />$ret");
+				return $this->message( $this->lang->mc, "{$this->lang->mc_found}<br /><br />$ret" );
 			}
 		}
 
-		$this->get['id'] = intval($this->get['id']);
+		$id = intval( $this->get['id'] );
 
-		switch ($this->get['s'])
+		switch( $this->get['s'] )
 		{
 		case 'delete':
-			$this->tree($this->lang->mc_delete);
+			$this->tree ($this->lang->mc_delete );
 
-			$this->get['id'] = intval($this->get['id']);
-
-			if ($this->get['id'] == USER_GUEST_UID) {
-				return $this->message($this->lang->mc_delete, $this->lang->mc_guest_needed);
+			if( $id == USER_GUEST_UID) {
+				return $this->message( $this->lang->mc_delete, $this->lang->mc_guest_needed );
 			}
 
-			if (!isset($this->post['submit'])) {
-				$token = $this->generate_token();
+			if( !isset( $this->post['submit'] ) ) {
+				$member = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
 
-				$member = $this->db->fetch("SELECT user_name FROM %pusers WHERE user_id=%d", $this->get['id']);
+				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
-				return eval($this->template('ADMIN_MEMBER_DELETE'));
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'id', $id );
+				$xtpl->assign( 'mc_delete', $this->lang->mc_delete );
+				$xtpl->assign( 'user_name', $member['user_name'] );
+				$xtpl->assign( 'mc_confirm', $this->lang->mc_confirm );
+				$xtpl->assign( 'token', $this->generate_token() );
+				$xtpl->assign( 'submit', $this->lang->submit );
+
+				$xtpl->parse( 'MemberControl.DeleteForm' );
+				$xtpl->parse( 'MemberControl' );
+
+				return $xtpl->text( 'MemberControl' );
 			} else {
 				if( !$this->is_valid_token() ) {
 					return $this->message( $this->lang->mc_delete, $this->lang->invalid_token );
 				}
 
-				$this->delete_member_account( $this->get['id'] );
+				$this->delete_member_account( $id );
 
-				return $this->message($this->lang->mc_delete, $this->lang->mc_deleted);
+				return $this->message( $this->lang->mc_delete, $this->lang->mc_deleted );
 			}
 			break;
 
 		case 'profile':
-			$this->tree($this->lang->mc_edit);
+			$this->tree( $this->lang->mc_edit );
 
-			$this->get['id'] = intval($this->get['id']);
+			if( isset( $this->post['memberspambot'] ) ) {
+				$member = $this->db->fetch( "SELECT * FROM %pusers WHERE user_id=%d", $id );
 
-			if( isset($this->post['memberspambot']) ) {
-				$token = $this->generate_token();
+				$this->lang->mc_confirm_bot = sprintf( $this->lang->mc_confirm_bot, $member['user_name'] );
 
-				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $this->get['id']);
+				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
-				$this->lang->mc_confirm_bot = sprintf($this->lang->mc_confirm_bot, $member['user_name']);
-				return eval($this->template('ADMIN_MEMBER_SPAMBOT'));
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'id', $id );
+				$xtpl->assign( 'mc_delete', $this->lang->mc_delete );
+				$xtpl->assign( 'user_name', $member['user_name'] );
+				$xtpl->assign( 'mc_confirm_bot', $this->lang->mc_confirm_bot );
+				$xtpl->assign( 'yes', $this->lang->yes );
+
+				$xtpl->parse( 'MemberControl.Spambot' );
+				$xtpl->parse( 'MemberControl' );
+
+				return $xtpl->text( 'MemberControl' );
 			}
 
-			if( isset($this->post['confirm_spambot']) ) {
+			if( isset( $this->post['confirm_spambot'] ) ) {
 				if( !$this->is_valid_token() ) {
 					return $this->message( $this->lang->mc_delete, $this->lang->invalid_token );
 				}
 
-				$id = intval($this->post['member']);
-				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $id);
+				$id = intval( $this->post['member'] );
+				$member = $this->db->fetch( "SELECT * FROM %pusers WHERE user_id=%d", $id );
 
-				$svars = json_decode($member['user_server_data'], true);
+				$svars = json_decode( $member['user_server_data'], true );
 
 				require_once $this->sets['include_path'] . '/lib/akismet.php';
 				$akismet = new Akismet( $this );
@@ -152,13 +174,11 @@ class member_control extends admin
 
 				$this->delete_member_account( $id );
 
-				return $this->message($this->lang->mc_delete, $this->lang->mc_deleted);
+				return $this->message( $this->lang->mc_delete, $this->lang->mc_deleted );
 			}
 
-			if (!isset($this->post['submit'])) {
-				$token = $this->generate_token();
-
-				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $this->get['id']);
+			if( !isset( $this->post['submit'] ) ) {
+				$member = $this->db->fetch("SELECT * FROM %pusers WHERE user_id=%d", $id );
 
 				$out = '';
 
@@ -215,34 +235,36 @@ class member_control extends admin
 					'user_server_data'	=> array($this->lang->mc_user_server_data, U_IGNORE)
 				);
 
-				foreach ($cols as $var => $data)
+				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
+
+				foreach( $cols as $var => $data )
 				{
-					if (!isset($member[$var])) {
+					if( !isset( $member[$var] ) ) {
 						continue;
 					}
 
 					$val = $member[$var];
 
-					if (($var == 'user_signature') || ($var == 'user_email') || ($var == 'user_register_email') || ($var == 'user_title')) {
-						$val = $this->format($val, FORMAT_HTMLCHARS);
-					} elseif (($var == 'user_icq') && !$val) {
+					if( ( $var == 'user_signature' ) || ( $var == 'user_email' ) || ( $var == 'user_register_email' ) || ( $var == 'user_title' ) ) {
+						$val = $this->format( $val, FORMAT_HTMLCHARS );
+					} elseif( ( $var == 'user_icq' ) && !$val ) {
 						$val = null;
 					}
 
 					$line = '';
 
-					switch ($data[1])
+					switch( $data[1] )
 					{
 					case U_TZONE:
-						$time_list  = $this->htmlwidgets->select_timezones($val);
+						$time_list  = $this->htmlwidgets->select_timezones( $val );
 						$line = '<select class="select timezone" name="user_timezone">' . $time_list . '</select>';
 						break;
 
 					case U_IGNORE:
-						if (!isset($cols[$var][2])) {
+						if( !isset( $cols[$var][2] ) ) {
 							$line = $val;
 						} else {
-							if ($val) {
+							if( $val ) {
 								$line = $this->lang->yes;
 							} else {
 								$line = $this->lang->no;
@@ -251,15 +273,15 @@ class member_control extends admin
 						break;
 
 					case U_IP:
-						$line = $val == 0 ? '127.0.0.1' : long2ip($val);
+						$line = $val == 0 ? '127.0.0.1' : long2ip( $val );
 						break;
 
 					case U_TIME:
-						$line = $val ? date('Y-m-d, H:i:s', $val) : '-';
+						$line = $val ? date( 'Y-m-d, H:i:s', $val ) : '-';
 						break;
 
 					case U_DATE:
-						$line = $val ? date('Y-m-d', $val) : '-';
+						$line = $val ? date( 'Y-m-d', $val ) : '-';
 						break;
 
 					case U_BOOL:
@@ -286,84 +308,96 @@ class member_control extends admin
 						$line = $val;
 					}
 
-					$out .= eval($this->template('ADMIN_MEMBER_EDIT'));
+					$xtpl->assign( 'field', $cols[$var][0] );
+					$xtpl->assign( 'line', $line );
+
+					$xtpl->parse( 'MemberControl.EditForm.Line' );
 				}
 
-				return eval($this->template('ADMIN_MEMBER_PROFILE'));
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'id', $id );
+				$xtpl->assign( 'mc', $this->lang->mc );
+				$xtpl->assign( 'mc_report_spambot', $this->lang->mc_report_spambot );
+				$xtpl->assign( 'submit', $this->lang->submit );
+
+				$xtpl->parse( 'MemberControl.EditForm' );
+				$xtpl->parse( 'MemberControl' );
+
+				return $xtpl->text( 'MemberControl' );
 			} else {
 				if( !$this->is_valid_token() ) {
 					return $this->message( $this->lang->mc_edit, $this->lang->invalid_token );
 				}
 
-				$member = $this->db->fetch("SELECT user_name FROM %pusers WHERE user_id=%d", $this->get['id']);
+				$member = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
 
-				if (($this->post['user_group'] == USER_BANNED) && ($this->get['id'] == USER_GUEST_UID)) {
-					return $this->message($this->lang->mc, $this->lang->mc_guest_banned);
+				if( ( $this->post['user_group'] == USER_BANNED ) && ( $id == USER_GUEST_UID ) ) {
+					return $this->message( $this->lang->mc, $this->lang->mc_guest_banned );
 				}
 
 				$guest_email = $this->post['user_email'];
-				if ($member['user_name'] != 'Guest' && !$this->validator->validate($guest_email, TYPE_EMAIL)) {
-					return $this->message($this->lang->mc_err_updating, $this->lang->mc_email_invaid);
+				if( $member['user_name'] != 'Guest' && !$this->validator->validate( $guest_email, TYPE_EMAIL ) ) {
+					return $this->message( $this->lang->mc_err_updating, $this->lang->mc_email_invaid );
 				}
 
-				if (!isset($this->post['user_view_avatars'])) {
+				if( !isset( $this->post['user_view_avatars'] ) ) {
 					$this->post['user_view_avatars'] = 0;
 				}
 
-				if (!isset($this->post['user_view_signatures'])) {
+				if( !isset( $this->post['user_view_signatures'] ) ) {
 					$this->post['user_view_signatures'] = 0;
 				}
 
-				if (!isset($this->post['user_view_emoticons'])) {
+				if( !isset( $this->post['user_view_emoticons'] ) ) {
 					$this->post['user_view_emoticons'] = 0;
 				}
 
-				if (!isset($this->post['user_email_show'])) {
+				if( !isset( $this->post['user_email_show'] ) ) {
 					$this->post['user_email_show'] = 0;
 				}
 
-				if (!isset($this->post['user_pm'])) {
+				if( !isset( $this->post['user_pm'] ) ) {
 					$this->post['user_pm'] = 0;
 				}
 
-				if (!isset($this->post['user_pm_mail'])) {
+				if( !isset( $this->post['user_pm_mail'] ) ) {
 					$this->post['user_pm_mail'] = 0;
 				}
 
-				if (!empty($this->post['user_homepage']) && (substr($this->post['user_homepage'], 0, 7) != 'http://')) {
+				if( !empty( $this->post['user_homepage'] ) && ( substr( $this->post['user_homepage'], 0, 7 ) != 'http://' ) ) {
 					$this->post['user_homepage'] = 'http://' . $this->post['user_homepage'];
 				}
 
-				$user_name = $this->format($this->post['user_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR);
-				$user_group = intval($this->post['user_group']);
+				$user_name = $this->format( $this->post['user_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
+				$user_group = intval( $this->post['user_group'] );
 				$user_title = $this->post['user_title'];
-				$user_title_custom = intval($this->post['user_title_custom']);
+				$user_title_custom = intval( $this->post['user_title_custom'] );
 				$user_language = $this->post['user_language'];
 				$user_skin = $this->post['user_skin'];
 				$user_avatar = $this->post['user_avatar'];
 				$user_avatar_type = $this->post['user_avatar_type'];
-				$user_avatar_width = intval($this->post['user_avatar_width']);
-				$user_avatar_height = intval($this->post['user_avatar_height']);
-				$user_level = intval($this->post['user_level']);
+				$user_avatar_width = intval( $this->post['user_avatar_width'] );
+				$user_avatar_height = intval( $this->post['user_avatar_height'] );
+				$user_level = intval( $this->post['user_level'] );
 				$user_birthday = $this->post['user_birthday'];
 				$user_timezone = $this->post['user_timezone'];
-				$user_location = $this->format($this->post['user_location'], FORMAT_HTMLCHARS);
-				$user_homepage = $this->format($this->post['user_homepage'], FORMAT_HTMLCHARS);
-				$user_interests = $this->format($this->post['user_interests'], FORMAT_HTMLCHARS);
+				$user_location = $this->format( $this->post['user_location'], FORMAT_HTMLCHARS );
+				$user_homepage = $this->format( $this->post['user_homepage'], FORMAT_HTMLCHARS );
+				$user_interests = $this->format( $this->post['user_interests'], FORMAT_HTMLCHARS );
 				$user_signature = $this->post['user_signature'];
-				$user_posts = intval($this->post['user_posts']);
-				$user_uploads = intval($this->post['user_uploads']);
-				$user_icq = intval($this->post['user_icq']);
-				$user_msn = $this->format($this->post['user_msn'], FORMAT_HTMLCHARS);
-				$user_aim = $this->format($this->post['user_aim'], FORMAT_HTMLCHARS);
-				$user_twitter = $this->format($this->post['user_twitter'], FORMAT_HTMLCHARS);
-				$user_yahoo = $this->format($this->post['user_yahoo'], FORMAT_HTMLCHARS);
-				$user_email_show = intval($this->post['user_email_show']);
-				$user_pm = intval($this->post['user_pm']);
-				$user_pm_mail = intval($this->post['user_pm_mail']);
-				$user_view_avatars = intval($this->post['user_view_avatars']);
-				$user_view_signatures = intval($this->post['user_view_signatures']);
-				$user_view_emoticons = intval($this->post['user_view_emoticons']);
+				$user_posts = intval( $this->post['user_posts'] );
+				$user_uploads = intval( $this->post['user_uploads'] );
+				$user_icq = intval( $this->post['user_icq'] );
+				$user_msn = $this->format( $this->post['user_msn'], FORMAT_HTMLCHARS );
+				$user_aim = $this->format( $this->post['user_aim'], FORMAT_HTMLCHARS );
+				$user_twitter = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
+				$user_yahoo = $this->format( $this->post['user_yahoo'], FORMAT_HTMLCHARS );
+				$user_email_show = intval( $this->post['user_email_show'] );
+				$user_pm = intval( $this->post['user_pm'] );
+				$user_pm_mail = intval( $this->post['user_pm_mail'] );
+				$user_view_avatars = intval( $this->post['user_view_avatars'] );
+				$user_view_signatures = intval( $this->post['user_view_signatures'] );
+				$user_view_emoticons = intval( $this->post['user_view_emoticons'] );
 
 				$this->db->query( "UPDATE %pusers SET user_name='%s', user_email='%s', user_group=%d, user_title='%s',
 				  user_title_custom=%d, user_language='%s', user_skin='%s', user_avatar='%s',
@@ -378,33 +412,32 @@ class member_control extends admin
 				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_interests,
 				  $user_signature, $user_posts, $user_uploads, $user_icq, $user_msn, $user_aim,
 				  $user_twitter, $user_yahoo, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
-				  $user_view_signatures, $user_view_emoticons, $this->get['id'] );
+				  $user_view_signatures, $user_view_emoticons, $id );
 
 				if( $user_group == USER_BANNED ) {
-					$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d",
-						$this->get['id'] );
+					$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d", $id );
 				}
-				if (($this->get['id'] == $this->sets['last_member_id'])
-				&& ($this->post['user_name'] != $this->sets['last_member'])) {
+				if( ( $id == $this->sets['last_member_id'] )
+				&& ( $this->post['user_name'] != $this->sets['last_member'] ) ) {
 					$this->sets['last_member'] = $this->post['user_name'];
 					$this->write_sets();
 				}
 
-				return $this->message($this->lang->mc_edit, $this->lang->mc_edited);
+				return $this->message( $this->lang->mc_edit, $this->lang->mc_edited );
 			}
 			break;
 
 		default:
-			return $this->message($this->lang->mc, "<a href='{$this->self}?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br />");
+			return $this->message( $this->lang->mc, "<a href='{$this->self}?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br />" );
 		}
 	}
 
-	function list_skins($val)
+	function list_skins( $val )
 	{
 		$out = "<select name='user_skin'>";
-		$groups = $this->db->query("SELECT skin_name, skin_dir FROM %pskins ORDER BY skin_name");
+		$groups = $this->db->query( "SELECT skin_name, skin_dir FROM %pskins ORDER BY skin_name" );
 
-		while ($group = $this->db->nqfetch($groups))
+		while( $group = $this->db->nqfetch( $groups ) )
 		{
 			$out .= "<option value='{$group['skin_dir']}'" . (($val == $group['skin_dir']) ? ' selected=\'selected\'' : '') . ">{$group['skin_name']}</option>";
 		}
@@ -412,12 +445,12 @@ class member_control extends admin
 		return $out . '</select>';
 	}
 
-	function list_user_avatar_types($val)
+	function list_user_avatar_types( $val )
 	{
 		$out = "<select name='user_avatar_type'>";
-		$types = array('local', 'url', 'uploaded', 'gravatar', 'none');
+		$types = array( 'local', 'url', 'uploaded', 'gravatar', 'none' );
 
-		foreach ($types as $type)
+		foreach( $types as $type )
 		{
 			$out .= "<option value='$type'" . (($val == $type) ? ' selected=\'selected\'' : '') . ">$type</option>";
 		}
@@ -425,20 +458,20 @@ class member_control extends admin
 		return $out . '</select>';
 	}
 
-	function list_langs($current)
+	function list_langs( $current )
 	{
 		$out = "<select name='user_language'>";
-		$dir = opendir('../languages');
+		$dir = opendir( '../languages' );
 
-		while (($file = readdir($dir)) !== false)
+		while( ( $file = readdir( $dir ) ) !== false )
 		{
-			if (is_dir('../languages/' . $file)) {
+			if( is_dir( '../languages/' . $file ) ) {
 				continue;
 			}
 
-			$code = substr($file, 0, -4);
-			$ext  = substr($file, -4);
-			if ($ext != '.php') {
+			$code = substr( $file, 0, -4 );
+			$ext  = substr( $file, -4 );
+			if( $ext != '.php' ) {
 				continue;
 			}
 
@@ -450,37 +483,37 @@ class member_control extends admin
 
 	function delete_member_account( $id )
 	{
-		$this->db->query("UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $id);
-		$this->db->query("UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $id);
-		$this->db->query("UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $id);
-		$this->db->query("UPDATE %ptopics SET topic_last_poster=%d WHERE topic_last_poster=%d", USER_GUEST_UID, $id);
-		$this->db->query("UPDATE %plogs SET log_user=%d WHERE log_user=%d", USER_GUEST_UID, $id);
-		$this->db->query("UPDATE %pfiles SET file_submitted=%d WHERE file_submitted=%d AND file_approved=1", USER_GUEST_UID, $id);
-		$this->db->query("UPDATE %pfilecomments SET user_id=%d WHERE user_id=%d", USER_GUEST_UID, $id);
-		$this->activeutil->delete($id);
-		$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d", $id);
-		$this->db->query("DELETE FROM %pvotes WHERE vote_user=%d", $id);
-		$this->db->query("DELETE FROM %pfileratings WHERE user_id=%d", $id);
-		$this->db->query("DELETE FROM %pusers WHERE user_id=%d", $id);
-		$this->db->query("DELETE FROM %ppmsystem WHERE pm_to=%d", $id);
-		$this->db->query("DELETE FROM %preadmarks WHERE readmark_user=%d", $id);
+		$this->db->query( "UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %ptopics SET topic_last_poster=%d WHERE topic_last_poster=%d", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %plogs SET log_user=%d WHERE log_user=%d", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %pfiles SET file_submitted=%d WHERE file_submitted=%d AND file_approved=1", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %pfilecomments SET user_id=%d WHERE user_id=%d", USER_GUEST_UID, $id );
+		$this->activeutil->delete( $id );
+		$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d", $id );
+		$this->db->query( "DELETE FROM %pvotes WHERE vote_user=%d", $id );
+		$this->db->query( "DELETE FROM %pfileratings WHERE user_id=%d", $id );
+		$this->db->query( "DELETE FROM %pusers WHERE user_id=%d", $id );
+		$this->db->query( "DELETE FROM %ppmsystem WHERE pm_to=%d", $id );
+		$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d", $id );
 
-		$files = $this->db->query("SELECT file_id, file_md5name FROM %pfiles WHERE file_submitted=%d AND file_approved=0", $id);
-		while( $file = $this->db->nqfetch($files) )
+		$files = $this->db->query( "SELECT file_id, file_md5name FROM %pfiles WHERE file_submitted=%d AND file_approved=0", $id );
+		while( $file = $this->db->nqfetch( $files ) )
 		{
-			@unlink("./downloads/" . $file['file_md5name']);
+			@unlink( "./downloads/" . $file['file_md5name'] );
 			$this->db->query( "DELETE FROM %pfiles WHERE file_id=%d", $file['file_id'] );
 		}
 
-		$updates = $this->db->query("SELECT update_id, update_md5name FROM %pupdates WHERE update_updater=%d", $id);
-		while( $update = $this->db->nqfetch($updates) )
+		$updates = $this->db->query( "SELECT update_id, update_md5name FROM %pupdates WHERE update_updater=%d", $id );
+		while( $update = $this->db->nqfetch( $updates ) )
 		{
-			@unlink("./updates/" . $update['update_md5name']);
+			@unlink( "./updates/" . $update['update_md5name'] );
 			$this->db->query( "DELETE FROM %pupdates WHERE update_id=%d", $update['update_id'] );
 		}
 
-		$member = $this->db->fetch("SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1");
-		$counts = $this->db->fetch("SELECT COUNT(user_id) AS count FROM %pusers");
+		$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
+		$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
 
 		$this->sets['last_member'] = $member['user_name'];
 		$this->sets['last_member_id'] = $member['user_id'];

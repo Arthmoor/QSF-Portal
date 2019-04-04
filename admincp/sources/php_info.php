@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -39,8 +39,8 @@ class php_info extends admin
 	{
 		$this->nohtml = true;
 
-		if (!function_exists('phpinfo')) {
-			return $this->message($this->lang->php_error, $this->lang->php_error_msg);
+		if( !function_exists( 'phpinfo' ) ) {
+			return $this->message( $this->lang->php_error, $this->lang->php_error_msg );
 		}
 
 		ob_start();

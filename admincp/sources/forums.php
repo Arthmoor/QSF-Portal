@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -50,114 +50,196 @@ class forums extends admin
 	 **/
 	function execute()
 	{
-		if (!isset($this->get['s'])) {
+		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = '';
 		}
 
-		$forums_exist = $this->db->fetch("SELECT COUNT(forum_id) AS count FROM %pforums");
+		$forums_exist = $this->db->fetch( "SELECT COUNT(forum_id) AS count FROM %pforums" );
 
-		if (!$forums_exist['count'] && ($this->get['s'] != 'add')) {
-			return $this->message($this->lang->forum_controls, $this->lang->forum_none, $this->lang->forum_create, "$this->self?a=forums&amp;s=add");
+		if( !$forums_exist['count'] && ( $this->get['s'] != 'add' ) ) {
+			return $this->message( $this->lang->forum_controls, $this->lang->forum_none, $this->lang->forum_create, "$this->self?a=forums&amp;s=add" );
 		}
 
-		switch ($this->get['s'])
+		switch( $this->get['s'] )
 		{
 		case 'edit':
-			$this->set_title($this->lang->forum_edit);
+			$this->set_title( $this->lang->forum_edit );
 
-			if (isset($this->get['id'])) {
-				$f = $this->db->fetch("SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect FROM %pforums WHERE forum_id=%d", $this->get['id']);
+			if( isset( $this->get['id'] ) ) {
+				$id = intval( $this->get['id'] );
 
-				$this->tree($this->lang->forum_edit, "{$this->self}?a=forums&amp;s=edit");
-				$this->tree($f['forum_name']);
+				$f = $this->db->fetch( "SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect FROM %pforums WHERE forum_id=%d", $id );
 
-				if (isset($this->post['editforum'])) {
+				$this->tree( $this->lang->forum_edit, "{$this->self}?a=forums&amp;s=edit" );
+				$this->tree( $f['forum_name'] );
+
+				if( isset( $this->post['editforum'] ) ) {
 					if( !$this->is_valid_token() ) {
 						return $this->message( $this->lang->forum_edit, $this->lang->invalid_token );
 					}
-					return $this->EditForum($this->get['id']);
+					return $this->EditForum( $id );
 				} else {
 					$token = $this->generate_token();
 
-					$forum = $this->htmlwidgets->select_forums($f['forum_parent']);
-					return eval($this->template('ADMIN_FORUM_EDIT'));
+					$forum = $this->htmlwidgets->select_forums( $f['forum_parent'] );
+
+					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
+
+					$xtpl->assign( 'self', $this->self );
+					$xtpl->assign( 'id', $id );
+					$xtpl->assign( 'forum_edit', $this->lang->forum_edit );
+					$xtpl->assign( 'forum_name', $f['forum_name'] );
+					$xtpl->assign( 'forum_parent_cat', $this->lang->forum_parent_cat );
+					$xtpl->assign( 'forum_create_cat', $this->lang->forum_create_cat );
+					$xtpl->assign( 'forum_select', $forum );
+					$xtpl->assign( 'forum_edit_name', $this->lang->forum_name );
+					$xtpl->assign( 'forum_edit_description', $this->lang->forum_description );
+					$xtpl->assign( 'forum_description', $f['forum_description'] );
+					$xtpl->assign( 'forum_subcat', $this->lang->forum_subcat );
+					$xtpl->assign( 'forum_is_subcat', $this->lang->forum_is_subcat );
+
+					$checked = null;
+					if( $f['forum_subcat'] )
+						$checked = "checked";
+					$xtpl->assign( 'checked', $checked );
+
+					$xtpl->assign( 'token', $this->generate_token() );
+					$xtpl->assign( 'submit', $this->lang->submit );
+
+					$xtpl->parse( 'Forums.EditForm' );
+					$xtpl->parse( 'Forums' );
+
+					return $xtpl->text( 'Forums' );
 				}
 			} else {
-				$this->tree($this->lang->forum_edit);
-				return $this->message($this->lang->forum_edit, '<div style="text-align:left">' . $this->Text($this->htmlwidgets->forum_grab(), "$this->self?a=forums&amp;s=edit&amp;id=") . '</div>');
+				$this->tree( $this->lang->forum_edit );
+
+				return $this->message( $this->lang->forum_edit, '<div style="text-align:left">' . $this->Text( $this->htmlwidgets->forum_grab(), "$this->self?a=forums&amp;s=edit&amp;id=" ) . '</div>' );
 			}
 			break;
 
 		case 'delete':
-			$this->set_title($this->lang->forum_delete);
+			$this->set_title( $this->lang->forum_delete );
 
-			if (isset($this->get['id'])) {
-				$f = $this->db->fetch("SELECT forum_name FROM %pforums WHERE forum_id=%d", intval($this->get['id']));
+			if( isset( $this->get['id'] ) ) {
+				$id = intval( $this->get['id'] );
 
-				$this->tree($this->lang->forum_delete, "{$this->self}?a=forums&amp;s=delete");
-				$this->tree($f['forum_name']);
+				$f = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id=%d", $id );
 
-				if (isset($this->post['submit'])) {
+				$this->tree( $this->lang->forum_delete, "{$this->self}?a=forums&amp;s=delete" );
+				$this->tree( $f['forum_name'] );
+
+				if( isset( $this->post['submit'] ) ) {
 					if( !$this->is_valid_token() ) {
 						return $this->message( $this->lang->forum_edit, $this->lang->invalid_token );
 					}
-					return $this->DeleteForum($this->get['id']);
+					return $this->DeleteForum( $id );
 				} else {
 					$token = $this->generate_token();
 
-					return eval($this->template('ADMIN_FORUM_DELETE'));
+					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
+
+					$xtpl->assign( 'self', $this->self );
+					$xtpl->assign( 'id', $id );
+					$xtpl->assign( 'forum_delete', $this->lang->forum_delete );
+					$xtpl->assign( 'forum_name', $f['forum_name'] );
+					$xtpl->assign( 'forum_delete_warning', $this->lang->forum_delete_warning );
+
+					$xtpl->assign( 'token', $this->generate_token() );
+					$xtpl->assign( 'submit', $this->lang->submit );
+
+					$xtpl->parse( 'Forums.DeleteForm' );
+					$xtpl->parse( 'Forums' );
+
+					return $xtpl->text( 'Forums' );
 				}
 			} else {
-				$this->tree($this->lang->forum_delete);
-				return $this->message($this->lang->forum_delete, '<div style="text-align:left">' . $this->Text($this->htmlwidgets->forum_grab(), "$this->self?a=forums&amp;s=delete&amp;id=") . '</div>');
+				$this->tree( $this->lang->forum_delete );
+				return $this->message( $this->lang->forum_delete, '<div style="text-align:left">' . $this->Text($this->htmlwidgets->forum_grab(), "$this->self?a=forums&amp;s=delete&amp;id=") . '</div>' );
 			}
 			break;
 
 		case 'add':
-			$this->set_title($this->lang->forum_create);
-			$this->tree($this->lang->forum_create);
+			$this->set_title( $this->lang->forum_create );
+			$this->tree( $this->lang->forum_create );
 
-			if (isset($this->post['addforum'])) {
+			if( isset( $this->post['addforum'] ) ) {
 				if( !$this->is_valid_token() ) {
 					return $this->message( $this->lang->forum_create, $this->lang->invalid_token );
 				}
 
-				return $this->message($this->lang->forum_create, $this->AddForum());
+				return $this->message( $this->lang->forum_create, $this->AddForum() );
 			} else {
-				$token = $this->generate_token();
-
 				$select = $this->htmlwidgets->select_forums();
 
-				if ($forums_exist['count']) {
+				if( $forums_exist['count'] ) {
 					$quickperms = $select;
 				} else {
 					$quickperms = "<option value='-3' selected='selected'>{$this->lang->forum_default_perms}</option>";
 				}
-				return eval($this->template('ADMIN_FORUM_ADD'));
+
+				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
+
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'forum_create', $this->lang->forum_create );
+				$xtpl->assign( 'forum_parent_cat', $this->lang->forum_parent_cat );
+				$xtpl->assign( 'forum_select_cat', $this->lang->forum_select_cat );
+				$xtpl->assign( 'forum_create_cat', $this->lang->forum_create_cat );
+				$xtpl->assign( 'forum_select', $select );
+				$xtpl->assign( 'forum_name', $this->lang->forum_name );
+				$xtpl->assign( 'forum_description', $this->lang->forum_description );
+				$xtpl->assign( 'forum_quickperms', $this->lang->forum_quickperms );
+				$xtpl->assign( 'forum_quickperm_select', $this->lang->forum_quickperm_select );
+				$xtpl->assign( 'quickperms', $quickperms );
+				$xtpl->assign( 'forum_subcat', $this->lang->forum_subcat );
+				$xtpl->assign( 'forum_is_subcat', $this->lang->forum_is_subcat );
+				$xtpl->assign( 'token', $this->generate_token() );
+				$xtpl->assign( 'submit', $this->lang->submit );
+
+				$xtpl->parse( 'Forums.AddForm' );
+				$xtpl->parse( 'Forums' );
+
+				return $xtpl->text( 'Forums' );
 			}
 			break;
 
 		case 'order':
-			$this->set_title($this->lang->forum_ordering);
-			$this->tree($this->lang->forum_ordering);
+			$this->set_title( $this->lang->forum_ordering );
+			$this->tree( $this->lang->forum_ordering );
 
-			if (isset($this->post['orderforum'])) {
+			if( isset( $this->post['orderforum'] ) ) {
 				if( !$this->is_valid_token() ) {
 					return $this->message( $this->lang->forum_ordering, $this->lang->invalid_token );
 				}
-				return $this->message($this->lang->forum_ordering, $this->OrderUpdate());
+				return $this->message( $this->lang->forum_ordering, $this->OrderUpdate() );
 			}
-			$token = $this->generate_token();
-			$forum = $this->InputBox($this->htmlwidgets->forum_grab());
-			return eval($this->template('ADMIN_FORUM_ORDER'));
+
+			$forum = $this->InputBox( $this->htmlwidgets->forum_grab() );
+
+			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
+
+			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'forum_ordering', $this->lang->forum_ordering );
+			$xtpl->assign( 'forum', $forum );
+			$xtpl->assign( 'token', $this->generate_token() );
+			$xtpl->assign( 'submit', $this->lang->submit );
+
+			$xtpl->parse( 'Forums.OrderForm' );
+			$xtpl->parse( 'Forums' );
+
+			return $xtpl->text( 'Forums' );
+
 			break;
 
 		case 'count':
-			$this->set_title($this->lang->forum_recount);
-			$this->tree($this->lang->forum_recount);
+			$this->set_title( $this->lang->forum_recount );
+			$this->tree( $this->lang->forum_recount );
+
 			$this->RecountForums();
+
 			$this->write_sets();
-			return $this->message($this->lang->forum_recount, sprintf($this->lang->recount_forums, $this->sets['topics'], $this->sets['posts']) );
+
+			return $this->message( $this->lang->forum_recount, sprintf( $this->lang->recount_forums, $this->sets['topics'], $this->sets['posts'] ) );
 			break;
 		}
 	}

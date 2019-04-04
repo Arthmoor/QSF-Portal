@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -26,32 +26,32 @@
  *
  **/
 
-define('QUICKSILVERFORUMS', true);
-define('QSF_ADMIN', true);
+define( 'QUICKSILVERFORUMS', true );
+define( 'QSF_ADMIN', true );
 
-date_default_timezone_set('America/Los_Angeles');
+date_default_timezone_set( 'UTC' );
 
-$time_now   = explode(' ', microtime());
+$time_now   = explode( ' ', microtime() );
 $time_start = $time_now[1] + $time_now[0];
 
 require '../settings.php';
 $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 
-if (!$set['installed']) {
-	header('Location: ../install/index.php');
+if( !$set['installed'] ) {
+	header( 'Location: ../install/index.php' );
 }
 
-ob_start('ob_gzhandler');
+ob_start( 'ob_gzhandler' );
 
 session_start();
 
-set_error_handler('error');
+set_error_handler( 'error' );
 
 error_reporting(E_ALL);
 
 // Check for any addons available
-include_addons($set['include_path'] . '/addons/');
+include_addons( $set['include_path'] . '/addons/' );
 
 /*
  * Logic here:
@@ -60,11 +60,11 @@ include_addons($set['include_path'] . '/addons/');
  * Otherwise $missing remains false and no error is generated later.
  */
 $missing = false;
-if (!isset($_GET['a']) ) {
+if( !isset( $_GET['a'] ) ) {
 	$module = $modules['default_admin_module'];
-	if( isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) )
+	if( isset( $_SERVER['QUERY_STRING'] ) && !empty( $_SERVER['QUERY_STRING'] ) )
 		$missing = true;
-} elseif ( !file_exists( 'sources/' . $_GET['a'] . '.php' ) ) {
+} elseif( !file_exists( 'sources/' . $_GET['a'] . '.php' ) ) {
 	$module = $modules['default_admin_module'];
 
 	$missing = true;
@@ -72,8 +72,8 @@ if (!isset($_GET['a']) ) {
 	$module = $_GET['a'];
 }
 
-if ( strstr($module, '/') || strstr($module, '\\') ) {
-	header('HTTP/1.0 403 Forbidden');
+if( strstr( $module, '/' ) || strstr( $module, '\\' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	exit( 'You have been banned from this site.' );
 }
 
@@ -81,23 +81,23 @@ require './sources/' . $module . '.php';
 
 $db = new $modules['database']($set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix']);
 
-if (!$db->connection) {
-	exit('<center><font face="verdana" size="4" color="#000000"><b>A connection to the database could not be established and/or the specified database could not be found.</font></center>');
+if( !$db->connection ) {
+	exit( '<center><font face="verdana" size="4" color="#000000"><b>A connection to the database could not be established and/or the specified database could not be found.</font></center>' );
 }
 
-$admin = new $module($db);
+$admin = new $module( $db );
 
 $admin->get['a'] = $module;
 $admin->pre      = $set['prefix'];
-$admin->sets     = $admin->get_settings($set);
+$admin->sets     = $admin->get_settings( $set );
 $admin->site     = $admin->sets['loc_of_board']; // Will eventually replace $admin->self once the SEO URL changes are done.
 $admin->modules  = $modules;
 $admin->user_cl  = new $admin->modules['user']($admin);
 $admin->user     = $admin->user_cl->login();
-$admin->lang     = $admin->get_lang($admin->user['user_language'], $admin->get['a']);
+$admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get['a'] );
 $server_load     = $admin->get_load();
 
-if (!isset($admin->get['skin'])) {
+if( !isset( $admin->get['skin'] ) ) {
 	$admin->skin = $admin->user['skin_dir'];
 } else {
 	$admin->skin = $admin->get['skin'];
@@ -105,19 +105,105 @@ if (!isset($admin->get['skin'])) {
 
 $admin->init();
 
+$xtpl = new XTemplate( '../skins/' . $admin->skin . '/admincp/index.xtpl' );
+$admin->xtpl = $xtpl;
+
 $output = $admin->execute();
 
-$title = isset($qsf->title) ? $qsf->title : $admin->name .' Admin CP';
-
-$time_now  = explode(' ', microtime());
-$time_exec = round(($time_now[1] + $time_now[0]) - $time_start, 4);
-
-if (!$admin->nohtml) {
-	$admin_main = $output . eval($admin->template('ADMIN_COPYRIGHT'));
-	echo eval($admin->template('ADMIN_INDEX'));
-} else {
+if( $admin->nohtml ) {
 	echo $output;
+} else {
+	$xtpl->assign( 'language_code', $admin->user['user_language'] );
+	$xtpl->assign( 'charset', $admin->lang->charset );
+	$xtpl->assign( 'self', $admin->self );
+
+	$title = isset($qsf->title) ? $qsf->title : $admin->name .' Admin CP';
+	$xtpl->assign( 'title', $title );
+
+	$xtpl->assign( 'admin_settings', $admin->lang->admin_settings );
+	$xtpl->assign( 'admin_edit_settings', $admin->lang->admin_edit_settings );
+	$xtpl->assign( 'admin_settings_add', $admin->lang->admin_settings_add );
+	$xtpl->assign( 'admin_new_captcha', $admin->lang->admin_new_captcha );
+	$xtpl->assign( 'admin_list_captcha', $admin->lang->admin_list_captcha );
+	$xtpl->assign( 'admin_censor', $admin->lang->admin_censor );
+	$xtpl->assign( 'admin_emoticons', $admin->lang->admin_emoticons );
+	$xtpl->assign( 'admin_phpinfo', $admin->lang->admin_phpinfo );
+	$xtpl->assign( 'admin_logs', $admin->lang->admin_logs );
+	$xtpl->assign( 'admin_stats', $admin->lang->admin_stats );
+
+	$xtpl->assign( 'admin_forums', $admin->lang->admin_forums );
+	$xtpl->assign( 'admin_create_forum', $admin->lang->admin_create_forum );
+	$xtpl->assign( 'admin_edit_forum', $admin->lang->admin_edit_forum );
+	$xtpl->assign( 'admin_delete_forum', $admin->lang->admin_delete_forum );
+	$xtpl->assign( 'admin_forum_order', $admin->lang->admin_forum_order );
+	$xtpl->assign( 'admin_recount_forums', $admin->lang->admin_recount_forums );
+	$xtpl->assign( 'admin_prune', $admin->lang->admin_prune );
+
+	$xtpl->assign( 'admin_members', $admin->lang->admin_members );
+	$xtpl->assign( 'admin_edit_member', $admin->lang->admin_edit_member );
+	$xtpl->assign( 'admin_delete_member', $admin->lang->admin_delete_member );
+	$xtpl->assign( 'admin_edit_member_perms', $admin->lang->admin_edit_member_perms );
+	$xtpl->assign( 'admin_edit_member_file_perms', $admin->lang->admin_edit_member_file_perms );
+	$xtpl->assign( 'admin_add_member_titles', $admin->lang->admin_add_member_titles );
+	$xtpl->assign( 'admin_edit_member_titles', $admin->lang->admin_edit_member_titles );
+	$xtpl->assign( 'admin_ban_ips', $admin->lang->admin_ban_ips );
+	$xtpl->assign( 'admin_mass_mail', $admin->lang->admin_mass_mail );
+	$xtpl->assign( 'admin_fix_stats', $admin->lang->admin_fix_stats );
+
+	$xtpl->assign( 'admin_groups', $admin->lang->admin_groups );
+	$xtpl->assign( 'admin_create_group', $admin->lang->admin_create_group );
+	$xtpl->assign( 'admin_edit_group_name', $admin->lang->admin_edit_group_name );
+	$xtpl->assign( 'admin_edit_group_perms', $admin->lang->admin_edit_group_perms );
+	$xtpl->assign( 'admin_edit_group_file_perms', $admin->lang->admin_edit_group_file_perms );
+	$xtpl->assign( 'admin_delete_group', $admin->lang->admin_delete_group );
+
+	$xtpl->assign( 'admin_db', $admin->lang->admin_db );
+	$xtpl->assign( 'admin_db_backup', $admin->lang->admin_db_backup );
+	$xtpl->assign( 'admin_db_restore', $admin->lang->admin_db_restore );
+	$xtpl->assign( 'admin_db_optimize', $admin->lang->admin_db_optimize );
+	$xtpl->assign( 'admin_db_repair', $admin->lang->admin_db_repair );
+	$xtpl->assign( 'admin_db_query', $admin->lang->admin_db_query );
+
+	$table = null;
+	if( $admin->get['a'] == 'perms' || $admin->get['a'] == 'file_perms' )
+		$table = '<table>';
+
+	$xtpl->assign( 'index_table_hack', $table );
+
+	$xtpl->assign( 'admin_heading', $admin->lang->admin_heading );
+
+	$endtable = null;
+	if( $admin->get['a'] == 'perms' || $admin->get['a'] == 'file_perms' )
+		$endtable = '</table>';
+
+	$xtpl->assign( 'index_endtable_hack', $endtable );
+
+	if( $admin->get['a'] != $modules['default_admin_module'] ) {
+		$xtpl->assign( 'navtree', $admin->htmlwidgets->tree );
+
+		$xtpl->parse( 'Index.NavTree' );
+	}
+
+	$xtpl->assign( 'admin_main', $output );
+
+	$xtpl->assign( 'admin_your_board', $admin->lang->admin_your_board );
+	$xtpl->assign( 'admin_poweredby', $admin->lang->powered );
+	$xtpl->assign( 'admin_name', $admin->name );
+	$xtpl->assign( 'admin_version', $admin->version );
+	$xtpl->assign( 'admin_based_on', $admin->lang->based_on );
+
+	$time_now  = explode(' ', microtime());
+	$time_exec = round(($time_now[1] + $time_now[0]) - $time_start, 4);
+
+	$xtpl->assign( 'time_exec', $time_exec );
+	$xtpl->assign( 'query_count', $admin->db->querycount );
+	$xtpl->assign( 'server_load', $server_load );
+
+	$xtpl->parse( 'Index' );
+
+	$xtpl->out( 'Index' );
 }
+
 @ob_end_flush();
 @flush();
 

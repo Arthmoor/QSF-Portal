@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -26,15 +26,15 @@
  *
  **/
  
-define('QUICKSILVERFORUMS', true);
-define('QSF_PUBLIC', true);
+define( 'QUICKSILVERFORUMS', true );
+define( 'QSF_PUBLIC', true );
 
-date_default_timezone_set('UTC');
+date_default_timezone_set( 'UTC' );
 
-$time_now   = explode(' ', microtime());
+$time_now   = explode( ' ', microtime() );
 $time_start = $time_now[1] + $time_now[0];
 
-srand((double)microtime() * 1234567);
+srand( (double)microtime() * 1234567 );
 
 $_REQUEST = array();
 
@@ -42,21 +42,21 @@ require './settings.php';
 $set['include_path'] = '.';
 require_once $set['include_path'] . '/defaultutils.php';
 
-if (!$set['installed']) {
-	header('Location: ./install/index.php');
+if( !$set['installed'] ) {
+	header( 'Location: ./install/index.php' );
 }
 
-set_error_handler('error');
+set_error_handler( 'error' );
 
 error_reporting(E_ALL);
 
 // Check for any addons available
-include_addons($set['include_path'] . '/addons/');
+include_addons( $set['include_path'] . '/addons/' );
 
 // Open connection to database
-$db = new $modules['database']($set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix']);
-if (!$db->connection) {
-    error(QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__);
+$db = new $modules['database']( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
+if( !$db->connection ) {
+    error( QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__ );
 }
 
 /*
@@ -67,11 +67,11 @@ if (!$db->connection) {
  */
 $missing = false;
 $terms_module = '';
-if (!isset($_GET['a']) ) {
+if( !isset( $_GET['a'] ) ) {
 	$module = $modules['default_module'];
-	if( isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']) )
+	if( isset( $_SERVER['QUERY_STRING'] ) && !empty( $_SERVER['QUERY_STRING'] ) )
 		$missing = true;
-} elseif ( !file_exists( 'func/' . $_GET['a'] . '.php' ) ) {
+} elseif( !file_exists( 'func/' . $_GET['a'] . '.php' ) ) {
 	$module = $modules['default_module'];
 
 	if( $_GET['a'] != 'forum_rules' && $_GET['a'] != 'upload_rules' )
@@ -82,28 +82,28 @@ if (!isset($_GET['a']) ) {
 	$module = $_GET['a'];
 }
 
-if ( strstr($module, '/') || strstr($module, '\\') ) {
-	header('HTTP/1.0 403 Forbidden');
+if( strstr( $module, '/' ) || strstr( $module, '\\' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	exit( 'You have been banned from this site.' );
 }
 
 require './func/' . $module . '.php';
 
-$qsf = new $module($db);
+$qsf = new $module( $db );
 $qsf->pre = $set['prefix'];
 
 $qsf->get['a'] = $module;
-$qsf->sets     = $qsf->get_settings($set);
+$qsf->sets     = $qsf->get_settings( $set );
 $qsf->site     = $qsf->sets['loc_of_board']; // Will eventually replace $qsf->self once the SEO URL changes are done.
 $qsf->modules  = $modules;
 
 session_start();
 
-$qsf->user_cl = new $modules['user']($qsf);
+$qsf->user_cl = new $modules['user']( $qsf );
 $qsf->user    = $qsf->user_cl->login();
-$qsf->lang    = $qsf->get_lang($qsf->user['user_language'], $qsf->get['a']);
+$qsf->lang    = $qsf->get_lang( $qsf->user['user_language'], $qsf->get['a'] );
 
-if (!isset($qsf->get['skin'])) {
+if( !isset( $qsf->get['skin'] ) ) {
 	$qsf->skin = $qsf->user['skin_dir'];
 } else {
 	$qsf->skin = $qsf->get['skin'];
@@ -111,40 +111,40 @@ if (!isset($qsf->get['skin'])) {
 
 $qsf->init();
 
-if ($qsf->is_banned()) {
-	error(QUICKSILVER_NOTICE, $qsf->lang->main_banned);
+if( $qsf->is_banned() ) {
+	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
 }
 
 $qsf->server_load = $qsf->get_load();
 
-$qsf->tree($qsf->sets['forum_name'], "$qsf->self?a=board");
+$qsf->tree( $qsf->sets['forum_name'], "$qsf->self?a=board" );
 
 $reminder = null;
 $reminder_text = null;
 
-if ($qsf->sets['closed']) {
-	if (!$qsf->perms->auth('board_view_closed')) {
-		if ($qsf->get['a'] != 'login') {
-			error(QUICKSILVER_NOTICE, $qsf->sets['closedtext'] . "<br /><hr />If you are an administrator, <a href='$qsf->self?a=login&amp;s=on'>click here</a> to login.");
+if( $qsf->sets['closed'] ) {
+	if( !$qsf->perms->auth( 'board_view_closed' ) ) {
+		if( $qsf->get['a'] != 'login' ) {
+			error( QUICKSILVER_NOTICE, $qsf->sets['closedtext'] . "<br /><hr />If you are an administrator, <a href='$qsf->self?a=login&amp;s=on'>click here</a> to login." );
 		}
 	} else {
 		$reminder_text = $qsf->lang->main_reminder_closed . '<br />&quot;' . $qsf->sets['closedtext'] . '&quot;';
 	}
 }
 
-if ($qsf->user['user_group'] == USER_AWAIT) {
+if( $qsf->user['user_group'] == USER_AWAIT ) {
 	$reminder_text = "{$qsf->lang->main_activate}<br /><a href='{$qsf->self}?a=register&amp;s=resend'>{$qsf->lang->main_activate_resend}</a>";
 }
 
-if ($reminder_text) {
-	$reminder = eval($qsf->template('MAIN_REMINDER'));
+if( $reminder_text ) {
+	$reminder = eval( $qsf->template( 'MAIN_REMINDER' ) );
 }
 
-if ($qsf->sets['max_load'] && ($qsf->server_load > $qsf->sets['max_load'])) {
+if( $qsf->sets['max_load'] && ($qsf->server_load > $qsf->sets['max_load'] ) ) {
 	error(QUICKSILVER_NOTICE, sprintf($qsf->lang->main_max_load, $qsf->sets['forum_name']));
 }
 
-$qsf->add_feed($qsf->site . '/index.php?a=rssfeed');
+$qsf->add_feed( $qsf->site . '/index.php?a=rssfeed' );
 
 if( $missing ) {
 	header( 'HTTP/1.0 404 Not Found' );
@@ -154,19 +154,19 @@ if( $missing ) {
 		$tos = $qsf->db->fetch( 'SELECT settings_tos FROM %psettings' );
 
 		$message = $qsf->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
-		$output = $qsf->message( 'Terms of Service: Forums', $message );
+		$output = $qsf->message( $qsf->lang->main_tos_forums, $message );
 	} elseif ( $terms_module == 'upload_rules' ) {
 		$tos = $qsf->db->fetch( 'SELECT settings_tos_files FROM %psettings' );
 
 		$message = $qsf->format( $tos['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
-		$output = $qsf->message( 'Terms of Service: Uploads', $message );
+		$output = $qsf->message( $qsf->lang->main_tos_files, $message );
 	} else {
 		$output = $qsf->execute();
 	}
 }
 
-if (($qsf->get['a'] == 'forum') && isset($qsf->get['f'])) {
-	$searchlink = '&amp;f=' . intval($qsf->get['f']);
+if( ( $qsf->get['a'] == 'forum' ) && isset( $qsf->get['f'] ) ) {
+	$searchlink = '&amp;f=' . intval( $qsf->get['f'] );
 } else {
 	$searchlink = null;
 }
@@ -185,39 +185,39 @@ if( $qsf->get_messages() > 0 )
 $new_files = null;
 if( $qsf->get_files() > 0 )
 	$new_files = ' class="attention"';
-$userheader = eval($qsf->template('MAIN_HEADER_' . ($qsf->perms->is_guest ? 'GUEST' : 'MEMBER')));
+$userheader = eval( $qsf->template( 'MAIN_HEADER_' . ( $qsf->perms->is_guest ? 'GUEST' : 'MEMBER' ) ) );
 
-$title = isset($qsf->title) ? $qsf->title : $qsf->sets['forum_name'];
+$title = isset( $qsf->title ) ? $qsf->title : $qsf->sets['forum_name'];
 
-$time_now  = explode(' ', microtime());
-$qsf->time_exec = round($time_now[1] + $time_now[0] - $time_start, 4);
+$time_now  = explode( ' ', microtime() );
+$qsf->time_exec = round( $time_now[1] + $time_now[0] - $time_start, 4 );
 
-if (!$qsf->nohtml) {
-	ob_start('ob_gzhandler');
+if( !$qsf->nohtml ) {
+	ob_start( 'ob_gzhandler' );
 
 	$google = null;
-	if ( isset($qsf->sets['analytics_code']) && !empty($qsf->sets['analytics_code']) ) {
+	if( isset( $qsf->sets['analytics_code'] ) && !empty( $qsf->sets['analytics_code'] ) ) {
 		$google = $qsf->sets['analytics_code'];
 	}
 	$meta_keywords = $qsf->sets['meta_keywords'];
 	$meta_desc = $qsf->sets['meta_description'];
 	$servertime = $qsf->mbdate( DATE_LONG, $qsf->time, false );
-	$copyright = eval($qsf->template('MAIN_COPYRIGHT'));
+	$copyright = eval( $qsf->template( 'MAIN_COPYRIGHT' ) );
 
-	if (isset($qsf->get['debug'])) {
-		$dumpthis = eval($qsf->template('MAIN'));
-		$output = $qsf->show_debug($qsf->server_load, $qsf->time_exec);
+	if( isset( $qsf->get['debug'] ) ) {
+		$dumpthis = eval( $qsf->template( 'MAIN' ) );
+		$output = $qsf->show_debug( $qsf->server_load, $qsf->time_exec );
 		echo $output;
 	} else {
 		$quicksilverforums = $output;
-		echo eval($qsf->template('MAIN'));
+		echo eval( $qsf->template( 'MAIN' ) );
 	}
 
 	@ob_end_flush();
 	@flush();
 } else {
-	if (isset($qsf->get['debug'])) {
-		$output = $qsf->show_debug($qsf->server_load, $qsf->time_exec);
+	if( isset( $qsf->get['debug'] ) ) {
+		$output = $qsf->show_debug( $qsf->server_load, $qsf->time_exec );
 		echo $output;
 	} else {
 		echo $output;

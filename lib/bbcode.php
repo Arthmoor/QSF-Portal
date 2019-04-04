@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -33,7 +33,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 
 class bbcode
 {
-	public function __construct(&$module)
+	public function __construct( &$module )
 	{
 		$this->settings = &$module->settings; // <---- When you figure out why this works, you let me know. -- Samson
 		$this->site = &$module->site;
@@ -65,32 +65,32 @@ class bbcode
 	{
 		$strtr = array();
 
-		if ($options & FORMAT_CENSOR) {
+		if( $options & FORMAT_CENSOR ) {
 			$in = $this->process_censors($in);
 		}
 
-		if( ($options & FORMAT_HTMLCHARS) ) {
-			$in = htmlentities($in, ENT_COMPAT, 'UTF-8');
+		if( $options & FORMAT_HTMLCHARS ) {
+			$in = htmlentities( $in, ENT_COMPAT, 'UTF-8' );
 		}
 
-		if( ($options & FORMAT_MBCODE) ) {
+		if( $options & FORMAT_MBCODE ) {
 			$in = $this->pre_parse_links( $in );
 			$in = $this->bbcode_parse( $in );
 		}
 
 		// Yes, this looks silly, but trust me.
-		if ( !( $options & FORMAT_HTMLCHARS ) || ( ($options & FORMAT_HTMLCHARS) && ($options & FORMAT_BREAKS) ) )
+		if( !( $options & FORMAT_HTMLCHARS ) || ( ($options & FORMAT_HTMLCHARS) && ($options & FORMAT_BREAKS) ) )
 			$strtr["\n"] = "<br />\n";
 
 		// Don't format emoticons!
 		if( $options & FORMAT_EMOTICONS ) {
-			if( isset($this->emoticons['click_replacement']) )
-				$strtr = array_merge($strtr, $this->emoticons['click_replacement']);
-			if( isset($this->emoticons['replacement']) )
-				$strtr = array_merge($strtr, $this->emoticons['replacement']);
+			if( isset( $this->emoticons['click_replacement'] ) )
+				$strtr = array_merge( $strtr, $this->emoticons['click_replacement'] );
+			if( isset( $this->emoticons['replacement'] ) )
+				$strtr = array_merge( $strtr, $this->emoticons['replacement'] );
 		}
 
-		$in = strtr($in, $strtr);
+		$in = strtr( $in, $strtr );
 
 		return $in;
 	}
@@ -103,7 +103,7 @@ class bbcode
 	 * @param string $in Unformatted input
 	 * @return string result with censored words replaced
 	 **/
-	private function process_censors($in)
+	private function process_censors( $in )
 	{
 		if ($this->censor) {
 			$in = preg_replace($this->censor, '####', $in);
@@ -274,50 +274,50 @@ class bbcode
 	 **/
 	private function format_code( $input, $php, $largebox = false, $start = 1 )
 	{
-		if ($php) {
-			$input = html_entity_decode($input, ENT_COMPAT, 'UTF-8'); // contents is html so undo it
+		if( $php ) {
+			$input = html_entity_decode( $input, ENT_COMPAT, 'UTF-8' ); // contents is html so undo it
 
-			if (strpos($input, '<?') === false) {
+			if( strpos( $input, '<?' ) === false ) {
 				$input  = '<?php ' . $input . '?>';
 				$tagged = true;
 			}
 
 			ob_start();
 
-			@highlight_string($input);
+			@highlight_string( $input );
 			$input = ob_get_contents();
 
 			ob_end_clean();
 
 			// Trim pointless space
-			$input = preg_replace('/^<code><span style="color: #000000">\s(.+)\s<\/span>\s<\/code>$/', '<span style="color: #000000">$1</span>', $input);
+			$input = preg_replace( '/^<code><span style="color: #000000">\s(.+)\s<\/span>\s<\/code>$/', '<span style="color: #000000">$1</span>', $input );
 		}
 
-		if (isset($tagged)) {
-			$input = str_replace(array('&lt;?php&nbsp;', '?&gt;'), '', $input);
+		if( isset( $tagged ) ) {
+			$input = str_replace( array( '&lt;?php&nbsp;', '?&gt;' ), '', $input );
 		}
-		
-		if ($php) {
-			$lines = explode('<br />', $input);
+
+		if( $php ) {
+			$lines = explode( '<br />', $input );
 		} else {
-			$lines = explode("\n", $input);
+			$lines = explode( "\n", $input );
 		}
-		$count = count($lines);
+		$count = count( $lines );
 
 		$col1 = '';
 		$col2 = '';
 
-		for ($i = 0; $i < $count; $i++)
+		for( $i = 0; $i < $count; $i++ )
 		{
 			$col1 .= $start . "\n";
 			$col2 .= $lines[$i];
 			$start++;
 		}
-		
-		$codehtml = $this->get_code_html($largebox);
+
+		$codehtml = $this->get_code_html( $largebox );
 
 		$return = '';
-		if ($php) {
+		if( $php ) {
 			$return = $codehtml['start_php'];
 		} else {
 			$return = $codehtml['start_code'];
@@ -383,7 +383,7 @@ class bbcode
 		return $in;
 	}
 
-	private function process_topic($topic, $in)
+	private function process_topic( $topic, $in )
 	{
 		return '<a href="' . $this->sets['loc_of_board'] . '/index.php?a=topic&t=' . $topic . '>' . $in . '</a>';
 	}

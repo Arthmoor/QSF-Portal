@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -37,7 +37,13 @@ class home extends admin
 {
 	function execute()
 	{
-		return eval($this->template('ADMIN_HOME'));
+		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/home.xtpl' );
+
+		$xtpl->assign( 'home_menu_title', $this->lang->home_menu_title );
+		$xtpl->assign( 'home_choose', $this->lang->home_choose );
+
+		$xtpl->parse( 'Home' );
+		return $xtpl->text( 'Home' );
 	}
 }
 ?>

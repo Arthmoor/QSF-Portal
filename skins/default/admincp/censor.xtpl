@@ -1,0 +1,19 @@
+<!-- BEGIN: Censor -->
+<form action="{self}?a=censoring" method="post">
+<div class="article">
+ <div class="title">{censor}</div>
+ {censor_one_per_line}<br />
+ {censor_regex_allowed}
+ <p class="line"></p>
+
+ <em>Hell</em> automatically matches <em>hello</em> and <em>HeLL</em>.
+ <p class="line"></p>
+
+ <textarea name="words" rows="15" cols="70" class="input">{words}</textarea>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: Censor -->

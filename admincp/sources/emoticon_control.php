@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -37,84 +37,116 @@ class emoticon_control extends admin
 {
 	function execute()
 	{
-		if (!isset($this->get['s'])) {
+		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = null;
 		}
 
-		switch($this->get['s'])
+		switch( $this->get['s'] )
 		{
 		case null:
 		case 'edit':
-			$this->set_title($this->lang->emote);
-			$this->tree($this->lang->emote);
+			$this->set_title( $this->lang->emote );
+			$this->tree( $this->lang->emote );
 
 			$out = null;
-			$edit_id = isset($this->get['edit']) ? intval($this->get['edit']) : 0;
-			$delete_id = isset($this->get['delete']) ? intval($this->get['delete']) : 0;
+			$edit_id = isset( $this->get['edit'] ) ? intval( $this->get['edit'] ) : 0;
+			$delete_id = isset( $this->get['delete'] ) ? intval( $this->get['delete'] ) : 0;
 
-			if (isset($this->get['delete'])) {
-				$this->db->query('DELETE FROM %pemoticons WHERE emote_id=%d', $delete_id );
+			if( isset( $this->get['delete'] ) ) {
+				$this->db->query( 'DELETE FROM %pemoticons WHERE emote_id=%d', $delete_id );
 			}
 
-			if (!isset($this->get['edit'])) {
+			if( !isset( $this->get['edit'] ) ) {
 				$this->get['edit'] = null;
 			}
 
-			if (isset($this->post['submit']) && (trim($this->post['new_string']) != '') && (trim($this->post['new_image']) != '')) {
-				$new_click = intval( isset($this->post['new_click']) );
-				$this->db->query("UPDATE %pemoticons SET emote_string='%s', emote_image='%s', emote_clickable=%d WHERE emote_id=%d",
+			if( isset( $this->post['submit'] ) && ( trim( $this->post['new_string'] ) != '' ) && ( trim( $this->post['new_image'] ) != '' ) ) {
+				$new_click = intval( isset( $this->post['new_click'] ) );
+				$this->db->query( "UPDATE %pemoticons SET emote_string='%s', emote_image='%s', emote_clickable=%d WHERE emote_id=%d",
 					$this->post['new_string'], $this->post['new_image'], $new_click, $edit_id );
 				$this->get['edit'] = null;
 			}
 
-			$query = $this->db->query('SELECT * FROM %pemoticons ORDER BY emote_clickable,emote_string ASC');
-			while ($data = $this->db->nqfetch($query))
+			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/emoticon_control.xtpl' );
+
+			$xtpl->assign( 'emote_controls', $this->lang->emote_controls );
+
+			$add_form_action = $this->site . '/admincp/index.php?a=emoticon_control&amp;s=add';
+			$xtpl->assign( 'add_form_action', $add_form_action );
+
+			$xtpl->assign( 'emote_add', $this->lang->emote_add );
+			$xtpl->assign( 'emote_text', $this->lang->emote_text );
+			$xtpl->assign( 'emote_image', $this->lang->emote_image );
+
+			$em_add_list = $this->list_emoticons( 'New' );
+			$xtpl->assign( 'em_add_list', $em_add_list );
+
+			$xtpl->assign( 'emote_clickable', $this->lang->emote_clickable );
+
+			$form_action = $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;edit=' . $edit_id;
+			$xtpl->assign( 'form_action', $form_action );
+
+			$xtpl->assign( 'emote_edit_or_delete', $this->lang->emote_edit_or_delete );
+
+			$query = $this->db->query( 'SELECT * FROM %pemoticons ORDER BY emote_clickable,emote_string ASC' );
+			while( $data = $this->db->nqfetch( $query ) )
 			{
 				$em_id = $data['emote_id'];
 				$em_string = $data['emote_string'];
 				$em_image = $data['emote_image'];
-				$em_clickable = $this->lang->yes;
-				if( $data['emote_clickable'] == 0 )
-					$em_clickable = $this->lang->no;
 
-				$em_edit = '<a href="' . $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;edit=' . $data['emote_id'] . '">' . $this->lang->edit . '</a>';
-				$em_delete = '<a href="' . $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;delete=' . $data['emote_id'] . '">' . $this->lang->delete . '</a>';
+				if( !$this->get['edit'] || ( $edit_id != $data['emote_id'] ) ) {
+					$xtpl->assign( 'em_string', $em_string );
+					$xtpl->assign( 'em_image', $em_image );
 
-				if ( !$this->get['edit'] || ($edit_id != $data['emote_id']) ) {
-					$img_src = '<img src="' . $this->site . '/emoticons/' . $em_image . '" alt="' . $em_string . '" />';
-					$out .= eval($this->template('ADMIN_EMOTICONS_DISPLAY'));
+					$xtpl->assign( 'img_src', "<img src=\"{$this->site}/emoticons/{$em_image}\" alt=\"{$em_string}\" />" );
+
+					if( $data['emote_clickable'] == 0 )
+						$xtpl->assign( 'em_clickable', $this->lang->no );
+					else
+						$xtpl->assign( 'em_clickable', $this->lang->yes );
+
+					$xtpl->assign( 'em_edit', "<a href=\"{$this->site}/admincp/index.php?a=emoticon_control&amp;s=edit&amp;edit={$em_id}\">{$this->lang->edit}</a>" );
 				} else {
+					$xtpl->assign( 'em_string', "<input name=\"new_string\" value=\"{$em_string}\" class=\"input\" />" );
+
+					$em_list = $this->list_emoticons( $em_image );
+					$xtpl->assign( 'em_image', "<select name=\"new_image\" onchange='document.emot_preview.src=\"../emoticons/\"+this.options[selectedIndex].value'>{$em_list}</select>" );
+
 					$checked = '';
 					if( $data['emote_clickable'] == 1 )
 						$checked = 'checked';
+					$xtpl->assign( 'em_clickable', "<input type=\"checkbox\" name=\"new_click\" {$checked} />" );
 
-					$img_src = '<img name="emot_preview" src="' . $this->site . '/emoticons/' . $em_image . '" alt="' . $em_string . '" />';
-					$em_list = $this->list_emoticons( $em_image );
-					$out .= eval($this->template('ADMIN_EMOTICONS_EDIT'));
+					$xtpl->assign( 'img_src', "<img name=\"emot_preview\" src=\"{$this->site}/emoticons/{$em_image}\" alt=\"{$em_string}\" />" );
+
+					$xtpl->assign( 'em_edit', "<input type=\"submit\" name=\"submit\" value=\"{$this->lang->edit}\">" );
 				}
+
+				$em_delete = '<a href="' . $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;delete=' . $em_id . '">' . $this->lang->delete . '</a>';
+				$xtpl->assign( 'em_delete', $em_delete );
+
+				$xtpl->parse( 'Emoticons.SingleEntry' );
 			}
 
-			$form_action = $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;edit=' . $edit_id;
-			$add_form_action = $this->site . '/admincp/index.php?a=emoticon_control&amp;s=add';
-			$em_add_list = $this->list_emoticons( 'New' );
-
-			return eval($this->template('ADMIN_EMOTICONS_EDIT_CONTROL'));
+			$xtpl->parse( 'Emoticons' );
+			return $xtpl->text( 'Emoticons' );
 			break;
 
 		case 'add':
-			$this->set_title($this->lang->emote_add);
-			$this->tree($this->lang->emote_add);
+			$this->set_title( $this->lang->emote_add );
+			$this->tree( $this->lang->emote_add );
 
-			if (!isset($this->post['submit'])) {
+			if( !isset( $this->post['submit'] ) ) {
 				$this->get['s'] = null;
 				$this->execute();
 				return;
 			} else {
-				$new_clickable = intval( isset($this->post['new_click']) );
-				$new_string = isset($this->post['new_string']) ? $this->post['new_string'] : '';
+				$new_clickable = intval( isset( $this->post['new_click'] ) );
+				$new_string = isset( $this->post['new_string'] ) ? $this->post['new_string'] : '';
 
-				if (trim($new_string) == '') {
-					return $this->message($this->lang->emote_add, $this->lang->emote_no_text);
+				if( trim( $new_string ) == '') {
+					return $this->message( $this->lang->emote_add, $this->lang->emote_no_text );
 				}
 
 				$new_image = '';
@@ -124,10 +156,10 @@ class emoticon_control extends admin
 					if( isset( $this->files['new_image'] ) && $this->files['new_image']['error'] == UPLOAD_ERR_OK ) {
 						$fname = $this->files['new_image']['tmp_name'];
 						$system = explode( '.', $this->files['new_image']['name'] );
-						$ext = strtolower(end($system));
+						$ext = strtolower( end( $system ) );
 
-						if ( !preg_match( '/jpg|jpeg|png|gif/', $ext ) ) {
-							return $this->message( $this->lang->emote_add, sprintf($this->lang->emote_invalid_image, $ext) );
+						if( !preg_match( '/jpg|jpeg|png|gif/', $ext ) ) {
+							return $this->message( $this->lang->emote_add, sprintf( $this->lang->emote_invalid_image, $ext ) );
 						} else {
 							$new_fname = '../emoticons/' . $this->files['new_image']['name'];
 							if ( !move_uploaded_file( $fname, $new_fname ) )
@@ -138,15 +170,15 @@ class emoticon_control extends admin
 					}
 				}
 
-				$this->db->query("INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES ('%s', '%s', %d )", $new_string, $new_image, $new_clickable );
+				$this->db->query( "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES ('%s', '%s', %d )", $new_string, $new_image, $new_clickable );
 
-				return $this->message($this->lang->emote_add, $this->lang->emote_added, $this->lang->emote_back, $this->site . '/admincp/index.php?a=emoticon_control' );
+				return $this->message( $this->lang->emote_add, $this->lang->emote_added, $this->lang->emote_back, $this->site . '/admincp/index.php?a=emoticon_control' );
 			}
 			break;
 		}
 	}
 
-	function list_emoticons($select)
+	function list_emoticons( $select )
 	{
 		$dirname = "../emoticons/";
 
@@ -156,24 +188,22 @@ class emoticon_control extends admin
 		if( $select == 'New' )
 			$out .= '\n<option value="New" selected="selected">New</option>';
 
-		$dir = opendir($dirname);
-		while (($emo = readdir($dir)) !== false)
+		$dir = opendir( $dirname );
+		while( ( $emo = readdir( $dir ) ) !== false )
 		{
-			$ext = substr($emo, -3);
-			if (($ext != 'png')
-			&& ($ext != 'gif')
-			&& ($ext != 'jpg')) {
+			$ext = substr( $emo, -3 );
+			if( ( $ext != 'png' ) && ( $ext != 'gif' ) && ( $ext != 'jpg' ) ) {
 				continue;
 			}
 
-			if (is_dir($dirname . $emo)) {
+			if( is_dir( $dirname . $emo ) ) {
 				continue;
 			}
 
 			$files[] = $emo;
 		}
 
-		sort($files);
+		sort( $files );
 
 		foreach( $files as $key => $name ) {
 			$out .= "\n<option value='$name'" . (($name == $select) ? ' selected' : '') . ">$name</option>";

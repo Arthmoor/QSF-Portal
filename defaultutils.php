@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -55,12 +55,12 @@ $modules['readmarker'] = 'readmarker';
 require_once $set['include_path'] . '/lib/activeutil.php';
 $modules['active'] = 'activeutil';
 
-
 // Other variables that we can allow addons to change
 $modules['default_module'] = 'main';
 $modules['default_admin_module'] = 'home';
 
 // These are generic enough that you shouldn't need to customise them
+require_once $set['include_path'] . '/lib/zTemplate.php';
 require_once $set['include_path'] . '/lib/modlet.php';
 require_once $set['include_path'] . '/func/constants.php';
 require_once $set['include_path'] . '/lib/globalfunctions.php';

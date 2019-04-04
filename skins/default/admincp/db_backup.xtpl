@@ -1,0 +1,19 @@
+<!-- BEGIN: DBBackup -->
+<!-- BEGIN: BackupForm -->
+<form action="{self}?a=backup&amp;s=create" method="post">
+<div class="article">
+ <div class="title">{options}</div>
+ <span class="field">{add_complete} INSERT {statements}?</span>
+ <span class="form"><input type="checkbox" checked="checked" name="insert" value="1" /></span>
+ <p class="line"></p>
+
+ <span class="field">{add_drop} DROP TABLE {statements}<a href="#" title="{uncheck}">?</a></span>
+ <span class="form"><input type="checkbox" checked="checked" name="droptable" value="1" class="check" /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{backup}" class="check" />
+</div>
+</form>
+<!-- END: BackupForm -->
+<!-- END: DBBackup -->

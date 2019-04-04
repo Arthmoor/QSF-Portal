@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -30,7 +30,7 @@ if (!defined('QSF_INSTALLER')) {
 	exit('Use index.php to upgrade.');
 }
 
-// Upgrade from QSF Portal 1.5.2 to QSF Portal 1.6
+// Upgrade from QSF Portal 1.5.2 to QSF Portal 2.0
 
 // Template changes - Don't forget to enclose them inside single quotes!!!
 $need_templates = true;
@@ -40,7 +40,8 @@ $this->sets['registrations_allowed'] = 1;
 $this->sets['analytics_code'] = '';
 
 // Deleted settings
-unset( $this->sets['analyrics_id'] );
+unset( $this->sets['analytics_id'] );
+unset( $this->sets['link_target'] );
 
 // Forum permission changes	
 

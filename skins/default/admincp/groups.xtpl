@@ -1,0 +1,63 @@
+<!-- BEGIN: Groups -->
+<!-- BEGIN: AddForm -->
+<form action="{self}?a=groups&amp;s=add" method="post">
+<div class="article">
+ <div class="title">{groups_create}</div>
+ {groups_create_new} <input class="input" name="group_name" /> {based_on}
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: AddForm -->
+
+<!-- BEGIN: ChooseForm -->
+<form action="{self}?a=groups&amp;s=edit" method="post">
+<div class="article">
+ <div class="title">{groups_edit}</div>
+ {groups_to_edit}: {group_list}<br /><br />
+ <input type="submit" name="choose_group" value="{submit}" />
+</div>
+</form>
+<!-- END: ChooseForm -->
+
+<!-- BEGIN: EditForm -->
+<form action="{self}?a=groups&amp;s=edit" method="post">
+<div class="article">
+ <div class="title">{groups_edit}</div>
+
+ <span class="field">{groups_type}</span>
+ <span class="form">{g_type}</span>
+ <p class="line"></p>
+
+ <span class="field">{groups_name}</span>
+ <span class="form"><input name="group_name" value="{oldGroupName}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{groups_formatting}</span>
+ <span class="form"><input name="group_format" value="{oldGroupFormat}" /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="hidden" name="group" value="{g}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditForm -->
+
+<!-- BEGIN: DeleteForm -->
+<form action="{self}?a=groups&amp;s=delete" method="post">
+<div class="article">
+ <div class="title">{groups_delete}</div>
+ {groups_will_be}<br />
+ {groups_will_become}<br /><br />
+ <hr>
+  <input type="checkbox" name="confirm" id="confirm" /> <label for="confirm">{groups_i_confirm}</label>
+ <hr />
+ <br />
+ {groups_only_custom}<br /><br />
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: DeleteForm -->
+<!-- END: Groups -->

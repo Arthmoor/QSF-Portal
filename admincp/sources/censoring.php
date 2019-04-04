@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -50,42 +50,53 @@ class censoring extends admin
 	 **/
 	function execute()
 	{
-		$this->set_title($this->lang->censor);
-		$this->tree($this->lang->censor);
+		$this->set_title( $this->lang->censor );
+		$this->tree( $this->lang->censor );
 
-		if (!isset($this->post['submit'])) {
+		if( !isset( $this->post['submit'] ) ) {
 			$words = null;
 			$token = $this->generate_token();
 
-			$query = $this->db->query("SELECT * FROM %preplacements ORDER BY replacement_id");
-			while ($word = $this->db->nqfetch($query))
+			$query = $this->db->query( "SELECT * FROM %preplacements ORDER BY replacement_id" );
+			while( $word = $this->db->nqfetch( $query ) )
 			{
-				$words .= str_replace('(.*?)', '*', $word['replacement_search']) . "\n";
+				$words .= str_replace( '(.*?)', '*', $word['replacement_search'] ) . "\n";
 			}
 
-			$words = rtrim($words);
+			$words = rtrim($words );
 
-			return eval($this->template('ADMIN_CENSOR_FORM'));
+			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/censor.xtpl' );
+
+			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'censor', $this->lang->censor );
+			$xtpl->assign( 'censor_one_per_line', $this->lang->censor_one_per_line );
+			$xtpl->assign( 'censor_regex_allowed', $this->lang->censor_regex_allowed );
+			$xtpl->assign( 'words', $words );
+			$xtpl->assign( 'submit', $this->lang->submit );
+			$xtpl->assign( 'token', $this->generate_token() );
+
+			$xtpl->parse( 'Censor' );
+			return $xtpl->text( 'Censor' );
 		} else {
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->censor, $this->lang->invalid_token );
 			}
 
-			$words = preg_replace('/[^a-zA-Z0-9\s\*"\'=]/', '', $this->post['words']);
-			$words = str_replace('*', '(.*?)', $words);
-			$words = explode("\n", $words);
+			$words = preg_replace( '/[^a-zA-Z0-9\s\*"\'=]/', '', $this->post['words'] );
+			$words = str_replace( '*', '(.*?)', $words );
+			$words = explode( "\n", $words );
 
-			$this->db->query("TRUNCATE TABLE %preplacements");
+			$this->db->query( "TRUNCATE TABLE %preplacements" );
 
-			foreach ($words as $word)
+			foreach( $words as $word )
 			{
-				$word = trim($word);
-				if ($word) {
-					$this->db->query("INSERT INTO %preplacements (replacement_search) VALUES ('%s')", $word);
+				$word = trim( $word );
+				if( $word ) {
+					$this->db->query( "INSERT INTO %preplacements (replacement_search) VALUES ('%s')", $word );
 				}
 			}
 
-			return $this->message($this->lang->censor, $this->lang->censor_updated);
+			return $this->message( $this->lang->censor, $this->lang->censor_updated );
 		}
 	}
 }

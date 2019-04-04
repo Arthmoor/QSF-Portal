@@ -1,0 +1,10 @@
+<!-- BEGIN: Query -->
+<form action="{self}?a=query" method="post">
+<div class="article">
+ <div class="title">{query}</div>
+ <textarea class="input" name="sql" cols="30" rows="15" style="width:100%">SELECT * FROM %pgroups</textarea><br /><br />
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: Query -->

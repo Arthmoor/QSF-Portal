@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -37,30 +37,38 @@ class logs extends admin
 {
 	function execute()
 	{
-		$this->set_title($this->lang->logs_view);
-		$this->tree($this->lang->logs_view);
+		$this->set_title( $this->lang->logs_view );
+		$this->tree( $this->lang->logs_view );
 
-		$data = $this->db->query("SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC");
-		$num = $this->db->num_rows($data);
+		$data = $this->db->query( "SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC" );
+		$num = $this->db->num_rows( $data );
 
 		$this->lang->main();
 
-		$this->get['min'] = isset($this->get['min']) ? intval($this->get['min']) : 0;
-		$this->get['num'] = isset($this->get['num']) ? intval($this->get['num']) : 60;
+		$this->get['min'] = isset( $this->get['min'] ) ? intval( $this->get['min'] ) : 0;
+		$this->get['num'] = isset( $this->get['num'] ) ? intval( $this->get['num'] ) : 60;
 		$pages = $this->htmlwidgets->get_pages( $num, 'a=logs', $this->get['min'], $this->get['num'] );
 
-		$data = $this->db->query("SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT %d, %d",
-                       $this->get['min'], $this->get['num']);
+		$data = $this->db->query( "SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT %d, %d",
+                       $this->get['min'], $this->get['num'] );
 
-		$out = null;
-		while ($log = $this->db->nqfetch($data))
+		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/logs.xtpl' );
+
+		$xtpl->assign( 'pages', $pages );
+		$xtpl->assign( 'logs_view', $this->lang->logs_view );
+		$xtpl->assign( 'logs_time', $this->lang->logs_time );
+		$xtpl->assign( 'logs_user', $this->lang->logs_user );
+		$xtpl->assign( 'logs_action', $this->lang->logs_action );
+		$xtpl->assign( 'logs_id', $this->lang->logs_id );
+
+		while( $log = $this->db->nqfetch( $data ) )
 		{
-			$date = $this->mbdate(DATE_LONG, $log['log_time']);
+			$date = $this->mbdate( DATE_LONG, $log['log_time'] );
 			$user = $log['user_name'];
 			$action = '';
 			$id = '';
 
-			switch ($log['log_action'])
+			switch( $log['log_action'] )
 			{
 			case 'spam_delete':
 				$action = $this->lang->logs_reported_spam;
@@ -182,9 +190,16 @@ class logs extends admin
 				$id = $log['log_data1'];
 			}
 
-			$out .= eval($this->template('ADMIN_MOD_LOGS_ENTRY'));
+			$xtpl->assign( 'date', $date );
+			$xtpl->assign( 'user', $user );
+			$xtpl->assign( 'action', $action );
+			$xtpl->assign( 'id', $id );
+
+			$xtpl->parse( 'Logs.Entry' );
 		}
-		return eval($this->template('ADMIN_MOD_LOGS'));
+
+		$xtpl->parse( 'Logs' );
+		return $xtpl->text( 'Logs' );
 	}
 }
 ?>

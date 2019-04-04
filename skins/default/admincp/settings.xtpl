@@ -1,0 +1,372 @@
+<!-- BEGIN: Settings -->
+<!-- BEGIN: AddForm -->
+<form action="{self}?a=settings&amp;s=add" method="post">
+<div class="article">
+ <div class="title">{settings_new}</div>
+ {settings_new_name}:  <input class="input" name="new_setting" type="text" value="" /><br /><br />
+ {settings_new_value}: <input class="input" name="new_value" type="text" value="" /><br />
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: AddForm -->
+
+<!-- BEGIN: EditForm -->
+<form action="{self}?a=settings&amp;s=update" method="post">
+<input type="hidden" name="token" value={token}" />
+<div class="article">
+ <div class="title">{settings_general}</div>
+ <span class="field">{settings_board_enabled}</span>
+ <span class="form">
+  <input class="check" type="radio" name="closed" value="0" {enable_checked} id="closed2" /><label for="closed2">{settings_enabled}</label><br />
+  <input class="check" type="radio" name="closed" value="1" {disable_checked} id="closed1" /><label for="closed1">{settings_disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_debug_mode}</span>
+ <span class="form">
+  <input class="check" type="radio" name="debug_mode" value="0" {debug_on} id="debug2" /><label for="debug2">{disabled}</label><br />
+  <input class="check" type="radio" name="debug_mode" value="1" {debug_off} id="debug1" /><label for="debug1">{enabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_disabled_notice}<br /><span class="tiny">{settings_show_notice}</span></span>
+ <span class="form"><input type="text" name="closedtext" value="{closedtext}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_board_name}</span>
+ <span class="form"><input type="text" name="forum_name" value="{forum_name}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_board_location}<br /><span class="tiny">URL</span></span>
+ <span class="form"><input type="text" name="loc_of_board" value="{loc_of_board}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_meta_keywords}</span>
+ <span class="form"><textarea name="meta_keywords" rows="2" cols="37">{meta_keywords}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_meta_description}</span>
+ <span class="form"><textarea name="meta_description" rows="2" cols="37">{meta_desc}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_topics_page}</span>
+ <span class="form"><input type="text" name="topics_per_page" value="{topics_per_page}" size="40" /></span>
+ <p class="line"></p>
+ 
+ <span class="field">{settings_posts_topic}</span>
+ <span class="form"><input type="text" name="posts_per_page" value="{posts_per_page}" size="40" /></span>
+ <p class="line"></p>
+ 
+ <span class="field">{settings_hot_topic}</span>
+ <span class="form"><input type="text" name="hot_limit" value="{hot_limit}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_edit_post_age}</span>
+ <span class="form"><input type="text" name="edit_post_age" value="{edit_post_age}" size="40" /></span>
+ <p class="line"></p>
+ 
+ <span class="field">{settings_antibot}</span>
+ <span class="form">
+  <input class="check" type="radio" name="register_image" value="1" {antibot_enabled} id="register_image1" /><label for="register_image1">{enabled}</label><br />
+  <input class="check" type="radio" name="register_image" value="0" {antibot_disabled} id="register_image2" /><label for="register_image2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_registrations}</span>
+ <span class="form">
+  <input class="check" type="radio" name="registrations_allowed" value="1" {registrations_enabled} id="register_allow1" /><label for="register_allow1">{enabled}</label><br />
+  <input class="check" type="radio" name="registrations_allowed" value="0" {registrations_disabled} id="register_allow2" /><label for="register_allow2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+ 
+ <span class="field">{settings_tos}</span>
+ <span class="form"><textarea name="tos" rows="10" cols="37">{tos_text}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_tos_files}</span>
+ <span class="form"><textarea name="tos_files" rows="10" cols="37">{tos_files_text}</textarea></span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">Akismet {settings}</div>
+ <span class="field">{settings_wordpress_id}<br /><span class="tiny">{settings_wordpress_msg}</span></span>
+ <span class="form"><input class="input" type="text" name="wordpress_api_key" value="{wordpress_api_key}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_akismet_email_enable}<br /><span class="tiny">{settings_akismet_email_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_email" value="1" {akismet_email_enabled} id="akismet_email1" /><label for="akismet_email1">{enabled}</label><br />
+  <input class="check" type="radio" name="akismet_email" value="0" {akismet_email_disabled} id="akismet_email2" /><label for="akismet_email2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_akismet_ureg_enable}<br /><span class="tiny">{settings_akismet_ureg_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_ureg" value="1" {akismet_ureg_enabled} id="akismet_ureg1" /><label for="akismet_ureg1">{enabled}</label><br />
+  <input class="check" type="radio" name="akismet_ureg" value="0" {akismet_ureg_disabled} id="akismet_ureg2" /><label for="akismet_ureg2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_akismet_profiles_enable}<br /><span class="tiny">{settings_akismet_profiles_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_profiles" value="1" {akismet_profiles_enabled} id="akismet_profiles1" /><label for="akismet_profiles1">{enabled}</label><br />
+  <input class="check" type="radio" name="akismet_profiles" value="0" {akismet_profiles_disabled} id="akismet_profiles2" /><label for="akismet_profiles2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_akismet_sigs_enable}<br /><span class="tiny">{settings_akismet_sigs_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_sigs" value="1" {akismet_sigs_enabled} id="akismet_sigs1" /><label for="akismet_sigs1">{enabled}</label><br />
+  <input class="check" type="radio" name="akismet_sigs" value="0" {akismet_sigs_disabled} id="akismet_sigs2" /><label for="akismet_sigs2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_akismet_posts_enable}<br /><span class="tiny">{settings_akismet_posts_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="akismet_posts" value="1" {akismet_posts_enabled} id="akismet_posts1" /><label for="akismet_posts1">{enabled}</label><br />
+  <input class="check" type="radio" name="akismet_posts" value="0" {akismet_posts_disabled} id="akismet_posts2" /><label for="akismet_posts2">{disabled}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_members}</div>
+ <span class="field">{settings_default_skin}</span>
+ <span class="form"><select name="default_skin">{selectSkins}</select></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_default_lang}</span>
+ <span class="form"><select name="default_lang">{defaultlang}</select></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_group_after}</span>
+ <span class="form"><select name="default_group">{selectGroups}</select></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_timezone}</span>
+ <span class="form"><select class="timezone" name="default_timezone">{selectTimezones}</select></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_show_avatars}</span>
+ <span class="form">
+  <input class="check" type="radio" name="default_view_avatars" value="1" {view_avatars_enabled} id="default_view_avatars1" /><label for="default_view_avatars1">{yes}</label><br />
+  <input class="check" type="radio" name="default_view_avatars" value="0" {view_avatars_disabled} id="default_view_avatars2" /><label for="default_view_avatars2">{no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_show_sigs}</span>
+ <span class="form">
+  <input class="check" type="radio" name="default_view_sigs" value="1" {view_sigs_enabled} id="default_view_sigs1" /><label for="default_view_sigs1">{yes}</label><br />
+  <input class="check" type="radio" name="default_view_sigs" value="0" {view_sigs_disabled} id="default_view_sigs2" /><label for="default_view_sigs2">{no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_show_emotes}</span>
+ <span class="form">
+  <input class="check" type="radio" name="default_view_emots" value="1" {view_emotes_enabled} id="default_view_emots1" /><label for="default_view_emots1">{yes}</label><br />
+  <input class="check" type="radio" name="default_view_emots" value="0" {view_emotes_disabled} id="default_view_emots2" /><label for="default_view_emots2">{no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_show_pm}</span>
+ <span class="form">
+  <input class="check" type="radio" name="default_pm" value="1" {accept_pms_enabled} id="default_pm1" /><label for="default_pm1">{yes}</label><br />
+  <input class="check" type="radio" name="default_pm" value="0" {accept_pms_disabled} id="default_pm2" /><label for="default_pm2">{no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_show_email}</span>
+ <span class="form">
+  <input class="check" type="radio" name="default_email_shown" value="1" {show_email_enabled} id="default_email_shown1" /><label for="default_email_shown1">{yes}</label><br />
+  <input class="check" type="radio" name="default_email_shown" value="0" {show_email_disabled} id="default_email_shown2" /><label for="default_email_shown2">{no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_polls}</span>
+ <span class="form">
+  <input class="check" type="radio" name="vote_after_results" value="1" {vote_after_enabled} id="vote_after_results1" /><label for="vote_after_results1">{$this->lang->settings_polls_yes}</label><br />
+  <input class="check" type="radio" name="vote_after_results" value="0" {vote_after_disabled} id="vote_after_results2" /><label for="vote_after_results2">{$this->lang->settings_polls_no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_akismet_posts_number}</span>
+ <span class="form"><input type="text" name="akismet_posts_number" value="{akismet_posts_number}" size="40" /></span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_avatar}</div>
+
+ <span class="field">{settings_avatar_max_width}<br /><span class="tiny">{settings_pixels}</span></span>
+ <span class="form"><input type="text" name="avatar_width" value="{avatar_width}" size="40" maxlength="5" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_avatar_max_height}<br /><span class="tiny">{settings_pixels}</span></span>
+ <span class="form"><input type="text" name="avatar_height" value="{avatar_height}" size="40" maxlength="5" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_avatar_upload}<br /><span class="tiny">{settings_kilobytes}</span></span>
+ <span class="form"><input type="text" name="avatar_upload_size" value="{avatarsize}" size="40" maxlength="5" /></span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_files}</div>
+
+ <span class="field">{settings_max_attach_size}<br /><span class="tiny">{settings_kilobytes}</span></span>
+ <span class="form"><input type="text" name="attach_upload_size" value="{attachsize}" size="40" maxlength="5" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_attach_ext}<br /><span class="tiny">{settings_attach_one_per}</span></span>
+ <span class="form"><textarea name="attach_types" rows="5" cols="37">{attachtypes}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_file_approval}</span>
+ <span class="form">
+  <input type="radio" name="file_approval" value="1" {file_approval_enabled} id="file_approval1" /><label for="file_approval1">{option_yes}</label><br />
+  <input type="radio" name="file_approval" value="0" {file_approval_disabled} id="file_approval2" /><label for="file_approval2">{option_no}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_email}</div>
+ <p class="line"></p>
+
+ <span class="field">{settings_email_reply}<br /><span class="tiny">{settings_email_real}</span></span>
+ <span class="form"><input type="text" name="admin_incoming" value="{admin_incoming}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_email_smtp}</span>
+ <span class="form"><input type="text" name="mailserver" value="{mailserver}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_email_from}<br /><span class="tiny">{settings_email_fake}</span></span>
+ <span class="form"><input type="text" name="admin_outgoing" value="{admin_outgoing}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_email_valid}</span>
+ <span class="form">
+  <input class="check" type="radio" name="emailactivation" value="1" {email_validation_enabled} id="emailactivation1" /><label for="emailactivation1">{settings_email_place1} <i>{group_name}</i> {settings_email_place2}</label><br />
+  <input class="check" type="radio" name="emailactivation" value="0" {email_validation_disabled} id="emailactivation2" /><label for="emailactivation2">{settings_email_place3}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_cookie}</div>
+ <p class="line"></p>
+
+ <span class="field">{settings_cookie_time}<br /><span class="tiny">{seconds}</span></span>
+ <span class="form"><input type="text" name="logintime" value="{logintime}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_post_flood}<br /><span class="tiny">{seconds}. {settings_post_min_time}</span></span>
+ <span class="form"><input type="text" name="flood_time" value="{flood_time}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_pm_flood}<br /><span class="tiny">{seconds}. {settings_pm_min_time}</span></span>
+ <span class="form"><input type="text" name="flood_time_pm" value="{flood_time_pm}" size="40" /></span>
+ <p class="line"></p>
+ 
+ <span class="field">{settings_search_flood}<br /><span class="tiny">{seconds}. {settings_search_min_time}</span></span>
+ <span class="form"><input type="text" name="flood_time_search" value="{flood_time_search}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_cookie_prefix}</span>
+ <span class="form"><input type="text" name="cookie_prefix" value="{cookie_prefix}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_cookie_path}</span>
+ <span class="form"><input type="text" name="cookie_path" value="{cookie_path}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_cookie_domain}</span>
+ <span class="form"><input type="text" name="cookie_domain" value="{cookie_domain}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_cookie_secure}<br /><span class="tiny">{settings_cookie_secured}</span></span>
+ <span class="form">
+  <input type="radio" name="cookie_secure" value="1" {cookie_security_enabled} id="cookie_secure1" /><label for="cookie_secure1">{option_yes}</label><br />
+  <input type="radio" name="cookie_secure" value="0" {cookie_security_disabled} id="cookie_secure2" /><label for="cookie_secure2">{option_no}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_server}</div>
+
+ <span class="field">{settings_server_timezone}</span>
+ <span class="form"><select class="timezone" name="servertime">{severTimezones}</select></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_server_maxload}<br /><span class="tiny">{settings_server_maxload_msg}</span></span>
+ <span class="form"><input type="text" name="max_load" value="{max_load}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_google_id}<br /><span class="tiny">{settings_google_msg}</span></span>
+ <span class="form"><textarea name="analytics_code" rows="12">{analytics_code}</textarea></span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_active}</div>
+ <span class="field">{settings_spider_enable}<br /><span class="tiny">{settings_spider_enable_msg}</span></span>
+ <span class="form">
+  <input class="check" type="radio" name="spider_active" value="1" {spider_display_enabled} id="spider_active1" /><label for="spider_active1">{option_yes}</label>
+  <input class="check" type="radio" name="spider_active" value="0" {spider_display_disabled} id="spider_active2" /><label for="spider_active2">{option_no}</label>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{settings_spider_agent}<br /><span class="tiny">{settings_spider_agent_msg}<br /><br />{settings_one_per}</span></span>
+ <span class="form"><textarea name="spider_agent" rows="10" cols="39">{spideragents}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_spider_name}<br /><span class="tiny">{settings_spider_name_msg}</span></span>
+ <span class="form"><textarea name="spider_name" rows="10" cols="39">{spidernames}</textarea></span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+
+<div class="article">
+ <div class="title">{settings_board_rss}</div>
+ <span class="field">{settings_board_rssfeed_title}</span>
+ <span class="form"><input class="check" type="text" name="rss_feed_title" value="{rss_feed_title}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_board_rssfeed_desc}</span>
+ <span class="form"><input class="check" type="text" name="rss_feed_desc" value="{rss_feed_desc}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_board_rssfeed_posts}</span>
+ <span class="form"><input class="check" type="text" name="rss_feed_posts" value="{rss_feed_posts}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_board_rssfeed_time}</span>
+ <span class="form"><input type="text" name="rss_feed_time" value="{rss_feed_time}" size="40" /></span>
+ <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditForm -->
+<!-- END: Settings -->

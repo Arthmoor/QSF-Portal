@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -40,48 +40,48 @@ class file_perms extends admin
 		$this->lang->perms(); // Load up permissions related translations
 		$perms_obj = new $this->modules['file_permissions']($this);
 
-		if (isset($this->get['s']) && ($this->get['s'] == 'user')) {
-			if (!isset($this->get['id'])) {
-				header("Location: $this->self?a=member_control&amp;s=file_perms");
+		if( isset( $this->get['s'] ) && ( $this->get['s'] == 'user' ) ) {
+			if( !isset( $this->get['id'] ) ) {
+				header( "Location: $this->self?a=member_control&amp;s=file_perms" );
 			}
 
-			$this->post['group'] = intval($this->get['id']);
+			$this->post['group'] = intval( $this->get['id'] );
 
 			$mode  = 'user';
 			$title = 'User Control';
 			$link  = '&amp;s=user&amp;id=' . $this->post['group'];
 
-			$perms_obj->get_perms(-1, $this->post['group']);
+			$perms_obj->get_perms( -1, $this->post['group'] );
 		} else {
-			if (!isset($this->post['group'])) {
-				return $this->message('User Groups', "
+			if( !isset( $this->post['group'] ) ) {
+				return $this->message( 'User Groups', "
 				<form action='$this->self?a=file_perms' method='post'><div>
 					{$this->lang->perms_edit_for}
 					<select name='group'>
 					" . $this->htmlwidgets->select_groups(-1) . "
 					</select>
 					<input type='submit' value='{$this->lang->submit}' /></div>
-				</form>");
+				</form>" );
 			}
 
-			$this->post['group'] = intval($this->post['group']);
+			$this->post['group'] = intval( $this->post['group'] );
 
 			$mode  = 'group';
 			$title = $this->lang->perms_title;
 			$link  = null;
 
-			$perms_obj->get_perms($this->post['group'], -1);
+			$perms_obj->get_perms( $this->post['group'], -1 );
 		}
 
-		$this->set_title($title);
-		$this->tree($title);
+		$this->set_title( $title );
+		$this->tree( $title );
 
-		$cats_only = $this->db->query('SELECT fcat_id, fcat_name FROM %pfile_categories ORDER BY fcat_name');
+		$cats_only = $this->db->query( 'SELECT fcat_id, fcat_name FROM %pfile_categories ORDER BY fcat_name' );
 
 		$cats_list = array();
 		$cats_list[] = array( 'fcat_id' => 0, 'fcat_name' => 'Root' );
 
-		while ($cat = $this->db->nqfetch($cats_only))
+		while( $cat = $this->db->nqfetch( $cats_only ) )
 		{
 			if( $cat['fcat_id'] == 0 )
 				continue;
@@ -102,26 +102,26 @@ class file_perms extends admin
 				'add_category'		=> 'Add category'
 		);
 
-		if (!isset($this->post['submit'])) {
+		if( !isset( $this->post['submit'] ) ) {
 			$token = $this->generate_token();
 
-			$count = count($cats_list) + 1;
+			$count = count( $cats_list ) + 1;
 
-			if ($mode == 'user') {
-				$query = $this->db->fetch('SELECT user_name, user_file_perms FROM %pusers WHERE user_id=%d', $this->post['group']);
+			if( $mode == 'user' ) {
+				$query = $this->db->fetch( 'SELECT user_name, user_file_perms FROM %pusers WHERE user_id=%d', $this->post['group'] );
 				$label = "User '{$query['user_name']}'";
 			} else {
-				$query = $this->db->fetch('SELECT group_name FROM %pgroups WHERE group_id=%d', $this->post['group']);
+				$query = $this->db->fetch( 'SELECT group_name FROM %pgroups WHERE group_id=%d', $this->post['group'] );
 				$label = "Group '{$query['group_name']}'";
 			}
 
 			$out = "
-			<script type='text/javascript' src='../javascript/permissions.js'></script>
+			<script src='../javascript/permissions.js'></script>
 
 			<form id='form' action='$this->self?a=file_perms$link' method='post'>
 			<div align='center'><span style='font-size:14px;'><b>File Permissions For $label</b></span>";
 
-			if ($mode == 'user') {
+			if( $mode == 'user' ) {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />
 				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_file_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
 			}
@@ -132,10 +132,10 @@ class file_perms extends admin
 				<td colspan='" . ($count + 1) . "' class='header'>$label</td>
 			</tr>";
 
-			$out .= $this->show_headers($cats_list);
+			$out .= $this->show_headers( $cats_list );
 
 			$i = 0;
-			foreach ($perms as $perm => $label)
+			foreach( $perms as $perm => $label )
 			{
 				$out .= "
 				<tr>
@@ -144,10 +144,10 @@ class file_perms extends admin
 						<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All
 					</td>";
 
-				if (!isset($perms_obj->globals[$perm])) {
-					foreach ($cats_list as $cat)
+				if( !isset( $perms_obj->globals[$perm] ) ) {
+					foreach( $cats_list as $cat )
 					{
-						if ($perms_obj->auth($perm, $cat['fcat_id'])) {
+						if( $perms_obj->auth( $perm, $cat['fcat_id'] ) ) {
 							$checked = " checked='checked'";
 						} else {
 							$checked = '';
@@ -155,7 +155,7 @@ class file_perms extends admin
 
 						$out .= "\n<td align='center'><input type='checkbox' name='perms[$perm][{$cat['fcat_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked /></td>";
 					}
-				} elseif ($cats_list) {
+				} elseif( $cats_list ) {
 					$out .= "\n<td colspan='$count' align='center'>N/A</td>";
 				}
 
@@ -163,8 +163,8 @@ class file_perms extends admin
 				</tr>";
 
 				$i++;
-				if (($i % 12) == 0) {
-					$out .= $this->show_headers($cats_list);
+				if( ( $i % 12 ) == 0 ) {
+					$out .= $this->show_headers( $cats_list );
 				}
 			}
 
@@ -177,37 +177,37 @@ class file_perms extends admin
 				return $this->message( $this->lang->perms, $this->lang->invalid_token );
 			}
 
-			if (($mode == 'user') && isset($this->post['usegroup'])) {
+			if( ( $mode == 'user' ) && isset( $this->post['usegroup'] ) ) {
 				$perms_obj->cube = '';
 				$perms_obj->update();
-				return $this->message($this->lang->perms, $this->lang->perms_user_inherit);
+				return $this->message( $this->lang->perms, $this->lang->perms_user_inherit );
 			}
 
-			$perms_obj->reset_cube(false);
+			$perms_obj->reset_cube( false );
 
-			if (!isset($this->post['perms'])) {
+			if( !isset( $this->post['perms'] ) ) {
 				$this->post['perms'] = array();
 			}
 
-			foreach ($this->post['perms'] as $name => $data)
+			foreach( $this->post['perms'] as $name => $data )
 			{
-				if (isset($data[-1]) || isset($data['-1']) || (count($data) == count($cats_list))) {
-					$perms_obj->set_xy($name, true);
+				if( isset( $data[-1] ) || isset( $data['-1'] ) || ( count($data) == count( $cats_list ) ) ) {
+					$perms_obj->set_xy( $name, true );
 				} else {
-					foreach ($data as $cat => $on)
+					foreach( $data as $cat => $on )
 					{
-						$perms_obj->set_xyz($name, intval($cat), true);
+						$perms_obj->set_xyz( $name, intval($cat), true );
 					}
 				}
 			}
 
 			$perms_obj->update();
 
-			return $this->message($this->lang->perms, $this->lang->perms_updated);
+			return $this->message( $this->lang->perms, $this->lang->perms_updated );
 		}
 	}
 
-	function show_headers($cats_list)
+	function show_headers( $cats_list )
 	{
 		$out = "<tr>
 		<td class='subheader' colspan='2' valign='bottom'>{$this->lang->perm}</td>";

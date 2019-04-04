@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -50,43 +50,52 @@ class query extends admin
 	 **/
 	function execute()
 	{
-		$this->set_title($this->lang->query);
-		$this->tree($this->lang->query);
+		$this->set_title( $this->lang->query );
+		$this->tree( $this->lang->query );
 
-		if (!isset($this->post['submit'])) {
-			$token = $this->generate_token();
+		if( !isset( $this->post['submit'] ) ) {
+			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/query.xtpl' );
 
-			return $this->message($this->lang->query, "
-			<form action='{$this->self}?a=query' method='post'>
-				<div>
-				<textarea class='input' name='sql' cols='30' rows='15' style='width:100%'>SELECT * FROM %pgroups</textarea><br /><br />
-				<input type='hidden' name='token' value='$token' />
-				<input type='submit' name='submit' value='{$this->lang->submit}' />
-				</div>
-			</form>");
+			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'query', $this->lang->query );
+
+			$xtpl->assign( 'token', $this->generate_token() );
+			$xtpl->assign( 'submit', $this->lang->submit );
+
+			$xtpl->parse( 'Query' );
+
+			return $xtpl->text( 'Query' );
 		} else {
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->query, $this->lang->invalid_token );
 			}
 
-			$result = $this->db->query($this->post['sql']);
+			$result = $this->db->query( $this->post['sql'] );
 
-			if (is_resource($result)) {
-				$sql = htmlspecialchars($this->post['sql']);
+			if( $result ) {
+				$sql = htmlspecialchars( $this->post['sql'] );
 				$show_headers = true;
 
-				$out = $this->message($this->lang->query, "<form action='{$this->self}?a=query' method='post'><div>
-					<textarea class='input' name='sql' cols='30' rows='15' style='width:100%'>$sql</textarea><br /><br />
-					<input type='submit' name='submit' value='{$this->lang->submit}' /></div>
-					</form><br />");
-				$out .= $this->table;
+				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/query.xtpl' );
 
-				while ($row = $this->db->nqfetch($result))
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'query', $this->lang->query );
+
+				$xtpl->assign( 'token', $this->generate_token() );
+				$xtpl->assign( 'submit', $this->lang->submit );
+
+				$xtpl->parse( 'Query' );
+
+				$out = $xtpl->text( 'Query' );
+
+				$out .= '<div class="article">';
+
+				while( $row = $this->db->nqfetch( $result ) )
 				{
-					if ($show_headers) {
+					if( $show_headers ) {
 						$out .= "<span class=\"head\">\n";
 
-						foreach ($row as $col => $data)
+						foreach( $row as $col => $data )
 						{
 							$out .= "<span class='starter'>$col</span>\n";
 						}
@@ -96,15 +105,15 @@ class query extends admin
 						$show_headers = false;
 					}
 
-					foreach ($row as $col => $data)
+					foreach( $row as $col => $data )
 					{
 						$out .= "<span class='starter'>" . $this->format($data, FORMAT_HTMLCHARS) . "</span>\n";
 					}
 					$out .= "<p class='list_line'></p>\n";
 				}
-				return $out . $this->etable;
+				return $out . '</div>';
 			} else {
-				return $this->message($this->lang->query, $this->lang->query_your . ' ' . ($result ? $this->lang->query_success : $this->lang->query_failed));
+				return $this->message( $this->lang->query, $this->lang->query_your . ' ' . ($result ? $this->lang->query_success : $this->lang->query_failed) );
 			}
 		}
 	}

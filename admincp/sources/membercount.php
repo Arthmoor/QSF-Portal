@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -52,13 +52,13 @@ class membercount extends admin
 	 **/
 	function execute()
 	{
-		$this->set_title($this->lang->mcount);
-		$this->tree($this->lang->mcount);
+		$this->set_title( $this->lang->mcount );
+		$this->tree( $this->lang->mcount );
 
 		$this->ResetMemberStats();
 		$this->write_sets();
 
-		return $this->message($this->lang->mcount, $this->lang->mcount_updated);
+		return $this->message( $this->lang->mcount, $this->lang->mcount_updated );
 	}
 }
 ?>

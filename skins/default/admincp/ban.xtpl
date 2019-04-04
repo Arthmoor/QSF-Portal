@@ -1,0 +1,27 @@
+<!-- BEGIN: Ban -->
+<form action="{self}?a=ban" method="post">
+<div class="article">
+ <div class="title">{ban_settings}</div>
+ {ban_member_explain1} <strong>{banned_group}</strong> {ban_member_explain2}
+</div>
+
+<div class="article">
+ <div class="title">{ban_banned_members}</div>
+ {banned}
+</div>
+
+<div class="article">
+ <div class="title">{ban_banned_ips}</div>
+ {ban_one_per_line}<br />
+ {ban_regex_allowed}<br />
+ {ban_cidr}
+ <p class="line"></p>
+
+ <textarea name="banned_ips" rows="12" cols="70" class="input">{ips}</textarea>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{ban}" />
+</div>
+</form>
+<!-- END: Ban -->

@@ -1,8 +1,9 @@
 QSF Portal Changes
 ------------------
 
-Changes for 1.6:
+Changes for 2.0:
 
+* Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
 * Emoticons are now handled independently of skins and can be added on the fly as desired.
@@ -12,10 +13,11 @@ Changes for 1.6:
 * Password security has been updated to stronger hashing standards. As a result, PHP 5.5.0 or higher is now required.
 * Replaced the Akismet library with my own hand rolled version.
 * Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
+* The unused HELP module has been removed.
 
    Bugs addressed:
 
-* Akismet reporting types have been corrected to conform to their API recommendations.
+* Akismet reporting types have been corrected to conform to their API specifications.
 * File updates were not unlinking the old files after replacing them with new ones, leading to large scale space waste.
 * Bare URLs entered into posts were getting stray single quotes placed around them.
 

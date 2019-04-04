@@ -79,7 +79,6 @@ class en
 		$this->admin_create_skin = 'Create a skin';
 		$this->admin_db = 'Database';
 		$this->admin_db_backup = 'Backup the database';
-		$this->admin_db_conn = 'Edit connection settings';
 		$this->admin_db_optimize = 'Optimize the database';
 		$this->admin_db_query = 'Execute an SQL query';
 		$this->admin_db_repair = 'Repair the database';
@@ -870,6 +869,8 @@ class en
 		$this->main_topics = 'Topics';
 		$this->main_topics_new = 'There are new posts in this forum.';
 		$this->main_topics_old = 'There are no new posts in this forum.';
+		$this->main_tos_files = 'Terms of Service: Uploads';
+		$this->main_tos_forums = 'Terms of Service: Forums';
 		$this->main_users_online = 'Users Online';
 		$this->main_welcome = 'Welcome';
 		$this->main_welcome_guest = 'Welcome!';
@@ -885,6 +886,7 @@ class en
 		$this->mail_select_all = 'Select All';
 		$this->mail_send = 'Send Mail';
 		$this->mail_sent = 'Your message has been sent to';
+		$this->mail_subject = 'Subject';
 	}
 
 	function member_control()
@@ -903,6 +905,7 @@ class en
 		$this->mc_guest_banned = 'You cannot ban Guests, this would cause your board to become unusable.';
 		$this->mc_guest_needed = 'The guest account is necessary for QSF Portal to function.';
 		$this->mc_not_found = 'No members were found matching';
+		$this->mc_report_spambot = 'Report as Spambot';
 		$this->mc_user_aim = 'AIM Name';
 		$this->mc_user_avatar = 'Avatar';
 		$this->mc_user_avatar_height = 'Avatar Height';
@@ -1319,6 +1322,7 @@ class en
 		$this->prune_notopics = 'No topics selected for pruning';
 		$this->prune_notopics_old = 'No topics are old enough for pruning';
 		$this->prune_novalidforum = 'No valid forums specified to prune';
+		$this->prune_old_topics = 'Prune Old Topics';
 		$this->prune_select_age = 'Select age of topics to limit pruning to';
 		$this->prune_select_topics = 'Select topics to prune or use Select All';
 		$this->prune_success = 'Topics have been pruned';
@@ -1625,7 +1629,7 @@ class en
 		$this->settings_tos_files = 'Terms of Service: Uploads';
 		$this->settings_updated = 'Settings have been updated.';
 		$this->settings_wordpress_id = 'Wordpress API Key';
-		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: http://akismet.com/personal/';
+		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: https://akismet.com/';
 	}
 
 	function spam_control()
@@ -1658,6 +1662,7 @@ class en
 		$this->stats_reg = 'Registrations';
 		$this->stats_reg_by_month = 'Registrations by Month';
 		$this->stats_sig = 'Signatures';
+		$this->stats_spam_statistics = 'Spam Statistics';
 	}
 
 	function templates()

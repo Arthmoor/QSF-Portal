@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -37,12 +37,12 @@ class optimize extends admin
 {
 	function execute()
 	{
-		$this->set_title($this->lang->optimize);
-		$this->tree($this->lang->optimize);
+		$this->set_title( $this->lang->optimize );
+		$this->tree( $this->lang->optimize );
 
 		$optimize_result = $this->opt_tables();
 
-		$output = $this->message($this->lang->optimize, $this->lang->optimized);
+		$output = $this->message( $this->lang->optimize, $this->lang->optimized );
 		$output .= $optimize_result;
 		return $output;
 	}
@@ -51,18 +51,18 @@ class optimize extends admin
 	{
 		$tables = implode( ', ', $this->get_db_tables() );
 
-		$result = $this->db->query('OPTIMIZE TABLE ' . $tables);
+		$result = $this->db->query( 'OPTIMIZE TABLE ' . $tables );
 
 		$show_headers = true;
 
-		$out = $this->table;
+		$out = '<div class="article">';
 
-		while ($row = $this->db->nqfetch($result))
+		while( $row = $this->db->nqfetch( $result ) )
 		{
-			if ($show_headers) {
+			if( $show_headers ) {
 				$out .= "<span class=\"head\">\n";
 
-				foreach ($row as $col => $data)
+				foreach( $row as $col => $data )
 				{
 					$out .= "<span class='starter'>$col</span>\n";
 				}
@@ -72,13 +72,13 @@ class optimize extends admin
 				$show_headers = false;
 			}
 
-			foreach ($row as $col => $data)
+			foreach( $row as $col => $data )
 			{
-				$out .= "<span class='starter'>" . $this->format($data, FORMAT_HTMLCHARS) . "</span>\n";
+				$out .= "<span class='starter'>" . $this->format( $data, FORMAT_HTMLCHARS ) . "</span>\n";
 			}
 			$out .= "<p class='list_line'></p>\n";
 		}
-		return $out . $this->etable;
+		return $out . '</div>';
 	}
 }
 ?>

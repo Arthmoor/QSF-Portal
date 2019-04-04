@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -48,16 +48,16 @@ class admin extends qsfglobal
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
-	function init($admin = true)
+	function init( $admin = true )
 	{
-		if (@file_exists('../install/index.php') && !@file_exists('../tools')) {
-			exit('<h1>' . $this->lang->admin_cp_warning . '</h1>');
+		if( @file_exists( '../install/index.php' ) && !@file_exists( '../tools' ) ) {
+			exit( '<h1>' . $this->lang->admin_cp_warning . '</h1>' );
 		}
 
-		parent::init($admin);
-		
-		if (!$this->perms->auth('is_admin') || $this->is_banned()) {
-			exit('<h1>' . $this->lang->admin_cp_denied . '</h1>');
+		parent::init( $admin );
+
+		if( !$this->perms->auth( 'is_admin' ) || $this->is_banned() ) {
+			exit( '<h1>' . $this->lang->admin_cp_denied . '</h1>' );
 		}
 	}
 
@@ -69,10 +69,10 @@ class admin extends qsfglobal
 	 **/
 	function set_table()
 	{
-		$this->table  = eval($this->template('ADMIN_TABLE'));
-		$this->etable = eval($this->template('ADMIN_ETABLE'));
+		$this->table  = eval( $this->template( 'ADMIN_TABLE' ) );
+		$this->etable = eval( $this->template( 'ADMIN_ETABLE' ) );
 	}
-	
+
 	/**
 	 * Formats a message (admin cp version)
 	 *
@@ -82,17 +82,21 @@ class admin extends qsfglobal
 	 * @since Beta 2.1
 	 * @return string HTML
 	 */
-	function message($title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4)
+	function message( $title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4 )
 	{
-		if ($link_text) {
+		if( $link_text ) {
 			$message .= "<br /><br /><a href=\"$link\">$link_text</a>";
 		}
 
-		if ($redirect) {
-			@header('Refresh: 4;url=' . $redirect);
+		if( $redirect ) {
+			@header( 'Refresh: 4;url=' . $redirect );
 		}
 
-		return eval($this->template('ADMIN_MESSAGE'));
+		$this->xtpl->assign( 'title', $title );
+		$this->xtpl->assign( 'message', $message );
+		$this->xtpl->parse( 'Index.Message' );
+
+		return '';
 	}
 
 	/**
@@ -106,13 +110,13 @@ class admin extends qsfglobal
 	 * @since Beta 3.0
 	 * @return object Language
 	 **/
-	function get_lang($lang, $a = null, $path = '../', $main = true)
+	function get_lang( $lang, $a = null, $path = '../', $main = true )
 	{
-		if (isset($this->get['lang'])) {
+		if( isset( $this->get['lang'] ) ) {
 			$lang = $this->get['lang'];
 		}
 
-		if ( strstr($lang, '\\') || strstr($lang, '/') || !file_exists($path . 'languages/' . $lang . '.php')) {
+		if( strstr( $lang, '\\' ) || strstr( $lang, '/' ) || !file_exists( $path . 'languages/' . $lang . '.php' ) ) {
 			$lang = 'en';
 		}
 
@@ -120,28 +124,28 @@ class admin extends qsfglobal
 		$obj = new $lang();
 
 		// Check if language function is available before running it
-		if ($a && is_callable(array($obj,$a))) {
+		if( $a && is_callable( array( $obj, $a ) ) ) {
 			$obj->$a();
 		}
 
-		if ($main) {
+		if( $main ) {
 			$obj->admin();
 		}
 		$obj->universal();
 		return $obj;
 	}
 
-	function list_groups($val, $select = 'user_group', $custom_only = false)
+	function list_groups( $val, $select = 'user_group', $custom_only = false )
 	{
 		$out = "<select name=\"$select\">";
 
-		if ($custom_only) {
-			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name");
+		if( $custom_only ) {
+			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name" );
 		} else {
-			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups ORDER BY group_name");
+			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups ORDER BY group_name" );
 		}
 
-		while ($group = $this->db->nqfetch($groups))
+		while( $group = $this->db->nqfetch( $groups ) )
 		{
 			$out .= "<option value=\"{$group['group_id']}\"" . (($val == $group['group_id']) ? ' selected=\"selected\"' : '') . ">" . htmlspecialchars($group['group_name']) . "</option>";
 		}
@@ -152,7 +156,7 @@ class admin extends qsfglobal
 	/**
 	 * Grabs the current list of table names in the database
 	 *
-	 * @author Roger Libiez [Samson] 
+	 * @author Roger Libiez [Samson]
 	 * @since 1.3.3
 	 * @return array
 	 **/
@@ -162,7 +166,7 @@ class admin extends qsfglobal
 
 		// This looks a bit strange, but it will pull all of the proper prefixed tables.
 		$tb = $this->db->query( "SHOW TABLES LIKE '%p%%'" );
-		while( $tb1 = $this->db->nqfetch($tb) )
+		while( $tb1 = $this->db->nqfetch( $tb ) )
 		{
 			foreach( $tb1 as $col => $data )
 				$tarray[] = $data;

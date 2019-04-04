@@ -1,0 +1,70 @@
+<!-- BEGIN: Prune -->
+<!-- BEGIN: Stage1 -->
+<form action="{self}?a=prune" method="post">
+<div class="article">
+ <div class="title">{prune_old_topics}</div>
+ <span class="field">{prune_topics_older_than}</span>
+ <span class="form">
+  <select id="age" name="age">
+   <option value="1">{prune_age_hour}</option>
+   <option value="8">{prune_age_eighthours}</option>
+   <option value="24">{prune_age_day}</option>
+   <option value="168">{prune_age_week}</option>
+   <option value="720">{prune_age_month}</option>
+   <option value="2160">{prune_age_threemonths}</option>
+   <option value="8760">{prune_age_year}</option>
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{prune_forums}</span>
+ <span class="form">
+  <select id="forums" name="forums[]" multiple="multiple" class="form">
+   {forum_options}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: Stage1 -->
+
+<!-- BEGIN: Stage2 -->
+<form action="{self}?a=prune" method="post" name="prune">
+ <input type="hidden" name="forums" value="{forums}" />
+ <div class="article">
+  <div class="title">{prune_old_topics}</div>
+  <div class="title">{prune_select_topics}</div>
+
+<!-- BEGIN: Topic -->
+  <span class="icon"><input class="check" type="checkbox" name="topics[]" value="{topic_id}" /></span>
+  <span class="prune"><a href="../{mainfile}?a=topic&amp;t={topic_id}">{topic_title}</a>{topic_description}</span>
+  <p class="line"></p>
+<!-- END: Topic -->
+
+  <input type="button" value="{select_all}" onclick="return select_all_boxes();" />
+  <p class="line"></p>
+
+  <span class="field">{prune_action}</span>
+  <span class="form">
+   <input class="check" type="radio" name="prune_action" value="move" id="move" checked="checked" /> <label for="move">{prune_move}</label>
+   <input class="check" type="radio" name="prune_action" value="delete" id="delete" /> <label for="delete">{delete}</label>
+  </span>
+  <p class="line"></p>
+
+  <span class="field">{prune_moveto_forum}</span>
+  <span class="form">
+   <select id="forums" name="dest">
+    {movetoForum}
+   </select>
+  </span>
+  <p class="line"></p>
+
+  <input type="hidden" name="token" value="{token}" />
+  <input type="submit" name="submit" value="{submit}" />
+ </div>
+</form>
+<!-- END: Stage2 -->
+<!-- END: Prune -->

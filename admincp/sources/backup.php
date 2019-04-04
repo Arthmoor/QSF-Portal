@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -50,25 +50,25 @@ class backup extends admin
 	 **/
 	function execute()
 	{
-		if (!isset($this->get['s'])) {
+		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = '';
 		}
 
-		switch($this->get['s'])
+		switch( $this->get['s'] )
 		{
-		case 'create':
-			$this->set_title($this->lang->backup_create);
-			$this->tree($this->lang->backup_create);
+			case 'create':
+				$this->set_title( $this->lang->backup_create );
+				$this->tree( $this->lang->backup_create );
 
-			return $this->create_backup();
-			break;
+				return $this->create_backup();
+				break;
 
-		case 'restore':
-			$this->set_title($this->lang->backup_restore);
-			$this->tree($this->lang->backup_restore);
+			case 'restore':
+				$this->set_title( $this->lang->backup_restore );
+				$this->tree( $this->lang->backup_restore );
 
-			return $this->restore_backup();
-			break;
+				return $this->restore_backup();
+				break;
 		}
 	}
 
@@ -81,9 +81,24 @@ class backup extends admin
 	 **/
 	function create_backup()
 	{
-		if(!isset($this->post['submit'] ) ) {
+		if( !isset( $this->post['submit'] ) ) {
 			$token = $this->generate_token();
-			return eval($this->template('ADMIN_BACKUP'));
+
+			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/db_backup.xtpl' );
+
+			$xtpl->assign( 'token', $this->generate_token() );
+			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'options', $this->lang->backup_options );
+			$xtpl->assign( 'add_complete', $this->lang->backup_add_complete );
+			$xtpl->assign( 'statements', $this->lang->backup_statements );
+			$xtpl->assign( 'add_drop', $this->lang->backup_add );
+			$xtpl->assign( 'uncheck', $this->lang->backup_uncheck );
+			$xtpl->assign( 'backup', $this->lang->backup );
+
+			$xtpl->parse( 'DBBackup.BackupForm' );
+			$xtpl->parse( 'DBBackup' );
+
+			return $xtpl->text( 'DBBackup' );
 		}
 
 		if( !$this->is_valid_token() ) {
@@ -96,11 +111,11 @@ class backup extends admin
 		$filename = 'backup_'.$this->version.'-'.date('y-m-d-H-i-s').'-'.$mcookie.'.sql';
 		$options = "";
 
-		foreach($this->post as $key => $value )
+		foreach( $this->post as $key => $value )
 			$$key = $value;
-		if(isset($insert))
+		if( isset($insert) )
 			$options .= " -c";
-		if(isset($droptable))
+		if( isset($droptable) )
 			$options .= " --add-drop-table";
 
 		$tables = implode( ' ', $this->get_db_tables() );
@@ -118,7 +133,7 @@ class backup extends admin
 
 		$proc = proc_open( $mbdump, $fds, $pipes );
 		if( $proc === false || !is_resource( $proc ) )
-			return $this->message($this->lang->backup_create, $this->lang->backup_failed);
+			return $this->message( $this->lang->backup_create, $this->lang->backup_failed );
 
 		fwrite( $pipes[0], $this->db->pass . PHP_EOL );
 		fclose( $pipes[0] );
@@ -128,19 +143,18 @@ class backup extends admin
 		$stderr = stream_get_contents( $pipes[2] );
 		fclose( $pipes[2] );
 
-
 		$retval = proc_close( $proc );
 
 		if ( 0 != $retval )
 		{
-			return $this->message($this->lang->backup_create, $this->lang->backup_failed . '<br />' . $stderr);
+			return $this->message( $this->lang->backup_create, $this->lang->backup_failed . '<br />' . $stderr );
 		}
 
 		$buf = $stdout . $stderr;
 
-		$this->chmod("../packages/".$filename, 0440);
+		$this->chmod( "../packages/" . $filename, 0440 );
 		$backup = sprintf( $this->lang->backup_created, "../packages/" );
-		return $this->message($this->lang->backup_create, $backup."<br /><br />". $this->lang->backup_output .": ".$buf, $filename, "../packages/".$filename);
+		return $this->message( $this->lang->backup_create, $backup."<br /><br />". $this->lang->backup_output .": ".$buf, $filename, "../packages/".$filename );
 	}
 
 	/**
@@ -152,37 +166,37 @@ class backup extends admin
 	 **/
 	function restore_backup()
 	{
-		if (!isset($this->get['restore']))
+		if( !isset( $this->get['restore'] ) )
 		{
-			if ( ($dir = opendir("../packages") ) === false )
-				return $this->message($this->lang->backup_restore, $this->lang->backup_no_packages);
+			if ( ($dir = opendir( "../packages" ) ) === false )
+				return $this->message( $this->lang->backup_restore, $this->lang->backup_no_packages );
 
 			$token = $this->generate_token();
 			$backups = array();
-			while( ($file = readdir($dir) ) )
+			while( ( $file = readdir($dir) ) )
 			{
-				if(strtolower(substr($file, -4) ) != ".sql")
+				if( strtolower( substr( $file, -4 ) ) != ".sql" )
 					continue;
 				$backups[] = $file;
 			}
-			closedir($dir);
+			closedir( $dir );
 
-			if(count($backups) <= 0 )
-				return $this->message($this->lang->backup_restore, $this->lang->backup_none);
+			if( count($backups) <= 0 )
+				return $this->message( $this->lang->backup_restore, $this->lang->backup_none );
 
-			$output = $this->lang->backup_warning ."<br /><br />";
-			$output .= $this->lang->backup_found .":<br /><br />";
+			$output = $this->lang->backup_warning . "<br /><br />";
+			$output .= $this->lang->backup_found . ":<br /><br />";
 			$count = 0;
 
 			foreach( $backups as $bkup )
 			{
 				$output .= "<a href='{$this->self}?a=backup&amp;s=restore&amp;restore=".$bkup."'>".$bkup."</a><br />";
 			}
-			return $this->message($this->lang->backup_restore, $output);
+			return $this->message( $this->lang->backup_restore, $output );
 		}
 
-		if(!file_exists("../packages/".$this->get['restore']) )
-			return $this->message($this->lang->backup_restore, $this->lang->backup_noexist);
+		if( !file_exists( "../packages/" . $this->get['restore'] ) )
+			return $this->message( $this->lang->backup_restore, $this->lang->backup_noexist );
 
 		if( !$this->is_valid_token() ) {
 			return $this->message( $this->lang->backup_create, $this->lang->invalid_token );
@@ -201,7 +215,7 @@ class backup extends admin
 		$proc = proc_open( $mbimport, $fds, $pipes );
 
 		if( $proc === false || !is_resource( $proc ) )
-			return $this->message($this->lang->backup_restore, $this->lang->backup_import_fail);
+			return $this->message( $this->lang->backup_restore, $this->lang->backup_import_fail );
 
 		fwrite( $pipes[0], $this->db->pass . PHP_EOL );
 		sleep( 10 );// this is bad and buggy if the mysql server is under load/crap
@@ -213,17 +227,16 @@ class backup extends admin
 		$stderr = stream_get_contents( $pipes[2] );
 		fclose( $pipes[2] );
 
-
 		$retval = proc_close( $proc );
 
 		if ( 0 != $retval )
 		{
-			return $this->message($this->lang->backup_restore, $this->lang->backup_import_fail . '<br />' . $stderr);
+			return $this->message( $this->lang->backup_restore, $this->lang->backup_import_fail . '<br />' . $stderr );
 		}
 
 		$output = $stdout . $stderr;
 
-		return $this->message($this->lang->backup_restore, $this->lang->backup_restore_done ."<br />". $this->lang->backup_output .": ".$output);
+		return $this->message( $this->lang->backup_restore, $this->lang->backup_restore_done ."<br />". $this->lang->backup_output .": ".$output );
 	}
 }
 ?>
