@@ -40,7 +40,7 @@
 
 <!-- BEGIN: Topic -->
   <span class="icon"><input class="check" type="checkbox" name="topics[]" value="{topic_id}" /></span>
-  <span class="prune"><a href="../{mainfile}?a=topic&amp;t={topic_id}">{topic_title}</a>{topic_description}</span>
+  <span class="prune"><a href="../index.php?a=topic&amp;t={topic_id}">{topic_title}</a>{topic_description}</span>
   <p class="line"></p>
 <!-- END: Topic -->
 

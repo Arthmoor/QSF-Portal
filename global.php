@@ -57,7 +57,6 @@ class qsfglobal
 	var $agent;                       // The browser's user agent @var string
 	var $referrer;                    // The browser's referrer setting @var string
 	var $self;                        // Alias for $PHP_SELF @var string
-	var $mainfile = 'index.php';	  // Combined with set['loc_of_board'] to make full url
 	var $db;                          // Database object @var object
 	var $perms;                       // Permissions object @var object
 	var $file_perms;		  // File permissions object @var object

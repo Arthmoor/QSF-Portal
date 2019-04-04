@@ -98,7 +98,6 @@ class prune extends admin
 					$topic['topic_description'] = '<br />&raquo; ' . $this->format( $topic['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 				}
 
-				$xtpl->assign( 'mainfile', $this->mainfile );
 				$xtpl->assign( 'topic_id', $topic['topic_id'] );
 				$xtpl->assign( 'topic_title', $topic['topic_title'] );
 				$xtpl->assign( 'topic_description', $topic['topic_description'] );

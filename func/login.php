@@ -152,7 +152,7 @@ class login extends qsfglobal
 			$message .= "Someone has requested a password reset for your forum account, {$this->post['user']}.\n";
 			$message .= "If you do not want to reset your password, please ignore or delete this email.\n\n";
 			$message .= "Go to the below URL to continue with the password reset:\n";
-			$message .= "{$this->sets['loc_of_board']}/{$this->mainfile}?a=login&s=request&e=" . md5($target['user_email'] . $target['user_name'] . $target['user_password'] . $target['user_joined']) . "\n\n";
+			$message .= "{$this->sets['loc_of_board']}/index.php?a=login&s=request&e=" . md5($target['user_email'] . $target['user_name'] . $target['user_password'] . $target['user_joined']) . "\n\n";
 			$message .= "Request IP: {$this->ip}";
 
 			$mailer->setSubject("{$this->sets['forum_name']} - Reset Password");
@@ -188,7 +188,7 @@ class login extends qsfglobal
 
 		$message  = "{$this->sets['forum_name']}\n\n";
 		$message .= "Your password has been reset to:\n$newpass\n\n";
-		$message .= "{$this->sets['loc_of_board']}/{$this->mainfile}?a=login";
+		$message .= "{$this->sets['loc_of_board']}/index.php?a=login";
 
 		$mailer->setSubject("{$this->sets['forum_name']} - Reset Password");
 		$mailer->setMessage($message);
