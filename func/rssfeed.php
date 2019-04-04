@@ -60,7 +60,6 @@ class rssfeed extends qsfglobal
 		}
 
 		$this->nohtml = true;
-		$this->templater->debug_mode = false; // or else we end up with invalid XML
 		
 		$feed = null;
 		

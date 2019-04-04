@@ -14,6 +14,7 @@ Changes for 2.0:
 * Replaced the Akismet library with my own hand rolled version.
 * Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
 * The unused HELP module has been removed.
+* Eliminated Debug Mode as it was only truly useful for the old template system.
 
    Bugs addressed:
 

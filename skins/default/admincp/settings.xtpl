@@ -23,13 +23,6 @@
  </span>
  <p class="line"></p>
 
- <span class="field">{settings_debug_mode}</span>
- <span class="form">
-  <input class="check" type="radio" name="debug_mode" value="0" {debug_on} id="debug2" /><label for="debug2">{disabled}</label><br />
-  <input class="check" type="radio" name="debug_mode" value="1" {debug_off} id="debug1" /><label for="debug1">{enabled}</label>
- </span>
- <p class="line"></p>
-
  <span class="field">{settings_disabled_notice}<br /><span class="tiny">{settings_show_notice}</span></span>
  <span class="form"><input type="text" name="closedtext" value="{closedtext}" size="40" /></span>
  <p class="line"></p>

@@ -48,7 +48,6 @@ class filerating extends qsfglobal
 		$this->lang->files();
 
                 $this->nohtml = true;
-                $this->templater->debug_mode = false; // This is a stripped pop-up window.
 		$rating = '';
 
 		if (!isset($this->get['f'])) {

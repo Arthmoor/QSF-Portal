@@ -43,6 +43,7 @@ $this->sets['analytics_code'] = '';
 unset( $this->sets['analytics_id'] );
 unset( $this->sets['link_target'] );
 unset( $this->sets['max_load'] );
+unset( $this->sets['debug_mode'] );
 
 // Forum permission changes	
 

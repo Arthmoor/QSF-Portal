@@ -76,25 +76,6 @@ class db_mysql extends database
 	}
 
 	/**
-	 * Runs an EXPLAIN or similar on a query
-	 *
-	 * @param string $query Query to debug
-	 * @access protected
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 2.0
-	 * @return void
-	 **/
-	function get_debug_info($query)
-	{
-		$data = array();
-		if (substr(trim(strtoupper($query)), 0, 6) == 'SELECT') {
-			$result = mysql_query("EXPLAIN $query", $this->connection) or error(QUICKSILVER_QUERY_ERROR, mysql_error($this->connection), $query, mysql_errno($this->connection));
-			$data = mysql_fetch_array($result, MYSQL_ASSOC);
-		}
-		return $data;
-	}
-
-	/**
 	 * Retrieves the insert ID of the last executed query
 	 *
 	 * @param string $table Table name - unused
@@ -128,10 +109,6 @@ class db_mysql extends database
 		$query = $this->_format_query($args);
 		
 		$this->querycount++;
-
-		if (isset($this->get['debug'])) {
-			$this->debug($query);
-		}
 
 		$result = mysql_query($query, $this->connection) or error(QUICKSILVER_QUERY_ERROR, mysql_error($this->connection), $query, mysql_errno($this->connection));
 		return $result;

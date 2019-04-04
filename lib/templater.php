@@ -44,8 +44,6 @@ class templater extends forumutils
 	var $macro;                     // Array of code to execute for each template
 	var $modlets = array();         // Array of modlet objects for running in templates
 
-	var $debug_mode = false;	// Set to true if we want to use start/end comments
-
 	/**
 	 * Constructor
 	 *
@@ -57,7 +55,6 @@ class templater extends forumutils
 
 		// Need the template selection
 		$this->skin = $qsf->skin;
-		$this->debug_mode = $qsf->debug_mode;
 
 		// Needed for modlets
 		$this->qsf = &$qsf;
@@ -419,10 +416,6 @@ class templater extends forumutils
 			foreach ($this->macro[$piece] as $macro_id => $macro_code) {
 				$macro_output .= $macro_code;
 			}
-		}
-
-		if ($this->debug_mode) {
-			return "$macro_output return \"<!-- START: $piece -->\r\n{$this->temps[$piece]}\r\n<!-- END: $piece -->\r\n\";";
 		}
 		return "$macro_output return \"{$this->temps[$piece]}\r\n\";";
 	}

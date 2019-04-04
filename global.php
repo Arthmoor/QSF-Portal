@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -76,8 +76,7 @@ class qsfglobal
 	var $validator;			  // Handler for checking usernames, passwords, etc
 	var $activeutil;		  // Handler user activity
 	
-	var $debug_mode = false;	  // Switch to tell if debugging info is allowed
-	var $xtpl = null;
+	var $xtpl = null;		  // Global template instance
 
 	/**
 	 * Constructor; sets up variables
@@ -118,10 +117,6 @@ class qsfglobal
 	 **/
 	function init( $admin = false )
 	{
-		if ($this->sets['debug_mode']) {
-			$this->debug_mode = true;
-		}
-
 		$this->perms = new $this->modules['permissions']($this);
 		$this->file_perms = new $this->modules['file_permissions']($this);
 		
@@ -621,22 +616,6 @@ class qsfglobal
 	function set_title($title)
 	{
 		$this->title = "{$this->sets['forum_name']} - $title";
-	}
-
-	/**
-	 * Handles debug information when $debug is set in the query string
-	 *
-	 * @param int $load Server load
-	 * @param int $totaltime Time to execute the board
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 2.0
-	 * @return void
-	 **/
-	function show_debug($load, $totaltime)
-	{
-		include './func/debug.php';
-
-		return $out; // This is set in debug.php
 	}
 
 	/**

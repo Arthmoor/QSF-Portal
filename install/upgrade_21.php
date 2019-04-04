@@ -62,8 +62,6 @@ $need_templates = array(
 	'ADMIN_EDIT_BOARD_SETTINGS'
 	);
 
-$this->sets['debug_mode'] = 0;
-
 // Permission changes	
 // $new_permissions['new_perm'] = true;
 

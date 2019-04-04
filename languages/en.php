@@ -1552,7 +1552,6 @@ class en
 		$this->settings_db_prefix = 'Table Prefix';
 		$this->settings_db_socket = 'Database Socket';
 		$this->settings_db_username = 'Database Username';
-		$this->settings_debug_mode = 'Debug Mode';
 		$this->settings_default_lang = 'Default Language';
 		$this->settings_default_no = 'Default No';
 		$this->settings_default_skin = 'Default Skin';

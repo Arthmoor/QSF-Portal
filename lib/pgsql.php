@@ -60,37 +60,6 @@ class db_pgsql extends database
 	}
 	
 	/**
-	 * Runs an EXPLAIN or similar on a query
-	 *
-	 * @param string $query Query to debug
-	 * @access protected
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 2.0
-	 * @return void
-	 **/
-	function get_debug_info($query)
-	{
-		$data = array();
-		if (substr(trim(strtoupper($query)), 0, 6) == 'SELECT') {
-			if (!pg_send_query($this->connection, "EXPLAIN $query"))
-			{
-				$err = pg_get_result($this->connection);
-				error(QUICKSILVER_QUERY_ERROR, pg_result_error($err), $query, 0);
-			} else {
-				$result = pg_get_result($this->connection);
-	
-				if (false === $this->last)
-				{
-					error(QUICKSILVER_QUERY_ERROR, pg_result_error($err), $query, 0);
-				}
-			}
-			$data = pg_fetch_array($result);;
-		}
-		return $data;
-	}
-
-
-	/**
 	 * Retrieves the insert ID of the last executed query
 	 *
 	 * @param string $table Table name
@@ -118,10 +87,6 @@ class db_pgsql extends database
 		$this->querycount++;
 
 		$query = $this->_format_query(func_get_args());
-
-		if (isset($this->get['debug'])) {
-			$this->debug($query);
-		}
 
 		if (!pg_send_query($this->connection, $query))
 		{

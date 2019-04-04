@@ -195,24 +195,13 @@ if( !$qsf->nohtml ) {
 	$servertime = $qsf->mbdate( DATE_LONG, $qsf->time, false );
 	$copyright = eval( $qsf->template( 'MAIN_COPYRIGHT' ) );
 
-	if( isset( $qsf->get['debug'] ) ) {
-		$dumpthis = eval( $qsf->template( 'MAIN' ) );
-		$output = $qsf->show_debug( 0, $qsf->time_exec );
-		echo $output;
-	} else {
-		$quicksilverforums = $output;
-		echo eval( $qsf->template( 'MAIN' ) );
-	}
+	$quicksilverforums = $output;
+	echo eval( $qsf->template( 'MAIN' ) );
 
 	@ob_end_flush();
 	@flush();
 } else {
-	if( isset( $qsf->get['debug'] ) ) {
-		$output = $qsf->show_debug( 0, $qsf->time_exec );
-		echo $output;
-	} else {
-		echo $output;
-	}
+	echo $output;
 }
 
 // Do post output stuff

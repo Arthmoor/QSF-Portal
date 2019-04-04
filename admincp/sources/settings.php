@@ -285,17 +285,6 @@ class settings extends admin
 
 			$xtpl->assign( 'settings_enabled', $this->lang->settings_enabled );
 			$xtpl->assign( 'settings_disabled', $this->lang->settings_disabled );
-			$xtpl->assign( 'settings_debug_mode', $this->lang->settings_debug_mode );
-
-			$debug_on = null;
-			if( !$this->sets['debug_mode'] )
-				$debug_on = "checked=\"checked\"";
-			$xtpl->assign( 'debug_on', $debug_on );
-
-			$debug_off = null;
-			if( $this->sets['debug_mode'] )
-				$debug_off = "checked=\"checked\"";
-			$xtpl->assign( 'debug_off', $debug_off );
 
 			$xtpl->assign( 'settings_disabled_notice', $this->lang->settings_disabled_notice );
 			$xtpl->assign( 'settings_show_notice', $this->lang->settings_show_notice );
@@ -698,7 +687,6 @@ class settings extends admin
 				'topics_per_page' => 'int',
 				'posts_per_page' => 'int',
 				'hot_limit' => 'int',
-				'debug_mode' => 'bool',
 				'default_skin' => 'string',
 				'default_email_shown' => 'bool',
 				'default_lang' => 'string',

@@ -334,7 +334,6 @@ break;
 				'yahoo'		=> 'Yahoo!',
 				'bingbot'	=> 'Bing'
 			);
-			$this->sets['debug_mode'] = 0;
 			$this->sets['file_count'] = 0;
 			$this->sets['file_approval'] = 0;
 			$this->sets['code_approval'] = 0;

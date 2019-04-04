@@ -77,46 +77,6 @@ class database
 	}
 
 	/**
-	 * Retrieves debug information about a query
-	 *
-	 * @param string $query Query to debug
-	 * @access protected
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 2.0
-	 * @return void
-	 **/
-	function debug($query)
-	{
-		$this->querylog[]   = $query;
-
-		$mtime              = explode(' ', microtime());
-		$starttime          = $mtime[1] + $mtime[0];
-
-		$data = $this->get_debug_info($query);
-
-		$mtime              = explode(' ', microtime());
-		$querytime          = ($mtime[1] + $mtime[0]) - $starttime;
-		$this->querytime   += $querytime;
-
-		$data['querytime']  = $querytime;
-		$data['query']      = $query;
-		$this->querydebug[] = $data;
-	}
-
-	/**
-	 * Runs an EXPLAIN or similar on a query
-	 * Interface version
-	 *
-	 * @param string $query Query to debug
-	 * @access protected
-	 * @return void
-	 **/
-	function get_debug_info($query)
-	{
-		return array();
-	}
-
-	/**
 	 * Retrieves the insert ID of the last executed query
 	 * Interface version
 	 *
