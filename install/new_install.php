@@ -55,7 +55,7 @@ class new_install extends qsfglobal
 	   return $proto . $server;
 	}
 
-	function install_board( $step, $mysqli )
+	function install_board( $step )
 	{
 		switch($step) {
 		default:
@@ -80,13 +80,7 @@ echo "    <p></p>
   <p class='line'></p>
 
   <span class='field'>Database Type:</span>
-  <span class='form'>";
-  if ($mysqli) {
-    echo 'MySQLi';
-  } else {
-    echo 'MySQL';
-  }
-  echo "</span>
+  <span class='form'>MySQLi</span>
   <p class='line'></p>
 
   <span class='field'>Database Name:</span>
@@ -153,15 +147,10 @@ echo "    <p></p>
   </span>
   <p class='line'></p>
 
-  <div style='text-align:center'>";
-
-  if ($mysqli) {
-    echo "<input type='hidden' name='dbtype' value='mysqli' />";
-  } else {
-    echo "<input type='hidden' name='dbtype' value='mysql' />";
-  }
-
-  echo "<input type='submit' name='submit' value='Continue' /></div>
+  <div style='text-align:center'>
+   <input type='hidden' name='dbtype' value='mysqli' />
+   <input type='submit' name='submit' value='Continue' />
+  </div>
  </div>
 </form>";
 break;

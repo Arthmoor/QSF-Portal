@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -58,9 +58,9 @@ class db_mysqli extends database
 	 * @since Beta 2.0
 	 * @return void
 	 **/
-	function db_mysqli($db_host, $db_user, $db_pass, $db_name, $db_port = 3306, $db_socket = '', $db_prefix)
+	public function __construct( $db_host, $db_user, $db_pass, $db_name, $db_port = 3306, $db_socket = '', $db_prefix )
 	{
-		parent::database($db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix);
+		parent::__construct( $db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix );
 		$this->socket = $db_socket;
 
 		$this->connection = new mysqli( $db_host, $db_user, $db_pass, $db_name /* , $db_port, $db_socket */ );
@@ -70,7 +70,7 @@ class db_mysqli extends database
 		}
 	}
 
-	function close()
+	public function close()
 	{
 		if( $this->connection )
 			$this->connection->close();
@@ -84,7 +84,7 @@ class db_mysqli extends database
 	 * @since Beta 2.1
 	 * @return int Insert ID
 	 **/
-	function insert_id($table)
+	public function insert_id( $table )
 	{
 		return $this->connection->insert_id;
 	}
@@ -98,20 +98,21 @@ class db_mysqli extends database
 	 * @since Beta 2.0
 	 * @return resource Executed query
 	 **/
-	function query($query)
+	public function query( $query )
 	{
 		$args = array();
-		if (is_array($query)) {
+
+		if( is_array( $query ) ) {
 			$args = $query; // only use arg 1
 		} else {
 			$args  = func_get_args();
 		}
 
-		$query = $this->_format_query($args);
-		
+		$query = $this->_format_query( $args );
+
 		$this->querycount++;
 
-		$result = $this->connection->query($query) or error(QUICKSILVER_QUERY_ERROR, $this->connection->error, $query, $this->connection->errno);
+		$result = $this->connection->query( $query ) or error( QUICKSILVER_QUERY_ERROR, $this->connection->error, $query, $this->connection->errno );
 		return $result;
 	}
 
@@ -123,12 +124,12 @@ class db_mysqli extends database
 	 * @since Beta 2.0
 	 * @return array Fetched rows
 	 **/
-	function nqfetch($query)
+	public function nqfetch( $query )
 	{
-		return $query->fetch_array(MYSQLI_ASSOC);
+		return $query->fetch_array( MYSQLI_ASSOC );
 	}
 
-	function nqfetch_row($query)
+	public function nqfetch_row( $query )
 	{
 		return $query->fetch_row();
 	}
@@ -141,7 +142,7 @@ class db_mysqli extends database
 	 * @since Beta 2.0
 	 * @return int Number of retrieved rows
 	 **/
-	function num_rows($result)
+	public function num_rows( $result )
 	{
 		return $result->num_rows;
 	}
@@ -153,7 +154,7 @@ class db_mysqli extends database
 	 * @since Beta 2.1
 	 * @return int Number of affected rows
 	 **/
-	function aff_rows()
+	public function aff_rows()
 	{
 		return $this->connection->affected_rows;
 	}
@@ -166,22 +167,9 @@ class db_mysqli extends database
 	 * @return string A string with the quotes and other charaters escaped
 	 * @param string $string The string to escape
 	 **/
-	function escape($string)
+	private function escape( $string )
 	{
-		return $this->connection->real_escape_string($string);
-	}
-
-	function invalid($errmsg)
-	{
-		if (stristr($errmsg, 'mysqli_fetch_array(): supplied argument is not a valid MySQLi result resource'))
-			return true;
-		
-		return false;
-	}
-
-	function error_last()
-	{
-		return $this->connection->error;
+		return $this->connection->real_escape_string( $string );
 	}
 
 	/**
@@ -191,25 +179,26 @@ class db_mysqli extends database
 	 * @param string $args Data to pass into query as escaped strings
 	 * @return string Formatted query
 	 **/
-	function _format_query($query)
+	private function _format_query( $query )
 	{
 		// Format the query string
 		$args = array();
-		if (is_array($query)) {
+
+		if( is_array( $query ) ) {
 			$args = $query; // only use arg 1
 		} else {
 			$args  = func_get_args();
 		}
 
-		$query = array_shift($args);
-		$query = str_replace('%p', $this->prefix, $query);
-		
-		for($i=0; $i<count($args); $i++) {
-			$args[$i] = $this->escape($args[$i]);
-		}
-		array_unshift($args,$query);
+		$query = array_shift( $args );
+		$query = str_replace( '%p', $this->prefix, $query );
 
-		return call_user_func_array('sprintf',$args);
+		for( $i = 0; $i < count( $args ); $i++ ) {
+			$args[$i] = $this->escape( $args[$i] );
+		}
+		array_unshift( $args, $query );
+
+		return call_user_func_array( 'sprintf', $args );
 	}
 }
 ?>

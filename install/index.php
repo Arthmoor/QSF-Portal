@@ -36,11 +36,11 @@ $set['include_path'] = '..';
 require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
-function execute_queries($queries, $db)
+function execute_queries( $queries, $db )
 {
-	foreach ($queries as $query)
+	foreach( $queries as $query )
 	{
-		$db->query($query);
+		$db->query( $query );
 	}
 }
 
@@ -50,31 +50,31 @@ function check_writeable_files()
 	$writeable = true;
 	$fixme = '';
 
-	if(!is_writeable('../attachments')) {
+	if( !is_writeable( '../attachments' ) ) {
 		$fixme .= "../attachments/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../avatars/uploaded')) {
+	if( !is_writeable( '../avatars/uploaded' ) ) {
 		$fixme .= "../avatars/uploaded/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../emoticons')) {
+	if( !is_writeable( '../emoticons' ) ) {
 		$fixme .= "../emoticons/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../packages')) {
+	if( !is_writeable( '../packages' ) ) {
 		$fixme .= "../packages/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../skins')) {
+	if( !is_writeable( '../skins' ) ) {
 		$fixme .= "../skins/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../downloads')) {
+	if( !is_writeable( '../downloads' ) ) {
 		$fixme .= "../downloads/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../updates')) {
+	if( !is_writeable( '../updates' ) ) {
 		$fixme .= "../updates/<br />";
 		$writeable = false;
 	}
@@ -87,20 +87,20 @@ function check_writeable_files()
 	}
 }
 
-if (!isset($_GET['step'])) {
+if( !isset( $_GET['step'] ) ) {
 	$step = 1;
 } else {
 	$step = $_GET['step'];
 }
 
 $mode = '';
-if (!isset($_GET['mode'])) {
+if( !isset( $_GET['mode'] ) ) {
 	$mode = '';
 } else {
 	$mode = $_GET['mode'];
 }
 
-if ($mode) {
+if( $mode ) {
 	require $set['include_path'] . '/install/' . $mode . '.php';
 	$qsf = new $mode;
 } else {
@@ -113,10 +113,10 @@ if ($mode) {
 	$failed = false;
 
 	$php_version = PHP_VERSION;
-	$os = defined('PHP_OS') ? PHP_OS : 'unknown';
-	$safe_mode = get_cfg_var('safe_mode') ? 'on' : 'off';
-	$register_globals = get_cfg_var('register_globals') ? 'on' : 'off';
-	$server = isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : 'unknown';
+	$os = defined( 'PHP_OS' ) ? PHP_OS : 'unknown';
+	$safe_mode = get_cfg_var( 'safe_mode' ) ? 'on' : 'off';
+	$register_globals = get_cfg_var( 'register_globals' ) ? 'on' : 'off';
+	$server = isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : 'unknown';
 
 	if( version_compare( PHP_VERSION, "5.5.0", "<" ) ) {
 		echo 'Your PHP version is ' . PHP_VERSION . '.<br />Currently only PHP 5.5.0 and higher are supported.';
@@ -124,44 +124,31 @@ if ($mode) {
 	}
 
 	$db_fail = 0;
-	$mysql = false;
 	$mysqli = false;
 
-	if (!extension_loaded('mysql'))
-		$db_fail++;
-	else
-		$mysql = true;
-
-	if (!extension_loaded('mysqli')) {
+	if( !extension_loaded( 'mysqli') ) {
 		$db_fail++;
 	} else {
 		if( mysqli_get_client_version() >= 40103 )
-			$mysql = false;
 			$mysqli = true;
 	}
 
-	if ( $db_fail > 1 )
+	if( $db_fail > 0 )
 	{
-		if ($failed) { // If we have already shown a message, show the next one two lines down
+		if( $failed ) { // If we have already shown a message, show the next one two lines down
 			echo '<br /><br />';
 		}
 
-		echo 'Your PHP installation does not support MySQL or MySQLi.';
+		echo 'Your PHP installation does not support MySQLi.';
 		$failed = true;
 	}
 
-	if ($failed) {
+	if( $failed ) {
 		echo "<br /><br /><b>To run {$qsf->name} and other advanced PHP software, the above error(s) must be fixed by you or your web host.</b>";
 		exit;
 	}
 
-	if ($mysql) {
-		$mysql_client = '<li>MySQL Client: (' . mysql_get_client_info() . ')</li><hr />';
-	} else {
-		$mysql_client = '';
-	}
-
-	if ($mysqli) {
+	if( $mysqli ) {
 		$mysqli_client = '<li>MySQLi Client: (' . mysqli_get_client_info() . ')</li><hr />';
 	} else {
 		$mysqli_client = '';
@@ -198,7 +185,6 @@ if ($mode) {
      <li>Safe mode: $safe_mode</li><hr />
      <li>Register globals: $register_globals</li><hr />
      <li>Server Software: $server</li><hr />
-     $mysql_client
      $mysqli_client
     </ul>
    </div>
@@ -212,13 +198,13 @@ if ($mode) {
 			include "choose_install.php";
 			break;
 		case 'new_install':
-			$qsf->install_board($step, $mysqli);
+			$qsf->install_board($step);
 			break;
 		case 'upgrade':
-			$qsf->upgrade_board($step);
+			$qsf->upgrade_board( $step );
 			break;
 		case 'convert':
-			$qsf->convert_board($step, $mysqli);
+			$qsf->convert_board( $step );
 			break;
 	}
 
@@ -226,7 +212,7 @@ if ($mode) {
    <div id='bottom'>&nbsp;</div>
   </div>
   <div id='footer'>
-   <a href='https://github.com/Arthmoor/QSF-Portal'>{$qsf->name}</a> {$qsf->version} &copy; 2005-2015 The {$qsf->name} Development Team<br />
+   <a href='https://github.com/Arthmoor/QSF-Portal'>{$qsf->name}</a> {$qsf->version} &copy; 2005-2019 The {$qsf->name} Development Team<br />
   </div>
  </body>
 </html>";

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -64,7 +64,7 @@ class database
 	 * @since Beta 2.0
 	 * @return void
 	 **/
-	function database($db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix)
+	public function __construct( $db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix )
 	{
 		$this->get    = $_GET;
 		$this->post   = $_POST;
@@ -83,7 +83,7 @@ class database
 	 * @param string $table Table name - unused
 	 * @return int Insert ID
 	 **/
-	function insert_id($table)
+	public function insert_id( $table )
 	{
 		return null;
 	}
@@ -95,7 +95,7 @@ class database
 	 * @param string $query SQL query
 	 * @return resource Executed query
 	 **/
-	function query($query)
+	public function query( $query )
 	{
 		return null;
 	}
@@ -109,16 +109,17 @@ class database
 	 * @since Beta 2.0
 	 * @return array Fetched rows
 	 **/
-	function fetch($query)
+	public function fetch( $query )
 	{
 		$args = array();
-		if (is_array($query)) {
+
+		if( is_array( $query ) ) {
 			$args = $query; // only use arg 1
 		} else {
 			$args  = func_get_args();
 		}
 
-		return $this->nqfetch($this->query($args));
+		return $this->nqfetch( $this->query( $args ) );
 	}
 
 	/**
@@ -128,7 +129,7 @@ class database
 	 * @param resource $query Executed SQL query
 	 * @return array Fetched rows
 	 **/
-	function nqfetch($query)
+	public function nqfetch( $query )
 	{
 		return array();
 	}
@@ -140,7 +141,7 @@ class database
 	 * @param resource $query Executed SQL query
 	 * @return int Number of retrieved rows
 	 **/
-	function num_rows($query)
+	public function num_rows( $query )
 	{
 		return 0;
 	}
@@ -155,23 +156,23 @@ class database
 	 * @since Beta 4.0
 	 * @return void
 	 */
-	function clone_row($table, $unique_col, $unique_id)
+	public function clone_row( $table, $unique_col, $unique_id )
 	{
 		$cols = null;
 		$vals = null;
 
-		$result = $this->fetch('SELECT * FROM %p' . $table . ' WHERE ' . $unique_col . '=' . $unique_id);
-		foreach ($result as $col => $val)
+		$result = $this->fetch( 'SELECT * FROM %p' . $table . ' WHERE ' . $unique_col . '=' . $unique_id );
+		foreach( $result as $col => $val )
 		{
-			if ($col == $unique_col) {
+			if( $col == $unique_col ) {
 				continue;
 			}
 
 			$cols .= $col . ', ';
-			$vals .= '"' . $this->escape($val) . '", ';
+			$vals .= '"' . $this->escape( $val ) . '", ';
 		}
 
-		$this->query('INSERT INTO %p' . $table . ' (' . substr($cols, 0, -2) . ') VALUES (' . substr($vals, 0, -2) . ')');
+		$this->query( 'INSERT INTO %p' . $table . ' (' . substr($cols, 0, -2) . ') VALUES (' . substr($vals, 0, -2) . ')' );
 	}
 
 	/**
@@ -180,7 +181,7 @@ class database
 	 *
 	 * @return int Number of affected rows
 	 **/
-	function aff_rows()
+	public function aff_rows()
 	{
 		return 0;
 	}
@@ -192,9 +193,9 @@ class database
 	 * @return string A string with the quotes and other charaters escaped
 	 * @param string $string The string to escape
 	 **/
-	function escape($string)
+	private function escape( $string )
 	{
-		return addslashes($string);
+		return addslashes( $string );
 	}
 
 	/**
@@ -204,25 +205,26 @@ class database
 	 * @param string $args Data to pass into query as escaped strings
 	 * @return string Formatted query
 	 **/
-	function _format_query($query)
+	private function _format_query( $query )
 	{
 		// Format the query string
 		$args = array();
-		if (is_array($query)) {
+
+		if( is_array( $query ) ) {
 			$args = $query; // only use arg 1
 		} else {
 			$args  = func_get_args();
 		}
 
-		$query = array_shift($args);
+		$query = array_shift( $args );
 		$query = str_replace('%p', $this->prefix, $query);
 		
-		for($i=0; $i<count($args); $i++) {
-			$args[$i] = $this->escape($args[$i]);
+		for( $i = 0; $i < count( $args ); $i++ ) {
+			$args[$i] = $this->escape( $args[$i] );
 		}
-		array_unshift($args,$query);
+		array_unshift( $args, $query );
 
-		return call_user_func_array('sprintf',$args);
+		return call_user_func_array( 'sprintf', $args );
 	}
 }
 ?>
