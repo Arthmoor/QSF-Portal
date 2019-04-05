@@ -50,7 +50,7 @@ class membercount extends admin
 	 * @Intensive queries, but not used much.
 	 * @return string Message
 	 **/
-	function execute()
+	public function execute()
 	{
 		$this->set_title( $this->lang->mcount );
 		$this->tree( $this->lang->mcount );
@@ -59,6 +59,37 @@ class membercount extends admin
 		$this->write_sets();
 
 		return $this->message( $this->lang->mcount, $this->lang->mcount_updated );
+	}
+
+ 	/**
+	 * Used to update member statistics
+	 *
+	 * @author Roger Libiez
+	 * @since 1.5
+	 * @return void
+	**/
+	private function ResetMemberStats()
+	{
+		$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
+		$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
+
+		$this->sets['last_member'] = $member['user_name'];
+		$this->sets['last_member_id'] = $member['user_id'];
+		$this->sets['members'] = $counts['count']-1; // Subtract guest
+
+		// Try to fix user post counts.
+		$users = $this->db->query( "SELECT user_id, user_posts FROM %pusers" );
+		while( ( $user = $this->db->nqfetch( $users ) ) )
+		{
+			$uid = $user['user_id'];
+
+			$posts = $this->db->fetch( "SELECT COUNT(post_id) count FROM %pposts WHERE post_author=%d AND post_count=1", $uid );
+			if( $posts['count'] && $posts['count'] > 0 ) {
+				$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts['count'], $uid );
+			} else {
+				$this->db->query( "UPDATE %pusers SET user_posts=0 WHERE user_id=%d", $uid );
+			}
+		}
 	}
 }
 ?>

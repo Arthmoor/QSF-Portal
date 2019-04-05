@@ -147,7 +147,7 @@ class qsfglobal
 	var $readmarker;		  // Handles tracking what posts are read and unread
 	var $validator;			  // Handler for checking usernames, passwords, etc
 	var $activeutil;		  // Handler user activity
-	
+
 	var $xtpl = null;		  // Global template instance
 
 	/**
@@ -156,7 +156,7 @@ class qsfglobal
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.0
 	 **/
-	function __construct( $db = null )
+	public function __construct( $db = null )
 	{
 		$this->db       = $db;
 		$this->time     = time();
@@ -187,7 +187,7 @@ class qsfglobal
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
-	function init( $admin = false )
+	public function init( $admin = false )
 	{
 		$this->perms = new permissions( $this );
 		$this->file_perms = new file_permissions( $this );
@@ -219,37 +219,37 @@ class qsfglobal
 
 		$this->set_table();
 	}
-	
+
 	/**
 	 * Run actions that can be delayed until after output is sent
 	 *
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2.0
 	 **/
-	function cleanup()
+	public function cleanup()
 	{
 		// Handle active users
-		if ($this->perms->is_guest) {
-			$this->activeutil->update($this->get['a']);
+		if( $this->perms->is_guest ) {
+			$this->activeutil->update( $this->get['a'] );
 		} else {
-			$this->activeutil->update($this->get['a'], $this->user['user_id']);
+			$this->activeutil->update( $this->get['a'], $this->user['user_id'] );
 		}
-		
+
 		$this->readmarker->cleanup();
 	}
-	
+
 	/**
 	 * Set values for $this->table and $this->etable
 	 *
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2.0
 	 **/
-	function set_table()
+	public function set_table()
 	{
-		$this->table  = eval($this->template('MAIN_TABLE'));
+		$this->table  = eval( $this->template('MAIN_TABLE'));
 		$this->etable = eval($this->template('MAIN_ETABLE'));
 	}
-	
+
 	/**
 	 * Get the template for eval (templater interface)
 	 *
@@ -258,23 +258,6 @@ class qsfglobal
 	function template($piece)
 	{
 		return $this->templater->template($piece);
-	}
-
-	/**
-	 * Combines two array to make a new array, the first array becomes the keys
-	 * and the second becomes the values
-	 *
-	 * @author Matthew Wells <ragnarok@squarehybrid.com>
-	 * @since Spiders in Active List Mod
-	 * @return Array
-	 **/
-	function array_combine($keys, $vals)
-	{
-		for ($i = 0; $i < count($keys); $i++) {
-			$array[$keys[$i]] = $vals[$i];
-		}
-
-		return $array;
 	}
 
 	/**
@@ -287,30 +270,30 @@ class qsfglobal
 	 * @since 1.1.5
 	 * @return void
 	 **/
-	function chmod($path, $mode, $recursive = false)
+	public function chmod( $path, $mode, $recursive = false )
 	{
-		if (!$recursive || !is_dir($path)) {
-			@chmod($path, $mode);
+		if( !$recursive || !is_dir( $path ) ) {
+			@chmod( $path, $mode );
 			return;
 		}
 
-		$dir = opendir($path);
-		while (($file = readdir($dir)) !== false)
+		$dir = opendir( $path );
+		while( ( $file = readdir( $dir ) ) !== false )
 		{
-			if(($file == '.') || ($file == '..')) {
+			if( ( $file == '.' ) || ( $file == '..' ) ) {
 				continue;
 			}
 
 			$fullpath = $path . '/' . $file;
-			if(!is_dir($fullpath)) {
-				@chmod($fullpath, $mode);
+			if( !is_dir( $fullpath ) ) {
+				@chmod( $fullpath, $mode );
 			} else {
-				$this->chmod($fullpath, $mode, true);
+				$this->chmod( $fullpath, $mode, true );
 			}
 		}
 
-		closedir($dir);
-		@chmod($path, $mode);
+		closedir( $dir );
+		@chmod( $path, $mode );
 	}
 
 	/**
@@ -320,9 +303,9 @@ class qsfglobal
 	 * @param int $options Options
 	 * @return string Formatted string
 	 **/
-	function format($in, $options = 0)
+	public function format( $in, $options = 0 )
 	{
-		return $this->bbcode->format($in, $options);
+		return $this->bbcode->format( $in, $options );
 	}
 
 	/**
@@ -331,19 +314,19 @@ class qsfglobal
 	 * @param string $label Label for the tree entry
 	 * @param string $link URL to link to
 	 **/
-	function tree($label, $link = null)
+	public function tree( $label, $link = null )
 	{
-		$this->htmlwidgets->tree($label, $link);
+		$this->htmlwidgets->tree( $label, $link );
 	}
 
 	/**
 	 * Hash a given string into a password suitable for database use
 	 *
 	 * @param string $pass The supplied password to hash
-	 * @author Samson
-	 * @since 1.6
+	 * @author Roger Libiez
+	 * @since 2.0
 	 */
-	function qsfp_password_hash($pass)
+	public function qsfp_password_hash( $pass )
 	{
 		$options = [ 'cost' => 12, ];
 		$newpass = password_hash( $pass, PASSWORD_DEFAULT, $options );
@@ -358,25 +341,25 @@ class qsfglobal
 	 * @author http://www.zend.com/codex.php?id=215&single=1
 	 * @since 1.1.0
 	 */
-	function generate_pass($length)
+	public function generate_pass( $length )
 	{
-		$vowels = array('a', 'e', 'i', 'o', 'u');
-		$cons = array('b', 'c', 'd', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'u', 'v', 'w', 'tr',
-		'cr', 'br', 'fr', 'th', 'dr', 'ch', 'ph', 'wr', 'st', 'sp', 'sw', 'pr', 'sl', 'cl');
+		$vowels = array( 'a', 'e', 'i', 'o', 'u' );
+		$cons = array( 'b', 'c', 'd', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'u', 'v', 'w', 'tr',
+		'cr', 'br', 'fr', 'th', 'dr', 'ch', 'ph', 'wr', 'st', 'sp', 'sw', 'pr', 'sl', 'cl' );
 
-		$num_vowels = count($vowels);
-		$num_cons = count($cons);
+		$num_vowels = count( $vowels );
+		$num_cons = count( $cons );
 
 		$password = '';
 
-		for ($i = 0; $i < $length; $i++)
+		for( $i = 0; $i < $length; $i++ )
 		{
 			$password .= $cons[rand(0, $num_cons - 1)] . $vowels[rand(0, $num_vowels - 1)];
 		}
 
-		return substr($password, 0, $length);
+		return substr( $password, 0, $length );
 	}
-	
+
 	/**
 	 * Loads a user_language. Bet you couldn't figure that out...
 	 *
@@ -388,13 +371,13 @@ class qsfglobal
 	 * @since Beta 3.0
 	 * @return object Language
 	 **/
-	function get_lang($lang, $a = null, $path = './', $main = true)
+	public function get_lang( $lang, $a = null, $path = './', $main = true )
 	{
-		if (isset($this->get['lang'])) {
+		if( isset( $this->get['lang'] ) ) {
 			$lang = $this->get['lang'];
 		}
 
-		if (strstr($lang, '/') || strstr($lang, '\\') || !file_exists($path . 'languages/' . $lang . '.php')) {
+		if( strstr( $lang, '/' ) || strstr( $lang, '\\' ) || !file_exists( $path . 'languages/' . $lang . '.php' ) ) {
 			$lang = 'en';
 		}
 
@@ -402,14 +385,16 @@ class qsfglobal
 		$obj = new $lang();
 
 		// Check if language function is available before running it
-		if ($a && is_callable(array($obj,$a))) {
+		if( $a && is_callable( array( $obj, $a ) ) ) {
 			$obj->$a();
 		}
 
-		if ($main) {
+		if( $main ) {
 			$obj->main();
 		}
+
 		$obj->universal();
+
 		return $obj;
 	}
 
@@ -421,18 +406,18 @@ class qsfglobal
 	 * @since Beta 2.1
 	 * @return array Array of information about the member:<br /><i>string user_title</i> - default member title for that post count<br /><i>int user_level</i> - default member level for that post count
 	 **/
-	function get_level($posts)
+	public function get_level( $posts )
 	{
 		$memtitle = array(
 			'user_title' => '',
 			'user_level' => '0'
 		);
 
-		$titles = $this->db->query("SELECT * FROM %pmembertitles WHERE membertitle_posts <= %d ORDER BY membertitle_posts", $posts);
+		$titles = $this->db->query( "SELECT * FROM %pmembertitles WHERE membertitle_posts <= %d ORDER BY membertitle_posts", $posts );
 
-		while ($title = $this->db->nqfetch($titles))
+		while( $title = $this->db->nqfetch( $titles ) )
 		{
-			if ($posts >= $title['membertitle_posts']) {
+			if( $posts >= $title['membertitle_posts'] ) {
 				$memtitle['user_title'] = $title['membertitle_title'];
 				$memtitle['user_level'] = $title['membertitle_id'];
 			} else {
@@ -444,42 +429,6 @@ class qsfglobal
 	}
 
 	/**
-	 * Retrieves the current server load
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 2.0
-	 * @return int Server load
-	 **/
-	function get_load()
-	{
-		if (get_cfg_var('safe_mode') || stristr(PHP_OS, 'WIN')) {
-			return 0;
-		}
-
-		if (@file_exists('/proc/loadavg')) {
-			$file = @fopen('/proc/loadavg', 'r');
-
-			if (!$file) {
-				return 0;
-			}
-
-			$load = explode(' ', fread($file, 6));
-			fclose($file);
-		} else {
-			$load = @exec('uptime');
-
-			if (!$load) {
-				return 0;
-			}
-
-			$load = preg_split('/load average:/', $load);
-			$load = explode(',', $load[1]);
-		}
-
-		return trim($load[0]);
-	}
-
-	/**
 	 * Retrieves the number of personal messages the user has received
 	 *
 	 * @param bool $seen True to retreive all messages, false to retrieve only unread messages
@@ -488,28 +437,28 @@ class qsfglobal
 	 * @since Beta 2.0
 	 * @return int Count of personal messages
 	 **/
-	function get_messages($seen = false, $folder = 0)
+	public function get_messages( $seen = false, $folder = 0 )
 	{
-		if($this->perms->is_guest)
+		if( $this->perms->is_guest )
 			return 0;
 
-		$count = $this->db->fetch("SELECT COUNT(pm_id) AS messages FROM %ppmsystem WHERE pm_to=%d AND pm_folder=%d" . (!$seen ? " AND pm_read=0" : null),
-			$this->user['user_id'], $folder);
+		$count = $this->db->fetch( "SELECT COUNT(pm_id) AS messages FROM %ppmsystem WHERE pm_to=%d AND pm_folder=%d" . (!$seen ? " AND pm_read=0" : null),
+			$this->user['user_id'], $folder );
 		return $count['messages'];
 	}
 
-	function get_files()
+	public function get_files()
 	{
 		$count = 0;
 
-		if($this->perms->is_guest)
+		if( $this->perms->is_guest )
 			return 0;
 
-		if($this->perms->auth('is_admin'))
+		if( $this->perms->auth( 'is_admin' ) )
 			return $this->sets['code_approval'];
 
 		$query = $this->db->query( "SELECT file_catid FROM %pfiles WHERE file_approved=0" );
-		while( $file = $this->db->nqfetch($query) )
+		while( $file = $this->db->nqfetch( $query ) )
 		{
 			if( !$this->file_perms->auth( 'approve_files', $file['file_catid'] ) )
 				continue;
@@ -518,19 +467,19 @@ class qsfglobal
 		return $count;
 	}
 
-	function cidrmatch( $cidr )
+	private function cidrmatch( $cidr )
 	{
-		$ip = decbin( ip2long($this->ip) );
+		$ip = decbin( ip2long( $this->ip ) );
 		list( $cidr1, $cidr2, $cidr3, $cidr4, $bits ) = sscanf( $cidr, '%d.%d.%d.%d/%d' );
 		$cidr = decbin( ip2long( "$cidr1.$cidr2.$cidr3.$cidr4" ) );
-		for( $i = strlen($ip); $i < 32; $i++ )
+		for( $i = strlen( $ip ); $i < 32; $i++ )
 			$ip = "0$ip";
-		for( $i = strlen($cidr); $i < 32; $i++ )
+		for( $i = strlen( $cidr ); $i < 32; $i++ )
 			$cidr = "0$cidr";
-		return !strcmp( substr($ip, 0, $bits), substr($cidr, 0, $bits) );
+		return !strcmp( substr( $ip, 0, $bits ), substr( $cidr, 0, $bits ) );
 	}
 
-	function is_ipv6( $ip )
+	private function is_ipv6( $ip )
 	{
 		return( substr_count( $ip, ":" ) > 0 && substr_count( $ip, "." ) == 0 );
 	}
@@ -540,30 +489,29 @@ class qsfglobal
 	 *
 	 * @return bool True if the user is banned, false if the user is not
 	 **/
-	function is_banned()
+	public function is_banned()
 	{
-		//Ban by user group
-		if (!$this->perms->auth('do_anything')) {
+		// Ban by user group
+		if( !$this->perms->auth( 'do_anything' ) ) {
 			return true;
 		}
 
-		//Ban by IP
-		if ($this->sets['banned_ips']) {
-			foreach ($this->sets['banned_ips'] as $ip)
+		// Ban by IP
+		if( $this->sets['banned_ips'] ) {
+			foreach( $this->sets['banned_ips'] as $ip )
 			{
-				$ip = stripslashes($ip);
+				$ip = stripslashes( $ip );
 
 				if( $this->is_ipv6( $this->ip ) ) {
 					if( strcasecmp( $ip, $this->ip ) == 0 )
 						return true;
 				}
 
-				if ( ( strstr($ip, '/') && $this->cidrmatch($ip) ) || strcasecmp( $ip, $this->ip ) == 0 ) {
+				if( ( strstr($ip, '/') && $this->cidrmatch($ip) ) || strcasecmp( $ip, $this->ip ) == 0 ) {
 					return true;
 				}
 			}
 		}
-
 		return false;
 	}
 
@@ -577,7 +525,7 @@ class qsfglobal
 	 * @since Beta 2.1
 	 * @return string Human-readable, formatted Unix timestamp
 	 **/
-	function mbdate( $format, $time = 0, $useToday = true )
+	public function mbdate( $format, $time = 0, $useToday = true )
 	{
 		if( !$time ) {
 			$time = $this->time;
@@ -592,7 +540,7 @@ class qsfglobal
 		$dt->setTimestamp( $time );
 
 		if( is_int( $format ) ) {
-			switch($format)
+			switch( $format )
 			{
 			case DATE_LONG:
 				$date_format = $this->lang->date_long . $this->lang->time_long;
@@ -638,17 +586,17 @@ class qsfglobal
 	 * @since Beta 2.0
 	 * @return string HTML-formatted message
 	 **/
-	function message($title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4)
+	public function message( $title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4 )
 	{
-		if ($link_text) {
+		if( $link_text ) {
 			$message .= '<br /><br /><a href="' . $link . '">' . $link_text . '</a>';
 		}
 
-		if ($redirect) {
-			@header('Refresh: '.$delay.';url=' . $redirect);
+		if( $redirect ) {
+			@header( 'Refresh: '.$delay.';url=' . $redirect );
 		}
 
-		return eval($this->template('MAIN_MESSAGE'));
+		return eval( $this->template( 'MAIN_MESSAGE' ) );
 	}
 
 	/**
@@ -659,21 +607,9 @@ class qsfglobal
 	 * @since Beta 4.0
 	 * @return array Moderator permissions
 	 **/
-	function post_box()
+	public function post_box()
 	{
-		return 'POST_BOX_PLAIN'; // Not quite ready for Beta 4
-
-		if (preg_match('/MSIE ([0-9]\.[0-9]{1,2})/', $this->agent, $browser)) {
-			if (floor($browser[1]) >= 4) {
-				if (!isset($this->get['rich'])) { //if ($this->user['post_style'] == 'rich') {
-					return 'POST_BOX_RICH';
-				} else {
-					return 'POST_BOX_PLAIN';
-				}
-			}
-		} else {
-			return 'POST_BOX_PLAIN';
-		}
+		return 'POST_BOX_PLAIN';
 	}
 
 	/**
@@ -684,7 +620,7 @@ class qsfglobal
 	 * @since Beta 2.0
 	 * @return void
 	 **/
-	function set_title($title)
+	public function set_title( $title )
 	{
 		$this->title = "{$this->sets['forum_name']} - $title";
 	}
@@ -698,77 +634,17 @@ class qsfglobal
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 **/
-	function add_feed($url, $subtitle='')
+	public function add_feed( $url, $subtitle = '' )
 	{
-		if ($this->sets['rss_feed_title']) {
-			if ($subtitle) {
+		if( $this->sets['rss_feed_title'] ) {
+			if( $subtitle ) {
 				$subtitle = ' - ' . $subtitle;
 			}
+
 			$title = htmlspecialchars( $this->sets['rss_feed_title'] );
 			$subtitle = htmlspecialchars( $subtitle );
 			$this->feed_links .= "<link rel=\"alternate\" title=\"$title$subtitle\" href=\"$url\" type=\"application/rss+xml\" />\n";
 		}
-	}
-	
-	/**
-	 * Creates the contents of a settings file
-	 *
-	 * @since 1.3.0
-	 * @return string Contents for settings file
-	 **/
-	function create_settings_file()
-	{
-		$settings = array(
-			'db_host'   => $this->sets['db_host'],
-			'db_name'   => $this->sets['db_name'],
-			'db_pass'   => $this->sets['db_pass'],
-			'db_port'   => $this->sets['db_port'],
-			'db_socket' => $this->sets['db_socket'],
-			'db_user'   => $this->sets['db_user'],
-			'dbtype'    => $this->sets['dbtype'],
-			'prefix'    => $this->sets['prefix'],
-			'installed' => $this->sets['installed'],
-			'admin_email' => $this->sets['admin_email']
-			);
-				
-		$file = "<?php\n\$set = array();\n\nif (!defined('QUICKSILVERFORUMS')) {\n       header('HTTP/1.0 403 Forbidden');\n       die;\n}\n\n";
-
-		foreach ($settings as $set => $val)
-		{
-			$file .= "\$set['$set'] = '" . str_replace(array('\\', '\''), array('\\\\', '\\\''), $val) . "';\n";
-		}
-
-		$file .= '?' . '>';
-		return $file;
-	}
-	
-
-	/**
-	 * Saves all data in the $this->sets array into a file
-	 *
-	 * @param string $sfile File to write settings into (default is settings.php)
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since 1.1.0
-	 * @return bool True on success, false on failure
-	 **/
-	function write_db_sets($sfile = './settings.php')
-	{
-		$settings = $this->create_settings_file();
-
-		$this->chmod($sfile, 0666);
-		$fp = @fopen($sfile, 'w');
-
-		if (!$fp) {
-			return false;
-		}
-
-		if (!@fwrite($fp, $settings)) {
-			return false;
-		}
-
-		fclose($fp);
-
-		return true;
 	}
 
 	/**
@@ -778,7 +654,7 @@ class qsfglobal
 	 * @since Beta 2.1
 	 * @return void
 	 **/
-	function write_sets()
+	public function write_sets()
 	{
 		$db_settings = array(
 			'db_host',
@@ -798,14 +674,14 @@ class qsfglobal
 		);
 
 		$sets = array();
-		foreach ($this->sets as $set => $val)
+		foreach( $this->sets as $set => $val )
 		{
-			if (!in_array($set, $db_settings)) {
+			if( !in_array( $set, $db_settings ) ) {
 				$sets[$set] = $val;
 			}
 		}
 
-		$this->db->query("UPDATE %psettings SET settings_data='%s'", json_encode($sets));
+		$this->db->query( "UPDATE %psettings SET settings_data='%s'", json_encode( $sets ) );
 	}
 
 	/**
@@ -815,25 +691,25 @@ class qsfglobal
 	 * @since 1.1.0
 	 * @return array Settings
 	 **/
-	function get_settings($sets)
+	public function get_settings( $sets )
 	{
 		// Converts old serialized array into a json encoded array due to potential exploits in the PHP serialize/unserialize functions.
 		$settings_array = array();
 
-		$settings = $this->db->fetch("SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_data FROM %psettings LIMIT 1");
+		$settings = $this->db->fetch( "SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_data FROM %psettings LIMIT 1" );
 		$sets['meta_keywords'] = $settings['settings_meta_keywords'];
 		$sets['meta_description'] = $settings['settings_meta_description'];
 
 		if( $settings['settings_version'] == 1 ) {
-			$settings_array = array_merge($sets, unserialize($settings['settings_data']));
-			$this->db->query("UPDATE %psettings SET settings_version=2");
+			$settings_array = array_merge( $sets, unserialize( $settings['settings_data'] ) );
+			$this->db->query( "UPDATE %psettings SET settings_version=2" );
 			$this->sets = $settings_array;
 			$this->write_sets();
 
 			$perms = $this->db->query( 'SELECT group_id, group_perms, group_file_perms FROM %pgroups' );
 
 			// Settings version 1 also means the perm arrays are not updated so they need fixing now too.
-			while( ($perm = $this->db->nqfetch($perms)) )
+			while( ( $perm = $this->db->nqfetch( $perms ) ) )
 			{
 				$forum_array = unserialize( $perm['group_perms'] );
 				$file_array = unserialize( $perm['group_file_perms'] );
@@ -845,43 +721,12 @@ class qsfglobal
 					$new_forum_array, $new_file_array, $perm['group_id'] );
 			}
 		} else {
-			$settings_array = array_merge($sets, json_decode($settings['settings_data'], true));
+			$settings_array = array_merge( $sets, json_decode( $settings['settings_data'], true ) );
 		}
 		return $settings_array;
 	}
 
 	/* Forum utility functions */
-
- 	/**
-	 * Used to update member statistics
-	 *
-	 * @author Roger Libiez [Samson]
-	 * @since 1.5
-	 * @return void
-	**/
-	function ResetMemberStats()
-	{
-		$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
-		$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
-
-		$this->sets['last_member'] = $member['user_name'];
-		$this->sets['last_member_id'] = $member['user_id'];
-		$this->sets['members'] = $counts['count']-1; // Subtract el guesto
-
-		// Try to fix user post counts.
-		$users = $this->db->query( "SELECT user_id, user_posts FROM %pusers" );
-		while( ( $user = $this->db->nqfetch( $users ) ) )
-		{
-			$uid = $user['user_id'];
-
-			$posts = $this->db->fetch( "SELECT COUNT(post_id) count FROM %pposts WHERE post_author=%d AND post_count=1", $uid );
-			if( $posts['count'] && $posts['count'] > 0 ) {
-				$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts['count'], $uid );
-			} else {
-				$this->db->query( "UPDATE %pusers SET user_posts=0 WHERE user_id=%d", $uid );
-			}
-		}
-	}
 
 	/**
 	 * Used to update topic and reply counts for every forum.
@@ -890,30 +735,30 @@ class qsfglobal
 	 * @since Beta 2.1
 	 * @return string Completion message
 	 **/
-	function RecountForums()
+	public function RecountForums()
 	{
 		// Recount all topics and posts - NiteShdw
-		$q = $this->db->query("SELECT topic_id, COUNT(post_id) AS replies FROM %ptopics, %pposts WHERE post_topic=topic_id GROUP BY topic_id");
-		
-		while ($f = $this->db->nqfetch($q))
+		$q = $this->db->query( "SELECT topic_id, COUNT(post_id) AS replies FROM %ptopics, %pposts WHERE post_topic=topic_id GROUP BY topic_id" );
+
+		while( $f = $this->db->nqfetch( $q ) )
 		{
 			$treplies = $f['replies'] - 1;
-			$this->db->query("UPDATE %ptopics SET topic_replies=%d WHERE topic_id=%d", $treplies, $f['topic_id']);
+			$this->db->query( "UPDATE %ptopics SET topic_replies=%d WHERE topic_id=%d", $treplies, $f['topic_id'] );
 		}
 
-		$q = $this->db->query("SELECT forum_id FROM %pforums WHERE forum_parent = 0");
+		$q = $this->db->query( "SELECT forum_id FROM %pforums WHERE forum_parent = 0" );
 		$this->sets['posts'] = 0;
 		$this->sets['topics'] = 0;
 
-		while ($f = $this->db->nqfetch($q))
+		while( $f = $this->db->nqfetch( $q ) )
 		{
-			$results = $this->countTopicsAndReplies($f['forum_id']);
+			$results = $this->countTopicsAndReplies( $f['forum_id'] );
 
 			$this->sets['posts'] += $results['replies'];
 			$this->sets['topics'] += $results['topics'];
 		}
 	}
-	
+
 	/**
 	 * Used for recursive topic and reply counting
 	 *
@@ -922,98 +767,50 @@ class qsfglobal
 	 * @param Forum to count
 	 * @return Array containing topic Count, reply Count, last post, last post time
 	 **/
-	function countTopicsAndReplies($forum)
+	public function countTopicsAndReplies( $forum )
 	{
 		// Initalise locals
 		$topicCount = 0;
 		$replyCount = 0;
 		$lastPostTime = 0;
 		$lastPost = 0;
-		
+
 		// Check for subforums
-		$q = $this->db->query("SELECT forum_id FROM %pforums WHERE forum_parent=%d", $forum);
-		while ($f = $this->db->nqfetch($q))
+		$q = $this->db->query( "SELECT forum_id FROM %pforums WHERE forum_parent=%d", $forum );
+		while( $f = $this->db->nqfetch( $q ) )
 		{
-			$results = $this->countTopicsAndReplies($f['forum_id']);
+			$results = $this->countTopicsAndReplies( $f['forum_id'] );
 			$topicCount += $results['topics'];
 			$replyCount += $results['replies'];
-			if ($results['lastPostTime'] > $lastPostTime) {
+			if( $results['lastPostTime'] > $lastPostTime ) {
 				$lastPostTime = $results['lastPostTime'];
 				$lastPost = $results['lastPost'];
 			}
 		}
-		
+
 		// Count topics on this forum
-		$tc = $this->db->fetch('SELECT COUNT(topic_id) tc FROM %ptopics 
-				WHERE NOT(topic_modes & %d) AND topic_forum=%d', TOPIC_MOVED, $forum);
-		$rc = $this->db->fetch('SELECT COUNT(p.post_id) rc
-				FROM %pposts p, %ptopics t 
-				WHERE p.post_topic=t.topic_id AND topic_forum=%d', $forum);
+		$tc = $this->db->fetch( 'SELECT COUNT(topic_id) tc FROM %ptopics
+				WHERE NOT(topic_modes & %d) AND topic_forum=%d', TOPIC_MOVED, $forum );
+		$rc = $this->db->fetch( 'SELECT COUNT(p.post_id) rc FROM %pposts p, %ptopics t 
+				WHERE p.post_topic=t.topic_id AND topic_forum=%d', $forum );
 		$lp = $this->db->fetch('SELECT p.post_time pt, p.post_id post
 				FROM %pposts p, %ptopics t 
 				WHERE p.post_topic=t.topic_id AND topic_forum=%d
-				ORDER BY p.post_time DESC LIMIT 1', $forum);
-		
+				ORDER BY p.post_time DESC LIMIT 1', $forum );
+
 		$topicCount += $tc['tc'];
 		$replyCount += $rc['rc'];
-		if ($lp['pt'] > $lastPostTime) {
+		if( $lp['pt'] > $lastPostTime ) {
 			$lastPostTime = $lp['pt'];
 			$lastPost = $lp['post'];
 		}
-		
-		// Update the details
-		$this->db->query("UPDATE %pforums SET forum_replies=%d,
-				forum_topics=%d, forum_lastpost=%d WHERE forum_id=%d",
-				$replyCount - $topicCount, $topicCount, $lastPost, $forum);
-		
-		return array('topics' => $topicCount, 'replies' => $replyCount, 'lastPost' => $lastPost, 'lastPostTime' => $lastPostTime);
-	}
-	
-	/**
-	 * Update Forum Trees
-	 *
-	 * @author Geoffrey Dunn <geoff@warmage.com>
-	 * @since 1.1.5
-	 **/
-	function updateForumTrees()
-	{
-		$forums = array();
-		$forumTree = array();
-		
-		// Build tree structure of 'id' => 'parent' structure
-		$q = $this->db->query("SELECT forum_id, forum_parent FROM %pforums ORDER BY forum_parent");
-		
-		while ($f = $this->db->nqfetch($q))
-		{
-			if ($f['forum_parent']) {
-				$forums[$f['forum_id']] = $f['forum_parent'];
-			}
-		}
-		
-		// Run through group
-		$q = $this->db->query("SELECT forum_parent FROM %pforums GROUP BY forum_parent");
 
-		while ($f = $this->db->nqfetch($q))
-		{
-			if ($f['forum_parent']) {
-				$tree = $this->buildTree($forums, $f['forum_parent']);
-			} else {
-				$tree = '';
-			}
-		
-			$this->db->query("UPDATE %pforums SET forum_tree='%s' WHERE forum_parent=%d", $tree, $f['forum_parent']);
-		}
-	}
-	
-	function buildTree($forumsArray, $parent)
-	{
-		$tree = '';
-		if (isset($forumsArray[$parent]) && $forumsArray[$parent]) {
-			$tree = $this->buildTree($forumsArray, $forumsArray[$parent]);
-			$tree .= ',';
-		}
-		$tree .= $parent;
-		return $tree;
+		// Update the details
+		$this->db->query( "UPDATE %pforums SET forum_replies=%d,
+				forum_topics=%d, forum_lastpost=%d WHERE forum_id=%d",
+				$replyCount - $topicCount, $topicCount, $lastPost, $forum );
+
+		return array( 'topics' => $topicCount, 'replies' => $replyCount, 'lastPost' => $lastPost, 'lastPostTime' => $lastPostTime );
 	}
 
 	/**
@@ -1027,11 +824,11 @@ class qsfglobal
 	 * @since 1.1.0
 	 * @return void
 	 **/
-	function log_action($action, $data1, $data2 = 0, $data3 = 0)
+	public function log_action( $action, $data1, $data2 = 0, $data3 = 0 )
 	{
-		$this->db->query("INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3)
+		$this->db->query( "INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3 )
 			VALUES (%d, %d, '%s', %d, %d, %d)",
-			$this->user['user_id'], $this->time, $action, $data1, $data2, $data3);
+			$this->user['user_id'], $this->time, $action, $data1, $data2, $data3 );
 	}
 
 	/**
@@ -1041,9 +838,9 @@ class qsfglobal
 	 * @return string Generated security token.
 	 * @since 1.1.9
 	 */
-	function generate_token()
+	public function generate_token()
 	{
-		$token = md5(uniqid(mt_rand(), true));
+		$token = md5( uniqid( mt_rand(), true ) );
 		$_SESSION['token'] = $token;
 		$_SESSION['token_time'] = $this->time + 7200; // Token is valid for 2 hours.
 
@@ -1057,9 +854,9 @@ class qsfglobal
 	 * @return false if invalid, true if valid
 	 * @since 1.1.9
 	 */
-	function is_valid_token()
+	public function is_valid_token()
 	{
-		if( !isset($_SESSION['token']) || !isset($_SESSION['token_time']) || !isset($this->post['token']) ) {
+		if( !isset( $_SESSION['token'] ) || !isset( $_SESSION['token_time'] ) || !isset( $this->post['token'] ) ) {
 			return false;
 		}
 
@@ -1080,9 +877,9 @@ class qsfglobal
 	 *
 	 * @author Roger Libiez
 	 * @return string
-	 * @since 1.6
+	 * @since 2.0
 	 */
-	function clean_url( $link )
+	public function clean_url( $link )
 	{
 		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
 		$link = str_replace( ' ', '-', $link );

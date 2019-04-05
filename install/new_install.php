@@ -46,20 +46,124 @@ require_once $set['include_path'] . '/lib/packageutil.php';
  */
 class new_install extends qsfglobal
 {
-	function server_url()
+	/**
+	 * Creates the contents of a settings file
+	 *
+	 * @since 1.3.0
+	 * @return string Contents for settings file
+	 **/
+	private function create_settings_file()
+	{
+		$settings = array(
+			'db_host'   => $this->sets['db_host'],
+			'db_name'   => $this->sets['db_name'],
+			'db_pass'   => $this->sets['db_pass'],
+			'db_port'   => $this->sets['db_port'],
+			'db_socket' => $this->sets['db_socket'],
+			'db_user'   => $this->sets['db_user'],
+			'dbtype'    => $this->sets['dbtype'],
+			'prefix'    => $this->sets['prefix'],
+			'installed' => $this->sets['installed'],
+			'admin_email' => $this->sets['admin_email']
+			);
+
+		$file = "<?php\n\$set = array();\n\nif( !defined( 'QUICKSILVERFORUMS' ) ) {\n       header( 'HTTP/1.0 403 Forbidden' );\n       die;\n}\n\n";
+
+		foreach( $settings as $set => $val )
+		{
+			$file .= "\$set['$set'] = '" . str_replace(array('\\', '\''), array('\\\\', '\\\''), $val) . "';\n";
+		}
+
+		$file .= '?' . '>';
+		return $file;
+	}
+
+	/**
+	 * Saves all data in the $this->sets array into a file
+	 *
+	 * @param string $sfile File to write settings into (default is settings.php)
+	 * @author Jason Warner <jason@mercuryboard.com>
+	 * @since 1.1.0
+	 * @return bool True on success, false on failure
+	 **/
+	private function write_db_sets( $sfile = './settings.php' )
+	{
+		$settings = $this->create_settings_file();
+
+		$this->chmod( $sfile, 0666 );
+		$fp = @fopen( $sfile, 'w' );
+
+		if( !$fp ) {
+			return false;
+		}
+
+		if( !@fwrite( $fp, $settings ) ) {
+			return false;
+		}
+
+		fclose( $fp );
+
+		return true;
+	}
+
+	private function server_url()
 	{
 	   $proto = "http" .
-		   ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
-	   $server = isset($_SERVER['HTTP_HOST']) ?
+		   ( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == "on" ) ? "s" : "" ) . "://";
+	   $server = isset( $_SERVER['HTTP_HOST'] ) ?
 		   $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 	   return $proto . $server;
 	}
 
-	function install_board( $step )
+	/**
+	 * Creates a category or forum
+	 *
+	 * @param string $name Name of the forum
+	 * @param string $desc Description of the forum
+	 * @param int $parent Parent id of the forum (0 if a category)
+	 * @author Geoffrey Dunn <geoff@warmage.com>
+	 * @since 1.1.9
+	 * @return int id of the forum created
+	 **/
+	private function create_forum( $name, $desc, $parent )
 	{
-		switch($step) {
+		$parent ? $tree = $parent : $tree = '';
+
+		$this->db->query( "INSERT INTO %pforums
+			(forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat) VALUES
+			('%s', %d, '%s', '%s', '0', '0')",
+			$tree, $parent, $name, $desc );
+
+		$forumId = $this->db->insert_id( "forums" );
+
+		$perms = new permissions( $this );
+
+		while( $perms->get_group() )
+		{
+			if( !$parent ) {
+				// Default permissions
+				$perms->add_z( $forumId );
+			} else {
+				// Copy permissions
+				$perms->add_z( $forumId, false );
+
+				foreach( $perms->standard as $perm => $false )
+				{
+					if( !isset( $perms->globals[$perm] ) ) {
+						$perms->set_xyz( $perm, $forumId, $perms->auth( $perm, $parent ) );
+					}
+				}
+			}
+			$perms->update();
+		}
+		return $forumId;
+	}
+
+	public function install_board( $step )
+	{
+		switch( $step ) {
 		default:
-			$url = preg_replace('/install\/?$/i', '', $this->server_url() . dirname($_SERVER['PHP_SELF']));
+			$url = preg_replace( '/install\/?$/i', '', $this->server_url() . dirname( $_SERVER['PHP_SELF'] ) );
 
 echo "<form action='{$this->self}?mode=new_install&amp;step=2' method='post'>
  <div class='article'>
@@ -67,7 +171,7 @@ echo "<form action='{$this->self}?mode=new_install&amp;step=2' method='post'>
   <div class='title'>Directory Permissions</div>";
 
 			check_writeable_files();
-			if(!is_writeable('../settings.php')) {
+			if( !is_writeable( '../settings.php' ) ) {
 				echo "<br /><br />Settings file cannot be written to. The installer cannot continue until this problem is corrected.";
 				break;
 			}
@@ -162,7 +266,7 @@ break;
 
 			$db = new $database($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
 
-			if (!$db->connection) {
+			if( !$db->connection ) {
 				echo "Couldn't connect to a database using the specified information.";
 				break;
 			}
@@ -175,9 +279,9 @@ break;
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
 			$this->sets['dbtype']    = $this->post['dbtype'];
-			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
+			$this->sets['prefix']    = trim( preg_replace( '/[^a-zA-Z0-9_]/', '', $this->post['prefix'] ) );
 
-			if (!$this->write_db_sets('../settings.php') && !isset($this->post['downloadsettings'])) {
+			if( !$this->write_db_sets( '../settings.php' ) && !isset( $this->post['downloadsettings'] ) ) {
 				echo "The database connection was ok, but settings.php could not be updated.<br />\n";
 				echo "You can CHMOD settings.php to 0666 and hit reload to try again<br/>\n";
 				echo "Or you can force the install to continue and download the new settings.php file ";
@@ -205,24 +309,24 @@ break;
 				break;
 			}
 
-			if (!is_readable('./' . $this->sets['dbtype'] . '_data_tables.php')) {
+			if( !is_readable( './' . $this->sets['dbtype'] . '_data_tables.php' ) ) {
 				echo 'Database connected, settings written, but no tables could be loaded from file: ./' . $this->sets['dbtype'] . '_data_tables.php';
 				break;
 			}
 
-			if (!is_readable('skin_default.xml')) {
+			if( !is_readable( 'skin_default.xml' ) ) {
 				echo 'Database connected, settings written, but no templates could be loaded from file: skin_default.xml';
 				break;
 			}
 
-			if ((trim($this->post['admin_name']) == '')
-			|| (trim($this->post['admin_pass']) == '')
-			|| (trim($this->post['admin_email']) == '')) {
+			if( ( trim( $this->post['admin_name'] ) == '' )
+			|| ( trim( $this->post['admin_pass'] ) == '' )
+			|| ( trim( $this->post['admin_email'] ) == '' ) ) {
 				echo 'You have not specified an admistrator account. Please go back and correct this error.';
 				break;
 			}
 
-			if ($this->post['admin_pass'] != $this->post['admin_pass2']) {
+			if( $this->post['admin_pass'] != $this->post['admin_pass2'] ) {
 				echo 'Your administrator passwords do not match. Please go back and correct this error.';
 				break;
 			}
@@ -234,27 +338,27 @@ break;
 			// Create tables
 			include './' . $this->sets['dbtype'] . '_data_tables.php';
 
-			execute_queries($queries, $db);
+			execute_queries( $queries, $db );
 			$queries = null;
 			
 			// Create template
 			$xmlInfo = new xmlparser();
-			$xmlInfo->parse('skin_default.xml');
-			$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
-			packageutil::insert_templates('default', $this->db, $templatesNode);
-			unset($templatesNode);
+			$xmlInfo->parse( 'skin_default.xml' );
+			$templatesNode = $xmlInfo->GetNodeByPath( 'QSFMOD/TEMPLATES' );
+			packageutil::insert_templates( 'default', $this->db, $templatesNode );
+			unset( $templatesNode );
 			$xmlInfo = null;
 
-			$this->sets = $this->get_settings($this->sets);
+			$this->sets = $this->get_settings( $this->sets );
 			$this->sets['loc_of_board'] = $this->post['site_url'];
 			$this->sets['forum_name'] = $this->post['site_name'];
 
-			$admin_pass = $this->qsfp_password_hash($this->post['admin_pass']);
+			$admin_pass = $this->qsfp_password_hash( $this->post['admin_pass'] );
 
 			$this->post['admin_name'] = str_replace(
-				array('&amp;#', '\''),
-				array('&#', '&#39;'),
-				htmlspecialchars($this->post['admin_name'])
+				array( '&amp;#', '\'' ),
+				array( '&#', '&#39;' ),
+				htmlspecialchars( $this->post['admin_name'] )
 			);
 
 			$this->sets['spam_post_count'] = 0;
@@ -273,7 +377,7 @@ break;
 			$this->sets['akismet_posts_number'] = 5;
 			$this->sets['akismet_profiles'] = 0;
 
-			$this->sets['attach_types'] = array('jpg', 'gif', 'png', 'bmp', 'zip', 'tgz', 'gz', 'rar', '7z');
+			$this->sets['attach_types'] = array( 'jpg', 'gif', 'png', 'bmp', 'zip', 'tgz', 'gz', 'rar', '7z' );
 			$this->sets['attach_upload_size'] = 51200;
 			$this->sets['avatar_height'] = 100;
 			$this->sets['avatar_upload_size'] = 51200;
@@ -283,10 +387,10 @@ break;
 			$this->sets['closed'] = 0;
 			$this->sets['closedtext'] = 'This site is currently down for maintenance. Please check back later.';
 
-			$server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+			$server = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
 			$this->sets['cookie_domain'] = $server;
 
-			$path = dirname($_SERVER['PHP_SELF']);
+			$path = dirname( $_SERVER['PHP_SELF'] );
 			$path = str_replace( 'install', '', $path );
 			$this->sets['cookie_path'] = $path;
 
@@ -334,10 +438,10 @@ break;
 			$this->sets['rss_feed_time'] = 60;
 			$this->sets['registrations_allowed'] = 1;
 
-			$this->db->query("INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height)
+			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height)
 				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', %d, '%s', '%s', %d, %d)",
-				$this->post['admin_name'], $admin_pass, USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime'], './avatars/avatar.jpg', 'local', 100, 100);
-			$admin_uid = $this->db->insert_id("users");
+				$this->post['admin_name'], $admin_pass, USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime'], './avatars/avatar.jpg', 'local', 100, 100 );
+			$admin_uid = $this->db->insert_id( "users" );
 
 			$this->sets['last_member'] = $this->post['admin_name'];
 			$this->sets['last_member_id'] = $admin_uid;
@@ -365,34 +469,34 @@ Should you need assistance with something, have an issue to report, or just want
 Have fun and enjoy your new site!";
 
 			// Create Category
-			$categoryId = $this->create_forum('Discussion', '', 0);
+			$categoryId = $this->create_forum( 'Discussion', '', 0 );
 
 			// Create Forum - Make News Forum
-			$forumId = $this->create_forum('News Posts', 'The main page news forum. Only administrators can see this or post in it. Posts here appear as front page news items.', $categoryId);
+			$forumId = $this->create_forum( 'News Posts', 'The main page news forum. Only administrators can see this or post in it. Posts here appear as front page news items.', $categoryId );
 
 			// Create Topic
-			$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 
+			$this->db->query( "INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 
 				VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
-				$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, TOPIC_PUBLISH);
-			$topicId = $this->db->insert_id("topics");
+				$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, TOPIC_PUBLISH );
+			$topicId = $this->db->insert_id( "topics" );
 
 			// Create Post
-			$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_ip, post_icon)
+			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_ip, post_icon)
 				VALUES (%d, %d, '%s', %d, 1, 1, '%s', '%s')",
-				$topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon);
-			$postId = $this->db->insert_id("posts");
+				$topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon );
+			$postId = $this->db->insert_id( "posts" );
 
-			$this->db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $postId, $topicId);
+			$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $postId, $topicId );
 
-			$this->db->query("UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d WHERE user_id=%d", $this->time, $admin_uid);
+			$this->db->query( "UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d WHERE user_id=%d", $this->time, $admin_uid );
 
-			$this->db->query("UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=%d WHERE forum_id=%d", $postId, $forumId);
+			$this->db->query( "UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=%d WHERE forum_id=%d", $postId, $forumId );
 
 			$this->sets['topics']++;
 			$this->sets['posts']++;
 
 			// Create second forum - Public chat
-			$forumId = $this->create_forum('Chat', "Welcome to {$this->sets['forum_name']}. Introduce yourself, ask a question, or join in on any conversations here.", $categoryId);
+			$forumId = $this->create_forum( 'Chat', "Welcome to {$this->sets['forum_name']}. Introduce yourself, ask a question, or join in on any conversations here.", $categoryId );
 
 			// This looks totally dumb considering we did this once already, but it appears necessary.
 			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=1",
@@ -438,21 +542,21 @@ Have fun and enjoy your new site!";
 				);
 
 			// Stupid as this may look, it appears to be quite necessary to allow categories to work.
-			$perms = new file_permissions($this);
-			while ($perms->get_group())
+			$perms = new file_permissions( $this );
+			while( $perms->get_group() )
 			{
-				$perms->add_z(0);
+				$perms->add_z( 0 );
 				$perms->update();
 			}
 
-			$writeSetsWorked = $this->write_db_sets('../settings.php');
+			$writeSetsWorked = $this->write_db_sets( '../settings.php' );
 			$this->write_sets();
 
-			setcookie($this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			setcookie($this->sets['cookie_prefix'] . 'pass', $admin_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			setcookie( $this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			setcookie( $this->sets['cookie_prefix'] . 'pass', $admin_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 
-			if (!$writeSetsWorked) {
-				echo "Congratulations! Your board has been installed.<br />
+			if( !$writeSetsWorked ) {
+				echo "Congratulations! Your site has been installed.<br />
 				An administrator account was registered.<br />";
 				echo "Click here to download your settings.php file. You must put this file on the webhost before the board is ready to use<br/>\n";
 				echo "<form action=\"{$this->self}?mode=new_install&amp;step=3\" method=\"post\">\n
@@ -489,62 +593,18 @@ Have fun and enjoy your new site!";
 			$this->sets['db_name']   = $this->post['db_name'];
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
-			$this->sets['prefix']    = trim(preg_replace('/[^a-zA-Z0-9_]/', '', $this->post['prefix']));
+			$this->sets['prefix']    = trim( preg_replace( '/[^a-zA-Z0-9_]/', '', $this->post['prefix'] ) );
 			$this->sets['dbtype']    = $this->post['dbtype'];
 			$this->sets['admin_email'] = $this->post['admin_email'];
 
 			$settingsFile = $this->create_settings_file();
 			ob_clean();
-			header("Content-type: application/octet-stream");
-			header("Content-Disposition: attachment; filename=\"settings.php\"");
+			header( "Content-type: application/octet-stream" );
+			header( "Content-Disposition: attachment; filename=\"settings.php\"" );
 			echo $settingsFile;
 			exit;
 			break;
 		}
-	}
-
-	/**
-	 * Creates a category or forum
-	 *
-	 * @param string $name Name of the forum
-	 * @param string $desc Description of the forum
-	 * @param int $parent Parent id of the forum (0 if a category)
-	 * @author Geoffrey Dunn <geoff@warmage.com>
-	 * @since 1.1.9
-	 * @return int id of the forum created
-	 **/
-	function create_forum($name, $desc, $parent)
-	{
-		$parent ? $tree = $parent : $tree = '';
-		
-		$this->db->query("INSERT INTO %pforums
-			(forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat) VALUES
-			('%s', %d, '%s', '%s', '0', '0')",
-			$tree, $parent, $name, $desc);
-		
-		$forumId = $this->db->insert_id("forums");
-		
-		$perms = new permissions($this);
-		
-		while ($perms->get_group())
-		{
-			if (!$parent) {
-				// Default permissions
-				$perms->add_z($forumId);
-			} else {
-				// Copy permissions
-				$perms->add_z($forumId, false);
-
-				foreach ($perms->standard as $perm => $false)
-				{
-					if (!isset($perms->globals[$perm])) {
-						$perms->set_xyz($perm, $forumId, $perms->auth($perm, $parent));
-					}
-				}
-			}
-			$perms->update();
-		}
-		return $forumId;
 	}
 }
 ?>

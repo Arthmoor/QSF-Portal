@@ -287,6 +287,56 @@ class forums extends admin
 		}
 	}
 
+	private function buildTree( $forumsArray, $parent )
+	{
+		$tree = '';
+
+		if( isset( $forumsArray[$parent] ) && $forumsArray[$parent] ) {
+			$tree = $this->buildTree( $forumsArray, $forumsArray[$parent] );
+			$tree .= ',';
+		}
+
+		$tree .= $parent;
+
+		return $tree;
+	}
+
+	/**
+	 * Update Forum Trees
+	 *
+	 * @author Geoffrey Dunn <geoff@warmage.com>
+	 * @since 1.1.5
+	 **/
+	private function updateForumTrees()
+	{
+		$forums = array();
+		$forumTree = array();
+
+		// Build tree structure of 'id' => 'parent' structure
+		$q = $this->db->query( "SELECT forum_id, forum_parent FROM %pforums ORDER BY forum_parent" );
+
+		while( $f = $this->db->nqfetch( $q ) )
+		{
+			if( $f['forum_parent'] ) {
+				$forums[$f['forum_id']] = $f['forum_parent'];
+			}
+		}
+
+		// Run through group
+		$q = $this->db->query( "SELECT forum_parent FROM %pforums GROUP BY forum_parent" );
+
+		while( $f = $this->db->nqfetch( $q ) )
+		{
+			if ($f['forum_parent']) {
+				$tree = $this->buildTree( $forums, $f['forum_parent'] );
+			} else {
+				$tree = '';
+			}
+
+			$this->db->query( "UPDATE %pforums SET forum_tree='%s' WHERE forum_parent=%d", $tree, $f['forum_parent'] );
+		}
+	}
+
 	/**
 	 * Cleans up orphaned topics and posts that no longer have valid hierarchy data.
 	 *

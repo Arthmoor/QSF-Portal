@@ -1706,45 +1706,48 @@ class files extends qsfglobal
 		return $this->cat_array;
 	}
 
-	// Stole^H^H^H^H^HBorrowed this from global.php updateForumTrees()
-	function update_category_trees()
+	// Stole^H^H^H^H^HBorrowed this from forums.php updateForumTrees()
+	private function update_category_trees()
 	{
 		$cats = array();
 		$catTree = array();
-		
+
 		// Build tree structure of 'id' => 'parent' structure
 		$q = $this->db->query( 'SELECT fcat_id, fcat_parent FROM %pfile_categories ORDER BY fcat_parent' );
-		
-		while ($f = $this->db->nqfetch($q))
+
+		while( $f = $this->db->nqfetch( $q ) )
 		{
-			if ($f['fcat_parent']) {
+			if( $f['fcat_parent'] ) {
 				$cats[$f['fcat_id']] = $f['fcat_parent'];
 			}
 		}
-		
+
 		// Run through group
 		$q = $this->db->query( 'SELECT fcat_parent FROM %pfile_categories GROUP BY fcat_parent' );
 
-		while ($f = $this->db->nqfetch($q))
+		while( $f = $this->db->nqfetch( $q ) )
 		{
-			if ($f['fcat_parent']) {
-				$tree = $this->buildTree($cats, $f['fcat_parent']);
+			if( $f['fcat_parent'] ) {
+				$tree = $this->buildTree( $cats, $f['fcat_parent'] );
 			} else {
 				$tree = '';
 			}
-		
+
 			$this->db->query( "UPDATE %pfile_categories SET fcat_tree='%s' WHERE fcat_parent=%d", $tree, $f['fcat_parent'] );
 		}
 	}
 
-	function buildTree($catsArray, $parent)
+	private function buildTree( $catsArray, $parent )
 	{
 		$tree = '';
-		if (isset($catsArray[$parent]) && $catsArray[$parent]) {
-			$tree = $this->buildTree($catsArray, $catsArray[$parent]);
+
+		if( isset( $catsArray[$parent] ) && $catsArray[$parent] ) {
+			$tree = $this->buildTree( $catsArray, $catsArray[$parent] );
 			$tree .= ',';
 		}
+
 		$tree .= $parent;
+
 		return $tree;
 	}
 
