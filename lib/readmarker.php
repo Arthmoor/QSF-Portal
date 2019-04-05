@@ -58,14 +58,15 @@ class readmarker extends forumutils
 		parent::forumutils($qsf);
 
 		$this->time = &$qsf->time;
+		$this->day_in_seconds = 86400;
 		
 		// To initalise ourselves we need to look at the user
 		if ($qsf->perms->is_guest) {
 			// With a guest user we can try and read/set a cookie but that's all!
-			if (isset($qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread']) && $qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread'] < ($this->time - (DAY_IN_SECONDS * 2))) {
+			if (isset($qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread']) && $qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread'] < ($this->time - ($this->day_in_seconds * 2))) {
 				$this->last_read_all = intval($qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread']);
 			} else {
-				$this->last_read_all = $this->time - DAY_IN_SECONDS;
+				$this->last_read_all = $this->time - $this->day_in_seconds;
 
 				setcookie($this->sets['cookie_prefix'] . 'lastallread', $this->last_read_all, $qsf->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 			}
@@ -81,7 +82,7 @@ class readmarker extends forumutils
 			} elseif (isset($qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread'])) {
 				$this->last_read_all = intval($qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread']);
 			} else {
-				$this->last_read_all = $this->time - DAY_IN_SECONDS;
+				$this->last_read_all = $this->time - $this->day_in_seconds;
 			}
 			
 			$this->guest_mode = false;

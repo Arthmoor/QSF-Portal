@@ -38,7 +38,6 @@ require '../settings.php';
 $set['include_path'] = '..';
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 $database = 'db_' . $set['dbtype'];
-require_once $set['include_path'] . '/func/constants.php';
 require_once $set['include_path'] . '/lib/globalfunctions.php';
 require_once $set['include_path'] . '/lib/perms.php';
 require_once $set['include_path'] . '/lib/file_perms.php';
