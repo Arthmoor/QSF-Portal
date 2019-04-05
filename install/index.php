@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -197,13 +197,10 @@ if( $mode ) {
 			include "choose_install.php";
 			break;
 		case 'new_install':
-			$qsf->install_board($step);
+			$qsf->install_board( $step );
 			break;
 		case 'upgrade':
 			$qsf->upgrade_board( $step );
-			break;
-		case 'convert':
-			$qsf->convert_board( $step );
 			break;
 	}
 
