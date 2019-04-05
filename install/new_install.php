@@ -26,18 +26,16 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
-if ( isset( $_POST['dbtype'] ) )
+if( isset( $_POST['dbtype'] ) )
 	$set['dbtype'] = $_POST['dbtype'];
 
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
-require_once $set['include_path'] . '/lib/xmlparser.php';
-require_once $set['include_path'] . '/lib/packageutil.php';
 
 /**
  * New Board Installation
@@ -314,11 +312,6 @@ break;
 				break;
 			}
 
-			if( !is_readable( 'skin_default.xml' ) ) {
-				echo 'Database connected, settings written, but no templates could be loaded from file: skin_default.xml';
-				break;
-			}
-
 			if( ( trim( $this->post['admin_name'] ) == '' )
 			|| ( trim( $this->post['admin_pass'] ) == '' )
 			|| ( trim( $this->post['admin_email'] ) == '' ) ) {
@@ -341,14 +334,6 @@ break;
 			execute_queries( $queries, $db );
 			$queries = null;
 			
-			// Create template
-			$xmlInfo = new xmlparser();
-			$xmlInfo->parse( 'skin_default.xml' );
-			$templatesNode = $xmlInfo->GetNodeByPath( 'QSFMOD/TEMPLATES' );
-			packageutil::insert_templates( 'default', $this->db, $templatesNode );
-			unset( $templatesNode );
-			$xmlInfo = null;
-
 			$this->sets = $this->get_settings( $this->sets );
 			$this->sets['loc_of_board'] = $this->post['site_url'];
 			$this->sets['forum_name'] = $this->post['site_name'];

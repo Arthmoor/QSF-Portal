@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QSF_INSTALLER')) {
-	exit('Use index.php to upgrade.');
+if( !defined('QSF_INSTALLER' ) ) {
+	exit( 'Use index.php to upgrade.' );
 }
 
 // Upgrade from QSF Portal 1.5.2 to QSF Portal 2.0

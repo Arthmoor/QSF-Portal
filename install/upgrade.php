@@ -26,17 +26,15 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
-define('LATEST', 38);   // ID of most recent upgrade script
+define( 'LATEST', 38 );   // ID of most recent upgrade script
 
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
-require_once $set['include_path'] . '/lib/xmlparser.php';
-require_once $set['include_path'] . '/lib/packageutil.php';
 
 /**
  * Board Upgrade
@@ -45,27 +43,30 @@ require_once $set['include_path'] . '/lib/packageutil.php';
  */
 class upgrade extends qsfglobal
 {
-	$database = 'db_' . $set['dbtype'];
+	var $database = null;
 
 	// Override for upgrade purposes.
-	function get_settings($sets)
+	public function get_settings( $sets )
 	{
-		$settings = $this->db->fetch("SELECT settings_data FROM %psettings LIMIT 1");
+		$settings = $this->db->fetch( "SELECT settings_data FROM %psettings LIMIT 1" );
 
-		return array_merge($sets, json_decode($settings['settings_data'], true));
+		return array_merge( $sets, json_decode( $settings['settings_data'], true ) );
 	}
 
 	function upgrade_board( $step )
 	{
-		switch($step) {
+		$this->database = $this->sets['dbtype'];
+
+		switch( $step ) {
 		default:
 			echo "<form action='{$this->self}?mode=upgrade&amp;step=2' method='post'>
  <div class='article'>
   <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
-			$db = new $this->database($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
-				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix']);
 
-			if ( !$db->connection )
+			$db = new $this->database( $this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
+				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix'] );
+
+			if( !$db->connection )
 			{
 				echo "Couldn't select database: " . $db->error();
 				break;
@@ -77,15 +78,15 @@ class upgrade extends qsfglobal
 
 			$this->db = $db;
 			$this->pre = $this->sets['prefix'];
-			$this->sets = $this->get_settings($this->sets);
+			$this->sets = $this->get_settings( $this->sets );
 
 			$v_message = 'To determine what version you are running, check the bottom of your AdminCP page. Or check the CHANGES file and look for the latest revision mentioned there.';
-			if( isset($this->sets['app_version']) )
+			if( isset( $this->sets['app_version'] ) )
 				$v_message = 'The upgrade script has determined you are currently using ' . $this->sets['app_version'];
 
 			echo "<br /><br /><strong>{$v_message}</strong>";
 
-			if( isset($this->sets['app_version']) && $this->sets['app_version'] == $this->version ) {
+			if( isset( $this->sets['app_version'] ) && $this->sets['app_version'] == $this->version ) {
 				echo "<br /><br />The detected version of {$this->name} is the same as the version you are trying to upgrade to. The upgrade cannot be processed.";
 			} else {
 				echo "<div class='title' style='text-align:center'>Upgrade from what version?</div>
@@ -240,13 +241,13 @@ class upgrade extends qsfglobal
 		case 2:
  <div class='article'>
   <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
-			@set_time_limit(600);
+			@set_time_limit( 600 );
 
 			// Check to see if all upgrade files are intact
 			$check = $this->post['from'];
-			while ($check <= LATEST)
+			while( $check <= LATEST )
 			{
-				if (!is_readable("./upgrade_$check.php")) {
+				if( !is_readable( "./upgrade_$check.php" ) ) {
 					echo "A file required for upgrading was not found: upgrade_$check.php";
 					break 2;
 				}
@@ -254,17 +255,16 @@ class upgrade extends qsfglobal
 			}
 			$check = $this->post['from'];
 
-			$db = new $this->database($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
-				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix']);
+			$db = new $this->database( $this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
+				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix'] );
 
-			if (!$db->connection) {
-				if ($this->get['step'] == 15) {
+			if( !$db->connection ) {
+				if( $this->get['step'] == 15 ) {
 					$sets_error = '<br />Could not connect with the specified information.';
 				} else {
 					$sets_error = null;
 				}
 
-				include 'templates/upgradefromdatabase.php';
 				break;
 			}
 
@@ -281,308 +281,72 @@ class upgrade extends qsfglobal
 			$this->db   = $db;
 
 			// We can't get settings from the database unless we're already running >= 1.1.0
-			if ($check >= 10) {
-				$this->sets = $this->get_settings($this->sets);
+			if( $check >= 10 ) {
+				$this->sets = $this->get_settings( $this->sets );
 			}
 
-			$this->perms = new permissions($this);
-			$this->file_perms = new file_permissions($this);
-
-			while ($check <= LATEST)
+			while( $check <= LATEST )
 			{
 				include "./upgrade_{$check}.php";
 				$check++;
-
-				// This gets really complicated so be careful
-				if (is_bool($need_templates)) {
-					if ($need_templates) {
-						$full_template_list = true;
-					}
-				} else {
-					$template_list = array_unique(array_merge($template_list, $need_templates));
-				}
 			}
 
-			/**
-			 * The order this next block executes is important.
-			 * 1. Verify we can upgrade templates
-			 * 2. Upgrade board
-			 * 3. Upgrade templates
-			 *
-			 * Because the query used to upgrade templates is for
-			 * the most recent version of the board, we must run
-			 * it after the board is fully upgraded.
-			 **/
-
-			if ($need_templates && !is_readable('skin_default.xml')) {
-				echo 'No templates could be loaded from skin_default.xml';
-				break;
-			}
-
-			execute_queries($queries, $this->db);
+			execute_queries( $queries, $this->db );
 
 			$queries = array();
-			
-			// Check the default skin still exists
-			$result = $this->db->fetch("SELECT * FROM %pskins WHERE skin_dir='default'");
-			if (!$result) {
-				$this->db->query("INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Ashlander 3', 'default')");
-				$full_template_list = true;
-			}
-			
-			$skinsupdated = "The following templates were upgraded:<br /><br /><span class='tiny'>";
-			$didsomething = false;
-			$result = $this->db->query("SELECT * FROM %pskins");
-
-			while ($row = $this->db->nqfetch($result))
-			{
-				$skin = $row['skin_dir'];
-
-				// QSF or MB default skin in default location
-				if (($row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'Blue Comet' || $row['skin_name'] == 'Candy Corn') && $skin == 'default') {
-					if ($full_template_list || $template_list) {
-						if ($full_template_list) {
-							$template_list = null;
-							$this->db->query("DELETE FROM %ptemplates WHERE template_skin='default'");
-						
-							$skinsupdated .= $row['skin_name'] . ": Full Template Replacement<br />";
-						} else {
-							$template_list_string = '';
-							foreach ($template_list as $temp_name) {
-								$template_list_string .= "'$temp_name',";
-								$skinsupdated .= $row['skin_name'] . ": " . $temp_name ."<br />";
-							}
-							$template_list_string = substr($template_list_string, 0, -1);
-							$this->db->query("DELETE FROM %ptemplates WHERE template_name IN ($template_list_string) AND template_skin='default'");
-						}
-						
-						// Create template
-						$xmlInfo = new xmlparser();
-						$xmlInfo->parse('skin_default.xml');
-						$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
-						packageutil::insert_templates('default', $this->db, $templatesNode, $template_list);
-						unset($templatesNode);
-						$xmlInfo = null;
-						
-						$didsomething = true;
-					}
-					if ($row['skin_name'] == 'QSF Comet' || $row['skin_name'] == 'QSF Comet Portal' || $row['skin_name'] == 'Blue Comet' || $row['skin_name'] == 'Candy Corn') {
-						$this->db->query("UPDATE %pskins SET skin_name='Ashlander 3' WHERE skin_dir='%s'", $skin);
-					}
-				}
-				else
-				{
-					// Other skins
-					$xmlInfo = new xmlparser();
-					$xmlInfo->parse('skin_default.xml');
-					$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
-					$temp_names = packageutil::list_templates($templatesNode);
-					$temps_to_insert = array();
-						
-					foreach ($temp_names as $temp_name)
-					{
-						$miss = $this->db->query("SELECT template_name FROM %ptemplates WHERE template_skin='%s' AND template_name='%s'",
-							$skin, $temp_name);
-
-						if ($this->db->num_rows($miss) < 1) {
-							$skinsupdated .= $row['skin_name'] . ": Added: " . $temp_name ."<br />";
-							$temps_to_insert[] = $temp_name;
-						}
-					}
-					
-					if ($temps_to_insert) {
-						$templatesNode = $xmlInfo->GetNodeByPath('QSFMOD/TEMPLATES');
-						packageutil::insert_templates($skin, $this->db, $templatesNode, $temps_to_insert);
-						$didsomething = true;
-					}
-					unset($templatesNode);
-					$xmlInfo = null;
-				}
-
-				/* Iterate over all our templates. This is excessive, but only needs to be done once anyway. */
-				$sql = "SELECT template_html, template_name FROM {$this->pre}templates WHERE template_skin='{$skin}'";
-				$query = $this->db->query($sql);
-
-				while ($row2 = $this->db->nqfetch($query))
-				{
-					if( strstr( $row2['template_html'], '{$messageclass}' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('{$messageclass}', '<MODLET messagelink(class)>', $row2['template_html']);
-						$updated_temps[] = $row['template_name'];
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '{$MessageLink}' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('{$MessageLink}', '<MODLET messagelink(text)>', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$mercury' ) ) {
-						$didsomething = true;
-               		        	        $row2['template_html'] = str_replace('$mercury', '$qsf', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$qsfboard' ) ) {
-						$didsomething = true;
-                       	        		$row2['template_html'] = str_replace('$qsfboard', '$quicksilverforums', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$qsf->lang->main_powered' ) ) {
-						$didsomething = true;
-	                                	$row2['template_html'] = str_replace('$qsf->lang->main_powered', '$qsf->lang->powered', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$qsf->lang->main_seconds' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$qsf->lang->main_seconds', '$qsf->lang->seconds', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$this->lang->pm_inbox' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$this->lang->pm_inbox', '$foldername', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$this->lang->board_topics_new' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$this->lang->board_topics_new', '$this->lang->main_topics_new', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$this->lang->forum_topics_new' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$this->lang->forum_topics_new', '$this->lang->main_topics_new', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$this->lang->recent_topics_new' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$this->lang->recent_topics_new', '$this->lang->main_topics_new', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], 'post_mbcode_' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('post_mbcode_', 'mbcode_', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$qsf->tree' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$qsf->tree', '$qsf->htmlwidgets->tree', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$admin->tree' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$admin->tree', '$admin->htmlwidgets->tree', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '$this->tree' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('$this->tree', '$this->htmlwidgets->tree', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '{$active[\'TOTALCOUNT\']}' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('{$active[\'TOTALCOUNT\']}', 'Skin Update Required', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '{$active[\'MEMBERCOUNT\']}' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('{$active[\'MEMBERCOUNT\']}', 'Skin Update Required', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '{$active[\'GUESTCOUNT\']}' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('{$active[\'GUESTCOUNT\']}', 'Skin Update Required', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-					if( strstr( $row2['template_html'], '{$active[\'USERS\']}' ) ) {
-						$didsomething = true;
-						$row2['template_html'] = str_replace('{$active[\'USERS\']}', 'Skin Update Required', $row2['template_html']);
-						$skinsupdated .= $row['skin_name'] . " Modified: " . $row2['template_name'] . "<br />";
-						$this->db->query("UPDATE %ptemplates SET template_html='%s' WHERE template_skin='%s' AND template_name='%s'",
-							$row2['template_html'], $skin, $row2['template_name']);
-					}
-				}
-			}
 
 			// New fields in forum tables need to be fixed in case the old install was a conversion
 			$this->updateForumTrees();
 			$this->RecountForums();
-			
+
+			$this->perms = new permissions( $this );
+			$this->file_perms = new file_permissions( $this );
+
 			// Check if new permissions need to be added
-			if (!empty($new_permissions)) {
-				foreach ($new_permissions as $id => $default)
+			if( !empty( $new_permissions ) ) {
+				foreach( $new_permissions as $id => $default )
 				{
 					// Groups
-					while ($this->perms->get_group())
+					while( $this->perms->get_group() )
 					{
 						$perm_on = $default;
-						if ($this->perms->auth('is_admin')) $perm_on = true;
-						if (!$this->perms->auth('do_anything')) $perm_on = false;
-						if ($this->perms->is_guest) $perm_on = false;
-						$this->perms->add_perm($id, $perm_on);
+						if( $this->perms->auth( 'is_admin' ) ) $perm_on = true;
+						if( !$this->perms->auth( 'do_anything' ) ) $perm_on = false;
+						if( $this->perms->is_guest ) $perm_on = false;
+						$this->perms->add_perm( $id, $perm_on );
 						$this->perms->update();
 					}
-			
+
 					// Users
-					while ($this->perms->get_group(true))
+					while( $this->perms->get_group(true) )
 					{
 						$perm_on = $default;
-						if ($this->perms->auth('is_admin')) $perm_on = true;
-						if (!$this->perms->auth('do_anything')) $perm_on = false;
-						if ($this->perms->is_guest) $perm_on = false;
-						$this->perms->add_perm($id, $perm_on);
+						if( $this->perms->auth( 'is_admin' ) ) $perm_on = true;
+						if( !$this->perms->auth( 'do_anything' ) ) $perm_on = false;
+						if( $this->perms->is_guest ) $perm_on = false;
+						$this->perms->add_perm( $id, $perm_on );
 						$this->perms->update();
 					}
 				}
 			}
 
 			// Check if new file permissions need to be added
-			if (!empty($new_file_perms)) {
-				foreach ($new_file_perms as $id => $default)
+			if( !empty( $new_file_perms ) ) {
+				foreach( $new_file_perms as $id => $default )
 				{
 					// Groups
-					while ($this->file_perms->get_group())
+					while( $this->file_perms->get_group() )
 					{
 						$perm_on = $default;
-						$this->file_perms->add_perm($id, $perm_on);
+						$this->file_perms->add_perm( $id, $perm_on );
 						$this->file_perms->update();
 					}
-			
+
 					// Users
-					while ($this->file_perms->get_group(true))
+					while( $this->file_perms->get_group(true) )
 					{
 						$perm_on = $default;
-						$this->file_perms->add_perm($id, $perm_on);
+						$this->file_perms->add_perm( $id, $perm_on );
 						$this->file_perms->update();
 					}
 				}
@@ -591,12 +355,7 @@ class upgrade extends qsfglobal
 			$this->sets['app_version'] = $this->version;
 			$this->write_sets();
 
-			$message ='';
-			if ($didsomething) {
-				$message = $skinsupdated . "</span>";
-			}
-			echo "$message
-			  <div class='title' style='text-align:center'>Upgrade Successful</div>
+			echo "<div class='title' style='text-align:center'>Upgrade Successful</div>
 			  <a href='../index.php'>Go to your site.</a>
 			 </div>";
 			break;
