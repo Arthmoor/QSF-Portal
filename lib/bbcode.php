@@ -49,12 +49,14 @@ class bbcode
 
 		if( $bbcode_menu === false )
 			return '';
+
 		return $bbcode_menu;
 	}
 
 	public function generate_emote_links()
 	{
 		$links = '';
+
 		foreach( $this->emoticons['click_replacement'] as $key => $value )
 			$links .= '<a href="#" onclick="return insertSmiley(\'' . $key . '\', textarea)">' . $value . '</a>';
 
@@ -105,10 +107,31 @@ class bbcode
 	 **/
 	private function process_censors( $in )
 	{
-		if ($this->censor) {
-			$in = preg_replace($this->censor, '####', $in);
+		if( $this->censor ) {
+			$in = preg_replace( $this->censor, '####', $in );
 		}
 		return $in;
+	}
+
+	private function bbcode_parse_code_callback( $matches = array() )
+	{
+		$text = $this->format_code( $matches[1], false, false );
+
+		return $text;
+	}
+
+	private function bbcode_parse_codebox_callback( $matches = array() )
+	{
+		$text = $this->format_code( $matches[1], false, true );
+
+		return $text;
+	}
+
+	private function bbcode_parse_php_callback( $matches = array() )
+	{
+		$text = $this->format_code( $matches[1], true, false );
+
+		return $text;
 	}
 
 	private function bbcode_parse( $in )
@@ -195,27 +218,6 @@ class bbcode
 		);
 
 		return preg_replace($parse['matches'], $parse['replacements'], $in);
-	}
-
-	private function bbcode_parse_code_callback( $matches = array() )
-	{
-		$text = $this->format_code( $matches[1], false, false );
-
-		return $text;
-	}
-
-	private function bbcode_parse_codebox_callback( $matches = array() )
-	{
-		$text = $this->format_code( $matches[1], false, true );
-
-		return $text;
-	}
-
-	private function bbcode_parse_php_callback( $matches = array() )
-	{
-		$text = $this->format_code( $matches[1], true, false );
-
-		return $text;
 	}
 
 	private function parse_quotes( $in )

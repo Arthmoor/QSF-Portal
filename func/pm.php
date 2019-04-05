@@ -200,6 +200,7 @@ class pm extends qsfglobal
 			$this->templater->add_templates('post');
 			$this->lang->post();
 			$smilies   = $this->bbcode->generate_emote_links();
+			$bbcode_menu = $this->bbcode->get_bbcode_menu();
 
 			return eval($this->template('PM_SEND'));
 		} else {

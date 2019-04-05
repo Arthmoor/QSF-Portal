@@ -59,11 +59,11 @@ function set_local_avatar(url)
   }
 }
 
-function noavatar()
+function noavatar( )
 {
   image = document.images['current_avatar'];
-  image.onerror = "";
-  image.src = '{$this->sets['loc_of_board']}/skins/{$this->skin}/images/noavatar.png';
+  image.onerror = '';
+  image.src = '../skins/default/images/noavatar.png';
   image.height = 64;
   image.width = 64;
   document.forms['avatar'].user_avatar_width.value = 64;
@@ -125,11 +125,6 @@ function initAvatarPage()
 	document.forms['avatar'].avatar_url.onchange = function() {
 		set_local_avatar(document.forms['avatar'].avatar_url.value);
 	};
-
-	// Now load our language data for error messages
-	load_js_lang(function() {
-			// do nothing
-		});
 }
 
 addLoadEvent(initAvatarPage);

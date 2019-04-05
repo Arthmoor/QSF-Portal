@@ -47,35 +47,10 @@ String.prototype.parseJSON = function () {
     }
 };
 
-/* For upload forms */
-function sendForm(form) {
-    UploadBoxToggle()
-    var fd = new FormData(form);
-    var xhr = new XMLHttpRequest();
-    xhr.upload.addEventListener("progress", uploadProgress, false);
-    xhr.upload.addEventListener("load", uploadComplete, false);
-    xhr.open("POST", form.action += ((/\?/).test(form.action) ? "&" : "?") + (new Date()).getTime(), true);
-    xhr.send(fd);
-}
-
-/* For upload forms */
-function uploadProgress(evt) {
-    var percentComplete = Math.round(evt.loaded * 100 / evt.total);
-    document.getElementById('prog').value = percentComplete;
-    document.getElementById('percent').innerHTML = percentComplete+"%<br />"+evt.loaded+" of "+evt.total;
-}
-
-/* For upload forms */
-function uploadComplete(evt) {
-    window.location = "http://yoursite.com/someredirect.php"
-}
-
 /* The below functions are for handling the XMLHttpRequest object */
 
-/* Request a HTTP object. If there are multiple http requests going on then
-we may have more than one object being used at a time */
+/* Request a HTTP object. If there are multiple http requests going on then we may have more than one object being used at a time */
 function getHTTPObject(func) {
-	
 	function requestHandler() {
 		var httpRequester = null;
 		if (typeof window.XMLHttpRequest != 'undefined') {
@@ -91,38 +66,38 @@ function getHTTPObject(func) {
 				}
 			}
 		}
-		
+
 		if (httpRequester) this.ready = true;
 		else this.ready = false;
-		
+
 		var stateHandler = function() {
 				if (httpRequester.readyState == 4) {
 					func(httpRequester.responseText);
 				}                             
 			};
-			
+
 		this.requestData = function() {
 			var pathName = location.pathname;
-			
+
 			var url = pathName.substring(pathName.lastIndexOf("/") + 1, pathName.length);
-			
+
 			if (arguments.length > 0) {
 				url += '?a=' + arguments[0];
 			}
 			for (var i=1; (i + 1) < arguments.length; i+=2) {
 				url += "&" + arguments[i] + "=" + escape(arguments[i+1]);
 			}
-			
+
 			httpRequester.open("GET", url, true);
 			httpRequester.onreadystatechange = stateHandler;
 			httpRequester.send(null);
 		};
 	}
-	
+
 	var waystation = new requestHandler();
-	
+
 	if (!waystation.ready) return null;
-	
+
 	return waystation
 }
 

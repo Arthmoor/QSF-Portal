@@ -387,6 +387,7 @@ class post extends qsfglobal
 
 			$msg_icons = $this->htmlwidgets->get_icons($icon);
 			$posticons = eval($this->template('POST_MESSAGE_ICONS'));
+			$bbcode_menu = $this->bbcode->get_bbcode_menu();
 			$smilies   = $this->bbcode->generate_emote_links();
 			$post_options = eval($this->template('POST_OPTIONS'));
 

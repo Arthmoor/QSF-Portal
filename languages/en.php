@@ -744,21 +744,6 @@ class en
 		$this->home_menu_title = 'Admin CP Menu';
 	}
 
-	function jsdata()
-	{
-		$this->jsdata_address = 'Enter an address';
-		$this->jsdata_detail = 'Enter a description';
-		$this->jsdata_smiles = 'Clickable Smilies';
-		$this->jsdata_url = 'URL';
-		$this->jsdata_youtube_url = 'Enter the YouTube video URL';
-	}
-
-	function jslang()
-	{
-		$this->jslang_avatar_size_height = 'Your avatar height must be between 1 and %d pixels';
-		$this->jslang_avatar_size_width = 'Your avatar width must be between 1 and %d pixels';
-	}
-
 	function login()
 	{
 		$this->login = 'Login';

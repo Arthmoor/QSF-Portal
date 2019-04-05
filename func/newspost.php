@@ -161,6 +161,8 @@ class newspost extends qsfglobal
 		$Poster_Info = $this->build_memberinfo($post, $post['topic_forum']);
 
 		$smilies = $this->bbcode->generate_emote_links();
+		$bbcode_menu = $this->bbcode->get_bbcode_menu();
+
 		return eval($this->template('NEWS_POST'));
 	}
 

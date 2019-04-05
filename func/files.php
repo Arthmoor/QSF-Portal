@@ -245,6 +245,7 @@ class files extends qsfglobal
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 			$filesize = $this->format_filesize($file_size);
 			$file_desc = $this->format($file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE);
+			$bbcode_menu = $this->bbcode->get_bbcode_menu();
 
 			return eval($this->template('FILE_EDIT'));
 		} else {
@@ -809,6 +810,7 @@ class files extends qsfglobal
 			$name = $file['file_name'];
 			$version = $file['file_fileversion'];
 			$desc = $file['file_description'];
+			$bbcode_menu = $this->bbcode->get_bbcode_menu();
 
 			return eval($this->template('FILE_UPDATE'));
 		}
@@ -961,6 +963,7 @@ class files extends qsfglobal
 			$list = $this->get_upload_categories($cid);
 
 			$token = $this->generate_token();
+			$bbcode_menu = $this->bbcode->get_bbcode_menu();
 
 			return eval($this->template('FILE_UPLOAD'));
 		}
