@@ -629,7 +629,7 @@ class post extends qsfglobal
 				$message .= "Forum: {$emailtopic['forum_name']}\n";
 				$message .= "Topic: " . $this->format($emailtopic['topic_title'], FORMAT_CENSOR);
 
-				$mailer = new $this->modules['mailer']($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
+				$mailer = new mailer($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
 				$mailer->setSubject("{$this->sets['forum_name']} - Subscriptions");
 				$mailer->setMessage($message);
 				$mailer->setServer($this->sets['mailserver']);

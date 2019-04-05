@@ -221,7 +221,7 @@ class pm extends qsfglobal
 			$bad_pm = array();
 			$ok_pm = array();
 
-			$mailer = new $this->modules['mailer']($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
+			$mailer = new mailer($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
 			$mailer->setSubject("{$this->sets['forum_name']} - {$this->lang->pm_personal}");
 			$mailer->setServer($this->sets['mailserver']);
 

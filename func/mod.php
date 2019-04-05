@@ -1033,7 +1033,7 @@ class mod extends qsfglobal
 
 		while ($sub = $this->db->nqfetch($query))
 		{
-			$perms = new $this->modules['permissions']($this);
+			$perms = new permissions($this);
 			$perms->db = &$this->db;
 			$perms->pre = &$this->pre;
 			$perms->get_perms($sub['user_group'], $sub['user_id'], ($sub['user_perms'] ? $sub['user_perms'] : $sub['group_perms']));

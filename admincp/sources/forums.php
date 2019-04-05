@@ -355,7 +355,7 @@ class forums extends admin
 
 		$this->db->query("DELETE FROM %pforums WHERE forum_id=%d", $id);
 
-		$perms = new $this->modules['permissions']($this);
+		$perms = new permissions($this);
 
 		// Groups
 		while ($perms->get_group())
@@ -441,7 +441,7 @@ class forums extends admin
 
 		$id = $this->db->insert_id("forums");
 
-		$perms = new $this->modules['permissions']($this);
+		$perms = new permissions($this);
 
 		while ($perms->get_group())
 		{

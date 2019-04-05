@@ -36,7 +36,23 @@ $time_start = $time_now[1] + $time_now[0];
 
 require '../settings.php';
 $set['include_path'] = '..';
-require_once $set['include_path'] . '/defaultutils.php';
+require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
+$database = 'db_' . $set['dbtype'];
+require_once $set['include_path'] . '/func/constants.php';
+require_once $set['include_path'] . '/lib/globalfunctions.php';
+require_once $set['include_path'] . '/lib/perms.php';
+require_once $set['include_path'] . '/lib/file_perms.php';
+require_once $set['include_path'] . '/lib/user.php';
+require_once $set['include_path'] . '/lib/mailer.php';
+require_once $set['include_path'] . '/lib/attachutil.php';
+require_once $set['include_path'] . '/lib/htmlwidgets.php';
+require_once $set['include_path'] . '/lib/templater.php';
+require_once $set['include_path'] . '/lib/bbcode.php';
+require_once $set['include_path'] . '/lib/tool.php';
+require_once $set['include_path'] . '/lib/readmarker.php';
+require_once $set['include_path'] . '/lib/activeutil.php';
+require_once $set['include_path'] . '/lib/zTemplate.php';
+require_once $set['include_path'] . '/lib/modlet.php';
 
 if( !$set['installed'] ) {
 	header( 'Location: ../install/index.php' );
@@ -58,11 +74,11 @@ error_reporting( E_ALL );
  */
 $missing = false;
 if( !isset( $_GET['a'] ) ) {
-	$module = $modules['default_admin_module'];
+	$module = 'home';
 	if( isset( $_SERVER['QUERY_STRING'] ) && !empty( $_SERVER['QUERY_STRING'] ) )
 		$missing = true;
 } elseif( !file_exists( 'sources/' . $_GET['a'] . '.php' ) ) {
-	$module = $modules['default_admin_module'];
+	$module = 'home';
 
 	$missing = true;
 } else {
@@ -76,7 +92,7 @@ if( strstr( $module, '/' ) || strstr( $module, '\\' ) ) {
 
 require './sources/' . $module . '.php';
 
-$db = new $modules['database']( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
+$db = new $database( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
 
 if( !$db->connection ) {
 	error( QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__ );
@@ -88,8 +104,7 @@ $admin->get['a'] = $module;
 $admin->pre      = $set['prefix'];
 $admin->sets     = $admin->get_settings( $set );
 $admin->site     = $admin->sets['loc_of_board']; // Will eventually replace $admin->self once the SEO URL changes are done.
-$admin->modules  = $modules;
-$admin->user_cl  = new $admin->modules['user']($admin);
+$admin->user_cl  = new user( $admin );
 $admin->user     = $admin->user_cl->login();
 $admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get['a'] );
 
@@ -174,7 +189,7 @@ if( $admin->nohtml ) {
 
 	$xtpl->assign( 'index_endtable_hack', $endtable );
 
-	if( $admin->get['a'] != $modules['default_admin_module'] ) {
+	if( $admin->get['a'] != 'home' ) {
 		$xtpl->assign( 'navtree', $admin->htmlwidgets->tree );
 
 		$xtpl->parse( 'Index.NavTree' );

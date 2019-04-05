@@ -49,7 +49,7 @@ class convert extends qsfglobal
 		return $proto . $server;
 	}
 
-	function convert_board( $step, $mysqli )
+	function convert_board( $step )
 	{
 		switch($step) {
 		default:
@@ -129,13 +129,7 @@ echo "    <p></p>
   <p class='line'></p>
 
   <span class='field'>Database Type:</span>
-  <span class='form'>";
-  if ($mysqli) {
-    echo 'MySQLi';
-  } else {
-    echo 'MySQL';
-  }
-  echo "</span>
+  <span class='form'>MySQLi</span>
   <p class='line'></p>
 
   <span class='field'>Database Name:</span>
@@ -188,15 +182,10 @@ echo "    <p></p>
   </span>
   <p class='line'></p>
 
-  <div style='text-align:center'>";
-
-  if ($mysqli) {
-    echo "<input type='hidden' name='dbtype' value='mysqli' />";
-  } else {
-    echo "<input type='hidden' name='dbtype' value='mysql' />";
-  }
-
-  echo "<input type='submit' name='submit' value='Continue' /></div>
+  <div style='text-align:center'>
+   <input type='hidden' name='dbtype' value='mysqli' />
+   <input type='submit' name='submit' value='Continue' />
+  </div>
  </div>
 </form>";
 break;
@@ -210,15 +199,17 @@ break;
 				break;
 			}
 
+			$database = 'db_' . $this->post['dbtype'];
+
 			$oldboard = new qsfglobal;
-			$oldboard->db = new $this->modules['database']($this->post['old_db_host'], $this->post['old_db_user'], $this->post['old_db_pass'], $this->post['old_db_name'], $this->post['old_db_port'], $this->post['old_db_socket'], $this->post['old_prefix']);
+			$oldboard->db = new $database($this->post['old_db_host'], $this->post['old_db_user'], $this->post['old_db_pass'], $this->post['old_db_name'], $this->post['old_db_port'], $this->post['old_db_socket'], $this->post['old_prefix']);
 
 			if (!$oldboard->db->connection) {
 				echo "Couldn't connect to your old database using the specified information.";
 				break;
 			}
 
-			$this->db = new $this->modules['database']($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
+			$this->db = new $database($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
 
 			if (!$this->db->connection) {
 				echo "Couldn't connect to your new database using the specified information.";

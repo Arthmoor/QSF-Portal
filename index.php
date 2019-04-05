@@ -40,7 +40,23 @@ $_REQUEST = array();
 
 require './settings.php';
 $set['include_path'] = '.';
-require_once $set['include_path'] . '/defaultutils.php';
+require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
+$database = 'db_' . $set['dbtype'];
+require_once $set['include_path'] . '/func/constants.php';
+require_once $set['include_path'] . '/lib/globalfunctions.php';
+require_once $set['include_path'] . '/lib/perms.php';
+require_once $set['include_path'] . '/lib/file_perms.php';
+require_once $set['include_path'] . '/lib/user.php';
+require_once $set['include_path'] . '/lib/mailer.php';
+require_once $set['include_path'] . '/lib/attachutil.php';
+require_once $set['include_path'] . '/lib/htmlwidgets.php';
+require_once $set['include_path'] . '/lib/templater.php';
+require_once $set['include_path'] . '/lib/bbcode.php';
+require_once $set['include_path'] . '/lib/tool.php';
+require_once $set['include_path'] . '/lib/readmarker.php';
+require_once $set['include_path'] . '/lib/activeutil.php';
+require_once $set['include_path'] . '/lib/zTemplate.php';
+require_once $set['include_path'] . '/lib/modlet.php';
 
 if( !$set['installed'] ) {
 	header( 'Location: ./install/index.php' );
@@ -51,7 +67,7 @@ set_error_handler( 'error' );
 error_reporting( E_ALL );
 
 // Open connection to database
-$db = new $modules['database']( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
+$db = new $database( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );
 if( !$db->connection ) {
 	error( QUICKSILVER_ERROR, 'A connection to the database could not be established and/or the specified database could not be found.', __FILE__, __LINE__ );
 }
@@ -65,11 +81,11 @@ if( !$db->connection ) {
 $missing = false;
 $terms_module = '';
 if( !isset( $_GET['a'] ) ) {
-	$module = $modules['default_module'];
+	$module = 'main';
 	if( isset( $_SERVER['QUERY_STRING'] ) && !empty( $_SERVER['QUERY_STRING'] ) )
 		$missing = true;
 } elseif( !file_exists( 'func/' . $_GET['a'] . '.php' ) ) {
-	$module = $modules['default_module'];
+	$module = 'main';
 
 	if( $_GET['a'] != 'forum_rules' && $_GET['a'] != 'upload_rules' )
 		$missing = true;
@@ -92,11 +108,10 @@ $qsf->pre = $set['prefix'];
 $qsf->get['a'] = $module;
 $qsf->sets     = $qsf->get_settings( $set );
 $qsf->site     = $qsf->sets['loc_of_board']; // Will eventually replace $qsf->self once the SEO URL changes are done.
-$qsf->modules  = $modules;
 
 session_start();
 
-$qsf->user_cl = new $modules['user']( $qsf );
+$qsf->user_cl = new user( $qsf );
 $qsf->user    = $qsf->user_cl->login();
 $qsf->lang    = $qsf->get_lang( $qsf->user['user_language'], $qsf->get['a'] );
 

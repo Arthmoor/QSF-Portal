@@ -48,7 +48,7 @@ class database
 	var $pass;               // Database Password @var string
 	var $db;                 // Database Name @var string
 	var $port = 3306;        // Database Port @var int
-	var $prefix = 'qsf_';    // Database Table Prefix @var string
+	var $prefix = 'qsfp_';   // Database Table Prefix @var string
 
 	/**
 	 * Constructor; sets up variables and connection
@@ -66,8 +66,6 @@ class database
 	 **/
 	public function __construct( $db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix )
 	{
-		$this->get    = $_GET;
-		$this->post   = $_POST;
 		$this->host   = $db_host;
 		$this->user   = $db_user;
 		$this->pass   = $db_pass;

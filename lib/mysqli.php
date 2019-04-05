@@ -42,8 +42,6 @@ require_once $set['include_path'] . '/lib/database.php';
  **/
 class db_mysqli extends database
 {
-	var $socket;             // Database Socket @var string
-
 	/**
 	 * Constructor; sets up variables and connection
 	 *
@@ -58,14 +56,13 @@ class db_mysqli extends database
 	 * @since Beta 2.0
 	 * @return void
 	 **/
-	public function __construct( $db_host, $db_user, $db_pass, $db_name, $db_port = 3306, $db_socket = '', $db_prefix )
+	public function __construct( $db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix )
 	{
 		parent::__construct( $db_host, $db_user, $db_pass, $db_name, $db_port, $db_socket, $db_prefix );
-		$this->socket = $db_socket;
 
 		$this->connection = new mysqli( $db_host, $db_user, $db_pass, $db_name /* , $db_port, $db_socket */ );
 
-		if (!$this->connection->select_db( $db_name )) {
+		if( !$this->connection->select_db( $db_name ) ) {
 			$this->connection = false;
 		}
 	}

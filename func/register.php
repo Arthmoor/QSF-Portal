@@ -243,7 +243,7 @@ class register extends qsfglobal
 
 	function send_activation_email($email, $username, $pass, $jointime)
 	{
-		$mailer = new $this->modules['mailer']($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
+		$mailer = new mailer($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
 
 		// todo. Make this more friendly with internationlisation. Currently it's too limiting for grammar.
 		$message = "{$this->lang->register_requested} {$username}\n";

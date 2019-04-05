@@ -38,7 +38,7 @@ class file_perms extends admin
 	function execute()
 	{
 		$this->lang->perms(); // Load up permissions related translations
-		$perms_obj = new $this->modules['file_permissions']($this);
+		$perms_obj = new file_permissions($this);
 
 		if( isset( $this->get['s'] ) && ( $this->get['s'] == 'user' ) ) {
 			if( !isset( $this->get['id'] ) ) {

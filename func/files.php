@@ -651,7 +651,7 @@ class files extends qsfglobal
 
 			$this->db->query( 'DELETE FROM %pfile_categories WHERE fcat_id=%d', $catid );
 
-			$perms = new $this->modules['file_permissions']($this);
+			$perms = new file_permissions($this);
 
 			// Groups
 			while ($perms->get_group())
@@ -731,7 +731,7 @@ class files extends qsfglobal
 			 VALUES( %d, '%s', '%s', '%s', '%s' )", $parent, $name, $longpath, $tree, $desc );
 
 			$newid = $this->db->insert_id('file_categories');
-			$perms = new $this->modules['file_permissions']($this);
+			$perms = new file_permissions($this);
 
 			while ($perms->get_group())
 			{

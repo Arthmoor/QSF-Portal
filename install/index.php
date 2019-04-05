@@ -107,8 +107,7 @@ if( $mode ) {
 	$qsf = new qsfglobal;
 }
 	$qsf->sets = $set;
-	$qsf->modules = $modules;
-	$qsf->self = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : 'index.php';
+	$qsf->self = isset( $_SERVER['PHP_SELF'] ) ? $_SERVER['PHP_SELF'] : 'index.php';
 
 	$failed = false;
 

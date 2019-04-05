@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -31,7 +31,7 @@ if (!defined('QUICKSILVERFORUMS')) {
 	die;
 }
 
-define('LATEST', 37);   // ID of most recent upgrade script
+define('LATEST', 38);   // ID of most recent upgrade script
 
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
@@ -45,6 +45,8 @@ require_once $set['include_path'] . '/lib/packageutil.php';
  */
 class upgrade extends qsfglobal
 {
+	$database = 'db_' . $set['dbtype'];
+
 	// Override for upgrade purposes.
 	function get_settings($sets)
 	{
@@ -60,8 +62,7 @@ class upgrade extends qsfglobal
 			echo "<form action='{$this->self}?mode=upgrade&amp;step=2' method='post'>
  <div class='article'>
   <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
-
-			$db = new $this->modules['database']($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
+			$db = new $this->database($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
 				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix']);
 
 			if ( !$db->connection )
@@ -253,7 +254,7 @@ class upgrade extends qsfglobal
 			}
 			$check = $this->post['from'];
 
-			$db = new $this->modules['database']($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
+			$db = new $this->database($this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
 				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix']);
 
 			if (!$db->connection) {
@@ -284,8 +285,8 @@ class upgrade extends qsfglobal
 				$this->sets = $this->get_settings($this->sets);
 			}
 
-			$this->perms = new $this->modules['permissions']($this);
-			$this->file_perms = new $this->modules['file_permissions']($this);
+			$this->perms = new permissions($this);
+			$this->file_perms = new file_permissions($this);
 
 			while ($check <= LATEST)
 			{

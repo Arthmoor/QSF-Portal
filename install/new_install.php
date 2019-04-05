@@ -158,7 +158,9 @@ break;
 		case 2:
   echo "<div class='article'>
   <div class='title'>New {$this->name} Installation</div>";
-			$db = new $this->modules['database']($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
+			$database = 'db_' . $this->post['dbtype'];
+
+			$db = new $database($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
 
 			if (!$db->connection) {
 				echo "Couldn't connect to a database using the specified information.";
@@ -436,7 +438,7 @@ Have fun and enjoy your new site!";
 				);
 
 			// Stupid as this may look, it appears to be quite necessary to allow categories to work.
-			$perms = new $this->modules['file_permissions']($this);
+			$perms = new file_permissions($this);
 			while ($perms->get_group())
 			{
 				$perms->add_z(0);
@@ -522,7 +524,7 @@ Have fun and enjoy your new site!";
 		
 		$forumId = $this->db->insert_id("forums");
 		
-		$perms = new $this->modules['permissions']($this);
+		$perms = new permissions($this);
 		
 		while ($perms->get_group())
 		{

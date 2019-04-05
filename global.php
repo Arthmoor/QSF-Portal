@@ -48,7 +48,6 @@ class qsfglobal
 	var $files   = array();           // Alias for $_FILES @var array
 	var $user    = array();           // Information about the user @var array
 	var $sets    = array();           // Settings @var array
-	var $modules = array();           // Module Settings @var array
 	var $censor  = array();           // Curse words to filter @var array
 	var $emoticons = array();	  // Array of emoticons used for processing post formatting
 	var $nohtml  = false;             // To display no board wrapper @var bool
@@ -99,7 +98,7 @@ class qsfglobal
 		$this->post     = $_POST;
 		$this->cookie   = $_COOKIE;
 		$this->files    = $_FILES;
-		$this->query    = htmlspecialchars($this->query);
+		$this->query    = htmlspecialchars( $this->query );
 
 		if( version_compare( PHP_VERSION, "5.5.0", "<" ) ) {
 			die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
@@ -117,28 +116,27 @@ class qsfglobal
 	 **/
 	function init( $admin = false )
 	{
-		$this->perms = new $this->modules['permissions']($this);
-		$this->file_perms = new $this->modules['file_permissions']($this);
-		
-		$this->attachmentutil = new $this->modules['attach']($this);
-		$this->htmlwidgets = new $this->modules['widgets']($this);
-		$this->templater = new $this->modules['templater']($this);
-		$this->bbcode = new $this->modules['bbcode']($this);
-		$this->validator = new $this->modules['validator']();
-		$this->readmarker = new $this->modules['readmarker']($this); 
-		$this->activeutil = new $this->modules['active']($this);
+		$this->perms = new permissions( $this );
+		$this->file_perms = new file_permissions( $this );
+		$this->attachmentutil = new attachutil( $this );
+		$this->htmlwidgets = new htmlwidgets( $this );
+		$this->templater = new templater( $this );
+		$this->bbcode = new bbcode( $this );
+		$this->validator = new tool();
+		$this->readmarker = new readmarker( $this );
+		$this->activeutil = new activeutil( $this );
 
-		$this->templater->init_templates($this->get['a'], $admin);
+		$this->templater->init_templates( $this->get['a'], $admin );
 
-		$replace = $this->db->query('SELECT * FROM %preplacements ORDER BY LENGTH(replacement_search) DESC');
+		$replace = $this->db->query( 'SELECT * FROM %preplacements ORDER BY LENGTH(replacement_search) DESC' );
 
-		while ($r = $this->db->nqfetch($replace))
+		while( $r = $this->db->nqfetch( $replace ) )
 		{
 			$this->censor[] = '/' . $r['replacement_search'] . '/i';
 		}
 
-		$emotes = $this->db->query('SELECT * FROM %pemoticons');
-		while( $e = $this->db->nqfetch($emotes) )
+		$emotes = $this->db->query( 'SELECT * FROM %pemoticons' );
+		while( $e = $this->db->nqfetch( $emotes ) )
 		{
 			if( $e['emote_clickable'] == 1 )
 				$this->emoticons['click_replacement'][$e['emote_string']] = '<img src="' . $this->site . '/emoticons/' . $e['emote_image'] . '" alt="' . $e['emote_string'] . '" />';
