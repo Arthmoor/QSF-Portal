@@ -70,10 +70,6 @@ function check_writeable_files()
 		$fixme .= "../skins/<br />";
 		$writeable = false;
 	}
-	if(!is_writeable('../rss')) {
-		$fixme .= "../rss/<br />";
-		$writeable = false;
-	}
 	if(!is_writeable('../downloads')) {
 		$fixme .= "../downloads/<br />";
 		$writeable = false;

@@ -276,28 +276,5 @@ class register extends qsfglobal
 
 		return $this->message($this->lang->register_activating, $this->lang->register_activation_error);
 	}
-
-	function create_image()
-	{
-		// Need to get rid of other image files since the names will all be different now.
-		foreach( glob("./rss/*.png") as $filename ) {
-			unlink($filename);
-		}
-
-		require './lib/jpgraph/jpgraph.php';
-		require './lib/jpgraph/jpgraph_antispam.php';
-		
-		if (!function_exists('imagejpeg')) {
-			JpGraphError::Raise("This PHP installation is not configured with JPEG support. Please recompile PHP with GD and JPEG support to run JpGraph. (Function imagejpeg() does not exist)");
-		}
-
-		$graph = new AntiSpam();
-		
-		$text  = strtoupper($graph->Rand(6));
-		$filename = "./rss/register" . $this->time . ".png";
-		$graph->Stroke($filename);
-
-		return array(md5("{$this->sets['db_pass']}{$this->sets['mostonlinetime']}$text"), $filename);
-	}
 }
 ?>
