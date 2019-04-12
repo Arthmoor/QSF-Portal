@@ -1,5 +1,5 @@
 -------------------------------
-== QSF Portal v1.6.0 ==
+== QSF Portal v2.0.0 ==
 -------------------------------
 
 === Installation ===
@@ -11,8 +11,8 @@
     ./attachments/
     ./avatars/uploaded/
     ./downloads/
-    ./skins/
-    ./rss/
+    ./emoticons/
+    ./packages/
     ./settings.php
     ./updates/
 
@@ -36,7 +36,7 @@
  See https://github.com/Arthmoor/QSF-Portal for more information
 
 === Requirements ===
- QSF Portal works with PHP 5.3.0 or higher. MySQL 4.1 or higher is required.
+ QSF Portal works with PHP 5.5.0 or higher. MySQL 4.1 or higher is required.
  QSF Portal works on any operating system and web server combination.
 
  If you experience a problem and you meet these requirements, please report it

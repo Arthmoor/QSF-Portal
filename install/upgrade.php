@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -53,7 +53,7 @@ class upgrade extends qsfglobal
 		return array_merge( $sets, json_decode( $settings['settings_data'], true ) );
 	}
 
-	function upgrade_board( $step )
+	public function upgrade_board( $step )
 	{
 		$this->database = $this->sets['dbtype'];
 

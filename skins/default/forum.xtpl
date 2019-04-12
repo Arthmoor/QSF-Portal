@@ -1,0 +1,176 @@
+<!-- BEGIN: Forum -->
+<div class="article">
+ <div style="float:left">{tree}</div>
+ <div style="text-align:right">
+  <a href="{self}?a=forum_rules" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{self}?a=board&amp;s=mark" title="{main_mark1}">{main_mark}</a> | <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a>
+ </div>
+</div>
+<!-- BEGIN: SubForum -->
+<div class="article">
+ <div class="title"><img src="{loc_of_board}/skins/{skin}/images/icons/report.png" alt="" /> {forum_name}</div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="thread">{forum_sub}</span>
+  <span class="number">{forum_sub_topics}</span>
+  <span class="number">{forum_sub_replies}</span>
+  <span class="last_post">{forum_sub_last_post}</span>
+ </span>
+<!-- BEGIN: Redirect -->
+ <span class="icon">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/world_link.png" alt="" />
+ </span>
+ <span class="thread">
+  <strong>{forum_forum_url}</strong> <a href="{fdesc}">{fname}</a>
+ </span>
+ <p class="list_line"></p>
+<!-- END: Redirect -->
+<!-- BEGIN: Normal -->
+ <span class="icon">
+<!-- BEGIN: ForumUnread -->
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" alt="{main_topics_new}" title="{main_topics_new}" />
+<!-- END: ForumUnread -->
+<!-- BEGIN: ForumRead -->
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="{main_topics_old}" title="{main_topics_old}" />
+<!-- END: ForumRead -->
+ </span>
+ <span class="thread">
+  <a href="{self}?a=forum&amp;f={fid}" class="forum">{fname}</a>
+  {fdesc}
+ </span>
+ <span class="number">{ftopics}</span><span class="number">{freplies}</span>
+ <span class="last_post">
+<!-- BEGIN: LastPostBox -->
+<!-- BEGIN: TopicUnread -->
+  <a href="{self}?a=topic&amp;t={forum_lastpost_topic}&amp;unread=1#unread"><img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
+<!-- END: TopicUnread -->
+  <a href="{self}?a=topic&amp;t={LastTopicID}" title="{full_title}">{user_lastpost}</a><br />
+  {board_by} {user_lastposter}<br />
+  {LastTime}
+<!-- END: LastPostBox -->
+ </span>
+<!-- END: Normal -->
+ <p class="list_line"></p>
+</div>
+<!-- END: SubForum -->
+
+<!-- BEGIN: Topics -->
+<!-- BEGIN: CanPostTop -->
+<div class="article">
+ <a href="{self}?a=board&amp;s=mark&amp;f={f}" class="mark_read"><img src="{loc_of_board}/skins/{skin}/images/icons/forum_read.png" alt="{forum_mark_read}" title="{forum_mark_read}" /></a>
+ <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=forum&amp;item={f}" title="{forum_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={f}" title="{forum_new_poll}">{new_poll}</a></div>
+ <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={f}" title="{forum_new_topic}">{new_topic}</a></div>
+ <p></p>
+</div>
+<!-- END: CanPostTop -->
+
+<div class="article">
+ <div class="title"><img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" /> {forum_name}</div>
+
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="icon">&nbsp;</span>
+  <span class="topic"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=title&amp;asc={asc}">{forum_topic}</a></span>
+  <span class="starter"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=starter&amp;asc={asc}">{forum_starter}</a></span>
+  <span class="number"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=replies&amp;asc={asc}">{forum_replies}</a></span>
+  <span class="number"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=views&amp;asc={asc}">{forum_views}</a></span>
+  <span class="topic_last_post"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=last&amp;asc={asc}">{forum_last}</a></span>
+ </span>
+<!-- BEGIN: NoTopics -->
+ <span class="notice">{forum_no_topics}</span>
+ <p class="list_line"></p>
+<!-- END: NoTopics -->
+<!-- BEGIN: ForumTopic -->
+ <div class="topic_icon">
+  <div class="{state}{poll}">
+   {pinned}
+  </div>
+ </div>
+
+ <span class="icon">
+  {topic_icon}
+ </span>
+
+ <span class="topic">
+  {moved}<a href="{self}?a=topic&amp;t={topic_id}" title="{forum_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}
+<!-- BEGIN: NewPost -->
+  &mdash; <a href="{self}?a=topic&amp;t={topic_id}&amp;unread=1#unread\"><img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" title="{forum_unread}" alt="{forum_unread}" /></a>
+<!-- END: NewPost -->
+  {topic_description}
+ </span>
+ <span class="starter">{topic_starter}</span>
+ <span class="number">{topic_replies}</span>
+ <span class="number">{topic_views}</span>
+ <span class="topic_last_post">
+  {topic_edited}<br />
+  <a href="{self}?a=topic&amp;t={topic_id}{jump}"><img src="{loc_of_board}/skins/{skin}/images/icons/goto_last_post.png" title="{forum_jump}" alt="{forum_jump}" /></a> &nbsp;
+  {forum_by} {last_poster}
+ </span>
+ <p class="list_line"></p>
+<!-- END: ForumTopic -->
+</div>
+
+<!-- BEGIN: CanPostBottom -->
+<div class="article">
+ <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=forum&amp;item={f}" title="{forum_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={f}" title="{forum_new_poll}">{new_poll}</a></div>
+ <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={f}" title="{forum_new_topic}">{new_topic}</a></div>
+ <p></p>
+</div>
+<!-- END: CanPostBottom -->
+
+<div class="article">
+ <span class="right">
+  <select onchange="get_forum(this,'{self}')">
+   {forumjump}
+  </select>
+ </span>
+
+ <span class="select_align">
+  {forum_pages}: {pagelinks}
+ </span><br />
+ <p></p>
+</div>
+
+<div class="article">
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" title="{forum_new}" alt="{forum_new}" />
+  {forum_new}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_hot_unread.png" title="{forum_new} {forum_hot}" alt="{forum_new} {forum_hot}" />
+  {forum_new} {forum_hot}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/pin.png" title="{forum_pinned}" alt="{forum_pinned}" />
+  {forum_pinned}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_moved.png" title="{forum_moved}" alt="{forum_moved}" />
+  {forum_moved}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" title="{forum_not} {forum_new}" alt="{forum_not} {forum_new}" />
+  {forum_not} {forum_new}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_hot.png" title="{forum_hot}" alt="{forum_hot}" />
+  {forum_hot}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/chart_bar.png" title="{forum_poll}" alt="{forum_poll}" />
+  {forum_poll}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_locked.png" title="{forum_locked}" alt="{forum_locked}" />
+  {forum_locked}
+ </span>
+ <p></p>
+ <span class="small_text">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_posted_to.png" title="{forum_dot_detail}" alt="{forum_dot_detail}" />
+  {forum_dot_detail}
+ </span>
+ <p></p>
+</div>
+<!-- END: Topics -->
+<!-- END: Forum -->

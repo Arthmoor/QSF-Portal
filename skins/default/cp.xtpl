@@ -1,0 +1,320 @@
+<!-- BEGIN: ControlPanel -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/control_panel.png" alt="" />
+  {cp_header}
+ </div>
+ <a href="{self}?a=cp&amp;s=avatar">{cp_label_edit_avatar}</a> |
+ <a href="{self}?a=cp&amp;s=cpass">{cp_label_edit_pass}</a> |
+ <a href="{self}?a=cp&amp;s=prefs">{cp_label_edit_prefs}</a> |
+ <a href="{self}?a=cp&amp;s=profile">{cp_label_edit_profile}</a> |
+ <a href="{self}?a=cp&amp;s=subs">{cp_label_edit_subs}</a> |
+ <a href="{self}?a=cp&amp;s=sig">{cp_label_edit_sig}</a>
+</div>
+
+{control_page}
+<!-- END: ControlPanel -->
+
+<!-- BEGIN: CPHome -->
+<div class="article">
+ {cp_welcome}
+</div>
+<!-- END: CPHome -->
+
+<!-- BEGIN: EditPassword -->
+<form action="{self}?a=cp&amp;s=cpass" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/key.png" alt="" />
+  {cp_label_edit_pass}
+ </div>
+
+ <span class="field">{cp_old_pass}</span>
+ <span class="form"><input type="password" name="old_pass" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cp_new_pass}</span>
+ <span class="form"><input type="password" name="passA" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cp_repeat_pass}</span>
+ <span class="form"><input type="password" name="passB" size="40" /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input class="button" type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditPassword -->
+
+<!-- BEGIN: EditPreferences -->
+<form action="{self}?a=cp&amp;s=prefs" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/wrench.png" alt="" />
+  {cp_label_edit_prefs}
+ </div>
+
+ <span class="field">{cp_zone}</span>
+ <span class="form">
+  <select class="select timezone" name="user_timezone">
+   {time_list}
+  </select><br />{current_time}
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{cp_skin}</span>
+ <span class="form">
+  <select name="user_skin">
+   {skin_list}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{cp_language}</span>
+ <span class="form">
+  <select name="user_language">
+   {lang_list}
+  </select>
+ </span>
+ <p class="line"></p>
+ 
+ <span class="field">{cp_topic_option}</span>
+ <span class="form">
+  <input class="check" type="checkbox" name="user_view_avatars" id="user_view_avatars" value="1"{ViewAvCheck} /> <label for="user_view_avatars">{cp_view_avatar}</label><br />
+  <input class="check" type="checkbox" name="user_view_emoticons" id="user_view_emoticons" value="1"{ViewEmCheck} /> <label for="user_view_emoticons">{cp_view_emoticon}</label><br />
+  <input class="check" type="checkbox" name="user_view_signatures" id="user_view_signatures" value="1"{ViewSiCheck} /> <label for="user_view_signatures">{cp_view_signature}</label><br />
+  <input type="text" name="user_topics_page" size="2" value="{user_topics_page}" /> {cp_topics_page}<br />
+  <input type="text" name="user_posts_page" size="2" value="{user_posts_page}" /> {cp_posts_page}
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{cp_privacy}</span>
+ <span class="form">
+  <input class="check" type="checkbox" name="user_email_show" id="user_email_show" value="1"{user_email_showCheck} /> <label for="user_email_show">{cp_show_email}</label><br />
+  <input class="check" type="checkbox" name="user_email_form" id="user_email_form" value="1"{EmailFormCheck} /> <label for="user_email_form">{cp_email_form}</label><br />
+  <input class="check" type="checkbox" name="user_pm" id="user_pm" value="1"{user_pmCheck} /> <label for="user_pm">{cp_contact_pm}</label><br />
+  <input class="check" type="checkbox" name="user_pm_mail" id="user_pm_mail" value="1"{user_pm_mailCheck} /> <label for="user_pm_mail">{cp_contact_pm_email}</label><br />
+  <input class="check" type="checkbox" name="user_active" id="user_active" value="1"{active_check} /> <label for="user_active">{cp_show_active}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input class="button" type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditPreferences -->
+
+<!-- BEGIN: EditProfile -->
+<form action="{self}?a=cp&amp;s=profile" method="post" id="profile">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/vcard_edit.png" alt="" />
+  {cp_label_edit_profile}
+ </div>
+
+ <span class="field">{cp_format}</span>
+ <span class="form"><input type="text" name="Newuser_name" value="{user_name}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cp_email}</span>
+ <span class="form"><input type="text" name="user_email" value="{user_email}" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">
+  {cp_pass}<br />
+  <span class="tiny">{cp_pass2}</span>
+ </span>
+ <span class="form"><input type="password" name="passA" value="" size="40" autocomplete="off" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cp_bday}</span>
+ <span class="form">
+  <select name="month">{month_list}</select>
+  <select name="day">{day_list}</select>
+  <select name="year">{year_list}</select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{cp_location}</span>
+ <span class="form"><input type="text" name="user_location" value="{user_location}" size="40" /></span>
+ <p class="line"></p>
+
+ <!-- BEGIN: Admin -->
+  <span class="field">{cp_custom_title}<br /><span class="tiny">{cp_custom_title2}</span></span>
+  <span class="form"><input type="text" name="user_title" value="{user_title}" size="40" /></span>
+  <p class="line"></p>
+ <!-- END: Admin -->
+
+ <span class="field">{cp_interest}</span>
+ <span class="form"><textarea name="user_interests" cols="39" rows="8">{user_interests}</textarea></span>
+ <p class="line"></p>
+ 
+ <span class="field">{cp_twitter}</span>
+ <span class="form"><input type="text" name="user_twitter" value="{user_twitter}" size="50" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cp_facebook}</span>
+ <span class="form"><input type="text" name="user_facebook" value="{user_facebook}" size="50" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cp_www}</span>
+ <span class="form"><input type="text" name="user_homepage" value="{user_homepage}" size="40" /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input class="button" type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditProfile -->
+
+<!-- BEGIN: EditAvatar -->
+<form action="{self}?a=cp&amp;s=avatar" enctype="multipart/form-data" method="post" id="avatar">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/picture_edit.png" alt="" />
+  {cp_label_edit_avatar}
+ </div>
+
+ <span class="head">
+  <strong>{cp_current_avatar}: {user_avatar_width} x {user_avatar_height} px</strong>
+ </span>
+
+ <div class="avatar_dimensions">
+  <img id="current_avatar" src="{avatar}" width="{user_avatar_width}" height="{user_avatar_height}" alt="{cp_current_avatar}" />
+ </div>
+
+ <br /><br />
+ <p></p>
+ <span class="head">
+  <strong>{cp_label_edit_avatar} ({avatar_width} x {avatar_height} Max)</strong>
+ </span>
+
+ <div class="avatar_settings">
+  <div id="local_row"{no_display}>
+   <input class="check" type="radio" name="user_avatar_type" value="local" id="local_radio" {checks0} />
+   {cp_avatar_select}<br />
+   <select size="10" name="avatar_local">
+    {avatar_select}
+   </select>
+   <img id="localavatar" src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+  </div>
+
+  {list_line}
+  <div id="url_row">
+   <input class="check" type="radio" name="user_avatar_type" value="url" id="url_radio" {checks1} />
+   {cp_avatar_url}&nbsp;&nbsp;
+   <input type="text" name="avatar_url" value="{avatar_url}" size="40" />
+  </div>
+  <p class="line"></p>
+
+  <div id="gravatar_row">
+   <input class="check" type="radio" name="user_avatar_type" value="gravatar" id="gurl_radio" {checks2} />
+   {cp_avatar_gravatar}&nbsp;&nbsp;
+   <input type="text" name="avatar_gurl" value="{gravatar_url}" size="40" />
+  </div>
+  <p class="line"></p>
+
+  <div id="upload_row">
+   <input class="check" type="radio" name="user_avatar_type" value="upload" id="upload_radio" />
+   {cp_avatar_upload}&nbsp;&nbsp;
+   <input type="file" name="avatar_upload" size="40" />
+  </div>
+  <p class="line"></p>
+
+  <div id="uploaded_row">
+   <input class="check" type="radio" name="user_avatar_type" value="use_uploaded" id="uploaded_radio" {checks3} />
+   {cp_avatar_use}
+  </div>
+  <p class="line"></p>
+
+  <div id="none_row">
+   <input class="check" type="radio" name="user_avatar_type" value="none" id="none_radio" {checks4} />
+   {cp_avatar_none}
+  </div>
+ </div>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="hidden" name="old_avatar" value="{old_avatar}" />
+ <input class="button" type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+
+<script src="{loc_of_board}/javascript/avatar.js"></script>
+<script>
+<!--
+function noavatar() // Fix bug introduced when the avatar JS was moved to an external file.
+{
+   image = document.images['current_avatar'];
+   image.onerror = "";
+   image.src = './skins/{skin}/images/noavatar.png';
+   image.height = 50;
+   image.width = 50;
+   document.forms['avatar'].user_avatar_width.value = 50;
+   document.forms['avatar'].user_avatar_height.value = 50;
+}
+enable('{init}');
+//-->
+</script>
+<!-- END: EditAvatar -->
+
+<!-- BEGIN: EditSubs -->
+<form action="{self}?a=cp&amp;s=subs" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/subscribe.png" alt="" />
+  {cp_label_edit_subs}
+ </div>
+
+ <span class="head">
+  <span class="quarter">{cp_sub_delete}</span>
+  <span class="quarter">{cp_sub_type}</span>
+  <span class="quarter">{cp_sub_name}</span>
+  <span class="quarter">{cp_sub_expire}</span>
+ </span>
+<!-- BEGIN: Row -->
+ <span class="quarter"> <input class="check" type="checkbox" name="delete[{subscription_id}]" /></span>
+ <span class="quarter">{subscription_type}</span>
+ <span class="quarter"><a href="{self}?{link}">{item_name}</a></span>
+ <span class="quarter">{subscription_expire}</span>
+ <p class="list_line"></p>
+<!-- END: Row -->
+ <input class="button" type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditSubs -->
+
+<!-- BEGIN: EditSig -->
+<form action="{self}?a=cp&amp;s=sig" method="post" id="mbpost">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/tag_blue_edit.png" alt="" />
+  {cp_label_edit_sig}
+ </div>
+
+ <span class="head">
+  <strong>{cp_preview_sig}</strong>
+ </span>
+
+ <div class="signature">{preview}</div>
+ <p class="line"></p><br />
+
+ <span class="field">
+  {smilies}
+ </span>
+ <span class="form">
+  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  {bbcode_menu}
+  <textarea name="sig" id="bbcode" rows="8" cols="10">{edit}</textarea>
+  <script>textarea = bbcodeInit("bbcode");</script>
+ </span>
+
+ <br /><br />
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input class="button" type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: EditSig -->

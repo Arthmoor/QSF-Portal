@@ -34,14 +34,14 @@
  <div class="title">{stats_post_by_month}</div>
 <!-- BEGIN: Post -->
  <span class="field">{month} - {stat}</span>
- <span class="form"><img src="../skins/default/images/vote_left.png" width="6" height="12" alt="" /><img src="../skins/default/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="../skins/default/images/vote_right.png" width="6" height="12" alt="" /></span>
+ <span class="form"><img src="../skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="../skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="../skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /></span>
  <p class="list_line"></p>
 <!-- END: Post -->
 
  <div class="title">{stats_reg_by_month}</div>
 <!-- BEGIN: Registration -->
  <span class="field">{month} - {stat}</span>
- <span class="form"><img src="../skins/default/images/vote_left.png" width="6" height="12" alt="" /><img src="../skins/default/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="../skins/default/images/vote_right.png" width="6" height="12" alt="" /></span>
+ <span class="form"><img src="../skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="../skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="../skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /></span>
  <p class="list_line"></p>
 <!-- END: Registration -->
 </div>

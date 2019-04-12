@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -16,8 +16,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-        header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+        header( 'HTTP/1.0 403 Forbidden' );
         die;
 }
 
@@ -26,7 +26,7 @@ require_once $set['include_path'] . '/global.php';
 /**
  * File Ratings
  *
- * @author Roger Libiez [Samson] 
+ * @author Roger Libiez
  **/
 class filerating extends qsfglobal
 {
@@ -36,43 +36,51 @@ class filerating extends qsfglobal
          **/
         function execute()
         {
-		if (!$this->perms->auth('board_view')) {
+		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
-			return $this->message(
-				sprintf($this->lang->board_message, $this->sets['forum_name']),
-				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
-			);
-		}
 
-		$this->templater->add_templates('Files');
-		$this->lang->files();
+			return $this->message(
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview );
+		}
 
                 $this->nohtml = true;
-		$rating = '';
 
-		if (!isset($this->get['f'])) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->files_rate, $this->lang->files_rate_valid);
+		$this->lang->files();
+
+		if( !isset( $this->get['f'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->files_rate, $this->lang->files_rate_valid );
 		}
 
-		if (!isset($this->post['rate'])) {
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/filerating.xtpl' );
+
+		$xtpl->assign( 'language', $this->user['user_language'] );
+		$xtpl->assign( 'charset', $this->lang->charset );
+		$xtpl->assign( 'files_rate', $this->lang->files_rate );
+		$xtpl->assign( 'files_close_window', $this->lang->files_close_window );
+
+		if( !isset( $this->post['rate'] ) ) {
 			$file_rated = $this->db->fetch( "SELECT file_id FROM %pfileratings WHERE user_id=%d AND file_id=%d", $this->user['user_id'], $this->get['f'] );
 
 			if( $file_rated['file_id'] != $this->get['f'] ) {
-				$rating .= "<body><form action=\"{$this->self}?a=filerating&amp;f={$this->get['f']}\" method=\"post\"><div>
-					{$this->lang->files_rate_please}:<br /><br />
-					<select name=\"rate\">
-						<option value=\"1\">1 - {$this->lang->files_rate_sucks}</option>
-						<option value=\"2\">2 - {$this->lang->files_rate_poor}</option>
-						<option value=\"3\">3 - {$this->lang->files_rate_average}</option>
-						<option value=\"4\">4 - {$this->lang->files_rate_good}</option>
-						<option value=\"5\" selected=\"selected\">5 - {$this->lang->files_rate_excellent}</option>
-					</select>
-					<input type=\"submit\" value=\"{$this->lang->submit}\" /></div>
-				</form></body></html>";
+				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'skin', $this->skin );
+				$xtpl->assign( 'f', $this->get['f'] );
+				$xtpl->assign( 'files_rate_please', $this->lang->files_rate_please );
+				$xtpl->assign( 'files_rate_sucks', $this->lang->files_rate_sucks );
+				$xtpl->assign( 'files_rate_poor', $this->lang->files_rate_poor );
+				$xtpl->assign( 'files_rate_average', $this->lang->files_rate_average );
+				$xtpl->assign( 'files_rate_good', $this->lang->files_rate_good );
+				$xtpl->assign( 'files_rate_excellent', $this->lang->files_rate_excellent );
+				$xtpl->assign( 'submit', $this->lang->submit );
+
+				$xtpl->parse( 'FileRating.RateForm' );
 			}
 			else {
-				$rating .= $this->lang->files_rate_already;
+				$xtpl->assign( 'other', $this->lang->files_rate_already );
+
+				$xtpl->parse( 'FileRating.Other' );
 			}
 		}
 		else {
@@ -86,9 +94,13 @@ class filerating extends qsfglobal
 			$this->db->query( "UPDATE %pfiles SET file_rating_total=%d, file_rating_votes=%d, file_rating=%d WHERE file_id=%d",
 				$file['file_rating_total'] + $this->post['rate'], $votes, $newrate, $this->get['f'] );
 
-			$rating .= $this->lang->files_rate_thank;
+			$xtpl->assign( 'other', $this->lang->files_rate_thank );
+
+			$xtpl->parse( 'FileRating.Other' );
 		}
-		return eval($this->template('FILE_RATING'));
+
+		$xtpl->parse( 'FileRating' );
+		return $xtpl->text( 'FileRating' );
         }
 }
 ?>

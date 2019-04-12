@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -22,8 +22,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -45,9 +45,9 @@ class htmlwidgets extends forumutils
 	 *
 	 * @param $qsf - Quicksilver Forums module
 	 **/
-	function htmlwidgets(&$qsf)
+	public function __construct( &$qsf )
 	{
-		parent::forumutils($qsf);
+		parent::__construct( $qsf );
 
 		$this->lang = &$qsf->lang;
 		$this->self = $qsf->self;
@@ -70,29 +70,29 @@ class htmlwidgets extends forumutils
 	 * @since Beta 1.0
 	 * @return string HTML-formatted page numbers
 	 **/
-	function get_pages($rows, $link, $min = 0, $num = 10)
+	public function get_pages( $rows, $link, $min = 0, $num = 10 )
 	{
-		if (!$num) {
+		if( !$num ) {
 			$num = 10;
 		}
 
 		// preliminary row handling
-		if (!is_resource($rows)) {
-			if (!is_numeric($rows)) {
-				$rows = $this->db->num_rows($this->db->query($rows));
+		if( !is_resource( $rows ) ) {
+			if( !is_numeric( $rows ) ) {
+				$rows = $this->db->num_rows( $this->db->query( $rows ) );
 			}
 		} else {
-			$rows = $this->db->num_rows($rows);
+			$rows = $this->db->num_rows( $rows );
 		}
 
 		// some base variables
-		$current = ceil($min / $num);
+		$current = ceil( $min / $num );
 		$string  = null;
-		$pages   = ceil($rows / $num);
-		$end     = ($pages - 1) * $num;
+		$pages   = ceil( $rows / $num );
+		$end     = ( $pages - 1 ) * $num;
 
 		// check if there's previous articles
-		if ($min == 0) {
+		if( $min == 0 ) {
 			$startlink = '&lt;&lt;';
 			$previouslink = $this->lang->main_prev;
 		} else {
@@ -102,7 +102,7 @@ class htmlwidgets extends forumutils
 		}
 
 		// check for next/end
-		if (($min + $num) < $rows) {
+		if( ( $min + $num ) < $rows ) {
 			$next = $min + $num;
   			$nextlink = "<a href=\"{$this->self}?$link&amp;min=$next&amp;num=$num\" class=\"pagelinks\">{$this->lang->main_next}</a>";
   			$endlink = "<a href=\"{$this->self}?$link&amp;min=$end&amp;num=$num\" class=\"pagelinks\">&gt;&gt;</a>";
@@ -116,36 +116,36 @@ class htmlwidgets extends forumutils
 		$e = $current + 2;
 
 		// set end and beginning of loop
-		if ($b < 0) {
+		if( $b < 0 ) {
   			$e = $e - $b;
   			$b = 0;
 		}
 
 		// check that end coheres to the issues
-		if ($e > $pages - 1) {
-  			$b = $b - ($e - $pages + 1);
-  			$e = ($pages - 1 < $current) ? $pages : $pages - 1;
+		if( $e > $pages - 1 ) {
+  			$b = $b - ( $e - $pages + 1 );
+  			$e = ( $pages - 1 < $current ) ? $pages : $pages - 1;
   			// b may need adjusting again
-  			if ($b < 0) {
+  			if( $b < 0 ) {
 				$b = 0;
 			}
 		}
 
  		// ellipses
-		if ($b != 0) {
+		if( $b != 0 ) {
 			$badd = '...';
 		} else {
 			$badd = '';
 		}
 
-		if (($e != $pages - 1) && $rows) {
+		if( ( $e != $pages - 1 ) && $rows ) {
 			$eadd = '...';
 		} else {
 			$eadd = '';
 		}
 
 		// run loop for numbers to the page
-		for ($i = $b; $i < $current; $i++)
+		for( $i = $b; $i < $current; $i++ )
 		{
 			$where = $num * $i;
 			$string .= ", <a href=\"{$this->self}?$link&amp;min=$where&amp;num=$num\" class=\"bodylinktype\">" . ($i + 1) . '</a>';
@@ -155,15 +155,15 @@ class htmlwidgets extends forumutils
 		$string .= ', <strong>' . ($current + 1) . '</strong>';
 
 		// run to the end
-		for ($i = $current + 1; $i <= $e; $i++)
+		for( $i = $current + 1; $i <= $e; $i++ )
 		{
 			$where = $num * $i;
 			$string .= ", <a href=\"{$this->self}?$link&amp;min=$where&amp;num=$num\" class=\"bodylinktype\">" . ($i + 1) . '</a>';
 		}
 
 		// get rid of preliminary comma. (optimized by jason: mark uses preg_replace() like candy)
-		if (substr($string, 0, 1) == ',') {
-			$string = substr($string, 1);
+		if( substr( $string, 0, 1 ) == ',' ) {
+			$string = substr( $string, 1 );
 		}
 
 		return "<span class=\"pagelinks\">$startlink $previouslink $badd $string $eadd $nextlink $endlink</span>";
@@ -181,36 +181,36 @@ class htmlwidgets extends forumutils
 	 * @since Beta 2.0
 	 * @return
 	 **/
-	function get_pages_topic($records, $link, $sep, $min = 0, $n = 10)
+	public function get_pages_topic( $records, $link, $sep, $min = 0, $n = 10 )
 	{
 		$records++;
-		$pages    = ceil($records / $n);
-		$max_page = ($pages - 1) * $n;
+		$pages    = ceil( $records / $n );
+		$max_page = ( $pages - 1 ) * $n;
 
-		if ($pages == 1) {
+		if( $pages == 1 ) {
 			return null;
 		}
 
 		$pagelinks = null;
-		if ($pages > 3) {
+		if( $pages > 3 ) {
 			$countfor = 3;
 		} else {
 			$countfor = $pages;
 		}
 
-		for ($i = 0; $i < $countfor; $i++)
+		for( $i = 0; $i < $countfor; $i++ )
 		{
 			$minpag = $i * $n;
 			$page   = $i + 1;
 			$pagelinks .= "<a href=\"{$this->self}?$link&amp;min=$minpag&amp;num=$n\" class=\"pages\">$page</a>{$sep}";
 		}
 
-		if (substr($pagelinks, -(strlen($sep))) == $sep) {
-			$pagelinks = substr($pagelinks, 0, -(strlen($sep)));
+		if( substr( $pagelinks, -( strlen( $sep ) ) ) == $sep ) {
+			$pagelinks = substr( $pagelinks, 0, -( strlen( $sep ) ) );
 		}
 
-		if ($pages > 3) {
-			$ellipsis = ($pages == 4) ? '' : '..';
+		if( $pages > 3 ) {
+			$ellipsis = ( $pages == 4 ) ? '' : '..';
 			$pagelinks .= "$sep<a href=\"{$this->self}?$link&amp;min=$max_page&amp;num=$n\" class=\"pages\">{$ellipsis}{$pages}</a>";
 		}
 
@@ -226,46 +226,48 @@ class htmlwidgets extends forumutils
 	 * @param string $relative Path to look for avatars in (optional)
 	 * @return string HTML
 	 **/
-	function select_avatars($current, $relative = '.', $subfolder = '/')
+	public function select_avatars( $current, $relative = '.', $subfolder = '/' )
 	{
-		if (substr($subfolder, -1) != '/') {
+		if( substr( $subfolder, -1 ) != '/' ) {
 			$subfolder .= '/';
 		}
 
 		$out = null;
-		$dir = opendir($relative . '/avatars' . $subfolder);
+		$dir = opendir( $relative . '/avatars' . $subfolder );
 		$subDirs = array();
 
-		while (($file = readdir($dir)) !== false)
+		while( ( $file = readdir( $dir ) ) !== false )
 		{
-			if (is_dir('./avatars' . $subfolder . $file)) {
-				if ($file == 'uploaded' || $file[0] == '.') continue;
+			if( is_dir( './avatars' . $subfolder . $file ) ) {
+				if( $file == 'uploaded' || $file[0] == '.' )
+					continue;
 
 				$subDirs[] = $file;
 			}
 
-			$split = explode('.', $file);
-			$ext   = array_pop($split);
-			if (($ext != 'jpg')
-			&& ($ext != 'jpeg')
-			&& ($ext != 'gif')
-			&& ($ext != 'png')) {
+			$split = explode( '.', $file );
+			$ext   = array_pop( $split );
+			if( ( $ext != 'jpg' )
+			&& ( $ext != 'jpeg' )
+			&& ( $ext != 'gif' )
+			&& ( $ext != 'png' ) ) {
 				continue;
 			}
 
-			$out .= "<option value=\"./avatars$subfolder$file\"" . (("./avatars$subfolder$file" == $current) ? ' selected="selected"' : null) . '>' . implode('.', $split) . "</option>\n";
+			$out .= "<option value=\"./avatars$subfolder$file\"" . ( ( "./avatars$subfolder$file" == $current ) ? ' selected="selected"' : null ) . '>' . implode('.', $split) . "</option>\n";
 		}
 
-		foreach ($subDirs as $file) {
-			$extra = $this->select_avatars($current, $relative, $subfolder . $file);
-			if ($extra) {
-				if ($subfolder == '/') {
-					$out .= '<optgroup label="' . htmlspecialchars($file) . "\">\n";
+		foreach( $subDirs as $file ) {
+			$extra = $this->select_avatars( $current, $relative, $subfolder . $file );
+
+			if( $extra ) {
+				if( $subfolder == '/' ) {
+					$out .= '<optgroup label="' . htmlspecialchars( $file ) . "\">\n";
 					$out .= $extra;
 					$out .= "</optgroup>\n";
 				} else {
 					$out .= "</optgroup>\n";
-					$out .= '<optgroup label="' . htmlspecialchars(substr($subfolder . $file, 1)) . "\">\n";
+					$out .= '<optgroup label="' . htmlspecialchars( substr( $subfolder . $file, 1 ) ) . "\">\n";
 					$out .= $extra;
 				}
 			}
@@ -277,23 +279,23 @@ class htmlwidgets extends forumutils
 	/**
 	 * Create options of group names
 	 *
-	 * @param int $var group_id of the selected group 
+	 * @param int $var group_id of the selected group
 	 * @param bool $custom_only Show only groups that are not part of the built in groups
 	 * @return string HTML
 	 **/
-	function select_groups($val, $custom_only = false)
+	public function select_groups( $val, $custom_only = false )
 	{
-		if ($custom_only) {
-			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name");
+		if( $custom_only ) {
+			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name" );
 		} else {
-			$groups = $this->db->query("SELECT group_name, group_id FROM %pgroups ORDER BY group_name");
+			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups ORDER BY group_name" );
 		}
 
 		$out = null;
 
-		while ($group = $this->db->nqfetch($groups))
+		while( $group = $this->db->nqfetch( $groups ) )
 		{
-			$out .= "<option value=\"{$group['group_id']}\"" . (($val == $group['group_id']) ? ' selected="selected"' : '') . ">{$group['group_name']}</option>";
+			$out .= "<option value=\"{$group['group_id']}\"" . ( ( $val == $group['group_id'] ) ? ' selected="selected"' : '' ) . ">{$group['group_name']}</option>";
 		}
 
 		return $out;
@@ -302,17 +304,17 @@ class htmlwidgets extends forumutils
 	/**
 	 * Create options of "null" to 31 selectable as a day of the month
 	 *
-	 * @param int $dat current day of the month (if any) 
+	 * @param int $dat current day of the month (if any)
 	 * @return string HTML
 	 **/
-	function select_days($day)
+	public function select_days( $day )
 	{
 		$i   = 1;
 		$out = "<option value=\"00\"></option>\n";
 
-		while ($i <= 31)
+		while( $i <= 31 )
 		{
-			$out .= "<option value=\"$i\"" . (($i == $day) ? ' selected="selected"' : null) . ">$i</option>\n";
+			$out .= "<option value=\"$i\"" . ( ( $i == $day ) ? ' selected="selected"' : null ) . ">$i</option>\n";
 			$i++;
 		}
 
@@ -325,7 +327,7 @@ class htmlwidgets extends forumutils
 	 * @param int $mon current month (if any) 
 	 * @return string HTML
 	 **/
-	function select_months($mon)
+	public function select_months( $mon )
 	{
 		$i   = 1;
 		$out = null;
@@ -346,9 +348,9 @@ class htmlwidgets extends forumutils
 			'12' => $this->lang->cp_dec
 		);
 
-		foreach ($month as $digit => $name)
+		foreach( $month as $digit => $name )
 		{
-			$out .= "<option value=\"$digit\"" . (($digit == $mon) ? ' selected="selected"' : null) . ">$name</option>\n";
+			$out .= "<option value=\"$digit\"" . ( ( $digit == $mon ) ? ' selected="selected"' : null ) . ">$name</option>\n";
 		}
 
 		return $out;
@@ -357,18 +359,18 @@ class htmlwidgets extends forumutils
 	/**
 	 * Create options of "null" to 100 years ago as selectable years
 	 *
-	 * @param int $year the selected year (if any) 
+	 * @param int $year the selected year (if any)
 	 * @return string HTML
 	 **/
-	function select_years($year)
+	public function select_years( $year )
 	{
-		$thisyear = gmdate("Y", time()); // Could end up missing the 'current year' if on new years day/eve
+		$thisyear = gmdate( "Y", time() ); // Could end up missing the 'current year' if on new years day/eve
 		$i        = $thisyear;
 		$out      = "<option value='0000'></option>\n";
 
-		while ($i >= $thisyear-100)
+		while( $i >= $thisyear - 100 )
 		{
-			$out .= "<option value=\"$i\"" . (($i == $year) ? ' selected="selected"' : null) . ">$i</option>\n";
+			$out .= "<option value=\"$i\"" . ( ( $i == $year ) ? ' selected="selected"' : null ) . ">$i</option>\n";
 			$i--;
 		}
 
@@ -383,23 +385,23 @@ class htmlwidgets extends forumutils
 	 * @since Beta 4.0
 	 * @return string HTML
 	 **/
-	function select_skins($skin)
+	public function select_skins( $skin )
 	{
 		$out = null;
 
-		$query = $this->db->query("SELECT * FROM %pskins");
-		while ($s = $this->db->nqfetch($query))
+		$query = $this->db->query( "SELECT * FROM %pskins" );
+		while( $s = $this->db->nqfetch( $query ) )
 		{
-			if ($s['skin_dir'] == 'default') {
-				$s['skin_name'] .= ' (default)';
+			if( $s['skin_id'] == $this->sets['default_skin'] ) {
+				$s['skin_name'] .= " [{$this->lang->default}]";
 			}
-			$out .= "<option value=\"{$s['skin_dir']}\"" . (($s['skin_dir'] == $skin) ? ' selected="selected"' : null) . ">{$s['skin_name']}</option>\n";
+			$out .= "<option value=\"{$s['skin_id']}\"" . (($s['skin_id'] == $skin) ? ' selected="selected"' : null) . ">{$s['skin_name']}</option>\n";
 		}
 
 		return $out;
 	}
 
-	function select_timezones($zone)
+	public function select_timezones( $zone )
 	{
 		$out = null;
 
@@ -452,9 +454,9 @@ class htmlwidgets extends forumutils
 			'Pacific/Kiritimati'	=> $this->lang->gmt_pos14
 		);
 
-		foreach ($zones as $offset => $zone_name)
+		foreach( $zones as $offset => $zone_name )
 		{
-			$out .= "<option value='$offset'" . (($offset == $zone) ? ' selected=\'selected\'' : null) . ">$zone_name</option>\n";
+			$out .= "<option value='$offset'" . ( ( $offset == $zone ) ? ' selected=\'selected\'' : null ) . ">$zone_name</option>\n";
 		}
 
 		return $out;
@@ -469,12 +471,13 @@ class htmlwidgets extends forumutils
 	 * @param bool $identify_category Set to true to place a period before the value of a category
 	 * @return string Options for an HTML select box (all forums in correct order)
 	 **/
-	function select_forums($select = 0, $parent = 0, $space = '', $identify_category = false)
+	public function select_forums( $select = 0, $parent = 0, $space = '', $identify_category = false )
 	{
 		$array = $this->forum_grab();
-		return $this->_select_forums_recurse($array, $select, $parent, $space, $identify_category);
+
+		return $this->_select_forums_recurse( $array, $select, $parent, $space, $identify_category );
 	}
-	
+
 	/**
 	 * Options for an HTML select box (all forums in correct order)
 	 *
@@ -489,31 +492,32 @@ class htmlwidgets extends forumutils
 	 * @since Beta 4.0
 	 * @return string Options for an HTML select box (all forums in correct order)
 	 **/
-	function _select_forums_recurse($array, $select, $parent, $space, $identify_category = false)
+	private function _select_forums_recurse( $array, $select, $parent, $space, $identify_category = false )
 	{
-		$arr = $this->forum_array($array, $parent);
+		$arr = $this->forum_array( $array, $parent );
 
 		$return = null;
-		foreach ($arr as $val)
+
+		foreach( $arr as $val )
 		{
-			if (!$this->perms->auth('forum_view', $val['forum_id'])) {
+			if( !$this->perms->auth( 'forum_view', $val['forum_id'] ) ) {
 				continue;
 			}
 
-			if ($identify_category && !$val['forum_parent']) {
+			if( $identify_category && !$val['forum_parent'] ) {
 				$dot = '.';
 			} else {
 				$dot = null;
 			}
 
-			if (($val['forum_id'] != $select) && ($select != -1)) {
+			if( ( $val['forum_id'] != $select ) && ( $select != -1 ) ) {
 				$selected = null;
 			} else {
 				$selected = ' selected="selected"';
 			}
 
 			$return .= '<option value="' . $dot . $val['forum_id'] . '"' . $selected . '>' . $space . $val['forum_name'] . "</option>\n" .
-			$this->_select_forums_recurse($array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;');
+			$this->_select_forums_recurse( $array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 		}
 
 		return $return;
@@ -526,32 +530,33 @@ class htmlwidgets extends forumutils
 	 * @param string $relative Path to look for avatars in (optional)
 	 * @return string HTML
 	 **/
-	function select_langs($current, $relative = '.')
+	public function select_langs( $current, $relative = '.' )
 	{
 		$out   = null;
 		$langs = array();
-		$dir   = opendir($relative . '/languages');
+		$dir   = opendir( $relative . '/languages' );
 
-		while (($file = readdir($dir)) !== false)
+		while( ( $file = readdir( $dir ) ) !== false )
 		{
-			if (is_dir($relative . '/languages/' . $file)) {
+			if( is_dir( $relative . '/languages/' . $file ) ) {
 				continue;
 			}
 
-			$code = substr($file, 0, -4);
-			$ext  = substr($file, -4);
-			if ($ext != '.php') {
+			$code = substr( $file, 0, -4 );
+			$ext  = substr( $file, -4 );
+
+			if( $ext != '.php' ) {
 				continue;
 			}
 
-			$langs[$code] = $this->get_lang_name($code);
+			$langs[$code] = $this->get_lang_name( $code );
 		}
 
-		asort($langs);
+		asort( $langs );
 
-		foreach ($langs as $code => $name)
+		foreach( $langs as $code => $name )
 		{
-			$out .= "<option value='$code'" . (($code == $current) ? ' selected=\'selected\'' : null) . ">$name</option>\n";
+			$out .= "<option value='$code'" . ( ( $code == $current ) ? ' selected=\'selected\'' : null ) . ">$name</option>\n";
 		}
 
 		return $out;
@@ -563,31 +568,31 @@ class htmlwidgets extends forumutils
 	 * @param string $code Two character country code
 	 * @return string Language name (in English)
 	 **/
-	function get_lang_name($code)
+	public function get_lang_name( $code )
 	{
-		$code = strtolower($code);
+		$code = strtolower( $code );
 
-		switch($code)
+		switch( $code )
 		{
-		case 'bg': return 'Bulgarian'; break;
-		case 'zh': return 'Chinese'; break;
-		case 'cs': return 'Czech'; break;
-		case 'nl': return 'Dutch'; break;
-		case 'en': return 'English'; break;
-		case 'fi': return 'Finnish'; break;
-		case 'fr': return 'French'; break;
-		case 'de': return 'German'; break;
-		case 'he': return 'Hebrew'; break;
-		case 'hu': return 'Hungarian'; break;
-		case 'id': return 'Indonesian'; break;
-		case 'it': return 'Italian'; break;
-		case 'no': return 'Norwegian'; break;
-		case 'pt': return 'Portuguese'; break;
-		case 'ru': return 'Russian'; break;
-		case 'sk': return 'Slovak'; break;
-		case 'es': return 'Spanish'; break;
-		case 'sv': return 'Swedish'; break;
-		default: return $code; break;
+			case 'bg': return 'Bulgarian'; break;
+			case 'zh': return 'Chinese'; break;
+			case 'cs': return 'Czech'; break;
+			case 'nl': return 'Dutch'; break;
+			case 'en': return 'English'; break;
+			case 'fi': return 'Finnish'; break;
+			case 'fr': return 'French'; break;
+			case 'de': return 'German'; break;
+			case 'he': return 'Hebrew'; break;
+			case 'hu': return 'Hungarian'; break;
+			case 'id': return 'Indonesian'; break;
+			case 'it': return 'Italian'; break;
+			case 'no': return 'Norwegian'; break;
+			case 'pt': return 'Portuguese'; break;
+			case 'ru': return 'Russian'; break;
+			case 'sk': return 'Slovak'; break;
+			case 'es': return 'Spanish'; break;
+			case 'sv': return 'Swedish'; break;
+			default: return $code; break;
 		}
 	}
 
@@ -600,10 +605,11 @@ class htmlwidgets extends forumutils
 	 * @since Beta 2.1
 	 * @return void
 	 **/
-	function tree($label, $link = null)
+	public function tree( $label, $link = null )
 	{
-		$label = htmlspecialchars($label);
-		$this->tree .= ' <b>&raquo;</b> ' . ($link ? "<a href='$link'>$label</a>" : $label);
+		$label = htmlspecialchars( $label );
+
+		$this->tree .= ' <b>&raquo;</b> ' . ( $link ? "<a href='$link'>$label</a>" : $label );
 	}
 
 	/**
@@ -615,32 +621,33 @@ class htmlwidgets extends forumutils
 	 * @since Beta 2.1
 	 * @return void
 	 **/
-	function tree_forums($f, $linklast = false)
+	public function tree_forums( $f, $linklast = false )
 	{
 		$forumData = $this->forum_grab_sorted();
-		
-		if (!isset($forumData[$f])) { //error? lets get out while we can
+
+		if( !isset( $forumData[$f] ) ) { //error? lets get out while we can
 			return;
 		}
 
 		$cat = 1; //first forum is always a category
-		$ft  = explode(',', $forumData[$f]['forum_tree']);
-		foreach ($ft as $i)
+		$ft  = explode( ',', $forumData[$f]['forum_tree'] );
+
+		foreach( $ft as $i )
 		{
-			if ($i) {
-				if (!$cat) {
-					$this->tree($forumData[$i]['forum_name'], "$this->self?a=forum&amp;f={$i}");
+			if( $i ) {
+				if( !$cat ) {
+					$this->tree( $forumData[$i]['forum_name'], "$this->self?a=forum&amp;f={$i}" );
 				} else {
-					$this->tree($forumData[$i]['forum_name'], "$this->self?a=board&amp;c={$i}");
+					$this->tree( $forumData[$i]['forum_name'], "$this->self?a=board&amp;c={$i}" );
 					$cat = 0;
 				}
 			}
 		}
 
-		if (!$linklast) {
-			$this->tree($forumData[$f]['forum_name']);
+		if( !$linklast ) {
+			$this->tree( $forumData[$f]['forum_name'] );
 		} else {
-			$this->tree($forumData[$f]['forum_name'], "$this->self?a=forum&amp;f={$f}");
+			$this->tree( $forumData[$f]['forum_name'], "$this->self?a=forum&amp;f={$f}" );
 		}
 	}
 
@@ -652,49 +659,49 @@ class htmlwidgets extends forumutils
 	 * @since Beta 2.0
 	 * @return string HTML-formatted message icons
 	 **/
-	function get_icons($select = -1)
+	public function get_icons( $select = -1 )
 	{
 		$i     = 0;
 		$icons = array();
-		$dir   = opendir("./skins/$this->skin/mbicons");
+		$dir   = opendir( "./skins/$this->skin/mbicons" );
 
-		while (($file = readdir($dir)) !== false)
+		while( ( $file = readdir( $dir ) ) !== false )
 		{
-			$ext = substr($file, -4);
+			$ext = substr( $file, -4 );
 
-			if ((($ext == '.gif') || ($ext == '.jpg') || ($ext == '.png')) && !is_dir("./skins/$this->skin/mbicons/$file")) {
+			if( ( ( $ext == '.gif' ) || ( $ext == '.jpg' ) || ( $ext == '.png' ) ) && !is_dir( "./skins/$this->skin/mbicons/$file" ) ) {
 				$icons[$i] = $file;
 				$i++;
 			}
 		}
 
-		closedir($dir);
-		natsort($icons);
+		closedir( $dir );
+		natsort( $icons );
 
 		$msgicons = null;
 		$i        = 0;
 
-		foreach ($icons as $icon)
+		foreach( $icons as $icon )
 		{
-			$msgicons .= "<li><input type=\"radio\" name=\"icon\" id=\"icon$i\" value=\"$icon\"" . (($select == $icon) ? '
-				checked=\'checked\'' : null) . " />&nbsp;<label for=\"icon$i\"><img src=\"{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/$icon\" alt=\"{$this->lang->post_icon}\" /></label></li>\n";
+			$msgicons .= "<li><input type=\"radio\" name=\"icon\" id=\"icon$i\" value=\"$icon\"" . ( ( $select == $icon ) ? '
+				checked=\'checked\'' : null ) . " />&nbsp;<label for=\"icon$i\"><img src=\"{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/$icon\" alt=\"{$this->lang->post_icon}\" /></label></li>\n";
 			$i++;
 		}
 		return $msgicons;
 	}
 
 	/**
-	 * Retreives a Gravatar URL for members who use them. See: http://en.gravatar.com/
+	 * Retreives a Gravatar URL for members who use them. See: https://en.gravatar.com/
 	 *
 	 * @param string $avatar Text containing the Gravatar email address (user specified)
 	 * @return string URL for the Gravatar image
-	 * @author Roger Libiez 
+	 * @author Roger Libiez
 	 * @since 1.5.2
 	 **/
-	function get_gravatar( $avatar )
+	public function get_gravatar( $avatar )
 	{
 		$gravatar = 'https://secure.gravatar.com/avatar/';
-		$gravatar .= md5( strtolower( trim($avatar) ) );
+		$gravatar .= md5( strtolower( trim( $avatar ) ) );
 		$gravatar .= "?s={$this->sets['avatar_width']}&amp;r=pg";
 
 		return $gravatar;
@@ -705,10 +712,10 @@ class htmlwidgets extends forumutils
 	 *
 	 * @param string $user SQL resource array of user data
 	 * @return string URL for the desired avatar image, or NULL if not desired/unavailable.
-	 * @author Roger Libiez 
+	 * @author Roger Libiez
 	 * @since 1.5.2
 	 **/
-	function display_avatar( $user )
+	public function display_avatar( $user )
 	{
 		$url = null;
 		$avatar = $user['user_avatar'];

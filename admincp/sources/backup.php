@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -48,7 +48,7 @@ class backup extends admin
 	 * @since 1.0.2
 	 * @return string HTML
 	 **/
-	function execute()
+	public function execute()
 	{
 		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = '';
@@ -79,7 +79,7 @@ class backup extends admin
 	 * @since 1.3.2
 	 * @return string HTML
 	 **/
-	function create_backup()
+	private function create_backup()
 	{
 		if( !isset( $this->post['submit'] ) ) {
 			$token = $this->generate_token();
@@ -108,20 +108,20 @@ class backup extends admin
 		srand();
 		$mcookie = sha1( crc32( rand() ) );
 
-		$filename = 'backup_'.$this->version.'-'.date('y-m-d-H-i-s').'-'.$mcookie.'.sql';
-		$options = "";
+		$filename = 'backup_' . $this->version . '-' . date( 'y-m-d-H-i-s' ) . '-' . $mcookie . '.sql';
+		$options = '';
 
 		foreach( $this->post as $key => $value )
 			$$key = $value;
-		if( isset($insert) )
-			$options .= " -c";
-		if( isset($droptable) )
-			$options .= " --add-drop-table";
+		if( isset( $insert ) )
+			$options .= ' -c';
+		if( isset( $droptable ) )
+			$options .= ' --add-drop-table';
 
 		$tables = implode( ' ', $this->get_db_tables() );
 
-		$mbdump = "mysqldump ".$options." -p --host=".$this->db->host." --user=".$this->db->user;
-		$mbdump .= " --result-file='../packages/".$filename."' ".$this->db->db." ".$tables;
+		$mbdump = "mysqldump $options -p --host={$this->db->host} --user={$this->db->user}";
+		$mbdump .= " --result-file='../packages/$filename' {$this->db->db} $tables";
 
 		$fds = array(
 				0 => array( 'pipe', 'r' ),
@@ -152,9 +152,10 @@ class backup extends admin
 
 		$buf = $stdout . $stderr;
 
-		$this->chmod( "../packages/" . $filename, 0440 );
-		$backup = sprintf( $this->lang->backup_created, "../packages/" );
-		return $this->message( $this->lang->backup_create, $backup."<br /><br />". $this->lang->backup_output .": ".$buf, $filename, "../packages/".$filename );
+		$this->chmod( '../packages/' . $filename, 0440 );
+		$backup = sprintf( $this->lang->backup_created, '../packages/' );
+
+		return $this->message( $this->lang->backup_create, "$backup<br />", $filename, "../packages/$filename" );
 	}
 
 	/**
@@ -164,16 +165,16 @@ class backup extends admin
 	 * @since 1.3.2
 	 * @return string HTML
 	 **/
-	function restore_backup()
+	private function restore_backup()
 	{
 		if( !isset( $this->get['restore'] ) )
 		{
-			if ( ($dir = opendir( "../packages" ) ) === false )
+			if ( ( $dir = opendir( "../packages" ) ) === false )
 				return $this->message( $this->lang->backup_restore, $this->lang->backup_no_packages );
 
 			$token = $this->generate_token();
 			$backups = array();
-			while( ( $file = readdir($dir) ) )
+			while( ( $file = readdir( $dir ) ) )
 			{
 				if( strtolower( substr( $file, -4 ) ) != ".sql" )
 					continue;
@@ -181,7 +182,7 @@ class backup extends admin
 			}
 			closedir( $dir );
 
-			if( count($backups) <= 0 )
+			if( count( $backups ) <= 0 )
 				return $this->message( $this->lang->backup_restore, $this->lang->backup_none );
 
 			$output = $this->lang->backup_warning . "<br /><br />";
@@ -229,7 +230,7 @@ class backup extends admin
 
 		$retval = proc_close( $proc );
 
-		if ( 0 != $retval )
+		if( 0 != $retval )
 		{
 			return $this->message( $this->lang->backup_restore, $this->lang->backup_import_fail . '<br />' . $stderr );
 		}

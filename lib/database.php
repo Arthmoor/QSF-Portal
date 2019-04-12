@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -216,7 +216,7 @@ class database
 
 		$query = array_shift( $args );
 		$query = str_replace('%p', $this->prefix, $query);
-		
+
 		for( $i = 0; $i < count( $args ); $i++ ) {
 			$args[$i] = $this->escape( $args[$i] );
 		}

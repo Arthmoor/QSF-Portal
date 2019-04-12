@@ -1,0 +1,122 @@
+<!-- BEGIN: PagesList -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/page.png" alt="" />
+  {pages}
+ </div>
+<!-- BEGIN: Page -->
+ <a href="{self}?a=page&amp;p={page_id}">{page_title}</a><br />
+<!-- END: Page -->
+</div>
+
+<!-- BEGIN: CreateLink -->
+<div class="article">
+ <div style="text-align:right">
+  [ <a href="{self}?a=page&amp;s=create">{page_create2}</a> ]
+ </div>
+</div>
+<!-- END: CreateLink -->
+<!-- END: PagesList -->
+
+<!-- BEGIN: PagesNone -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/page.png" alt="" />
+  {pages}
+ </div>
+ {pages_none}
+</div>
+
+<!-- BEGIN: CreateLink -->
+<div class="article">
+ <div style="text-align:right">
+  [ <a href="{self}?a=page&amp;s=create">{page_create2}</a> ]
+ </div>
+</div>
+<!-- END: CreateLink -->
+<!-- END: PagesNone -->
+
+<!-- BEGIN: PagesPage -->
+<div class="article">
+ <div class="title">{page_title}</div>
+ {page_contents}
+</div>
+
+<div class="article">
+ <div style="text-align:right">&nbsp;
+<!-- BEGIN: CreateLink -->
+   [ <a href="{self}?a=page&amp;s=create">{page_create2}</a> ]
+<!-- END: CreateLink -->
+<!-- BEGIN: EditLink -->
+   [ <a href="{self}?a=page&amp;p={p}&amp;s=edit">{edit}</a> ]
+<!-- END: EditLink -->
+<!-- BEGIN: DeleteLink -->
+   [ <a href="{self}?a=page&amp;p={p}&amp;s=delete">{delete}</a> ]
+<!-- END: DeleteLink -->
+ </div>
+</div>
+<!-- END: PagesPage -->
+
+<!-- BEGIN: PagesEdit -->
+<form action="{self}?a=page&amp;s=edit&amp;p={$this->get['p']}" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/page_edit.png" alt="" />
+  {page_edit}
+ </div>
+
+ <span class="field">{page_title}:</span>
+ <span class="form"><input class="input" type="text" size="40" name="title" value="{title}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{page_contents}:</span>
+ <span class="form"><textarea class="input" name="contents" rows="12" cols="60">{contents}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">Options:</span>
+ <span class="form">
+   <input type="checkbox" name="flags[]" id="post_html" value="{html}"{htmlbox} /><label for="post_html">{page_format_html}</label>
+   <input type="checkbox" name="flags[]" id="post_bbcode" value="{bb}"{bbbox} /><label for="post_bbcode">{page_format_bbcode}</label>
+   <input type="checkbox" name="flags[]" id="post_emote" value="{em}"{embox} /><label for="post_emote">{page_format_emoticons}</label>
+   <input type="checkbox" name="flags[]" id="post_breaks" value="{nl}"{nlbox} /><label for="post_breaks">{page_format_breaks}</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value="{cn}"{cnbox} /><label for="post_censor">{page_format_censor}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: PagesEdit -->
+
+<!-- BEGIN: PagesCreate -->
+<form action="{self}?a=page&amp;s=create" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/page_add.png" alt="" />
+  {page_create}
+ </div>
+
+ <span class="field">{page_title}:</span>
+ <span class="form"><input class="input" type="text" size="40" name="title" value="" /></span>
+ <p class="line"></p>
+
+ <span class="field">{page_contents}:</span>
+ <span class="form"><textarea class="input" name="contents" rows="12" cols="60"></textarea></span>
+ <p class="line"></p>
+
+ <span class="field">Options:</span>
+ <span class="form">
+   <input type="checkbox" name="flags[]" id="post_html" value="" /><label for="post_html">{page_format_html}</label>
+   <input type="checkbox" name="flags[]" id="post_bbcode" value="" /><label for="post_bbcode">{page_format_bbcode}</label>
+   <input type="checkbox" name="flags[]" id="post_emote" value="" /><label for="post_emote">{page_format_emoticons}</label>
+   <input type="checkbox" name="flags[]" id="post_breaks" value="" /><label for="post_breaks">{page_format_breaks}</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value="" /><label for="post_censor">{page_format_censor}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: PagesCreate -->

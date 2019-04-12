@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -39,7 +39,7 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class en
 {
-	function active()
+	public function active()
 	{
 		$this->active_last_action = 'Last Action';
 		$this->active_modules_active = 'Viewing the active users';
@@ -64,11 +64,9 @@ class en
 		$this->active_users = 'Active Users';
 	}
 
-	function admin()
+	public function admin()
 	{
-		$this->admin_add_emoticons = 'Add emoticons';
 		$this->admin_add_member_titles = 'Add automatic member titles';
-		$this->admin_add_templates = 'Add HTML templates';
 		$this->admin_ban_ips = 'Ban IP addresses';
 		$this->admin_censor = 'Censor words';
 		$this->admin_cp_denied = 'Access Denied';
@@ -87,8 +85,6 @@ class en
 		$this->admin_delete_group = 'Delete a group';
 		$this->admin_delete_help = 'Delete a help article';
 		$this->admin_delete_member = 'Delete a member';
-		$this->admin_delete_template = 'Delete HTML template';
-		$this->admin_edit_emoticons = 'Edit or delete emoticons';
 		$this->admin_edit_forum = 'Edit a forum';
 		$this->admin_edit_group_file_perms = 'Edit a group\'s file permissions';
 		$this->admin_edit_group_name = 'Edit a group\'s name';
@@ -100,18 +96,15 @@ class en
 		$this->admin_edit_member_titles = 'Edit or delete automatic member titles';
 		$this->admin_edit_settings = 'Edit board settings';
 		$this->admin_edit_skin = 'Edit or delete a skin';
-		$this->admin_edit_templates = 'Edit HTML templates';
-		$this->admin_emoticons = 'Emoticon Controls';
+		$this->admin_emoticons = 'Emoji Controls';
 		$this->admin_export_skin = 'Export a skin';
 		$this->admin_fix_stats = 'Fix the member statistics';
 		$this->admin_forum_order = 'Change the forum ordering';
 		$this->admin_forums = 'Forums and Categories';
 		$this->admin_groups = 'Groups';
 		$this->admin_heading = 'QSF Portal Admin Control Panel';
-		$this->admin_help = 'Help Articles';
-		$this->admin_install_emoticons = 'Install emoticons';
-		$this->admin_install_skin = 'Install a skin';
 		$this->admin_logs = 'View moderator actions';
+		$this->admin_manage_skins = 'Manage Skins';
 		$this->admin_mass_mail = 'Send an email to your members';
 		$this->admin_members = 'Members';
 		$this->admin_phpinfo = 'View PHP information';
@@ -121,19 +114,18 @@ class en
 		$this->admin_settings_add = 'Add new board setting';
 		$this->admin_skins = 'Skins';
 		$this->admin_stats = 'Statistics center';
-		$this->admin_upgrade_skin = 'Upgrade a Skin';
 		$this->admin_your_board = 'Your Board';
 		$this->admin_new_captcha = 'Add new captcha pair';
 		$this->admin_list_captcha = 'List existing captcha pairs';
 	}
 
-	function backup()
+	public function backup()
 	{
 		$this->backup = 'Backup';
 		$this->backup_add = 'Add';
 		$this->backup_add_complete = 'Add complete';
 		$this->backup_create = 'Backup Database';
-		$this->backup_created = 'Backup successfully created in';
+		$this->backup_created = 'Backup successfully created in %s';
 		$this->backup_createfile = 'Backup and create a file on server';
 		$this->backup_done = 'The database has been backed up to the packages directory.';
 		$this->backup_download = 'Backup and download (recommended)';
@@ -145,7 +137,6 @@ class en
 		$this->backup_noexist = 'Sorry, that backup does not exist.';
 		$this->backup_none = 'No backups were found in the packages directory.';
 		$this->backup_options = 'Database Backup Options';
-		$this->backup_output = 'Output';
 		$this->backup_restore = 'Restore Backup';
 		$this->backup_restore_done = 'The database has been restored successfully.';
 		$this->backup_statements = 'statements';
@@ -153,7 +144,7 @@ class en
 		$this->backup_warning = '<b>Warning:</b> This will overwrite all existing data used by QSF Portal.';
 	}
 
-	function ban()
+	public function ban()
 	{
 		$this->ban = 'Ban';
 		$this->ban_banned_ips = 'Ban IP Addresses';
@@ -170,73 +161,7 @@ class en
 		$this->ban_users_banned = 'Users banned.';
 	}
 
-	function bbcode()
-	{
-		$this->bbcode_arial = 'Arial';
-		$this->bbcode_blue = 'Blue';
-		$this->bbcode_bold = 'Bold (CTRL-b)';
-		$this->bbcode_bold1 = 'B';
-		$this->bbcode_chocolate = 'Chocolate';
-		$this->bbcode_code = 'Code (CTRL-l)';
-		$this->bbcode_code1 = 'Code';
-		$this->bbcode_code2 = 'Codebox';
-		$this->bbcode_color = 'Color';
-		$this->bbcode_coral = 'Coral';
-		$this->bbcode_courier = 'Courier';
-		$this->bbcode_crimson = 'Crimson';
-		$this->bbcode_darkblue = 'Dark Blue';
-		$this->bbcode_darkred = 'Dark Red';
-		$this->bbcode_deeppink = 'Deep Pink';
-		$this->bbcode_email = 'Email (CTRL-e)';
-		$this->bbcode_firered = 'Firebrick Red';
-		$this->bbcode_font = 'Font';
-		$this->bbcode_green = 'Green';
-		$this->bbcode_huge = 'Huge';
-		$this->bbcode_image = 'Image (CTRL-j)';
-		$this->bbcode_image1 = 'IMG';
-		$this->bbcode_impact = 'Impact';
-		$this->bbcode_indigo = 'Indigo';
-		$this->bbcode_italic = 'Italic (CTRL-i)';
-		$this->bbcode_italic1 = 'I';
-		$this->bbcode_large = 'Large';
-		$this->bbcode_limegreen = 'Lime Green';
-		$this->bbcode_medium = 'Medium';
-		$this->bbcode_orange = 'Orange';
-		$this->bbcode_orangered = 'Orange Red';
-		$this->bbcode_php = 'PHP (CTRL-k)';
-		$this->bbcode_php1 = 'PHP';
-		$this->bbcode_purple = 'Purple';
-		$this->bbcode_quote = 'Quote (CTRL-q)';
-		$this->bbcode_quote1 = 'Quote';
-		$this->bbcode_red = 'Red';
-		$this->bbcode_royalblue = 'Royal Blue';
-		$this->bbcode_sandybrown = 'Sandy Brown';
-		$this->bbcode_seagreen = 'Sea Green';
-		$this->bbcode_sienna = 'Sienna';
-		$this->bbcode_silver = 'Silver';
-		$this->bbcode_size = 'Size';
-		$this->bbcode_skyblue = 'Sky Blue';
-		$this->bbcode_small = 'Small';
-		$this->bbcode_spoiler = 'Spoiler (CTRL-r)';
-		$this->bbcode_spoiler1 = 'Spoiler';
-		$this->bbcode_strike = 'Strikethrough (CTRL-s)';
-		$this->bbcode_strike1 = 'S';
-		$this->bbcode_tahoma = 'Tahoma';
-		$this->bbcode_teal = 'Teal';
-		$this->bbcode_times = 'Times';
-		$this->bbcode_tiny = 'Tiny';
-		$this->bbcode_tomato = 'Tomato';
-		$this->bbcode_underline = 'Underline (CTRL-u)';
-		$this->bbcode_underline1 = 'U';
-		$this->bbcode_url = 'URL (CTRL-h)';
-		$this->bbcode_url1 = 'URL';
-		$this->bbcode_verdana = 'Verdana';
-		$this->bbcode_wood = 'Burly Wood';
-		$this->bbcode_yellow = 'Yellow';
-		$this->bbcode_youtube = 'YouTube';
-	}
-
-	function board()
+	public function board()
 	{
 		$this->board_active_users = 'Active Users';
 		$this->board_birthdays = 'Today\'s Birthdays';
@@ -271,7 +196,7 @@ class en
 		$this->board_write_topics = 'You can view and create topics in this forum.';
 	}
 
-	function censoring()
+	public function censoring()
 	{
 		$this->censor = 'Censor Words';
 		$this->censor_one_per_line = 'One per line.';
@@ -279,30 +204,8 @@ class en
 		$this->censor_updated = 'Word list updated.';
 	}
 
-	function conversation()
+	public function cp()
 	{
-		$this->cv_conversation = 'Private Conversations';
-		$this->cv_by = 'By';
-		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
-		$this->cv_guest_user = 'Guest';
-		$this->cv_icon = 'Message Icon';
-		$this->cv_jump = 'Jump to newest post in topic';
-		$this->cv_last = 'Last Post';
-		$this->cv_no_topics = 'You have no private conversations to display.';
-		$this->cv_new_convo = 'New Conversation';
-		$this->cv_pages = 'Pages';
-		$this->cv_replies = 'Replies';
-		$this->cv_start_convo = 'Start a Conversation';
-		$this->cv_starter = 'Starter';
-		$this->cv_topic = 'Topic';
-		$this->cv_topic_posted = 'Posted';
-		$this->cv_unread = 'Jump to oldest unread post';
-		$this->cv_views = 'Views';
-	}
-
-	function cp()
-	{
-		$this->cp_aim = 'AIM Screen Name';
 		$this->cp_already_member = 'The email address you entered is already assigned to a member.';
 		$this->cp_apr = 'April';
 		$this->cp_aug = 'August';
@@ -342,12 +245,12 @@ class en
 		$this->cp_email_invaid = 'The email address you entered is invalid.';
 		$this->cp_err_avatar = 'Error Updating Avatar';
 		$this->cp_err_updating = 'Error Updating Profile';
+		$this->cp_facebook = 'Facebook Page';
 		$this->cp_feb = 'February';
 		$this->cp_file_type = 'The avatar you entered is not valid. Make sure the url is correctly formatted, and the file type is either gif, jpg, or png.';
 		$this->cp_format = 'Name Formatting';
 		$this->cp_header = 'User Control Panel';
 		$this->cp_height = 'Height';
-		$this->cp_icq = 'ICQ Number';
 		$this->cp_interest = 'Interests';
 		$this->cp_jan = 'January';
 		$this->cp_july = 'July';
@@ -365,7 +268,6 @@ class en
 		$this->cp_login_first = 'You must be logged in to access your control panel.';
 		$this->cp_mar = 'March';
 		$this->cp_may = 'May';
-		$this->cp_msn = 'MSN Identity';
 		$this->cp_must_orig = 'Your name must be identical to the original. You may only change the letter case and spacing.';
 		$this->cp_new_notmatch = 'The new passwords you entered do not match.';
 		$this->cp_new_pass = 'New Password';
@@ -404,29 +306,28 @@ class en
 		$this->cp_sub_updated = 'Selected subscriptions have been deleted.';
 		$this->cp_topic_option = 'Topic Options';
 		$this->cp_topics_page = 'Topics per forum page. 0 resets to board default.';
-		$this->cp_twitter = 'Twitter ID';
+		$this->cp_twitter = 'Twitter Username';
 		$this->cp_updated = 'Profile Updated';
 		$this->cp_updated1 = 'Avatar Updated';
 		$this->cp_updated_prefs = 'Preferences Updated';
 		$this->cp_user_exists = 'A user with that name formatting already exists.';
 		$this->cp_valided = 'Your password was validated and changed.';
 		$this->cp_view_avatar = 'View Avatars?';
-		$this->cp_view_emoticon = 'View Emoticons?';
+		$this->cp_view_emoticon = 'View Emojis?';
 		$this->cp_view_signature = 'View Signatures?';
 		$this->cp_welcome = 'Welcome to the user control panel. From here, you can configure your account. Please choose from the options above.';
 		$this->cp_width = 'Width';
-		$this->cp_www = 'Homepage';
-		$this->cp_yahoo = 'Yahoo Identity';
+		$this->cp_www = 'Blog or Other Homepage';
 		$this->cp_zone = 'Time Zone';
 	}
 
-	function db_repair()
+	public function db_repair()
 	{
 		$this->repair_db = 'Repair Database';
 		$this->repaired_db = 'The tables in the database have been repaired.';
 	}
 
-	function email()
+	public function email()
 	{
 		$this->email_akismet_email_spam = 'Your email has been flagged as spam and has not been delivered.';
 		$this->email_blocked = 'That member is not accepting email through this form.';
@@ -440,26 +341,23 @@ class en
 		$this->email_to = 'To:';
 	}
 
-	function emoticon_control()
+	public function emoticon_control()
 	{
-		$this->emote = 'Emoticon Controls';
-		$this->emote_add = 'Add New Emoticon';
-		$this->emote_added = 'Emoticon added.';
-		$this->emote_back = 'Back to Emoticon Controls';
+		$this->emote = 'Emoji Controls';
+		$this->emote_add = 'Add New Emoji';
+		$this->emote_added = 'Emoji added.';
+		$this->emote_back = 'Back to Emoji Controls';
 		$this->emote_clickable = 'Clickable';
-		$this->emote_controls = 'QSF Portal Emoticon Controls';
-		$this->emote_edit_or_delete = 'Edit or Delete Emoticons';
+		$this->emote_controls = 'QSF Portal Emoji Controls';
+		$this->emote_edit_or_delete = 'Edit or Delete Emoji';
 		$this->emote_image = 'Image File';
 		$this->emote_invalid_image = 'Invalid image type %s. Valid file types are jpg, png and gif.';
 		$this->emote_image_failed = 'Image failed to upload!';
-		$this->emote_install = 'Install Emoticons';
-		$this->emote_install_done = 'Emoticons have been successfully reinstalled.';
-		$this->emote_install_warning = 'This will erase all existing emoticon settings and import uploaded emoticons from your currently selected skin into the database.';
-		$this->emote_no_text = 'No emoticon text was given.';
+		$this->emote_no_text = 'No emoji text was given.';
 		$this->emote_text = 'Text';
 	}
 
-	function files()
+	public function files()
 	{
 		$this->file = 'File';
 		$this->files = 'Files';
@@ -506,6 +404,7 @@ class en
 		$this->files_delete_cat2 = 'Delete which existing category?';
 		$this->files_delete_cat_done = 'The category has been deleted.';
 		$this->files_delete_cat_not_empty = 'The %s category is not empty. Cannot delete.';
+		$this->files_delete_cat_not_exist = 'The category does not exist. It may have been deleted, or never existed.';
 		$this->files_delete_cat_not_permitted = 'You have not been permitted to delete categories.';
 		$this->files_delete_confirm = 'Are you sure you want to delete';
 		$this->files_delete_file = 'Delete File';
@@ -563,6 +462,7 @@ class en
 		$this->files_rating = 'Rating';
 		$this->files_recent = 'Recent Uploads';
 		$this->files_recent_uploads = 'Files uploaded in the last 10 days';
+		$this->files_recent_uploads_none = 'No files have been uploaded in the last 10 days.';
 		$this->files_remove_mod = 'Remove Moderator';
 		$this->files_remove_mod_cat = 'Which category\'s moderator would you like to remove?';
 		$this->files_remove_mod_done = 'The moderator for that category has been removed.';
@@ -579,7 +479,8 @@ class en
 		$this->files_search_days = 'days';
 		$this->files_search_display_first = 'Display the first';
 		$this->files_search_display_more = 'Display files with more than';
-		$this->files_search_error = 'You have to search by atleast the name, author or descripton.';
+		$this->files_search_error = 'You have to search by at least the name, author or descripton.';
+		$this->files_search_error_something = 'You must provide something to search for.';
 		$this->files_search_error_none = 'No files found.';
 		$this->files_search_for = 'Search For';
 		$this->files_search_in = 'Search In';
@@ -590,6 +491,7 @@ class en
 		$this->files_search_older = 'older';
 		$this->files_search_results = 'Search results for';
 		$this->files_search_results2 = 'results';
+		$this->files_search_than = 'than';
 		$this->files_search_week = 'week';
 		$this->files_search_weeks = 'weeks';
 		$this->files_search_year = 'year';
@@ -634,7 +536,7 @@ class en
 		$this->files_view_specify = 'You must specify a file id to view.';
 	}
 
-	function forum()
+	public function forum()
 	{
 		$this->forum_by = 'By';
 		$this->forum_can_post = 'You can reply in this forum.';
@@ -644,6 +546,7 @@ class en
 		$this->forum_dot = 'dot';
 		$this->forum_dot_detail = 'Shows that you have posted in the topic';
 		$this->forum_forum = 'Forum';
+		$this->forum_forum_url = 'URL Redirect:';
 		$this->forum_guest = 'Guest';
 		$this->forum_hot = 'Hot';
 		$this->forum_icon = 'Message Icon';
@@ -680,7 +583,7 @@ class en
 		$this->forum_write_topics = 'You can create topics in this forum.';
 	}
 
-	function forums()
+	public function forums()
 	{
 		$this->forum_controls = 'Forum Controls';
 		$this->forum_create = 'Create Forum';
@@ -711,7 +614,7 @@ class en
 		$this->forum_url = 'URL Redirect';
 	}
 
-	function groups()
+	public function groups()
 	{
 		$this->groups_bad_format = 'You must use %s in the format, which represents the group name.';
 		$this->groups_based_on = 'based on';
@@ -738,17 +641,19 @@ class en
 		$this->groups_will_become = 'Users from the deleted group will become';
 	}
 
-	function home()
+	public function home()
 	{
 		$this->home_choose = 'Choose a task to begin.';
 		$this->home_menu_title = 'Admin CP Menu';
 	}
 
-	function login()
+	public function login()
 	{
 		$this->login = 'Login';
 		$this->login_cant_logged = 'You could not be logged in. Check to see that your user name and password are correct.<br /><br />They are case sensitive, so \'UsErNaMe\' is different from \'Username\'. Also, check to see that cookies are enabled in your browser.';
 		$this->login_cookies = 'Cookies must be enabled to login.';
+		$this->login_did_not_request = 'If you do not want to reset your password, please ignore or delete this email.';
+		$this->login_did_request = 'If you did request this, go to the below URL to continue with the password reset:';
 		$this->login_forgot_pass = 'Forgot your password?';
 		$this->login_header = 'Logging In';
 		$this->login_logged = 'You are now logged in.';
@@ -759,11 +664,15 @@ class en
 		$this->login_pass_request = 'To complete the password reset, please click on the link sent to the email address associated with your account.';
 		$this->login_pass_reset = 'Reset Password';
 		$this->login_pass_sent = 'Your password has been reset. The new password has been sent to the email address associated with your account.';
+		$this->login_request_done = 'Your password has been reset to:';
+		$this->login_request_done2 = 'You should log in and update it immediately for better security.';
+		$this->login_request_ip = 'This request was sent from IP:';
+		$this->login_someome_requested = 'Someone has requested a password reset for your forum account,';
 		$this->login_sure = 'Are you sure you wish to logoff from \'%s\'?';
 		$this->login_user = 'User Name';
 	}
 
-	function logs()
+	public function logs()
 	{
 		$this->logs_action = 'Action';
 		$this->logs_category = 'Category';
@@ -804,7 +713,7 @@ class en
 		$this->logs_view = 'View Moderator Actions';
 	}
 
-	function main()
+	public function main()
 	{
 		$this->main_activate = 'Your account has not yet been activated.';
 		$this->main_activate_resend = 'Resend Activation Email';
@@ -856,11 +765,12 @@ class en
 		$this->main_tos_files = 'Terms of Service: Uploads';
 		$this->main_tos_forums = 'Terms of Service: Forums';
 		$this->main_users_online = 'Users Online';
+		$this->main_visitors = 'Today\'s Visitors:';
 		$this->main_welcome = 'Welcome';
 		$this->main_welcome_guest = 'Welcome!';
 	}
 
-	function mass_mail()
+	public function mass_mail()
 	{
 		$this->mail = 'Mass Mail';
 		$this->mail_announce = 'Announcement From';
@@ -873,7 +783,7 @@ class en
 		$this->mail_subject = 'Subject';
 	}
 
-	function member_control()
+	public function member_control()
 	{
 		$this->mc = 'Member Control';
 		$this->mc_confirm = 'Are you sure you want to delete';
@@ -890,7 +800,6 @@ class en
 		$this->mc_guest_needed = 'The guest account is necessary for QSF Portal to function.';
 		$this->mc_not_found = 'No members were found matching';
 		$this->mc_report_spambot = 'Report as Spambot';
-		$this->mc_user_aim = 'AIM Name';
 		$this->mc_user_avatar = 'Avatar';
 		$this->mc_user_avatar_height = 'Avatar Height';
 		$this->mc_user_avatar_type = 'Avatar Type';
@@ -898,10 +807,10 @@ class en
 		$this->mc_user_birthday = 'Birthday';
 		$this->mc_user_email = 'Email Address';
 		$this->mc_user_email_show = 'Email Is Public';
+		$this->mc_user_facebook = 'Facebook Page';
 		$this->mc_user_group = 'Group';
 		$this->mc_user_twitter = 'Twitter ID';
-		$this->mc_user_homepage = 'Homepage';
-		$this->mc_user_icq = 'ICQ Number';
+		$this->mc_user_homepage = 'Blog or Other Homepage';
 		$this->mc_user_id = 'User ID';
 		$this->mc_user_interests = 'Interests';
 		$this->mc_user_joined = 'Member Since';
@@ -910,7 +819,6 @@ class en
 		$this->mc_user_lastvisit = 'Last Visit';
 		$this->mc_user_level = 'Level';
 		$this->mc_user_location = 'Location';
-		$this->mc_user_msn = 'MSN Identity';
 		$this->mc_user_name = 'Name';
 		$this->mc_user_pm = 'Accepting Private Messages';
 		$this->mc_user_pm_mail = 'Email Private Messages';
@@ -925,18 +833,17 @@ class en
 		$this->mc_user_title_custom = 'Use a Custom Member Title';
 		$this->mc_user_uploads = 'Uploads';
 		$this->mc_user_view_avatars = 'Viewing Avatars';
-		$this->mc_user_view_emoticons = 'Viewing Emoticons';
+		$this->mc_user_view_emoticons = 'Viewing Emojis';
 		$this->mc_user_view_signatures = 'Viewing Signatures';
-		$this->mc_user_yahoo = 'Yahoo Identity';
 	}
 
-	function membercount()
+	public function membercount()
 	{
 		$this->mcount = 'Fix Member Statistics';
 		$this->mcount_updated = 'Member Count Updated.';
 	}
 
-	function members()
+	public function members()
 	{
 		$this->members_all = 'all';
 		$this->members_email = 'Email';
@@ -949,11 +856,13 @@ class en
 		$this->members_posts = 'Posts';
 		$this->members_send_pm = 'Send this user a personal message';
 		$this->members_title = 'Title';
-		$this->members_vist_www = 'Visit this member\'s web site';
-		$this->members_www = 'Web Site';
+		$this->members_visit_facebook = 'Visit this member\'s Facebook page';
+		$this->members_visit_twitter = 'Visit this member\'s Twitter page';
+		$this->members_visit_www = 'Visit this member\'s web site';
+		$this->members_www = 'Web Sites';
 	}
 
-	function mod()
+	public function mod()
 	{
 		$this->mod_confirm_post_delete = 'Are you sure you want to delete this post?';
 		$this->mod_confirm_post_delete_spam = 'Are you sure you want to delete this post and report it as spam?';
@@ -972,9 +881,9 @@ class en
 		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />';
 		$this->mod_label_controls = 'Moderator Controls';
 		$this->mod_label_description = 'Description';
-		$this->mod_label_emoticon = 'Convert emoticons into images?';
+		$this->mod_label_emoticon = 'Convert emojis into images?';
 		$this->mod_label_global = 'Global Topic';
-		$this->mod_label_mbcode = 'Format MbCode?';
+		$this->mod_label_mbcode = 'Format BBCode?';
 		$this->mod_label_move_to = 'Move to';
 		$this->mod_label_options = 'Options';
 		$this->mod_label_post_delete = 'Delete Post';
@@ -1018,20 +927,30 @@ class en
 		$this->mod_success_unpublish = 'This topic has been removed from the published list.';
 	}
 
-	function news()
+	public function news()
 	{
 		$this->news_comments = 'comment(s)';
 		$this->news_more = 'Read more...';
 		$this->news_previous = 'Previous news...';
 	}
 
-	function optimize()
+	public function newspost()
+	{
+		$this->newspost_comments = 'Comments:';
+		$this->newspost_news = 'News';
+		$this->newspost_no_article = 'No such article exists.';
+		$this->newspost_post_comment = 'Post Comment';
+		$this->newspost_post_emoticons = 'Convert emojis into images?';
+		$this->newspost_post_mbcode = 'Format BBCode?';
+	}
+
+	public function optimize()
 	{
 		$this->optimize = 'Optimize Database';
 		$this->optimized = 'The tables in the database have been optimized for maximum performance.';
 	}
 
-	function page()
+	public function page()
 	{
 		$this->page = 'Page';
 		$this->page_action_not_allowed = 'Action not allowed!';
@@ -1049,6 +968,11 @@ class en
 		$this->page_edit_done = 'Page successfully edited.';
 		$this->page_edit_not_permitted = 'You are not permitted to edit pages.';
 		$this->page_editing = 'Editing a page';
+		$this->page_format_bbcode = 'Format BBCode?';
+		$this->page_format_breaks = 'Format Breaks?';
+		$this->page_format_censor = 'Censor Contents?';
+		$this->page_format_emoticons = 'Format Emojis?';
+		$this->page_format_html = 'Format HTML?';
 		$this->page_not_exist = 'That page does not exist!';
 		$this->page_title = 'Title';
 		$this->page_viewing = 'Viewing a page';
@@ -1056,7 +980,7 @@ class en
 		$this->pages_none = 'There are no custom pages yet.';
 	}
 
-	function perms()
+	public function perms()
 	{
 		$this->perm = 'Permission';
 		$this->perms = 'Permissions';
@@ -1126,13 +1050,13 @@ class en
 		$this->perms_user_inherit = 'The user will inherit the group\'s permissions.';
 	}
 
-	function php_info()
+	public function php_info()
 	{
 		$this->php_error = 'Error';
 		$this->php_error_msg = 'phpinfo() can not be executed. It appears that your host has disabled this feature.';
 	}
 
-	function pm()
+	public function pm()
 	{
 		$this->pm_avatar = 'Avatar';
 		$this->pm_cant_del = 'You do not have permission to delete this message.';
@@ -1182,7 +1106,7 @@ class en
 		$this->pm_to = 'To';
 	}
 
-	function post()
+	public function post()
 	{
 		$this->post_akismet_posts_spam = 'Your post has been flagged as spam and must be approved by a moderator.';
 		$this->post_attach = 'Attachments';
@@ -1219,10 +1143,10 @@ class en
 		$this->post_no_forum = 'That forum was not found.';
 		$this->post_no_topic = 'No topic was specified.';
 		$this->post_no_vote = 'You must choose an option to vote for.';
-		$this->post_option_emoticons = 'Convert emoticons into images?';
+		$this->post_option_emoticons = 'Convert emojis into images?';
 		$this->post_option_global = 'Make this topic global?';
 		$this->post_option_lock = 'Lock topic after posting?';
-		$this->post_option_mbcode = 'Format MbCode?';
+		$this->post_option_mbcode = 'Format BBCode?';
 		$this->post_option_pin = 'Pin topic after posting?';
 		$this->post_optional = 'optional';
 		$this->post_options = 'Options';
@@ -1242,17 +1166,16 @@ class en
 		$this->post_voting = 'Voting';
 	}
 
-	function profile()
+	public function profile()
 	{
-		$this->profile_aim_sn = 'AIM Name';
 		$this->profile_av_sign = 'Avatar and Signature';
 		$this->profile_avatar = 'Avatar';
 		$this->profile_bday = 'Birthday';
 		$this->profile_contact = 'Contact';
 		$this->profile_email_address = 'Email Address';
+		$this->profile_facebook = 'Facebook Page';
 		$this->profile_fav = 'Favorite Forum';
 		$this->profile_fav_forum = '%s (%d%% of this member\'s posts)';
-		$this->profile_icq_uin = 'ICQ Number';
 		$this->profile_info = 'Information';
 		$this->profile_interest = 'Interests';
 		$this->profile_joined = 'Joined';
@@ -1262,7 +1185,6 @@ class en
 		$this->profile_location = 'Location';
 		$this->profile_member = 'Member Group';
 		$this->profile_member_title = 'Member Title';
-		$this->profile_msn = 'MSN Identity';
 		$this->profile_must_user = 'You must enter a user to view a profile.';
 		$this->profile_no_member = 'There is no member with that user id. The account may have been deleted.';
 		$this->profile_none = '[ None ]';
@@ -1284,11 +1206,10 @@ class en
 		$this->profile_uploads_per_day = 'per day';
 		$this->profile_uploads_total = 'total';
 		$this->profile_view_profile = 'Viewing Profile';
-		$this->profile_www = 'Homepage';
-		$this->profile_yahoo = 'Yahoo Identity';
+		$this->profile_www = 'Blog or Other Homepage';
 	}
 
-	function prune()
+	public function prune()
 	{
 		$this->prune_action = 'Prune action to take';
 		$this->prune_age_day = '1 Day';
@@ -1314,7 +1235,7 @@ class en
 		$this->prune_topics_older_than = 'Prune topics older than';
 	}
 
-	function query()
+	public function query()
 	{
 		$this->query = 'Query Interface';
 		$this->query_fail = 'failed.';
@@ -1322,7 +1243,7 @@ class en
 		$this->query_your = 'Your query';
 	}
 
-	function recent()
+	public function recent()
 	{
 		$this->recent_active = 'Active topics since last visit';
 		$this->recent_by = 'By';
@@ -1367,7 +1288,7 @@ class en
 		$this->recent_write_topics = 'You can create topics in this forum.';
 	}
 
-	function register()
+	public function register()
 	{
 		$this->register_activated = 'Your account has been activated!';
 		$this->register_activating = 'Account Activation';
@@ -1402,12 +1323,13 @@ class en
 		$this->register_requested = 'Account activation request for:';
 		$this->register_tos = 'Terms of Service';
 		$this->register_tos_i_agree = 'I agree to the above terms';
+		$this->register_tos_missing = 'The administrators have not yet written terms of service for this site. Registrations are disabled until they do so.';
 		$this->register_tos_not_agree = 'You did not agree to the terms.';
-		$this->register_tos_read = 'Please read the following terms of service';
+		$this->register_tos_read = 'Please read the following terms of service:';
 		$this->register_what_is = 'What is ';
 	}
 
-	function rssfeed()
+	public function rssfeed()
 	{
 		$this->rssfeed_cannot_find_forum = 'The forum does not appear to exist';
 		$this->rssfeed_cannot_find_topic = 'The topic does nto appear to exist';
@@ -1419,7 +1341,7 @@ class en
 		$this->rssfeed_topic = 'Topic:';
 	}
 
-	function search()
+	public function search()
 	{
 		$this->search_advanced = 'Advanced Options';
 		$this->search_avatar = 'Avatar';
@@ -1473,7 +1395,7 @@ class en
 		$this->search_year = 'year';
 	}
 
-	function settings()
+	public function settings()
 	{
 		$this->settings = 'Settings';
 		$this->settings_active = 'Active Users Settings';
@@ -1527,16 +1449,6 @@ class en
 		$this->settings_cookie_secure = 'Cookie Security';
 		$this->settings_cookie_secured = 'Is your site SSL secured?';
 		$this->settings_cookie_time = 'Time to Remain Logged In';
-		$this->settings_db = 'Edit Connection Settings';
-		$this->settings_db_host = 'Database Host';
-		$this->settings_db_leave_blank = 'Leave blank for none.';
-		$this->settings_db_multiple = 'For installing multiple boards on one database.';
-		$this->settings_db_name = 'Database Name';
-		$this->settings_db_password = 'Database Password';
-		$this->settings_db_port = 'Database Port';
-		$this->settings_db_prefix = 'Table Prefix';
-		$this->settings_db_socket = 'Database Socket';
-		$this->settings_db_username = 'Database Username';
 		$this->settings_default_lang = 'Default Language';
 		$this->settings_default_no = 'Default No';
 		$this->settings_default_skin = 'Default Skin';
@@ -1594,7 +1506,7 @@ class en
 		$this->settings_server_timezone = 'Server Time Zone';
 		$this->settings_show_avatars = 'Show Avatars';
 		$this->settings_show_email = 'Show Email Address';
-		$this->settings_show_emotes = 'Show Emoticons';
+		$this->settings_show_emotes = 'Show Emojis';
 		$this->settings_show_notice = 'Shown when the board is disabled';
 		$this->settings_show_pm = 'Accept Personal Messages';
 		$this->settings_show_sigs = 'Show Signatures';
@@ -1610,10 +1522,31 @@ class en
 		$this->settings_tos_files = 'Terms of Service: Uploads';
 		$this->settings_updated = 'Settings have been updated.';
 		$this->settings_wordpress_id = 'Wordpress API Key';
-		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: https://akismet.com/';
+		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: ';
 	}
 
-	function spam_control()
+	public function skins()
+	{
+		$this->skins_dir = 'Stored in Folder';
+		$this->skins_confirm_disable = 'Are you sure you wish to disable this skin? Anyone using it will be reset to the site default skin.';
+		$this->skins_disable = 'Disable';
+		$this->skins_disable_skin = 'Disable Skin';
+		$this->skins_disabled = 'Skins Found on Server';
+		$this->skins_enable = 'Enable';
+		$this->skins_enabled = 'Skins Enabled';
+		$this->skins_enable_skin = 'Enable Skin';
+		$this->skins_invalid_option = 'Invalid option selected.';
+		$this->skins_is_disabled = ' has been disabled. All users set to use it are now using the site default skin.';
+		$this->skins_is_enabled = ' has been enabled and is now available for all users.';
+		$this->skins_manage_skins = 'Manage Skins';
+		$this->skins_must_select = 'You must select a skin before you can delete one.';
+		$this->skins_name = 'Skin Name';
+		$this->skins_no_disable_default = 'You cannot disable the default skin for the site.';
+		$this->skins_no_disable_default = 'You cannot enable the default skin for the site, as it is always enabled.';
+		$this->skins_cant_disable = 'The skin you specified either does not exist or is already disabled.';
+	}
+
+	public function spam_control()
 	{
 		$this->spam_action = 'Action';
 		$this->spam_all_deleted = 'All flagged spam has been deleted.';
@@ -1632,7 +1565,7 @@ class en
 		$this->spam_text = 'Text';
 	}
 
-	function stats()
+	public function stats()
 	{
 		$this->stats = 'Statistics Center';
 		$this->stats_false_neg = 'False Negatives';
@@ -1646,115 +1579,7 @@ class en
 		$this->stats_spam_statistics = 'Spam Statistics';
 	}
 
-	function templates()
-	{
-		$this->add = 'Add HTML Templates';
-		$this->add_in = 'Add template to:';
-		$this->all_fields_required = 'All fields are required to add a template';
-		$this->choose_css = 'Choose CSS Template';
-		$this->choose_set = 'Choose a template set';
-		$this->choose_skin = 'Choose a skin';
-		$this->confirm1 = 'You are about to delete the';
-		$this->confirm2 = 'template from';
-		$this->create_new = 'Create a new skin named';
-		$this->create_skin = 'Create Skin';
-		$this->credit = 'Please do not remove our only credit!';
-		$this->css_edited = 'CSS file has been updated.';
-		$this->css_fioerr = 'The file could not be written to, you will need to CHMOD the file manually.';
-		$this->deleted = 'Template Deleted';
-		$this->delete_template = 'Delete Template';
-		$this->directory = 'Directory';
-		$this->display_name = 'Display Name';
-		$this->edit_css = 'Edit CSS';
-		$this->edit_skin = 'Edit Skin';
-		$this->edit_templates = 'Edit Templates';
-		$this->export_done = 'Skin exported to the skins directory.';
-		$this->export_select = 'Select a skin to export';
-		$this->export_skin = 'Export Skin';
-		$this->export_writeable = 'The packages folder on your server is not writeable. The skin cannot be exported.';
-		$this->install_done = 'The skin has been installed successfully.';
-		$this->install_exists1 = 'It appears that the skin';
-		$this->install_exists2 = 'is already installed.';
-		$this->install_overwrite = 'Overwrite';
-		$this->install_skin = 'Install Skin';
-		$this->menu_title = 'Select a template section to edit';
-		$this->no_file = 'No such file.';
-		$this->only_skin = 'There is only one skin installed. You may not delete this skin.';
-		$this->or_new = 'Or create new template set named:';
-		$this->select_skin = 'Select a Skin';
-		$this->select_skin_edit = 'Select a skin to edit';
-		$this->select_skin_edit_done = 'Skin successfully edited.';
-		$this->select_template = 'Select Template';
-		$this->skin_chmod = 'A new directory could not be created for the skin. Try to CHMOD the skins directory to 775.';
-		$this->skin_created = 'Skin created.';
-		$this->skin_deleted = 'Skin successfully deleted.';
-		$this->skin_dir_name = 'You must enter a skin name and directory name.';
-		$this->skin_dup = 'A skin with a duplicate directory name was found. The skin\'s directory was changed to';
-		$this->skin_name = 'You must enter a skin name.';
-		$this->skin_none = 'There are no skins available to install.';
-		$this->skin_set = 'Skin Set';
-		$this->skins_found = 'The following skins were found in the skins directory';
-		$this->template_about = 'About Variables';
-		$this->template_about2 = 'Variables are pieces of text that are replaced with dynamic data. Variables always begin with a dollar sign, and are sometimes enclosed in {braces}.';
-		$this->template_add = 'Add';
-		$this->template_added = 'Template added.';
-		$this->template_clear = 'Clear';
-		$this->template_confirm = 'You have made changes to the templates. Do you want to save your changes?';
-		$this->template_description = 'Template Description';
-		$this->template_html = 'Template HTML';
-		$this->template_name = 'Template Name';
-		$this->template_position = 'Template Position';
-		$this->template_set = 'Template Set';
-		$this->template_title = 'Template Title';
-		$this->template_universal = 'Universal Variable';
-		$this->template_universal2 = 'Some variables can be used in any template, while others can only be used in a single template. Properties of the object $this can be used anywhere.';
-		$this->template_updated = 'Template updated.';
-		$this->templates = 'Templates';
-		$this->temps_active = 'Active Users Detail';
-		$this->temps_admin = '<b>AdminCP Universal</b>';
-		$this->temps_backup = 'AdminCP Database Backup';
-		$this->temps_ban = 'AdminCP Bans';
-		$this->temps_board_index = 'Board Index';
-		$this->temps_censoring = 'AdminCP Word Censoring';
-		$this->temps_conversation = 'Private Conversations';
-		$this->temps_cp = 'Member Control Panel';
-		$this->temps_email = 'Email A Member';
-		$this->temps_emoticon_control = 'AdminCP Emoticons';
-		$this->temps_forum = 'Forums';
-		$this->temps_forums = 'AdminCP Forums';
-		$this->temps_groups = 'AdminCP Groups';
-		$this->temps_help = 'Help';
-		$this->temps_login = 'Logging In/Out';
-		$this->temps_logs = 'AdminCP Moderator Logs';
-		$this->temps_main = '<b>Board Universal</b>';
-		$this->temps_mass_mail = 'AdminCP Mass Mail';
-		$this->temps_member_control = 'AdminCP Member Control';
-		$this->temps_members = 'Member List';
-		$this->temps_mod = 'Moderator Controls';
-		$this->temps_newspost = 'News Posts';
-		$this->temps_pm = 'Private Messenger';
-		$this->temps_polls = 'Polls';
-		$this->temps_post = 'Posting';
-		$this->temps_printer = 'Printer-Friendly Topics';
-		$this->temps_profile = 'Profile Viewing';
-		$this->temps_recent = 'Recent Topics';
-		$this->temps_register = 'Registration';
-		$this->temps_rssfeed = 'RSS Feed';
-		$this->temps_search = 'Searching';
-		$this->temps_settings = 'AdminCP Settings';
-		$this->temps_spam = 'Spam Controls';
-		$this->temps_templates = 'AdminCP Template Editor';
-		$this->temps_titles = 'AdminCP Member Titles';
-		$this->temps_topic_prune = 'AdminCP Topic Pruning';
-		$this->temps_topics = 'Topics';
-		$this->upgrade_skin = 'Upgrade Skin';
-		$this->upgrade_skin_already = 'was already upgraded. Nothing to do.';
-		$this->upgrade_skin_detail = 'Skins upgraded using this method will still require template editing afterwards.<br />Select a skin to upgrade';
-		$this->upgrade_skin_upgraded = 'skin has been upgraded.';
-		$this->upgraded_templates = 'The following templates were added or upgraded';
-	}
-
-	function titles()
+	public function titles()
 	{
 		$this->titles_add = 'Add Member Titles';
 		$this->titles_added = 'Member Title added.';
@@ -1767,7 +1592,7 @@ class en
 		$this->titles_title = 'Title';
 	}
 
-	function topic()
+	public function topic()
 	{
 		$this->topic_attached = 'Attached file:';
 		$this->topic_attached_downloads = 'Downloads';
@@ -1822,9 +1647,7 @@ class en
 		$this->topic_posts = 'Posts';
 		$this->topic_print = 'View Printable';
 		$this->topic_publish = 'Publish';
-		$this->topic_qr_emoticons = 'Emoticons';
-		$this->topic_qr_open_emoticons = 'Open Clickable Emoticons';
-		$this->topic_qr_open_mbcode = 'Open MBCode';
+		$this->topic_qr_emoticons = 'Emojis';
 		$this->topic_quickreply = 'Quick Reply';
 		$this->topic_quote = 'Reply with a quote from this post';
 		$this->topic_reply = 'Reply to Topic';
@@ -1847,9 +1670,8 @@ class en
 		$this->topic_votes = 'Votes';
 	}
 
-	function universal()
+	public function universal()
 	{
-		$this->aim = 'AIM';
 		$this->based_on = 'Based on';
 		$this->board_by = 'By';
 		$this->charset = 'utf-8';
@@ -1857,6 +1679,7 @@ class en
 		$this->date = 'Date';
 		$this->date_long = 'M j, Y';
 		$this->date_short = 'n/j/y';
+		$this->default = 'Default';
 		$this->delete = 'Delete';
 		$this->direction = 'ltr';
 		$this->edit = 'Edit';
@@ -1910,9 +1733,7 @@ class en
 		$this->gmt_pos13  = 'GMT+13    - Pacific: Tonga/Phoenix Islands';
 		$this->gmt_pos14  = 'GMT+14    - Pacific: Line Islands';
 
-		$this->icq = 'ICQ';
 		$this->invalid_token = 'The security validation token used to verify you are authorized to perform this action is either invalid or expired. Please try again.';
-		$this->msn = 'MSN';
 		$this->new_message = 'New Message';
 		$this->new_poll = 'New Poll';
 		$this->new_topic = 'New Topic';
@@ -1937,7 +1758,6 @@ class en
 		$this->topic = 'Topic';
 		$this->twitter = 'Twitter';
 		$this->website = 'WWW';
-		$this->yahoo = 'Yahoo';
 		$this->yes = 'Yes';
 		$this->yesterday = 'Yesterday';
 	}

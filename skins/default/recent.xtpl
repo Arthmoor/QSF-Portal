@@ -1,0 +1,98 @@
+<!-- BEGIN: Recent -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" alt="" />
+  {main_recent}
+ </div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="icon">&nbsp;</span>
+  <span class="recent_topic">{recent_topic}</span>
+  <span class="number">{recent_starter}</span>
+  <span class="number">{recent_forum}</span>
+  <span class="last_post">{recent_last}</span>
+ </span>
+ <p></p>
+<!-- BEGIN: Topic -->
+ <div class="topic_icon">
+  <div class="{state}{poll}">
+   {pinned}
+  </div>
+ </div>
+
+ <span class="icon">
+  {icon}
+ </span>
+
+ <span class="recent_topic">
+  <a href="{self}?a=topic&amp;t={topic_id}&amp;unread=1#unread" title="{recent_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}{topic_description}
+ </span>
+
+ <span class="number">{topic_starter}</span>
+ <span class="number"><a href="{self}?a=forum&amp;f={forum_id}">{forum_name}</a></span>
+ <span class="last_post">
+  {topic_edited}<br />
+  <a href="{self}?a=topic&amp;t={topic_id}{jump}"><img src="{loc_of_board}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}" /></a>
+  {recent_by}: {last_poster}
+ </span>
+ <p class="list_line"></p>
+<!-- END: Topic -->
+<!-- BEGIN: NoTopics -->
+ <span class="notice">{recent_no_topics}</span>
+ <p class="list_line"></p>
+<!-- END: NoTopics -->
+</div>
+
+<div class="article">
+ <span class="right">
+  <select onchange="get_forum(this,'{self}')">
+   {forumjump}
+  </select>
+ </span>
+ <span class="select_align">
+  {recent_pages}: {pagelinks}
+ </span><br />
+ <p></p>
+</div>
+
+<div class="article">
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" title="{recent_new}" alt="{recent_new}" />
+  {recent_new}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_hot_unread.png" title="{recent_new} {recent_hot}" alt="{recent_new} {recent_hot}" />
+  {recent_new} {recent_hot}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/pin.png" title="{recent_pinned}" alt="{recent_pinned}" />
+  {recent_pinned}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_moved.png" title="{recent_moved}" alt="{recent_moved}" />
+  {recent_moved}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" title="{recent_not} {recent_new}" alt="{recent_not} {recent_new}" />
+  {recent_not} {recent_new}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_hot.png" title="{recent_hot}" alt="{recent_hot}" />
+  {recent_hot}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/chart_bar.png" title="{recent_poll}" alt="{recent_poll}" />
+  {recent_poll}
+ </span>
+ <span class="eight">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_locked.png" title="{recent_locked}" alt="{recent_locked}" />
+  {recent_locked}
+ </span>
+ <p></p>
+ <span class="small_text">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_posted_to.png" title="{recent_dot_detail}" alt="{recent_dot_detail}" />
+  {recent_dot_detail}
+ </span>
+ <p></p>
+</div>
+<!-- END: Recent -->

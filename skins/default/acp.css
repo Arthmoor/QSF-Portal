@@ -27,17 +27,6 @@ li {
 	color:#c0c0c0;
 }
 
-/* Template Editor */
-#main .article .template_text {
-	font: 12px 'courier new', courier, monospaced, serif;
-	width: 100%;
-	padding: 0px;
-}
-#main .article span.template {
-	width: 33.3%;
-	float: left;
-}
-
 /* Groups */
 #main .article span.min_posts {
 	width: 16%;
@@ -58,7 +47,7 @@ li {
 	float: left;
 }
 
-/* Emotions */
+/* Emojis */
 #main .article span.emotion {
 	width: 30%;
 	float: left;

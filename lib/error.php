@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -79,7 +79,7 @@ function get_backtrace()
 		if( $trace == 2 ) {
 			$func = 'See above for details.';
 		} else {
-			$func = htmlspecialchars($frame['class'] . $frame['type'] . $frame['function']) . "(" . $arg_list . ")";
+			$func = htmlspecialchars( $frame['class'] . $frame['type'] . $frame['function'] ) . "(" . $arg_list . ")";
 		}
 
 		$out .= 'File: ' . $frame['file'] . "\n";
@@ -89,11 +89,11 @@ function get_backtrace()
 	return $out;
 }
 
-function error_fatal($type, $message, $file, $line = 0)
+function error_fatal( $type, $message, $file, $line = 0 )
 {
 	global $set;
 
-	switch($type)
+	switch( $type )
 	{
 	case E_USER_ERROR:
 		$type_str = 'Error';
@@ -121,8 +121,8 @@ function error_fatal($type, $message, $file, $line = 0)
 		$type_str = 'Unknown Error';
 	}
 
-	if (strstr($file, 'eval()')) {
-		$split    = preg_split('/[\(\)]/', $file);
+	if( strstr( $file, 'eval()' ) ) {
+		$split    = preg_split( '/[\(\)]/', $file );
 		$file     = $split[0];
 		$line     = $split[1];
 		$message .= ' (in evaluated code)';
@@ -131,28 +131,28 @@ function error_fatal($type, $message, $file, $line = 0)
 	$details = null;
 	$backtrace = null;
 
-	if (strpos($message, 'Template not found') === false) {
+	if( strpos( $message, 'Template not found' ) === false ) {
 		$backtrace = get_backtrace();
 	}
 
-	if ($type != QUICKSILVER_QUERY_ERROR) {
-		if (strpos($message, 'mysql_fetch_array(): supplied argument') === false) {
+	if( $type != QUICKSILVER_QUERY_ERROR ) {
+		if( strpos( $message, 'mysql_fetch_array(): supplied argument') === false ) {
 			$lines = null;
 			$details2 = null;
 
-			if (strpos($message, 'Template not found') !== false) {
+			if( strpos( $message, 'Template not found' ) !== false ) {
 				$backtrace = "";
 				$trace = debug_backtrace();
 				$file = $trace[2]['file'];
 				$line = $trace[2]['line'];
 			}
 
-			if (file_exists($file)) {
-				$lines = file($file);
+			if( file_exists( $file ) ) {
+				$lines = file( $file );
 			}
 
-			if ($lines) {
-				$details2 = "Code:\n" . error_getlines($lines, $line);
+			if( $lines ) {
+				$details2 = "Code:\n" . error_getlines( $lines, $line );
 			}
 		} else {
 			$details2 = "MySQL Said:\n" . mysql_error() . "\n";
@@ -168,7 +168,7 @@ function error_fatal($type, $message, $file, $line = 0)
 	}
 
 	// IIS does not use $_SERVER['QUERY_STRING'] in the same way as Apache and might not set it
-	if (isset($_SERVER['QUERY_STRING'])) {
+	if( isset($_SERVER['QUERY_STRING'] ) ) {
 		$querystring = str_replace( '&', '&amp;', $_SERVER['QUERY_STRING'] );
 	} else {
 		$querystring = '';
@@ -189,20 +189,22 @@ function error_fatal($type, $message, $file, $line = 0)
 	if( isset($set['admin_email']) ) {
 		$headers = "From: QSF Portal Error Module <{$set['admin_email']}>\r\n" . "X-Mailer: PHP/" . phpversion();
 
-		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'N/A';
-		$ip    = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : 'N/A';
+		$ip    = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$https = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
 
 		$error_report = "QSF Portal has exited with an error!\n";
-		$error_report .= "The error details are as follows:\n\nURL: http://" . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . "?" . $querystring . "\n";
+		$error_report .= "The error details are as follows:\n\n";
+		$error_report .= "URL: " . $https . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . "?" . $querystring . "\n";
 		$error_report .= 'Querying user agent: ' . $agent . "\n";
 		$error_report .= 'Querying IP: ' . $ip . "\n\n";
 		$error_report .= $message . "\n\n" . $details . "\n\n" . $backtrace;
-		$error_report = str_replace( "&nbsp;", " ", html_entity_decode($error_report) );
+		$error_report = str_replace( "&nbsp;", " ", html_entity_decode( $error_report ) );
 
 		@mail( $set['admin_email'], 'QSF Portal Error Report', $error_report, $headers );
 	}
 
-	header('HTTP/1.0 500 Internal Server Error');
+	header( 'HTTP/1.0 500 Internal Server Error' );
 	exit( "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
@@ -234,31 +236,31 @@ function error_fatal($type, $message, $file, $line = 0)
 
   <div id=\"bottom\">&nbsp;</div>
  </div>
- <div id=\"footer\">Powered by QSF Portal &copy; 2006-2015 The QSF Portal Development Team</div>
+ <div id=\"footer\">Powered by QSF Portal &copy; 2006-2019 The QSF Portal Development Team</div>
 </body>
 </html>" );
 }
 
-function error_getlines($lines, $line)
+function error_getlines( $lines, $line )
 {
 	$code    = null;
 	$padding = ' ';
 	$previ   = $line-3;
 	$total_lines = count($lines);
 
-	for ($i = $line - 3; $i <= $line + 3; $i++)
+	for( $i = $line - 3; $i <= $line + 3; $i++ )
 	{
-		if ((strlen($previ) < strlen($i)) && ($padding == ' ')) {
+		if( ( strlen( $previ ) < strlen( $i ) ) && ( $padding == ' ' ) ) {
 			$padding = null;
 		}
 
-		if (($i < 1) || ($i > $total_lines)) {
+		if( ( $i < 1 ) || ( $i > $total_lines ) ) {
 			continue;
 		}
 
-		$codeline = rtrim(htmlentities($lines[$i-1]));
-		$codeline = str_replace("\t", '&nbsp;&nbsp;&nbsp;&nbsp;', $codeline);
-		$codeline = str_replace(' ', '&nbsp;', $codeline);
+		$codeline = rtrim( htmlentities( $lines[$i-1] ) );
+		$codeline = str_replace( "\t", '&nbsp;&nbsp;&nbsp;&nbsp;', $codeline );
+		$codeline = str_replace( ' ', '&nbsp;', $codeline );
 
 		$code .= $i . $padding . $codeline . "\n";
 
@@ -267,31 +269,32 @@ function error_getlines($lines, $line)
 	return $code;
 }
 
-function error_warning($message, $file, $line)
+function error_warning( $message, $file, $line )
 {
 	return $message;
 }
 
-function error_notice($message)
+function error_notice( $message )
 {
 	// Don't send it if this isn't available. Spamming mail servers is a bad bad thing.
 	// This will also email the user agent string, in case errors are being generated by evil bots.
-	if( isset($set['admin_email']) ) {
-		$mailer = new mailer($set['admin_email'], $set['admin_email'], 'QSF Portal Error Module', false);
-		$mailer->setSubject('QSF Portal Notice Report');
+	if( isset( $set['admin_email'] ) ) {
+		$mailer = new mailer( $set['admin_email'], $set['admin_email'], 'QSF Portal Error Module', false );
+		$mailer->setSubject( 'QSF Portal Notice Report' );
 
-		$agent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'N/A';
-		$ip    = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : 'N/A';
+		$ip    = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$https = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
 
 		$error_report = "QSF Portal triggered the following notice:\n\n";
-		$error_report .= 'URL: http://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . "\n";
+		$error_report .= "URL: $https" . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'] . "\n";
 		$error_report .= 'Querying user agent: ' . $agent . "\n";
 		$error_report .= 'Querying IP: ' . $ip . "\n\n";
-		$error_report .= strip_tags($message) . "\n\n";
-		$error_report = str_replace( '&nbsp;', ' ', html_entity_decode($error_report) );
-		$mailer->setMessage($error_report);
+		$error_report .= strip_tags( $message ) . "\n\n";
+		$error_report = str_replace( '&nbsp;', ' ', html_entity_decode( $error_report ) );
+		$mailer->setMessage( $error_report );
 
-		$mailer->setRecipient($set['admin_email']);
+		$mailer->setRecipient( $set['admin_email'] );
 		$mailer->doSend();
 	}
 	return $message;

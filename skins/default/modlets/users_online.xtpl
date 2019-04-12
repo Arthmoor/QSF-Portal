@@ -1,0 +1,18 @@
+<!-- BEGIN: UsersOnlineBlock -->
+    <div class="block">
+     <div class="title">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/members.png" alt="" />
+      {link}
+     </div>
+     {users}
+     <br /><br />{main_members}: {membercount}
+     <br />{main_guests}: {guestcount}
+    </div>
+<!-- END: UsersOnlineBlock -->
+
+<!-- BEGIN: UsersOnlineMain -->
+    <div class="article">
+     <div class="title" style="text-align:center">{main_visitors} {date}</div>
+     {userlist}
+    </div>
+<!-- END: UsersOnlineMain -->

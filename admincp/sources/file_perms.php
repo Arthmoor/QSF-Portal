@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class file_perms extends admin
 {
-	function execute()
+	public function execute()
 	{
 		$this->lang->perms(); // Load up permissions related translations
 		$perms_obj = new file_permissions($this);
@@ -126,8 +126,8 @@ class file_perms extends admin
 				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_file_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
 			}
 
-			$out .= "</div>" .
-			$this->table . "
+			$out .= "</div>
+			<div class='article'><table>
 			<tr>
 				<td colspan='" . ($count + 1) . "' class='header'>$label</td>
 			</tr>";
@@ -171,7 +171,7 @@ class file_perms extends admin
 			return $out . "
 			<tr>
 				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}' /><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='Update File Permissions' /></td>
-			</tr>" . $this->etable . "</form>";
+			</tr></table></div></form>";
 		} else {
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->perms, $this->lang->invalid_token );
@@ -207,7 +207,7 @@ class file_perms extends admin
 		}
 	}
 
-	function show_headers( $cats_list )
+	private function show_headers( $cats_list )
 	{
 		$out = "<tr>
 		<td class='subheader' colspan='2' valign='bottom'>{$this->lang->perm}</td>";

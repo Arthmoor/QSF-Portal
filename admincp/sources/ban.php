@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -48,7 +48,7 @@ class ban extends admin
 	 * @since Beta 3.0
 	 * @return string HTML form or message
 	 **/
-	function execute()
+	public function execute()
 	{
 		$this->set_title( $this->lang->ban_ip );
 		$this->tree( $this->lang->ban_ip );

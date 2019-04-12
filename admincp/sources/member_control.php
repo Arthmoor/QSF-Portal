@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class member_control extends admin
 {
-	function execute()
+	public function execute()
 	{
 		$this->set_title( $this->lang->mc );
 		$this->tree( $this->lang->mc, "$this->self?a=member_control&amp;s=profile" );
@@ -210,16 +210,13 @@ class member_control extends admin
 					'user_birthday'		=> array($this->lang->mc_user_birthday, U_TEXT, 10),
 					'user_timezone'		=> array($this->lang->mc_user_timezone, U_TZONE),
 					'user_location'		=> array($this->lang->mc_user_location, U_TEXT, 100),
+					'user_twitter'		=> array($this->lang->mc_user_twitter, U_TEXT, 50),
+					'user_facebook'		=> array($this->lang->mc_user_facebook, U_TEXT, 255),
 					'user_homepage'		=> array($this->lang->mc_user_homepage, U_TEXT, 255),
 					'user_interests'	=> array($this->lang->mc_user_interests, U_BLOB, 255),
 					'user_signature'	=> array($this->lang->mc_user_signature, U_BLOB, 255),
 					'user_posts'		=> array($this->lang->mc_user_posts, U_INT, 10),
 					'user_uploads'		=> array($this->lang->mc_user_uploads, U_INT, 10),
-					'user_icq'		=> array($this->lang->mc_user_icq, U_INT, 16),
-					'user_msn'		=> array($this->lang->mc_user_msn, U_TEXT, 32),
-					'user_aim'		=> array($this->lang->mc_user_aim, U_TEXT, 32),
-					'user_twitter'		=> array($this->lang->mc_user_twitter, U_TEXT, 50),
-					'user_yahoo'		=> array($this->lang->mc_user_yahoo, U_TEXT, 100),
 					'user_email_show'	=> array($this->lang->mc_user_email_show, U_BOOL),
 					'user_pm'		=> array($this->lang->mc_user_pm, U_BOOL),
 					'user_pm_mail'		=> array($this->lang->mc_user_pm_mail, U_BOOL),
@@ -247,8 +244,6 @@ class member_control extends admin
 
 					if( ( $var == 'user_signature' ) || ( $var == 'user_email' ) || ( $var == 'user_register_email' ) || ( $var == 'user_title' ) ) {
 						$val = $this->format( $val, FORMAT_HTMLCHARS );
-					} elseif( ( $var == 'user_icq' ) && !$val ) {
-						$val = null;
 					}
 
 					$line = '';
@@ -318,6 +313,7 @@ class member_control extends admin
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc', $this->lang->mc );
 				$xtpl->assign( 'mc_report_spambot', $this->lang->mc_report_spambot );
+				$xtpl->assign( 'token', $this->generate_token() );
 				$xtpl->assign( 'submit', $this->lang->submit );
 
 				$xtpl->parse( 'MemberControl.EditForm' );
@@ -383,15 +379,12 @@ class member_control extends admin
 				$user_timezone = $this->post['user_timezone'];
 				$user_location = $this->format( $this->post['user_location'], FORMAT_HTMLCHARS );
 				$user_homepage = $this->format( $this->post['user_homepage'], FORMAT_HTMLCHARS );
+				$user_facebook = $this->format( $this->post['user_facebook'], FORMAT_HTMLCHARS );
 				$user_interests = $this->format( $this->post['user_interests'], FORMAT_HTMLCHARS );
 				$user_signature = $this->post['user_signature'];
 				$user_posts = intval( $this->post['user_posts'] );
 				$user_uploads = intval( $this->post['user_uploads'] );
-				$user_icq = intval( $this->post['user_icq'] );
-				$user_msn = $this->format( $this->post['user_msn'], FORMAT_HTMLCHARS );
-				$user_aim = $this->format( $this->post['user_aim'], FORMAT_HTMLCHARS );
 				$user_twitter = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
-				$user_yahoo = $this->format( $this->post['user_yahoo'], FORMAT_HTMLCHARS );
 				$user_email_show = intval( $this->post['user_email_show'] );
 				$user_pm = intval( $this->post['user_pm'] );
 				$user_pm_mail = intval( $this->post['user_pm_mail'] );
@@ -402,16 +395,14 @@ class member_control extends admin
 				$this->db->query( "UPDATE %pusers SET user_name='%s', user_email='%s', user_group=%d, user_title='%s',
 				  user_title_custom=%d, user_language='%s', user_skin='%s', user_avatar='%s',
 				  user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d, user_level=%d,
-				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s',
+				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s', user_facebook='%s',
 				  user_interests='%s', user_signature='%s', user_posts=%d, user_uploads=%d,
-				  user_icq=%d, user_msn='%s', user_aim='%s', user_twitter='%s', user_yahoo='%s',
-				  user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
+				  user_twitter='%s', user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
 				  user_view_signatures=%d, user_view_emoticons=%d WHERE user_id=%d",
 				  $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
 				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
-				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_interests,
-				  $user_signature, $user_posts, $user_uploads, $user_icq, $user_msn, $user_aim,
-				  $user_twitter, $user_yahoo, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
+				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
+				  $user_signature, $user_posts, $user_uploads, $user_twitter, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
 				  $user_view_signatures, $user_view_emoticons, $id );
 
 				if( $user_group == USER_BANNED ) {
@@ -432,7 +423,7 @@ class member_control extends admin
 		}
 	}
 
-	function list_skins( $val )
+	private function list_skins( $val )
 	{
 		$out = "<select name='user_skin'>";
 		$groups = $this->db->query( "SELECT skin_name, skin_dir FROM %pskins ORDER BY skin_name" );
@@ -445,7 +436,7 @@ class member_control extends admin
 		return $out . '</select>';
 	}
 
-	function list_user_avatar_types( $val )
+	private function list_user_avatar_types( $val )
 	{
 		$out = "<select name='user_avatar_type'>";
 		$types = array( 'local', 'url', 'uploaded', 'gravatar', 'none' );
@@ -458,7 +449,7 @@ class member_control extends admin
 		return $out . '</select>';
 	}
 
-	function list_langs( $current )
+	private function list_langs( $current )
 	{
 		$out = "<select name='user_language'>";
 		$dir = opendir( '../languages' );
@@ -481,7 +472,7 @@ class member_control extends admin
 		return $out . '</select>';
 	}
 
-	function delete_member_account( $id )
+	private function delete_member_account( $id )
 	{
 		$this->db->query( "UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $id );
 		$this->db->query( "UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $id );

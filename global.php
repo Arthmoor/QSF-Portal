@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -133,8 +133,6 @@ class qsfglobal
 	var $perms;                       // Permissions object @var object
 	var $file_perms;		  // File permissions object @var object
 	var $skin;                        // The user's selected skin @var string
-	var $table;                       // Start to an HTML table @var string
-	var $etable;                      // End to an HTML table @var string
 	var $lang;                        // Loaded words @var object
 	var $query;                       // The query string @var string
 	var $time_exec;                   // Execution time for the whole page
@@ -142,13 +140,12 @@ class qsfglobal
 
 	var $attachmentutil;		  // Attachment handler @var object
 	var $htmlwidgets;		  // HTML widget handler @var object
-	var $templater;			  // Template handler @var object
 	var $bbcode;			  // BBCode formatter @var object
 	var $readmarker;		  // Handles tracking what posts are read and unread
 	var $validator;			  // Handler for checking usernames, passwords, etc
 	var $activeutil;		  // Handler user activity
 
-	var $xtpl = null;		  // Global template instance
+	var $xtpl = null;		  // Global Xtemplate instance
 
 	/**
 	 * Constructor; sets up variables
@@ -160,11 +157,12 @@ class qsfglobal
 	{
 		$this->db       = $db;
 		$this->time     = time();
-		$this->query    = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : null;
-		$this->ip       = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-		$this->agent    = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
-		$this->agent    = substr($this->agent, 0, 99); // Cut off after 100 characters.
-		$this->referrer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'N/A';
+		$this->query    = isset( $_SERVER['QUERY_STRING'] ) ? $_SERVER['QUERY_STRING'] : null;
+		$this->ip       = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+		$this->agent    = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : "N/A";
+		$this->agent    = substr( $this->agent, 0, 254 ); // Cut off after 255 characters.
+		$this->referrer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : 'N/A';
+		$this->referrer = substr( $this->referrer, 0, 254 ); // Cut off after 255 characters.
 		$this->self     = $_SERVER['PHP_SELF'];
 		$this->server   = $_SERVER;
 		$this->get      = $_GET;
@@ -172,10 +170,6 @@ class qsfglobal
 		$this->cookie   = $_COOKIE;
 		$this->files    = $_FILES;
 		$this->query    = htmlspecialchars( $this->query );
-
-		if( version_compare( PHP_VERSION, "5.5.0", "<" ) ) {
-			die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
-		}
 	}
 
 	/**
@@ -183,7 +177,6 @@ class qsfglobal
 	 *
 	 * Note: This is never run for special tools such as installs or upgrades
 	 *
-	 * @param bool $admin Set to true if we need to setup admin templates
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
@@ -193,13 +186,10 @@ class qsfglobal
 		$this->file_perms = new file_permissions( $this );
 		$this->attachmentutil = new attachutil( $this );
 		$this->htmlwidgets = new htmlwidgets( $this );
-		$this->templater = new templater( $this );
 		$this->bbcode = new bbcode( $this );
 		$this->validator = new tool();
 		$this->readmarker = new readmarker( $this );
 		$this->activeutil = new activeutil( $this );
-
-		$this->templater->init_templates( $this->get['a'], $admin );
 
 		$replace = $this->db->query( 'SELECT * FROM %preplacements ORDER BY LENGTH(replacement_search) DESC' );
 
@@ -216,8 +206,6 @@ class qsfglobal
 			else
 				$this->emoticons['replacement'][$e['emote_string']] = '<img src="' . $this->site . '/emoticons/' . $e['emote_image'] . '" alt="' . $e['emote_string'] . '" />';
 		}
-
-		$this->set_table();
 	}
 
 	/**
@@ -236,28 +224,6 @@ class qsfglobal
 		}
 
 		$this->readmarker->cleanup();
-	}
-
-	/**
-	 * Set values for $this->table and $this->etable
-	 *
-	 * @author Geoffrey Dunn <geoff@warmage.com>
-	 * @since 1.2.0
-	 **/
-	public function set_table()
-	{
-		$this->table  = eval( $this->template('MAIN_TABLE'));
-		$this->etable = eval($this->template('MAIN_ETABLE'));
-	}
-
-	/**
-	 * Get the template for eval (templater interface)
-	 *
-	 * @param string $piece Name of the template to return
-	 **/
-	function template($piece)
-	{
-		return $this->templater->template($piece);
 	}
 
 	/**
@@ -596,20 +562,10 @@ class qsfglobal
 			@header( 'Refresh: '.$delay.';url=' . $redirect );
 		}
 
-		return eval( $this->template( 'MAIN_MESSAGE' ) );
-	}
+		$this->xtpl->assign( 'title', $title );
+		$this->xtpl->assign( 'message', $message );
 
-	/**
-	 * Selects a post editing template
-	 *
-	 * @param int $f Forum to test moderator abilities in
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 4.0
-	 * @return array Moderator permissions
-	 **/
-	public function post_box()
-	{
-		return 'POST_BOX_PLAIN';
+		$this->xtpl->parse( 'Index.Message' );
 	}
 
 	/**
@@ -885,6 +841,32 @@ class qsfglobal
 		$link = str_replace( ' ', '-', $link );
 
 		return $link;
+	}
+
+	public function get_uri()
+	{
+		if( !isset( $this->server['REQUEST_URI'] ) ) {
+			return $this->self;
+		}
+
+		$url = @parse_url( $this->server['REQUEST_URI'] );
+		if( $url === false ) {
+			return $this->self;
+		}
+
+		if( $this->query && strpos( "http://", $this->query ) !== false ) {
+			error( QUICKSILVER_NOTICE, "BAD BOT! You should know better than that!" );
+		}
+
+		if( !isset( $url['path'] ) ) {
+			return $this->self;
+		}
+
+		if( !empty( $url['query'] ) && !stristr( $url['query'], 'login' ) ) {
+			return $this->format( $url['path'] . ( !empty( $url['query'] ) ? '?' . $url['query'] : null ), FORMAT_HTMLCHARS );
+		} else {
+			return $this->self;
+		}
 	}
 }
 ?>

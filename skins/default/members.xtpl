@@ -1,0 +1,82 @@
+<!-- BEGIN: Members -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" />
+  {members_list}
+ </div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="member"><a href="{self}?a=members&amp;l={l}&amp;order=member&amp;asc={asc}">{members_member}</a></span>
+  <span class="nine">&nbsp;</span>
+  <span class="nine"><a href="{self}?a=members&amp;l={l}&amp;order=posts&amp;asc={asc}">{members_posts}</a></span>
+  <span class="nine"><a href="{self}?a=members&amp;l={l}&amp;order=joined&amp;asc={asc}">{members_joined}</a></span>
+  <span class="group">{members_title}</span>
+  <span class="group"><a href="{self}?a=members&amp;l={l}&amp;order=group&amp;asc={asc}">{members_group}</a></span>
+  <span class="nine">{members_www}</span>
+ </span>
+<!-- BEGIN: User -->
+ <span class="icon"><img src="{loc_of_board}/skins/{skin}/images/icons/members.png" alt="" /></span>
+ <span class="member"><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></span>
+ <span class="nine">
+<!-- BEGIN: EmailShow -->
+  <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
+<!-- END: EmailShow -->
+<!-- BEGIN: EmailForm -->
+  <span class="smallbutton"><a class="email" href="{self}?a=email&amp;to={user_id}" title="{members_email_member}"></a></span>
+<!-- END: EmailForm -->
+<!-- BEGIN: PM -->
+  <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+<!-- END: PM -->
+ </span>
+ <span class="nine">{user_posts}</span>
+ <span class="nine">{user_joined}</span>
+ <span class="group">{user_title}</span>
+ <span class="group">{group_name}</span>
+ <span class="nine">
+<!-- BEGIN: Twitter -->
+   <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>
+<!-- END: Twitter -->
+<!-- BEGIN: Facebook -->
+   <span class="smallbutton"><a class="facebook" href="{facebook}" title="{members_visit_facebook}"></a></span>
+<!-- END: Facebook -->
+<!-- BEGIN: Homepage -->
+   <span class="smallbutton"><a class="home" href="{homepage}" title="{members_visit_www}"></a></span>
+<!-- END: Homepage -->
+ </span>
+<p class="list_line"></p>
+<!-- END: User -->
+</div>
+
+<div class="article">
+ <span class="right">
+  <a href="{self}?a=members&amp;order={order}&amp;asc={lasc}">[{members_all}]</a>
+  <a href="{self}?a=members&amp;l=a&amp;order={order}&amp;asc={lasc}">a</a>
+  <a href="{self}?a=members&amp;l=b&amp;order={order}&amp;asc={lasc}">b</a>
+  <a href="{self}?a=members&amp;l=c&amp;order={order}&amp;asc={lasc}">c</a>
+  <a href="{self}?a=members&amp;l=d&amp;order={order}&amp;asc={lasc}">d</a>
+  <a href="{self}?a=members&amp;l=e&amp;order={order}&amp;asc={lasc}">e</a>
+  <a href="{self}?a=members&amp;l=f&amp;order={order}&amp;asc={lasc}">f</a>
+  <a href="{self}?a=members&amp;l=g&amp;order={order}&amp;asc={lasc}">g</a>
+  <a href="{self}?a=members&amp;l=h&amp;order={order}&amp;asc={lasc}">h</a>
+  <a href="{self}?a=members&amp;l=i&amp;order={order}&amp;asc={lasc}">i</a>
+  <a href="{self}?a=members&amp;l=j&amp;order={order}&amp;asc={lasc}">j</a>
+  <a href="{self}?a=members&amp;l=k&amp;order={order}&amp;asc={lasc}">k</a>
+  <a href="{self}?a=members&amp;l=l&amp;order={order}&amp;asc={lasc}">l</a>
+  <a href="{self}?a=members&amp;l=m&amp;order={order}&amp;asc={lasc}">m</a>
+  <a href="{self}?a=members&amp;l=n&amp;order={order}&amp;asc={lasc}">n</a>
+  <a href="{self}?a=members&amp;l=o&amp;order={order}&amp;asc={lasc}">o</a>
+  <a href="{self}?a=members&amp;l=p&amp;order={order}&amp;asc={lasc}">p</a>
+  <a href="{self}?a=members&amp;l=q&amp;order={order}&amp;asc={lasc}">q</a>
+  <a href="{self}?a=members&amp;l=r&amp;order={order}&amp;asc={lasc}">r</a>
+  <a href="{self}?a=members&amp;l=s&amp;order={order}&amp;asc={lasc}">s</a>
+  <a href="{self}?a=members&amp;l=t&amp;order={order}&amp;asc={lasc}">t</a>
+  <a href="{self}?a=members&amp;l=u&amp;order={order}&amp;asc={lasc}">u</a>
+  <a href="{self}?a=members&amp;l=v&amp;order={order}&amp;asc={lasc}">v</a>
+  <a href="{self}?a=members&amp;l=w&amp;order={order}&amp;asc={lasc}">w</a>
+  <a href="{self}?a=members&amp;l=x&amp;order={order}&amp;asc={lasc}">x</a>
+  <a href="{self}?a=members&amp;l=y&amp;order={order}&amp;asc={lasc}">y</a>
+  <a href="{self}?a=members&amp;l=z&amp;order={order}&amp;asc={lasc}">z</a>
+ </span>
+ {PageNums}
+</div>
+<!-- END: Members -->

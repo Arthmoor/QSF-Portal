@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -397,7 +397,7 @@ break;
 			$this->sets['topics'] = 0;
 			$this->sets['topics_per_page'] = 20;
 			$this->sets['vote_after_results'] = 0;
-			$this->sets['default_skin'] = 'default';
+			$this->sets['default_skin'] = 1;
 			$this->sets['default_email_shown'] = 0;
 			$this->sets['default_lang'] = 'en';
 			$this->sets['default_group'] = 2;

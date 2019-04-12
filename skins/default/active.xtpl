@@ -1,0 +1,21 @@
+<!-- BEGIN: Active -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/members.png" alt="" />
+  {active_users}
+ </div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="third">{active_user}</span>
+  <span class="third">{active_last_action}</span>
+  <span class="third">{active_time}</span>
+ </span>
+<!-- BEGIN: Item -->
+ <span class="icon"><img src="{loc_of_board}/skins/{skin}/images/icons/{icon}" alt="" /></span>
+ <span class="third"><a {link} title="{title}">{name}</a></span>
+ <span class="third">{action}</span>
+ <span class="third">{time}</span>
+ <p class="list_line"></p>
+<!-- END: Item -->
+</div>
+<!-- END: Active -->

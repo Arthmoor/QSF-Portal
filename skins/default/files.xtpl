@@ -1,0 +1,565 @@
+<!-- BEGIN: Files -->
+<form action="{site}/files/search/" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{site}/skins/{skin}/images/icons/downloads.png" alt="" />
+  {files}
+ </div>
+ <a href="{site}/files/upload_rules/">{files_upload_rules}</a>
+  | <a href="{site}/files/">{files_index}</a> 
+  | <a href="{site}/files/search/">{files_search2}</a>
+  | <a href="{site}/files/recent/">{files_recent}</a>
+  {upload}
+  {approve}
+  {addcat}
+  {editcat}
+  {delcat}
+  {admin}
+ <br />
+ <select class="select" onchange="get_filecat(this,'{self}')">
+  {filejump}
+ </select>
+ <input type="text" name="query" />
+ <input type="hidden" name="cats" value="all" />
+ <input type="hidden" name="sName" value="1" />
+ <input type="hidden" name="sDesc" value="1" />
+ <input type="hidden" name="sAuth" value="1" />
+ <input type="hidden" name="downCount" value="0" />
+ <input type="hidden" name="dispCount" value="100" />
+ <input type="submit" name="submit" value="{main_search}" />
+</div>
+</form>
+{file_page}
+<!-- END: Files -->
+
+<!-- BEGIN: Edit -->
+<div class="article">
+ {tree}
+</div>
+
+<div class="article">
+ <div class="title">{file_name}</div>
+ <strong>{files_desc}:</strong><br /><br />{file_description}<br /><br />
+ <strong>{files_author}:</strong> {file_author} <strong>{files_submitted_by}:</strong> {user_name}<br />
+ <strong>{files_size}:</strong> {filesize} <strong>{files_added}:</strong> {date} <strong>{files_downloads}:</strong> {file_downloads}<br />
+</div>
+
+<form action="{self}?a=files&amp;s=edit&amp;fid={id}" method="post">
+<div class="article">
+ <div class="title" style="text-align:center">{files_modify_info}</div>
+ <span class="field">{files_name}:</span>
+ <span class="form"><input class="input" name="file_name" type="text" size="50" maxlength="50" value="{file_name}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_author}:</span>
+ <span class="form"><input class="input" name="file_author" type="text" size="30" maxlength="30" value="{file_author}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_version}:</span>
+ <span class="form"><input class="input" name="file_version" type="text" size="10" maxlength="10" value="{file_fileversion}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_cat}:</span>
+ <span class="form">
+  <select name="file_category">
+   {list}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{files_desc}:</span>
+ <span class="form">
+  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  {bbcode_menu}
+  <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{file_description}</textarea>
+  <script>textarea = bbcodeInit("bbcode");</script>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+<!-- END: Edit -->
+
+<!-- BEGIN: Move -->
+<form action="{self}?a=files&amp;s=move&amp;fid={$id}" method="post">
+<div class="article">
+ <div class="title">{files_move_file}</div>
+ {move_file}
+ <select name="category">
+  {list}
+ </select>
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{files_move_file}" />
+</div>
+</form>
+<!-- END: Move -->
+
+<!-- BEGIN: ApproveNew -->
+<div class="article">
+ <div class="title">{file_name}</div>
+ <strong>{files_desc}:</strong><br />{file_description}<br /><br />
+ <strong>{files_submitted_by}:</strong> {user_name} <strong>{files_author}:</strong> {file_author}
+ <strong>{files_size}:</strong> {filesize} <br />
+ <strong>{files_added}:</strong> {date}<br />
+</div>
+
+<div class="article">
+  <a href="{self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={file_id}&amp;cid={file_catid}">{files_download}</a> | 
+  <a href="{self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={file_id}&amp;cid={file_catid}">{files_approve2}</a> | 
+  <a href="{self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={file_id}&amp;cid={file_catid}">{files_deny}</a>
+</div>
+<!-- END: ApproveNew -->
+
+<!-- BEGIN: ApproveUpdate -->
+<div class="article">
+ <div class="title">{file_name} ({files_update})</div>
+ <strong>{files_desc}:</strong><br />{file_description}<br /><br />
+ <strong>{files_submitted_by}:</strong> {user_name}
+ <strong>{files_size}:</strong> {filesize} <br />
+ <strong>{files_added}:</strong> {date}<br />
+</div>
+
+<div class="article">
+  <a href="{self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_download}</a> | 
+  <a href="{self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_approve2}</a> | 
+  <a href="{self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_deny}</a>
+</div>
+<!-- END: ApproveUpdate -->
+
+<!-- BEGIN: EditCategory -->
+<form action="{self}?a=files&amp;s=editcategory&amp;cid={cid}" method="post">
+<div class="article">
+ <div class="title">{files_edit_category}</div>
+ <span class="field"><strong>{files_name}:</strong></span>
+ <span class="form"><input type="text" name="cat_name" value="{fcat_name}" maxlength="32" /></span>
+ <p class="line"></p>
+
+ <span class="field"><strong>{files_add_cat_parent}:</strong></span>
+ <span class="form">
+  <select name="parent">
+   {list}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field"><strong>{files_desc}:</strong></span>
+ <span class="form">
+  <textarea name="catdesc" cols="60" rows="3" id="catdesc">{fcat_description}</textarea>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{edit}" />
+</div>
+</form>
+<!-- END: EditCategory -->
+
+<!-- BEGIN: DeleteCategory -->
+<form action="{self}?a=files&amp;s=deletecategory" method="post">
+<div class="article">
+ <div class="title">{files_delete_cat}</div>
+ {files_delete_cat2}
+ <select name="category">
+  {list}
+ </select>
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{delete}" />
+</div>
+</form>
+<!-- END: DeleteCategory -->
+
+<!-- BEGIN: AddCategory -->
+<form action="{self}?a=files&amp;s=addcategory&amp;cid={cid}" method="post">
+<div class="article">
+ <div class="title">{files_add_cat}</div>
+ <span class="field"><strong>{files_add_cat_name}:</strong></span>
+ <span class="form"><input type="text" name="cat_name" value="" maxlength="32" /></span>
+ <p class="line"></p>
+
+ <span class="field"><strong>{files_add_cat_parent}:</strong></span>
+ <span class="form">
+  <select name="parent">
+   {list}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field"><strong>{files_add_cat_desc}:</strong></span>
+ <span class="form"><textarea name="catdesc" cols="60" rows="3" id="catdesc"></textarea></span>
+ <p class="line"></p>
+
+ <span class="field">
+  <b>{files_add_cat_qperms}</b><br />{files_add_cat_qperms2}
+ </span>
+ <span class="form">
+  <select name="sync">
+   {quickperms}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{files_add_cat}" />
+</div>
+</form>
+<!-- END: AddCategory -->
+
+<!-- BEGIN: DeleteFile -->
+<form action="{self}?a=files&amp;s=delete&amp;fid={file_id}&amp;cid={cid}" method="post">
+<div class="article">
+ <div class="title">{files_delete_file}</div>
+ {files_delete_confirm} <strong>{file_name}</strong>?<br />
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{delete}" />
+</div>
+</form>
+<!-- END: DeleteFile -->
+
+<!-- BEGIN: UpdateFile -->
+<form action="{self}?a=files&amp;s=update&amp;cid={cid}&amp;fid={fid}" method="post" enctype="multipart/form-data">
+<div class="article">
+ <div class="title">{files_update_file}: {name}</div>
+ <span class="field">{file}:</span>
+ <span class="form"><input type="file" name="code_update" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_version}:</span>
+ <span class="form"><input class="input" type="text" name="file_version" value="{version}" size="10" maxlength="10" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_desc}:</span>
+ <span class="form">
+  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  {bbcode_menu}
+  <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{desc}</textarea>
+  <script>textarea = bbcodeInit("bbcode");</script>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{files_update_file}" />
+</div>
+</form>
+<!-- END: UpdateFile -->
+
+<!-- BEGIN: UploadFile -->
+<form action="{self}?a=files&amp;s=upload" method="post" enctype="multipart/form-data">
+<div class="article">
+ <div class="title">{files_upload}</div>
+ <span class="field">{files_name}:</span>
+ <span class="form"><input class="input" type="text" name="file_name" value="" size="50" maxlength="50" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_author}:</span>
+ <span class="form"><input class="input" type="text" name="file_author" value="" size="30" maxlength="30" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_version}:</span>
+ <span class="form"><input class="input" type="text" name="file_version" value="" size="10" maxlength="10" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_cat}:</span>
+ <span class="form">
+  <select name="file_category">
+   {list}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{file}:</span>
+ <span class="form"><input type="file" name="code_upload" /></span>
+ <p class="line"></p>
+
+ <span class="field">{files_desc}:</span>
+ <span class="form">
+  <script src="{site}/javascript/postboxplain.js"></script>
+  {bbcode_menu}
+  <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60"></textarea>
+  <script>textarea = bbcodeInit("bbcode");</script>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{files_upload}" />
+</div>
+</form>
+<!-- END: UploadFile -->
+
+<!-- BEGIN: CategoryLink -->
+<span class="file_folder">
+ <img src="{site}/skins/{skin}/images/icons/folder.png" height="14" width="14" alt="" />
+ <a href="{site}/files/category/{id}/">{name}</a> ({count})
+</span>
+<!-- END: CategoryLink -->
+
+<!-- BEGIN: FileCategories -->
+<div class="article">
+ {tree}<br /><br />
+ {catlinks}
+ <div style="clear:both;"></div>
+</div>
+<br />
+{displaycat}
+<!-- END: FileCategories -->
+
+<!-- BEGIN: FileCategory -->
+<!-- BEGIN: Desc -->
+ <div class="article">{desc}</div><br />
+<!-- END: Desc -->
+<div class="article">
+<!-- BEGIN: Top20 -->
+ <div class="title" style="text-align:center">{files_top20}</div>
+<!-- END: Top20 -->
+<!-- BEGIN: Header -->
+ <span class="file_head">
+  <span class="filename">{files_name}</span>
+  <span class="fileversion">{files_version}</span>
+  <span class="submitter">{files_submitted_by}</span>
+  <span class="filedate">{files_added}</span>
+  <span class="filedate">{files_updated}</span>
+  <span class="file_number">{files_dl}</span>
+  <span class="file_number">{files_size}</span>
+  <span class="file_number">{files_comments}</span>
+  <span class="file_rating">{files_rating}</span>
+ </span>
+ <p class="list_line"></p>
+<!-- END: Header -->
+<!-- BEGIN: Item -->
+ <span class="filename"><a href="{site}/files/{file_url}-{file_id}/">{file_name}</a></span>
+ <span class="fileversion">{file_fileversion}</span>
+ <span class="submitter"><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></span>
+ <span class="filedate">{date}</span>
+ <span class="filedate">{revdate}</span>
+ <span class="file_number" style="text-align:center">{file_downloads}</span>
+ <span class="file_number" style="text-align:center">{size}</span>
+ <span class="file_number" style="text-align:center">{file_comments}</span>
+ <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
+
+ <p class="list_line"></p>
+<!-- END: Item -->
+</div>
+<!-- END: FileCategory -->
+
+<!-- BEGIN: RecentUploads -->
+<div class="article">
+ <div class="title" style="text-align:center">{files_recent_uploads}:</div>
+ <span class="file_head">
+  <span class="filename">{files_name}</span>
+  <span class="fileversion">{files_version}</span>
+  <span class="submitter">{files_submitted_by}</span>
+  <span class="filedate">{files_added}</span>
+  <span class="filedate">{files_updated}</span>
+  <span class="file_number">{files_dl}</span>
+  <span class="file_number">{files_size}</span>
+  <span class="file_number">{files_comments}</span>
+  <span class="file_rating">{files_rating}</span>
+ </span>
+ <p class="list_line"></p>
+<!-- BEGIN: Item -->
+ <span class="filename"><a href="{site}/files/{file_url}-{file_id}/">{file_name}</a></span>
+ <span class="fileversion">{file_fileversion}</span>
+ <span class="submitter"><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></span>
+ <span class="filedate">{date}</span>
+ <span class="filedate">{revdate}</span>
+ <span class="file_number" style="text-align:center">{file_downloads}</span>
+ <span class="file_number" style="text-align:center">{size}</span>
+ <span class="file_number" style="text-align:center">{file_comments}</span>
+ <span class="file_rating"><img src="{site}/skins/{this->skin}/images/{file_rating}.png" alt="" /></span>
+
+ <p class="list_line"></p>
+<!-- END: Item -->
+</div>
+<!-- END: RecentUploads -->
+
+<!-- BEGIN: FileDetails -->
+<div class="article">
+ {tree}
+</div>
+
+<div class="article">
+ <div class="title">{file_name}</div>
+ <span class="file_head">
+  <span class="submitter">{files_author}</span>
+  <span class="submitter">{files_submitted_by}</span>
+  <span class="fileversion">{files_version}</span>
+  <span class="file_number">{files_dl}</span>
+  <span class="file_number">{files_size}</span>
+  <span class="filedate">{files_added}</span>
+  <span class="filedate">{files_updated}</span>
+ </span>
+ <p class="list_line"></p>
+
+ <span class="submitter">{file_author}</span>
+ <span class="submitter">{user_name}</span>
+ <span class="fileversion">{file_fileversion}</span>
+ <span class="file_number">{file_downloads}</span>
+ <span class="file_number">{filesize}</span>
+ <span class="filedate">{date}</span>
+ <span class="filedate">{rdate}</span>
+ <p class="list_line"></p>
+
+ <div class="title">{files_desc}</div>
+ {file_description}<br /><br />
+
+ <strong>{files_revisions}:</strong> {file_revision}
+</div>
+
+<div class="article">
+ {rating}
+ | <a href="{site}/files/download/{file_id}/">{files_download}</a>
+ | <a href="{self}?a=files&amp;s=listcomments&amp;fid={file_id}">{files_comments}({file_comments})</a>
+ {update}
+ {move}
+ {edit}
+ {delete}
+</div>
+<!-- END: FileDetails -->
+
+<!-- BEGIN: FileSearch -->
+<form action="{site}/files/search/" method="post" id="search">
+<div class="article">
+ <div class="title">
+  <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />
+  {files_search}
+ </div>
+
+ <span class="half">
+  <span class="head"><strong>{files_search_basic}</strong></span>
+  {files_search_for}:<br />
+  <input class="input" type="text" style="width:100%" name="query" />
+  <br /><br />
+  {files_search_in}: <a href="javascript:select_all_cats()">{select_all}</a><br />
+  <select class="input" name="cats[]" size="10" style="width:100%" multiple="multiple">
+   {selectItems}
+  </select><br /><br />
+ </span>
+
+ <span class="half">
+  <span class="head"><strong>{files_search_advanced}</strong></span>
+  {files_search_by}<br />
+  
+  {files_name}
+  <input type="checkbox" name="sName" value="1" checked="checked" />
+  {files_desc}
+  <input type="checkbox" name="sDesc" value="1" checked="checked" />
+  {files_author}
+  <input type="checkbox" name="sAuth" value="1" checked="checked" />
+
+  <p class="line"></p>
+
+  {files_search_display_more} <input name="downCount" type="text" value="0" size="2"> {files_downloads2}<br />
+  {files_search_display_first} <input name="dispCount" type="text" value="100" size="2" /> {files_search_results2}<br />
+
+  <p class="line"></p>
+
+  <input type="checkbox" name="useRating" value="1" /> {files_search_minimum_rating}
+  1 <input type="radio" name="minRating" value="1" checked="checked" />
+  2 <input type="radio" name="minRating" value="2" />
+  3 <input type="radio" name="minRating" value="3" />
+  4 <input type="radio" name="minRating" value="4" />
+  5 <input type="radio" name="minRating" value="5" />
+
+  <p class="line"></p>
+
+  <input type="checkbox" name="byTime" value="1" /> {files_search3}
+  <select class="select" name="time_way_select">
+   <option value="newer" selected="selected">{files_search_newer}</option>
+   <option value="older">{files_search_older}</option>
+  </select>
+  {files_search_than}
+  <select class="select" name="time_select">
+   <option value="1">1 {files_search_day}</option>
+   <option value="3">3 {files_search_days}</option>
+   <option value="7">1 {files_search_week}</option>
+   <option value="14">2 {files_search_weeks}</option>
+   <option value="31" selected="selected">1 {files_search_month}</option>
+   <option value="92">3 {files_search_months}</option>
+   <option value="183">6 {files_search_months}</option>
+   <option value="365">1 {files_search_year}</option>
+  </select>
+ </span>
+
+ <p class="line"></p>
+ <input type="submit" name="submit" value="{files_search2}" />
+</div>
+</form>
+<!-- END: FileSearch -->
+
+<!-- BEGIN: FileSearchResults -->
+<div class="article">
+ <div class="title">{files_search_results} '{qString}'</div>
+ <span class="file_head">
+  <span class="filename">{files_name}</span>
+  <span class="fileversion">{files_version}</span>
+  <span class="submitter">{files_submitted_by}</span>
+  <span class="filedate">{files_added}</span>
+  <span class="filedate">{files_updated}</span>
+  <span class="file_number">{files_dl}</span>
+  <span class="file_number">{files_size}</span>
+  <span class="file_number">{files_comments}</span>
+  <span class="file_rating">{files_rating}</span>
+ </span>
+ <p class="list_line"></p>
+<!-- BEGIN: Item -->
+ <span class="filename"><a href="{site}/files/{file_url}-{file_id}/">{file_name}</a></span>
+ <span class="fileversion">{file_fileversion}</span>
+ <span class="submitter"><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></span>
+ <span class="filedate">{date}</span>
+ <span class="filedate">{revdate}</span>
+ <span class="file_number" style="text-align:center">{file_downloads}</span>
+ <span class="file_number" style="text-align:center">{size}</span>
+ <span class="file_number" style="text-align:center">{file_comments}</span>
+ <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
+ <p class="list_line"></p>
+<!-- END: Item -->
+</div>
+<!-- END: FileSearchResults -->
+
+<!-- BEGIN: AddComment -->
+<form name="commentadd" method="post" action="{self}?a=files&amp;s=addcomment&amp;fid={id}">
+<div class="article">
+ <div class="title">{files_comment}</div>
+
+ <span class="form"><textarea name="commentbody" cols="60" rows="6" id="commentbody"></textarea></span>
+ <p class="line"></p>
+
+ <input name="addcomment" type="submit" value="{files_comment}" />
+</div>
+</form>
+<!-- END: AddComment -->
+
+<!-- BEGIN: ListComments -->
+{$file}
+<div class="article">
+ <div class="title" style="text-align:center">{files_comment_user}: {file_name}</div>
+<!-- BEGIN: Item -->
+ <div><strong>{board_by}: {user_name}</strong></div>
+ <span class="postbit_top"></span>
+ <div class="rounded_top" style="background-position:35px 0px;">
+  <span class="one"></span>
+  <span class="two"></span>
+  <span class="three"></span>
+  <span class="four"></span>
+ </div>
+ <div class="postbit">
+  {text}
+ </div>
+ <div class="rounded_bottom">
+ <span class="one">&nbsp;</span>
+  <span class="two">&nbsp;</span>
+  <span class="three">&nbsp;</span>
+  <span class="four">&nbsp;</span>
+ </div>
+ <br />
+<!-- END: Item -->
+</div>
+
+<!-- BEGIN: Add -->
+<div class="article">
+ <div style="text-align:center">
+  <a href="{self}?a=files&amp;s=addcomment&amp;cid={cid}&amp;fid={id}">{files_comment}</a>
+ </div>
+</div>
+<!-- END: Add -->
+<!-- END: ListComments -->

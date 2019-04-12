@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -25,6 +25,10 @@
  * GNU General Public License for more details.
  *
  **/
+
+if( version_compare( PHP_VERSION, "5.5.0", "<" ) ) {
+	die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
+}
 
 define( 'QUICKSILVERFORUMS', true );
 define( 'QSF_ADMIN', true );
@@ -45,13 +49,12 @@ require_once $set['include_path'] . '/lib/user.php';
 require_once $set['include_path'] . '/lib/mailer.php';
 require_once $set['include_path'] . '/lib/attachutil.php';
 require_once $set['include_path'] . '/lib/htmlwidgets.php';
-require_once $set['include_path'] . '/lib/templater.php';
 require_once $set['include_path'] . '/lib/bbcode.php';
 require_once $set['include_path'] . '/lib/tool.php';
 require_once $set['include_path'] . '/lib/readmarker.php';
 require_once $set['include_path'] . '/lib/activeutil.php';
-require_once $set['include_path'] . '/lib/zTemplate.php';
 require_once $set['include_path'] . '/lib/modlet.php';
+require_once $set['include_path'] . '/lib/zTemplate.php';
 
 if( !$set['installed'] ) {
 	header( 'Location: ../install/index.php' );
@@ -71,13 +74,20 @@ error_reporting( E_ALL );
  * If 'a' is set, but the module doesn't exist, it's either a malformed URL or a bogus request.
  * Otherwise $missing remains false and no error is generated later.
  */
+$module = null;
+$qstring = null;
 $missing = false;
+
 if( !isset( $_GET['a'] ) ) {
 	$module = 'home';
-	if( isset( $_SERVER['QUERY_STRING'] ) && !empty( $_SERVER['QUERY_STRING'] ) )
+
+	if( isset( $_SERVER['QUERY_STRING'] ) && !empty( $_SERVER['QUERY_STRING'] ) ) {
+		$qstring = $_SERVER['QUERY_STRING'];
+
 		$missing = true;
+	}
 } elseif( !file_exists( 'sources/' . $_GET['a'] . '.php' ) ) {
-	$module = 'home';
+	$qstring = $_SERVER['REQUEST_URI'];
 
 	$missing = true;
 } else {
@@ -87,6 +97,22 @@ if( !isset( $_GET['a'] ) ) {
 if( strstr( $module, '/' ) || strstr( $module, '\\' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	exit( 'You have been banned from this site.' );
+}
+
+// I know this looks corny and all but it mimics the output from a real 404 page.
+if( $missing ) {
+	header( 'HTTP/1.0 404 Not Found' );
+
+	echo( "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
+	<html><head>
+	<title>404 Not Found</title>
+	</head><body>
+	<h1>Not Found</h1>
+	<p>The requested URL $qstring was not found on this server.</p>
+	<hr>
+	{$_SERVER['SERVER_SIGNATURE']}	</body></html>" );
+
+	exit( );
 }
 
 require './sources/' . $module . '.php';
@@ -107,13 +133,24 @@ $admin->user_cl  = new user( $admin );
 $admin->user     = $admin->user_cl->login();
 $admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get['a'] );
 
-if( !isset( $admin->get['skin'] ) ) {
-	$admin->skin = $admin->user['skin_dir'];
-} else {
-	$admin->skin = $admin->get['skin'];
-}
-
+// Init function also checks permissions and kicks out non-admins
 $admin->init();
+
+if( !isset( $admin->get['skin'] ) ) {
+	$skin = $admin->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $admin->user['user_skin'] );
+
+	$admin->skin = $skin['skin_dir'];
+} elseif( $admin->perms->auth( 'is_admin' ) ) {
+	$admin->skin = 'default';
+
+	// Allow admins to specify a skin manually for development purposes.
+	$skin = intval( $admin->get['skin'] );
+
+	$dev_skin = $admin->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $skin );
+
+	if( $dev_Skin )
+		$admin->skin = $dev_skin['skin_dir'];
+}
 
 $xtpl = new XTemplate( '../skins/' . $admin->skin . '/admincp/index.xtpl' );
 $admin->xtpl = $xtpl;
@@ -126,8 +163,9 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'language_code', $admin->user['user_language'] );
 	$xtpl->assign( 'charset', $admin->lang->charset );
 	$xtpl->assign( 'self', $admin->self );
+	$xtpl->assign( 'skin', $admin->skin );
 
-	$title = isset($qsf->title) ? $qsf->title : $admin->name .' Admin CP';
+	$title = isset( $qsf->title ) ? $qsf->title : $admin->name .' Admin CP';
 	$xtpl->assign( 'title', $title );
 
 	$xtpl->assign( 'admin_settings', $admin->lang->admin_settings );
@@ -166,6 +204,9 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_edit_group_perms', $admin->lang->admin_edit_group_perms );
 	$xtpl->assign( 'admin_edit_group_file_perms', $admin->lang->admin_edit_group_file_perms );
 	$xtpl->assign( 'admin_delete_group', $admin->lang->admin_delete_group );
+
+	$xtpl->assign( 'admin_skins', $admin->lang->admin_skins );
+	$xtpl->assign( 'admin_manage_skins', $admin->lang->admin_manage_skins );
 
 	$xtpl->assign( 'admin_db', $admin->lang->admin_db );
 	$xtpl->assign( 'admin_db_backup', $admin->lang->admin_db_backup );

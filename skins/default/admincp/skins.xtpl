@@ -1,0 +1,51 @@
+<!-- BEGIN: Skins -->
+<div class="article">
+ <div class="title">{skins_manage_skins}</div>
+</div>
+<!-- BEGIN: DisabledSkins -->
+<div class="article">
+ <div class="title">{skins_disabled}</div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="topic">{skins_name}</span>
+  <span class="starter">{skins_dir}</span>
+ </span>
+ <p></p>
+<!-- BEGIN: FolderEntry -->
+ <span class="icon">{enable_link}</span>
+ <span class="topic">{skin_name}</span>
+ <span class="starter">{skin_dir}</span>
+ <p class="list_line"></p>
+<!-- END: FolderEntry -->
+</div>
+<!-- END: DisabledSkins -->
+<div class="article">
+ <div class="title">{skins_enabled}</div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="topic">{skins_name}</span>
+  <span class="starter">{skins_dir}</span>
+ </span>
+ <p></p>
+<!-- BEGIN: EnabledEntry -->
+ <span class="icon">{disable_link}</span>
+ <span class="topic">{skin_name}</span>
+ <span class="starter">{skin_dir}</span>
+ <p class="list_line"></p>
+<!-- END: EnabledEntry -->
+</div>
+<!-- END: Skins -->
+
+<!-- BEGIN: DisableForm -->
+<form action="{self}?a=skins&amp;s=disable&amp;id={skin_id}" method="post">
+<div class="article">
+ <div class="title">{skins_disable_skin}</div>
+ <span class="field">{skin_name}</span>
+ <span class="form">{skins_confirm_disable}</span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="confirm" value="{skins_disable}" />
+</div>
+</form>
+<!-- END: DisableForm -->

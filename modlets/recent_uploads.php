@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -16,8 +16,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -32,7 +32,12 @@ class recent_uploads extends modlet
 {
 	var $cat_data;
 
-	function run($param)
+	public function __construct( $forumobject )
+	{
+		parent::__construct( $forumobject );
+	}
+
+	public function execute( $arg )
 	{
 		$this->cat_data = false;
 		$content = "";
@@ -40,31 +45,37 @@ class recent_uploads extends modlet
 		$cats = $this->create_category_permissions_string();
 
 		// Handle the unlikely case where the user cannot view ANY forums
-		if ($cats == "") {
+		if( $cats == "" ) {
 			return $content;
 		}
 
-		$result = $this->qsf->db->query(
-		  "SELECT f.*, u.user_name, c.fcat_name
-		    FROM
-		     %pfiles f
+		$result = $this->qsf->db->query( "SELECT f.*, u.user_name, c.fcat_name FROM %pfiles f
 		    LEFT JOIN %pusers u ON u.user_id = f.file_submitted
 		    LEFT JOIN %pfile_categories c ON c.fcat_id = f.file_catid
 		    WHERE file_approved=1 AND c.fcat_id IN (%s) ORDER BY file_date DESC LIMIT 5", $cats );
-		
-		while($file = $this->qsf->db->nqfetch($result))
+
+		while( $file = $this->qsf->db->nqfetch( $result ) )
 		{
-			$filesize = ceil($file['file_size'] / 1024);
+			$filesize = ceil( $file['file_size'] / 1024 );
 			$fid = $file['file_id'];
-			$fname = $this->qsf->format($file['file_name'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
-			$furl = $this->qsf->clean_url($fname);
+			$fname = $this->qsf->format( $file['file_name'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+			$furl = $this->qsf->clean_url( $fname );
 			$title = "Downloads: {$file['file_downloads']}  Size: {$filesize} KB";
-			$author = $this->qsf->format($file['file_author'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+			$author = $this->qsf->format( $file['file_author'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			$content .= "<a href=\"". $this->qsf->site . "/files/{$furl}-{$fid}/\" title=\"{$title}\">{$fname}</a>";
 			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->self}?a=profile&amp;w={$file['file_submitted']}\">{$file['user_name']}</a><hr />";
 		}
-		return eval($this->qsf->template('MAIN_RECENT_UPLOADS'));
+
+		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/recent_uploads.xtpl' );
+
+		$xtpl->assign( 'site', $this->qsf->site );
+		$xtpl->assign( 'skin', $this->qsf->skin );
+		$xtpl->assign( 'main_recent_uploads', $this->qsf->lang->main_recent_uploads );
+		$xtpl->assign( 'content', $content );
+
+		$xtpl->parse( 'RecentUploads' );
+		return $xtpl->text( 'RecentUploads' );
 	}
 
 	/**
@@ -74,19 +85,19 @@ class recent_uploads extends modlet
 	 * @since 1.1.5
 	 * @return string comma delimited list for us in SQL
 	 **/
-	function create_category_permissions_string()
+	private function create_category_permissions_string()
 	{
 		$categories = array();
 		$allCats = $this->_load_cat_data();
-		
-		foreach ($allCats as $row)
+
+		foreach( $allCats as $row )
 		{
-			if ($this->qsf->file_perms->auth('category_view', $row['fcat_id']))
+			if( $this->qsf->file_perms->auth( 'category_view', $row['fcat_id'] ) )
 			{
 				$categories[] = $row['fcat_id'];
 			}
 		}
-		return implode(', ', $categories);
+		return implode( ', ', $categories );
 	}
 
 	/**
@@ -96,14 +107,14 @@ class recent_uploads extends modlet
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2.0
 	 **/
-	function _load_cat_data()
+	private function _load_cat_data()
 	{
-		if ($this->cat_data === false) {
+		if( $this->cat_data === false ) {
 			$this->cat_data = array();
-			
-			$q = $this->qsf->db->query("SELECT * FROM %pfile_categories");
 
-			while ($f = $this->qsf->db->nqfetch($q))
+			$q = $this->qsf->db->query( "SELECT * FROM %pfile_categories" );
+
+			while( $f = $this->qsf->db->nqfetch( $q ) )
 			{
 				$this->cat_data[] = $f;
 			}

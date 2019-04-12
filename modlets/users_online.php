@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -22,8 +22,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,35 +35,60 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class users_online extends modlet
 {
+	public function __construct( $forumobject )
+	{
+		parent::__construct( $forumobject );
+	}
+
 	/**
 	* Display a listing of who is online.
 	*
-	* @param string $param unusued
+	* @arg bool
 	* @author Geoffrey Dunn <geoff@warmage.com>
 	* @since 1.2.0
 	* @return string HTML with current online users and total membercount
 	**/
-	function run( $arg )
+	public function execute( $arg )
 	{
-		if (!isset($this->qsf->lang->board_members)) {
+		if( !isset( $this->qsf->lang->board_members ) ) {
 			$this->qsf->lang->board();
 		}
 
 		$users = $this->doActive();
 
 		$userlist = "";
-		if( $arg == "true" ) {
+		if( $arg == true ) {
 			$this->userlist = $this->usersonline();
 			$userlist = $this->userlist['TITLEONTABLE'] . "<br /><br />" . $this->userlist['USERNAMES'];
 			$date = $this->qsf->mbdate( DATE_ONLY_LONG, $this->qsf->time, false );
-			return eval($this->qsf->template('MAIN_USERS_VISITED'));
+
+			$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/users_online.xtpl' );
+
+			$xtpl->assign( 'userlist', $userlist );
+			$xtpl->assign( 'main_visitors', $this->qsf->lang->main_visitors );
+			$xtpl->assign( 'date', $date );
+
+			$xtpl->parse( 'UsersOnlineMain' );
+			return $xtpl->text( 'UsersOnlineMain' );
 		}
 
 		$link = "<a href=\"{$this->qsf->self}?a=active\" class=\"activeusers\">{$this->qsf->lang->main_users_online}</a>";
 		if( $this->qsf->perms->is_guest )
 			$link = $this->qsf->lang->main_users_online;
 
-		return eval($this->qsf->template('MAIN_USERS'));
+		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/users_online.xtpl' );
+
+		$xtpl->assign( 'loc_of_board', $this->qsf->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->qsf->skin );
+		$xtpl->assign( 'link', $link );
+		$xtpl->assign( 'users', $users['USERS'] );
+		$xtpl->assign( 'main_members', $this->qsf->lang->main_members );
+		$xtpl->assign( 'membercount', $users['MEMBERCOUNT'] );
+		$xtpl->assign( 'main_guests', $this->qsf->lang->main_guests );
+		$xtpl->assign( 'guestcount', $users['GUESTCOUNT'] );
+
+		$xtpl->parse( 'UsersOnlineBlock' );
+		return $xtpl->text( 'UsersOnlineBlock' );
 	}
 
 	/**
@@ -73,13 +98,13 @@ class users_online extends modlet
 	 * @since Beta 2.0
 	 * @return array Active users: USERS, MEMBERCOUNT, GUESTCOUNT, TOTALCOUNT
 	 **/
-	function doActive()
+	private function doActive()
 	{
 		/**
 		 * If it exists, perhaps do something like UPDATE ... SELECT
 		 */
-
 		$Active = $this->getActive();
+
 		if ($Active) {
 			$Active = implode(', ', $Active);
 		} else {
@@ -112,7 +137,7 @@ class users_online extends modlet
 	 * @since Beta 2.0
 	 * @return array Array of active members
 	 **/
-	function getActive()
+	private function getActive()
 	{
 		$allusers = array();
 		$allnames = array();
@@ -135,7 +160,7 @@ class users_online extends modlet
 		return $allusers;
 	}
 
-	function usersonline()
+	private function usersonline()
 	{
 		$which_day = date("d F Y", $this->qsf->time);
 		$today_date = strtotime("$which_day");

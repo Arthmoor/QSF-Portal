@@ -1,0 +1,9 @@
+<!-- BEGIN: RecentPosts -->
+    <div class="block">
+     <div class="title">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" alt="" />
+      <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a>
+     </div>
+     {content}
+    </div>
+<!-- END: RecentPosts -->

@@ -1,0 +1,25 @@
+<!-- BEGIN: Email -->
+<form action="{self}?a=email" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/email.png" alt="" />
+  {email_email}
+ </div>
+
+ <span class="field">{email_to}</span>
+ <span class="form"><input name="to" size="60" value="{mailto}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{email_subject}</span>
+ <span class="form"><input name="subject" size="60" /></span>
+ <p class="line"></p>
+
+ <span class="field">{email_msgtext}</span>
+ <span class="form"><textarea name="message" cols="60" rows="12"></textarea></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input name="submit" type="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: Email -->

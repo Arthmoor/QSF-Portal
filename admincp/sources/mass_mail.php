@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class mass_mail extends admin
 {
-	function execute()
+	public function execute()
 	{
 		$this->set_title( $this->lang->mail );
 		$this->tree( $this->lang->mail );
@@ -69,7 +69,7 @@ class mass_mail extends admin
 		}
 	}
 
-	function group_list()
+	private function group_list()
 	{
 		$out   = null;
 		$query = $this->db->query( "SELECT group_id, group_name, group_type FROM %pgroups ORDER BY group_name" );
@@ -84,7 +84,7 @@ class mass_mail extends admin
 		return $out;
 	}
 
-	function send_mail()
+	private function send_mail()
 	{
 		if( !isset( $this->post['groups'] ) ) {
 			$this->post['groups'] = array();

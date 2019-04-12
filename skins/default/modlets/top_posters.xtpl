@@ -1,0 +1,9 @@
+<!-- BEGIN: TopPosters -->
+    <div class="block">
+     <div class="title">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/award_star_gold_1.png" alt="" />
+      {main_top_posters}
+     </div>
+     {content}
+    </div>
+<!-- END: TopPosters -->

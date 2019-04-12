@@ -13,7 +13,7 @@
 
 <!-- BEGIN: EditForm -->
 <form action="{self}?a=settings&amp;s=update" method="post">
-<input type="hidden" name="token" value={token}" />
+<input type="hidden" name="token" value="{token}" />
 <div class="article">
  <div class="title">{settings_general}</div>
  <span class="field">{settings_board_enabled}</span>
@@ -86,7 +86,7 @@
 
 <div class="article">
  <div class="title">Akismet {settings}</div>
- <span class="field">{settings_wordpress_id}<br /><span class="tiny">{settings_wordpress_msg}</span></span>
+ <span class="field">{settings_wordpress_id}<br /><span class="tiny">{settings_wordpress_msg}<a href="https://akismet.com/">https://akismet.com/</a></span></span>
  <span class="form"><input class="input" type="text" name="wordpress_api_key" value="{wordpress_api_key}" size="40" /></span>
  <p class="line"></p>
 

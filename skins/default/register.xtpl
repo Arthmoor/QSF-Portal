@@ -1,0 +1,42 @@
+<!-- BEGIN: Register -->
+<form action="{self}?a=register" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/user_add.png" alt="" />
+  {register_reging}
+ </div>
+ <span class="field">{register_new_user}</span>
+ <span class="form"><input type="text" name="desuser" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{register_email}</span>
+ <span class="form"><input type="text" name="email" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{register_passwd}</span>
+ <span class="form"><input type="password" name="passA" size="40" /></span>
+ <p class="line"></p>
+
+ <span class="field">{register_confirm_passwd}</span>
+ <span class="form"><input type="password" name="passB" size="40" /></span>
+ <p class="line"></p>
+
+<!-- BEGIN: Captcha -->
+ <span class="field">{register_math_ask}: <br /><br />{math_prompt}</span>
+ <span class="form"><input type="text" name="user_math" size="50" maxlength="50" value="" /></span>
+ <p class="line"></p>
+<!-- END: Captcha -->
+
+ <span class="field">{register_tos_read}</span>
+ <span class="form">{tos_text}</span>
+ <p class="line"></p>
+
+ <span class="field">{register_tos_i_agree}</span>
+ <span class="form"><input type="checkbox" name="terms" /></span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{register_reg}" />
+</div>
+</form>
+<!-- END: Register -->

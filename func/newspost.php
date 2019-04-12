@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -16,8 +16,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -26,36 +26,36 @@ require_once $set['include_path'] . '/global.php';
 /**
  * Generate a single complete news post.
  *
- * @author Roger Libiez [Samson] 
+ * @author Roger Libiez
  * @since 1.3.5
  **/
 class newspost extends qsfglobal
 {
-	function execute( )
+	public function execute( )
 	{
-		if (!$this->perms->auth('board_view')) {
+		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
+
 			return $this->message(
-				sprintf($this->lang->board_message, $this->sets['forum_name']),
-				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
 			);
 		}
 
 		if( !isset( $this->get['t'] ) ) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message( 'News', 'No such article.' );
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
 		$post = intval( $this->get['t'] );
 		return $this->getpost( $post );
 	}
 
-	function getpost( $post )
+	private function getpost( $post )
 	{
 		$items = "";
 
-		$post = $this->db->fetch(
-		  "SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_mbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
+		$post = $this->db->fetch( "SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_mbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
 		    FROM (%ptopics t, %pgroups g)
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
@@ -64,52 +64,67 @@ class newspost extends qsfglobal
 		    WHERE t.topic_id=%d AND u.user_group=g.group_id LIMIT 1", $post );
 
 		if( !$post ) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message( 'News', 'No such article. (2)' );
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
-		$query = $this->db->query("
-			SELECT
-			  attach_id, attach_name, attach_downloads, attach_size
-			FROM
-			  %pattach
-			WHERE
-			  attach_post=%d", $post['post_id'] );
+		$query = $this->db->query( "SELECT attach_id, attach_name, attach_downloads, attach_size FROM %pattach
+			WHERE attach_post=%d", $post['post_id'] );
 
 		$this->lang->topic();
-		$this->templater->add_templates('topic');
+
+		$post['post_time'] = $this->mbdate (DATE_LONG, $post['post_time'] );
+
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
+
+		$xtpl->assign( 'self', $this->self );
+		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'topic', $post['topic_title'] );
+		$xtpl->assign( 'post_time', $post['post_time'] );
+		$xtpl->assign( 'topic_attached', $this->lang->topic_attached );
+		$xtpl->assign( 'topic_attached_filename', $this->lang->topic_attached_filename );
+		$xtpl->assign( 'topic_attached_size', $this->lang->topic_attached_size );
+		$xtpl->assign( 'topic_attached_downloads', $this->lang->topic_attached_downloads );
+
+		$Poster_Info = $this->build_memberinfo( $post, $post['topic_forum'] );
+		$xtpl->assign( 'PosterInfo', $Poster_Info );
+
+		$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
+		if( $post['post_mbcode'] ) {
+			$params |= FORMAT_MBCODE;
+		}
+		if( $post['post_emoticons'] ) {
+			$params |= FORMAT_EMOTICONS;
+		}
+
+		$text = $this->format( $post['post_text'], $params );
+		$text = str_replace( "[more]", "", $text );
+		$xtpl->assign( 'text', $text );
+
 		$attachments = null;
 
-		while ($file = $this->db->nqfetch($query))
+		while( $file = $this->db->nqfetch( $query ) )
 		{
-			if ($this->perms->auth('post_attach_download', $post['topic_forum'])) {
-				$ext = strtolower(substr($file['attach_name'], -4));
+			if( $this->perms->auth( 'post_attach_download', $post['topic_forum'] ) ) {
+				$ext = strtolower( substr( $file['attach_name'], -4 ) );
 
-				if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png') || ($ext == '.bmp')) {
+				if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) || ( $ext == '.bmp' ) ) {
 					$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->self}?a=topic&amp;s=attach&amp;id={$file['attach_id']}' alt='{$file['attach_name']}' />";
 					continue;
 				}
 			}
-			$filesize = ceil($file['attach_size'] / 1024);
-			$attachments .= eval($this->template('TOPIC_POST_ATTACHMENT'));
+			$filesize = ceil( $file['attach_size'] / 1024 );
+
+			$xtpl->assign( 'attach_id', $file['attach_id'] );
+			$xtpl->assign( 'attach_name', $file['attach_name'] );
+			$xtpl->assign( 'filesize', $filesize );
+			$xtpl->assign( 'attach_downloads', $file['attach_downloads'] );
+
+			$xtpl->parse( 'NewsPost.Attachment' );
 		}
 
-		$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
-		if ($post['post_mbcode']) {
-			$params |= FORMAT_MBCODE;
-		}
-		if ($post['post_emoticons']) {
-			$params |= FORMAT_EMOTICONS;
-		}
-
-		$topic = $post['topic_title'];
-		$uid = $post['post_author'];
-		$user = $post['user_name'];
-		$date = $this->mbdate( DATE_LONG, $post['topic_posted'] );
-		$text = $this->format($post['post_text'], $params);
-		$text .= $attachments;
-
-		$text = str_replace( "[more]", "", $text );
+		$xtpl->assign( 'newspost_comments', $this->lang->newspost_comments );
 
 		$comments = null;
 
@@ -122,7 +137,7 @@ class newspost extends qsfglobal
 
 		$show = false;
 		$pos = 0;
-		while( $comment = $this->db->nqfetch($result) )
+		while( $comment = $this->db->nqfetch( $result ) )
 		{
 			// Skip the first one. The initial "comment" is really the first post.
 			if( !$show ) {
@@ -131,10 +146,10 @@ class newspost extends qsfglobal
 			}
 
 			$pos++;
-			if ($comment['post_mbcode']) {
+			if( $comment['post_mbcode'] ) {
 				$params |= FORMAT_MBCODE;
 			}
-			if ($comment['post_emoticons']) {
+			if( $comment['post_emoticons'] ) {
 				$params |= FORMAT_EMOTICONS;
 			}
 
@@ -142,125 +157,166 @@ class newspost extends qsfglobal
 			$c_date = $this->mbdate( DATE_LONG, $comment['post_time'] );
 			$c_text = $this->format( $comment['post_text'], $params );
 
-			$Poster_Info = $this->build_memberinfo($comment, $post['topic_forum']);
+			$Poster_Info = $this->build_memberinfo( $comment, $post['topic_forum'] );
 
 			if( !strstr( $c_date, $this->lang->today ) && !strstr( $c_date, $this->lang->yesterday ) ) {
 				$c_date = "On " . $c_date;
 			}
-			$comments .= eval($this->template('NEWS_COMMENT'));
+
+			$xtpl->assign( 'pos', $pos );
+			$xtpl->assign( 'CommenterInfo', $Poster_Info );
+			$xtpl->assign( 'c_text', $c_text );
+
+			$xtpl->parse( 'NewsPost.Comment' );
 		}
 
 		$can_post = false;
-		if ($this->perms->auth('post_create', $post['topic_forum'])) {
+		if( $this->perms->auth( 'post_create', $post['topic_forum'] ) ) {
 			$can_post = true;
 		}
 
-		$request_uri = $this->self . "?" . $this->query . "#p" . ++$pos;
+		if( $can_post ) {
+			$xtpl->assign( 't', $post );
+			$xtpl->assign( 'newspost_post_comment', $this->lang->newspost_post_comment );
+			$xtpl->assign( 'smilies', $this->bbcode->generate_emote_links() );
+			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
+			$xtpl->assign( 'newspost_post_emoticons', $this->lang->newspost_post_emoticons );
+			$xtpl->assign( 'newspost_post_mbcode', $this->lang->newspost_post_mbcode );
+			$xtpl->assign( 'reply', $this->lang->reply );
 
-		$post['post_time'] = $this->mbdate(DATE_LONG, $post['post_time']);
-		$Poster_Info = $this->build_memberinfo($post, $post['topic_forum']);
+			$request_uri = $this->self . "?" . $this->query . "#p" . ++$pos;
+			$xtpl->assign( 'request_uri', $request_uri );
 
-		$smilies = $this->bbcode->generate_emote_links();
-		$bbcode_menu = $this->bbcode->get_bbcode_menu();
+			$xtpl->parse( 'NewsPost.CommentForm' );
+		}
 
-		return eval($this->template('NEWS_POST'));
+		$xtpl->parse( 'NewsPost' );
+		return $xtpl->text( 'NewsPost' );
 	}
 
-	function build_memberinfo($post, $forum)
+	private function build_memberinfo( $post, $forum )
 	{
 		$oldtime = $this->time - 900;
 
-		$online = ($post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active']);
+		$online = ( $post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active'] );
 
-		$icons = array(
-			'user_email' => array(
-				'link'   => '',
-				'alt'    => '',
-				'img'    => '',
-				'target' => '_self',
-			),
-			'user_homepage' => array(
-				'link'   => $post['user_homepage'],
-				'alt'    => sprintf($this->lang->topic_links_web, $post['user_name']),
-				'img'    => 'www.png',
-				'target' => $this->sets['link_target']
-			),
-			'user_icq' => array(
-				'link'   => 'http://wwp.icq.com/scripts/search.dll?to=' . $post['user_icq'],
-				'alt'    => sprintf($this->lang->topic_links_icq, $post['user_name']),
-				'img'    => 'icq.png',
-				'target' => $this->sets['link_target']
-			),
-			'user_aim' => array(
-				'link'   => 'aim:goim?screenname=' . $post['user_aim'],
-				'alt'    => sprintf($this->lang->topic_links_aim, $post['user_name']),
-				'img'    => 'aim.png',
-				'target' => '_self'
-			),
-			'user_yahoo' => array(
-				'link'   => 'http://edit.yahoo.com/config/send_webmesg?.target=' . $post['user_yahoo'] . '&amp;.src=pg',
-				'alt'    => sprintf($this->lang->topic_links_yahoo, $post['user_name']),
-				'img'    => 'yahoo.png',
-				'target' => $this->sets['link_target']
-			),
-			'user_msn' => array(
-				'link'   => 'http://members.msn.com/' . $post['user_msn'],
-				'alt'    => sprintf($this->lang->topic_links_msn, $post['user_name']),
-				'img'    => 'msn.png',
-				'target' => $this->sets['link_target']
-			),
-			'user_twitter' => array(
-				'link'   => 'http://twitter.com/' . $post['user_twitter'],
-				'alt'    => sprintf($this->lang->topic_links_twitter, $post['user_name']),
-				'img'    => 'twitter.png',
-				'target' => $this->sets['link_target']
-			),
-			'user_pm' => array(
-				'link'   => $this->self . '?a=pm&amp;s=send&amp;to=' . $post['user_id'],
-				'alt'    => sprintf($this->lang->topic_links_pm, $post['user_name']),
-				'img'    => 'pm.png',
-				'target' => '_self'
-			)
-		);
-
-		if ($this->perms->auth('email_use')) {
-			if (!$post['user_email_show']) {
-				if ($post['user_email_form']) {
+		if( $this->perms->auth( 'email_use' ) ) {
+			if( !$post['user_email_show'] ) {
+				if( $post['user_email_form'] ) {
 					$icons['user_email'] = array(
 						'link'   => "{$this->self}?a=email&amp;to={$post['user_id']}",
-						'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
-						'img'    => 'email.png',
-						'target' => '_self'
+						'alt'    => sprintf( $this->lang->topic_links_email, $post['user_name'] ),
+						'img'    => 'email.png'
 					);
 				} else {
-					unset($icons['user_email']);
+					unset( $icons['user_email'] );
 				}
 			} else {
 				$icons['user_email'] = array(
 					'link'   => 'mailto:' . $post['user_email'],
-					'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
-					'img'    => 'email.png',
-					'target' => '_self'
+					'alt'    => sprintf( $this->lang->topic_links_email, $post['user_name'] ),
+					'img'    => 'email.png'
 				);
 			}
 		}
 
-		$post['user_posts'] = number_format($post['user_posts'], 0, null, $this->lang->sep_thousands);
-		$post['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $post['user_joined']);
+		$post['user_posts'] = number_format( $post['user_posts'], 0, null, $this->lang->sep_thousands );
+		$post['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $post['user_joined'] );
 
-		if (!$this->perms->auth('post_viewip', $forum)) {
+		if( !$this->perms->auth( 'post_viewip', $forum ) ) {
 			$post['post_ip'] = null;
 		}
 
 		$post['user_avatar'] = $this->htmlwidgets->display_avatar( $post );
 
-		if ($post['user_signature'] && $this->user['user_view_signatures']) {
-			$post['user_signature'] = '.........................<br />' . $this->format($post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
+		if( $post['user_signature'] && $this->user['user_view_signatures'] ) {
+			$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
 		} else {
 			$post['user_signature'] = null;
 		}
 
-		return eval($this->template('TOPIC_POSTER_MEMBER'));
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
+
+		$xtpl->assign( 'self', $this->self );
+		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'user_avatar', $post['user_avatar'] );
+
+		if( $online )
+			$xtpl->assign( 'online_icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/images/icons/user_online.png\" alt=\"\" title=\"{$this->lang->topic_online}\" />" );
+		else
+			$xtpl->assign( 'online_icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/images/icons/user_offline.png\" alt=\"\" title=\"{$this->lang->topic_offline}\" />" );
+
+		$xtpl->assign( 'user_id', $post['user_id'] );
+		$xtpl->assign( 'user_name', $post['user_name'] );
+		$xtpl->assign( 'user_title', $post['user_title'] );
+		$xtpl->assign( 'membertitle_icon', $post['membertitle_icon'] );
+		$xtpl->assign( 'topic_group', $this->lang->topic_group );
+		$xtpl->assign( 'group_name', $post['group_name'] );
+		$xtpl->assign( 'topic_posts', $this->lang->topic_posts );
+		$xtpl->assign( 'user_posts', $post['user_posts'] );
+		$xtpl->assign( 'topic_joined', $this->lang->topic_joined );
+		$xtpl->assign( 'user_joined', $post['user_joined'] );
+
+		if( $post['post_ip'] )
+			$xtpl->assign( 'post_ip', "<br /><span class=\"text\">IP</span><a href=\"{$this->self}?a=mod&amp;s=viewips&amp;t={$post}&amp;w={$post['post_author']}\">{$post['post_ip']}</a>" );
+
+		if( $this->perms->auth( 'email_use' ) ) {
+			if( $member['user_email_show'] ) {
+				$member['email'] = $member['user_email'];
+			}
+		}
+
+		if( !$post['user_pm'] || $this->perms->is_guest ) {
+			$post['user_pm'] = null;
+		}
+
+		$this->lang->members(); // Time to cheat!
+
+		if( $post['user_email_show'] && $this->perms->auth('email_use') ) {
+			$xtpl->assign( 'user_email', $post['user_email'] );
+			$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
+
+			$xtpl->parse( 'MemberInfo.EmailShow' );
+		}
+
+		if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
+			$xtpl->assign( 'user_id', $post['user_id'] );
+			$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
+
+			$xtpl->parse( 'MemberInfo.EmailForm' );
+		}
+
+		if( $post['user_pm'] ) {
+			$xtpl->assign( 'user_id', $post['user_id'] );
+			$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
+
+			$xtpl->parse( 'MemberInfo.PM' );
+		}
+
+		if( $post['user_twitter'] ) {
+			$xtpl->assign( 'twitter', 'https://twitter.com/' . $post['user_twitter'] );
+			$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
+
+			$xtpl->parse( 'MemberInfo.Twitter' );
+		}
+
+		if( $post['user_facebook'] ) {
+			$xtpl->assign( 'facebook', $post['user_facebook'] );
+			$xtpl->assign( 'members_visit_facebook', $this->lang->members_visit_facebook );
+
+			$xtpl->parse( 'MemberInfo.Facebook' );
+		}
+
+		if( $post['user_homepage'] ) {
+			$xtpl->assign( 'homepage', $post['user_homepage'] );
+			$xtpl->assign( 'members_visit_www', $this->lang->members_visit_www );
+
+			$xtpl->parse( 'MemberInfo.Homepage' );
+		}
+
+		$xtpl->parse( 'MemberInfo' );
+		return $xtpl->text( 'MemberInfo' );
 	}
 }
 ?>

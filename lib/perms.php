@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -114,20 +114,21 @@ class permissions
 		'search_noflood' => true,
 		'topic_global' => true
 	);
-	
+
 	/**
 	 * Constructor; sets up variables
 	 *
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
-	function permissions(&$qsf)
+	public function __construct( &$qsf )
 	{
 		$this->db  = &$qsf->db;
 		$this->pre = &$qsf->pre;
-		if (!empty($qsf->user)) {
-			$this->get_perms($qsf->user['user_group'], $qsf->user['user_id'],
-				($qsf->user['user_perms'] ? $qsf->user['user_perms'] : $qsf->user['group_perms']));
+
+		if( !empty( $qsf->user ) ) {
+			$this->get_perms( $qsf->user['user_group'], $qsf->user['user_id'],
+				( $qsf->user['user_perms'] ? $qsf->user['user_perms'] : $qsf->user['group_perms'] ) );
 		}
 	}
 
@@ -138,25 +139,26 @@ class permissions
 	 * @param int $user User id. Checked against USER_GUEST_UID as loaded as perms if group is set to -1
 	 * @param mixed $perms Optional array of permissions to use instead of group or user perms from the database
 	 **/
-	function get_perms($group, $user, $perms = false)
+	public function get_perms( $group, $user, $perms = false )
 	{
-		if (!$perms) {
-			if ($group != -1) {
-				$data  = $this->db->fetch("SELECT group_perms FROM %pgroups WHERE group_id=%d", $group);
+		if( !$perms ) {
+			if( $group != -1 ) {
+				$data  = $this->db->fetch( "SELECT group_perms FROM %pgroups WHERE group_id=%d", $group );
 				$perms = $data['group_perms'];
 			} else {
-				$data  = $this->db->fetch("SELECT user_perms, user_group FROM %pusers WHERE user_id=%d", $user);
+				$data  = $this->db->fetch( "SELECT user_perms, user_group FROM %pusers WHERE user_id=%d", $user );
 				$perms = $data['user_perms'];
 				$group = $data['user_group'];
 			}
 		}
 
-		$this->cube = json_decode($perms, true);
-		if (!$this->cube) {
+		$this->cube = json_decode( $perms, true );
+
+		if( !$this->cube ) {
 			$this->cube = $this->standard;
 		}
 
-		$this->is_guest = (($user == USER_GUEST_UID) || ($group == USER_GUEST));
+		$this->is_guest = ( ( $user == USER_GUEST_UID ) || ( $group == USER_GUEST ) );
 		$this->group = $group;
 		$this->user  = $user;
 	}
@@ -169,16 +171,16 @@ class permissions
 	 *
 	 * @return true if found the permission and it is on
 	 **/
-	function auth($y, $z = false)
+	public function auth( $y, $z = false )
 	{
-		if (!isset($this->cube[$y])) {
+		if( !isset( $this->cube[$y] ) ) {
 			return false;
 		}
 
-		if ($z === false) {
-			return !is_array($this->cube[$y]) ? $this->cube[$y] : !in_array(false, $this->cube[$y]);
+		if( $z === false ) {
+			return !is_array( $this->cube[$y] ) ? $this->cube[$y] : !in_array(false, $this->cube[$y] );
 		} else {
-			return is_array($this->cube[$y]) ? (isset($this->cube[$y][$z]) && $this->cube[$y][$z]) : $this->cube[$y];
+			return is_array( $this->cube[$y] ) ? ( isset( $this->cube[$y][$z] ) && $this->cube[$y][$z] ) : $this->cube[$y];
 		}
 	}
 
@@ -187,20 +189,21 @@ class permissions
 	 *
 	 * @param bool $bool What value to assign to all permissions
 	 **/
-	function reset_cube($bool)
+	public function reset_cube( $bool )
 	{
 		$cube = $this->standard;
 		$forums = array();
 
-		$query = $this->db->query("SELECT forum_id FROM %pforums ORDER BY forum_id");
-		while ($forum = $this->db->nqfetch($query))
+		$query = $this->db->query( "SELECT forum_id FROM %pforums ORDER BY forum_id" );
+
+		while( $forum = $this->db->nqfetch( $query ) )
 		{
 			$forums[$forum['forum_id']] = $bool;
 		}
 
-		foreach ($cube as $y => $z)
+		foreach( $cube as $y => $z )
 		{
-			if (!isset($this->globals[$y]) && $forums) {
+			if( !isset( $this->globals[$y] ) && $forums ) {
 				$cube[$y] = $forums;
 			} else {
 				$cube[$y] = $bool;
@@ -217,19 +220,19 @@ class permissions
 	 * @param string $y Indentifier of the permission being queried
 	 * @param bool $bool What value to assign to all permissions
 	 **/
-	function set_xy($y, $bool)
+	public function set_xy( $y, $bool )
 	{
-		if (!isset($this->cube[$y])) {
-			if (!isset($this->globals[$y])) {
+		if( !isset( $this->cube[$y] ) ) {
+			if( !isset( $this->globals[$y] ) ) {
 				// Create an array of all the forums
-				$z = $this->cube[reset(array_diff(array_keys($this->standard), array_keys($this->globals)))];
+				$z = $this->cube[reset( array_diff( array_keys( $this->standard ), array_keys( $this->globals ) ) )];
 
-				if (is_array($z)) { // We have forums
-					$z = array_keys($array);
+				if( is_array( $z ) ) { // We have forums
+					$z = array_keys( $array );
 
 					$this->cube[$y] = array();
 
-					foreach ($z as $zkey)
+					foreach( $z as $zkey )
 					{
 						$this->cube[$y][$zkey] = $bool;
 					}
@@ -240,10 +243,10 @@ class permissions
 				$this->cube[$y] = $bool;
 			}
 		} else {
-			if (isset($this->globals[$y]) || is_bool($this->cube[$y])) {
+			if( isset( $this->globals[$y] ) || is_bool( $this->cube[$y] ) ) {
 				$this->cube[$y] = $bool;
 			} else {
-				foreach ($this->cube[$y] as $zkey => $zval)
+				foreach( $this->cube[$y] as $zkey => $zval )
 				{
 					$this->cube[$y][$zkey] = $bool;
 				}
@@ -258,10 +261,10 @@ class permissions
 	 * @param int $z Forum to check the permission against
 	 * @param bool $bool What value to assign to all permissions
 	 **/
-	function set_xyz($y, $z, $bool)
+	public function set_xyz( $y, $z, $bool )
 	{
 		// Only allow z modifications on non-global permissions if there are forums
-		if (!isset($this->globals[$y]) && is_array($this->cube[$y])) {
+		if( !isset( $this->globals[$y] ) && is_array( $this->cube[$y] ) ) {
 			$this->cube[$y][$z] = $bool;
 		}
 	}
@@ -273,21 +276,21 @@ class permissions
 	 * @param mixed $bool Forum to copy permissions from. -1 if this is the first
 	 *	forum/category and to use a default. true or false to set all values to that
 	 **/
-	function add_z($z, $bool = -1)
+	public function add_z( $z, $bool = -1 )
 	{
-		foreach ($this->cube as $y => $zval)
+		foreach( $this->cube as $y => $zval )
 		{
-			if (isset($this->globals[$y])) {
+			if( isset( $this->globals[$y] ) ) {
 				continue;
 			}
 
-			if (!is_bool($this->cube[$y])) {
+			if( !is_bool( $this->cube[$y] ) ) {
 				$this->cube[$y][$z] = $bool;
 			} else {
-				if ($bool === -1) {
-					$this->cube[$y] = array($z => $this->cube[$y]);
+				if( $bool === -1 ) {
+					$this->cube[$y] = array( $z => $this->cube[$y] );
 				} else {
-					$this->cube[$y] = array($z => $bool);
+					$this->cube[$y] = array( $z => $bool );
 				}
 			}
 		}
@@ -298,19 +301,19 @@ class permissions
 	 *
 	 * @param int $z Forum to remove
 	 **/
-	function remove_z($z)
+	public function remove_z( $z )
 	{
-		foreach ($this->cube as $y => $zval)
+		foreach( $this->cube as $y => $zval )
 		{
-			if (isset($this->globals[$y])) {
+			if( isset( $this->globals[$y] ) ) {
 				continue;
 			}
 
 			// Removing the last forum?
-			if (count($this->cube[$y]) == 1) {
+			if( count( $this->cube[$y] ) == 1) {
 				$this->cube[$y] = $this->cube[$y][$z];
 			} else {
-				unset($this->cube[$y][$z]);
+				unset( $this->cube[$y][$z] );
 			}
 		}
 	}
@@ -326,32 +329,32 @@ class permissions
 	 *
 	 * @param bool $users If true load user permissions instead of group permissions
 	 **/
-	function get_group($users = false)
+	public function get_group( $users = false )
 	{
 		static $start = true;
 		static $groups = array();
 		static $p = 0;
 
-		if ($start) {
+		if( $start ) {
 			$start = false;
 
-			if ($users) {
-				$query = $this->db->query("SELECT user_id, user_perms FROM %pusers WHERE user_perms != ''");
+			if( $users ) {
+				$query = $this->db->query( "SELECT user_id, user_perms FROM %pusers WHERE user_perms != ''" );
 			} else {
-				$query = $this->db->query("SELECT group_id, group_perms FROM %pgroups");
+				$query = $this->db->query( "SELECT group_id, group_perms FROM %pgroups" );
 			}
 
-			while ($group = $this->db->nqfetch($query))
+			while( $group = $this->db->nqfetch( $query ) )
 			{
 				$groups[] = $group;
 			}
 		}
 
-		if ($p < count($groups)) {
-			if ($users) {
-				$this->get_perms(-1, $groups[$p]['user_id'], $groups[$p]['user_perms']);
+		if( $p < count( $groups ) ) {
+			if( $users ) {
+				$this->get_perms( -1, $groups[$p]['user_id'], $groups[$p]['user_perms'] );
 			} else {
-				$this->get_perms($groups[$p]['group_id'], -1, $groups[$p]['group_perms']);
+				$this->get_perms( $groups[$p]['group_id'], -1, $groups[$p]['group_perms'] );
 			}
 
 			$p++;
@@ -365,7 +368,7 @@ class permissions
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Turn on or off a specific permission for a specific forum
 	 *
@@ -374,15 +377,17 @@ class permissions
 	 * @param string $y Indentifier of the permission being added
 	 * @param bool $bool What value to assign to all permissions
 	 **/
-	function add_perm($y, $bool)
+	public function add_perm( $y, $bool )
 	{
-		$new_global = isset($this->globals[$y]);
-		if (!isset($this->standard[$y])) return; // Don't allow the action!
-		
+		$new_global = isset( $this->globals[$y] );
+
+		if( !isset( $this->standard[$y] ) )
+			return; // Don't allow the action!
+
 		$forum_view_array = $this->cube['forum_view']; // Use this to find the exisitng forums
-		
-		if (!$new_global && is_array($forum_view_array)) {
-			foreach (array_keys($forum_view_array) as $forum) {
+
+		if( !$new_global && is_array( $forum_view_array ) ) {
+			foreach( array_keys( $forum_view_array ) as $forum ) {
 				$this->cube[$y][$forum] = $bool;
 			}
 		} else {
@@ -393,21 +398,19 @@ class permissions
 	/**
 	 * Save the permissions back to the database
 	 **/
-	function update()
+	public function update()
 	{
-		if ($this->cube) {
-			ksort($this->cube);
-			$serialized = json_encode($this->cube);
+		if( $this->cube ) {
+			ksort( $this->cube );
+			$serialized = json_encode( $this->cube );
 		} else {
 			$serialized = '';
 		}
 
-		if ($this->user == -1) {
-			$this->db->query("UPDATE %pgroups SET group_perms='%s' WHERE group_id=%d",
-				$serialized, $this->group);
+		if( $this->user == -1 ) {
+			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=%d", $serialized, $this->group );
 		} else {
-			$this->db->query("UPDATE %pusers SET user_perms='%s' WHERE user_id=%d",
-				$serialized, $this->user);
+			$this->db->query( "UPDATE %pusers SET user_perms='%s' WHERE user_id=%d", $serialized, $this->user );
 		}
 	}
 }

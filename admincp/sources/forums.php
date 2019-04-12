@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -48,7 +48,7 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string HTML
 	 **/
-	function execute()
+	public function execute()
 	{
 		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = '';
@@ -79,8 +79,6 @@ class forums extends admin
 					}
 					return $this->EditForum( $id );
 				} else {
-					$token = $this->generate_token();
-
 					$forum = $this->htmlwidgets->select_forums( $f['forum_parent'] );
 
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
@@ -254,15 +252,15 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return bool True if $check is found amongst the children of $id
 	 **/
-	function CheckParent($array, $id, $check)
+	private function CheckParent( $array, $id, $check )
 	{
-		$arr = $this->htmlwidgets->forum_array($array, $id);
-		if ($arr) {
-			foreach ($arr as $val) {
-				if ($val['forum_id'] == $check) {
+		$arr = $this->htmlwidgets->forum_array( $array, $id );
+		if( $arr ) {
+			foreach( $arr as $val ) {
+				if( $val['forum_id'] == $check ) {
 					return true;
 				} else {
-					return $this->CheckParent($array, $val['forum_id'], $check);
+					return $this->CheckParent( $array, $val['forum_id'], $check );
 				}
 			}
 		}
@@ -278,11 +276,11 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string List of forums preceding $id in $array
 	 **/
-	function CreateTree($array, $id)
+	private function CreateTree( $array, $id )
 	{
-		for ($i = 0; $i < count($array); $i++) {
-			if ($array[$i]['forum_id'] == $id) {
-				return preg_replace('/^,/', '', $array[$i]['forum_tree'] . ",$id");
+		for( $i = 0; $i < count( $array ); $i++ ) {
+			if( $array[$i]['forum_id'] == $id ) {
+				return preg_replace( '/^,/', '', $array[$i]['forum_tree'] . ",$id" );
 			}
 		}
 	}
@@ -340,10 +338,10 @@ class forums extends admin
 	/**
 	 * Cleans up orphaned topics and posts that no longer have valid hierarchy data.
 	 *
-	 * @author Roger Libiez [Samson] 
+	 * @author Roger Libiez
 	 * @since 1.4.3
 	**/
-	function CleanOrphans()
+	private function CleanOrphans()
 	{
 		$topic_purge = null;
 
@@ -384,40 +382,40 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string Completion message
 	 **/
-	function DeleteForum($id)
+	private function DeleteForum( $id )
 	{
-		if ($this->htmlwidgets->forum_array($this->htmlwidgets->forum_grab(), $id)) {
-			return $this->message($this->lang->forum_delete, $this->lang->forum_no_orphans);
+		if( $this->htmlwidgets->forum_array( $this->htmlwidgets->forum_grab(), $id ) ) {
+			return $this->message( $this->lang->forum_delete, $this->lang->forum_no_orphans );
 		}
 
 		$topics = null;
 
-		$query = $this->db->query("SELECT topic_id FROM %ptopics WHERE topic_forum=%d", $id);
-		while ($data = $this->db->nqfetch($query))
+		$query = $this->db->query( "SELECT topic_id FROM %ptopics WHERE topic_forum=%d", $id );
+		while( $data = $this->db->nqfetch( $query ) )
 		{
 			$topics .= "post_topic={$data['topic_id']} OR ";
 		}
 
-		if ($topics) {
-			$this->db->query("DELETE FROM %pposts WHERE " . substr($topics, 0, -4));
-			$this->db->query("DELETE FROM %ptopics WHERE topic_forum=%d", $id);
+		if( $topics ) {
+			$this->db->query( "DELETE FROM %pposts WHERE " . substr( $topics, 0, -4 ) );
+			$this->db->query( "DELETE FROM %ptopics WHERE topic_forum=%d", $id );
 		}
 
-		$this->db->query("DELETE FROM %pforums WHERE forum_id=%d", $id);
+		$this->db->query( "DELETE FROM %pforums WHERE forum_id=%d", $id );
 
-		$perms = new permissions($this);
+		$perms = new permissions( $this );
 
 		// Groups
-		while ($perms->get_group())
+		while( $perms->get_group() )
 		{
-			$perms->remove_z($id);
+			$perms->remove_z( $id );
 			$perms->update();
 		}
 
 		// Users
-		while ($perms->get_group(true))
+		while( $perms->get_group(true) )
 		{
-			$perms->remove_z($id);
+			$perms->remove_z( $id );
 			$perms->update();
 		}
 
@@ -428,7 +426,7 @@ class forums extends admin
 		// Clean up any orphans that got left behind, because this process apparently isn't perfect.
 		$this->CleanOrphans();
 
-		return $this->message($this->lang->forum_delete, $this->lang->forum_deleted);
+		return $this->message( $this->lang->forum_delete, $this->lang->forum_deleted );
 	}
 
 	/**
@@ -439,28 +437,27 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string Completion message
 	 **/
-	function EditForum($id)
+	private function EditForum( $id )
 	{
-		if (trim($this->post['name']) == '') {
-			return $this->message($this->lang->forum_edit, $this->lang->forum_empty);
+		if( trim( $this->post['name'] ) == '' ) {
+			return $this->message( $this->lang->forum_edit, $this->lang->forum_empty );
 		}
 
-		$subcat = isset($this->post['subcat']) ? 1 : 0;
-		$redirect = isset($this->post['redirect']) ? 1 : 0;
+		$subcat = isset( $this->post['subcat'] ) ? 1 : 0;
+		$redirect = isset( $this->post['redirect'] ) ? 1 : 0;
 
 		$forums = $this->htmlwidgets->forum_grab();
-		if (($this->post['parent'] == $id) || $this->CheckParent($forums, $id, $this->post['parent'])) {
-			return $this->message($this->lang->forum_edit, $this->lang->forum_parent);
+
+		if( ( $this->post['parent'] == $id ) || $this->CheckParent( $forums, $id, $this->post['parent'] ) ) {
+			return $this->message( $this->lang->forum_edit, $this->lang->forum_parent );
 		}
 
-		$this->db->query("UPDATE %pforums SET
-			  forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d, forum_redirect=%d
-			  WHERE forum_id=%d",
-			  $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $id);
+		$this->db->query( "UPDATE %pforums SET forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d, forum_redirect=%d
+			  WHERE forum_id=%d", $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $id );
 
 		$this->updateForumTrees();
 
-		return $this->message($this->lang->forum_edit, $this->lang->forum_edited);
+		return $this->message( $this->lang->forum_edit, $this->lang->forum_edited );
 	}
 
 	/**
@@ -470,51 +467,51 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string Completion message
 	 **/
-	function AddForum()
+	private function AddForum()
 	{
-		if (trim($this->post['name']) == '') {
+		if( trim( $this->post['name'] ) == '' ) {
 			return $this->lang->forum_empty;
 		}
 
 		$forums = $this->htmlwidgets->forum_grab();
 
-		$forums_arr = $this->htmlwidgets->forum_array($forums, $this->post['parent']);
-		$position   = $forums_arr ? count($forums_arr) : 0;
-		$subcat     = isset($this->post['subcat']) ? 1 : 0;
-		$redirect   = isset($this->post['redirect']) ? 1 : 0;
+		$forums_arr = $this->htmlwidgets->forum_array( $forums, $this->post['parent'] );
+		$position   = $forums_arr ? count( $forums_arr ) : 0;
+		$subcat     = isset( $this->post['subcat'] ) ? 1 : 0;
+		$redirect   = isset( $this->post['redirect'] ) ? 1 : 0;
 
-		$this->db->query("INSERT INTO %pforums
+		$this->db->query( "INSERT INTO %pforums
 			(forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat, forum_redirect)
 			VALUES('%s', %d, '%s', '%s', %d, %d, %d)",
 			$this->CreateTree($forums, $this->post['parent']),
-			$this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect);
+			$this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect );
 
-		$id = $this->db->insert_id("forums");
+		$id = $this->db->insert_id( "forums" );
 
-		$perms = new permissions($this);
+		$perms = new permissions( $this );
 
-		while ($perms->get_group())
+		while( $perms->get_group() )
 		{
 			// Full permissions (note: the banned group is still false)
-			if ($this->post['sync'] == -2) {
-				$perms->add_z($id, ($perms->group != USER_BANNED));
+			if( $this->post['sync'] == -2 ) {
+				$perms->add_z( $id, ( $perms->group != USER_BANNED ) );
 
 			// Default permissions (only works if there are no forums already created)
-			} elseif ($this->post['sync'] == -3) {
-				$perms->add_z($id);
+			} elseif( $this->post['sync'] == -3 ) {
+				$perms->add_z( $id );
 
 			// No permissions
-			} elseif ($this->post['sync'] == -1) {
-				$perms->add_z($id, false);
+			} elseif( $this->post['sync'] == -1 ) {
+				$perms->add_z( $id, false );
 
 			// Copy another forum
 			} else {
-				$perms->add_z($id, false);
+				$perms->add_z( $id, false );
 
-				foreach ($perms->standard as $perm => $false)
+				foreach( $perms->standard as $perm => $false )
 				{
-					if (!isset($perms->globals[$perm])) {
-						$perms->set_xyz($perm, $id, $perms->auth($perm, $this->post['sync']));
+					if( !isset( $perms->globals[$perm] ) ) {
+						$perms->set_xyz( $perm, $id, $perms->auth( $perm, $this->post['sync'] ) );
 					}
 				}
 			}
@@ -532,13 +529,12 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string Completion message
 	 **/
-	function OrderUpdate()
+	private function OrderUpdate()
 	{
-		$q = $this->db->query("SELECT forum_id FROM %pforums ORDER BY forum_id ASC");
-		while ($f = $this->db->nqfetch($q))
+		$q = $this->db->query( "SELECT forum_id FROM %pforums ORDER BY forum_id ASC" );
+		while( $f = $this->db->nqfetch( $q ) )
 		{
-			$this->db->query("UPDATE %pforums SET forum_position=%d WHERE forum_id=%d",
-				$this->post["_{$f['forum_id']}"], $f['forum_id']);
+			$this->db->query( "UPDATE %pforums SET forum_position=%d WHERE forum_id=%d", $this->post["_{$f['forum_id']}"], $f['forum_id'] );
 		}
 		return $this->lang->forum_ordered;
 	}
@@ -552,15 +548,16 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string A heirarchial HTML list of all the forums with an input box in front with id _$forum_id
 	 **/
-	function InputBox($array, $parent = 0)
+	private function InputBox( $array, $parent = 0 )
 	{
-		$arr = $this->htmlwidgets->forum_array($array, $parent);
+		$arr = $this->htmlwidgets->forum_array( $array, $parent );
 
-		if ($arr) {
+		if( $arr ) {
 			$return = "<ul>\n";
-			foreach ($arr as $val) {
+
+			foreach( $arr as $val ) {
 				$return .= "<li><input class='input' name='_{$val['forum_id']}' value='{$val['forum_position']}' size='2' /> {$val['forum_name']}";
-				$return .= $this->InputBox($array, $val['forum_id']);
+				$return .= $this->InputBox( $array, $val['forum_id'] );
 				$return .= "</li>\n";
 			}
 			$return .= "</ul>\n";
@@ -578,16 +575,17 @@ class forums extends admin
 	 * @since Beta 2.1
 	 * @return string A heirarchial HTML list of all the forums
 	 **/
-	function Text($array, $link = "", $parent = 0)
+	private function Text( $array, $link = "", $parent = 0 )
 	{
-		$arr = $this->htmlwidgets->forum_array($array, $parent);
+		$arr = $this->htmlwidgets->forum_array( $array, $parent );
 
-		if ($arr) {
+		if( $arr ) {
 			$return = null;
-			foreach ($arr as $val) {
+
+			foreach( $arr as $val ) {
 				$return .= '<ul>' . "
 				<li><a href='{$link}{$val['forum_id']}'>{$val['forum_name']}</a></li>" .
-				$this->Text($array, $link, $val['forum_id']) . '</ul>';
+				$this->Text( $array, $link, $val['forum_id'] ) . '</ul>';
 			}
 			return $return;
 		}

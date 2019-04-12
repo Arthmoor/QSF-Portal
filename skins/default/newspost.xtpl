@@ -1,0 +1,129 @@
+<!-- BEGIN: NewsPost -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/newspaper.png" alt="" />
+  {topic} <span class="small_text">{post_time}</span>
+ </div>
+ {PosterInfo}
+ <div class="rounded_top" style="background-position:35px 0px;">
+  <span class="one"></span>
+  <span class="two"></span>
+  <span class="three"></span>
+  <span class="four"></span>
+ </div>
+ <div class="postbit">
+  {text}
+<!-- BEGIN: Attachment -->
+  <div class="filebox">
+   <strong>{topic_attached}</strong>
+   <div class="file">
+    <br />{topic_attached_filename} <a href="{self}?a=topic&amp;s=attach&amp;id={attach_id}">{attach_name}</a>
+    <br />{topic_attached_size} {filesize} KB
+    <br />{topic_attached_downloads}: {attach_downloads}
+   </div>
+  </div>
+<!-- END: Attachment -->
+ </div>
+ <div class="rounded_bottom">
+  <span class="one">&nbsp;</span>
+  <span class="two">&nbsp;</span>
+  <span class="three">&nbsp;</span>
+  <span class="four">&nbsp;</span>
+ </div>
+</div>
+
+<br />
+
+<div class="article">
+ <div class="title" style="text-align:center;">{newspost_comments}</div>
+</div>
+
+<!-- BEGIN: Comment -->
+<div class="article">
+ <a id="p{pos}"></a>
+ {CommenterInfo}
+ <span class="postbit_top"></span>
+ <div class="rounded_top" style="background-position:35px 0px;">
+  <span class="one"></span>
+  <span class="two"></span>
+  <span class="three"></span>
+  <span class="four"></span>
+ </div>
+ <div class="postbit">
+  {c_text}
+ </div>
+ <div class="rounded_bottom">
+  <span class="one">&nbsp;</span>
+  <span class="two">&nbsp;</span>
+  <span class="three">&nbsp;</span>
+  <span class="four">&nbsp;</span>
+ </div>
+</div>
+<!-- END: Comment -->
+
+<!-- BEGIN: CommentForm -->
+ <div class="article">
+  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{loc_of_board}/javascript/quickquote.js"></script>
+  <form action="{self}?a=post&amp;s=reply&amp;t={t}" method="post" id="mbpost">
+   <div class="title">{newspost_post_comment}</div>
+
+   <span class="field">
+    {smilies}
+   </span>
+   <span class="form">
+    {bbcode_menu}
+    <textarea class="input" name="post" id="bbcode" rows="8" cols="10"></textarea>
+    <script>textarea = bbcodeInit("bbcode");</script>
+   </span>
+   <p class="line"></p>
+
+   <input type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{newspost_post_emoticons}</label>
+   <input type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{newspost_post_mbcode}</label>
+   <p class="line"></p>
+
+   <input type="submit" name="submit" value="{reply}" />
+   <input type="hidden" name="request_uri" value="{request_uri}" />
+  </div>
+  </form>
+ </div>
+<!-- END: CommentForm -->
+<!-- END: NewsPost -->
+
+<!-- BEGIN: MemberInfo -->
+<span class="avatar">
+ {user_avatar}
+</span>
+
+<span class="member_info">
+ {online_icon}
+ <strong><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></strong><br />
+ <strong>{user_title}</strong> <img src="{loc_of_board}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
+ <span class="text">{topic_group}</span>{group_name}<br />
+ <span class="text">{topic_posts}</span>{user_posts}<br />
+ <span class="text">{topic_joined}</span>{$post['user_joined']}
+ {post_ip}
+</span>
+
+<span class="member_bits">
+<!-- BEGIN: EmailShow -->
+  <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
+<!-- END: EmailShow -->
+<!-- BEGIN: EmailForm -->
+  <span class="smallbutton"><a class="email" href="{self}?a=email&amp;to={user_id}" title="{members_email_member}"></a></span>
+<!-- END: EmailForm -->
+<!-- BEGIN: PM -->
+  <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+<!-- END: PM -->
+<!-- BEGIN: Twitter -->
+   <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>
+<!-- END: Twitter -->
+<!-- BEGIN: Facebook -->
+   <span class="smallbutton"><a class="facebook" href="{facebook}" title="{members_visit_facebook}"></a></span>
+<!-- END: Facebook -->
+<!-- BEGIN: Homepage -->
+   <span class="smallbutton"><a class="home" href="{homepage}" title="{members_visit_www}"></a></span>
+<!-- END: Homepage -->
+</span>
+<p></p>
+<!-- END: MemberInfo -->

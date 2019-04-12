@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class perms extends admin
 {
-	function execute()
+	public function execute()
 	{
 		$perms_obj = new permissions($this);
 
@@ -150,7 +150,7 @@ class perms extends admin
 			}
 
 			$out = "
-			<script type='text/javascript' src='../javascript/permissions.js'></script>
+			<script src='../javascript/permissions.js'></script>
 
 			<form id='form' action='$this->self?a=perms$link' method='post'>
 			<div class='article'><div class='title'>{$this->lang->perms_for} $label</div>";
@@ -160,8 +160,8 @@ class perms extends admin
 				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
 			}
 
-			$out .= "</div>" .
-			$this->table . "
+			$out .= "</div>
+			<div class='article'><table>
 			<tr>
 				<td colspan='8' class='header'>{$this->lang->perms_global}</td>
 			</tr>";
@@ -187,7 +187,7 @@ class perms extends admin
 				if ( ++$i == 4 ) {
 					$i = 0;
 					$out .= '</tr><tr>';
-				}					
+				}
 			}
 			while ( $i++ < 4 ) {
 				$out .= "<td></td><td></td>";
@@ -195,9 +195,9 @@ class perms extends admin
 			$out .= "</tr>";
 			$out .= "<tr>
 				<td colspan='8' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
-			</tr>" . $this->etable;
+			</tr></table></div>";
 
-			$out .= $this->table . "<tr><td colspan='" . ($count + 1) . "' class='header'>{$this->lang->perms_forum}</td></tr>";
+			$out .= "<div class='article'><table><tr><td colspan='" . ($count + 1) . "' class='header'>{$this->lang->perms_forum}</td></tr>";
 			$chunks = array_chunk($locals,8, true);
 			foreach( $chunks as $perms_chunk ) {
 				if ( $perms_chunk != $chunks[0] )
@@ -230,8 +230,8 @@ class perms extends admin
 			$out .= "
 			<tr>
 				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}' /><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
-			</tr>";
-			$out .= $this->etable . "</form>";
+			</tr>
+			</tr></table></div></form>";
 			return $out;
 		} else {
 			if( !$this->is_valid_token() ) {
@@ -280,7 +280,7 @@ class perms extends admin
 		}
 	}
 
-	function show_headers($forums_list)
+	private function show_headers($forums_list)
 	{
 		$out = "<tr>
 		<td class='subheader' colspan='2' valign='bottom'>{$this->lang->perm}</td>";
@@ -293,7 +293,7 @@ class perms extends admin
 		return $out . '</tr>';
 	}
 
-	function show_perm_headers( &$perms_obj, $perms )
+	private function show_perm_headers( &$perms_obj, $perms )
 	{
 		$out = "<td class='subheader' valign='bottom'>{$this->lang->perm}</td>\n";
 		foreach ($perms as $perm => $label) {
@@ -313,7 +313,7 @@ class perms extends admin
 	 * @author Jonathan West <jon@quicksilverforums.com>
 	 * @since 1.3.2
 	 **/
-	function check_subscriptions($mode, $group)
+	private function check_subscriptions($mode, $group)
 	{
 		if ($mode == 'user') {
 			$query = $this->db->query("SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, u.user_perms
@@ -322,7 +322,7 @@ class perms extends admin
 				AND s.subscription_user=u.user_id", $group);
 
 			while ($sub = $this->db->nqfetch($query))//if the user has subscriptions
-			{ 
+			{
 				$perms = new permissions($this);
 				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['user_perms']);
 

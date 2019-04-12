@@ -1,0 +1,108 @@
+<!-- BEGIN: RSSFeedError -->
+<rss version="2.0">
+ <channel>
+  <title>{title}</title>
+  <link>{link}</link>
+  <description>{error}</description>
+  <language>{language}</language>
+  <generator>{generator}</generator>
+  <ttl>{ttl}</ttl>
+ </channel>
+</rss>
+<!-- END: RSSFeedError -->
+
+<!-- BEGIN: RSSFeedFull -->
+<rss version="2.0">
+ <channel>
+  <title>{title}</title>
+  <link>{link}</link>
+  <description>{description}</description>
+  <language>{language}</language>
+  <generator>{generator}</generator>
+  <ttl>{ttl}</ttl>
+<!-- BEGIN: Item -->
+  <item>
+   <title>{item_title}</title>
+   <link>{item_link}</link>
+   <description>{item_desc}</description>
+   <guid isPermaLink="true">{item_link}</guid>
+   <pubDate>{pubdate}</pubDate>
+   <category>{forum_name}</category>
+   <author>{user_email}</author>
+  </item>
+<!-- END: Item -->
+ </channel>
+</rss>
+<!-- END: RSSFeedFull -->
+
+<!-- BEGIN: RSSFeedForum -->
+<rss version="2.0">
+ <channel>
+  <title>{title}</title>
+  <link>{link}</link>
+  <description>{description}</description>
+  <language>{language}</language>
+  <generator>{generator}</generator>
+  <ttl>{ttl}</ttl>
+<!-- BEGIN: Item -->
+  <item>
+   <title>{item_title}</title>
+   <link>{item_link}</link>
+   <description>{item_desc}</description>
+   <guid isPermaLink="true">{item_link}</guid>
+   <pubDate>{pubdate}</pubDate>
+   <category>{forum_name}</category>
+   <author>{user_email}</author>
+  </item>
+<!-- END: Item -->
+ </channel>
+</rss>
+<!-- END: RSSFeedForum -->
+
+<!-- BEGIN: RSSFeedTopic -->
+<rss version="2.0">
+ <channel>
+  <title>{title}</title>
+  <link>{link}</link>
+  <description>{description}</description>
+  <language>{language}</language>
+  <generator>{generator}</generator>
+  <ttl>{ttl}</ttl>
+<!-- BEGIN: Item -->
+  <item>
+   <title>{item_title}</title>
+   <link>{item_link}</link>
+   <description>{item_desc}</description>
+   <guid isPermaLink="true">{item_link}</guid>
+   <pubDate>{pubdate}</pubDate>
+   <category>{forum_name}</category>
+   <author>{user_email}</author>
+  </item>
+<!-- END: Item -->
+ </channel>
+</rss>
+<!-- END: RSSFeedTopic -->
+
+<!-- BEGIN: RSSFeedFile -->
+<rss version="2.0">
+ <channel>
+  <title>{title}</title>
+  <link>{link}</link>
+  <description>{description}</description>
+  <language>{language}</language>
+  <generator>{generator}</generator>
+  <ttl>{ttl}</ttl>
+<!-- BEGIN: Item -->
+  <item>
+   <title>{item_title}</title>
+   <link>{item_link}</link>
+   <description>{item_desc}</description>
+   <guid isPermaLink="true">{item_link}</guid>
+   <pubDate>{pubdate}</pubDate>
+   <category>{cat_name}</category>
+   <author>{user_email}</author>
+  </item>
+<!-- END: Item -->
+ </channel>
+</rss>
+<!-- END: RSSFeedFile -->

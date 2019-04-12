@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,13 +35,14 @@ require_once $set['include_path'] . '/global.php';
 
 class spam_control extends qsfglobal
 {
-	function execute()
+	public function execute()
 	{
-		if (!$this->perms->auth('board_view')) {
+		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
+
 			return $this->message(
-				sprintf($this->lang->board_message, $this->sets['forum_name']),
-				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
 			);
 		}
 
@@ -51,7 +52,7 @@ class spam_control extends qsfglobal
 		$svars = array();
 		$this->set_title( $this->lang->spam_controls );
 
-		if( !isset($this->get['c']) ) {
+		if( !isset( $this->get['c'] ) ) {
 			return $this->display_spam();
 		}
 
@@ -59,7 +60,7 @@ class spam_control extends qsfglobal
 			return $this->message( $this->lang->spam_control, $this->lang->invalid_token );
 		}
 
-		$c = intval($this->get['c']);
+		$c = intval( $this->get['c'] );
 
 		if( $c == 0 ) {
 			$this->db->query( "TRUNCATE TABLE %pspam" );
@@ -72,14 +73,14 @@ class spam_control extends qsfglobal
 		if( isset( $this->get['s'] ) ) {
 			switch( $this->get['s'] )
 			{
-				case 'delete_spam':	return $this->delete_spam($c);
-				case 'report_ham':	return $this->report_ham($c);
+				case 'delete_spam':	return $this->delete_spam( $c );
+				case 'report_ham':	return $this->report_ham( $c );
 			}
 		}
 		return $this->message( $this->lang->spam_control, $this->lang->spam_invalid_option );
 	}
 
-	function delete_spam( $c )
+	private function delete_spam( $c )
 	{
 		$spam = $this->db->fetch( "SELECT spam_topic FROM %pspam WHERE spam_id=%d", $c );
 
@@ -102,14 +103,14 @@ class spam_control extends qsfglobal
 		return $this->message( $this->lang->spam_control, $this->lang->spam_deleted, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
 	}
 
-	function report_ham( $c )
+	private function report_ham( $c )
 	{
 		$spam = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_emoticons, spam_mbcode, spam_count, spam_text, spam_time,
 			spam_icon, spam_ip, spam_edited_by, spam_edited_time, spam_svars FROM %pspam WHERE spam_id=%d", $c );
 		if( !$spam )
 			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
 
-		$svars = json_decode($spam['spam_svars'], true);
+		$svars = json_decode( $spam['spam_svars'], true );
 
 		$user = $this->db->query( "SELECT user_name, FROM %pusers WHERE user_id=%d", $spam['spam_author'] );
 
@@ -126,15 +127,15 @@ class spam_control extends qsfglobal
 
 		$akismet->submit_ham();
 
-		$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
+		$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
 			VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
-			$spam['spam_topic'], $spam['spam_author'], $spam['spam_text'], $spam['spam_time'], $spam['spam_emoticons'], $spam['spam_mbcode'], $spam['spam_count'], $spam['spam_ip'], $spam['spam_icon'], $svars['HTTP_REFERER'], $svars['HTTP_USER_AGENT']);
-		$post_id = $this->db->insert_id("posts");
+			$spam['spam_topic'], $spam['spam_author'], $spam['spam_text'], $spam['spam_time'], $spam['spam_emoticons'], $spam['spam_mbcode'], $spam['spam_count'], $spam['spam_ip'], $spam['spam_icon'], $svars['HTTP_REFERER'], $svars['HTTP_USER_AGENT'] );
+		$post_id = $this->db->insert_id( "posts" );
 
-		$this->db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $spam['spam_topic']);
+		$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $spam['spam_topic'] );
 
-		if ($spam['spam_count']) {
-			$this->db->query("UPDATE %pusers SET user_posts=user_posts+1' WHERE user_id=%d", $spam['spam_author']);
+		if( $spam['spam_count'] ) {
+			$this->db->query( "UPDATE %pusers SET user_posts=user_posts+1' WHERE user_id=%d", $spam['spam_author'] );
 		}
 
 		// Easier to just do this as reporting ham isn't generally repeated that often.
@@ -150,14 +151,36 @@ class spam_control extends qsfglobal
 		return $this->message( $this->lang->spam_control, $this->lang->spam_false_positive, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
 	}
 
-	function display_spam()
+	private function display_spam()
 	{
-		$token = $this->generate_token();
-
 		$result = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_text, spam_time, spam_ip FROM %pspam ORDER BY spam_time" );
 
-		$spams = null;
-		while( $spam = $this->db->nqfetch($result) )
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/spam_control.xtpl' );
+
+		$xtpl->assign( 'self', $this->self );
+		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'spam_controls', $this->lang->spam_controls );
+		$xtpl->assign( 'spam_message1', $this->lang->spam_message1 );
+		$xtpl->assign( 'spam_message2', $this->lang->spam_message2 );
+		$xtpl->assign( 'spam_not_spam', $this->lang->spam_not_spam );
+		$xtpl->assign( 'delete', $this->lang->delete );
+
+		$xtpl->assign( 'token', $this->generate_token() );
+
+		if( $this->perms->auth( 'is_admin' ) ) {
+			$xtpl->assign( 'spam_clear_all', $this->lang->spam_clear_all );
+
+			$xtpl->parse( 'SpamControl.ClearAll' );
+		}
+
+		$xtpl->assign( 'spam_action', $this->lang->spam_action );
+		$xtpl->assign( 'topic', $this->lang->topic );
+		$xtpl->assign( 'spam_author', $this->lang->spam_author );
+		$xtpl->assign( 'lang_date', $this->lang->date );
+		$xtpl->assign( 'spam_text', $this->lang->spam_text );
+
+		while( $spam = $this->db->nqfetch( $result ) )
 		{
 			$ham_link = $this->sets['loc_of_board'] . '/index.php?a=spam_control&amp;s=report_ham&amp;c=' . $spam['spam_id'];
 			$delete_link = $this->sets['loc_of_board'] . '/index.php?a=spam_control&amp;s=delete_spam&amp;c=' . $spam['spam_id'];
@@ -165,27 +188,30 @@ class spam_control extends qsfglobal
 			$topic = $this->db->fetch( "SELECT topic_id, topic_title FROM %ptopics WHERE topic_id=%d", $spam['spam_topic'] );
 			$user = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_id=%d", $spam['spam_author'] );
 
-			$tid = $topic['topic_id'];
 			$title = $this->format( $topic['topic_title'], FORMAT_HTMLCHARS );
 
-			$uid = $user['user_id'];
 			$author = $this->format( $user['user_name'], FORMAT_HTMLCHARS );
 
-			$text = ((strlen($spam['spam_text']) > 1000)) ? (substr($spam['spam_text'], 0, 996) . ' ...') : $spam['spam_text'];
+			$text = ( ( strlen( $spam['spam_text'] ) > 1000 ) ) ? ( substr( $spam['spam_text'], 0, 996 ) . ' ...' ) : $spam['spam_text'];
 			$text = $this->format( $text, FORMAT_HTMLCHARS );
 
 			$date = $this->mbdate( DATE_LONG, $spam['spam_time'] );
-			$ip = $spam['spam_ip'];
 
-			$spams .= eval($this->template('SPAM_LIST_ENTRY'));
+			$xtpl->assign( 'ham_link', $ham_link );
+			$xtpl->assign( 'delete_link', $delete_link );
+			$xtpl->assign( 'tid', $topic['topic_id'] );
+			$xtpl->assign( 'title', $title );
+			$xtpl->assign( 'uid', $user['user_id'] );
+			$xtpl->assign( 'author', $author );
+			$xtpl->assign( 'ip', $spam['spam_ip'] );
+			$xtpl->assign( 'date', $date );
+			$xtpl->assign( 'text', $text );
+
+			$xtpl->parse( 'SpamControl.Entry' );
 		}
 
-		$clearall = null;
-		if( $this->perms->auth('is_admin') ) {
-			$clearall = eval($this->template('SPAM_CLEARALL'));
-		}
-
-		return eval($this->template('SPAM_LIST'));
+		$xtpl->parse( 'SpamControl' );
+		return $xtpl->text( 'SpamControl' );
 	}
 }
 ?>

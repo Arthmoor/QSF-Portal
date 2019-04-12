@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -44,11 +44,10 @@ class admin extends qsfglobal
 	/**
 	 * Post constructor initaliser. Take care of admin specific stuff
 	 *
-	 * @param bool $admin Set to true if we need to setup admin templates
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.2
 	 **/
-	function init( $admin = true )
+	public function init( $admin = true )
 	{
 		if( @file_exists( '../install/index.php' ) && !@file_exists( '../tools' ) ) {
 			exit( '<h1>' . $this->lang->admin_cp_warning . '</h1>' );
@@ -62,18 +61,6 @@ class admin extends qsfglobal
 	}
 
 	/**
-	 * Set to admin tables
-	 *
-	 * @author Geoffrey Dunn <geoff@warmage.com>
-	 * @since 1.2
-	 **/
-	function set_table()
-	{
-		$this->table  = eval( $this->template( 'ADMIN_TABLE' ) );
-		$this->etable = eval( $this->template( 'ADMIN_ETABLE' ) );
-	}
-
-	/**
 	 * Formats a message (admin cp version)
 	 *
 	 * @param string $title Title of the message
@@ -82,7 +69,7 @@ class admin extends qsfglobal
 	 * @since Beta 2.1
 	 * @return string HTML
 	 */
-	function message( $title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4 )
+	public function message( $title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4 )
 	{
 		if( $link_text ) {
 			$message .= "<br /><br /><a href=\"$link\">$link_text</a>";
@@ -94,9 +81,8 @@ class admin extends qsfglobal
 
 		$this->xtpl->assign( 'title', $title );
 		$this->xtpl->assign( 'message', $message );
-		$this->xtpl->parse( 'Index.Message' );
 
-		return '';
+		$this->xtpl->parse( 'Index.Message' );
 	}
 
 	/**
@@ -110,7 +96,7 @@ class admin extends qsfglobal
 	 * @since Beta 3.0
 	 * @return object Language
 	 **/
-	function get_lang( $lang, $a = null, $path = '../', $main = true )
+	public function get_lang( $lang, $a = null, $path = '../', $main = true )
 	{
 		if( isset( $this->get['lang'] ) ) {
 			$lang = $this->get['lang'];
@@ -132,10 +118,11 @@ class admin extends qsfglobal
 			$obj->admin();
 		}
 		$obj->universal();
+
 		return $obj;
 	}
 
-	function list_groups( $val, $select = 'user_group', $custom_only = false )
+	public function list_groups( $val, $select = 'user_group', $custom_only = false )
 	{
 		$out = "<select name=\"$select\">";
 
@@ -147,7 +134,7 @@ class admin extends qsfglobal
 
 		while( $group = $this->db->nqfetch( $groups ) )
 		{
-			$out .= "<option value=\"{$group['group_id']}\"" . (($val == $group['group_id']) ? ' selected=\"selected\"' : '') . ">" . htmlspecialchars($group['group_name']) . "</option>";
+			$out .= "<option value=\"{$group['group_id']}\"" . ( ( $val == $group['group_id'] ) ? ' selected=\"selected\"' : '') . ">" . htmlspecialchars( $group['group_name'] ) . "</option>";
 		}
 
 		return $out . '</select>';
@@ -156,11 +143,11 @@ class admin extends qsfglobal
 	/**
 	 * Grabs the current list of table names in the database
 	 *
-	 * @author Roger Libiez [Samson]
+	 * @author Roger Libiez
 	 * @since 1.3.3
 	 * @return array
 	 **/
-	function get_db_tables()
+	public function get_db_tables()
 	{
 		$tarray = array();
 

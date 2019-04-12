@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -22,8 +22,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,38 +35,38 @@ if (!defined('QUICKSILVERFORUMS')) {
  **/
 class modlet
 {
-    /**
-     * Pointer to the running module object
-     **/
-    var $qsf;
-    
-    /**
-     * Constructor.
-     *
-     * Set any variables specific to your
-     * class in the constructor
-     *
-     * @param object reference to running module
-     * @author Geoffrey Dunn <geoff@warmage.com>
-     * @since 1.1.5
-     **/
-    function modlet(&$forumobject)
-    {
-        $this->qsf =& $forumobject;
-    }
+	/**
+	 * Pointer to the running module object
+	 **/
+	var $qsf;
 
-    /**
-     * Main interface
-     *
-     * This is what's run to generate output for the page
-     *
-     * @param string optional string that is passed from the template
-     * @author Geoffrey Dunn <geoff@warmage.com>
-     * @since 1.1.5
-     * @return string HTML to appear within the template
-     **/
-    function run($param)
-    {
-    }
+	/**
+	 * Constructor.
+	 *
+	 * Set any variables specific to your
+	 * class in the constructor
+	 *
+	 * @param object reference to running module
+	 * @author Geoffrey Dunn <geoff@warmage.com>
+	 * @since 1.1.5
+	 **/
+	public function __construct( $forumobject )
+	{
+		$this->qsf = $forumobject;
+	}
+
+	/**
+	 * Main interface
+	 *
+	 * This is what's run to generate output for the page
+	 *
+	 * @arg string optional string that is passed from the template
+	 * @author Geoffrey Dunn <geoff@warmage.com>
+	 * @since 1.1.5
+	 * @return string HTML to appear within the template
+	 **/
+	public function execute( $arg )
+	{
+	}
 }
 ?>

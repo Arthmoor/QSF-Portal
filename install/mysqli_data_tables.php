@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,15 +26,15 @@
  *
  **/
 
-if (!defined('QSF_INSTALLER')) {
-	exit('Use index.php to install.');
+if( !defined( 'QSF_INSTALLER' ) ) {
+	exit( 'Use index.php to install.' );
 }
 
 $queries[] = "DROP TABLE IF EXISTS %pactive";
 $queries[] = "CREATE TABLE %pactive (
   active_id int(10) unsigned NOT NULL default '0',
   active_ip varchar(40) NOT NULL default '127.0.0.1',
-  active_user_agent varchar(100) NOT NULL default 'Unknown',
+  active_user_agent varchar(255) NOT NULL default 'Unknown',
   active_action varchar(32) NOT NULL default '',
   active_item int(10) unsigned NOT NULL default '0',
   active_time int(10) unsigned NOT NULL default '0',
@@ -269,10 +269,12 @@ $queries[] = "CREATE TABLE %psettings (
 
 $queries[] = "DROP TABLE IF EXISTS %pskins";
 $queries[] = "CREATE TABLE %pskins (
-  skin_name varchar(32) NOT NULL default '',
-  skin_dir varchar(32) NOT NULL default '',
-  PRIMARY KEY  (skin_dir)
-) ENGINE=MyISAM ROW_FORMAT=FIXED";
+  skin_id int(12) unsigned NOT NULL auto_increment,
+  skin_name varchar(255) NOT NULL default '',
+  skin_dir varchar(255) NOT NULL default '',
+  skin_enabled tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (skin_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 $queries[] = "DROP TABLE IF EXISTS %pspam";
 $queries[] = "CREATE TABLE %pspam (
@@ -306,16 +308,6 @@ $queries[] = "CREATE TABLE %psubscriptions (
 ) ENGINE=MyISAM";
 
 $queries[] = "DROP TABLE IF EXISTS %ptemplates";
-$queries[] = "CREATE TABLE %ptemplates (
-  template_skin varchar(32) NOT NULL default 'default',
-  template_set varchar(20) NOT NULL default '',
-  template_name varchar(36) NOT NULL default '',
-  template_html text NOT NULL default '',
-  template_displayname varchar(255) NOT NULL default '',
-  template_description varchar(255) NOT NULL default '',
-  UNIQUE KEY Piece (template_name,template_skin),
-  KEY Section (template_set,template_skin)
-) ENGINE=MyISAM";
 
 $queries[] = "DROP TABLE IF EXISTS %ptopics";
 $queries[] = "CREATE TABLE %ptopics (
@@ -363,7 +355,7 @@ $queries[] = "CREATE TABLE %pusers (
   user_title varchar(100) NOT NULL default '',
   user_title_custom tinyint(1) unsigned NOT NULL default '0',
   user_group tinyint(3) unsigned NOT NULL default '2',
-  user_skin varchar(32) NOT NULL default 'default',
+  user_skin int(10) unsigned NOT NULL default '1',
   user_language varchar(6) NOT NULL default 'en',
   user_avatar varchar(150) NOT NULL default '',
   user_avatar_type enum('local','url','uploaded','gravatar','none') NOT NULL default 'none',
@@ -374,18 +366,15 @@ $queries[] = "CREATE TABLE %pusers (
   user_email_form tinyint(1) unsigned NOT NULL default '1',
   user_birthday date NOT NULL default '1900-01-01',
   user_timezone float(3,1) NOT NULL default '0.0',
-  user_homepage varchar(255) NOT NULL default '',
   user_posts int(10) unsigned NOT NULL default '0',
   user_uploads int(10) unsigned NOT NULL default '0',
   user_location varchar(100) NOT NULL default '',
-  user_icq int(16) unsigned NOT NULL default '0',
-  user_msn varchar(32) NOT NULL default '',
-  user_aim varchar(32) NOT NULL default '',
   user_twitter varchar(50) NOT NULL default '',
+  user_facebook varchar(255) NOT NULL default '',
+  user_homepage varchar(255) NOT NULL default '',
   user_pm tinyint(1) unsigned NOT NULL default '1',
   user_pm_mail tinyint(1) unsigned NOT NULL default '0',
   user_active tinyint(1) unsigned NOT NULL default '1',
-  user_yahoo varchar(100) NOT NULL default '',
   user_interests varchar(255) NOT NULL default '',
   user_signature text NOT NULL default '',
   user_lastvisit int(10) unsigned NOT NULL default '0',
@@ -446,7 +435,7 @@ $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, mem
 $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, membertitle_posts, membertitle_icon) VALUES (5, 'Pool', 500, '5.png')";
 
 $sets = array();
-$settings = json_encode($sets);
+$settings = json_encode( $sets );
 $queries[] = "INSERT INTO %psettings (settings_id, settings_data, settings_version) VALUES (1, '{$settings}', 2)";
 $queries[] = "INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Ashlander 3', 'default')";
 $queries[] = "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)";
@@ -492,6 +481,7 @@ $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickabl
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':imp:', 'imp.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':banana:', 'dancingbanana.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cricket:', 'cricket.png', 1 )";
+$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':troll:', 'trollface.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':(', 'sad.png', 0 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':P', 'tongue.png', 0 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (';)', 'wink.png', 0 )";

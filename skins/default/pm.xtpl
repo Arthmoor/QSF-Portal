@@ -1,0 +1,159 @@
+<!-- BEGIN: PMFolder -->
+<div class="article">
+ <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <select class="big_button_align" onchange="get_folder(this,'{self}')">
+  {folderjump}
+ </select>
+ <p></p>
+</div>
+
+<form action="{self}?a=pm" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/messenger.png" alt="" />
+  {foldername}
+ </div>
+ <span class="head">
+  <span class="icon">&nbsp;</span>
+  <span class="message">{lang_pm_title}</span>
+  <span class="quarter">{lang_pm_from}</span>
+  <span class="last_post">{pm_sendon}</span>
+  <span class="delete">{pm_delete}</span>
+ </span>
+<!-- BEGIN: Message -->
+ <span class="icon">
+<!-- BEGIN: New -->
+  <img src="{loc_of_board}/skins/{skin}/images/icons/new_message.png" alt="{pm_pm}" />
+<!-- END: New -->
+<!-- BEGIN: Old -->
+  <a href="{self}?a=pm&amp;s=unread&amp;m={pm_id}"><img src="{loc_of_board}/skins/{skin}/images/icons/messenger.png" alt="{pm_pm}" /></a>
+<!-- END: Old -->
+ </span>
+ <span class="message"><a href="{self}?a=pm&amp;s=view&amp;m={pm_id}" title="{preview}">{pm_title}</a></span>
+ <span class="quarter"><a href="{self}?a=profile&amp;w={pm_from}">{user_name}</a></span>
+ <span class="last_post">{pm_time}</span>
+ <span class="delete"><input class="check" type="checkbox" name="delete[{pm_id}]" /></span>
+ <p class="list_line"></p>
+<!-- END: Message -->
+<!-- BEGIN: NoMessages -->
+ <span class="notice">{pm_nomsg}</span>
+ <p class="list_line"></p>
+<!-- END: NoMessages -->
+ <span class="right">
+  <input class="button" type="button" value="{select_all}" onclick="return select_all_boxes();" />
+  <input class="button" type="submit" name="submit" value="{pm_delete_selected}" />
+ </span>
+ <p></p>
+</div>
+</form>
+
+<div class="article">
+ <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <select class="big_button_align" onchange="get_folder(this,'{self}')">
+  {folderjump}
+ </select>
+ <p></p>
+</div>
+<!-- END: PMFolder -->
+
+<!-- BEGIN: PMSend -->
+<!-- BEGIN: Preview -->
+<div class="article">
+ <div class="title">{preview_title}</div>
+ {preview_text}
+</div>
+<!-- END: Preview -->
+<form action="{self}?a=pm&amp;s=send" method="post" id="mbpost">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/new_message.png" alt="" />
+  {pm_sendingpm}
+ </div>
+ <span class="field">{pm_to}<br /><span class="tiny">{pm_multiple}</span></span>
+ <span class="form"><input name="to" size="60" value="{to}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{pm_title}</span>
+ <span class="form"><input name="title" size="60" value="{title}" /></span>
+ <p class="line"></p>
+
+ <span class="field">
+  {smilies}
+ </span>
+ <span class="form">
+  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  {bbcode_menu}
+  <textarea name="message" id="bbcode" rows="12" cols="20">{msg}</textarea>
+  <script>textarea = bbcodeInit("bbcode");</script>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input name="submit" type="submit" value="{pm_send}" />
+ <input type="submit" name="preview" value="{pm_preview}" />
+</div>
+</form>
+<!-- END: PMSend -->
+
+<!-- BEGIN: PMView -->
+<div class="article">
+ <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="reply" href="{self}?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="delete" href="{self}?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
+ <p></p>
+</div>
+
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/messenger.png" alt="" />
+  {pm_title}
+ </div>
+
+ <span class="avatar">
+  {user_avatar}
+ </span>
+
+ <span class="member_info">
+<!-- BEGIN: Online -->
+   <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="{pm_online}" title="{pm_online}" height="16" width="16" />
+<!-- END: Online -->
+<!-- BEGIN: Offline -->
+   <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="{pm_offline}" title="{pm_offline}" height="16" width="16" />
+<!-- END: Offline -->
+  <strong><a href="{self}?a=profile&amp;w={pm_from}">{user_name}</a></strong><br />
+  <strong>{user_title}</strong><br />
+  <span class="text">{pm_group}</span>{group_name}<br />
+  <span class="text">{pm_posts}</span>{user_posts}<br />
+  <span class="text">{pm_joined}</span>{user_joined}
+ </span>
+ <p></p>
+ <span class="postbit_top"></span>
+ <div class="rounded_top" style="background-position:{avatar_center}px 0px;">
+  <span class="one"></span>
+  <span class="two"></span>
+  <span class="three"></span>
+  <span class="four"></span>
+ </div>
+
+ <div class="postbit">
+  {recipients}{pm_message}<br />
+  <div class="signature">{user_signature}</div><hr />
+  <div>{pm_sendon} {pm_time}</div>
+ </div>
+
+ <div class="rounded_bottom">
+  <span class="one">&nbsp;</span>
+  <span class="two">&nbsp;</span>
+  <span class="three">&nbsp;</span>
+  <span class="four">&nbsp;</span>
+ </div>
+ <p></p>
+</div>
+
+<div class="article">
+ <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="reply" href="{self}?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="delete" href="{self}?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
+ <p></p>
+</div>
+<!-- END: PMView -->

@@ -1,0 +1,195 @@
+<!-- BEGIN: ModMoveTopic -->
+<form action="{self}?a=mod&amp;s=move&amp;t={t}" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_moved.png" alt="" />
+  {mod_label_topic_move}
+ </div>
+ <span class="field">{mod_label_move_to}</span>
+ <span class="form">
+  <select size="1" name="newforum">
+   {forumlist}
+  </select>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{mod_label_options}</span>
+ <span class="form">
+  <input class="check" type="radio" name="operation" value="delete" id="delete" checked="checked" /> <label for="delete">{mod_label_topic_move_complete}</label><br />
+  <input class="check" type="radio" name="operation" value="lock" id="move" /> <label for="move">{mod_label_topic_move_link}</label>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: ModMoveTopic -->
+
+<!-- BEGIN: ModEditPost -->
+<!-- BEGIN: Preview -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  {preview_title}
+ </div>
+<!-- BEGIN: PosterGuest -->
+<span class="avatar">
+ <img src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+</span>
+<span class="member_info">
+ <strong>[{topic_guest}]</strong> - ({topic_unreg})
+</span>
+<p></p>
+<!-- END: PosterGuest -->
+<!-- BEGIN: PosterMember -->
+<span class="avatar">
+ {avatar}
+</span>
+<span class="member_info">
+ <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" />
+ <strong><a href="{self}?a=profile&amp;w={uid}">{uname}</a></strong><br />
+ <strong>{utitle}</strong>   <img src="{loc_of_board}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
+ <span class="text">{topic_group}</span>{gname}<br />
+ <span class="text">{topic_posts}</span> {uposts}<br />
+ <span class="text">{topic_joined}</span> {joined}
+</span>
+<p></p>
+<!-- END: PosterMember -->
+ <div class="rounded_top" style="background-position:{avatar_center}px 0px;">
+  <span class="one"></span>
+  <span class="two"></span>
+  <span class="three"></span>
+  <span class="four"></span>
+ </div>
+ <div class="postbit">
+  {preview_text}
+  <span class="signature">{signature}</span>
+ </div>
+ <div class="rounded_bottom">
+  <span class="one">&nbsp;</span>
+  <span class="two">&nbsp;</span>
+  <span class="three">&nbsp;</span>
+  <span class="four">&nbsp;</span>
+ </div>
+ <p class="line"></p>
+</div>
+<!-- END: Preview -->
+<form action="{self}?a=mod&amp;s=edit_post&amp;p={p}" method="post" name="mbpost" enctype="multipart/form-data">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/comment_edit.png" alt="" />
+  {mod_label_post_edit} {topic_title}
+ </div>
+ <span class="field">{post_icon}</span>
+ <div class="form">
+  <ul class="post_icons">
+   {msg_icons}
+  </ul>
+ </div>
+ <p class="line"></p>
+ <span class="field">
+  {smilies}
+ </span>
+ <span class="form">
+  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  {bbcode_menu}
+  <textarea name="post" id="bbcode" rows="12" cols="60">{quote}</textarea>
+  <script>textarea = bbcodeInit("bbcode");</script>
+ </span>
+ <p class="line"></p>
+
+ <span class="field">{mod_label_options}</span>
+ <span class="form">
+  <input class="check" type="checkbox" name="emoticons" id="emoticons" value="1"{emot_check} /><label for="emoticons">{mod_label_emoticon}</label><br />
+  <input class="check" type="checkbox" name="code" id="code" value="1"{code_check} /> <label for="code">{mod_label_mbcode}</label>
+ </span>
+ <p class="line"></p>
+
+<!-- BEGIN: AttachBox -->
+ <span class="field">{post_attach_add}<br /><span class="tiny">{post_attach_disrupt}</span></span>
+ <span class="form">
+  <input type="file" name="attach_upload" /><br />
+  <input type="submit" name="attach" value="{post_attach_add}" /> <b>{upload_error}</b>
+ </span>
+ <p class="line"></p>
+
+<!-- BEGIN: Remove -->
+ <span class="field">{post_attach}</span>
+ <span class="form">
+  <select name="attached">
+   {attached}
+  </select>
+  <input type="submit" name="detach" value="{post_attach_remove}" />
+ </span>
+ {attached_data}
+ <p class="line"></p>
+<!-- END: Remove -->
+<!-- END: AttachBox -->
+
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+ <input type="submit" name="preview" value="{post_preview}" />
+</div>
+</form>
+<!-- END: ModEditPost -->
+
+<!-- BEGIN: ModEditTopic -->
+<form action="{self}?a=mod&amp;s=edit_topic&amp;t={t}" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_edit.png" alt="" />
+  {mod_label_topic_edit}
+ </div>
+ <span class="field">{mod_label_title}</span>
+ <span class="form"><input type="text" size="40" maxlength="75" name="title" value="{topic_title}" /></span>
+ <p class="line"></p>
+ 
+ <span class="field">{mod_label_description}</span>
+ <span class="form"><input type="text" size="40" maxlength="35" name="desc" value="{topic_description}" /></span>
+ <p class="line"></p>
+
+<!-- BEGIN: Global -->
+ <span class="field">{mod_label_global}</span>
+ <span class="form"><input class="check" style="margin-top:5px;" type="checkbox" name="global_topic"{checkGlob} /></span>
+ <p class="line"></p>
+<!-- END: Global -->
+ <input type="hidden" name="token" value="{token}" />
+ <input type="submit" name="submit" value="{submit}" />
+</div>
+</form>
+<!-- END: ModEditTopic -->
+
+<!-- BEGIN: ModSplitTopic -->
+<form action="{self}?a=mod&amp;s=split&amp;t={$t}" method="post">
+ <input type="hidden" name="posttarget" value="{posttarget}" />
+ <div class="article">
+  <div class="title">{mod_label_topic_split}</div>
+  <span class="field">{mod_label_title_original}</span>
+  <span class="form">{topic_title}</span>
+
+  <p class="line"></p>
+
+  <span class="field" style="{display1}">{mod_label_title_split} 1</span>
+  <span class="form" style="{display1}"><input type="text" name="topic[1]" size="60" maxlength="75" /></span>
+
+  <p class="line" style="{display1}"></p>
+
+  <span class="field" style="{display2}">{mod_label_title_split} 2</span>
+  <span class="form" style="{display2}"><input type="text" name="topic[2]" size="60" maxlength="75" /></span>
+
+  <p class="line" style="{display2}"></p>
+
+  <span class="field" style="{display3}">{mod_label_title_split} 3</span>
+  <span class="form" style="{display3}"><input type="text" name="topic[3]" size="60" maxlength="75" /></span>
+
+  <p class="line" style="{display3}"></p>
+
+  <span class="field" style="{display4}">{mod_label_title_split} 4</span>
+  <span class="form" style="{display4}"><input type="text" name="topic[4]" size="60" maxlength="75" /></span>
+
+  <p class="line" style="{display4}"></p>
+  <input type="submit" name="submitsplit" value="{submit}" />
+ </div>
+</form>
+<!-- END: ModSplitTopic -->

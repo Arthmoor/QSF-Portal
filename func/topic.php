@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -41,45 +41,46 @@ require_once $set['include_path'] . '/global.php';
  **/
 class topic extends qsfglobal
 {
-	function execute()
+	public function execute()
 	{
-		if (!$this->perms->auth('board_view')) {
+		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
+
 			return $this->message(
-				sprintf($this->lang->board_message, $this->sets['forum_name']),
-				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
 			);
 		}
 
-		if (!isset($this->get['s'])) {
+		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = '';
 		}
 
-		switch($this->get['s']) {
-		case 'attach':
-			return $this->get_attachment();
-			break;
+		switch( $this->get['s'] ) {
+			case 'attach':
+				return $this->get_attachment();
+				break;
 
-		default:
-			return $this->get_topic();
+			default:
+				return $this->get_topic();
 		}
 	}
 
-	function get_topic()
+	private function get_topic()
 	{
 		$num = $min = $topicnum = $postnum = 0;
 		$unread = false;
 
-		if (isset($this->get['num'])) {
-			$num = intval($this->get['num']);
-		} elseif ($this->user['user_posts_page'] > 0) {
+		if( isset( $this->get['num'] ) ) {
+			$num = intval( $this->get['num'] );
+		} elseif( $this->user['user_posts_page'] > 0 ) {
 			$num = $this->user['user_posts_page'];
 		} else {
 			$num = $this->sets['posts_per_page'];
 		}
 
-		$min = isset($this->get['min']) ? intval($this->get['min']) : 0;
-		$topicnum = isset($this->get['t']) ? intval($this->get['t']) : 0;
+		$min = isset( $this->get['min'] ) ? intval( $this->get['min'] ) : 0;
+		$topicnum = isset( $this->get['t'] ) ? intval( $this->get['t'] ) : 0;
 
 		if( $min < 0 )
 			$min = 0;
@@ -88,57 +89,52 @@ class topic extends qsfglobal
 		if( $topicnum < 0 )
 			$topicnum = 0;
 
-		if (isset($this->get['view'])) {
-                        $this->validator->validate($this->get['view'], TYPE_STRING, array('newer', 'older'), false);
+		if( isset( $this->get['view'] ) ) {
+                        $this->validator->validate( $this->get['view'], TYPE_STRING, array('newer', 'older'), false );
                 } else {
                         $this->get['view']  = false;
                 }
 
-		if (isset($this->get['p'])) {
-			$postnum = intval($this->get['p']);
-                        $this->validator->validate($postnum, TYPE_UINT);
+		if( isset( $this->get['p'] ) ) {
+			$postnum = intval( $this->get['p'] );
+                        $this->validator->validate( $postnum, TYPE_UINT );
                 } else {
                         $postnum = false;
                 }
 
-		if (isset($this->get['unread'])) {
+		if( isset( $this->get['unread'] ) ) {
                         $unread = true;
                 }
 		
-		$topic = $this->db->fetch("
-			SELECT
-				t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum,
+		$topic = $this->db->fetch( "SELECT t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum,
 				t.topic_icon, t.topic_edited, t.topic_replies, t.topic_poll_options, t.topic_type, f.forum_name
-			FROM
-				%ptopics t, %pforums f
-			WHERE
-				t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $topicnum, TOPIC_TYPE_FORUM);
+			FROM %ptopics t, %pforums f
+			WHERE t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $topicnum, TOPIC_TYPE_FORUM );
 
-		if (!$topic) {
-			$this->set_title($this->lang->topic_not_found);
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->topic_error, $this->lang->topic_not_found_message);
-		}
-		
-		if (!($topic['topic_modes'] & TOPIC_PUBLISH) && !$this->perms->auth('topic_view_unpublished', $topic['topic_forum'])) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->topic_error, $this->lang->topic_unpublished);
+		if( !$topic ) {
+			$this->set_title( $this->lang->topic_not_found );
+
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_error, $this->lang->topic_not_found_message );
 		}
 
-		if (!$this->perms->auth('topic_view', $topic['topic_forum'])) {
-			header('HTTP/1.0 403 Forbidden');
-			return $this->message(
-				$this->lang->topic_error,
-				($this->perms->is_guest) ? sprintf($this->lang->topic_perm_view_guest, $this->self) : $this->lang->topic_perm_view
-			);
+		if( !( $topic['topic_modes'] & TOPIC_PUBLISH ) && !$this->perms->auth( 'topic_view_unpublished', $topic['topic_forum'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_error, $this->lang->topic_unpublished );
 		}
 
-		if ($this->get['view']) {
-			if ($this->get['view'] == 'older') {
+		if( !$this->perms->auth( 'topic_view', $topic['topic_forum'] ) ) {
+			header( 'HTTP/1.0 403 Forbidden' );
+
+			return $this->message( $this->lang->topic_error, ( $this->perms->is_guest ) ? sprintf( $this->lang->topic_perm_view_guest, $this->self ) : $this->lang->topic_perm_view	);
+		}
+
+		if( $this->get['view'] ) {
+			if( $this->get['view'] == 'older' ) {
 				$order = 'DESC';
 				$where = "topic_edited < %d";
 				
-				if ($topic['topic_modes'] & TOPIC_PINNED) {
+				if( $topic['topic_modes'] & TOPIC_PINNED ) {
 					$where .= ' OR ';
 				} else {
 					$where .= ' AND ';
@@ -147,7 +143,8 @@ class topic extends qsfglobal
 			} else {
 				$order = 'ASC';
 				$where = "topic_edited > %d";
-				if (!($topic['topic_modes'] & TOPIC_PINNED)) {
+
+				if( !( $topic['topic_modes'] & TOPIC_PINNED ) ) {
 					$where .= ' OR ';
 				} else {
 					$where .= ' AND ';
@@ -155,131 +152,134 @@ class topic extends qsfglobal
 				$where .= "(topic_modes & " . TOPIC_PINNED . ") = " . TOPIC_PINNED;
 			}
  
-			$new_topic = $this->db->fetch("
-					SELECT topic_id FROM %ptopics
-					WHERE topic_forum=%d AND topic_type=%d AND
-						($where)
-					ORDER BY (topic_modes & %d) $order,
-						topic_edited $order
-					LIMIT 1",
-					$topic['topic_forum'], TOPIC_TYPE_FORUM, $topic['topic_edited'], TOPIC_PINNED);
+			$new_topic = $this->db->fetch( "SELECT topic_id FROM %ptopics
+					WHERE topic_forum=%d AND topic_type=%d AND ($where)
+					ORDER BY (topic_modes & %d) $order, topic_edited $order
+					LIMIT 1", $topic['topic_forum'], TOPIC_TYPE_FORUM, $topic['topic_edited'], TOPIC_PINNED );
 
-			if ($new_topic) {
+			if( $new_topic ) {
                                 // Move to that topic
-				header('Location: ' . $this->self . '?a=topic&t=' . $new_topic['topic_id']);
+				header( 'Location: ' . $this->self . '?a=topic&t=' . $new_topic['topic_id'] );
 				return;
                         } else {
-				header('HTTP/1.0 404 Not Found');
-				if ($this->get['view'] == 'older') {
-					return $this->message($this->lang->topic_not_found, $this->lang->topic_no_older);
+				header( 'HTTP/1.0 404 Not Found' );
+
+				if( $this->get['view'] == 'older' ) {
+					return $this->message( $this->lang->topic_not_found, $this->lang->topic_no_older );
 				} else {
-					return $this->message($this->lang->topic_not_found, $this->lang->topic_no_newer);
+					return $this->message( $this->lang->topic_not_found, $this->lang->topic_no_newer );
 				}
 			}
                 }
 
-		if ($unread) {
+		if( $unread ) {
 			// Jump to the first unread post (or the last post)
-			$timeread = $this->readmarker->topic_last_read($topicnum);
-			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_time < %d", $topicnum, $timeread);
-			if ($posts) $postCount = $posts['posts'] + 1;
-			else $postCount = 0;
+			$timeread = $this->readmarker->topic_last_read( $topicnum );
+
+			$posts = $this->db->fetch( "SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_time < %d", $topicnum, $timeread );
+
+			if( $posts )
+				$postCount = $posts['posts'] + 1;
+			else
+				$postCount = 0;
+
 			$min = 0; // Start at the first page regardless
-			while ($postCount >= ($min + $num)) {
+			while( $postCount >= ( $min + $num ) ) {
 				$min += $num;
 			}
 		}
 
-		if ($postnum) {
+		if( $postnum ) {
 			// We need to find what page this post exists on!
-			$posts = $this->db->fetch("SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_id < %d",
-				$topicnum, $postnum);
-			if ($posts) $postCount = $posts['posts'] + 1;
-			else $postCount = 0;
+			$posts = $this->db->fetch( "SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=%d AND post_id < %d", $topicnum, $postnum );
+
+			if( $posts )
+				$postCount = $posts['posts'] + 1;
+			else
+				$postCount = 0;
+
 			$min = 0; // Start at the first page regardless
-			while ($postCount > ($min + $num)) {
+			while( $postCount > ( $min + $num ) ) {
 				$min += $num;
 			}
 		}
 
-		$this->db->query("UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d", $topicnum);
+		$this->db->query( "UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d", $topicnum );
 
-		$topic['topic_title'] = $this->format($topic['topic_title'], FORMAT_CENSOR);
+		$topic['topic_title'] = $this->format( $topic['topic_title'], FORMAT_CENSOR );
 		$title_html = $this->format($topic['topic_title'], FORMAT_HTMLCHARS);
 
 		// Add RSS feed link for forum and topic
 		$this->lang->forum(); // needed for 'Forum' and 'Topic'
-		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;f=' . $topic['topic_forum'],
-			"{$this->lang->forum_forum}: {$topic['forum_name']}");
-		$this->add_feed($this->site . '/index.php?a=rssfeed&amp;t=' . $topicnum,
-			"{$this->lang->forum_topic}: $title_html");
 
-		if (strlen($topic['topic_title']) > 30) {
-			$title_short = substr($topic['topic_title'], 0, 29) . '...';
+		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;f=' . $topic['topic_forum'], "{$this->lang->forum_forum}: {$topic['forum_name']}" );
+		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;t=' . $topicnum, "{$this->lang->forum_topic}: $title_html" );
+
+		if( strlen( $topic['topic_title'] ) > 30 ) {
+			$title_short = substr( $topic['topic_title'], 0, 29 ) . '...';
 		} else {
 			$title_short = $topic['topic_title'];
 		}
 
-		$this->set_title($this->lang->topic_viewing . ': ' . $title_html);
+		$this->set_title( $this->lang->topic_viewing . ': ' . $title_html );
 
-		$this->htmlwidgets->tree_forums($topic['topic_forum'], true);
-		$this->tree($title_short);
+		$this->htmlwidgets->tree_forums( $topic['topic_forum'], true );
+		$this->tree( $title_short );
 
-		if (trim($topic['topic_description']) != '') {
-			$topic['topic_description'] = ', ' . $this->format($topic['topic_description'], FORMAT_HTMLCHARS | FORMAT_CENSOR);
+		if( trim( $topic['topic_description'] ) != '' ) {
+			$topic['topic_description'] = ', ' . $this->format( $topic['topic_description'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 		} else {
 			$topic['topic_description'] = null;
 		}
 
-		$user_started_topic = ($this->user['user_id'] == $topic['topic_starter']);
+		$user_started_topic = ( $this->user['user_id'] == $topic['topic_starter'] );
 		$opts = array();
 
-		if ($topic['topic_modes'] & TOPIC_LOCKED) {
-			if ($this->perms->auth('topic_unlock', $topic['topic_forum']) || ($this->perms->auth('topic_unlock_own', $topic['topic_forum']) && $user_started_topic)) {
+		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
+			if( $this->perms->auth( 'topic_unlock', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_unlock_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_unlock . '</a>';
 			}
 		} else {
-			if ($this->perms->auth('topic_lock', $topic['topic_forum']) || ($this->perms->auth('topic_lock_own', $topic['topic_forum']) && $user_started_topic)) {
+			if( $this->perms->auth( 'topic_lock', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_lock_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_lock . '</a>';
 			}
 		}
 
-		if ($topic['topic_modes'] & TOPIC_PINNED) {
-			if ($this->perms->auth('topic_unpin', $topic['topic_forum']) || ($this->perms->auth('topic_unpin_own', $topic['topic_forum']) && $user_started_topic)) {
+		if( $topic['topic_modes'] & TOPIC_PINNED ) {
+			if( $this->perms->auth( 'topic_unpin', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_unpin_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_unpin . '</a>';
 			}
 		} else {
-			if ($this->perms->auth('topic_pin', $topic['topic_forum']) || ($this->perms->auth('topic_pin_own', $topic['topic_forum']) && $user_started_topic)) {
+			if( $this->perms->auth( 'topic_pin', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_pin_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_pin . '</a>';
 			}
 		}
 
-		if ($this->perms->auth('topic_delete', $topic['topic_forum']) || ($this->perms->auth('topic_delete_own', $topic['topic_forum']) && $user_started_topic)) {
+		if( $this->perms->auth( 'topic_delete', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_delete_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=del_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_delete . '</a>';
 		}
 
-		if ($this->perms->auth('topic_move', $topic['topic_forum']) || ($this->perms->auth('topic_move_own', $topic['topic_forum']) && $user_started_topic)) {
+		if( $this->perms->auth( 'topic_move', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_move_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=move&amp;t=' . $topicnum . '">' . $this->lang->topic_move . '</a>';
 		}
 
-		if ($this->perms->auth('topic_edit', $topic['topic_forum']) || ($this->perms->auth('topic_edit_own', $topic['topic_forum']) && $user_started_topic)) {
+		if( $this->perms->auth( 'topic_edit', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_edit_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
 			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=edit_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_edit . '</a>';
 		}
 
-		if ($topic['topic_modes'] & TOPIC_PUBLISH) {
-			if ($this->perms->auth('topic_publish', $topic['topic_forum'])) {
+		if( $topic['topic_modes'] & TOPIC_PUBLISH ) {
+			if( $this->perms->auth( 'topic_publish', $topic['topic_forum'] ) ) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_unpublish . '</a>';
 			}
 		} else {
-			if ($this->perms->auth('topic_publish', $topic['topic_forum'])) {
+			if( $this->perms->auth( 'topic_publish', $topic['topic_forum'] ) ) {
 				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_publish . '</a>';
 			}
 		}
 		$splitmode = false;
 
-		if ($this->perms->auth('topic_split', $topic['topic_forum']) || ($this->perms->auth('topic_split_own', $topic['topic_forum']) && $user_started_topic)) {
-			if ($this->get['s'] == 'split') {
-				$this->templater->add_templates('mod');
+		if( $this->perms->auth( 'topic_split', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_split_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
+			if( $this->get['s'] == 'split' ) {
 				$splitmode = true;
 				$min = 0;
 				$num = $topic['topic_replies'] + 1;
@@ -289,68 +289,50 @@ class topic extends qsfglobal
 		}
 
 		$topic_icon = null;
-		if ($topic['topic_icon']) {
+		if( $topic['topic_icon'] ) {
 			$topic_icon = $topic['topic_icon'];
 		}
 
-		if (!$opts) {
+		if( !$opts ) {
 			$mod_opts = '&nbsp;';
 		} else {
 			$mod_opts = $this->lang->topic_options . ': [ ' . implode(' | ', $opts) . ' ]';
 		}
 
-		if ($topic['topic_modes'] & TOPIC_POLL) {
-			$this->templater->add_templates('poll');
-			$PollDisplay = $this->get_poll($topicnum, $topic['topic_forum'], $title_html, $topic['topic_modes'], $topic['topic_poll_options']);
- 		} else {
-			$PollDisplay = null;
-		}
+		$PollDisplay = null;
+		if( $topic['topic_modes'] & TOPIC_POLL ) {
+			$PollDisplay = $this->get_poll( $topicnum, $topic['topic_forum'], $title_html, $topic['topic_modes'], $topic['topic_poll_options'] );
+ 		}
 
-		$posts = null;
-
-		$query = $this->db->query("
-			SELECT
-			  a.attach_id, a.attach_name, a.attach_downloads, a.attach_size,
-			  p.post_id
-			FROM
-			  %pposts p, %pattach a
-			WHERE
-			  p.post_topic = %d AND
-			  a.attach_post = p.post_id",
-			$topicnum);
+		$query = $this->db->query( "SELECT a.attach_id, a.attach_name, a.attach_downloads, a.attach_size, p.post_id
+			FROM %pposts p, %pattach a
+			WHERE p.post_topic = %d AND a.attach_post = p.post_id",	$topicnum );
 
 		$attachments = array();
 
-		while ($attach = $this->db->nqfetch($query))
+		while( $attach = $this->db->nqfetch( $query ) )
 		{
-			if (!isset($attachments[$attach['post_id']])) {
+			if( !isset( $attachments[$attach['post_id']] ) ) {
 				$attachments[$attach['post_id']] = array();
 			}
 
 			$attachments[$attach['post_id']][] = $attach;
 		}
 
-		$query = $this->db->query("
-			SELECT
-			  p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
-			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_aim, m.user_twitter,
-			  m.user_icq, m.user_yahoo, m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_msn, m.user_pm, m.user_email_show, m.user_email_form, m.user_active,
+		$query = $this->db->query( "SELECT p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
+			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_twitter, m.user_facebook,
+			  m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_pm, m.user_email_show, m.user_email_form, m.user_active,
 			  t.membertitle_icon,
 			  g.group_name,
 			  a.active_time
-			FROM
-			  (%pposts p, %pusers m, %pgroups g)
+			FROM (%pposts p, %pusers m, %pgroups g)
 			LEFT JOIN %pactive a ON a.active_id=m.user_id
 			LEFT JOIN %pmembertitles t ON t.membertitle_id=m.user_level
-			WHERE
-			  p.post_topic = %d AND
-			  p.post_author = m.user_id AND
-			  m.user_group = g.group_id
+			WHERE p.post_topic = %d AND p.post_author = m.user_id AND m.user_group = g.group_id
 			GROUP BY p.post_id
-			ORDER BY
-			  p.post_time
+			ORDER BY p.post_time
 			LIMIT %d, %d",
-			$topicnum, $min, $num);
+			$topicnum, $min, $num );
 
 		$i = 0;
 		$split = '';
@@ -358,286 +340,430 @@ class topic extends qsfglobal
 		$newest_post_read = 0;
 		$first_unread_post = false;
 
-		while ($post = $this->db->nqfetch($query))
+		$this->readmarker->mark_topic_read( $topicnum, $newest_post_read );
+
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
+
+		$xtpl->assign( 'self', $this->self );
+		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
+		$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
+		$xtpl->assign( 'main_mark1', $this->lang->main_mark1 );
+		$xtpl->assign( 'main_mark', $this->lang->main_mark );
+		$xtpl->assign( 'main_recent1', $this->lang->main_recent1 );
+		$xtpl->assign( 'main_recent', $this->lang->main_recent );
+		$xtpl->assign( 'PollDisplay', $PollDisplay );
+		$xtpl->assign( 'topicnum', $topicnum );
+		$xtpl->assign( 'reply', $this->lang->reply );
+
+		$can_post = false;
+		if( $this->perms->auth( 'post_create', $topic['topic_forum'] ) ) {
+			$can_post = true;
+		}
+
+		if( $can_post ) {
+			$xtpl->assign( 'topic_forum', $topic['topic_forum'] );
+			$xtpl->assign( 'topic_create_poll', $this->lang->topic_create_poll );
+			$xtpl->assign( 'new_poll', $this->lang->new_poll );
+			$xtpl->assign( 'topic_subscribe', $this->lang->topic_subscribe );
+			$xtpl->assign( 'subscribe', $this->lang->subscribe );
+			$xtpl->assign( 'topic_create_topic', $this->lang->topic_create_topic );
+			$xtpl->assign( 'new_topic', $this->lang->new_topic );
+
+			$xtpl->parse( 'Topic.CanPostTop' );
+			$xtpl->parse( 'Topic.CanPostBottom' );
+		}
+
+		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
+			$xtpl->assign( 'topic_locked', $this->lang->topic_locked );
+
+			$xtpl->parse( 'Topic.LockedTop' );
+			$xtpl->parse( 'Topic.LockedBottom' );
+		}
+
+		$can_reply = false;
+		if( $this->perms->auth( 'post_create', $topic['topic_forum'] ) && !( $topic['topic_modes'] & TOPIC_LOCKED ) ) {
+			$can_reply = true;
+		}
+
+		if( $can_reply ) {
+			$xtpl->assign( 'topic_reply', $this->lang->topic_reply );
+
+			$xtpl->parse( 'Topic.ReplyTop' );
+			$xtpl->parse( 'Topic.ReplyBottom' );
+		}
+
+		$xtpl->assign( 'title_html', $title_html );
+		$xtpl->assign( 'topic_newer', $this->lang->topic_newer );
+		$xtpl->assign( 'topic_older', $this->lang->topic_older );
+
+		if( ( substr( $topic['topic_description'], 0, 1 ) == ',' ) && ( $topic['topic_description'] = substr( $topic['topic_description'], 2 ) ) ) {
+			// What is this I don't even.....
+		}
+
+		$xtpl->assign( 'topic_description', $topic['topic_description'] );
+
+		$pagelinks = $this->htmlwidgets->get_pages( $topic['topic_replies'] + 1, 'a=topic&amp;t=' . $topicnum, $min, $num );
+
+		$xtpl->assign( 'topic_pages', $this->lang->topic_pages );
+		$xtpl->assign( 'pagelinks', $pagelinks );
+
+		if( strpos( $mod_opts, '&nbsp' ) === false ) {
+			$xtpl->assign( 'mod_opts', $mod_opts );
+
+			$xtpl->parse( 'Topic.ModPageLinksTop' );
+			$xtpl->parse( 'Topic.ModPageLinksBottom' );
+		} else {
+			$xtpl->parse( 'Topic.PageLinksTop' );
+			$xtpl->parse( 'Topic.PageLinksBottom' );
+		}
+
+		$xtpl->assign( 'topic_new_post', $this->lang->topic_new_post );
+		$xtpl->assign( 'topic_top', $this->lang->topic_top );
+		$xtpl->assign( 'topic_bottom', $this->lang->topic_bottom );
+		$xtpl->assign( 'topic_delete_spam', $this->lang->topic_delete_spam );
+		$xtpl->assign( 'spam', $this->lang->spam );
+		$xtpl->assign( 'topic_delete_post', $this->lang->topic_delete_post );
+		$xtpl->assign( 'delete', $this->lang->delete );
+		$xtpl->assign( 'topic_edit_post', $this->lang->topic_edit_post );
+		$xtpl->assign( 'edit', $this->lang->edit );
+		$xtpl->assign( 'topic_quote', $this->lang->topic_quote );
+		$xtpl->assign( 'quote', $this->lang->quote );
+		$xtpl->assign( 'topic_attached', $this->lang->topic_attached );
+		$xtpl->assign( 'topic_attached_filename', $this->lang->topic_attached_filename );
+		$xtpl->assign( 'topic_attached_size', $this->lang->topic_attached_size );
+		$xtpl->assign( 'topic_attached_downloads', $this->lang->topic_attached_downloads );
+		$xtpl->assign( 'topic_guest', $this->lang->topic_guest );
+		$xtpl->assign( 'topic_unreg', $this->lang->topic_unreg );
+		$xtpl->assign( 'topic_online', $this->lang->topic_online );
+		$xtpl->assign( 'topic_offline', $this->lang->topic_offline );
+		$xtpl->assign( 'topic_group', $this->lang->topic_group );
+		$xtpl->assign( 'topic_posts', $this->lang->topic_posts );
+		$xtpl->assign( 'topic_joined', $this->lang->topic_joined );
+		$xtpl->assign( 'topic_split_keep', $this->lang->topic_split_keep );
+		$xtpl->assign( 'topic_split_move', $this->lang->topic_split_move );
+		$xtpl->assign( 'topic_split_finish', $this->lang->topic_split_finish );
+
+		while( $post = $this->db->nqfetch( $query ) )
 		{
 			$newest_post_read = $post['post_time'];
-			$post['newpost'] = !$this->readmarker->is_post_read($topicnum, $post['post_time']);
-			if ($first_unread_post === false && $post['newpost']) {
+			$post['newpost'] = !$this->readmarker->is_post_read( $topicnum, $post['post_time'] );
+
+			if( $first_unread_post === false && $post['newpost'] ) {
+				$xtpl->parse( 'Topic.Post.FirstUnread' );
+
 				$first_unread_post = true;
-			} else if ($first_unread_post === true) {
-				$first_unread_post = 0;
+			} else if( $first_unread_post === true ) {
+				$first_unread_post = false;
 			}
 
+			if( $post['newpost'] ) {
+				$xtpl->parse( 'Topic.Post.NewPost' );
+			}
+
+			if( !( $post['newpost'] ) && !( $post['post_icon'] ) ) {
+				$xtpl->parse( 'Topic.Post.NewPostTopic' );
+			} else {
+				$xtpl->assign( 'post_icon', $post['post_icon'] );
+
+				$xtpl->parse( 'Topic.Post.PostIcon' );
+			}
+
+			$xtpl->assign( 'post_id', $post['post_id'] );
+
+			$post_num = ( $i + 1 ) + $min;
+			$i++;
+
+			$xtpl->assign( 'post_num', $post_num );
+
 			$post_time = $post['post_time'];
-			$post['post_time']   = $this->mbdate(DATE_LONG, $post['post_time']);
-			$post['user_joined'] = $this->mbdate(DATE_ONLY_LONG, $post['user_joined']);
+			$post['post_time']   = $this->mbdate( DATE_LONG, $post['post_time'] );
+
+			$xtpl->assign( 'post_time', $post['post_time'] );
+
+			$edited = null;
+			if( $post['post_edited_by'] ) {
+				$post['post_edited_time'] = $this->mbdate( DATE_LONG, $post['post_edited_time'] );
+				$edited = sprintf( $this->lang->topic_edited, $post['post_edited_time'], $post['post_edited_by'] );
+			}
+			$xtpl->assign( 'edited', $edited );
+
+			$hours = $this->sets['edit_post_age'];
+
+			$can_delete = false;
+			$user_created_post = ( $this->user['user_id'] == $post['post_author'] );
+			if( $this->perms->auth( 'post_delete', $topic['topic_forum'] ) || ( $user_created_post && $this->perms->auth( 'post_delete_own', $topic['topic_forum'] ) ) ) {
+				if( !( $topic['topic_modes'] & TOPIC_LOCKED ) )
+					$can_delete = true;
+				if( $hours > 0 && $this->time - ( $hours * 60 * 60 ) > $post_time )
+					$can_delete = false;
+				if( $this->perms->auth( 'post_delete_old', $topic['topic_forum'] ) )
+					$can_delete = true;
+			}
+
+			if( $can_delete ) {
+				$xtpl->parse( 'Topic.Post.CanDelete' );
+			}
+
+			$can_edit = false;
+			if( $this->perms->auth( 'post_edit', $topic['topic_forum'] ) || ( $user_created_post && $this->perms->auth( 'post_edit_own', $topic['topic_forum'] ) ) ) {
+				if( !( $topic['topic_modes'] & TOPIC_LOCKED ) )
+					$can_edit = true;
+				if( $hours > 0 && $this->time - ( $hours * 60 * 60 ) > $post_time )
+					$can_edit = false;
+				if( $this->perms->auth( 'post_edit_old', $topic['topic_forum'] ) )
+					$can_edit = true;
+			}
+
+			if( $can_edit ) {
+				$xtpl->parse( 'Topic.Post.CanEdit' );
+			}
+
+			$can_reply = false;
+			if( $this->perms->auth( 'post_create', $topic['topic_forum'] ) && !( $topic['topic_modes'] & TOPIC_LOCKED ) ) {
+				$can_reply = true;
+			}
+
+			if( $can_reply ) {
+				$xtpl->parse( 'Topic.Post.CanReply' );
+			}
 
 			$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
 
-			if ($post['post_mbcode']) {
+			if( $post['post_mbcode'] ) {
 				$params |= FORMAT_MBCODE;
 			}
 
-			if ($post['post_emoticons']) {
+			if( $post['post_emoticons'] ) {
 				$params |= FORMAT_EMOTICONS;
 			}
 
-			$post['post_text'] = $this->format($post['post_text'], $params);
+			$post['post_text'] = $this->format( $post['post_text'], $params );
 
-			if ($splitmode && $i) {
-				$split = eval($this->template('MOD_SPLIT_SELECT'));
+			if( $splitmode && $i ) {
+				$xtpl->parse( 'Topic.Post.SplitSelect' );
 			}
 
-			if (isset($this->get['hl'])) {
-				$post['post_text'] = str_replace($this->get['hl'], "<span style='color:#FF0000; font-weight:bold'>{$this->get['hl']}</span>", $post['post_text']);
+			if( isset( $this->get['hl'] ) ) {
+				$post['post_text'] = str_replace( $this->get['hl'], "<span style='color:#FF0000; font-weight:bold'>{$this->get['hl']}</span>", $post['post_text'] );
 			}
 
-			if (!$this->perms->auth('post_viewip', $topic['topic_forum'])) {
+			if( !$this->perms->auth( 'post_viewip', $topic['topic_forum'] ) ) {
 				$post['post_ip'] = null;
 			}
 
-			if ($post['post_author'] != USER_GUEST_UID) {
-				$online = ($post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active']);
+			if( $post['post_author'] != USER_GUEST_UID ) {
+				$post['user_avatar'] = $this->htmlwidgets->display_avatar( $post );
+				$xtpl->assign( 'user_avatar', $post['user_avatar'] );
 
-				$icons = array(
-					'user_email' => array(
-						'link'   => '',
-						'alt'    => '',
-						'img'    => '',
-						'target' => '_self',
-					),
-					'user_homepage' => array(
-						'link'   => $post['user_homepage'],
-						'alt'    => sprintf($this->lang->topic_links_web, $post['user_name']),
-						'img'    => 'www.png',
-						'target' => $this->sets['link_target']
-					),
-					'user_icq' => array(
-						'link'   => 'http://wwp.icq.com/scripts/search.dll?to=' . $post['user_icq'],
-						'alt'    => sprintf($this->lang->topic_links_icq, $post['user_name']),
-						'img'    => 'icq.png',
-						'target' => $this->sets['link_target']
-					),
-					'user_aim' => array(
-						'link'   => 'aim:goim?screenname=' . $post['user_aim'],
-						'alt'    => sprintf($this->lang->topic_links_aim, $post['user_name']),
-						'img'    => 'aim.png',
-						'target' => '_self'
-					),
-					'user_yahoo' => array(
-						'link'   => 'http://edit.yahoo.com/config/send_webmesg?.target=' . $post['user_yahoo'] . '&amp;.src=pg',
-						'alt'    => sprintf($this->lang->topic_links_yahoo, $post['user_name']),
-						'img'    => 'yahoo.png',
-						'target' => $this->sets['link_target']
-					),
-					'user_msn' => array(
-						'link'   => 'http://members.msn.com/' . $post['user_msn'],
-						'alt'    => sprintf($this->lang->topic_links_msn, $post['user_name']),
-						'img'    => 'msn.png',
-						'target' => $this->sets['link_target']
-					),
-					'user_twitter' => array(
-						'link'   => 'http://twitter.com/' . $post['user_twitter'],
-						'alt'    => sprintf($this->lang->topic_links_twitter, $post['user_name']),
-						'img'    => 'twitter.png',
-						'target' => $this->sets['link_target']
-					),
-					'user_pm' => array(
-						'link'   => $this->self . '?a=pm&amp;s=send&amp;to=' . $post['user_id'],
-						'alt'    => sprintf($this->lang->topic_links_pm, $post['user_name']),
-						'img'    => 'pm.png',
-						'target' => '_self'
-					)
-				);
+				$online = ( $post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active'] );
+				if( $online ) {
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.Online' );
+				} else {
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.Offline' );
+				}
 
-				if ($this->perms->auth('email_use')) {
-					if (!$post['user_email_show']) {
-						if ($post['user_email_form']) {
-							$icons['user_email'] = array(
-								'link'   => "{$this->self}?a=email&amp;to={$post['user_id']}",
-								'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
-								'img'    => 'email.png',
-								'target' => '_self'
-							);
-						} else {
-							unset($icons['user_email']);
-						}
-					} else {
-						$icons['user_email'] = array(
-							'link'   => 'mailto:' . $post['user_email'],
-							'alt'    => sprintf($this->lang->topic_links_email, $post['user_name']),
-							'img'    => 'email.png',
-							'target' => '_self'
-						);
+				$xtpl->assign( 'user_id', $post['user_id'] );
+				$xtpl->assign( 'user_name', $post['user_name'] );
+				$xtpl->assign( 'user_title', $post['user_title'] );
+				$xtpl->assign( 'membertitle_icon', $post['membertitle_icon'] );
+				$xtpl->assign( 'group_name', $post['group_name'] );
+
+				$post['user_posts'] = number_format( $post['user_posts'], 0, null, $this->lang->sep_thousands );
+				$xtpl->assign( 'user_posts', $post['user_posts'] );
+
+				$post['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $post['user_joined'] );
+				$xtpl->assign( 'user_joined', $post['user_joined'] );
+
+				if( $post['post_ip'] ) {
+					$xtpl->assign( 'post_author', $post['post_author'] );
+					$xtpl->assign( 'post_ip', $post['post_ip'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.PostIP' );
+				}
+
+				if( $this->perms->auth( 'email_use' ) ) {
+					if( $post['user_email_show'] ) {
+						$post['email'] = $post['user_email'];
 					}
 				}
-				$post['user_posts'] = number_format($post['user_posts'], 0, null, $this->lang->sep_thousands);
 
-				$post['user_avatar'] = $this->htmlwidgets->display_avatar( $post );
+				if( !$post['user_pm'] || $this->perms->is_guest ) {
+					$post['user_pm'] = null;
+				}
 
-				if ($post['user_signature'] && $this->user['user_view_signatures']) {
-					$post['user_signature'] = '.........................<br />' . $this->format($post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
+				if( $post['user_email_show'] && $this->perms->auth('email_use') ) {
+					$xtpl->assign( 'user_email', $post['user_email'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.EmailShow' );
+				}
+
+				if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
+					$xtpl->assign( 'user_id', $post['user_id'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.EmailForm' );
+				}
+
+				if( $post['user_pm'] ) {
+					$xtpl->assign( 'user_id', $post['user_id'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.PM' );
+				}
+
+				if( $post['user_twitter'] ) {
+					$xtpl->assign( 'twitter', 'https://twitter.com/' . $post['user_twitter'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.Twitter' );
+				}
+
+				if( $post['user_facebook'] ) {
+					$xtpl->assign( 'facebook', $post['user_facebook'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.Facebook' );
+				}
+
+				if( $post['user_homepage'] ) {
+					$xtpl->assign( 'homepage', $post['user_homepage'] );
+
+					$xtpl->parse( 'Topic.Post.PosterInfoMember.Homepage' );
+				}
+
+				if( $post['user_signature'] && $this->user['user_view_signatures'] ) {
+					$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
 				} else {
 					$post['user_signature'] = null;
 				}
 
-				$Poster_Info = eval($this->template('TOPIC_POSTER_MEMBER'));
-
+				$xtpl->parse( 'Topic.Post.PosterInfoMember' );
 			} else {
 				$post['user_email_form'] = null;
 				$post['user_homepage'] = null;
-				$post['user_icq'] = null;
-				$post['user_aim'] = null;
-				$post['user_yahoo'] = null;
-				$post['user_msn'] = null;
+				$post['user_facebook'] = null;
 				$post['user_twitter'] = null;
 				$post['user_pm'] = null;
-				$Poster_Info = eval($this->template('TOPIC_POSTER_GUEST'));
 				$post['user_signature'] = null;
 				$icons = array();
+
+				$xtpl->assign( 'post_ip', $post['post_ip'] );
+
+				$xtpl->parse( 'Topic.Post.PosterInfoGuest' );
 			}
 
-			if ($post['post_icon']) {
-				$post['post_icon'] = "<img src='{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/{$post['post_icon']}' alt='*' style='margin-right:5px' />";
-			}
+			$xtpl->assign( 'user_signature', $post['user_signature'] );
 
-			if (!$post['post_edited_by']) {
-				$edited = null;
-			} else {
-				$post['post_edited_time'] = $this->mbdate(DATE_LONG, $post['post_edited_time']);
-				$edited = sprintf($this->lang->topic_edited, $post['post_edited_time'], $post['post_edited_by']);
-			}
+			$avatar_center = ( $post['user_avatar_width'] ? ( ( $post['user_avatar_width'] / 2 ) - 3 ) : 22 );
+			$xtpl->assign( 'avatar_center', $avatar_center );
 
-			if (isset($attachments[$post['post_id']])) {
-				$download_perm = $this->perms->auth('post_attach_download', $topic['topic_forum']);
+			if( isset( $attachments[$post['post_id']] ) ) {
+				$download_perm = $this->perms->auth( 'post_attach_download', $topic['topic_forum'] );
 
-				foreach ($attachments[$post['post_id']] as $file)
+				foreach( $attachments[$post['post_id']] as $file )
 				{
-					if ($download_perm) {
-						$ext = strtolower(substr($file['attach_name'], -4));
+					if( $download_perm ) {
+						$ext = strtolower( substr( $file['attach_name'], -4 ) );
 
-						if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png') || ($ext == '.bmp')) {
+						if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) || ( $ext == '.bmp' ) ) {
 							$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->self}?a=topic&amp;s=attach&amp;id={$file['attach_id']}' alt='{$file['attach_name']}' />";
 							continue;
 						}
 					}
-					$filesize = ceil($file['attach_size'] / 1024);
-					$post_attachment = eval($this->template('TOPIC_POST_ATTACHMENT'));
-					$post['post_text'] .= $post_attachment;
+
+					$xtpl->assign( 'attach_id', $file['attach_id'] );
+					$xtpl->assign( 'attach_name', $file['attach_name'] );
+
+					$filesize = ceil( $file['attach_size'] / 1024 );
+					$xtpl->assign( 'filesize', $filesize );
+
+					$xtpl->assign( 'attach_downloads', $file['attach_downloads'] );
+
+					$xtpl->parse( 'Topic.Post.Attachment' );
 				}
 			}
+			$xtpl->assign( 'post_text', $post['post_text'] );
 
-			$user_created_post = ($this->user['user_id'] == $post['post_author']);
-
-			$hours = $this->sets['edit_post_age'];
-			$can_edit = false; // Shortcut for skin
-			if ($this->perms->auth('post_edit', $topic['topic_forum']) || ($user_created_post && $this->perms->auth('post_edit_own', $topic['topic_forum']))) {
-				if( !($topic['topic_modes'] & TOPIC_LOCKED) )
-					$can_edit = true;
-				if( $hours > 0 && $this->time - ($hours*60*60) > $post_time )
-					$can_edit = false;
-				if( $this->perms->auth('post_edit_old', $topic['topic_forum']) )
-					$can_edit = true;
-			}
-
-			$can_delete = false; // Shortcut for skin
-			if ($this->perms->auth('post_delete', $topic['topic_forum']) || ($user_created_post && $this->perms->auth('post_delete_own', $topic['topic_forum']))) {
-				if( !($topic['topic_modes'] & TOPIC_LOCKED) )
-					$can_delete = true;
-				if( $hours > 0 && $this->time - ($hours*60*60) > $post_time )
-					$can_delete = false;
-				if( $this->perms->auth('post_delete_old', $topic['topic_forum']) )
-					$can_delete = true;
-			}
-
-			$can_reply = false;
-			if ($this->perms->auth('post_create', $topic['topic_forum']) && !($topic['topic_modes'] & TOPIC_LOCKED) ) {
-				$can_reply = true;
-			}
-
-			$post_num = ($i + 1) + $min;
-			$posts .= eval($this->template('TOPIC_POST'));
-			$i++;
-		}
-
-		$pagelinks = $this->htmlwidgets->get_pages($topic['topic_replies'] + 1, 'a=topic&amp;t=' . $topicnum, $min, $num);
-
-		$this->readmarker->mark_topic_read($topicnum, $newest_post_read);
-
-		$can_post = false;
-		if ($this->perms->auth('post_create', $topic['topic_forum'])) {
-			$can_post = true;
-		}
-
-		$can_reply = false;
-		if ($this->perms->auth('post_create', $topic['topic_forum']) && !($topic['topic_modes'] & TOPIC_LOCKED) ) {
-			$can_reply = true;
+			$xtpl->parse( 'Topic.Post' );
 		}
 
 		// Quickreply
-		$this->lang->post();
-		$bbcode_menu = $this->bbcode->get_bbcode_menu();
-		$smilies = $this->bbcode->generate_emote_links();
-		$quickreply = eval($this->template('TOPIC_QUICKREPLY'));
+		if( $can_reply ) {
+			$this->lang->post();
 
-		return eval($this->template('TOPIC_MAIN'));
-	}
+			$xtpl->assign( 'topic_quickreply', $this->lang->topic_quickreply );
+			$xtpl->assign( 'post_msg', $this->lang->post_msg );
+			$xtpl->assign( 'post_option_emoticons', $this->lang->post_option_emoticons );
+			$xtpl->assign( 'post_option_mbcode', $this->lang->post_option_mbcode );
+			$xtpl->assign( 'post_preview', $this->lang->post_preview );
 
-	function get_attachment()
-	{
-		if (!isset($this->get['id'])) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);
+			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
+			$xtpl->assign( 'smilies', $this->bbcode->generate_emote_links() );
+
+			$xtpl->parse( 'Topic.QuickReplyScript' );
+			$xtpl->parse( 'Topic.QuickReplyBox' );
 		}
 
-		$id = intval($this->get['id']);
+		$xtpl->parse( 'Topic' );
+		return $xtpl->text( 'Topic' );
+	}
+
+	private function get_attachment()
+	{
+		if( !isset( $this->get['id'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_attached_title, $this->lang->topic_attached_perm );
+		}
+
+		$id = intval( $this->get['id'] );
 
 		if( $id < 0 )
 			$id = 0;
 
-		$data = $this->db->fetch("
-			SELECT
-			  a.attach_name, a.attach_file, a.attach_size, t.topic_forum
-			FROM
-			  %pattach a, %pposts p, %ptopics t
-			WHERE
-			  a.attach_post = p.post_id AND
-			  p.post_topic = t.topic_id AND
-			  a.attach_id = %d", $id);
+		$data = $this->db->fetch( "SELECT a.attach_name, a.attach_file, a.attach_size, t.topic_forum
+			FROM %pattach a, %pposts p, %ptopics t
+			WHERE a.attach_post = p.post_id AND p.post_topic = t.topic_id AND a.attach_id = %d", $id );
 
-		if ($this->perms->auth('post_attach_download', $data['topic_forum'])) {
+		if( $this->perms->auth( 'post_attach_download', $data['topic_forum'] ) ) {
 			$this->nohtml = true;
-			$this->db->query("UPDATE %pattach SET attach_downloads=attach_downloads+1 WHERE attach_id=%d", $id);
+
+			$this->db->query( "UPDATE %pattach SET attach_downloads=attach_downloads+1 WHERE attach_id=%d", $id );
 
 			// Need to terminate and unlock the session at this point or the site will stall for the current user.
 			session_write_close();
 
-			ini_set("zlib.output_compression", "Off");
-			header("Connection: close");
-			header("Content-Type: application/octet-stream");
-			header("Content-Disposition: attachment; filename=\"{$data['attach_name']}\"");
-			header("Content-Length: " . $data['attach_size']);
-			header("X-Robots-Tag: noarchive, nosnippet, noindex");
+			ini_set( "zlib.output_compression", "Off" );
+			header( "Connection: close" );
+			header( "Content-Type: application/octet-stream" );
+			header( "Content-Disposition: attachment; filename=\"{$data['attach_name']}\"" );
+			header( "Content-Length: " . $data['attach_size'] );
+			header( "X-Robots-Tag: noarchive, nosnippet, noindex" );
+
 			// directly pass through file to output buffer
 			@readfile( './attachments/' . $data['attach_file'] );
 		} else {
-			return $this->message($this->lang->topic_attached_title, $this->lang->topic_attached_perm);
+			return $this->message( $this->lang->topic_attached_title, $this->lang->topic_attached_perm );
 		}
 	}
 
-	function get_poll($t, $f, $title_html, $topic_modes, $options)
+	private function get_poll( $t, $f, $title_html, $topic_modes, $options )
 	{
-		$user_voted = $this->db->fetch("SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d", $this->user['user_id'], $t);
+		$user_voted = $this->db->fetch( "SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d", $this->user['user_id'], $t );
 
-		if ($user_voted || !$this->perms->auth('poll_vote', $f) || ($topic_modes & TOPIC_LOCKED) || (isset($this->get['results']) && $this->sets['vote_after_results'])) {
-			$votes = $this->db->query("SELECT vote_option FROM %pvotes WHERE vote_topic=%d AND vote_option != -1", $t);
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
+
+		$xtpl->assign( 'self', $this->self );
+		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'title_html', $title_html );
+
+		if( $user_voted || !$this->perms->auth( 'poll_vote', $f ) || ( $topic_modes & TOPIC_LOCKED ) || ( isset( $this->get['results'] ) && $this->sets['vote_after_results'] ) ) {
+			$votes = $this->db->query( "SELECT vote_option FROM %pvotes WHERE vote_topic=%d AND vote_option != -1", $t );
 
 			$results = array();
 			$total_votes = 0;
 
-			while ($vote = $this->db->nqfetch($votes))
+			while( $vote = $this->db->nqfetch( $votes ) )
 			{
-				if (isset($results[$vote['vote_option']])) {
+				if( isset( $results[$vote['vote_option']] ) ) {
 					$results[$vote['vote_option']]++;
 				} else {
 					$results[$vote['vote_option']] = 1;
@@ -646,53 +772,68 @@ class topic extends qsfglobal
 				$total_votes++;
 			}
 
-			if (!$total_votes) {
-				return $this->message($this->lang->topic_no_votes, $this->lang->topic_no_votes);
+			if( !$total_votes ) {
+				return $this->message( $this->lang->topic_no_votes, $this->lang->topic_no_votes );
 			}
 
-			$out = null;
+			$xtpl->assign( 'topic_votes', $this->lang->topic_votes );
+			$xtpl->assign( 'total_votes', $total_votes );
 
-			$options = explode("\n", $options);
-			foreach ($options as $i => $option)
+			$options = explode( "\n", $options );
+			foreach( $options as $i => $option )
 			{
-				if (trim($option) == '') {
+				if( trim( $option ) == '' ) {
 					continue;
 				}
 
-				if (!isset($results[$i])) {
+				if( !isset( $results[$i] ) ) {
 					$results[$i] = 0;
 				}
 
-				$option    = $this->format($option, FORMAT_MBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS);
+				$option = $this->format( $option, FORMAT_MBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS );
+				$xtpl->assign( 'option', $option );
 
-				$percent = round($results[$i] / $total_votes * 100, 2);
-				$width   = round($results[$i] / $total_votes * 100) * 2;
+				$percent = round( $results[$i] / $total_votes * 100, 2 );
+				$width   = round( $results[$i] / $total_votes * 100 ) * 2;
 
-				if ($results[$i] != 1) {
-					$votes = sprintf($this->lang->topic_vote_count_plur, $results[$i]);
+				if( $results[$i] != 1 ) {
+					$votes = sprintf( $this->lang->topic_vote_count_plur, $results[$i] );
 				} else {
-					$votes = sprintf($this->lang->topic_vote_count_sing, $results[$i]);
+					$votes = sprintf( $this->lang->topic_vote_count_sing, $results[$i] );
 				}
 
-				$out .= eval($this->template('POLL_RESULTS_ENTRY'));
+				$xtpl->assign( 'width', $width );
+				$xtpl->assign( 'percent', $percent );
+				$xtpl->assign( 'votes', $votes );
+
+				$xtpl->parse( 'PollResults.Entry' );
 			}
 
-			return eval($this->template('POLL_RESULTS_MAIN'));
+			$xtpl->parse( 'PollResults' );
+			return $xtpl->text( 'PollResults' );
 		} else {
-			$pollopts = null;
-			$options  = explode("\n", $options);
+			$xtpl->assign( 't', $t );
+			$xtpl->assign( 'topic_view', $this->lang->topic_view );
+			$xtpl->assign( 'topic_vote', $this->lang->topic_vote );
 
-			foreach ($options as $i => $option)
+			$options  = explode( "\n", $options );
+
+			foreach( $options as $i => $option )
 			{
-				if (trim($option) == '') {
+				if( trim( $option ) == '' ) {
 					continue;
 				}
 
-				$option    = $this->format($option, FORMAT_MBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS);
-				$pollopts .= eval($this->template('POLL_OPTION'));
+				$option = $this->format( $option, FORMAT_MBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS );
+
+				$xtpl->assign( 'i', $i );
+				$xtpl->assign( 'option', $option );
+
+				$xtpl->parse( 'Poll.Option' );
 			}
 
-			return eval($this->template('POLL_MAIN'));
+			$xtpl->parse( 'Poll' );
+			return $xtpl->text( 'Poll' );
 		}
 	}
 }

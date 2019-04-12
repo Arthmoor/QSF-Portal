@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -21,8 +21,8 @@
  * GNU General Public License for more details.
  *
  **/
- 
-if (!defined('QUICKSILVERFORUMS')) {
+
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	header('HTTP/1.0 403 Forbidden');
 	die;
 }
@@ -47,10 +47,10 @@ class activeutil extends forumutils
 	 *
 	 * @param $qsf - Quicksilver Forums module
 	 **/
-	function activeutil(&$qsf)
+	public function __construct( &$qsf )
 	{
-		parent::forumutils($qsf);
-		
+		parent::__construct( $qsf );
+
 		$this->get = &$qsf->get;
 		$this->user_id = $qsf->user['user_id'];
 		$this->time = $qsf->time;
@@ -67,29 +67,30 @@ class activeutil extends forumutils
 	 * @param string $action Modual we have displayed
 	 * @param integer $user_id User who are logged in as
 	 **/
-	function update($action, $userid = USER_GUEST_UID)
+	public function update( $action, $userid = USER_GUEST_UID )
 	{
-		if (!$this->doneUpdate) {
-			$item = $this->_get_item($action);
+		if( !$this->doneUpdate ) {
+			$item = $this->_get_item( $action );
 
 			if( $item >= 0 && $item < 4000000000 ) {
-				$this->db->query("REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
+				$this->db->query( "REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
 					VALUES (%d, '%s', %d, %d, '%s', '%s', '%s')",
-					$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid);
+					$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid );
 			}
 			$this->doneUpdate = true; // Flag to make sure we only call once
 		}
 	}
-	
+
 	/**
 	 * Remove the active entry for a member when logging out or being deleted
 	 *
 	 * @param integer $user_id User who are logged in as
 	 **/
-	function delete($userid)
+	public function delete( $userid )
 	{
-		$this->db->query("DELETE FROM %pactive WHERE active_id=%d", $userid);
-		if ($userid == $this->user_id)
+		$this->db->query( "DELETE FROM %pactive WHERE active_id=%d", $userid );
+
+		if( $userid == $this->user_id )
 			$this->user_id = USER_GUEST_UID;
 	}
 
@@ -98,29 +99,29 @@ class activeutil extends forumutils
 	 *
 	 * @return array Full information on active users, links, and their actions
 	 **/
-	function get_active()
+	public function get_active()
 	{
 		$this->_load_active_users();
 		return $this->activeUsers;
 	}
-	
+
 	/**
 	 * Returns a total number for members on the site
 	 *
 	 * @return integer Total count for members active on the site
 	 **/
-	function get_members_online()
+	public function get_members_online()
 	{
 		$this->_load_active_users();
 		return $this->totalMembers;
 	}
-	
+
 	/**
 	 * Returns a total number for guests
 	 *
 	 * @return integer Total count for guests active on the site
 	 **/
-	function get_guests_online()
+	public function get_guests_online()
 	{
 		$this->_load_active_users();
 		return $this->totalGuests;
@@ -131,60 +132,58 @@ class activeutil extends forumutils
 	 *
 	 * @return integer Total count for people active on the site
 	 **/
-	function get_users_online()
+	public function get_users_online()
 	{
 		return $this->get_members_online() + $this->get_guests_online();
 	}
-	
+
 	/**
 	 * Asks if a user is active and has allowed their activity to be shown
 	 *
 	 * @param integer $user_id User we want to check if they are online
 	 * @return boolean True if the user is active
 	 **/
-	function is_user_online($user_id)
+	public function is_user_online( $user_id )
 	{
-		foreach ($this->get_active() as $active) {
-			if ($active['id'] == $user_id) return true;
+		foreach( $this->get_active() as $active ) {
+			if( $active['id'] == $user_id )
+				return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Load enough data to be able to generate a list of active users and link to where they are
 	 *
 	 * PRIVATE
 	 **/
-	function _load_active_users()
+	private function _load_active_users()
 	{
-		if (count($this->activeUsers)) return;
+		if( count( $this->activeUsers ) )
+			return;
 
 		$oldtime   = $this->time - 900;
 		$botformat = '<i>%s</i>';
-				
+
 		$oldusers = array(); // Collect timed out users
 
 		// Add self to top of list
-		$this->update($this->get['a'], $this->user_id);
+		$this->update( $this->get['a'], $this->user_id );
 
-		$query = $this->db->query("
-			SELECT a.*, a.active_ip, u.user_name, u.user_active, g.group_format, f.forum_name, t.topic_title, t.topic_forum, u2.user_name AS profile_name
+		$query = $this->db->query( "SELECT a.*, a.active_ip, u.user_name, u.user_active, g.group_format, f.forum_name, t.topic_title, t.topic_forum, u2.user_name AS profile_name
 			FROM (%pactive a, %pgroups g, %pusers u)
 			LEFT JOIN %pforums f ON f.forum_id=a.active_item
 			LEFT JOIN %ptopics t ON t.topic_id=a.active_item
 			LEFT JOIN %pusers u2 ON u2.user_id=a.active_item
-			WHERE
-			  a.active_id = u.user_id AND
-			  u.user_group = g.group_id
-			ORDER BY
-			  a.active_time DESC");
-			  
-		while ($user = $this->db->nqfetch($query))
+			WHERE a.active_id = u.user_id AND u.user_group = g.group_id
+			ORDER BY a.active_time DESC" );
+
+		while( $user = $this->db->nqfetch( $query ) )
 		{
-			if ($user['active_time'] < $oldtime) {
+			if( $user['active_time'] < $oldtime ) {
 				$oldusers[] = $user['active_id'];
 			} else {
-				if (!$user['user_active'] && !$this->perms->auth('is_admin')) {
+				if( !$user['user_active'] && !$this->perms->auth( 'is_admin' ) ) {
 					continue;
 				}
 
@@ -196,41 +195,43 @@ class activeutil extends forumutils
 				$topic = null;
 				$is_bot = false;
 
-				$title = (!$this->perms->auth('post_viewip') ? null : $user['active_ip'] . ' --- ') .  htmlspecialchars($user['active_user_agent']);
+				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ') .  htmlspecialchars( $user['active_user_agent'] );
 
-				if ($user['active_id'] != USER_GUEST_UID) {
+				if( $user['active_id'] != USER_GUEST_UID ) {
 					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
 						$link = "href=\"{$this->self}?a=profile&amp;w={$user['active_id']}\"";
 					else
 						$link = '';
-					$name = sprintf($user['group_format'], $user['user_name']);
+
+					$name = sprintf( $user['group_format'], $user['user_name'] );
 					if( !$user['user_active'] ) {
 						$name = sprintf( '<i>%s</i>', $name );
 					}
+
 					$this->totalMembers++;
 				} else {
 					$name = $user['user_name'];
 
-					$spider_name = $this->_spider_check($user['active_user_agent']);
-					if ($spider_name) {
-						$name = sprintf($botformat, $spider_name);
+					$spider_name = $this->_spider_check( $user['active_user_agent'] );
+					if( $spider_name ) {
+						$name = sprintf( $botformat, $spider_name );
 						$is_bot = true;
 					} else {
 						$this->totalGuests++;
 					}
 				}
 
-				switch ($user['active_action'])
+				switch( $user['active_action'] )
 				{
 				case 'topic':
-					if ($this->perms->auth('topic_view', $user['topic_forum']) || $this->perms->auth('forum_view', $user['topic_forum'])) {
+					if( $this->perms->auth( 'topic_view', $user['topic_forum'] ) || $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$topic = $user['topic_forum'];
-						$action_link = "<a href='{$this->self}?a=topic&amp;t={$user['active_item']}'>" . $this->bbcode->format($user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a>';
+						$action_link = "<a href='{$this->self}?a=topic&amp;t={$user['active_item']}'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
 					}
 					break;
 
 				case 'forum':
-					if ($this->perms->auth('forum_view', $user['topic_forum'])) {
+					if( $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$forum = $user['topic_forum'];
 						$action_link = "<a href='{$this->self}?a=forum&amp;f={$user['active_item']}'>{$user['forum_name']}</a>";
 					}
@@ -241,16 +242,15 @@ class activeutil extends forumutils
 					break;
 				}
 
-				$this->activeUsers[] = array('id' => $user['active_id'], 'name' => $name, 'link' => $link, 'title' => $title,
+				$this->activeUsers[] = array( 'id' => $user['active_id'], 'name' => $name, 'link' => $link, 'title' => $title,
 					'action' => $user['active_action'], 'action_link' => $action_link, 'topic' => $topic, 'forum' => $forum,
-					'time' => $user['active_time'], 'bot' => $is_bot);
+					'time' => $user['active_time'], 'bot' => $is_bot );
 			}
 		}
 
-		if ($oldusers) {
-			$this->db->query("UPDATE %pusers SET user_lastvisit=%d WHERE user_id IN (%s)",
-				$oldtime, implode(', ', $oldusers));
-			$this->db->query("DELETE FROM %pactive WHERE active_time < %d", $oldtime);
+		if( $oldusers ) {
+			$this->db->query( "UPDATE %pusers SET user_lastvisit=%d WHERE user_id IN (%s)", $oldtime, implode( ', ', $oldusers ) );
+			$this->db->query( "DELETE FROM %pactive WHERE active_time < %d", $oldtime );
 		}
 	}
 
@@ -264,12 +264,13 @@ class activeutil extends forumutils
 	 * @since 1.1.5
 	 * @return Spider Name / false
 	 **/
-	function _spider_check($user_agent)
+	private function _spider_check( $user_agent )
 	{
-		$user_agent = strtolower($user_agent);
-		if ($this->sets['spider_active']) {
-			foreach (array_keys($this->sets['spider_name']) as $spiderstring) {
-				if (preg_match("#($spiderstring)#is", $user_agent, $agent))
+		$user_agent = strtolower( $user_agent );
+
+		if( $this->sets['spider_active'] ) {
+			foreach( array_keys( $this->sets['spider_name']) as $spiderstring ) {
+				if( preg_match( "#($spiderstring)#is", $user_agent, $agent ) )
 				{
 					return $this->sets['spider_name'][$agent[1]];
 				}
@@ -286,14 +287,15 @@ class activeutil extends forumutils
 	 * @param string $action Module being run
 	 * @return integer Identifier for the item being actioned (eg forum, topic, user)
 	 **/
-	function _get_item($action)
+	private function _get_item( $action )
 	{
 		$item = 0;
-		switch($action)
+
+		switch( $action )
 		{
-		case 'forum': $item = isset($this->get['f']) ? intval($this->get['f']) : 0; break;
-		case 'topic': $item = isset($this->get['t']) ? intval($this->get['t']) : 0; break;
-		case 'profile': $item = isset($this->get['w']) ? intval($this->get['w']) : 0; break;
+			case 'forum': $item = isset( $this->get['f'] ) ? intval( $this->get['f'] ) : 0; break;
+			case 'topic': $item = isset( $this->get['t'] ) ? intval( $this->get['t'] ) : 0; break;
+			case 'profile': $item = isset( $this->get['w'] ) ? intval( $this->get['w'] ) : 0; break;
 		}
 		return $item;
 	}

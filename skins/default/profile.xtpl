@@ -1,0 +1,161 @@
+<!-- BEGIN: Profile -->
+<div id="profile">
+ <div class="article">
+  <div class="title">
+   <img src="{loc_of_board}/skins/{skin}/images/icons/vcard.png" alt="" />
+   {profile_profile}
+  </div>
+
+<!-- BEGIN: Avatar -->
+  <span class="avatar">
+    {user_avatar}
+  </span>
+<!-- END: Avatar -->
+
+  <span class="member_info">
+   {online_link}
+   <strong>{user_name}</strong><br />
+   <strong>{user_title}</strong><br />
+   <span class="text">{profile_member}</span>{group_name}<br />
+   <span class="text">{profile_posts}</span>{user_posts}<br />
+   <span class="text">{profile_joined}</span>{user_joined}
+  </span>
+  <p></p>
+  <span class="postbit_top"></span>
+<!-- BEGIN: SigBlockHeader -->
+   <div class="rounded_top" style="background-position:{avatar_center}px 0px;">
+    <span class="one"></span>
+    <span class="two"></span>
+    <span class="three"></span>
+    <span class="four"></span>
+   </div>
+   <div class="postbit">
+<!-- END: SigBlockHeader -->
+<!-- BEGIN: Interests -->
+   <strong>{profile_interest}</strong>:<br />
+   {user_interests}
+<!-- END: Interests -->
+<!-- BEGIN: Signature -->
+   <span class="signature">.........................<br />{user_signature}</span>
+<!-- END: Signature -->
+<!-- BEGIN: SigBlockFooter -->
+   </div>
+   <div class="rounded_bottom">
+    <span class="one">&nbsp;</span>
+    <span class="two">&nbsp;</span>
+    <span class="three">&nbsp;</span>
+    <span class="four">&nbsp;</span>
+   </div>
+<!-- END: SigBlockFooter -->
+  <p></p>
+ </div>
+
+ <div class="article">
+  <div class="title">
+   <img src="{loc_of_board}/skins/{skin}/images/icons/phone.png" alt="" />
+   {profile_contact}
+  </div>
+<!-- BEGIN: Email -->
+   <span class="field">{profile_email_address}</span>
+   <span class="form">{user_email}</span>
+<!-- END: Email -->
+<!-- BEGIN: PM -->
+   <p class="line"></p>
+   <span class="field">{profile_pm}</span>
+   <span class="form">
+    <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}"></a></span>
+   </span>
+<!-- END: PM -->
+  <p></p>
+ </div>
+
+ <div class="article">
+  <div class="title">
+   <img src="{loc_of_board}/skins/{skin}/images/icons/control_panel.png" alt="" />
+   {profile_info}
+  </div>
+  <span class="field">{profile_member}</span>
+  <span class="form">{group_name}</span>
+  <p class="line"></p>
+  <span class="field">{profile_member_title}</span>
+  <span class="form">{user_title}</span>
+  <p class="line"></p>
+  <span class="field">{profile_joined}</span>
+  <span class="form">{user_joined}</span>
+  <p class="line"></p>
+  <span class="field">{profile_last_visit}</span>
+  <span class="form">{user_lastvisit}</span>
+<!-- BEGIN: Twitter -->
+   <p class="line"></p>
+   <span class="field">{twitter}</span>
+   <span class="form">
+    <span class="smallbutton"><a class="twitter" href="https://twitter.com/{user_twitter}"></a></span>
+   </span>
+<!-- END: Twitter -->
+<!-- BEGIN: Facebook -->
+   <p class="line"></p>
+   <span class="field">{profile_facebook}</span>
+   <span class="form">
+    <span class="smallbutton"><a class="facebook" href="{user_facebook}"></a></span>
+   </span>
+<!-- END: Facebook -->
+<!-- BEGIN: Homepage -->
+   <p class="line"></p>
+   <span class="field">{profile_www}</span>
+   <span class="form">
+    <span class="smallbutton"><a class="home" href="{user_homepage}"></a></span>
+   </span>
+<!-- END: Homepage -->
+<!-- BEGIN: Birthday -->
+   <p class="line"></p>
+   <span class="field">{profile_bday}</span>
+   <span class="form">{user_birthday}</span>
+<!-- END: Birthday -->
+<!-- BEGIN: Location -->
+   <p class="line"></p>
+   <span class="field">{profile_location}</span>
+   <span class="form">{user_location}</span>
+<!-- END: Location -->
+  <p></p>
+ </div>
+
+<!-- BEGIN: Posts -->
+ <div class="article">
+  <div class="title">
+   <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+   {profile_posts}
+  </div>
+  <span class="field">{profile_posts}</span>
+  <span class="form">{user_posts}</span>
+
+  <p class="line"></p>
+
+  <span class="field">{profile_fav}</span>
+  <span class="form">{fav_forum}</span>
+
+  <p class="line"></p>
+
+  <span class="field">{profile_last_post}</span>
+  <span class="form">{lastpost}</span>
+  <p></p>
+ </div>
+<!-- END: Posts -->
+
+<!-- BEGIN: Uploads -->
+ <div class="article">
+  <div class="title">
+   <img src="{loc_of_board}/skins/{skin}/images/icons/downloads.png" alt="" />
+   {profile_uploads}
+  </div>
+  <span class="field">{profile_uploads}</span>
+  <span class="form">{uploads}</span>
+
+  <p class="line"></p>
+
+  <span class="field">{profile_upload_last}</span>
+  <span class="form">{lastfile}</span>
+  <p></p>
+ </div>
+<!-- END: Uploads -->
+</div>
+<!-- END: Profile -->

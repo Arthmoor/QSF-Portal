@@ -1,0 +1,305 @@
+<!-- BEGIN: Topic -->
+<div class="article">
+ <div style="float:left">{tree}</div>
+ <div style="text-align:right"><a href="{self}?a=forum_rules" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{self}?a=board&amp;s=mark" title="{main_mark1}">{main_mark}</a> | <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a></div>
+</div>
+{PollDisplay}
+<div class="article">
+<!-- BEGIN: CanPostTop -->
+ <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
+ <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
+<!-- END: CanPostTop -->
+<!-- BEGIN: LockedTop -->
+ <div class="bigbutton"><a class="locked">{topic_locked}</a></div>
+<!-- END: LockedTop -->
+<!-- BEGIN: ReplyTop -->
+ <div class="bigbutton"><a class="topic_reply" href="{self}?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
+<!-- END: ReplyTop -->
+ <p></p>
+</div>
+
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  {title_html}
+ </div>
+ <span class="next_prev_topics">
+  <a href="{self}?a=topic&amp;t={topicnum}&amp;view=newer">&lt; {topic_newer}</a>
+  :: <a href="{self}?a=topic&amp;t={topicnum}&amp;view=older">{topic_older} &gt;</a>
+ </span>
+ <span class="topic_description">{topic_description}</span>
+ <p></p>
+</div>
+
+<div class="article">
+<!-- BEGIN: ModPageLinksTop -->
+ <div style="float:left">{topic_pages}:{pagelinks}</div>
+ <div style="text-align:right">{mod_opts}</div>
+<!-- END: ModPageLinksTop -->
+<!-- BEGIN: PageLinksTop -->
+ {topic_pages}:{pagelinks}
+<!-- END: PageLinksTop -->
+</div>
+<!-- BEGIN: Post -->
+<div class="hidden">
+ <a id="p{post_id}"></a>
+<!-- BEGIN: FirstUnread -->
+ <a id="unread"></a>
+<!-- END: FirstUnread -->
+</div>
+<form>
+<div class="article">
+ <div class="title">
+  <div style="float:left;">
+<!-- BEGIN: NewPost -->
+   <img src="{loc_of_board}/skins/{skin}/images/icons/post_new.png" alt="{topic_new_post}" />
+<!-- END: NewPost -->
+<!-- BEGIN: NewPostTopic -->
+   <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="{topic_new_post}" />
+<!-- END: NewPostTopic -->
+<!-- BEGIN: PostIcon -->
+   <img src="{loc_of_board}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
+<!-- END: PostIcon -->
+   <a href="{self}?a=topic&amp;t={topicnum}']}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
+   &nbsp;&nbsp;<span class="small_text">{edited}</span>
+  </div>
+  <div style="text-align:right;">
+   <div style="float:right;"><a href="#top"><img src="{loc_of_board}/skins/{skin}/images/icons/arrow_up.png" alt="{topic_top}" title="{topic_top}" /></a></div>
+   <div style="float:right;"><a href="#bottom"><img src="{loc_of_board}/skins/{skin}/images/icons/arrow_down.png" alt="{topic_bottom}" title="{topic_bottom}" /></a></div>
+<!-- BEGIN: CanDelete -->
+   <div class="button"><a class="spam" href="{self}?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
+   <div class="button"><a class="delete" href="{self}?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
+<!-- END: CanDelete -->
+<!-- BEGIN: CanEdit -->
+    <div class="button"><a class="edit" href="{self}?a=mod&amp;s=edit_post&amp;p={post_id}" title="{topic_edit_post}">{edit}</a></div>
+<!-- END: CanEdit -->
+<!-- BEGIN: CanReply -->
+    <div class="button"><a class="quotepost" href="{self}?a=post&amp;s=reply&amp;t={topicnum}&amp;f={topic_forum}&amp;qu={post_id}" title="{topic_quote}">{quote}</a></div>
+<!-- END: CanReply -->
+  </div>
+  <p></p>
+ </div>
+<!-- BEGIN: SplitSelect -->
+ <select name="posttarget[{post_id}]">
+  <option value="0" selected="selected">{topic_split_keep}</option>
+  <option value="1">{topic_split_move} (1)</option>
+  <option value="2">{topic_split_move} (2)</option>
+  <option value="3">{topic_split_move} (3)</option>
+  <option value="4">{topic_split_move} (4)</option>
+ </select>
+ <input name="submit" type="submit" value="{topic_split_finish}" />
+ <p class="line"></p>
+<!-- END: SplitSelect -->
+<!-- BEGIN: PosterInfoGuest -->
+ <span class="avatar">
+  <img src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+ </span>
+ <span class="member_info">
+  <strong>{topic_guest}</strong> - ({topic_unreg}) {post_ip}
+ </span>
+ <p></p>
+<!-- END: PosterInfoGuest -->
+<!-- BEGIN: PosterInfoMember -->
+ <span class="avatar">
+  {user_avatar}
+ </span>
+
+ <span class="member_info">
+<!-- BEGIN: Online -->
+   <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
+<!-- END: Online -->
+<!-- BEGIN: Offline -->
+   <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
+<!-- END: Offline -->
+  <strong><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></strong><br />
+  <strong>{user_title}</strong> <img src="{loc_of_board}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
+  <span class="text">{topic_group}</span>{group_name}<br />
+  <span class="text">{topic_posts}</span>{user_posts}<br />
+  <span class="text">{topic_joined}</span>{user_joined}
+<!-- BEGIN: PostIP -->
+  <br /><span class="text">IP</span><a href="{self}?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
+<!-- END: PostIP -->
+ </span>
+
+ <span class="member_bits">
+<!-- BEGIN: EmailShow -->
+  <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
+<!-- END: EmailShow -->
+<!-- BEGIN: EmailForm -->
+  <span class="smallbutton"><a class="email" href="{self}?a=email&amp;to={user_id}" title="{members_email_member}"></a></span>
+<!-- END: EmailForm -->
+<!-- BEGIN: PM -->
+  <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+<!-- END: PM -->
+<!-- BEGIN: Twitter -->
+   <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>
+<!-- END: Twitter -->
+<!-- BEGIN: Facebook -->
+   <span class="smallbutton"><a class="facebook" href="{facebook}" title="{members_visit_facebook}"></a></span>
+<!-- END: Facebook -->
+<!-- BEGIN: Homepage -->
+   <span class="smallbutton"><a class="home" href="{homepage}" title="{members_visit_www}"></a></span>
+<!-- END: Homepage -->
+ </span>
+ <p></p>
+<!-- END: PosterInfoMember -->
+ <span class="postbit_top"></span>
+ <div class="rounded_top" style="background-position:{avatar_center}px 0px;">
+  <span class="one"></span>
+  <span class="two"></span>
+  <span class="three"></span>
+  <span class="four"></span>
+ </div>
+
+ <div class="postbit">
+  <p></p>
+  {post_text}
+<!-- BEGIN: Attachment -->
+  <div class="filebox">
+   <strong>{topic_attached}</strong>
+   <div class="file">
+    <br />{topic_attached_filename} <a href="{self}?a=topic&amp;s=attach&amp;id={attach_id}">{attach_name}</a>
+    <br />{topic_attached_size} {filesize} KB
+    <br />{topic_attached_downloads}: {attach_downloads}
+   </div>
+  </div>
+<!-- END: Attachment -->
+  <span class="signature">{user_signature}</span>
+ </div>
+
+ <div class="rounded_bottom">
+  <span class="one">&nbsp;</span>
+  <span class="two">&nbsp;</span>
+  <span class="three">&nbsp;</span>
+  <span class="four">&nbsp;</span>
+ </div>
+</div>
+</form>
+<!-- END: Post -->
+<div class="article">
+<!-- BEGIN: ModPageLinksBottom -->
+ <div style="float:left">{topic_pages}:{pagelinks}</div>
+ <div style="text-align:right">{mod_opts}</div>
+<!-- END: ModPageLinksBottom -->
+<!-- BEGIN: PageLinksBottom -->
+ {topic_pages}:{pagelinks}
+<!-- END: PageLinksBottom -->
+</div>
+
+<div class="article">
+<!-- BEGIN: CanPostBottom -->
+ <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
+ <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
+<!-- END: CanPostBottom -->
+<!-- BEGIN: LockedBottom -->
+ <div class="bigbutton"><a class="locked">{topic_locked}</a></div>
+<!-- END: LockedBottom -->
+<!-- BEGIN: ReplyBottom -->
+ <div class="bigbutton"><a class="topic_reply" href="{self}?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
+<!-- END: ReplyBottom -->
+
+<!-- BEGIN: QuickReplyScript -->
+ <script>
+  function toggleQuickReplyButton()
+  {
+   document.write('<div class="bigbutton"><a class="quick_reply" href="javascript:toggleQuickReplyBox();" title="{topic_quickreply}">{topic_quickreply}</a></div>');
+  } toggleQuickReplyButton();
+ </script>
+<!-- END: QuickReplyScript -->
+ <p></p>
+</div>
+
+<!-- BEGIN: QuickReplyBox -->
+<div class="quickreply">
+<script src="{loc_of_board}/javascript/postboxplain.js"></script>
+<form action="{self}?a=post&amp;s=reply&amp;t={topicnum}" method="post" id="mbpost">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{$this->skin}/images/icons/comment_add_blured.png" alt="" />
+  {topic_quickreply}: {title_html}
+ </div>
+ <span class="head">
+  <strong>{post_msg}</strong>
+ </span>
+
+ <span class="field">
+  {smilies}
+ </span>
+ <span class="form">
+  {bbcode_menu}
+  <textarea name="post" id="bbcodequick" rows="8" cols="75"></textarea>
+ </span>
+ <p class="line"></p>
+
+ <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{post_option_emoticons}</label>
+ <p class="line"></p>
+
+ <input class="check" type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{post_option_mbcode}</label>
+ <p class="line"></p>
+
+ <input type="submit" name="submit" value="{reply}" />
+ <input type="submit" name="preview" value="{post_preview}" />
+</div>
+</form>
+
+<script>
+ /* Quick Reply Box Toggle JavaScript */
+ var textareaInit = 0;
+ var toggleQuickReplyBoxStatus = 0;
+ var quickReplyBox = document.getElementById( 'mbpost' );
+ var textarea = bbcodeInit( 'bbcodequick' );
+ quickReplyBox.style.display = 'none';
+
+ function toggleQuickReplyBox()
+ {
+  if( toggleQuickReplyBoxStatus == 0 ) {
+   quickReplyBox.style.display = 'inline';
+   toggleQuickReplyBoxStatus = 1;
+  } else {
+   quickReplyBox.style.display = 'none';
+   toggleQuickReplyBoxStatus = 0;
+  }
+ }
+</script>
+</div>
+<!-- END: QuickReplyBox -->
+<!-- END: Topic -->
+
+<!-- BEGIN: PollResults -->
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/chart_bar.png" alt="" />
+  {title_html} ({total_votes} {topic_votes})
+ </div>
+<!-- BEGIN: Entry -->
+ <span class="field">
+  {option}
+ </span>
+
+ <span class="form">
+  <img src="{loc_of_board}/skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="{loc_of_board}/skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="{loc_of_board}/skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /> &nbsp;{percent}% - {votes}
+ </span>
+
+ <p class="list_line"></p>
+<!-- END: Entry -->
+</div>
+<!-- END: PollResults -->
+
+<!-- BEGIN: Poll -->
+<form action="{self}?a=post&amp;s=vote&amp;t={t}" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/chart_bar.png" alt="" />
+  {title_html} (<a href="{self}?a=post&amp;s=results&amp;t={t}">{topic_view}</a>)
+ </div>
+<!-- BEGIN: Option -->
+ <input class="check" type="radio" name="pollvote" id="pollvote_{i}" value="{i}" />
+ <label class="poll" for="pollvote_{i}">{option}</label>
+ <p class="list_line"></p>
+<!-- END: Option -->
+ <input type="submit" name="submitvote" value="{topic_vote}" />
+</div>
+</form>
+<!-- END: Poll -->

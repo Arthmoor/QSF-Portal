@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class settings extends admin
 {
-	function execute()
+	public function execute()
 	{
 		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = null;
@@ -687,7 +687,7 @@ class settings extends admin
 				'topics_per_page' => 'int',
 				'posts_per_page' => 'int',
 				'hot_limit' => 'int',
-				'default_skin' => 'string',
+				'default_skin' => 'int',
 				'default_email_shown' => 'bool',
 				'default_lang' => 'string',
 				'default_group' => 'int',

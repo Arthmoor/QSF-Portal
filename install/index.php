@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-define('QUICKSILVERFORUMS', true);
-define('QSF_INSTALLER', 1); // Used in query files
+define( 'QUICKSILVERFORUMS', true );
+define( 'QSF_INSTALLER', 1 ); // Used in query files
 
 error_reporting(E_ALL);
 
@@ -64,10 +64,6 @@ function check_writeable_files()
 	}
 	if( !is_writeable( '../packages' ) ) {
 		$fixme .= "../packages/<br />";
-		$writeable = false;
-	}
-	if( !is_writeable( '../skins' ) ) {
-		$fixme .= "../skins/<br />";
 		$writeable = false;
 	}
 	if( !is_writeable( '../downloads' ) ) {

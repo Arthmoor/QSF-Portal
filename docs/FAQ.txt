@@ -48,7 +48,7 @@
 * A. There is a tool in the admin cp to allow running SQL queries for advanced users. Or we can recommend using phpMyAdmin for browsing the structure / data.
 
 * Q. Can I put PHP code into temmplates?
-* A. Generally no. But you can get createive using the following syntax: <tt><IF (php condition)>(html output)</IF></tt> And there are also modlets that allow you to drop in code <tt><MODLET mymodletname()></tt>
+* A. No. The templating system is only for display purposes. Though it does have support for conditional blocks.
 
 * Q. I think I found a bug?
 * A. Visit the website, search to see if someone found it already, if not then report what happened and how to repeat it.

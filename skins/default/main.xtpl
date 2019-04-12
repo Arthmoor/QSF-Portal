@@ -1,0 +1,25 @@
+<!-- BEGIN: Main -->
+    <div class="article">
+     <div class="title" style="text-align:center">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/newspaper.png" alt="" />
+      {main_news}
+      <img src="{loc_of_board}/skins/{skin}/images/icons/newspaper.png" alt="" />
+     </div>
+     <br />
+     {items}
+    </div>
+
+    {users_online}
+<!-- END: Main -->
+
+<!-- BEGIN: NewsItem -->
+    <div class="article">
+     <div class="title">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/newspaper.png" alt="" />
+      {topic}
+     </div>
+     <br />
+     {text}<br /><br />{comments}<br />
+     <div class="newsfooter">{main_posted_by}: {user} {date}</div>
+    </div><br />
+<!-- END: NewsItem -->

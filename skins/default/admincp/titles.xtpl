@@ -8,7 +8,7 @@
   <input class="free" name="new_title" id="new_title" /><br class="free" />
 
   <label class="free" for="new_icon">{titles_image}:</label>
-  <select class="free" name="new_icon" id="new_icon" onchange="document.title_preview.src='../skins/default/images/'+this.options[selectedIndex].value; document.title_preview.style.display='inline'">{image_list}</select>
+  <select class="free" name="new_icon" id="new_icon" onchange="document.title_preview.src='../skins/{skin}/images/'+this.options[selectedIndex].value; document.title_preview.style.display='inline'">{image_list}</select>
   <img class="free" name="title_preview" src="null" style="display:none;" alt="" /><br class="free" />
 
   <label class="free" for="new_posts">{titles_minpost}:</label>

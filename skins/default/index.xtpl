@@ -1,0 +1,147 @@
+<!-- BEGIN: Index -->
+<!DOCTYPE html>
+<html lang="{user_language}">
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
+  <meta name="keywords" content="{meta_keywords}" />
+  <meta name="description" content="{meta_desc}" />
+  <title>{title}</title>
+  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/styles.css" media="screen" />
+  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/print.css" media="print" />
+  {feed_links}
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+  <link rel="manifest" href="/manifest.json">
+  <script src="{loc_of_board}/javascript/utils.js"></script>
+ </head>
+
+ <body>
+  <div id="container">
+   <div><a id="top"></a></div>
+   <div id="header">
+    <div id="company">
+     <div class="title"></div>
+    </div>
+   </div>
+   <div id="blocks">
+<!-- BEGIN: GuestHeader -->
+    <div class="block">
+     <div class="title"><a href="{loc_of_board}">{forum_name}</a></div>
+     <span class="half">
+      <a href="{qsf_site}/files/">{main_files}</a>
+      <a href="{qsf_self}?a=board">{main_forum}</a>
+      <a href="{qsf_self}?a=members">{main_members}</a>
+      <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
+      <a href="{qsf_self}?a=page&amp;p=7">Hierarchy</a>
+      <a href="{qsf_self}?a=page&amp;p=14">AFKMud</a>
+      <a href="{qsf_self}?a=page&amp;p=15">SmaugFUSS</a>
+      <a href="{qsf_self}?a=topic&amp;t=4892">GDB Tutorial</a>
+     </span>
+     <div style="clear:both"></div>
+    </div>
+
+    <form action="{self}?a=login&amp;s=on" method="post">
+    <div class="block">
+     <div class="title">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/login.png" alt="" />
+      {login}
+     </div>
+     <input type="hidden" name="request_uri" value="{request_uri}" />
+     {login_user}:<br />
+     <input class="input" type="text" name="user" size="17" /><br />
+     {login_pass}:<br />
+     <input class="input" type="password" name="pass" size="17" /><br />
+     <input type="submit" name="submit" value="{submit}" /><br /><br />
+     <a href="{self}?a=register">{register_reg}</a><br />
+     <a href="{self}?a=login&amp;s=pass">{login_forgot_pass}</a>
+    </div>
+    </form>
+<!-- END: GuestHeader -->
+
+<!-- BEGIN: MemberHeader -->
+    <div class="block">
+     <div class="title"><a href="{loc_of_board}">{forum_name}</a></div>
+     <div class="article">
+      {main_welcome} <a href="{qsf_self}?a=profile&amp;w={user_id}"><strong>{user_name}</strong></a>!
+     </div>
+
+     <span class="half">
+      <a href="{qsf_site}/files/"{new_files}>{main_files}</a>
+      <a href="{qsf_self}?a=board">{main_forum}</a>
+<!-- BEGIN: PagesLink -->
+      <a href="{qsf_self}?a=page">{main_pages}</a>
+<!-- END: PagesLink -->
+      <a href="{qsf_self}?a=members">{main_members}</a>
+      <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
+     </span>
+
+     <span class="half">
+      <a href="{qsf_self}?a=pm"{new_pm}>{main_messenger}</a>
+      <a href="{qsf_self}?a=cp">{main_cp}</a>
+<!-- BEGIN: SpamLink -->
+      <a href="{qsf_self}?a=spam_control"{spam_style}>{main_spam_controls}</a>
+<!-- END: SpamLink -->
+<!-- BEGIN: AdminCPLink -->
+      <a href="./admincp/index.php">{main_admincp}</a>
+<!-- END: AdminCPLink -->
+      <a href="{qsf_self}?a=login&amp;s=off">{main_logout}</a>
+     </span>
+     <div style="clear:both"></div>
+    </div>
+<!-- END: MemberHeader -->
+    {recent_posts}
+    {recent_uploads}
+    {top_posters}
+    {top_uploaders}
+    {users_online_block}
+    {board_stats}
+   </div>
+
+   <div id="main">
+<!-- BEGIN: Reminder -->
+    <div class="article">
+     <div class="title">{main_reminder}</div>
+     {reminder_text}
+    </div>
+<!-- END: Reminder -->
+<!-- BEGIN: Message -->
+<!-- BEGIN: Message -->
+    <div class="article">
+     <div class="title">{title}</div>
+     {message}
+    </div>
+<!-- END: Message -->
+<!-- END: Message -->
+    {module_output}
+   </div>
+
+   <div id="bottom">&nbsp;</div>
+  </div>
+
+  <div id="footer">
+   {powered_by} <a href="https://github.com/Arthmoor/QSF-Portal">{qsf_name}</a> &copy; 2006-2019 The {qsf_name} Development Team<br />
+   {based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br />
+   {based_on} <a href="https://github.com/markelliot/MercuryBoard">MercuryBoard</a> &copy; 2001-2009 The Mercury Development Team<br />
+   Ashlander 4 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {based_on} HForumv3.1 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a>
+   <br />100% Valid &lsaquo;&rsaquo; <a href="https://validator.w3.org/check?uri=referer">HTML5</a> <a href="https://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+   Best viewed at 1024x768 or better resolution.
+   <br />{servertime}
+  </div>
+  {google}
+ </body>
+</html>
+<!-- END: Index -->

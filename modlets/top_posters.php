@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -16,8 +16,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -29,24 +29,38 @@ if (!defined('QUICKSILVERFORUMS')) {
 **/
 class top_posters extends modlet
 {
-	function run($param)
+	public function __construct( $forumobject )
+	{
+		parent::__construct( $forumobject );
+	}
+
+	public function execute( $arg )
 	{
 		$content = "";
 		$result = $this->qsf->db->query( "SELECT user_id, user_name, user_posts FROM %pusers ORDER BY user_posts DESC LIMIT 5" );
 
-		while($row = $this->qsf->db->nqfetch($result))
+		while( $row = $this->qsf->db->nqfetch( $result ) )
 		{
 			$user = $row['user_name'];
 			$post = $row['user_posts'];
 			$uid = $row['user_id'];
 
 			if( $uid == USER_GUEST_UID || $post < 1 )
-			   continue;
+				continue;
 
 			$uPostRef = "<a href=\"{$this->qsf->self}?a=search&amp;id={$uid}\">";
 			$content .= "<a href=\"{$this->qsf->self}?a=profile&amp;w={$uid}\">{$user}</a> {$uPostRef}($post)</a><br />";
 		}
-		return eval($this->qsf->template('MAIN_TOP_POSTERS'));
+
+		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/top_posters.xtpl' );
+
+		$xtpl->assign( 'loc_of_board', $this->qsf->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->qsf->skin );
+		$xtpl->assign( 'main_top_posters', $this->qsf->lang->main_top_posters );
+		$xtpl->assign( 'content', $content );
+
+		$xtpl->parse( 'TopPosters' );
+		return $xtpl->text( 'TopPosters' );
 	}
 }
 ?>

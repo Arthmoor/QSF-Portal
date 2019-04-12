@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  *  https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * Based on MercuryBoard
  * Copyright (c) 2001-2005 The Mercury Development Team
  *  https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -37,7 +37,7 @@ require_once $set['include_path'] . '/lib/database.php';
  * MySQLi Abstraction Class
  *
  * @author Jason Warner <jason@mercuryboard.com>
- * @author Roger Libiez [Samson] 
+ * @author Roger Libiez
  * @since 1.5.1
  **/
 class db_mysqli extends database

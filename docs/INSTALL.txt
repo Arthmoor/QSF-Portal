@@ -48,7 +48,7 @@ TODO: Probably will require a separate guide.
 === Preparing for Upgrade ===
 
 If you will be upgrading from an earlier version of QSF Portal, from Quicksilver Forums, or from MercuryBoard,
-please hang onto your <tt>settings.php</tt> file.
+please hang onto your settings.php file.
 
 It is recommended when uploading files you do not overwrite this file. This is easiest done by making a copy
 temporarily and putting it back after all files are in place. Or deleting the settings.php provided in the new release.
@@ -66,7 +66,7 @@ Also, it is helpful to know the following:
 
 * The URL to your web site; and
 * The directory containing your "webspace." It depends upon the host, but by default Apache servers look
-  in <tt>$HOME/public_html/</tt> for web pages to serve.
+  in $HOME/public_html/ for web pages to serve.
 
 If you will be using a third-party web hosting service, speak to an administrator about setting up a
 MySQL database for your site, for which there may be additional hosting fees. The administrator will
@@ -80,26 +80,25 @@ likely provide you the following important information:
 
 This section will ready the user's webspace for QSF Portal, guide the user through uploading
 QSF Portal to the webspace, and setting the proper permissions for installation.
-Those comfortable with the uploading process can do so and skip to the ''Permissions'' subsection.
+Those comfortable with the uploading process can do so and skip to the "Permissions" subsection.
 
 === Uploading the Files ===
 
-Unpack the QSF Portal archive into a directory called
-<tt>qsfp</tt> on your desktop.
+Unpack the QSF Portal archive into a directory called qsfp on your desktop.
 
-Log into your webspace, via FTP or SSH and create a directory called <tt>qsforums</tt> .
+Log into your webspace, via FTP or SSH and create a directory called qsfportal.
 
-''NOTE: It does not have to be named <tt>qsforums</tt> -- you may name it whatever you wish, though 
-<tt>qsforums</tt> will be used throughout the remainder of this guide. Adapt to your situation as necessary.''
+NOTE: It does not have to be named qsfportal -- you may name it whatever you wish, though 
+qsfportal will be used throughout the remainder of this guide. Adapt to your situation as necessary.
 
-Direct your client to your local <tt>quicksilver</tt> folder and upload everything to the <tt>qsforums</tt>
-directory within your webspace.
+Direct your client to your local qsfportal folder and upload everything to the qsfportal directory within your webspace.
 
-Remotely, navigate to the <tt>qsforums</tt> directory. Check the directory listing. Here is what it should look like:
+Remotely, navigate to the qsfportal directory. Check the directory listing. Here is what it should look like:
 
-addons                attachments       docs         func        install     lib       robots.txt    skins
-admincp               avatars           downloads    global.php  javascript  modlets   rss
-alternate_robots.txt  defaultutils.php  favicon.ico  index.php   languages   packages  settings.php  updates
+admincp		attachments		avatars			docs		downloads		emoticons
+func		install			javascript		languages	lib			modlets
+packages	skins			updates			.htaccess	alternate_robots.txt	favicon.ico
+global.php	index.php		LICENSE			README.md	robots.txt		settings.php
 
 You have successfully uploaded QSF Portal to your webspace!
 Now it is time to set permissions for the files, which affects both the security and operability of the installation.
@@ -110,26 +109,26 @@ Within your client you may have to modify the permissions of the QSF Portal file
 If you are using a third-party hosting service, ensure you are not violating any terms of service by modifying permissions.
 Determine what the host's recommended permissions are for directories and files, particularly PHP files. Some hosts
 may not require you to modify permissions because of their server configuration.
-''Be aware of your host's policies and what portions of this subsection apply to you,
-as it deals with security and access control.''
+Be aware of your host's policies and what portions of this subsection apply to you,
+as it deals with security and access control.
 
-It is assumed you have uploaded QSF Portal to a directory called <tt>qsforums</tt> within your webspace.
-Connect to your webspace via FTP or SSH (if you have not already) and navigate to the <tt>qsforums</tt> directory.
+It is assumed you have uploaded QSF Portal to a directory called qsfportal within your webspace.
+Connect to your webspace via FTP or SSH (if you have not already) and navigate to the qsfportal directory.
 
 ==== Permission changing if your server is running a UNIX permission system ====
 
 It is prudent to assign your host's default permissions to all the files you uploaded.
 Modify the following values with those advised by your host.
-On ''most'' servers, it is, in ''chmod'' terms, '''755''' for directories, and '''644''' for files.
+On most servers, it is, in ''chmod'' terms, '''755''' for directories, and '''644''' for files.
 
 If you have shell access, these are some easy commands for expediting permissions for all within
-the <tt>qsforums</tt> directory. Some hosts may have a script available which will automatically
+the qsfportal directory. Some hosts may have a script available which will automatically
 set proper permissions. Please consult your administrator. Here are some examples:
 
   $ find . -type d -print0 | xargs -0 chmod 755
   $ find . -type f -print0 | xargs -0 chmod 644
 
-''NOTE: If the <tt>find</tt> does not work, try using <tt>gfind</tt> instead.''
+''NOTE: If the find< does not work, try using gfind instead.''
 
 There are specific directories and files that will require write permissions.
 On third-party hosts, administrators may provide permission guidelines for such files and folders.
@@ -160,7 +159,7 @@ This section will guide you through the basic web-based configuration of QSF Por
 === Post-Installation Configuration ===
 
 Maintain a SSH or FTP connection to your webspace. Launch your favorite graphical browser
-(with JavaScript and CSS enabled), and access the <tt>qsforums/install</tt> subdirectory.
+(with JavaScript and CSS enabled), and access the qsfportal/install subdirectory.
 
 For example:
 
@@ -183,12 +182,9 @@ and Create Initial Data.
 * '''Administrator Account Settings:''' When selecting an administrative username, it is recommended it not be
  obvious, like ''admin''. Select an obscure password, preferrably composed of upper and lowercase letters, numbers,
  and symbols. For security reasons, change your administrative password frequently to safeguard your portal.
-* '''Create Initial Data:''' If this is your first installation of QSF Portal, it is recommended you
- leave the checkbox checked. If you are confident you can create the categories and forums in QSF you need then
- uncheck it to give you a blank slate.
 
 Click "Continue." If you are directed to a page saying "Congratulations!", you have successfully installed
-QSF Portal! In such a case, delete the <tt>qsforums/install</tt> directory immediately.
+QSF Portal! In such a case, delete the qsfportal/install directory immediately.
 If not removed promptly, it could allow a third-party to reconfigure your site.
 
 If you are receiving error messages, proceed to the next section, which has procedures for dealing with the
@@ -209,21 +205,19 @@ while working with QSF Portal' web-based configuration tools.
 The following directories and files require read and write permissions.
 Please verify their permissions are set properly. The necessary permissions differ from host to host.
 Consult your administrator. Otherwise, it is safe to set directory permissions to '''755''' and
-file permissions to '''644''' using the <tt>chmod</tt> command. In some cases these permissions are not
+file permissions to '''644''' using the chmod command. In some cases these permissions are not
 sufficient; world-writeable permissions ('''777''' for directories, '''666''' for files) may need to be set.
 World-writeable permissions should be assigned cautiously as such permissions could threaten site security.
 
 All files and directories require world readable permissions.
 The following directories and files require world-writeable permissions:
 
-  qsforums/attachments/
-  qsforums/avatars/uploaded/
-  qsforums/downloads/
-  qsforums/packages/
-  qsforums/skins/
-  qsforums/rss/
-  qsforums/settings.php
-  qsforums/updates/
+  qsfportal/attachments/
+  qsfportal/avatars/uploaded/
+  qsfportal/downloads/
+  qsfportal/emoticons/
+  qsfportal/packages/
+  qsfportal/updates/
 
 Please attempt to resume installation after setting the proper permissions to these files.
 The remaining subsections deal with individual error messages and their respective remedies.
@@ -243,12 +237,12 @@ In your browser, go "back" to the configuration page. Verify that the database i
 This error can only occur if these values are incorrect or incomplete.
 Verify you have input the correct values as supplied by your administrator.
 
-==== The database connection was ok, but <tt>settings.php</tt> could not be updated. ====
+==== The database connection was ok, but settings.php could not be updated. ====
 
   "The database connection was ok, but settings.php could not be updated. CHMOD settings.php to 0666."
 
 Assuming the "Permission-Related Errors" section has been consulted and permissions already set,
-you may have to set ''world-writeable'' permissions for the <tt>settings.php</tt> file.
+you may have to set ''world-writeable'' permissions for the settings.php file.
 Consult your administator first before assigning world-writeable permissions:
 
   $ chmod 666 settings.php
@@ -259,15 +253,12 @@ Click your browser's "back" button, verify the necessary information is input, a
 
   "Database connected, settings written, but no tables could be loaded from file: data_tables.php"
 
-  "Database connected, settings written, but no templates could be loaded from file: skin_default.xml"
+These errors are generated when qsfportal/install/mysqli_data_tables.php is either corrupt or lack the necessary
+read permissions. You may wish to re-upload the file before continuing.
 
-These errors are generated when <tt>qsforums/install/data_tables.php</tt> or 
-<tt>qsforums/install/skin_default.xml</tt> are either corrupt or lack the necessary read permissions.
-You may wish to re-upload these files before continuing.
+These files need world-readable permissions. From the qsfportal/install directory, issue the following command:
 
-These files need world-readable permissions. From the <tt>qsforums/install</tt> directory, issue the following command:
-
-  $ chmod 644 data_tables.php skin_default.xml
+  $ chmod 644 mysqli_data_tables.php
 
 Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
 
@@ -281,22 +272,3 @@ enter the administrator's password twice, and supply an e-mail address for the a
 (which will not be published by default).
 
 Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
-
-==== Database connected, settings written, but no seed data... ====
-
-  "Database connected, settings written, but no seed data could be loaded from file: seed_data.php"
-
-The file <tt>qsforums/install/seed_data.php</tt> is either corrupt or does not have proper world-readable
-permissions set. This file is used to "seed" a new installation of QSF Portal by providing a sample
-forum and messages. This file is used if you checked the option labelled "Create Initial Data" in the
-configuration page. You may wish to re-upload this file before continuing.
-
-Issue this command from the <tt>qsforums/install</tt> directory to assign world-readable permissions:
-
-  $ chmod 644 seed_data.php
-
-Click your browser's "back" button, verify the necessary information is input, and attempt to "continue" once more.
-
-== Appendices ==
-
-TODO: To be added.

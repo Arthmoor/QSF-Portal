@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class stats extends admin
 {
-	function execute()
+	public function execute()
 	{
 		$this->set_title( $this->lang->stats );
 		$this->tree( $this->lang->stats );
@@ -54,6 +54,7 @@ class stats extends admin
 
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/stats.xtpl' );
 
+		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'stats', $this->lang->stats );
 		$xtpl->assign( 'stats_spam_statistics', $this->lang->stats_spam_statistics );
 		$xtpl->assign( 'stats_forum_posts', $this->lang->stats_forum_posts );
@@ -84,7 +85,7 @@ class stats extends admin
 				$data[$item['month']] = $item['posts'];
 			else
 				$item['posts'] = 0;
-			
+
 			$total += intval( $item['posts'] );
 		}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,7 +26,7 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	header('HTTP/1.0 403 Forbidden');
 	die;
 }
@@ -48,21 +48,33 @@ class active extends qsfglobal
 	 * @since Beta 2.0
 	 * @return void
 	 **/
-	function execute()
+	public function execute()
 	{
-		if (!$this->perms->auth('board_view')) {
+		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
+
 			return $this->message(
-				sprintf($this->lang->board_message, $this->sets['forum_name']),
-				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
 			);
 		}
 
-		$this->set_title($this->lang->active_users);
-		$this->tree($this->lang->active_users);
+		$this->set_title( $this->lang->active_users );
+		$this->tree( $this->lang->active_users );
 
-		$ActiveList = $this->listActive();
-		return eval($this->template('ACTIVE_MAIN'));
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/active.xtpl' );
+
+		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'active_users', $this->lang->active_users );
+		$xtpl->assign( 'active_user', $this->lang->active_user );
+		$xtpl->assign( 'active_last_action', $this->lang->active_last_action );
+		$xtpl->assign( 'active_time', $this->lang->active_time );
+
+		$this->listActive( $xtpl );
+
+		$xtpl->parse( 'Active' );
+		return $xtpl->text( 'Active' );
 	}
 
 	/**
@@ -72,10 +84,8 @@ class active extends qsfglobal
 	 * @since Beta 2.0
 	 * @return string HTML: Active users
 	 **/
-	function listActive()
+	private function listActive( $xtpl )
 	{
-		$allusers  = null;
-
 		$act = array(
 			'active'  => $this->lang->active_modules_active,
 			'board'   => $this->lang->active_modules_board,
@@ -95,31 +105,38 @@ class active extends qsfglobal
 			'search'  => $this->lang->active_modules_search,
 			'topic'   => $this->lang->active_modules_topic
 		);
-		
+
 		$all_active_users = $this->activeutil->get_active();
 
-		foreach ($all_active_users as $user)
+		foreach( $all_active_users as $user )
 		{
-			if (isset($act[$user['action']])) {
+			if( isset( $act[$user['action']] ) ) {
 				$action = $act[$user['action']];
-				if ($user['action_link']) {
-					$action = sprintf($action, $user['action_link']);
+
+				if( $user['action_link'] ) {
+					$action = sprintf( $action, $user['action_link'] );
 				}
 			} else {
 				$action = $act['board'];
 			}
 
-			$time = $this->mbdate(DATE_SHORT, $user['time']);
+			$time = $this->mbdate( DATE_SHORT, $user['time'] );
 
-			if ($user['bot']) {
+			if( $user['bot'] ) {
 				$icon = "robot.png";
 			} else {
 				$icon = "user_online.png";
 			}
-			$allusers .= eval($this->template('ACTIVE_USER'));
-		}
 
-		return $allusers;
+			$xtpl->assign( 'icon', $icon );
+			$xtpl->assign( 'link', $user['link'] );
+			$xtpl->assign( 'title', $user['title'] );
+			$xtpl->assign( 'name', $user['name'] );
+			$xtpl->assign( 'action', $action );
+			$xtpl->assign( 'time', $time );
+
+			$xtpl->parse( 'Active.Item' );
+		}
 	}
 }
 ?>

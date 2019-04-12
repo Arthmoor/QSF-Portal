@@ -4,8 +4,8 @@
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="../skins/default/styles.css" />
-  <link rel="stylesheet" type="text/css" href="../skins/default/acp.css" />
+  <link rel="stylesheet" type="text/css" href="../skins/{skin}/styles.css" />
+  <link rel="stylesheet" type="text/css" href="../skins/{skin}/acp.css" />
  </head>
 
 <body>
@@ -19,7 +19,7 @@
   <div id="blocks">
    <div class="block">
     <div class="title">
-     <img src="../skins/default/images/icons/wrench.png" alt="" />
+     <img src="../skins/{skin}/images/icons/wrench.png" alt="" />
      {admin_settings}
     </div>
     <span>
@@ -36,7 +36,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="../skins/default/images/icons/report.png" alt="" />
+     <img src="../skins/{skin}/images/icons/report.png" alt="" />
      {admin_forums}
     </div>
     <span>
@@ -50,7 +50,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="../skins/default/images/icons/user_online.png" alt="" />
+     <img src="../skins/{skin}/images/icons/user_online.png" alt="" />
      {admin_members}
     </div>
     <span>
@@ -67,7 +67,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="../skins/default/images/icons/members.png" alt="" />
+     <img src="../skins/{skin}/images/icons/members.png" alt="" />
      {admin_groups}
     </div>
     <span>
@@ -80,16 +80,16 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="../skins/default/images/icons/layout_content.png" alt="" />
-     Skins
+     <img src="../skins/{skin}/images/icons/layout_content.png" alt="" />
+     {admin_skins}
     </div>
     <span>
-     <a href="{self}?a=templates&amp;s=html">Edit HTML Templates</a>
+     <a href="{self}?a=skins">{admin_manage_skins}</a>
     </span>
    </div>
    <div class="block">
     <div class="title">
-     <img src="../skins/default/images/icons/database_gear.png" alt="" />
+     <img src="../skins/{skin}/images/icons/database_gear.png" alt="" />
      {admin_db}
     </div>
     <span>
@@ -138,7 +138,7 @@
   {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" class="small"><b>{admin_name}</b></a> [{admin_version}] &copy; 2006-2019 The {admin_name} Development Team<br />
   {admin_based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2011 The Quicksilver Forums Development Team<br />
   {admin_based_on} <a href="https://github.com/markelliot/MercuryBoard" class="small"><b>MercuryBoard</b></a> &copy; 2001-2009 The Mercury Development Team<br />
-  Ashlander 3 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {admin_based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a><br />
+  Ashlander 4 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {admin_based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a><br />
   {time_exec} seconds - {query_count} queries
  </div>
 </body>

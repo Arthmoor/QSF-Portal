@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -41,21 +41,22 @@ require_once $set['include_path'] . '/global.php';
  **/
 class post extends qsfglobal
 {
-	function execute()
+	public function execute()
 	{
-		if (!$this->perms->auth('board_view')) {
+		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
+
 			return $this->message(
-				sprintf($this->lang->board_message, $this->sets['forum_name']),
-				($this->perms->is_guest) ? sprintf($this->lang->board_regfirst, $this->self) : $this->lang->board_noview
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
 			);
 		}
 
-		if (!isset($this->get['s'])) {
+		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = null;
 		}
 
-		switch($this->get['s'])
+		switch( $this->get['s'] )
 		{
 		case 'vote':
 			return $this->vote();
@@ -66,154 +67,120 @@ class post extends qsfglobal
 			break;
 
 		default:
-			return $this->makePost($this->get['s']);
+			return $this->makePost( $this->get['s'] );
 			break;
 		}
 	}
 
-	function makeReview($limit = 5)
+	private function makePost( $s )
 	{
-		$review = null;
+		$f = -1;
+		$t = -1;
 
-		$query = $this->db->query("SELECT p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, m.user_name
-			FROM %pposts p, %pusers m
-			WHERE p.post_topic=%d AND p.post_author = m.user_id
-			ORDER BY p.post_time DESC
-			LIMIT %d", $this->get['t'], $limit);
-
-		while ($last = $this->db->nqfetch($query))
-		{
-			$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
-
-			if ($last['post_mbcode']) {
-				$params |= FORMAT_MBCODE;
-			}
-
-			if ($last['post_emoticons']) {
-				$params |= FORMAT_EMOTICONS;
-			}
-
-			$last['post_text'] = $this->format($last['post_text'], $params);
-			$last['post_time'] = $this->mbdate(DATE_LONG, $last['post_time']);
-
-			if ($last['post_author'] != USER_GUEST_UID) {
-				$last['user_name'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $last['post_author'] . '">' . $last['user_name'] . '</a>';
-			} else {
-				$last['user_name'] = $this->lang->post_guest;
-			}
-
-			$review .= eval($this->template('POST_REVIEW_ENTRY'));
-		}
-
-		return $review;
-	}
-
-	function makePost($s)
-	{
 		/**
 		 * Determine if the user has permission to make a post here and
 		 * execute tasks common to both before and after the form submit.
 		 */
-		switch($s)
+		switch( $s )
 		{
-		case 'reply':
-			if (!isset($this->get['t'])) {
-				return $this->message($this->lang->post_replying, $this->lang->post_cant_reply);
-			}
-
-			$this->get['t'] = intval($this->get['t']);
-
-			$topic = $this->db->fetch("SELECT t.topic_modes, t.topic_title, f.forum_name, f.forum_id, t.topic_replies, t.topic_starter
-				FROM %ptopics t, %pforums f
-				WHERE t.topic_id=%d AND f.forum_id=t.topic_forum", $this->get['t']);
-
-			if ($topic && !$this->perms->auth('post_create', $topic['forum_id'])) {
-				if ($this->perms->is_guest) {
-					return $this->message($this->lang->post_replying, sprintf($this->lang->post_cant_reply1, $this->self));
-				} else {
-					return $this->message($this->lang->post_replying, $this->lang->post_cant_reply2);
+			case 'reply':
+				if( !isset( $this->get['t'] ) ) {
+					return $this->message( $this->lang->post_replying, $this->lang->post_cant_reply );
 				}
-			}
 
-			if (!$topic) {
-				return $this->message($this->lang->post_replying, $this->lang->post_cant_reply);
-			}
+				$t = intval( $this->get['t'] );
 
-			if ($topic['topic_modes'] & TOPIC_LOCKED) {
-				return $this->message($this->lang->post_replying, $this->lang->post_closed);
-			}
+				$topic = $this->db->fetch( "SELECT t.topic_modes, t.topic_title, f.forum_name, f.forum_id, t.topic_replies, t.topic_starter
+					FROM %ptopics t, %pforums f
+					WHERE t.topic_id=%d AND f.forum_id=t.topic_forum", $t );
 
-			if (strlen($topic['topic_title']) > 30) {
-				$shortened_title = substr($topic['topic_title'], 0, 29);
-			} else {
-				$shortened_title = $topic['topic_title'];
-			}
-
-			$shortened_title = $this->format($topic['topic_title'], FORMAT_CENSOR);
-
-			$this->get['f'] = $topic['forum_id'];
-
-			$this->lang->post_reply_topic = sprintf( $this->lang->post_reply_topic, $topic['topic_title'] );
-
-			$this->htmlwidgets->tree_forums($topic['forum_id'], true);
-			$this->tree($shortened_title, $this->self . '?a=topic&amp;t=' . $this->get['t'] . '&amp;f=' . $topic['forum_id']);
-			$this->tree($this->lang->post_replying1);
-			break;
-
-		case 'poll':
-			if (!isset($this->get['f'])) {
-				return $this->message($this->lang->post_creating, $this->lang->post_no_forum);
-			}
-
-			$this->get['f'] = intval($this->get['f']);
-
-			if (!$this->perms->auth('poll_create', $this->get['f'])) {
-				if ($this->perms->is_guest) {
-					return $this->message($this->lang->post_creating_poll, sprintf($this->lang->post_cant_poll, $this->self));
-				} else {
-					return $this->message($this->lang->post_creating_poll, $this->lang->post_cant_poll1);
+				if( $topic && !$this->perms->auth( 'post_create', $topic['forum_id'] ) ) {
+					if( $this->perms->is_guest ) {
+						return $this->message( $this->lang->post_replying, sprintf( $this->lang->post_cant_reply1, $this->self ) );
+					} else {
+						return $this->message( $this->lang->post_replying, $this->lang->post_cant_reply2 );
+					}
 				}
-			}
 
-			if (!$this->db->num_rows($this->db->query("SELECT forum_id FROM %pforums WHERE forum_id=%d", $this->get['f']))) {
-				return $this->message($this->lang->post_creating, $this->lang->post_no_forum);
-			}
-
-			$forum = $this->db->fetch("SELECT forum_name FROM %pforums WHERE forum_id=%d", $this->get['f']);
-
-			$this->htmlwidgets->tree_forums($this->get['f'], true);
-			$this->tree($this->lang->post_creating_poll);
-			break;
-
-		default: //topic
-			if (!isset($this->get['f'])) {
-				return $this->message($this->lang->post_creating, $this->lang->post_no_forum);
-			}
-
-			$this->get['f'] = intval($this->get['f']);
-
-			if (!$this->perms->auth('topic_create', $this->get['f'])) {
-				if ($this->perms->is_guest) {
-					return $this->message($this->lang->post_creating, sprintf($this->lang->post_cant_create, $this->self));
-				} else {
-					return $this->message($this->lang->post_creating, $this->lang->post_cant_create1);
+				if( !$topic ) {
+					return $this->message( $this->lang->post_replying, $this->lang->post_cant_reply );
 				}
-			}
 
-			if (!$this->db->num_rows($this->db->query("SELECT forum_id FROM %pforums WHERE forum_id=%d", $this->get['f']))) {
-				return $this->message($this->lang->post_creating, $this->lang->post_no_forum);
-			}
+				if( $topic['topic_modes'] & TOPIC_LOCKED ) {
+					return $this->message( $this->lang->post_replying, $this->lang->post_closed );
+				}
 
-			$forum = $this->db->fetch("SELECT forum_name FROM %pforums WHERE forum_id=%d", $this->get['f']);
+				if( strlen( $topic['topic_title'] ) > 30 ) {
+					$shortened_title = substr( $topic['topic_title'], 0, 29 );
+				} else {
+					$shortened_title = $topic['topic_title'];
+				}
 
-			$this->htmlwidgets->tree_forums($this->get['f'], true);
-			$this->tree($this->lang->post_creating);
+				$shortened_title = $this->format( $topic['topic_title'], FORMAT_CENSOR );
+
+				$f = $topic['forum_id'];
+
+				$this->lang->post_reply_topic = sprintf( $this->lang->post_reply_topic, $topic['topic_title'] );
+
+				$this->htmlwidgets->tree_forums( $topic['forum_id'], true );
+				$this->tree( $shortened_title, $this->self . '?a=topic&amp;t=' . $t . '&amp;f=' . $topic['forum_id'] );
+				$this->tree( $this->lang->post_replying1 );
+				break;
+
+			case 'poll':
+				if( !isset( $this->get['f'] ) ) {
+					return $this->message( $this->lang->post_creating, $this->lang->post_no_forum );
+				}
+
+				$f = intval( $this->get['f'] );
+
+				if( !$this->perms->auth( 'poll_create', $f ) ) {
+					if( $this->perms->is_guest ) {
+						return $this->message( $this->lang->post_creating_poll, sprintf($this->lang->post_cant_poll, $this->self ));
+					} else {
+						return $this->message( $this->lang->post_creating_poll, $this->lang->post_cant_poll1 );
+					}
+				}
+
+				if( !$this->db->num_rows( $this->db->query( "SELECT forum_id FROM %pforums WHERE forum_id=%d", $f ) ) ) {
+					return $this->message( $this->lang->post_creating, $this->lang->post_no_forum );
+				}
+
+				$forum = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id=%d", $f );
+
+				$this->htmlwidgets->tree_forums( $f, true );
+				$this->tree( $this->lang->post_creating_poll );
+				break;
+
+			default: //topic
+				if( !isset( $this->get['f'] ) ) {
+					return $this->message( $this->lang->post_creating, $this->lang->post_no_forum );
+				}
+
+				$f = intval( $this->get['f'] );
+
+				if( !$this->perms->auth( 'topic_create', $f ) ) {
+					if( $this->perms->is_guest ) {
+						return $this->message( $this->lang->post_creating, sprintf( $this->lang->post_cant_create, $this->self ) );
+					} else {
+						return $this->message( $this->lang->post_creating, $this->lang->post_cant_create1 );
+					}
+				}
+
+				if( !$this->db->num_rows( $this->db->query( "SELECT forum_id FROM %pforums WHERE forum_id=%d", $f ) ) ) {
+					return $this->message( $this->lang->post_creating, $this->lang->post_no_forum );
+				}
+
+				$forum = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id=%d", $f );
+
+				$this->htmlwidgets->tree_forums( $f, true );
+				$this->tree( $this->lang->post_creating );
 		}
 
 		/**
 		 * Show the form
 		 */
-		if (!isset($this->post['submit'])) {
+		if( !isset( $this->post['submit'] ) ) {
 			$attached = null;
 			$attached_data = null;
 			$upload_error = null;
@@ -224,69 +191,75 @@ class post extends qsfglobal
 			$checkEmot = ' checked="checked"';
 			$checkCode = ' checked="checked"';
 			$checkGlob = '';
-			$universal_topic = false;
+			$global_topic = false;
 			$topic_lock = false;
 			$topic_pin = false;
 
-			$title   = isset($this->post['title']) ? $this->format($this->post['title'], FORMAT_HTMLCHARS) : '';
-			$desc    = isset($this->post['desc']) ? $this->format($this->post['desc'], FORMAT_HTMLCHARS) : '';
-			$options = isset($this->post['options']) ? $this->format($this->post['options'], FORMAT_HTMLCHARS) : '';
+			$title   = isset( $this->post['title'] ) ? $this->format( $this->post['title'], FORMAT_HTMLCHARS ) : '';
+			$desc    = isset( $this->post['desc'] ) ? $this->format( $this->post['desc'], FORMAT_HTMLCHARS ) : '';
+			$options = isset( $this->post['options'] ) ? $this->format( $this->post['options'], FORMAT_HTMLCHARS ) : '';
 
-			if (!isset($this->post['attached_data'])) {
+			if( !isset( $this->post['attached_data'] ) ) {
 				$this->post['attached_data'] = array();
 			}
 
-			if ($this->perms->auth('post_attach', $this->get['f'])) {
+			if( $this->perms->auth( 'post_attach', $f ) ) {
 				// Attach
-				if (isset($this->post['attach'])) {
-					$upload_error = $this->attachmentutil->attach($this->files['attach_upload'], $this->post['attached_data']);
+				if( isset( $this->post['attach'] ) ) {
+					$upload_error = $this->attachmentutil->attach( $this->files['attach_upload'], $this->post['attached_data'] );
 				// Detach
-				} elseif (isset($this->post['detach'])) {
-					$this->attachmentutil->delete($this->post['attached'], $this->post['attached_data']);
+				} elseif( isset( $this->post['detach'] ) ) {
+					$this->attachmentutil->delete( $this->post['attached'], $this->post['attached_data'] );
 				}
 
-				$this->attachmentutil->getdata($attached, $attached_data, $this->post['attached_data']);
+				$this->attachmentutil->getdata( $attached, $attached_data, $this->post['attached_data'] );
 			}
+
+			$xtpl = new XTemplate( './skins/' . $this->skin . '/post.xtpl' );
+
+			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'skin', $this->skin );
 
 			/**
 			 * Preview
 			 */
-			if (isset($this->post['preview']) || isset($this->post['attach']) || isset($this->post['detach'])) {
-				if (($s == 'topic') || ($s == 'poll')) {
-					$title = $this->format($this->post['title'], FORMAT_HTMLCHARS);
-					$desc  = $this->format($this->post['desc'], FORMAT_HTMLCHARS);
+			if( isset( $this->post['preview'] ) || isset( $this->post['attach'] ) || isset( $this->post['detach'] ) ) {
+				if( ( $s == 'topic' ) || ( $s == 'poll' ) ) {
+					$title = $this->format( $this->post['title'], FORMAT_HTMLCHARS );
+					$desc  = $this->format( $this->post['desc'], FORMAT_HTMLCHARS );
 
-					if ($s == 'poll') {
-						$options = $this->format($this->post['options'], FORMAT_HTMLCHARS);
+					if( $s == 'poll' ) {
+						$options = $this->format( $this->post['options'], FORMAT_HTMLCHARS );
  					}
 				}
 
 				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
-				if (isset($this->post['parseCode']) ) {
+				if( isset( $this->post['parseCode'] ) ) {
 					$params |= FORMAT_MBCODE;
 					$checkCode = ' checked=\'checked\'';
 				} else {
 					$checkCode = '';
 				}
 
-				if (isset($this->post['parseEmot'])) {
+				if( isset( $this->post['parseEmot'] ) ) {
 					$params |= FORMAT_EMOTICONS;
 					$checkEmot = ' checked=\'checked\'';
 				} else {
 					$checkEmot = '';
 				}
 
-				if (isset($this->post['global_topic'])) {
+				if( isset( $this->post['global_topic'] ) ) {
 					$checkGlob = ' checked=\'checked\'';
 				} else {
 					$checkGlob = '';
 				}
 
-				$quote = $this->format($this->post['post'], FORMAT_HTMLCHARS);
-				$preview_text = $this->format($this->post['post'], $params);
+				$quote = $this->format( $this->post['post'], FORMAT_HTMLCHARS );
+				$preview_text = $this->format( $this->post['post'], $params );
 
-				if ($title != '') {
+				if( $title != '' ) {
 					$preview_title = $title;
 					$preview_title = $desc != '' ? $preview_title . ', ' . $desc : $preview_title;
 				} else {
@@ -295,40 +268,51 @@ class post extends qsfglobal
 
 				$this->lang->topic();
 
-				if ($this->perms->is_guest) {
-					$signature = '';
-					$Poster_Info = eval($this->template('POST_POSTER_GUEST'));
+				$signature = null;
+				if( $this->perms->is_guest ) {
+					$xtpl->assign( 'topic_guest', $this->lang->topic_guest );
+					$xtpl->assign( 'topic_unreg', $this->lang->topic_unreg );
+
+					$xtpl->parse( 'Post.Preview.PosterGuest' );
 				} else {
 					$avatar = $this->htmlwidgets->display_avatar( $this->user );
 
-					if ($this->user['user_signature'] && $this->user['user_view_signatures']) {
-						$signature = '.........................<br />' . $this->format($this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS);
-					} else {
-						$signature = null;
+					if( $this->user['user_signature'] ) {
+						$signature = '.........................<br />' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
 					}
 
-					$joined = $this->mbdate(DATE_ONLY_LONG, $this->user['user_joined']);
+					$joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
 
-					$uid = $this->user['user_id'];
-					$uname = $this->user['user_name'];
-					$utitle = $this->user['user_title'];
-					$utitleicon = $this->user['membertitle_icon'];
-					$gname = $this->user['group_name'];
-					$uposts = $this->user['user_posts'];
-					$Poster_Info = eval($this->template('POST_POSTER_MEMBER'));
+					$xtpl->assign( 'avatar', $avatar );
+					$xtpl->assign( 'uid', $this->user['user_id'] );
+					$xtpl->assign( 'uname', $this->user['user_name'] );
+					$xtpl->assign( 'utitle', $this->user['user_title'] );
+					$xtpl->assign( 'utitleicon', $this->user['membertitle_icon'] );
+					$xtpl->assign( 'topic_level', $this->lang->topic_level );
+					$xtpl->assign( 'topic_group', $this->lang->topic_group );
+					$xtpl->assign( 'gname', $this->user['group_name'] );
+					$xtpl->assign( 'topic_posts', $this->lang->topic_posts );
+					$xtpl->assign( 'uposts', $this->user['user_posts'] );
+					$xtpl->assign( 'topic_joined', $this->lang->topic_joined );
+					$xtpl->assign( 'joined', $joined );
+
+					$xtpl->parse( 'Post.Preview.PosterMember' );
 				}
 
-				if ($this->post['attached_data']) {
+				$avatar_center = ( $this->user['user_avatar_width'] ? ( ( $this->user['user_avatar_width'] / 2 ) - 3 ) : 22 );
+				$xtpl->assign( 'avatar_center', $avatar_center );
+
+				if( $this->post['attached_data'] ) {
 					$this->lang->topic();
 
-					$download_perm = $this->perms->auth('post_attach_download', $this->get['f']);
+					$download_perm = $this->perms->auth( 'post_attach_download', $f );
 
-					foreach ($this->post['attached_data'] as $md5 => $file)
+					foreach( $this->post['attached_data'] as $md5 => $file )
 					{
-						if ($download_perm) {
-							$ext = strtolower(substr($file, -4));
+						if( $download_perm ) {
+							$ext = strtolower( substr( $file, -4 ) );
 
-							if (($ext == '.jpg') || ($ext == '.gif') || ($ext == '.png')) {
+							if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
 								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->sets['loc_of_board']}/attachments/$md5' alt='{$file}' />";
 								continue;
 							}
@@ -338,178 +322,297 @@ class post extends qsfglobal
 					}
 				}
 
-				$preview = eval($this->template('POST_PREVIEW'));
+				$xtpl->assign( 'preview_title', $preview_title );
+				$xtpl->assign( 'preview_text', $preview_text );
+				$xtpl->assign( 'signature', $signature );
+
+				$xtpl->parse( 'Post.Preview' );
 			}
 
-			if ($s == 'reply') {
-				if (isset($this->get['qu'])) {
-					$this->get['qu'] = intval($this->get['qu']);
-					$query = $this->db->fetch("SELECT p.post_text, m.user_name FROM %pposts p, %pusers m
-						WHERE p.post_id=%d AND p.post_author=m.user_id AND p.post_topic=%d",
-						$this->get['qu'], $this->get['t']);
+			if( $s == 'reply' ) {
+				if( isset( $this->get['qu'] ) ) {
+					$qu = intval( $this->get['qu'] );
 
-					if ($query['post_text'] != '') {
-						$quote = '[quote=' . $query['user_name'] . ']' . $this->format($query['post_text'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '[/quote]';
+					$query = $this->db->fetch("SELECT p.post_text, m.user_name FROM %pposts p, %pusers m
+						WHERE p.post_id=%d AND p.post_author=m.user_id AND p.post_topic=%d", $qu, $t );
+
+					if( $query['post_text'] != '' ) {
+						$quote = '[quote=' . $query['user_name'] . ']' . $this->format( $query['post_text'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '[/quote]';
 					}
 				}
 				$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-				if (!($topic['topic_modes'] & TOPIC_LOCKED)) {
-					if ($this->perms->auth('topic_lock', $topic['forum_id']) || ($is_owner && $this->perms->auth('topic_lock_own', $topic['forum_id']))) {
+				if( !($topic['topic_modes'] & TOPIC_LOCKED ) ) {
+					if( $this->perms->auth( 'topic_lock', $topic['forum_id'] ) || ( $is_owner && $this->perms->auth( 'topic_lock_own', $topic['forum_id'] ) ) ) {
 						$topic_lock = true;
 					}
 				}
 
-				if (!($topic['topic_modes'] & TOPIC_PINNED)) {
-					if ($this->perms->auth('topic_pin', $topic['forum_id']) || ($is_owner && $this->perms->auth('topic_pin_own', $topic['forum_id']))) {
+				if( !( $topic['topic_modes'] & TOPIC_PINNED ) ) {
+					if( $this->perms->auth( 'topic_pin', $topic['forum_id'] ) || ( $is_owner && $this->perms->auth( 'topic_pin_own', $topic['forum_id'] ) ) ) {
 						$topic_pin = true;
 					}
 				}
 			} else {
-				if ($this->perms->auth('topic_global')) {
-					$universal_topic = true;
+				if( $this->perms->auth( 'topic_global' ) ) {
+					$global_topic = true;
 				}
 
 				// Able to lock? Yes if the forum allows "lock any", or if "lock own topics" is allowed.
 				// The person creating the topic is assumed to be the owner.
-				if ($this->perms->auth('topic_lock', $this->get['f']) || $this->perms->auth('topic_lock_own', $this->get['f'])) {
+				if( $this->perms->auth( 'topic_lock', $f ) || $this->perms->auth( 'topic_lock_own', $f ) ) {
 					$topic_lock = true;
 				}
 
 				// Able to pin? Yes if the forum allows "pin any", or if "pin own topics" is allowed.
 				// The person creating the topic is assumed to be the owner.
-				if ($this->perms->auth('topic_pin', $this->get['f']) || $this->perms->auth('topic_pin_own', $this->get['f'])) {
+				if( $this->perms->auth( 'topic_pin', $f ) || $this->perms->auth( 'topic_pin_own', $f ) ) {
 					$topic_pin = true;
 				}
 			}
 
-			$icon = isset($this->post['icon']) ? $this->post['icon'] : -1;
+			if( $s == 'poll' ) {
+				$xtpl->assign( 'target', "f={$f}" );
+				$xtpl->assign( 'icon_file', 'chart_bar_add.png' );
+				$xtpl->assign( 'post_new_topic', $this->lang->post_new_poll );
+				$xtpl->assign( 'post_create_topic', $this->lang->post_create_poll );
+			}
+			elseif( $s == 'topic' ) {
+				$xtpl->assign( 'target', "f={$f}" );
+				$xtpl->assign( 'icon_file', 'new_topic.png' );
+				$xtpl->assign( 'post_new_topic', $this->lang->post_new_topic );
+				$xtpl->assign( 'post_create_topic', $this->lang->post_create_topic );
+			}
+			elseif( $s == 'reply' ) {
+				$xtpl->assign( 'forum_name', $topic['forum_name'] );
+				$xtpl->assign( 'target', "t={$t}" );
+				$xtpl->assign( 'icon_file', 'comment_add.png' );
+				$xtpl->assign( 'post_new_topic', $this->lang->post_reply_topic );
+				$xtpl->assign( 'post_create_topic', $this->lang->post_reply );
+			}
 
-			$msg_icons = $this->htmlwidgets->get_icons($icon);
-			$posticons = eval($this->template('POST_MESSAGE_ICONS'));
+			if( $s == 'poll' || $s == 'topic' ) {
+				$xtpl->assign( 'forum_name', $forum['forum_name'] );
+				$xtpl->assign( 'post_topic_title', $this->lang->post_topic_title );
+				$xtpl->assign( 'title', $title );
+				$xtpl->assign( 'post_topic_detail', $this->lang->post_topic_detail );
+				$xtpl->assign( 'post_optional', $this->lang->post_optional );
+				$xtpl->assign( 'desc', $desc );
+
+				$xtpl->parse( 'Post.Topic.New' );
+			}
+
+			$icon = isset( $this->post['icon'] ) ? $this->post['icon'] : -1;
+			$msg_icons = $this->htmlwidgets->get_icons( $icon );
+
+			$xtpl->assign( 'post_icon', $this->lang->post_icon );
+			$xtpl->assign( 'msg_icons', $msg_icons );
+
 			$bbcode_menu = $this->bbcode->get_bbcode_menu();
-			$smilies   = $this->bbcode->generate_emote_links();
-			$post_options = eval($this->template('POST_OPTIONS'));
+			$smilies = $this->bbcode->generate_emote_links();
+			$xtpl->assign( 'smilies', $smilies );
+			$xtpl->assign( 'bbcode_menu', $bbcode_menu );
+			$xtpl->assign( 'quote', $quote );
 
-			if ($this->perms->auth('post_attach', $this->get['f'])) {
-				if ($attached) {
-					$remove_box = eval($this->template('POST_ATTACH_REMOVE'));
-				} else {
-					$remove_box = '';
+			$xtpl->assign( 'post_options', $this->lang->post_options );
+			$xtpl->assign( 'checkEmot', $checkEmot );
+			$xtpl->assign( 'post_option_emoticons', $this->lang->post_option_emoticons );
+			$xtpl->assign( 'checkCode', $checkCode );
+			$xtpl->assign( 'post_option_mbcode', $this->lang->post_option_mbcode );
+
+			if( $global_topic && $s != 'reply' ) {
+				$xtpl->assign( 'checkGlob', $checkGlob );
+				$xtpl->assign( 'post_option_global', $this->lang->post_option_global );
+
+				$xtpl->parse( 'Post.Topic.Global' );
+			}
+
+			if( $topic_lock ) {
+				$xtpl->assign( 'post_option_lock', $this->lang->post_option_lock );
+
+				$xtpl->parse( 'Post.Topic.Lock' );
+			}
+
+			if( $topic_pin ) {
+				$xtpl->assign( 'post_option_pin', $this->lang->post_option_pin );
+
+				$xtpl->parse( 'Post.Topic.Pin' );
+			}
+
+			if( $this->perms->auth( 'post_attach', $f ) ) {
+				if( $attached ) {
+					$xtpl->assign( 'post_attach', $this->lang->post_attach );
+					$xtpl->assign( 'attached', $attached );
+					$xtpl->assign( 'post_attach_remove', $this->lang->post_attach_remove );
+					$xtpl->assign( 'attached_data', $attached_data );
+
+					$xtpl->parse( 'Post.Topic.AttachBox.Remove' );
 				}
 
-				$attach_box = eval($this->template('POST_ATTACH'));
-			} else {
-				$attach_box = null;
+				$xtpl->assign( 'post_attach_add', $this->lang->post_attach_add );
+				$xtpl->assign( 'post_attach_disrupt', $this->lang->post_attach_disrupt );
+				$xtpl->assign( 'upload_error', $upload_error );
+
+				$xtpl->parse( 'Post.Topic.AttachBox' );
 			}
 
-			switch($s)
+			switch( $s )
 			{
-			case 'reply':
-				$temp_name = 'POST_REPLY';
-				$review    = $this->makeReview(5);
-				break;
+				case 'reply':
+					$query = $this->db->query( "SELECT p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, m.user_name
+						FROM %pposts p, %pusers m
+						WHERE p.post_topic=%d AND p.post_author = m.user_id
+						ORDER BY p.post_time DESC
+						LIMIT %d", $t, 5 );
 
-			case 'poll':
-				$temp_name = 'POST_POLL';
-				break;
+					while( $last = $this->db->nqfetch( $query ) )
+					{
+						$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
 
-			default:
-				$temp_name = 'POST_TOPIC';
-			}
+						if( $last['post_mbcode'] ) {
+							$params |= FORMAT_MBCODE;
+						}
 
-			$post_box = eval($this->template($this->post_box()));
-			return eval($this->template($temp_name));
+						if( $last['post_emoticons'] ) {
+							$params |= FORMAT_EMOTICONS;
+						}
 
-		/**
-		 * Final submission of form, after all attachments and previews
-		 */
+						$last['post_text'] = $this->format( $last['post_text'], $params );
+						$last['post_time'] = $this->mbdate( DATE_LONG, $last['post_time'] );
+
+						if( $last['post_author'] != USER_GUEST_UID ) {
+							$last['user_name'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $last['post_author'] . '">' . $last['user_name'] . '</a>';
+						} else {
+							$last['user_name'] = $this->lang->post_guest;
+						}
+
+						$xtpl->assign( 'last_user', $last['user_name'] );
+						$xtpl->assign( 'post_posted', $this->lang->post_posted );
+						$xtpl->assign( 'last_time', $last['post_time'] );
+						$xtpl->assign( 'last_text', $last['post_text'] );
+
+						$xtpl->parse( 'Post.Topic.Reply.ReplyReview' );
+					}
+
+					$xtpl->assign( 'post_last_five', $this->lang->post_last_five );
+					$xtpl->assign( 't', $t );
+					$xtpl->assign( 'post_view_topic', $this->lang->post_view_topic );
+
+					$xtpl->parse( 'Post.Topic.Reply' );
+					break;
+
+				case 'poll':
+					$xtpl->assign( 'post_poll_options', $this->lang->post_poll_options );
+					$xtpl->assign( 'post_poll_row', $this->lang->post_poll_row );
+					$xtpl->assign( 'options', $options );
+
+					$xtpl->parse( 'Post.Topic.PollOptions' );
+					break;
+
+				case 'topic':
+					break;
+
+				default:
+					return $this->message( $this->lang->post_create_topic, "Unknown activity type: $s." );
+
+			} // END: Switch Statement
+
+			$xtpl->assign( 's', $s );
+			$xtpl->assign( 'post_preview', $this->lang->post_preview );
+
+			$xtpl->parse( 'Post.Topic' );
+			$xtpl->parse( 'Post' );
+			return $xtpl->text( 'Post' );
 		} else {
-			if (!$this->perms->auth('post_noflood', $this->get['f']) && ($this->user['user_lastpost'] > ($this->time - $this->sets['flood_time']))) {
-				return $this->message($this->lang->post_replying, sprintf($this->lang->post_flood, $this->sets['flood_time']));
+			/**
+			 * Final submission of form, after all attachments and previews
+			 */
+
+			if( !$this->perms->auth( 'post_noflood', $f ) && ( $this->user['user_lastpost'] > ( $this->time - $this->sets['flood_time'] ) ) ) {
+				return $this->message( $this->lang->post_replying, sprintf( $this->lang->post_flood, $this->sets['flood_time'] ) );
 			}
 
-			if (trim($this->post['post']) == '') {
-				return $this->message($this->lang->post_posting, $this->lang->post_must_msg);
+			if( trim( $this->post['post'] ) == '' ) {
+				return $this->message( $this->lang->post_posting, $this->lang->post_must_msg );
 			}
 
-			if (!isset($this->post['icon']))      $this->post['icon'] = '';
-			if (!isset($this->post['parseCode'])) $this->post['parseCode'] = 0;
-			if (!isset($this->post['parseEmot'])) $this->post['parseEmot'] = 0;
+			if( !isset( $this->post['icon'] ) )      $this->post['icon'] = '';
+			if( !isset( $this->post['parseCode'] ) ) $this->post['parseCode'] = 0;
+			if( !isset( $this->post['parseEmot'] ) ) $this->post['parseEmot'] = 0;
 
-			if (($s == 'topic') || ($s == 'poll')) {
+			if( ( $s == 'topic' ) || ( $s == 'poll' ) ) {
 				$mode = 0;
 
-				if ($this->perms->auth('topic_global') && isset($this->post['global_topic'])) {
+				if( $this->perms->auth( 'topic_global') && isset( $this->post['global_topic'] ) ) {
 					$mode |= TOPIC_GLOBAL;
 				}
 
-				if ($this->perms->auth('topic_publish_auto', $this->get['f'])) {
+				if( $this->perms->auth( 'topic_publish_auto', $f ) ) {
 					$mode |= TOPIC_PUBLISH;
 				}
 
-				if (isset($this->post['locktopic']) && ($this->perms->auth('topic_lock', $this->get['f']) || $this->perms->auth('topic_lock_own', $this->get['f']))) {
+				if( isset( $this->post['locktopic'] ) && ( $this->perms->auth( 'topic_lock', $f ) || $this->perms->auth( 'topic_lock_own', $f ) ) ) {
 					$mode |= TOPIC_LOCKED;
 				}
 
-				if (isset($this->post['pintopic']) && ($this->perms->auth('topic_pin', $this->get['f']) || $this->perms->auth('topic_pin_own', $this->get['f']))) {
+				if( isset( $this->post['pintopic'] ) && ( $this->perms->auth( 'topic_pin', $f ) || $this->perms->auth( 'topic_pin_own', $f ) ) ) {
 					$mode |= TOPIC_PINNED;
 				}
 
-				if (trim($this->post['title']) == '') {
-					return $this->message($this->lang->post_posting, $this->lang->post_must_title);
+				if( trim( $this->post['title'] ) == '' ) {
+					return $this->message( $this->lang->post_posting, $this->lang->post_must_title );
 				}
 
-				if ($s == 'poll') {
-					if (trim($this->post['options']) == '') {
-						return $this->message($this->lang->post_posting, $this->lang->post_must_options);
+				if( $s == 'poll' ) {
+					if( trim( $this->post['options'] ) == '' ) {
+						return $this->message( $this->lang->post_posting, $this->lang->post_must_options );
 					}
 
 					$max_options  = 15;
-					$option_count = substr_count($this->post['options'], "\n") + 1;
+					$option_count = substr_count( $this->post['options'], "\n" ) + 1;
 
-					if (($option_count > $max_options) || ($option_count < 2)) {
-						return $this->message($this->lang->post_posting, sprintf($this->lang->post_too_many_options, $max_options));
+					if( ( $option_count > $max_options ) || ( $option_count < 2 ) ) {
+						return $this->message( $this->lang->post_posting, sprintf( $this->lang->post_too_many_options, $max_options ) );
 					}
 				}
 
 				$this->sets['topics']++;
 
-				if ($s != 'poll') {
-					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_type)
+				if( $s != 'poll' ) {
+					$this->db->query( "INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_type)
 						VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d, %d)",
-						$this->post['title'], $this->get['f'], $this->post['desc'], $this->user['user_id'],
-						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM);
+						$this->post['title'], $f, $this->post['desc'], $this->user['user_id'],
+						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM );
 				} else {
 					$mode |= TOPIC_POLL;
-					$this->db->query("INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_type, topic_poll_options)
+					$this->db->query( "INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes, topic_type, topic_poll_options)
 						VALUES('%s', %d, '%s', %d, '%s', %d, %d, %d, %d, %d, '%s')",
-						$this->post['title'], $this->get['f'], $this->post['desc'], $this->user['user_id'],
-						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM, $this->post['options']);
+						$this->post['title'], $f, $this->post['desc'], $this->user['user_id'],
+						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM, $this->post['options'] );
 				}
 
-				$this->get['t'] = $this->db->insert_id("topics");
+				$t = $this->db->insert_id( "topics" );
 
 				// Topic pin and lock were not being tracked here before. Oops.
-				if ( $mode & TOPIC_PINNED )
-					$this->log_action('topic_pin', $this->get['t']);
-				if ( $mode & TOPIC_LOCKED )
-					$this->log_action('topic_lock', $this->get['t']);
+				if( $mode & TOPIC_PINNED )
+					$this->log_action( 'topic_pin', $t );
+				if( $mode & TOPIC_LOCKED )
+					$this->log_action( 'topic_lock', $t );
 			}
 			
-			if ($this->perms->auth('post_inc_userposts', $this->get['f'])) {
+			if( $this->perms->auth( 'post_inc_userposts', $f ) ) {
 				$post_count = 1;
 			} else {
 				$post_count = 0;
 			}
 
-			if ($post_count) {
-				$newlevel = $this->get_level($this->user['user_posts'] + 1);
+			if( $post_count ) {
+				$newlevel = $this->get_level( $this->user['user_posts'] + 1 );
 			} else {
-				$newlevel = $this->get_level($this->user['user_posts']);
+				$newlevel = $this->get_level( $this->user['user_posts'] );
 			}
 			
-			if ($this->user['user_title_custom']) {
+			if( $this->user['user_title_custom'] ) {
 				$membertitle = $this->user['user_title'];
 			} else {
 				$membertitle = $newlevel['user_title'];
@@ -518,16 +621,9 @@ class post extends qsfglobal
 			$this->sets['posts']++;
 			$this->write_sets();
 
-			/* HTML formatting not implemented at this time
-			
-			if (isset($this->post['rich'])) {
-				$this->post['post'] = $this->format_html_mbcode($this->post['post']);
-			}
-			*/
-
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
-			if( !empty($this->sets['wordpress_api_key']) && $this->sets['akismet_posts'] ) {
-				if( !$this->perms->auth('is_admin') && $this->user['user_posts'] < $this->sets['akismet_posts_number'] ) {
+			if( !empty( $this->sets['wordpress_api_key'] ) && $this->sets['akismet_posts'] ) {
+				if( !$this->perms->auth( 'is_admin' ) && $this->user['user_posts'] < $this->sets['akismet_posts_number'] ) {
 					require_once $this->sets['include_path'] . '/lib/akismet.php';
 
 					$spam_checked = false;
@@ -546,14 +642,14 @@ class post extends qsfglobal
 					catch(Exception $e) {}
 
 					if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
-						$this->log_action('Possible Spam Posted', 0, 0, 0);
+						$this->log_action( 'Possible Spam Posted', 0, 0, 0 );
 
 						// Store the contents of the entire $_SERVER array.
-						$svars = json_encode($_SERVER);
+						$svars = json_encode( $_SERVER );
 
-						$this->db->query("INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emoticons, spam_mbcode, spam_count, spam_ip, spam_icon, spam_svars)
+						$this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emoticons, spam_mbcode, spam_count, spam_ip, spam_icon, spam_svars)
 							VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
-							$this->get['t'], $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars);
+							$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
 
 						$this->sets['spam_post_count']++;
 						$this->sets['spam_pending']++;
@@ -564,79 +660,78 @@ class post extends qsfglobal
 				}
 			}
 
-			$this->db->query("INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
+			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
 				VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
-				$this->get['t'], $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $this->referrer, $this->agent);
-			$post_id = $this->db->insert_id("posts");
+				$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $this->referrer, $this->agent );
+			$post_id = $this->db->insert_id( "posts" );
 
-			$this->db->query("UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $this->get['t']);
+			$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $t );
 
-			if ($post_count) {
-				$this->db->query("UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d, user_level='%s', user_title='%s' WHERE user_id=%d",
-					$this->time, $newlevel['user_level'], $membertitle, $this->user['user_id']);
+			if( $post_count ) {
+				$this->db->query( "UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=%d, user_level='%s', user_title='%s' WHERE user_id=%d",
+					$this->time, $newlevel['user_level'], $membertitle, $this->user['user_id'] );
 			} else {
-				$this->db->query("UPDATE %pusers SET user_lastpost=%d WHERE user_id=%d", $this->time, $this->user['user_id']);
+				$this->db->query( "UPDATE %pusers SET user_lastpost=%d WHERE user_id=%d", $this->time, $this->user['user_id'] );
 			}
 
-			if ($s == 'reply') {
+			if( $s == 'reply' ) {
 				$mode = $topic['topic_modes'];
 
 				$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-				if (isset($this->post['locktopic']) && ($this->perms->auth('topic_lock', $topic['forum_id']) || ($is_owner && $this->perms->auth('topic_lock_own', $topic['forum_id'])))) {
+				if( isset( $this->post['locktopic'] ) && ( $this->perms->auth( 'topic_lock', $topic['forum_id'] ) || ( $is_owner && $this->perms->auth( 'topic_lock_own', $topic['forum_id'] ) ) ) ) {
 					$mode |= TOPIC_LOCKED;
 				}
 
-				if (isset($this->post['pintopic']) && ($this->perms->auth('topic_pin', $topic['forum_id']) || ($is_owner && $this->perms->auth('topic_pin_own', $topic['forum_id'])))) {
+				if( isset( $this->post['pintopic'] ) && ( $this->perms->auth( 'topic_pin', $topic['forum_id'] ) || ( $is_owner && $this->perms->auth( 'topic_pin_own', $topic['forum_id'] ) ) ) ) {
 					$mode |= TOPIC_PINNED;
 				}
 
-				$this->db->query("UPDATE %ptopics SET topic_replies=topic_replies+1, topic_modes=%d, topic_edited=%d, topic_last_poster=%d WHERE topic_id=%d",
-					$mode, $this->time, $this->user['user_id'], $this->get['t']);
+				$this->db->query( "UPDATE %ptopics SET topic_replies=topic_replies+1, topic_modes=%d, topic_edited=%d, topic_last_poster=%d WHERE topic_id=%d",
+					$mode, $this->time, $this->user['user_id'], $t );
 				$field = 'forum_replies';
 			} else {
 				$field = 'forum_topics';
 			}
 
 			// Update all parent forums if any
-			$forums = $this->db->fetch("SELECT forum_tree FROM %pforums WHERE forum_id=%d", $this->get['f']);
-			$this->db->query("UPDATE %pforums SET {$field}={$field}+1, forum_lastpost=%d
+			$forums = $this->db->fetch( "SELECT forum_tree FROM %pforums WHERE forum_id=%d", $f );
+
+			$this->db->query( "UPDATE %pforums SET {$field}={$field}+1, forum_lastpost=%d
 				WHERE forum_parent > 0 AND forum_id IN (%s) OR forum_id=%d",
-				$post_id, $forums['forum_tree'], $this->get['f']);
+				$post_id, $forums['forum_tree'], $f );
 			
-			if (isset($this->post['attached_data']) && $this->perms->auth('post_attach', $this->get['f'])) {
-				$this->attachmentutil->insert($post_id, $this->post['attached_data']);
+			if( isset( $this->post['attached_data'] ) && $this->perms->auth( 'post_attach', $f ) ) {
+				$this->attachmentutil->insert( $post_id, $this->post['attached_data'] );
 			}
 
-			$this->db->query("DELETE FROM %psubscriptions WHERE subscription_expire < %d", $this->time);
-			$subs = $this->db->query("SELECT u.user_email
-				FROM %psubscriptions s, %pusers u
-				WHERE
-				  s.subscription_user = u.user_id AND
-				  u.user_id != %d AND
+			$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_expire < %d", $this->time );
+
+			$subs = $this->db->query( "SELECT u.user_email FROM %psubscriptions s, %pusers u
+				WHERE s.subscription_user = u.user_id AND u.user_id != %d AND
 				  ((s.subscription_type = 'topic' AND s.subscription_item = %d) OR
 				   (s.subscription_type = 'forum' AND s.subscription_item = %d))",
-				$this->user['user_id'], $this->get['t'], $this->get['f']);
+				$this->user['user_id'], $t, $f );
 
-			if ($this->db->num_rows($subs)) {
-				$emailtopic = $this->db->fetch("SELECT t.topic_title, f.forum_name
+			if( $this->db->num_rows( $subs ) ) {
+				$emailtopic = $this->db->fetch( "SELECT t.topic_title, f.forum_name
 					FROM %ptopics t, %pforums f
-					WHERE t.topic_id=%d AND t.topic_forum=f.forum_id", $this->get['t']);
+					WHERE t.topic_id=%d AND t.topic_forum=f.forum_id", $t );
 
 				$message  = "{$this->sets['forum_name']}\n";
 				$message .= "{$this->sets['loc_of_board']}/index.php?a=topic&t={$this->get['t']}\n\n";
 				$message .= "A new post has been made in a topic or forum you are subscribed to.\n\n";
 				$message .= "Forum: {$emailtopic['forum_name']}\n";
-				$message .= "Topic: " . $this->format($emailtopic['topic_title'], FORMAT_CENSOR);
+				$message .= "Topic: " . $this->format( $emailtopic['topic_title'], FORMAT_CENSOR );
 
-				$mailer = new mailer($this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false);
-				$mailer->setSubject("{$this->sets['forum_name']} - Subscriptions");
-				$mailer->setMessage($message);
-				$mailer->setServer($this->sets['mailserver']);
+				$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
+				$mailer->setSubject( "{$this->sets['forum_name']} - Subscriptions" );
+				$mailer->setMessage( $message );
+				$mailer->setServer( $this->sets['mailserver'] );
 
-				while ($sub = $this->db->nqfetch($subs))
+				while( $sub = $this->db->nqfetch( $subs ) )
 				{
-					$mailer->setBcc($sub['user_email']);
+					$mailer->setBcc( $sub['user_email'] );
 				}
 
 				$mailer->doSend();
@@ -645,56 +740,53 @@ class post extends qsfglobal
 			if( isset($this->post['request_uri']) ) {
 				header('Location: ' . $this->post['request_uri']);
 			} else {
-				header('Location: ' . $this->self . '?a=topic&t=' . $this->get['t'] . '&p=' . $post_id . '#p' . $post_id);
+				header('Location: ' . $this->self . '?a=topic&t=' . $t . '&p=' . $post_id . '#p' . $post_id );
 			}
 		}
 	}
 
-	function vote()
+	private function vote()
 	{
-		if (!isset($this->get['t'])) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->post_voting, $this->lang->post_no_topic);
+		if( !isset( $this->get['t'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->post_voting, $this->lang->post_no_topic );
 		}
 
-		if (!isset($this->post['pollvote'])) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->post_voting, $this->lang->post_no_vote);
+		if( !isset( $this->post['pollvote'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->post_voting, $this->lang->post_no_vote );
 		}
 
-		$this->get['t'] = intval($this->get['t']);
-		$this->post['pollvote'] = intval($this->post['pollvote']);
+		$t = intval( $this->get['t'] );
+		$pollvote = intval( $this->post['pollvote'] );
 
-		$user_voted = $this->db->fetch("SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d",
-			$this->user['user_id'], $this->get['t']);
-		$data = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $this->get['t']);
+		$user_voted = $this->db->fetch( "SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d",	$this->user['user_id'], $t );
+		$data = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
 
-		if (!$user_voted && $this->perms->auth('poll_vote', $data['topic_forum'])) {
-			$this->db->query("INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, %d)",
-				$this->user['user_id'], $this->get['t'], $this->post['pollvote']);
-			header('Location: ' . $this->self . '?a=topic&t=' . $this->get['t']);
+		if( !$user_voted && $this->perms->auth( 'poll_vote', $data['topic_forum'] ) ) {
+			$this->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, %d)", $this->user['user_id'], $t, $pollvote );
+			header( 'Location: ' . $this->self . '?a=topic&t=' . $t );
 			return;
 		}
 
-		$this->set_title($this->lang->post_voting);
-		return $this->message($this->lang->post_voting, $this->lang->post_cant_enter);
+		$this->set_title( $this->lang->post_voting );
+		return $this->message( $this->lang->post_voting, $this->lang->post_cant_enter );
 	}
 
-	function nullvote()
+	private function nullvote()
 	{
-		if (!isset($this->get['t'])) {
-			header('HTTP/1.0 404 Not Found');
-			return $this->message($this->lang->post_voting, $this->lang->post_no_topic);
+		if( !isset( $this->get['t'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->post_voting, $this->lang->post_no_topic );
 		}
 
-		$this->get['t'] = intval($this->get['t']);
+		$t = intval( $this->get['t'] );
 
-		if (!$this->sets['vote_after_results']) {
-			$this->db->query("INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, -1)",
-				$this->user['user_id'], $this->get['t']);
+		if( !$this->sets['vote_after_results'] ) {
+			$this->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, -1)", $this->user['user_id'], $t );
 		}
 
-		header("Location: {$this->self}?a=topic&t={$this->get['t']}&results=1");
+		header( "Location: {$this->self}?a=topic&t={$t}&results=1" );
 	}
 }
 ?>

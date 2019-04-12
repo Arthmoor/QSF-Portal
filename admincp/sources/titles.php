@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS') || !defined('QSF_ADMIN')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -35,7 +35,7 @@ require_once $set['include_path'] . '/admincp/admin.php';
 
 class titles extends admin
 {
-	function execute()
+	public function execute()
 	{
 		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = null;
@@ -51,6 +51,7 @@ class titles extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/titles.xtpl' );
 
 				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'titles_add', $this->lang->titles_add );
 				$xtpl->assign( 'titles_title', $this->lang->titles_title );
 				$xtpl->assign( 'titles_image', $this->lang->titles_image );
@@ -170,7 +171,7 @@ class titles extends admin
 		}
 	}
 
-	function list_title_images( $select )
+	private function list_title_images( $select )
 	{
 		$dirname = "../skins/{$this->skin}/images/";
 
@@ -198,7 +199,7 @@ class titles extends admin
 		return $out;
 	}
 
-	function update_titles()
+	private function update_titles()
 	{
 		$titles = $this->db->query( "SELECT * FROM %pmembertitles ORDER BY membertitle_posts" );
 		$last_count = 0;

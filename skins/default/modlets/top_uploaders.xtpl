@@ -1,0 +1,9 @@
+<!-- BEGIN: TopUploaders -->
+    <div class="block">
+     <div class="title">
+      <img src="{loc_of_board}/skins/{skin}/images/icons/award_star_gold_2.png" alt="" />
+      {main_top_uploaders}
+     </div>
+     {content}
+    </div>
+<!-- END: TopUploaders -->

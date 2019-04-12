@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,18 +26,16 @@
  *
  **/
 
-if( !defined('QSF_INSTALLER' ) ) {
+if( !defined( 'QSF_INSTALLER' ) ) {
 	exit( 'Use index.php to upgrade.' );
 }
 
 // Upgrade from QSF Portal 1.5.2 to QSF Portal 2.0
 
-// Template changes - Don't forget to enclose them inside single quotes!!!
-$need_templates = true;
-
 // New settings
 $this->sets['registrations_allowed'] = 1;
 $this->sets['analytics_code'] = '';
+$this->sets['default_skin'] = 1;
 
 // Deleted settings
 unset( $this->sets['analytics_id'] );
@@ -51,13 +49,33 @@ unset( $this->sets['debug_mode'] );
 
 // Queries to run
 $queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
+$queries[] = "ALTER TABLE %pactive CHANGE active_user_agent active_user_agent varchar(255) NOT NULL default 'Unknown'";
 $queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
 $queries[] = "ALTER TABLE %pusers CHANGE user_birthday user_birthday NOT NULL default '1900-01-01'";
-$queries[] = 'ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255) NOT NULL default 'Europe/London';
+$queries[] = "ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255) NOT NULL default 'Europe/London'";
 $queries[] = "UPDATE %pusers SET user_birthday='1900-01-01' WHERE CAST(user_birthday AS CHAR(10)) = '0000-00-00'";
 $queries[] = "UPDATE %pusers SET user_timezone='Europe/London'";
+$queries[] = "ALTER TABLE %pusers ADD user_facebook varchar(255) NOT NULL default '' AFTER user_twitter";
+$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_icq';
+$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_aim';
+$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_msn';
+$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_yahoo';
+$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_skin';
+$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
+$queries[] = "UPDATE %pusers SET user_skin=1";
 
 $queries[] = "DROP TABLE IF EXISTS %phelp";
+$queries[] = "DROP TABLE IF EXISTS %ptemplates";
+
+$queries[] = "DROP TABLE IF EXISTS %pskins";
+$queries[] = "CREATE TABLE %pskins (
+  skin_id int(12) unsigned NOT NULL auto_increment,
+  skin_name varchar(255) NOT NULL default '',
+  skin_dir varchar(255) NOT NULL default '',
+  skin_enabled tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (skin_id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+$queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ( 'Ashlander 4', 'default', 1 )";
 
 $queries[] = "CREATE TABLE %pemoticons (
   emote_id int(10) unsigned NOT NULL auto_increment,
@@ -106,6 +124,7 @@ $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickabl
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':imp:', 'imp.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':banana:', 'dancingbanana.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cricket:', 'cricket.png', 1 )";
+$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':troll:', 'trollface.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':(', 'sad.png', 0 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':P', 'tongue.png', 0 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (';)', 'wink.png', 0 )";

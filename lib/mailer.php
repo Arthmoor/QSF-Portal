@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2019 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -9,7 +9,7 @@
  * Quicksilver Forums
  * Copyright (c) 2005-2011 The Quicksilver Forums Development Team
  * https://github.com/Arthmoor/Quicksilver-Forums
- * 
+ *
  * MercuryBoard
  * Copyright (c) 2001-2006 The Mercury Development Team
  * https://github.com/markelliot/MercuryBoard
@@ -26,8 +26,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -58,7 +58,7 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function mailer($in, $out, $sender, $html)
+	public function __construct( $in, $out, $sender, $html )
 	{
 		$this->outgoing = $out;
 		$this->incoming = $in;
@@ -83,7 +83,7 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function setBcc($email)
+	public function setBcc( $email )
 	{
 		$this->bcc[] = $email;
 	}
@@ -95,14 +95,14 @@ class mailer
 	 * @since RC1
 	 * @return boolean true if bcc recipients exist
 	 **/
-	function doBcc()
+	private function doBcc()
 	{
-		if (!$this->bcc) {
+		if( !$this->bcc ) {
 			return false;
 		}
 
-		$this->list .= implode(', ', $this->bcc);
-		$this->setHeader('Bcc: ' . $this->list);
+		$this->list .= implode( ', ', $this->bcc );
+		$this->setHeader( 'Bcc: ' . $this->list );
 
 		return true;
 	}
@@ -115,7 +115,7 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function setRecipient($recipient)
+	public function setRecipient( $recipient )
 	{
 		$this->recipient = $recipient;
 	}
@@ -128,10 +128,10 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function setSubject($subject)
+	public function setSubject( $subject )
 	{
 		// Basic security check
-		$subject = str_replace(array("\n", "\r"), array(' ', ' '), $subject);
+		$subject = str_replace( array( "\n", "\r" ), array( ' ', ' ' ), $subject );
 		$this->subject = $subject;
 	}
 
@@ -143,7 +143,7 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function setMessage($message)
+	public function setMessage( $message )
 	{
 		$this->message = $message;
 	}
@@ -156,10 +156,10 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function setHeader($header)
+	public function setHeader( $header )
 	{
 		// Basic security check
-		$header = str_replace(array("\n", "\r"), array(' ', ' '), $header);
+		$header = str_replace( array( "\n", "\r" ), array( ' ', ' ' ), $header );
 		$this->headers[] = $header;
 	}
 
@@ -171,7 +171,7 @@ class mailer
 	 * @since RC1
 	 * @return void
 	 **/
-	function setServer($server)
+	public function setServer( $server )
 	{
 		$this->server = $server;
 	}
@@ -183,27 +183,28 @@ class mailer
 	 * @since RC1
 	 * @return boolean true on success
 	 **/
-	function doSend()
+	public function doSend()
 	{
-		if (!strlen($this->subject)) {
+		if ( !strlen( $this->subject ) ) {
 			return false;
 		}
 
-		$this->setHeader('From: ' . $this->sender . ' <' . $this->outgoing . '>');
-		$this->setHeader('Reply-To: ' . $this->incoming);
+		$this->setHeader( 'From: ' . $this->sender . ' <' . $this->outgoing . '>' );
+		$this->setHeader( 'Reply-To: ' . $this->incoming );
 
-		if (!strlen($this->recipient)) {
+		if( !strlen( $this->recipient ) ) {
 			$this->doBcc();
+
 			$to = $this->sender . ' <' . $this->outgoing . '>';
 		} else {
 			$to = $this->recipient;
 		}
 
-		if ($this->server) {
-			@ini_set('SMTP', $this->server);
+		if( $this->server ) {
+			@ini_set( 'SMTP', $this->server );
 		}
 
-		if (mail($to, $this->subject, $this->message, implode("\n", $this->headers))) {
+		if( mail( $to, $this->subject, $this->message, implode( "\n", $this->headers ) ) ) {
 			return true;
 		} else {
 			return false;

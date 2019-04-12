@@ -6,7 +6,7 @@ Changes for 2.0:
 * Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
-* Emoticons are now handled independently of skins and can be added on the fly as desired.
+* Emojis are now handled independently of skins and can be added on the fly as desired.
 * Added a new setting to block new user registration.
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
 * Default skin is now served as HTML5 instead of XHTML 1.1.
@@ -18,7 +18,6 @@ Changes for 2.0:
 
    Bugs addressed:
 
-* Akismet reporting types have been corrected to conform to their API specifications.
 * File updates were not unlinking the old files after replacing them with new ones, leading to large scale space waste.
 * Bare URLs entered into posts were getting stray single quotes placed around them.
 
