@@ -55,13 +55,13 @@ class upgrade extends qsfglobal
 
 	public function upgrade_board( $step )
 	{
-		$this->database = $this->sets['dbtype'];
+		$this->database = 'db_' . $this->sets['dbtype'];
 
 		switch( $step ) {
 		default:
 			echo "<form action='{$this->self}?mode=upgrade&amp;step=2' method='post'>
- <div class='article'>
-  <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
+			 <div class='article'>
+			  <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
 
 			$db = new $this->database( $this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
 				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix'] );
@@ -93,139 +93,11 @@ class upgrade extends qsfglobal
 			       <span class='half'>
 				<div class='title'>QSF Portal</div>
 
-				<span class='field'><input type='radio' name='from' value='38' id='upgrade38' /></span>
-				<span class='form'><label for='upgrade38'>QSF Portal v1.5.2</label></span>
+				<span class='field'><input type='radio' name='from' value='1.5.2' id='152' /></span>
+				<span class='form'><label for='152'>QSF Portal v1.5.2</label></span>
 				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='37' id='upgrade37' /></span>
-				<span class='form'><label for='upgrade37'>QSF Portal v1.5.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='36' id='upgrade36' /></span>
-				<span class='form'><label for='upgrade36'>QSF Portal v1.5</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='35' id='upgrade35' /></span>
-				<span class='form'><label for='upgrade35'>QSF Portal v1.4.6</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='34' id='upgrade34' /></span>
-				<span class='form'><label for='upgrade34'>QSF Portal v1.4.5</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='33' id='upgrade33' /></span>
-				<span class='form'><label for='upgrade33'>QSF Portal v1.4.4</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='32' id='upgrade32' /></span>
-				<span class='form'><label for='upgrade32'>QSF Portal v1.4.3</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='31' id='upgrade31' /></span>
-				<span class='form'><label for='upgrade31'>QSF Portal v1.4.2</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='30' id='upgrade30' /></span>
-				<span class='form'><label for='upgrade30'>QSF Portal v1.4.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='29' id='upgrade29' /></span>
-				<span class='form'><label for='upgrade29'>QSF Portal v1.4.0</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='28' id='upgrade28' /></span>
-				<span class='form'><label for='upgrade28'>QSF Portal v1.3.5</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='27' id='upgrade27' /></span>
-				<span class='form'><label for='upgrade27'>QSF Portal v1.3.4</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='26' id='upgrade26' /></span>
-				<span class='form'><label for='upgrade26'>QSF Portal v1.3.3</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='25' id='upgrade25' /></span>
-				<span class='form'><label for='upgrade25'>QSF Portal v1.3.2</label></span>
 			       </span>
 
-			       <span class='half'>
-    				<div class='title'>Quicksilver Forums</div>
-
-				<span class='field'><input type='radio' name='from' value='24' id='upgrade24' /></span>
-				<span class='form'><label for='upgrade24'>QSF Portal v1.3.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='23' id='upgrade23' /></span>
-				<span class='form'><label for='upgrade23'>Quicksilver Forums v1.3.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='22' id='upgrade22' /></span>
-				<span class='form'><label for='upgrade22'>Quicksilver Forums v1.3.0</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='21' id='upgrade21' /></span>
-				<span class='form'><label for='upgrade21'>Quicksilver Forums v1.2.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='20' id='upgrade20' /></span>
-				<span class='form'><label for='upgrade20'>Quicksilver Forums v1.2.0</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='19' id='upgrade19' /></span>
-				<span class='form'><label for='upgrade19'>Quicksilver Forums v1.1.9</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='18' id='upgrade18' /></span>
-				<span class='form'><label for='upgrade18'>Quicksilver Forums v1.1.8</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='17' id='upgrade17' /></span>
-				<span class='form'><label for='upgrade17'>Quicksilver Forums v1.1.7</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='16' id='upgrade16' /></span>
-				<span class='form'><label for='upgrade16'>Quicksilver Forums v1.1.6</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='15' id='upgrade15' /></span>
-				<span class='form'><label for='upgrade15'>Quicksilver Forums v1.1.5</label></span>
-			       </span>
-
-			       <span class='half'>
-				<div class='title'>MercuryBoard</div>
-
-				<span class='field'><input type='radio' name='from' value='14' id='upgrade14' /></span>
-				<span class='form'><label for='upgrade14'>MercuryBoard v1.1.4</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='13' id='upgrade13' /></span>
-				<span class='form'><label for='upgrade13'>MercuryBoard v1.1.3</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='12' id='upgrade12' /></span>
-				<span class='form'><label for='upgrade12'>MercuryBoard v1.1.2</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='11' id='upgrade11' /></span>
-				<span class='form'><label for='upgrade11'>MercuryBoard v1.1.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='10' id='upgrade10' /></span>
-				<span class='form'><label for='upgrade10'>MercuryBoard v1.1.0</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='9' id='upgrade9' /></span>
-				<span class='form'><label for='upgrade9'>MercuryBoard v1.0.2</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='8' id='upgrade8' /></span>
-				<span class='form'><label for='upgrade8'>MercuryBoard v1.0.1</label></span>
-				<p class='line'></p>
-
-				<span class='field'><input type='radio' name='from' value='7' id='upgrade7' /></span>
-				<span class='form'><label for='upgrade7'>MercuryBoard v1.0.0</label></span>
-			       </span>
 				<p></p>
 
 				<div style='text-align:center'>
@@ -239,21 +111,9 @@ class upgrade extends qsfglobal
 			break;
 
 		case 2:
- <div class='article'>
-  <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
+			echo "<div class='article'>
+			  <div class='title' style='text-align:center'>Upgrade {$this->name}</div>";
 			@set_time_limit( 600 );
-
-			// Check to see if all upgrade files are intact
-			$check = $this->post['from'];
-			while( $check <= LATEST )
-			{
-				if( !is_readable( "./upgrade_$check.php" ) ) {
-					echo "A file required for upgrading was not found: upgrade_$check.php";
-					break 2;
-				}
-				$check++;
-			}
-			$check = $this->post['from'];
 
 			$db = new $this->database( $this->sets['db_host'], $this->sets['db_user'], $this->sets['db_pass'], $this->sets['db_name'],
 				$this->sets['db_port'], $this->sets['db_socket'], $this->sets['prefix'] );
@@ -280,22 +140,126 @@ class upgrade extends qsfglobal
 			$this->pre  = $this->sets['prefix'];
 			$this->db   = $db;
 
-			// We can't get settings from the database unless we're already running >= 1.1.0
-			if( $check >= 10 ) {
-				$this->sets = $this->get_settings( $this->sets );
-			}
-
-			while( $check <= LATEST )
+			// Missing breaks are deliberate. Upgrades from older versions need to step through all of this.
+			switch( $this->post['from'] )
 			{
-				include "./upgrade_{$check}.php";
-				$check++;
+				// Examples for setting new perms
+				// $new_permissions['post_inc_userposts'] = true;
+				// $new_permissions['topic_publish_auto'] = true; // will publish on posting
+				// $new_permissions['topic_publish'] = false;
+				// $new_permissions['topic_view_unpublished'] = false;
+
+				// $new_file_perms['download_files'] = true;
+				// $new_file_perms['upload_files'] = false;
+				// $new_file_perms['approve_files'] = false;
+				// $new_file_perms['edit_files'] = false;
+
+				case '1.5.2':
+					// New settings
+					$this->sets['registrations_allowed'] = 1;
+					$this->sets['analytics_code'] = '';
+					$this->sets['default_skin'] = 1;
+
+					// Deleted settings
+					unset( $this->sets['analytics_id'] );
+					unset( $this->sets['link_target'] );
+					unset( $this->sets['max_load'] );
+					unset( $this->sets['debug_mode'] );
+
+					// Queries to run
+					$queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
+					$queries[] = "ALTER TABLE %pactive CHANGE active_user_agent active_user_agent varchar(255) NOT NULL default 'Unknown'";
+					$queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
+					$queries[] = "ALTER TABLE %pusers CHANGE user_birthday user_birthday NOT NULL default '1900-01-01'";
+					$queries[] = "ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255) NOT NULL default 'Europe/London'";
+					$queries[] = "UPDATE %pusers SET user_birthday='1900-01-01' WHERE CAST(user_birthday AS CHAR(10)) = '0000-00-00'";
+					$queries[] = "UPDATE %pusers SET user_timezone='Europe/London'";
+					$queries[] = "ALTER TABLE %pusers ADD user_facebook varchar(255) NOT NULL default '' AFTER user_twitter";
+					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_icq';
+					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_aim';
+					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_msn';
+					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_yahoo';
+					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_skin';
+					$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
+					$queries[] = "UPDATE %pusers SET user_skin=1";
+
+					$queries[] = "DROP TABLE IF EXISTS %phelp";
+					$queries[] = "DROP TABLE IF EXISTS %ptemplates";
+
+					$queries[] = "DROP TABLE IF EXISTS %pskins";
+					$queries[] = "CREATE TABLE %pskins (
+					  skin_id int(12) unsigned NOT NULL auto_increment,
+					  skin_name varchar(255) NOT NULL default '',
+					  skin_dir varchar(255) NOT NULL default '',
+					  skin_enabled tinyint(1) unsigned NOT NULL default '0',
+					  PRIMARY KEY  (skin_id)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+					$queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ( 'Ashlander 4', 'default', 1 )";
+
+					$queries[] = "CREATE TABLE %pemoticons (
+					  emote_id int(10) unsigned NOT NULL auto_increment,
+					  emote_string varchar(15) NOT NULL default '',
+					  emote_image varchar(255) NOT NULL default '',
+					  emote_clickable tinyint(1) unsigned NOT NULL default '1',
+					  PRIMARY KEY  (emote_id)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':alien:', 'alien.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':biggrin:', 'biggrin.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':blues:', 'blues.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cool:', 'cool.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cry:', 'cry.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cyclops:', 'cyclops.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':devil:', 'devil.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':evil:', 'evil.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':ghostface:', 'ghostface.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':grinning:', 'grinning.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':lol:', 'lol.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':mad:', 'angry.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':redface:', 'redface.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':robot:', 'robot.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':rolleyes:', 'rolleyes.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':sad:', 'sad.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':smile:', 'smile.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':stare:', 'stare.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':surprised:', 'surprised.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':thinking:', 'thinking.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':tongue:', 'tongue.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':unclesam:', 'unclesam.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':wink:', 'wink.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':huh:', 'huh.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':blink:', 'blink.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':facepalm:', 'facepalm.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':whistle:', 'whistle.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':sick:', 'sick.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':headbang:', 'headbang.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':innocent:', 'innocent.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':crazy:', 'crazy.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':rofl:', 'rofl.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':lmao:', 'lmao.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':shrug:', 'shrug.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':ninja:', 'ninja.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':nuke:', 'nuke.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':wub:', 'wub.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':imp:', 'imp.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':banana:', 'dancingbanana.gif', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cricket:', 'cricket.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':troll:', 'trollface.png', 1 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':(', 'sad.png', 0 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':P', 'tongue.png', 0 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (';)', 'wink.png', 0 )";
+					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':)', 'smile.gif', 0 )";
+
+				default:
+					break;
 			}
 
 			execute_queries( $queries, $this->db );
 
 			$queries = array();
 
-			// New fields in forum tables need to be fixed in case the old install was a conversion
+			// New fields in forum tables need to be fixed.
 			$this->updateForumTrees();
 			$this->RecountForums();
 
