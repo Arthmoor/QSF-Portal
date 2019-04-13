@@ -21,7 +21,7 @@ Changes for 2.0:
 * File updates were not unlinking the old files after replacing them with new ones, leading to large scale space waste.
 * Bare URLs entered into posts were getting stray single quotes placed around them.
 
-Changes for 1.5.2:
+Changes for 1.5.1:
 
 * Extend Akismet protection to user profiles.
 * Fixed IP address handling so that future IPv6 addresses will be displayed properly.
@@ -33,19 +33,6 @@ Changes for 1.5.2:
 * Modified file size display formatting.
 * Added support to report spambot registrations to Akismet.
 * Added secondary captcha system that takes admin supplied questions and answers to challenge bots with since the math system has been defeated.
-
-   Bugs addressed:
-
-* Issue #3: Help articles don't format correctly.
-* Fixed database support to work on PHP 5.2 if a site is already installed there.
-* Fixed uncaught deprecated use of the split() function.
-* IP banning code did not work because IPs are stored with slashes.
-* Could not use multiple spoiler tags in one post.
-* Email and registration IP in member editing was being handled wrong.
-* Corrected the post box's inability to focus on the cursor position when using bbcode buttons.
-
-Changes for 1.5.1:
-
 * Slight rearranging of the forum topics display to save a bit of vertical space.
 * Groundwork laid for creating better file comments.
 * Added the ability to toggle file approvals on and off (global only).
@@ -65,9 +52,16 @@ Changes for 1.5.1:
 
    Bugs addressed:
 
+* SECURITY: It was possible to view a category the user did not have permission to see using a direct link.
 * File permissions module was not setting the security token.
 * Fixed BBCode size tags messing up formatting of other tags.
-* SECURITY: It was possible to view a category the user did not have permission to see using a direct link.
+* Issue #3: Help articles don't format correctly.
+* Fixed database support to work on PHP 5.2 if a site is already installed there.
+* Fixed uncaught deprecated use of the split() function.
+* IP banning code did not work because IPs are stored with slashes.
+* Could not use multiple spoiler tags in one post.
+* Email and registration IP in member editing was being handled wrong.
+* Corrected the post box's inability to focus on the cursor position when using bbcode buttons.
 
 Changes for 1.5:
 
