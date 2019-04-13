@@ -31,8 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-define( 'LATEST', 38 );   // ID of most recent upgrade script
-
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
 
@@ -93,8 +91,8 @@ class upgrade extends qsfglobal
 			       <span class='half'>
 				<div class='title'>QSF Portal</div>
 
-				<span class='field'><input type='radio' name='from' value='1.5.2' id='152' /></span>
-				<span class='form'><label for='152'>QSF Portal v1.5.2</label></span>
+				<span class='field'><input type='radio' name='from' value='1.5.1' id='151' /></span>
+				<span class='form'><label for='151'>QSF Portal v1.5.1</label></span>
 				<p class='line'></p>
 			       </span>
 
@@ -154,7 +152,7 @@ class upgrade extends qsfglobal
 				// $new_file_perms['approve_files'] = false;
 				// $new_file_perms['edit_files'] = false;
 
-				case '1.5.2':
+				case '1.5.1':
 					// New settings
 					$this->sets['registrations_allowed'] = 1;
 					$this->sets['analytics_code'] = '';
