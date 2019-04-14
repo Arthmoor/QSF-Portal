@@ -58,8 +58,8 @@ $queries[] = "CREATE TABLE %pattach (
 $queries[] = "DROP TABLE IF EXISTS %pcaptcha";
 $queries[] = "CREATE TABLE %pcaptcha (
   cap_id int(10) unsigned NOT NULL auto_increment,
-  cap_question text NOT NULL default '',
-  cap_answer text NOT NULL default '',
+  cap_question text NOT NULL,
+  cap_answer text NOT NULL,
   PRIMARY KEY (cap_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
@@ -109,7 +109,7 @@ $queries[] = "CREATE TABLE %pfilecomments (
   file_id int(10) unsigned NOT NULL default '0',
   user_id int(10) unsigned NOT NULL default '0',
   comment_date int(10) unsigned NOT NULL default '0',
-  comment_text text NOT NULL default '',
+  comment_text text NOT NULL,
   PRIMARY KEY  (comment_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
@@ -140,7 +140,7 @@ $queries[] = "CREATE TABLE %pfiles (
   file_approved tinyint(1) unsigned NOT NULL default '0',
   file_revision int(10) unsigned NOT NULL default '0',
   file_revdate int(10) unsigned default '0',
-  file_description text NOT NULL default '',
+  file_description text NOT NULL,
   PRIMARY KEY  (file_id)
 ) ENGINE=MyISAM";
 
@@ -167,8 +167,8 @@ $queries[] = "CREATE TABLE %pgroups (
   group_name varchar(255) NOT NULL default '',
   group_type varchar(20) NOT NULL default '',
   group_format varchar(255) NOT NULL default '%%s',
-  group_perms text NOT NULL default '',
-  group_file_perms text NOT NULL default '',
+  group_perms text NOT NULL,
+  group_file_perms text NOT NULL,
   PRIMARY KEY  (group_id)
 ) ENGINE=MyISAM";
 
@@ -199,7 +199,7 @@ $queries[] = "CREATE TABLE %ppages (
   page_id int(11) unsigned NOT NULL auto_increment,
   page_title varchar(255) NOT NULL default '',
   page_flags int(10) unsigned NOT NULL default '0',
-  page_contents text NOT NULL default '',
+  page_contents text NOT NULL,
   PRIMARY KEY  (page_id)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
@@ -212,7 +212,7 @@ $queries[] = "CREATE TABLE %ppmsystem (
   pm_bcc text,
   pm_title varchar(255) NOT NULL default '[No Title]',
   pm_time int(10) unsigned NOT NULL default '0',
-  pm_message text NOT NULL default '',
+  pm_message text NOT NULL,
   pm_read tinyint(1) unsigned NOT NULL default '0',
   pm_folder tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (pm_id),
@@ -227,7 +227,7 @@ $queries[] = "CREATE TABLE %pposts (
   post_emoticons tinyint(1) unsigned NOT NULL default '1',
   post_mbcode tinyint(1) unsigned NOT NULL default '1',
   post_count tinyint(1) unsigned NOT NULL default '1',
-  post_text text NOT NULL default '',
+  post_text text NOT NULL,
   post_time int(10) unsigned NOT NULL default '0',
   post_icon varchar(32) NOT NULL default '',
   post_ip varchar(40) NOT NULL default '127.0.0.1',
@@ -259,12 +259,12 @@ $queries[] = "DROP TABLE IF EXISTS %psettings";
 $queries[] = "CREATE TABLE %psettings (
   settings_id tinyint(2) unsigned NOT NULL auto_increment,
   settings_version smallint(2) NOT NULL default 2,
-  settings_tos text NOT NULL default '',
-  settings_tos_files text NOT NULL default '',
+  settings_data text NOT NULL,
+  settings_tos text,
+  settings_tos_files text,
   settings_meta_keywords tinytext,
   settings_meta_description tinytext,
   settings_mobile_icons text,
-  settings_data text NOT NULL default '',
   PRIMARY KEY  (settings_id)
 ) ENGINE=MyISAM";
 
@@ -285,7 +285,7 @@ $queries[] = "CREATE TABLE %pspam (
   spam_emoticons tinyint(1) unsigned NOT NULL default '1',
   spam_mbcode tinyint(1) unsigned NOT NULL default '1',
   spam_count tinyint(1) unsigned NOT NULL default '1',
-  spam_text text NOT NULL default '',
+  spam_text text NOT NULL,
   spam_time int(10) unsigned NOT NULL default '0',
   spam_icon varchar(32) NOT NULL default '',
   spam_ip varchar(40) NOT NULL default '127.0.0.1',
@@ -366,7 +366,7 @@ $queries[] = "CREATE TABLE %pusers (
   user_email_show tinyint(1) unsigned NOT NULL default '0',
   user_email_form tinyint(1) unsigned NOT NULL default '1',
   user_birthday date NOT NULL default '1900-01-01',
-  user_timezone float(3,1) NOT NULL default '0.0',
+  user_timezone varchar(255) NOT NULL default 'Europe/London',
   user_posts int(10) unsigned NOT NULL default '0',
   user_uploads int(10) unsigned NOT NULL default '0',
   user_location varchar(100) NOT NULL default '',
@@ -377,7 +377,7 @@ $queries[] = "CREATE TABLE %pusers (
   user_pm_mail tinyint(1) unsigned NOT NULL default '0',
   user_active tinyint(1) unsigned NOT NULL default '1',
   user_interests varchar(255) NOT NULL default '',
-  user_signature text NOT NULL default '',
+  user_signature text NOT NULL,
   user_lastvisit int(10) unsigned NOT NULL default '0',
   user_lastallread int(10) unsigned NOT NULL default '0',
   user_lastpost int(10) unsigned NOT NULL default '0',
@@ -391,8 +391,8 @@ $queries[] = "CREATE TABLE %pusers (
   user_regip varchar(40) NOT NULL default '127.0.0.1',
   user_register_email varchar(100) default '',
   user_server_data text,
-  user_perms text NOT NULL default '',
-  user_file_perms text NOT NULL default '',
+  user_perms text,
+  user_file_perms text,
   PRIMARY KEY  (user_id)
 ) ENGINE=MyISAM";
 
@@ -437,9 +437,9 @@ $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, mem
 
 $sets = array();
 $settings = json_encode( $sets );
-$queries[] = "INSERT INTO %psettings (settings_id, settings_data, settings_version) VALUES (1, '{$settings}', 2)";
+$queries[] = "INSERT INTO %psettings (settings_id, settings_version, settings_data, settings_tos, settings_tos_files, settings_meta_keywords, settings_meta_description, settings_mobile_icons) VALUES (1, 2, '{$settings}', '', '', '', '', '')";
 $queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ('Ashlander 4', 'default', 1)";
-$queries[] = "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)";
+$queries[] = "INSERT INTO %pusers (user_id, user_name, user_group, user_signature) VALUES (1, 'Guest', 3, '')";
 $queries[] = "INSERT INTO %pfile_categories (fcat_id, fcat_name, fcat_longpath) VALUES (0, 'Root', '/')";
 $queries[] = "UPDATE %pfile_categories SET fcat_id=0";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':alien:', 'alien.gif', 1 )";
@@ -457,14 +457,14 @@ $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickabl
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':redface:', 'redface.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':robot:', 'robot.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':rolleyes:', 'rolleyes.gif', 1 )";
-$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':sad:', 'sad.gif', 1 )";
+$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':sad:', 'sad.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':smile:', 'smile.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':stare:', 'stare.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':surprised:', 'surprised.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':thinking:', 'thinking.gif', 1 )";
-$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':tongue:', 'tongue.gif', 1 )";
+$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':tongue:', 'tongue.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':unclesam:', 'unclesam.gif', 1 )";
-$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':wink:', 'wink.gif', 1 )";
+$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':wink:', 'wink.png', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':huh:', 'huh.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':blink:', 'blink.gif', 1 )";
 $queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':facepalm:', 'facepalm.gif', 1 )";

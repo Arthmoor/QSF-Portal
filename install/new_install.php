@@ -31,10 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-if( isset( $_POST['dbtype'] ) )
-	$set['dbtype'] = $_POST['dbtype'];
-
-require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
 
 /**
@@ -69,7 +65,7 @@ class new_install extends qsfglobal
 
 		foreach( $settings as $set => $val )
 		{
-			$file .= "\$set['$set'] = '" . str_replace(array('\\', '\''), array('\\\\', '\\\''), $val) . "';\n";
+			$file .= "\$set['$set'] = '" . str_replace( array( '\\', '\'' ), array( '\\\\', '\\\'' ), $val ) . "';\n";
 		}
 
 		$file .= '?' . '>';
@@ -84,7 +80,7 @@ class new_install extends qsfglobal
 	 * @since 1.1.0
 	 * @return bool True on success, false on failure
 	 **/
-	private function write_db_sets( $sfile = './settings.php' )
+	private function write_db_sets( $sfile = '../settings.php' )
 	{
 		$settings = $this->create_settings_file();
 
@@ -106,11 +102,10 @@ class new_install extends qsfglobal
 
 	private function server_url()
 	{
-	   $proto = "http" .
-		   ( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == "on" ) ? "s" : "" ) . "://";
-	   $server = isset( $_SERVER['HTTP_HOST'] ) ?
-		   $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-	   return $proto . $server;
+		$proto = "http" . ( ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] == "on" ) ? "s" : "" ) . "://";
+		$server = isset( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
+
+		return $proto . $server;
 	}
 
 	/**
@@ -161,6 +156,8 @@ class new_install extends qsfglobal
 	{
 		switch( $step ) {
 		default:
+			$timezones = $this->htmlwidgets->select_timezones( 'Europe/London' );
+
 			$url = preg_replace( '/install\/?$/i', '', $this->server_url() . dirname( $_SERVER['PHP_SELF'] ) );
 
 echo "<form action='{$this->self}?mode=new_install&amp;step=2' method='post'>
@@ -170,7 +167,7 @@ echo "<form action='{$this->self}?mode=new_install&amp;step=2' method='post'>
 
 			check_writeable_files();
 			if( !is_writeable( '../settings.php' ) ) {
-				echo "<br /><br />Settings file cannot be written to. The installer cannot continue until this problem is corrected.";
+				echo "<br /><br />Settings file cannot be written to. The installer cannot continue until this problem is corrected.</div>";
 				break;
 			}
 
@@ -221,6 +218,10 @@ echo "    <p></p>
   <span class='form'><input class='input' type='text' name='site_url' value='{$url}' size='75' /></span>
   <p></p>
 
+  <span class='field'>Server Timezone:</span>
+  <span class='form'><select class='select' name='timezone'>{$timezones}</select></span>
+  <p></p>
+
   <div class='title' style='text-align:center'>Administrator Account Settings</div>
 
   <span class='field'>User Name:</span>
@@ -233,6 +234,10 @@ echo "    <p></p>
 
   <span class='field'>Password (confirmation):</span>
   <span class='form'><input class='input' type='password' name='admin_pass2' size='30' /></span>
+  <p class='line'></p>
+
+  <span class='field'>User Timezone:</span>
+  <span class='form'><select class='select' name='user_timezone'>{$timezones}</select></span>
   <p class='line'></p>
 
   <span class='field'>Contact Email:</span>
@@ -250,7 +255,7 @@ echo "    <p></p>
   <p class='line'></p>
 
   <div style='text-align:center'>
-   <input type='hidden' name='dbtype' value='mysqli' />
+   <input type='hidden' name='db_type' value='mysqli' />
    <input type='submit' name='submit' value='Continue' />
   </div>
  </div>
@@ -260,9 +265,10 @@ break;
 		case 2:
   echo "<div class='article'>
   <div class='title'>New {$this->name} Installation</div>";
-			$database = 'db_' . $this->post['dbtype'];
 
-			$db = new $database($this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix']);
+			$dbt = 'db_' . $this->post['db_type'];
+
+			$db = new $dbt( $this->post['db_host'], $this->post['db_user'], $this->post['db_pass'], $this->post['db_name'], $this->post['db_port'], $this->post['db_socket'], $this->post['prefix'] );
 
 			if( !$db->connection ) {
 				echo "Couldn't connect to a database using the specified information.";
@@ -276,7 +282,7 @@ break;
 			$this->sets['db_name']   = $this->post['db_name'];
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
-			$this->sets['dbtype']    = $this->post['dbtype'];
+			$this->sets['dbtype']    = $this->post['db_type'];
 			$this->sets['prefix']    = trim( preg_replace( '/[^a-zA-Z0-9_]/', '', $this->post['prefix'] ) );
 
 			if( !$this->write_db_sets( '../settings.php' ) && !isset( $this->post['downloadsettings'] ) ) {
@@ -293,7 +299,7 @@ break;
 					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars($this->post['db_port']) . "\" />\n
 					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars($this->post['db_socket']) . "\" />\n
 					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars($this->post['prefix']) . "\" />\n
-					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['dbtype']) . "\" />\n
+					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['db_type']) . "\" />\n
 					<input type=\"hidden\" name=\"site_name\" value=\"" . htmlspecialchars($this->post['site_name']) . "\" />\n
 					<input type=\"hidden\" name=\"site_url\" value=\"" . htmlspecialchars($this->post['site_url']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_name\" value=\"" . htmlspecialchars($this->post['admin_name']) . "\" />\n
@@ -307,8 +313,8 @@ break;
 				break;
 			}
 
-			if( !is_readable( './' . $this->sets['dbtype'] . '_data_tables.php' ) ) {
-				echo 'Database connected, settings written, but no tables could be loaded from file: ./' . $this->sets['dbtype'] . '_data_tables.php';
+			if( !is_readable( './' . $this->sets['db_type'] . '_data_tables.php' ) ) {
+				echo 'Database connected, settings written, but no tables could be loaded from file: ./' . $this->sets['db_type'] . '_data_tables.php';
 				break;
 			}
 
@@ -329,7 +335,7 @@ break;
 			$this->pre = $this->sets['prefix'];
 
 			// Create tables
-			include './' . $this->sets['dbtype'] . '_data_tables.php';
+			include './' . $this->sets['db_type'] . '_data_tables.php';
 
 			execute_queries( $queries, $db );
 			$queries = null;
@@ -393,7 +399,7 @@ break;
 			$this->sets['posts'] = 0;
 			$this->sets['posts_per_page'] = 15;
 			$this->sets['register_image'] = 0;
-			$this->sets['servertime'] = 0;
+			$this->sets['servertime'] = $this->post['timezone'];
 			$this->sets['topics'] = 0;
 			$this->sets['topics_per_page'] = 20;
 			$this->sets['vote_after_results'] = 0;
@@ -401,7 +407,7 @@ break;
 			$this->sets['default_email_shown'] = 0;
 			$this->sets['default_lang'] = 'en';
 			$this->sets['default_group'] = 2;
-			$this->sets['default_timezone'] = 0;
+			$this->sets['default_timezone'] = 'Europe/London';
 			$this->sets['default_pm'] = 1;
 			$this->sets['default_view_avatars'] = 1;
 			$this->sets['default_view_sigs'] = 1;
@@ -423,9 +429,9 @@ break;
 			$this->sets['rss_feed_time'] = 60;
 			$this->sets['registrations_allowed'] = 1;
 
-			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height)
-				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', %d, '%s', '%s', %d, %d)",
-				$this->post['admin_name'], $admin_pass, USER_ADMIN, $this->time, $this->post['admin_email'], $this->sets['servertime'], './avatars/avatar.jpg', 'local', 100, 100 );
+			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_signature)
+				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', '%s', '%s', '%s', %d, %d, '%s')",
+				$this->post['admin_name'], $admin_pass, USER_ADMIN, $this->time, $this->post['admin_email'], $this->post['user_timezone'], './avatars/avatar.jpg', 'local', 100, 100, '' );
 			$admin_uid = $this->db->insert_id( "users" );
 
 			$this->sets['last_member'] = $this->post['admin_name'];
@@ -552,7 +558,7 @@ Have fun and enjoy your new site!";
 					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars($this->post['db_port']) . "\" />\n
 					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars($this->post['db_socket']) . "\" />\n
 					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars($this->post['prefix']) . "\" />\n
-					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['dbtype']) . "\" />\n
+					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['db_type']) . "\" />\n
 					<input type=\"hidden\" name=\"admin_email\" value=\"" . htmlspecialchars($this->post['admin_email']) . "\" />\n
 					<input type=\"submit\" value=\"Download settings.php\" />
 					</form>
@@ -579,7 +585,7 @@ Have fun and enjoy your new site!";
 			$this->sets['db_port']   = $this->post['db_port'];
 			$this->sets['db_socket'] = $this->post['db_socket'];
 			$this->sets['prefix']    = trim( preg_replace( '/[^a-zA-Z0-9_]/', '', $this->post['prefix'] ) );
-			$this->sets['dbtype']    = $this->post['dbtype'];
+			$this->sets['dbtype']    = $this->post['db_type'];
 			$this->sets['admin_email'] = $this->post['admin_email'];
 
 			$settingsFile = $this->create_settings_file();

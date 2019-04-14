@@ -177,7 +177,7 @@ class tool
 	 */
 	function _is_valid_email_address( $email )
 	{
-		return filter_var( $addr, FILTER_VALIDATE_EMAIL );
+		return filter_var( $email, FILTER_VALIDATE_EMAIL );
 	}
 }
 ?>

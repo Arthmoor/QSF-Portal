@@ -32,8 +32,24 @@ define( 'QSF_INSTALLER', 1 ); // Used in query files
 error_reporting( E_ALL );
 
 require_once( '../settings.php' );
+
+$mode = null;
+if( isset( $_GET['mode'] ) ) {
+	$mode = $_GET['mode'];
+}
+
+if( isset( $_POST['db_type'] ) )
+	$set['db_type'] = $_POST['db_type'];
+elseif( $mode != 'upgrade' )
+	$set['db_type'] = 'database';
+
 $set['include_path'] = '..';
+require $set['include_path'] . '/lib/' . $set['db_type'] . '.php';
+require_once $set['include_path'] . '/lib/globalfunctions.php';
 require_once $set['include_path'] . '/global.php';
+require_once $set['include_path'] . '/lib/perms.php';
+require_once $set['include_path'] . '/lib/file_perms.php';
+require_once $set['include_path'] . '/lib/htmlwidgets.php';
 
 function execute_queries( $queries, $db )
 {
@@ -41,6 +57,15 @@ function execute_queries( $queries, $db )
 	{
 		$db->query( $query );
 	}
+}
+
+function get_sql_version()
+{
+	$output = shell_exec( 'mysql -V' );
+
+	preg_match( '@[0-9]+\.[0-9]+\.[0-9]+@', $output, $version );
+
+	return $version[0];
 }
 
 function check_writeable_files()
@@ -97,6 +122,7 @@ if( !isset( $_GET['mode'] ) ) {
 
 if( $mode ) {
 	require $set['include_path'] . '/install/' . $mode . '.php';
+
 	$qsf = new $mode;
 } else {
 	$qsf = new qsfglobal;
@@ -117,14 +143,17 @@ if( $mode ) {
 		$failed = true;
 	}
 
+	$qsf->lang = $qsf->get_lang( 'en', null, '../', false );
+	$qsf->htmlwidgets = new htmlwidgets( $qsf );
+
 	$db_fail = 0;
 	$mysqli = false;
+	$mysqli_version = 0;
 
 	if( !extension_loaded( 'mysqli') ) {
 		$db_fail++;
 	} else {
-		if( mysqli_get_client_version() >= 40103 )
-			$mysqli = true;
+		$mysqli = true;
 	}
 
 	if( $db_fail > 0 )
@@ -137,15 +166,22 @@ if( $mode ) {
 		$failed = true;
 	}
 
+	$sql_version = 'Unknown';
+	if( $mysqli ) {
+		$sql_version = get_sql_version();
+
+		if( version_compare( $sql_version, "5.6.0", "<" ) ) {
+			if( $failed ) { // If we have already shown a message, show the next one two lines down
+				echo '<br /><br />';
+			}
+			echo 'Your MySQL version is not supported.<br /> Your version: ' . $sql_version . '.<br /> Required: 5.6.0 or higher.';
+			$failed = true;
+		}
+	}
+
 	if( $failed ) {
 		echo "<br /><br /><b>To run {$qsf->name} and other advanced PHP software, the above error(s) must be fixed by you or your web host.</b>";
 		exit;
-	}
-
-	if( $mysqli ) {
-		$mysqli_client = '<li>MySQLi Client: (' . mysqli_get_client_info() . ')</li><hr />';
-	} else {
-		$mysqli_client = '';
 	}
 
 	echo "<!DOCTYPE html>
@@ -179,7 +215,7 @@ if( $mode ) {
      <li>Safe mode: $safe_mode</li><hr />
      <li>Register globals: $register_globals</li><hr />
      <li>Server Software: $server</li><hr />
-     $mysqli_client
+     <li>MySQLi version: $sql_version</li>
     </ul>
    </div>
   </div>

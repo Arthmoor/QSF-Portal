@@ -418,7 +418,7 @@ class htmlwidgets extends forumutils
 			'America/New_York'	=> $this->lang->gmt_nev05,
 			'America/Halifax'	=> $this->lang->gmt_nev04,
 			'America/St_Johns'	=> $this->lang->gmt_nev03b,
-			'America/Argentina/Buenos Aires'	=> $this->lang->gmt_nev03a,
+			'America/Argentina/Buenos_Aires'	=> $this->lang->gmt_nev03a,
 			'America/Sao_Paulo'	=> $this->lang->gmt_nev03,
 			'America/Noronha'	=> $this->lang->gmt_nev02,
 			'Atlantic/Azores'	=> $this->lang->gmt_nev01,
