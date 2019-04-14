@@ -627,7 +627,9 @@ class qsfglobal
 			'meta_keywords',
 			'meta_description',
 			'mobile_icons',
-			'settings_version'
+			'settings_version',
+			'settings_tos',
+			'settings_tos_files'
 		);
 
 		$sets = array();

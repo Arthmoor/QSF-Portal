@@ -31,7 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 require_once $set['include_path'] . '/global.php';
 
 /**
@@ -321,6 +320,7 @@ class upgrade extends qsfglobal
 			$this->write_sets();
 
 			echo "<div class='title' style='text-align:center'>Upgrade Successful</div>
+			  <span style='color:yellow; font-weight:bold;'>REMEMBER TO DELETE THE INSTALL DIRECTORY!</span><br /><br />
 			  <a href='../index.php'>Go to your site.</a>
 			 </div>";
 			break;

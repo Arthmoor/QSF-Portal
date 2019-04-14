@@ -313,8 +313,8 @@ break;
 				break;
 			}
 
-			if( !is_readable( './' . $this->sets['db_type'] . '_data_tables.php' ) ) {
-				echo 'Database connected, settings written, but no tables could be loaded from file: ./' . $this->sets['db_type'] . '_data_tables.php';
+			if( !is_readable( './' . $this->sets['dbtype'] . '_data_tables.php' ) ) {
+				echo 'Database connected, settings written, but no tables could be loaded from file: ./' . $this->sets['dbtype'] . '_data_tables.php';
 				break;
 			}
 
@@ -335,7 +335,7 @@ break;
 			$this->pre = $this->sets['prefix'];
 
 			// Create tables
-			include './' . $this->sets['db_type'] . '_data_tables.php';
+			include './' . $this->sets['dbtype'] . '_data_tables.php';
 
 			execute_queries( $queries, $db );
 			$queries = null;
