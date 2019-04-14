@@ -170,7 +170,7 @@ class database
 			$vals .= '"' . $this->escape( $val ) . '", ';
 		}
 
-		$this->query( 'INSERT INTO %p' . $table . ' (' . substr($cols, 0, -2) . ') VALUES (' . substr($vals, 0, -2) . ')' );
+		$this->query( 'INSERT INTO %p' . $table . ' (' . substr( $cols, 0, -2 ) . ') VALUES (' . substr( $vals, 0, -2 ) . ')' );
 	}
 
 	/**

@@ -222,6 +222,7 @@ if( $qsf->nohtml ) {
 	$xtpl->assign( 'charset', $qsf->lang->charset );
 	$xtpl->assign( 'meta_keywords', $qsf->sets['meta_keywords'] );
 	$xtpl->assign( 'meta_desc', $qsf->sets['meta_description'] );
+	$xtpl->assign( 'mobile_icons', $qsf->sets['mobile_icons'] );
 	$xtpl->assign( 'title', $title );
 	$xtpl->assign( 'loc_of_board', $qsf->sets['loc_of_board'] );
 	$xtpl->assign( 'skin', $qsf->skin );

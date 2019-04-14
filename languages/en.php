@@ -1501,6 +1501,9 @@ class en
 		$this->settings_members = 'Member Settings';
 		$this->settings_meta_keywords = 'Meta Keywords';
 		$this->settings_meta_description = 'Meta Description';
+		$this->settings_mobile_icons = 'Mobile Icon Meta Tags';
+		$this->settings_mobile_icons_desc = 'Link tags for optional mobile icons (ie: Apple Touch, Android, etc).';
+		$this->settings_mobile_icons_details = 'See here for details.';
 		$this->settings_new = 'New Setting';
 		$this->settings_new_add = 'Add New Board Setting';
 		$this->settings_new_added = 'New settings added.';

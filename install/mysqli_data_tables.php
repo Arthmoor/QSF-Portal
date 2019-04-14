@@ -263,6 +263,7 @@ $queries[] = "CREATE TABLE %psettings (
   settings_tos_files text NOT NULL default '',
   settings_meta_keywords tinytext,
   settings_meta_description tinytext,
+  settings_mobile_icons text,
   settings_data text NOT NULL default '',
   PRIMARY KEY  (settings_id)
 ) ENGINE=MyISAM";
@@ -437,7 +438,7 @@ $queries[] = "INSERT INTO %pmembertitles (membertitle_id, membertitle_title, mem
 $sets = array();
 $settings = json_encode( $sets );
 $queries[] = "INSERT INTO %psettings (settings_id, settings_data, settings_version) VALUES (1, '{$settings}', 2)";
-$queries[] = "INSERT INTO %pskins (skin_name, skin_dir) VALUES ('Ashlander 3', 'default')";
+$queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ('Ashlander 4', 'default', 1)";
 $queries[] = "INSERT INTO %pusers (user_id, user_name, user_group) VALUES (1, 'Guest', 3)";
 $queries[] = "INSERT INTO %pfile_categories (fcat_id, fcat_name, fcat_longpath) VALUES (0, 'Root', '/')";
 $queries[] = "UPDATE %pfile_categories SET fcat_id=0";

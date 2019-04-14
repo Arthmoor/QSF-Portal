@@ -43,6 +43,13 @@
  <span class="form"><textarea name="meta_description" rows="2" cols="37">{meta_desc}</textarea></span>
  <p class="line"></p>
 
+ <span class="field">{settings_mobile_icons}</span>
+ <span class="form">
+  {settings_mobile_icons_desc} <a href="https://mathiasbynens.be/notes/touch-icons#sizes">{settings_mobile_icons_details}</a>
+  <textarea name="mobile_icons" rows="10" cols="37">{mobile_icons}</textarea>
+ </span>
+ <p class="line"></p>
+
  <span class="field">{settings_topics_page}</span>
  <span class="form"><input type="text" name="topics_per_page" value="{topics_per_page}" size="40" /></span>
  <p class="line"></p>

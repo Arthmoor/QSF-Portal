@@ -302,6 +302,11 @@ class settings extends admin
 			$xtpl->assign( 'settings_meta_description', $this->lang->settings_meta_description );
 			$xtpl->assign( 'meta_desc', htmlspecialchars( $this->sets['meta_description'] ) );
 
+			$xtpl->assign( 'settings_mobile_icons', $this->lang->settings_mobile_icons );
+			$xtpl->assign( 'mobile_icons', htmlspecialchars( $this->sets['mobile_icons'] ) );
+			$xtpl->assign( 'settings_mobile_icons_desc', $this->lang->settings_mobile_icons_desc );
+			$xtpl->assign( 'settings_mobile_icons_details', $this->lang->settings_mobile_icons_details );
+
 			$xtpl->assign( 'settings_topics_page', $this->lang->settings_topics_page );
 			$xtpl->assign( 'topics_per_page', $this->sets['topics_per_page'] );
 
@@ -668,6 +673,7 @@ class settings extends admin
 			$tos_files_text = $this->post['tos_files'];
 			$meta_keywords = $this->post['meta_keywords'];
 			$meta_description = $this->post['meta_description'];
+			$mobile_icons = $this->post['mobile_icons'];
 
 			$vartypes = array(
 				'db_host' => 'string',
@@ -738,7 +744,7 @@ class settings extends admin
 
 			foreach( $this->post as $var => $val )
 			{
-				if( $var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' )
+				if( $var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' || $var == 'mobile_icons' )
 					continue;
 				if( ( $vartypes[$var] == 'int' ) || ( $vartypes[$var] == 'bool' ) ) {
 					$val = intval($val);
@@ -786,6 +792,7 @@ class settings extends admin
 			$this->db->query( "UPDATE %psettings SET settings_tos_files='%s'", $tos_files_text );
 			$this->db->query( "UPDATE %psettings SET settings_meta_keywords='%s'", $meta_keywords );
 			$this->db->query( "UPDATE %psettings SET settings_meta_description='%s'", $meta_description );
+			$this->db->query( "UPDATE %psettings SET settings_mobile_icons='%s'", $mobile_icons );
 
 			return $this->message( $this->lang->settings, $this->lang->settings_updated );
 			break;

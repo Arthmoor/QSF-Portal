@@ -29,11 +29,10 @@
 define( 'QUICKSILVERFORUMS', true );
 define( 'QSF_INSTALLER', 1 ); // Used in query files
 
-error_reporting(E_ALL);
+error_reporting( E_ALL );
 
-require_once( "../settings.php" );
+require_once( '../settings.php' );
 $set['include_path'] = '..';
-require_once $set['include_path'] . '/defaultutils.php';
 require_once $set['include_path'] . '/global.php';
 
 function execute_queries( $queries, $db )
@@ -190,7 +189,7 @@ if( $mode ) {
 	switch( $mode )
 	{
 		default:
-			include "choose_install.php";
+			include 'choose_install.php';
 			break;
 		case 'new_install':
 			$qsf->install_board( $step );

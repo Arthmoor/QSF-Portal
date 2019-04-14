@@ -18,6 +18,7 @@ Changes for 2.0:
 * Updated the upgrade system so that a bunch of little files full of stuff aren't needed anymore. One file is sufficient with all the changes listed in sequence going forward.
 * Conversion from other ancient forum packages has been removed as they're all woefully obsolete and writing new ones would be a huge time sink for little gain.
 * Removed GTalk/Skype profile fields and replaced them with Twitter ID.
+* Added support for mobile icon metatags.
 * Added support to report spambot registrations to Akismet.
 * Added support for Gravatars. See: https://en.gravatar.com/
 * Added Akismet filter protection to signature edits. Eat shit spambots.

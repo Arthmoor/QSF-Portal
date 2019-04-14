@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined('QUICKSILVERFORUMS' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -626,6 +626,7 @@ class qsfglobal
 			'admin_email',
 			'meta_keywords',
 			'meta_description',
+			'mobile_icons',
 			'settings_version'
 		);
 
@@ -652,9 +653,10 @@ class qsfglobal
 		// Converts old serialized array into a json encoded array due to potential exploits in the PHP serialize/unserialize functions.
 		$settings_array = array();
 
-		$settings = $this->db->fetch( "SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_data FROM %psettings LIMIT 1" );
+		$settings = $this->db->fetch( "SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_mobile_icons, settings_data FROM %psettings LIMIT 1" );
 		$sets['meta_keywords'] = $settings['settings_meta_keywords'];
 		$sets['meta_description'] = $settings['settings_meta_description'];
+		$sets['mobile_icons'] = $settings['settings_mobile_icons'];
 
 		if( $settings['settings_version'] == 1 ) {
 			$settings_array = array_merge( $sets, unserialize( $settings['settings_data'] ) );
