@@ -204,6 +204,27 @@ class en
 		$this->censor_updated = 'Word list updated.';
 	}
 
+	public function conversation()
+	{
+		$this->cv_conversation = 'Private Conversations';
+		$this->cv_by = 'By';
+		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
+		$this->cv_guest_user = 'Guest';
+		$this->cv_icon = 'Message Icon';
+		$this->cv_jump = 'Jump to newest post in topic';
+		$this->cv_last = 'Last Post';
+		$this->cv_no_topics = 'You have no private conversations to display.';
+		$this->cv_new_convo = 'New Conversation';
+		$this->cv_pages = 'Pages';
+		$this->cv_replies = 'Replies';
+		$this->cv_start_convo = 'Start a Conversation';
+		$this->cv_starter = 'Starter';
+		$this->cv_topic = 'Topic';
+		$this->cv_topic_posted = 'Posted';
+		$this->cv_unread = 'Jump to oldest unread post';
+		$this->cv_views = 'Views';
+	}
+
 	public function cp()
 	{
 		$this->cp_already_member = 'The email address you entered is already assigned to a member.';

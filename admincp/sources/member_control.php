@@ -91,7 +91,7 @@ class member_control extends admin
 		switch( $this->get['s'] )
 		{
 		case 'delete':
-			$this->tree ($this->lang->mc_delete );
+			$this->tree( $this->lang->mc_delete );
 
 			if( $id == USER_GUEST_UID) {
 				return $this->message( $this->lang->mc_delete, $this->lang->mc_guest_needed );

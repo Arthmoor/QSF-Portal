@@ -7,14 +7,35 @@ Changes for 2.0:
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
 * Emojis are now handled independently of skins and can be added on the fly as desired.
-* Added a new setting to block new user registration.
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
 * Default skin is now served as HTML5 instead of XHTML 1.1.
 * Password security has been updated to stronger hashing standards. As a result, PHP 5.5.0 or higher is now required.
 * Replaced the Akismet library with my own hand rolled version.
 * Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
 * The unused HELP module has been removed.
+* Updated avatar handling.
+* Updated timezone handling to use more modern methods.
+* Updated the upgrade system so that a bunch of little files full of stuff aren't needed anymore. One file is sufficient with all the changes listed in sequence going forward.
+* Conversion from other ancient forum packages has been removed as they're all woefully obsolete and writing new ones would be a huge time sink for little gain.
+* Removed GTalk/Skype profile fields and replaced them with Twitter ID.
+* Added support to report spambot registrations to Akismet.
+* Added support for Gravatars. See: https://en.gravatar.com/
+* Added Akismet filter protection to signature edits. Eat shit spambots.
+* Added Akismet filter protection to forum posts. Eat shit again spambots.
+* Added Akismet filter protection to user profiles.
+* Added the ability to toggle file approvals on and off (global only).
+* Added a file version to the file data.
+* Added a new setting to block new user registration.
+* Added Facebook page to user profile data.
 * Eliminated Debug Mode as it was only truly useful for the old template system.
+* Removed ICQ, MSN, AIM, and Yahoo from user profile data as those platforms are essentially all dead now.
+* Removed the defaultutils.php module as it seems unrealistic to have ever expected custom overrides of basic functions anyway.
+* Removed pgsql support as it became apparent nobody ever used it.
+* Removed the old mysql library as mysqli is the only thing officially supported in PHP 5.5 and above.
+* Removed the obsolete JSON libraries from the code.
+* Removed the rss folder as it no longer serves a purpose.
+* Removed server load checking as there is no real use for it anymore.
+* Removed the unused addons folder support.
 
    Bugs addressed:
 
@@ -23,30 +44,21 @@ Changes for 2.0:
 
 Changes for 1.5.1:
 
-* Extend Akismet protection to user profiles.
 * Fixed IP address handling so that future IPv6 addresses will be displayed properly.
-* Added support for Gravatars. See: https://en.gravatar.com/
 * Extended the size of filenames in the files module to 50 chars from 32.
-* Removed GTalk/Skype profile fields and replaced them with Twitter ID.
 * Updated the file rating pop-up to appear in the screen center instead of the corner.
 * Profile display will now show last visited date for that member.
 * Modified file size display formatting.
-* Added support to report spambot registrations to Akismet.
 * Added secondary captcha system that takes admin supplied questions and answers to challenge bots with since the math system has been defeated.
 * Slight rearranging of the forum topics display to save a bit of vertical space.
 * Groundwork laid for creating better file comments.
-* Added the ability to toggle file approvals on and off (global only).
-* Added a file version to the file data.
 * Updated the file details screen with a better layout.
 * Updated Google Analytics code.
 * It is now possible to upload to an otherwise hidden category to allow for one-way submissions.
-* Added Akismet filter protection to signature edits. Eat shit spambots.
-* Added Akismet filter protection to forum posts. Eat shit again spambots.
 * Default number of members displayed per members page raised from 10 to 25.
 * Visual update to individual news posts.
 * Moved query stats to the board statistics box on the left side.
 * Dropped the messagelink and codelink modlets in favor of inline styling for new PMs and files pending approval.
-* Updated avatar handling.
 * Massive overhaul of the installer system. Dropped unsupported converters. Will bring back if the need arises.
 * Added MySQLi support.
 
