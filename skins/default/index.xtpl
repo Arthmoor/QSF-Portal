@@ -30,10 +30,6 @@
       <a href="{qsf_self}?a=board">{main_forum}</a>
       <a href="{qsf_self}?a=members">{main_members}</a>
       <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
-      <a href="{qsf_self}?a=page&amp;p=7">Hierarchy</a>
-      <a href="{qsf_self}?a=page&amp;p=14">AFKMud</a>
-      <a href="{qsf_self}?a=page&amp;p=15">SmaugFUSS</a>
-      <a href="{qsf_self}?a=topic&amp;t=4892">GDB Tutorial</a>
      </span>
      <div style="clear:both"></div>
     </div>

@@ -134,7 +134,7 @@ class admin extends qsfglobal
 
 		while( $group = $this->db->nqfetch( $groups ) )
 		{
-			$out .= "<option value=\"{$group['group_id']}\"" . ( ( $val == $group['group_id'] ) ? ' selected=\"selected\"' : '') . ">" . htmlspecialchars( $group['group_name'] ) . "</option>";
+			$out .= "<option value=\"{$group['group_id']}\"" . ( ( $val == $group['group_id'] ) ? ' selected="selected"' : '') . ">" . htmlspecialchars( $group['group_name'] ) . "</option>";
 		}
 
 		return $out . '</select>';

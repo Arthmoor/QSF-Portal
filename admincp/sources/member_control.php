@@ -360,7 +360,7 @@ class member_control extends admin
 					$this->post['user_pm_mail'] = 0;
 				}
 
-				if( !empty( $this->post['user_homepage'] ) && ( substr( $this->post['user_homepage'], 0, 7 ) != 'http://' ) ) {
+				if( !empty( $this->post['user_homepage'] ) && ( ( substr( $this->post['user_homepage'], 0, 7 ) != 'http://' ) && ( substr( $this->post['user_homepage'], 0, 8 ) != 'https://' ) ) ) {
 					$this->post['user_homepage'] = 'http://' . $this->post['user_homepage'];
 				}
 
@@ -393,7 +393,7 @@ class member_control extends admin
 				$user_view_emoticons = intval( $this->post['user_view_emoticons'] );
 
 				$this->db->query( "UPDATE %pusers SET user_name='%s', user_email='%s', user_group=%d, user_title='%s',
-				  user_title_custom=%d, user_language='%s', user_skin='%s', user_avatar='%s',
+				  user_title_custom=%d, user_language='%s', user_skin=%d, user_avatar='%s',
 				  user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d, user_level=%d,
 				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s', user_facebook='%s',
 				  user_interests='%s', user_signature='%s', user_posts=%d, user_uploads=%d,
@@ -426,12 +426,8 @@ class member_control extends admin
 	private function list_skins( $val )
 	{
 		$out = "<select name='user_skin'>";
-		$groups = $this->db->query( "SELECT skin_name, skin_dir FROM %pskins ORDER BY skin_name" );
 
-		while( $group = $this->db->nqfetch( $groups ) )
-		{
-			$out .= "<option value='{$group['skin_dir']}'" . (($val == $group['skin_dir']) ? ' selected=\'selected\'' : '') . ">{$group['skin_name']}</option>";
-		}
+		$out .= $this->htmlwidgets->select_skins( $val );
 
 		return $out . '</select>';
 	}
@@ -439,6 +435,7 @@ class member_control extends admin
 	private function list_user_avatar_types( $val )
 	{
 		$out = "<select name='user_avatar_type'>";
+
 		$types = array( 'local', 'url', 'uploaded', 'gravatar', 'none' );
 
 		foreach( $types as $type )
@@ -452,22 +449,8 @@ class member_control extends admin
 	private function list_langs( $current )
 	{
 		$out = "<select name='user_language'>";
-		$dir = opendir( '../languages' );
 
-		while( ( $file = readdir( $dir ) ) !== false )
-		{
-			if( is_dir( '../languages/' . $file ) ) {
-				continue;
-			}
-
-			$code = substr( $file, 0, -4 );
-			$ext  = substr( $file, -4 );
-			if( $ext != '.php' ) {
-				continue;
-			}
-
-			$out .= '<option value="' . $code . '"' . (($code == $current) ? ' selected=\'selected\'' : null) . '>' . $this->htmlwidgets->get_lang_name($code) . "</option>\n";
-		}
+		$out .= $this->htmlwidgets->select_langs( $current, '..' );
 
 		return $out . '</select>';
 	}

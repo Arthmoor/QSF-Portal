@@ -111,7 +111,7 @@ class groups extends admin
 					$xtpl->assign( 'groups_edit', $this->lang->groups_edit );
 					$xtpl->assign( 'groups_to_edit', $this->lang->groups_to_edit );
 
-					$group_list = $this->list_groups(-1, 'group');
+					$group_list = $this->list_groups( -1, 'group' );
 					$xtpl->assign( 'group_list', $group_list );
 
 					$xtpl->assign( 'submit', $this->lang->submit );
