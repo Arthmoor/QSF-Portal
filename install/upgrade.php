@@ -158,6 +158,8 @@ class upgrade extends qsfglobal
 					$this->sets['default_skin'] = 1;
 					$this->sets['default_timezone'] = 'Europe/London';
 					$this->sets['servertime'] = 'Europe/London';
+					$this->sets['left_sidebar_links'] = array();
+					$this->sets['right_sidebar_links'] = array();
 
 					// Deleted settings
 					unset( $this->sets['analytics_id'] );

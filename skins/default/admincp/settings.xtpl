@@ -373,6 +373,8 @@
  <span class="field">{settings_right_sidebar}<br /><span class="tiny">{settings_one_per}</span></span>
  <span class="form"><textarea name="right_sidebar_links" rows="10" cols="39">{right_links}</textarea></span>
  <p class="line"></p>
+
+ <input type="submit" value="{submit}" />
 </form>
 <!-- END: EditForm -->
 <!-- END: Settings -->

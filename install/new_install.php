@@ -428,6 +428,9 @@ break;
 			$this->sets['rss_feed_posts'] = 5;
 			$this->sets['rss_feed_time'] = 60;
 			$this->sets['registrations_allowed'] = 1;
+			$this->sets['left_sidebar_links'] = array();
+			$this->sets['right_sidebar_links'] = array();
+
 
 			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_signature)
 				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', '%s', '%s', '%s', %d, %d, '%s')",
