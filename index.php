@@ -228,6 +228,24 @@ if( $qsf->nohtml ) {
 	$xtpl->assign( 'skin', $qsf->skin );
 	$xtpl->assign( 'feed_links', $qsf->feed_links );
 
+	$left_links = null;
+	foreach( $qsf->sets['left_sidebar_links'] as $link ) {
+		$link = trim( $link );
+
+		$left_links .= $link;
+	}
+
+	$xtpl->assign( 'index_left_links', $left_links );
+
+	$right_links = null;
+	foreach( $qsf->sets['right_sidebar_links'] as $link ) {
+		$link = trim( $link );
+
+		$right_links .= $link;
+	}
+
+	$xtpl->assign( 'index_right_links', $right_links );
+
 	// Blocks on left side of front page.
 	if( $qsf->perms->is_guest ) {
 		$qsf->lang->login(); // For login words
@@ -242,8 +260,6 @@ if( $qsf->nohtml ) {
 		$xtpl->assign( 'main_members', $qsf->lang->main_members );
 		$xtpl->assign( 'searchlink', $searchlink );
 		$xtpl->assign( 'main_search', $qsf->lang->main_search );
-
-		// FIXME: Add Hook for additional guest links.
 
 		$xtpl->assign( 'login', $qsf->lang->login );
 
@@ -289,13 +305,9 @@ if( $qsf->nohtml ) {
 			$xtpl->parse( 'Index.MemberHeader.SpamLink' );
 		}
 
-		// FIXME: Add Hook for additional member links on left side.
-
 		$xtpl->assign( 'new_pm', $new_pm );
 		$xtpl->assign( 'main_messenger', $qsf->lang->main_messenger );
 		$xtpl->assign( 'main_cp', $qsf->lang->main_cp );
-
-		// FIXME: Add Hook for additional member links on right side.
 
 		if( $qsf->perms->auth( 'is_admin' ) ) {
 			$xtpl->assign( 'main_admincp', $qsf->lang->main_admincp );

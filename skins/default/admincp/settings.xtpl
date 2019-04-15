@@ -363,6 +363,16 @@
 
  <input type="submit" value="{submit}" />
 </div>
+
+<div class="article">
+ <div class="title">{settings_front_page_links}</div>
+ <span class="field">{settings_left_sidebar}<br /><span class="tiny">{settings_one_per}</span></span>
+ <span class="form"><textarea name="left_sidebar_links" rows="10" cols="39">{left_links}</textarea></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_right_sidebar}<br /><span class="tiny">{settings_one_per}</span></span>
+ <span class="form"><textarea name="right_sidebar_links" rows="10" cols="39">{right_links}</textarea></span>
+ <p class="line"></p>
 </form>
 <!-- END: EditForm -->
 <!-- END: Settings -->

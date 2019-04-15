@@ -1490,13 +1490,14 @@ class en
 		$this->settings_enabled = 'Enabled';
 		$this->settings_files = 'File Settings';
 		$this->settings_file_approval = 'File Uploads - Approval Required?';
-		$this->settings_foreign_link = 'Foreign Link Target';
+		$this->settings_front_page_links = 'Front Page Links';
 		$this->settings_general = 'General Settings';
 		$this->settings_google_id = 'Google Analytics Code';
 		$this->settings_google_msg = 'Copy and paste the Javascript Tracking Code snippet from your Google Analytics account for this site here to enable Analytics.';
 		$this->settings_group_after = 'Group After Registration';
 		$this->settings_hot_topic = 'Posts for a Hot Topic';
 		$this->settings_kilobytes = 'Kilobytes';
+		$this->settings_left_sidebar = 'Left Sidebar';
 		$this->settings_max_attach_size = 'Post Attachments - Maximum File Size';
 		$this->settings_members = 'Member Settings';
 		$this->settings_meta_keywords = 'Meta Keywords';
@@ -1524,6 +1525,7 @@ class en
 		$this->settings_post_min_time = 'Minimum time between posts.';
 		$this->settings_posts_topic = 'Posts Per Topic Page';
 		$this->settings_registrations = 'New User Registrations';
+		$this->settings_right_sidebar = 'Right Sidebar';
 		$this->settings_search_flood = 'Search Flood Control';
 		$this->settings_search_min_time = 'Minimum time between searches.';
 		$this->settings_server = 'Server Settings';

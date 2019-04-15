@@ -653,6 +653,16 @@ class settings extends admin
 			$xtpl->assign( 'settings_board_rssfeed_time', $this->lang->settings_board_rssfeed_time );
 			$xtpl->assign( 'rss_feed_time', $this->sets['rss_feed_time'] );
 
+			$xtpl->assign( 'settings_front_page_links', $this->lang->settings_front_page_links );
+			$xtpl->assign( 'settings_left_sidebar', $this->lang->settings_left_sidebar );
+			$xtpl->assign( 'settings_right_sidebar', $this->lang->settings_right_sidebar );
+
+			$left_links = implode( "\r\n", $this->sets['left_sidebar_links'] );
+			$xtpl->assign( 'left_links', $left_links );
+
+			$right_links = implode( "\r\n", $this->sets['right_sidebar_links'] );
+			$xtpl->assign( 'right_links', $right_links );
+
 			$xtpl->parse( 'Settings.EditForm' );
 			$xtpl->parse( 'Settings' );
 
@@ -739,7 +749,9 @@ class settings extends admin
 				'akismet_posts' => 'bool',
 				'akismet_profiles' => 'bool',
 				'akismet_posts_number' => 'int',
-				'file_approval' => 'bool'
+				'file_approval' => 'bool',
+				'left_sidebar_links' => 'array',
+				'right_sidebar_links' => 'array'
 			);
 
 			foreach( $this->post as $var => $val )

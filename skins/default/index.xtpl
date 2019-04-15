@@ -30,6 +30,8 @@
       <a href="{qsf_self}?a=board">{main_forum}</a>
       <a href="{qsf_self}?a=members">{main_members}</a>
       <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
+      {index_left_links}
+      {index_right_links}
      </span>
      <div style="clear:both"></div>
     </div>
@@ -67,14 +69,16 @@
 <!-- END: PagesLink -->
       <a href="{qsf_self}?a=members">{main_members}</a>
       <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
+<!-- BEGIN: SpamLink -->
+      <a href="{qsf_self}?a=spam_control"{spam_style}>{main_spam_controls}</a>
+<!-- END: SpamLink -->
+      {index_left_links}
      </span>
 
      <span class="half">
       <a href="{qsf_self}?a=pm"{new_pm}>{main_messenger}</a>
       <a href="{qsf_self}?a=cp">{main_cp}</a>
-<!-- BEGIN: SpamLink -->
-      <a href="{qsf_self}?a=spam_control"{spam_style}>{main_spam_controls}</a>
-<!-- END: SpamLink -->
+      {index_right_links}
 <!-- BEGIN: AdminCPLink -->
       <a href="./admincp/index.php">{main_admincp}</a>
 <!-- END: AdminCPLink -->

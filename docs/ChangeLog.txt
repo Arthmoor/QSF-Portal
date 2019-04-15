@@ -28,6 +28,7 @@ Changes for 2.0:
 * Added a file version to the file data.
 * Added a new setting to block new user registration.
 * Added Facebook page to user profile data.
+* Added the ability to put extra links on the sidebar box to reduce the need for editing the base templates.
 * Eliminated Debug Mode as it was only truly useful for the old template system.
 * Removed ICQ, MSN, AIM, and Yahoo from user profile data as those platforms are essentially all dead now.
 * Removed the defaultutils.php module as it seems unrealistic to have ever expected custom overrides of basic functions anyway.
