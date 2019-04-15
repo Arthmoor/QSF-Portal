@@ -46,8 +46,8 @@ class user
 	 **/
 	public function __construct( &$qsf )
 	{
-		$this->db  = &$qsf->db;
-		$this->pre = &$qsf->pre;
+		$this->db      = &$qsf->db;
+		$this->pre     = &$qsf->pre;
 		$this->server  = &$qsf->server;
 		$this->cookie  = &$qsf->cookie;
 		$this->sets    = &$qsf->sets;

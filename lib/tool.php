@@ -59,38 +59,36 @@ class tool
 		{
 			case TYPE_BOOLEAN:
 				// $range and $default are unused
-				if( !is_bool( $var ) ) {
+				if( !filter_var( $var, FILTER_VALIDATE_BOOLEAN ) ) {
 					$unchanged = false;
 				}
 				$var = ( true && $var ); // Convert to a proper boolean
 				break;
 
 			case TYPE_UINT:
-				$newvar = intval( $var );
+				// Clip anything negative for UINTs before validating them.
+				if( $var < 0 )
+					$var = 0;
 
-				if( $newvar != $var || $newvar < 0 || ( $range != null && !in_array( $var, $range ) ) ) {
+				if( !filter_var( $var, FILTER_VALIDATE_INT ) ) {
 					$unchanged = false;
 
 					if( $default != null )
-						$newvar = $default;
+						$var = $default;
 				}
-				$var = $newvar;
 				break;
 
 			case TYPE_INT:
-				$newvar = intval( $var );
-
-				if( $newvar != $var || ( $range != null && !in_array( $var, $range ) ) ) {
+				if( !filter_var( $var, FILTER_VALIDATE_INT ) ) {
 					$unchanged = false;
 
 					if( $default != null )
-						$newvar = $default;
+						$var = $default;
 				}
-				$var = $newvar;
 				break;
 
 			case TYPE_FLOAT:
-				if( !is_numeric( $var ) || ( $range != null && !in_array( $var, $range ) ) ) {
+				if( !filter_var( $var, FILTER_VALIDATE_FLOAT ) ) {
 					$unchanged = false;
 
 					if( $default != null )
@@ -117,43 +115,24 @@ class tool
 				}
 				break;
 
-			case TYPE_OBJECT:
-				// $range is seen as a class name
-				if( !is_object( $var ) || ( $range != null && !is_subclass_of( $var, $range ) ) ) {
-					$unchanged = false;
-
-					if( $default != null )
-						$var = $default;
-				}
-				break;
-
 			case TYPE_USERNAME:
 				// $range is unused
-				if( strlen( $username ) > 20 ) {
+				if( !is_string( $var ) || strlen( $var ) > 30 ) {
 					$unchanged = false;
-
-					if( $default != null )
-						$var = $default;
 				}
 				break;
 
 			case TYPE_PASSWORD:
 				// $range is unused
-				if( strlen( $var ) < 5 || strlen( $var ) > 256 ) {
+				if( !is_string( $var ) || strlen( $var ) < 8 || strlen( $var ) > 255 ) {
 					$unchanged = false;
-
-					if( $default != null )
-						$var = $default;
 				}
 				break;
 
 			case TYPE_EMAIL:
 				// $range is unused
-				if( !$this->_is_valid_email_address( $var ) ) {
+				if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
 					$unchanged = false;
-
-					if( $default != null )
-						$var = $default;
 				}
 				break;
 
@@ -162,22 +141,6 @@ class tool
 				error( QUICKSILVER_ERROR, "Invalid type sent to validate()", __FILE__, __LINE__ );
 		}
 		return $unchanged;
-	}
-
-	/**
-	 * Checks if an email address looks valid
-	 *
-	 * Updates in 2019 by Roger Libiez. Just needs to pass the call to the PHP native email validator, which is far less prone to dumb mistakes.
-	 * PRIVATE
-	 *
-	 * @param string $email Address to check
-	 * @return true if the email checks out
-	 * @author http://iamcal.com/publish/articles/php/parsing_email
-	 * @since 1.1.5
-	 */
-	function _is_valid_email_address( $email )
-	{
-		return filter_var( $email, FILTER_VALIDATE_EMAIL );
 	}
 }
 ?>

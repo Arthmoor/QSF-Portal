@@ -129,6 +129,7 @@ class qsfglobal
 	var $agent;                       // The browser's user agent @var string
 	var $referrer;                    // The browser's referrer setting @var string
 	var $self;                        // Alias for $PHP_SELF @var string
+	var $site;			  // Root URL for the site @var string
 	var $db;                          // Database object @var object
 	var $perms;                       // Permissions object @var object
 	var $file_perms;		  // File permissions object @var object

@@ -172,14 +172,14 @@ class register extends qsfglobal
 				return $this->message( $this->lang->register_reging, $this->lang->register_fields );
 			}
 
-			if( strlen( $username ) > 30 ) {
+			if( !$this->validator->validate( $username ) ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_name_invalid );
 			}
 
 			if( !isset( $this->post['terms'] ) ) {
 				return $this->message( $this->lang->register_tos, $this->lang->register_tos_not_agree );
 			}
-		
+
 			// Do some quick checks to prevent flooding registration
 			if( isset( $_SESSION['last_register'] ) && $_SESSION['last_register'] > ( $this->time - $this->sets['flood_time'] ) ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_flood );
