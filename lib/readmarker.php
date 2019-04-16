@@ -38,14 +38,14 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class readmarker extends forumutils
 {
-	var $last_read_all = 0;		// Time beyond which all posts are considered read
-	var $guest_mode = true;		// Mark if we're using a cookie or database records
-	var $readmarkers_loaded = false; // Have we queried the database yet
-	var $forum_topics_loaded = false; // Same as above execpt for the forums not the topics
-	var $user_id;			// What user ID should we use for any queries or updates
-	var $readmarkers = array();	// Data for user as pulled from the database
-	var $forumtopics = array();	// Cache of topics within forums
-	var $cleanupchance = false;	// Set to true if we want a cleanup operation done
+	private $last_read_all = 0;           // Time beyond which all posts are considered read
+	private $guest_mode = true;           // Mark if we're using a cookie or database records
+	private $readmarkers_loaded = false;  // Have we queried the database yet
+	private $forum_topics_loaded = false; // Same as above execpt for the forums not the topics
+	private $user_id;                     // What user ID should we use for any queries or updates
+	private $readmarkers = array();       // Data for user as pulled from the database
+	private $forumtopics = array();       // Cache of topics within forums
+	private $cleanupchance = false;       // Set to true if we want a cleanup operation done
 
 	/**
 	 * Constructor. Initalise the read marker for guest (cookie and session)

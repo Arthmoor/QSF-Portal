@@ -30,7 +30,7 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class recent_uploads extends modlet
 {
-	var $cat_data;
+	private $cat_data;
 
 	public function __construct( $forumobject )
 	{

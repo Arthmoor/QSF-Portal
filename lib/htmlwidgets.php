@@ -38,7 +38,7 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class htmlwidgets extends forumutils
 {
-	var $tree    = null;              // The navigational tree @var string
+	public $tree    = null;              // The navigational tree @var string
 
 	/**
 	 * Constructor

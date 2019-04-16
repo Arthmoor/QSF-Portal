@@ -42,7 +42,7 @@ require_once $set['include_path'] . '/global.php';
 class cp extends qsfglobal
 {
 	/** Files allowed to be used as avatars **/
-	var $fileExtensions = array( 'jpg', 'jpeg', 'gif', 'png' );
+	private $fileExtensions = array( 'jpg', 'jpeg', 'gif', 'png' );
 
 	public function execute()
 	{

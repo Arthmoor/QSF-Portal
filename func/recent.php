@@ -39,7 +39,7 @@ require_once $set['include_path'] . '/global.php';
  **/
 class recent extends qsfglobal
 {
-	var $has_topics = false; // Set this to true if at least one topic exists to display.
+	private $has_topics = false; // Set this to true if at least one topic exists to display.
 
 	/**
 	 * Main interface. Display a list of topics considered unread

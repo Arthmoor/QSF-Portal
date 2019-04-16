@@ -37,7 +37,7 @@ require_once $set['include_path'] . '/lib/tool.php';
  **/
  class forumutils extends tool
  {
-	 var $forum_data;	// Array of forum forum_id, forum_parent, forum_tree, forum_name, forum_position
+	 private $forum_data;	// Array of forum forum_id, forum_parent, forum_tree, forum_name, forum_position
 
 	/**
 	 * Constructor. Initalise the read marker for guest (cookie and session)

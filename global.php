@@ -112,41 +112,41 @@ define( 'TYPE_EMAIL', 10 ); // Check if string is a valid email
  **/
 class qsfglobal
 {
-	var $name    = 'QSF Portal';      // The name of the software @var string
-	var $version = '2.0';             // QSF Portal version @var int
-	var $server  = array();           // Alias for $_SERVER @var array
-	var $get     = array();           // Alias for $_GET @var array
-	var $post    = array();           // Alias for $_POST @var array
-	var $cookie  = array();           // Alias for $_COOKIE @var array
-	var $files   = array();           // Alias for $_FILES @var array
-	var $user    = array();           // Information about the user @var array
-	var $sets    = array();           // Settings @var array
-	var $censor  = array();           // Curse words to filter @var array
-	var $emoticons = array();	  // Array of emoticons used for processing post formatting
-	var $nohtml  = false;             // To display no board wrapper @var bool
-	var $time;                        // The current Unix time @var int
-	var $ip;                          // The user's IP address @var string
-	var $agent;                       // The browser's user agent @var string
-	var $referrer;                    // The browser's referrer setting @var string
-	var $self;                        // Alias for $PHP_SELF @var string
-	var $site;			  // Root URL for the site @var string
-	var $db;                          // Database object @var object
-	var $perms;                       // Permissions object @var object
-	var $file_perms;		  // File permissions object @var object
-	var $skin;                        // The user's selected skin @var string
-	var $lang;                        // Loaded words @var object
-	var $query;                       // The query string @var string
-	var $time_exec;                   // Execution time for the whole page
-	var $feed_links = null;		  // HTML of RSS link tags
+	public $name    = 'QSF Portal';      // The name of the software @public string
+	public $version = '2.0';             // QSF Portal version @public int
+	public $server  = array();           // Alias for $_SERVER @public array
+	public $get     = array();           // Alias for $_GET @public array
+	public $post    = array();           // Alias for $_POST @public array
+	public $cookie  = array();           // Alias for $_COOKIE @public array
+	public $files   = array();           // Alias for $_FILES @public array
+	public $user    = array();           // Information about the user @public array
+	public $sets    = array();           // Settings @public array
+	public $censor  = array();           // Curse words to filter @public array
+	public $emoticons = array();	     // Array of emoticons used for processing post formatting
+	public $nohtml  = false;             // To display no board wrapper @public bool
+	public $time;                        // The current Unix time @public int
+	public $ip;                          // The user's IP address @public string
+	public $agent;                       // The browser's user agent @public string
+	public $referrer;                    // The browser's referrer setting @public string
+	public $self;                        // Alias for $PHP_SELF @public string
+	public $site;			     // Root URL for the site @public string
+	public $db;                          // Database object @public object
+	public $perms;                       // Permissions object @public object
+	public $file_perms;		     // File permissions object @public object
+	public $skin;                        // The user's selected skin @public string
+	public $lang;                        // Loaded words @public object
+	public $query;                       // The query string @public string
+	public $time_exec;                   // Execution time for the whole page
+	public $feed_links = null;	     // HTML of RSS link tags
 
-	var $attachmentutil;		  // Attachment handler @var object
-	var $htmlwidgets;		  // HTML widget handler @var object
-	var $bbcode;			  // BBCode formatter @var object
-	var $readmarker;		  // Handles tracking what posts are read and unread
-	var $validator;			  // Handler for checking usernames, passwords, etc
-	var $activeutil;		  // Handler user activity
+	public $attachmentutil;		  // Attachment handler @public object
+	public $htmlwidgets;		  // HTML widget handler @public object
+	public $bbcode;			  // BBCode formatter @public object
+	public $readmarker;		  // Handles tracking what posts are read and unread
+	public $validator;		  // Handler for checking usernames, passwords, etc
+	public $activeutil;		  // Handler user activity
 
-	var $xtpl = null;		  // Global Xtemplate instance
+	public $xtpl = null;		  // Global zTemplate instance
 
 	/**
 	 * Constructor; sets up variables

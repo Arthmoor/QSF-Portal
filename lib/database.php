@@ -38,17 +38,17 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class database
 {
-	var $connection = false; // Connection link identifier @var resource
-	var $querytime  = 0;     // Time spent executing queries @var int
-	var $querycount = 0;     // Number of executed queries @var int
-	var $get;                // Alias for $_GET @var array
-	var $post;               // Alias for $_POST @var array
-	var $host;               // Database Server @var string
-	var $user;               // Database User Name @var string
-	var $pass;               // Database Password @var string
-	var $db;                 // Database Name @var string
-	var $port = 3306;        // Database Port @var int
-	var $prefix = 'qsfp_';   // Database Table Prefix @var string
+	public $connection = false; // Connection link identifier @var resource
+	public $querytime  = 0;     // Time spent executing queries @var int
+	public $querycount = 0;     // Number of executed queries @var int
+	public $get;                // Alias for $_GET @var array
+	public $post;               // Alias for $_POST @var array
+	public $host;               // Database Server @var string
+	public $user;               // Database User Name @var string
+	public $pass;               // Database Password @var string
+	public $db;                 // Database Name @var string
+	public $port = 3306;        // Database Port @var int
+	public $prefix = 'qsfp_';   // Database Table Prefix @var string
 
 	/**
 	 * Constructor; sets up variables and connection

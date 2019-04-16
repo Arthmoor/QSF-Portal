@@ -39,13 +39,14 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class permissions
 {
-	var $cube = array();
-	var $group;
-	var $user;
-	var $db;
-	var $pre;
-	var $is_guest;
-	var $standard = array(
+	public $cube = array();
+	public $group;
+	public $user;
+	public $db;
+	public $pre;
+	public $is_guest;
+
+	public $standard = array(
 		'board_view' => false,
 		'board_view_closed' => false,
 		'do_anything' => false,
@@ -98,7 +99,7 @@ class permissions
 		'topic_view_unpublished' => false
 	);
 
-	var $globals = array(
+	public $globals = array(
 		'board_view' => true,
 		'board_view_closed' => true,
 		'do_anything' => true,

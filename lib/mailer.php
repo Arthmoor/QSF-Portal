@@ -39,17 +39,17 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class mailer
 {
-	var $sender;    // Name to be displayed in From field. @access private @var string
-	var $outgoing;  // Outgoing email address @access private @var string
-	var $incoming;  // Incoming email address @access private @var string
-	var $message;   // Email body @access private @var string
-	var $subject;   // Email Subject @access private @var string
-	var $server;    // Mail Server @access private @var string
-	var $list;      // Formatted Bcc list @access private @var string
-	var $recipient; // Recipient for single send mode @access private @var string
-	var $bcc;       // Blind Carbon Copy recipients @access private @var array
-	var $headers;   // Headers to be used for email @access private @var array
-	var $html;      // Determines whether message will be sent in HTML format. @access private @var boolean
+	private $sender;      // Name to be displayed in From field. @access private @var string
+	private $outgoing;    // Outgoing email address @access private @var string
+	private $incoming;    // Incoming email address @access private @var string
+	private $text;        // Email body @access private @var string
+	private $subject;     // Email Subject @access private @var string
+	private $mail_server; // Mail Server @access private @var string
+	private $list;        // Formatted Bcc list @access private @var string
+	private $recipient;   // Recipient for single send mode @access private @var string
+	private $bcc;         // Blind Carbon Copy recipients @access private @var array
+	private $headers;     // Headers to be used for email @access private @var array
+	private $html;        // Determines whether message will be sent in HTML format. @access private @var boolean
 
 	/**
 	 * This initializes instance variables / objects.
@@ -65,9 +65,9 @@ class mailer
 		$this->sender   = $sender;
 		$this->html     = false;
 
-		$this->server    = 'localhost';
+		$this->mail_server = 'localhost';
 		$this->recipient = '';
-		$this->message   = '';
+		$this->text      = '';
 		$this->subject   = '';
 		$this->list      = '';
 
@@ -145,7 +145,7 @@ class mailer
 	 **/
 	public function setMessage( $message )
 	{
-		$this->message = $message;
+		$this->text = $message;
 	}
 
 	/**
@@ -173,7 +173,7 @@ class mailer
 	 **/
 	public function setServer( $server )
 	{
-		$this->server = $server;
+		$this->mail_server = $server;
 	}
 
 	/**
@@ -200,11 +200,11 @@ class mailer
 			$to = $this->recipient;
 		}
 
-		if( $this->server ) {
-			@ini_set( 'SMTP', $this->server );
+		if( $this->mail_server ) {
+			@ini_set( 'SMTP', $this->mail_server );
 		}
 
-		if( mail( $to, $this->subject, $this->message, implode( "\n", $this->headers ) ) ) {
+		if( mail( $to, $this->subject, $this->text, implode( "\n", $this->headers ) ) ) {
 			return true;
 		} else {
 			return false;

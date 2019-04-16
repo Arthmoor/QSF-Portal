@@ -36,7 +36,8 @@ class top_uploaders extends modlet
 
 	public function execute( $arg )
 	{
-		$content = "";
+		$content = '';
+
 		$result = $this->qsf->db->query( "SELECT user_id, user_name, user_uploads FROM %pusers ORDER BY user_uploads DESC LIMIT 5" );
 
 		while( $row = $this->qsf->db->nqfetch( $result ) )

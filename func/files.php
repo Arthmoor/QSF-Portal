@@ -31,7 +31,7 @@ require_once $set['include_path'] . '/global.php';
  **/
 class files extends qsfglobal
 {
-	var $cat_array; // Used to generate category trees
+	private $cat_array; // Used to generate category trees
 
 	/**
 	 * Build the file browser information

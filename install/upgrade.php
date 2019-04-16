@@ -40,7 +40,7 @@ require_once $set['include_path'] . '/global.php';
  */
 class upgrade extends qsfglobal
 {
-	var $database = null;
+	private $database = null;
 
 	// Override for upgrade purposes.
 	public function get_settings( $sets )

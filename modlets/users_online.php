@@ -56,7 +56,7 @@ class users_online extends modlet
 
 		$users = $this->doActive();
 
-		$userlist = "";
+		$userlist = '';
 		if( $arg == true ) {
 			$this->userlist = $this->usersonline();
 			$userlist = $this->userlist['TITLEONTABLE'] . "<br /><br />" . $this->userlist['USERNAMES'];

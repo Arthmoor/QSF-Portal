@@ -38,7 +38,7 @@ class modlet
 	/**
 	 * Pointer to the running module object
 	 **/
-	var $qsf;
+	protected $qsf;
 
 	/**
 	 * Constructor.

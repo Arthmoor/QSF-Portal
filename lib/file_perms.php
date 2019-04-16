@@ -40,13 +40,14 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class file_permissions
 {
-	var $cube = array();
-	var $group;
-	var $user;
-	var $db;
-	var $pre;
-	var $is_guest;
-	var $standard = array(
+	public $cube = array();
+	public $group;
+	public $user;
+	public $db;
+	public $pre;
+	public $is_guest;
+	public $globals = array();
+	public $standard = array(
                 'download_files' => false,
                 'upload_files' => false,
 		'approve_files' => false,
@@ -59,8 +60,6 @@ class file_permissions
 		'delete_category' => false,
 		'add_category' => false
 	);
-
-	var $globals = array();
 
 	/**
 	 * Constructor; sets up variables

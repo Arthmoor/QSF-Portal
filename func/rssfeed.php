@@ -38,7 +38,7 @@ require_once $set['include_path'] . '/global.php';
  **/
 class rssfeed extends qsfglobal
 {
-	var $cat_data;
+	private $cat_data;
 
 	/**
 	 * Main interface. Get a RSS feed of posts

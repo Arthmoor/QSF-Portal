@@ -35,12 +35,12 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class activeutil extends forumutils
 {
-	var $activeUsers    = array();
-	var $doneUpdate     = false;
-	var $totalGuests    = 0; // Total guest users online
-	var $totalMembers   = 0; // Total members online
+	private $activeUsers    = array();
+	private $doneUpdate     = false;
+	private $totalGuests    = 0; // Total guest users online
+	private $totalMembers   = 0; // Total members online
 
-	var $sessionid = null;
+	private $sessionid = null;
 
 	/**
 	 * Constructor
