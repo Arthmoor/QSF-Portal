@@ -732,6 +732,7 @@ class topic extends qsfglobal
 
 			ini_set( "zlib.output_compression", "Off" );
 			header( "Connection: close" );
+			header( 'Content-Description: File Transfer' );
 			header( "Content-Type: application/octet-stream" );
 			header( "Content-Disposition: attachment; filename=\"{$data['attach_name']}\"" );
 			header( "Content-Length: " . $data['attach_size'] );

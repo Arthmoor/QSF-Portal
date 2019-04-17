@@ -1508,6 +1508,7 @@ class en
 		$this->settings_new = 'New Setting';
 		$this->settings_new_add = 'Add New Board Setting';
 		$this->settings_new_added = 'New settings added.';
+		$this->settings_new_array = 'Check here if this is a new array. Separate elements of the array with commas.';
 		$this->settings_new_exists = 'That setting already exists. Choose another name for it.';
 		$this->settings_new_name = 'New setting name';
 		$this->settings_new_required = 'The new setting name is required.';

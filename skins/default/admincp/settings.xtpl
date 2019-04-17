@@ -3,8 +3,18 @@
 <form action="{self}?a=settings&amp;s=add" method="post">
 <div class="article">
  <div class="title">{settings_new}</div>
- {settings_new_name}:  <input class="input" name="new_setting" type="text" value="" /><br /><br />
- {settings_new_value}: <input class="input" name="new_value" type="text" value="" /><br />
+ <span class="field">{settings_new_name}:</span>
+ <span class="form"><input class="input" name="new_setting" type="text" value="" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_new_value}:</span>
+ <span class="form"><input class="input" name="new_value" type="text" value="" /></span>
+ <p class="line"></p>
+
+ <span class="field">{settings_new_array}</span>
+ <span class="form"><input type="checkbox" name="is_array" id="is_array" /></span>
+ <p class="line"></p>
+
  <input type="hidden" name="token" value="{token}" />
  <input type="submit" name="submit" value="{submit}" />
 </div>

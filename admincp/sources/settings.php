@@ -224,6 +224,7 @@ class settings extends admin
 				$xtpl->assign( 'settings_new', $this->lang->settings_new );
 				$xtpl->assign( 'settings_new_name', $this->lang->settings_new_name );
 				$xtpl->assign( 'settings_new_value', $this->lang->settings_new_value );
+				$xtpl->assign( 'settings_new_array', $this->lang->settings_new_array );
 				$xtpl->assign( 'token', $this->generate_token() );
 				$xtpl->assign( 'submit', $this->lang->submit );
 
@@ -242,11 +243,17 @@ class settings extends admin
 				}
 
 				$new_setting = $this->post['new_setting'];
-				$new_value = $this->post['new_value'];
 
 				if( isset( $this->sets[$new_setting] ) ) {
 					return $this->message( $this->lang->settings_new, $this->lang->settings_new_exists );
 				}
+
+				$is_new_array = isset( $this->post['is_array'] );
+
+				if( $is_new_array )
+					$new_value = explode( ',', $this->post['new_value'] );
+				else
+					$new_value = $this->post['new_value'];
 
 				$this->sets[$new_setting] = $new_value;
 				$this->write_sets();
