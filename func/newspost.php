@@ -47,13 +47,13 @@ class newspost extends qsfglobal
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
-		$post = intval( $this->get['t'] );
-		return $this->getpost( $post );
+		$post_id = intval( $this->get['t'] );
+		return $this->getpost( $post_id );
 	}
 
-	private function getpost( $post )
+	private function getpost( $post_id )
 	{
-		$items = "";
+		$items = '';
 
 		$post = $this->db->fetch( "SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_mbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
 		    FROM (%ptopics t, %pgroups g)
@@ -61,19 +61,18 @@ class newspost extends qsfglobal
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
 		    LEFT JOIN %pactive a ON a.active_id=u.user_id
 		    LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
-		    WHERE t.topic_id=%d AND u.user_group=g.group_id LIMIT 1", $post );
+		    WHERE t.topic_id=%d AND u.user_group=g.group_id LIMIT 1", $post_id );
 
 		if( !$post ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
-		$query = $this->db->query( "SELECT attach_id, attach_name, attach_downloads, attach_size FROM %pattach
-			WHERE attach_post=%d", $post['post_id'] );
+		$query = $this->db->query( "SELECT attach_id, attach_name, attach_downloads, attach_size FROM %pattach WHERE attach_post=%d", $post_id );
 
 		$this->lang->topic();
 
-		$post['post_time'] = $this->mbdate (DATE_LONG, $post['post_time'] );
+		$post['post_time'] = $this->mbdate( DATE_LONG, $post['post_time'] );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
 
@@ -86,6 +85,7 @@ class newspost extends qsfglobal
 		$xtpl->assign( 'topic_attached_filename', $this->lang->topic_attached_filename );
 		$xtpl->assign( 'topic_attached_size', $this->lang->topic_attached_size );
 		$xtpl->assign( 'topic_attached_downloads', $this->lang->topic_attached_downloads );
+		$xtpl->assign( 'topicnum', $post_id );
 
 		$Poster_Info = $this->build_memberinfo( $post, $post['topic_forum'] );
 		$xtpl->assign( 'PosterInfo', $Poster_Info );
@@ -99,7 +99,7 @@ class newspost extends qsfglobal
 		}
 
 		$text = $this->format( $post['post_text'], $params );
-		$text = str_replace( "[more]", "", $text );
+		$text = str_replace( '[more]', '', $text );
 		$xtpl->assign( 'text', $text );
 
 		$attachments = null;
@@ -129,11 +129,12 @@ class newspost extends qsfglobal
 		$comments = null;
 
 		$result = $this->db->query( "SELECT u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_mbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
-		   FROM (%pposts p, %pgroups g)
-		   LEFT JOIN %pusers u ON u.user_id=p.post_author
-		   LEFT JOIN %pactive a ON a.active_id=u.user_id
-		   LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
-		   WHERE post_topic=%d AND u.user_group=g.group_id", $post['topic_id'] );
+			FROM (%pposts p, %pgroups g)
+			LEFT JOIN %pusers u ON u.user_id=p.post_author
+			LEFT JOIN %pactive a ON a.active_id=u.user_id
+			LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
+			WHERE post_topic=%d AND u.user_group=g.group_id
+			ORDER BY p.post_time", $post['topic_id'] );
 
 		$show = false;
 		$pos = 0;
@@ -159,13 +160,11 @@ class newspost extends qsfglobal
 
 			$Poster_Info = $this->build_memberinfo( $comment, $post['topic_forum'] );
 
-			if( !strstr( $c_date, $this->lang->today ) && !strstr( $c_date, $this->lang->yesterday ) ) {
-				$c_date = "On " . $c_date;
-			}
-
 			$xtpl->assign( 'pos', $pos );
 			$xtpl->assign( 'CommenterInfo', $Poster_Info );
 			$xtpl->assign( 'c_text', $c_text );
+			$xtpl->assign( 'c_date', $c_date );
+			$xtpl->assign( 'post_id', $post_id );
 
 			$xtpl->parse( 'NewsPost.Comment' );
 		}
@@ -200,26 +199,6 @@ class newspost extends qsfglobal
 
 		$online = ( $post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active'] );
 
-		if( $this->perms->auth( 'email_use' ) ) {
-			if( !$post['user_email_show'] ) {
-				if( $post['user_email_form'] ) {
-					$icons['user_email'] = array(
-						'link'   => "{$this->self}?a=email&amp;to={$post['user_id']}",
-						'alt'    => sprintf( $this->lang->topic_links_email, $post['user_name'] ),
-						'img'    => 'email.png'
-					);
-				} else {
-					unset( $icons['user_email'] );
-				}
-			} else {
-				$icons['user_email'] = array(
-					'link'   => 'mailto:' . $post['user_email'],
-					'alt'    => sprintf( $this->lang->topic_links_email, $post['user_name'] ),
-					'img'    => 'email.png'
-				);
-			}
-		}
-
 		$post['user_posts'] = number_format( $post['user_posts'], 0, null, $this->lang->sep_thousands );
 		$post['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $post['user_joined'] );
 
@@ -241,11 +220,13 @@ class newspost extends qsfglobal
 		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'user_avatar', $post['user_avatar'] );
+		$xtpl->assign( 'topic_online', $this->lang->topic_online );
+		$xtpl->assign( 'topic_offline', $this->lang->topic_offline );
 
 		if( $online )
-			$xtpl->assign( 'online_icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/images/icons/user_online.png\" alt=\"\" title=\"{$this->lang->topic_online}\" />" );
+			$xtpl->parse( 'MemberInfo.Online' );
 		else
-			$xtpl->assign( 'online_icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/images/icons/user_offline.png\" alt=\"\" title=\"{$this->lang->topic_offline}\" />" );
+			$xtpl->parse( 'MemberInfo.Offline' );
 
 		$xtpl->assign( 'user_id', $post['user_id'] );
 		$xtpl->assign( 'user_name', $post['user_name'] );
@@ -259,11 +240,11 @@ class newspost extends qsfglobal
 		$xtpl->assign( 'user_joined', $post['user_joined'] );
 
 		if( $post['post_ip'] )
-			$xtpl->assign( 'post_ip', "<br /><span class=\"text\">IP</span><a href=\"{$this->self}?a=mod&amp;s=viewips&amp;t={$post}&amp;w={$post['post_author']}\">{$post['post_ip']}</a>" );
+			$xtpl->assign( 'post_ip', "<br /><span class=\"text\">IP</span><a href=\"{$this->self}?a=mod&amp;s=viewips&amp;t={$post['post_id']}&amp;w={$post['post_author']}\">{$post['post_ip']}</a>" );
 
 		if( $this->perms->auth( 'email_use' ) ) {
-			if( $member['user_email_show'] ) {
-				$member['email'] = $member['user_email'];
+			if( $post['user_email_show'] ) {
+				$post['email'] = $post['user_email'];
 			}
 		}
 
@@ -273,7 +254,7 @@ class newspost extends qsfglobal
 
 		$this->lang->members(); // Time to cheat!
 
-		if( $post['user_email_show'] && $this->perms->auth('email_use') ) {
+		if( $post['user_email_show'] && $this->perms->auth( 'email_use' ) ) {
 			$xtpl->assign( 'user_email', $post['user_email'] );
 			$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
 

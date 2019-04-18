@@ -1644,14 +1644,11 @@ class en
 		$this->topic_ip = 'IP';
 		$this->topic_joined = 'Joined';
 		$this->topic_level = 'Member Level';
-		$this->topic_links_aim = 'Send an AIM message to %s';
 		$this->topic_links_email = 'Send an email to %s';
+		$this->topic_links_facebook = 'Visit this member\'s Facebook page';
 		$this->topic_links_twitter = 'Visit %s\'s Twitter page';
-		$this->topic_links_icq = 'Send an ICQ messsage to %s';
-		$this->topic_links_msn = 'View %s\'s MSN profile';
 		$this->topic_links_pm = 'Send a personal messsage to %s';
 		$this->topic_links_web = 'Visit %s\'s web site';
-		$this->topic_links_yahoo = 'Send a message to %s with Yahoo! Messenger';
 		$this->topic_lock = 'Lock';
 		$this->topic_locked = 'Topic Locked';
 		$this->topic_move = 'Move';

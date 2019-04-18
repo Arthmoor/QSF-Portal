@@ -229,7 +229,7 @@ class recent extends qsfglobal
 			$jump = '&amp;p=' . $row['topic_last_post'] . '#p' . $row['topic_last_post'];
 
 			$row['edited'] = $row['topic_edited']; // Store so skin can access
-			$row['topic_edited'] = $this->mbdate( 'g:i a, M j, Y', $row['topic_edited'] );
+			$row['topic_edited'] = $this->mbdate( DATE_LONG, $row['topic_edited'] );
 			$row['topic_views']  = number_format( $row['topic_views'], 0, null, $this->lang->sep_thousands );
 
 			if( $row['topic_modes'] & TOPIC_PINNED ) {

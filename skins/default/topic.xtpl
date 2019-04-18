@@ -61,7 +61,7 @@
 <!-- BEGIN: PostIcon -->
    <img src="{loc_of_board}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
 <!-- END: PostIcon -->
-   <a href="{self}?a=topic&amp;t={topicnum}']}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
+   <a href="{self}?a=topic&amp;t={topicnum}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
    &nbsp;&nbsp;<span class="small_text">{edited}</span>
   </div>
   <div style="text-align:right;">

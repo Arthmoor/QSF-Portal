@@ -40,6 +40,10 @@
 
 <!-- BEGIN: Comment -->
 <div class="article">
+ <div class="title">
+  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  <a href="{self}?a=newspost&amp;t={topicnum}&amp;p={post_id}#p{post_id}">#{pos}</a> {c_date}
+ </div>
  <a id="p{pos}"></a>
  {CommenterInfo}
  <span class="postbit_top"></span>
@@ -96,12 +100,17 @@
 </span>
 
 <span class="member_info">
- {online_icon}
+<!-- BEGIN: Online -->
+ <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
+<!-- END: Online -->
+<!-- BEGIN: Offline -->
+ <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
+<!-- END: Offline -->
  <strong><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></strong><br />
  <strong>{user_title}</strong> <img src="{loc_of_board}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
  <span class="text">{topic_group}</span>{group_name}<br />
  <span class="text">{topic_posts}</span>{user_posts}<br />
- <span class="text">{topic_joined}</span>{$post['user_joined']}
+ <span class="text">{topic_joined}</span>{user_joined}
  {post_ip}
 </span>
 
