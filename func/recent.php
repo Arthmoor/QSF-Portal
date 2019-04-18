@@ -274,7 +274,7 @@ class recent extends qsfglobal
 				}
 
 				if( $row['icon'] ) {
-					$xtpl->assign( 'icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/mbicons/{$row['icon']}\" alt=\"{$this->lang->forum_icon}\" class=\"left\" />" );
+					$xtpl->assign( 'icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/mbicons/{$row['icon']}\" alt=\"{$this->lang->recent_icon}\" class=\"left\" />" );
 				}
 
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
