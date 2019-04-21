@@ -230,20 +230,20 @@ class bbcode
 		$search[] = '~\[quote=(.+?)]~i';
 		$search[] = '~\[quote]~i';
 
-		$replace[] = '<div class="quote"><span class="quote">$1 said:</span><br /><br /><span class="left-quote"></span>';
-		$replace[] = '<div class="quote"><span class="left-quote"></span>';
+		$replace[] = '<blockquote><span class="quote">$1 said:</span><br /><br /><span class="left-quote"></span>';
+		$replace[] = '<blockquote><span class="left-quote"></span>';
 
-		$startCount = preg_match_all($search[0], $in, $matches);
-		$startCount += preg_match_all($search[1], $in, $matches);
-		$in = preg_replace($search, $replace, $in);
+		$startCount = preg_match_all( $search[0], $in, $matches );
+		$startCount += preg_match_all( $search[1], $in, $matches );
+		$in = preg_replace( $search, $replace, $in );
 
 		$search = '~\[/quote]~i';
-		$replace = '<span class="right-quote"></span></div>';
+		$replace = '<span class="right-quote"></span></blockquote>';
 
-		$endCount = preg_match_all( $search, $in, $matches);
-		$in = preg_replace($search, $replace, $in);
+		$endCount = preg_match_all( $search, $in, $matches );
+		$in = preg_replace( $search, $replace, $in );
 
-		if ($startCount != $endCount) {
+		if( $startCount != $endCount ) {
 			return $old;
 		}
 		return $in;
@@ -259,6 +259,7 @@ class bbcode
 		else
 			$code_html['start_code'] = '<pre class="code">';
 		$code_html['end'] = '</pre>';
+
 		return $code_html;
 	}
 

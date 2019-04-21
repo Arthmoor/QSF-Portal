@@ -48,7 +48,7 @@ class main extends qsfglobal
 		}
 
 		$this->lang->news();
-		$items = $this->getposts( 20 ); // FIXME: Have this set up to use a forum flag for news posts.
+		$items = $this->getposts( 2 ); // FIXME: Have this set up to use a forum flag for news posts.
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/main.xtpl' );
 

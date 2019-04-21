@@ -176,22 +176,22 @@ textarea {
 }
 
 /* Main */
-#main {
+main {
 	width: 83%;
 	float: right;
 }
-#main.middle {
+main.middle {
 	width: 50%;
 	float: left;
 }
-#main .article, #blocks .article {
+main .article, #blocks .article {
 	background: #161616;
 	margin: 0px 0px 5px;
 	padding: 4px 6px;
 	border: 1px solid #292929;
 	border-bottom: 3px double #292929;
 }
-#main .title {
+main .title {
 	background: #292929;
 	font: 18px Arial, Sans-serif;
 	color: #c0c0c0;
@@ -278,24 +278,24 @@ textarea {
 .bigbutton .locked { background-image: url('./images/icons/topic_locked.png') }
 
 /* Button-align */
-#main .article span.big_button_align {
+main .article span.big_button_align {
 	margin: 5px 4px 4px;
 	float: right;
 }
-#main .article select.big_button_align {
+main .article select.big_button_align {
 	margin: 3px;
 	float: right;
 }
 
 /* Topic Icons */
-#main .article img.topic_icon {
+main .article img.topic_icon {
 	float: right;
 	margin: 0px 2px;
 }
-#main .article div.topic_icon {
+main .article div.topic_icon {
 	padding: 0px;
 }
-#main .article div.topic_icon div {
+main .article div.topic_icon div {
 	background-repeat: no-repeat;
 	height: 22px;
 }
@@ -326,8 +326,8 @@ div.newlockedpoll { background: url('./images/topicicons/lockedopennewpoll.png')
 /* Pin overlaps other topic icons */
 div.pinned { background: url('./images/icons/pin_faded.png') }
 
-#main .article .file_head span,
-#main .article .file_head strong {
+main .article .file_head span,
+main .article .file_head strong {
 	font: bold italic 13px Arial, Sans-serif;
 	margin: 0px 0px 3px;
 	display: block;
@@ -336,8 +336,8 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* Forum-specific Rules */
-#main .article .head span,
-#main .article .head strong {
+main .article .head span,
+main .article .head strong {
 	font: bold italic 13px Arial, Sans-serif;
 	border-bottom: 1px dotted #3e3e3e;
 	margin: 0px 0px 3px;
@@ -345,47 +345,47 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	position: relative;
 	width: 100%;
 }
-#main .article span {
+main .article span {
 	padding: 2px 0px;
 }
-#main .article .rounded_top span,
-#main .article .rounded_bottom span {
+main .article .rounded_top span,
+main .article .rounded_bottom span {
 	padding: 0px;
 }
-#main .article span.right {
+main .article span.right {
 	padding: 0px;
 	float: right;
 }
-#main .article .left {
+main .article .left {
 	padding: 0px;
 	float: left;
 }
-#main .article span.icon,
-#main .article div.topic_icon {
+main .article span.icon,
+main .article div.topic_icon {
 	width: 4%;
 	float: left;
 }
-#main .article p {
+main .article p {
 	height: 0px;
 	margin: 0px;
 	overflow: hidden;
 	clear: both;
 }
-#main .article p.line {
+main .article p.line {
 	margin: 3px 0px;
 	border-bottom: 1px dotted #3e3e3e;
 }
-#main .article p.list_line {
+main .article p.list_line {
 	margin: 1px 0px 3px;
 	border-bottom: 1px dotted #3e3e3e;
 }
-#main .article .small_text {
+main .article .small_text {
 	font: 10px Arial, Sans-serif;
 }
-#main .article .tiny {
+main .article .tiny {
 	font: 10px Arial, Sans-serif;
 }
-#main .article span.notice {
+main .article span.notice {
 	background: url('./images/icons/alert.png') no-repeat;
 	margin: 10px;
 	padding: 1px 20px;
@@ -393,18 +393,18 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* View Topic */
-#main .article span.topic_description {
+main .article span.topic_description {
 	font: bold 16px Arial, Sans-serif;
 	margin: 4px 6px;
 	float: left;
 }
-#main .article span.next_prev_topics {
+main .article span.next_prev_topics {
 	margin: 6px 10px 2px;
 	float: right;
 }
 
 /* Quotes */
-#main .article div.quote {
+main .article blockquote {
 	background: #484848;
 	width:90%;
 	margin-left:auto;
@@ -412,29 +412,29 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	padding: 5px;
 	border: 1px solid black;
 }
-#main .article span.quote {
+main .article span.quote {
 	color:#FFD800;
 	font: bold 14px Arial, Sans-serif;
 }
-#main .article span.quote a {
+main .article span.quote a {
 	color:#FFD800;
 	font: bold 14px Arial, Sans-serif;
 }
-#main .article span.quote a:hover {
+main .article span.quote a:hover {
 	color:yellow;
 	font: bold 14px Arial, Sans-serif;
 }
-#main .article span.left-quote {
+main .article span.left-quote {
 	background: #484848 url("./images/left-quote.png") left no-repeat;
 	padding-left:20px;
 }
-#main .article span.right-quote {
+main .article span.right-quote {
 	background: #484848 url("./images/right-quote.png") right no-repeat;
 	padding-right:20px;
 }
 
 /* Code */
-#main .article pre.code {
+main .article pre.code {
 	background: #484848 url('./images/code.png') top right no-repeat;
 	width: 98%;
 	padding: 3px 5px;
@@ -442,7 +442,7 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	white-space:pre;
 	overflow-x: auto;
 }
-#main .article pre.codebox {
+main .article pre.codebox {
 	background: #484848;
 	width: 98%;
 	padding: 3px 5px;
@@ -451,16 +451,16 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	white-space:pre;
 	overflow:auto;
 }
-#main .article pre.phpcode {
+main .article pre.phpcode {
         color:black;
 	background: #fefefe url('./images/code_php.png');
 }
-#main .article div.codetitle {
+main .article div.codetitle {
 	font-weight: bold;
 }
 
 /* Attachments */
-#main .article div.filebox {
+main .article div.filebox {
 	background: #484848 url('./images/attachment.png') top right  no-repeat;
 	margin: 6px 0px 0px;
 	padding: 3px 6px;
@@ -468,56 +468,56 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* Spoilers */
-#main .article div.spoilerbox {
+main .article div.spoilerbox {
 	background: #484848 url('./images/spoiler.png') top right  no-repeat;
 	padding: 3px 6px;
 	border: 1px solid black;
 }
-#main .article div.spoilerbox .spoiler {
+main .article div.spoilerbox .spoiler {
 	color: #484848;
 }
 
 /* Postbit */
-#main .article .hidden {
+main .article .hidden {
 	display: none;
 }
-#main .article span.avatar {
+main .article span.avatar {
 	margin: 4px 4px 0px;
 	overflow: hidden;
 	float: left;
 }
-#main .article span.avatar br {
+main .article span.avatar br {
 	display: none;
 }
-#main .article span.member_bits {
+main .article span.member_bits {
 	width: 192px;
 	float: right;
 }
-#main .article span.member_info {
+main .article span.member_info {
 	font: 11px Arial, Sans-serif;
 	margin: 2px 7px 0px;
 	float: left;
 }
-#main .article span.member_info strong {
+main .article span.member_info strong {
 	font: 16px Arial, Sans-serif;
 }
-#main .article span.member_info strong a:hover {
+main .article span.member_info strong a:hover {
 	color: white;
 }
-#main .article span.member_info span.text {
+main .article span.member_info span.text {
 	font-weight: bold;
 	width: 100px;
 	padding: 0px;
 	float: left;
 }
-#main .article .rounded_top {
+main .article .rounded_top {
 	padding: 2px 0px 0px;
 }
-#main .article .rounded_top span,
-#main .article .rounded_bottom span {
+main .article .rounded_top span,
+main .article .rounded_bottom span {
 	background: #292929;
 }
-#main .article div.postbit {
+main .article div.postbit {
 	background: #292929;
 	padding: 1px 5px;
 	border-left: 1px solid #3e3e3e;
@@ -525,143 +525,143 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 	display: block;
 	margin: 0px;
 }
-#main .article div.postbit span.signature {
+main .article div.postbit span.signature {
 	font: 11px Arial, Sans-serif;
 	margin: 2px 4px 0px;
 	display: block;
 }
-#main .article span.posted {
+main .article span.posted {
 	float: right;
 	margin: 0px 2px 2px;
 }
 
 /* New Post */
-#main .article div.form ul.post_icons {
+main .article div.form ul.post_icons {
 	padding: 10px;
 	margin: 0px;
 }
-#main .article div.form ul.post_icons li {
+main .article div.form ul.post_icons li {
 	display: inline;
 	white-space: nowrap;
 	list-style-type: none;
 }
 
 /* Messages */
-#main .article span.delete {
+main .article span.delete {
 	text-align: right;
 	width: 9%;
 	float: left;
 }
-#main .article span.message {
+main .article span.message {
 	width: 38%;
 	float: left;
 }
 
 /* Forms */
-#main .article span.field {
+main .article span.field {
 	font-weight: bold;
 	width: 15%;
 	margin: 5px 0px;
 	float: left;
 }
-#main .article span.field span {
+main .article span.field span {
 	font-weight: normal;
 }
-#main .article span.form,
-#main .article div.form {
+main .article span.form,
+main .article div.form {
 	width: 85%;
 	float: left;
 }
 
 /* Profile */
-#main #profile span.field {
+main #profile span.field {
 	margin: 1px 0px 2px;
 }
 
 /* Search */
-#main .article span.half {
+main .article span.half {
 	width: 48%;
 	padding: 0px 2% 0px 0px;
 	overflow: hidden;
 	float: left;
 }
-#main .article span.search_forum {
+main .article span.search_forum {
 	width: 8%;
 	float: left;
 }
 
 /* Subscriptions */
-#main .article span.quarter {
+main .article span.quarter {
 	width: 25%;
 	float: left;
 	padding: 0px 0px 4px;
 }
-#main .article span.quarter a {
+main .article span.quarter a {
 	margin: 2px 0px 1px;
 	float: left;
 }
 
 /* Edit Avatar */
-#main .article div.avatar_dimensions {
+main .article div.avatar_dimensions {
 	margin: 8px 3px 8px;
 	float: left;
 }
-#main .article div.avatar_dimensions img {
+main .article div.avatar_dimensions img {
 	float: left;
 }
-#main .article div.avatar_dimensions span.text {
+main .article div.avatar_dimensions span.text {
 	width: 40px;
 	float: left;
 	margin: 2px 6px 0px;
 }
 
 /* Member List */
-#main .article .center {
+main .article .center {
 	text-align: center;
 }
-#main .article span.member {
+main .article span.member {
 	width: 18%;
 	float: left;
 }
-#main .article span.nine {
+main .article span.nine {
 	text-align: center;
 	width: 11%;
 	float: left;
 }
-#main .article span.group {
+main .article span.group {
 	text-align: center;
 	width: 17%;
 	float: left;
 }
 
 /* Index */
-#main .article span.thread {
+main .article span.thread {
 	width: 42%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 }
-#main .article span.thread br {
+main .article span.thread br {
 	display: none;
 }
-#main .article span.thread a.forum {
+main .article span.thread a.forum {
 	font: bold 14px Arial, Sans-serif;
 	width: 100%;
 	margin: 0px;
 	padding: 2px 0px 1px;
 	display: block; /* IE Hack */
 }
-#main .article span.thread a:hover {
+main .article span.thread a:hover {
 	color: white;
 	text-decoration: underline;
 }
-#main .article span.number {
+main .article span.number {
 	text-align: center;
 	width: 15%;
 	padding: 2px 0px;
 	float: left;
 }
-#main .article span.last_post {
+main .article span.last_post {
 	text-align: right;
 	width: 24%;
 	overflow-x: auto;
@@ -669,7 +669,7 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* Recent Topics */
-#main .article span.recent_topic {
+main .article span.recent_topic {
 	width: 38%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
@@ -677,45 +677,45 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* Files */
-#main .article span.file_folder {
+main .article span.file_folder {
         width: 20%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 }
 
-#main .article span.filename {
+main .article span.filename {
 	width: 20%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 }
-#main .article span.fileversion {
+main .article span.fileversion {
 	width: 8%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 	text-align: center;
 }
-#main .article span.submitter {
+main .article span.submitter {
 	width: 10%;
 	margin: 0px 0px 2px;
 	float: left;
 	text-align: center;
 }
-#main .article span.filedate {
+main .article span.filedate {
 	text-align: right;
 	width: 10%;
 	overflow-x: auto;
 	float: left;
 }
-#main .article span.file_number {
+main .article span.file_number {
 	text-align: center;
 	width: 8%;
 	padding: 2px 0px;
 	float: left;
 }
-#main .article span.file_rating {
+main .article span.file_rating {
 	width: 10%;
 	margin: 0px 0px 2px;
 	float: left;
@@ -723,91 +723,91 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* Spam Controls */
-#main .article span.spamaction {
+main .article span.spamaction {
 	width: 10%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 }
-#main .article span.spamtopic {
+main .article span.spamtopic {
 	width: 10%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 }
-#main .article span.spamuser {
+main .article span.spamuser {
 	width: 10%;
 	margin: 0px 0px 2px;
 	float: left;
 	text-align: center;
 }
-#main .article span.spamip {
+main .article span.spamip {
 	text-align: center;
 	width: 10%;
 	float: left;
 }
-#main .article span.spamdate {
+main .article span.spamdate {
 	text-align: center;
 	width: 15%;
 	float: left;
 }
-#main .article span.spamtext {
+main .article span.spamtext {
 	width: 40%;
 	float: left;
 }
 
 /* Topics */
-#main .article span.topic {
+main .article span.topic {
 	width: 28%;
 	margin: 0px 0px 2px;
 	overflow-x: auto;
 	float: left;
 }
-#main .article span.starter {
+main .article span.starter {
 	width: 13%;
 	margin: 0px 0px 2px;
 	float: left;
 	text-align: center;
 }
-#main .article span.topic_last_post {
+main .article span.topic_last_post {
 	text-align: right;
 	width: 20%;
 	overflow-x: auto;
 	float: left;
 }
-#main .article a.mark_read {
+main .article a.mark_read {
 	margin: 6px 0px 2px;
 	float: right;
 }
-#main .article a.mark_read:hover {
+main .article a.mark_read:hover {
 	text-decoration: none;
 }
 
 /* Member CP */
-#main .article div.avatar_settings .check {
+main .article div.avatar_settings .check {
 	margin: 4px 2px 0px;
 }
-#main .article div.signature {
+main .article div.signature {
 	margin: 2px;
 }
 
 /* Topic Icon Key */
-#main .article span.eight {
+main .article span.eight {
 	font: 10px Arial, Sans-serif;
 	text-align: center;
 	width: 12.4%;
 	float: left;
 }
-#main .article span.eight img {
+main .article span.eight img {
 	margin: 0px 3px 0px 0px;
 }
-#main .article span.select_align {
+main .article span.select_align {
 	margin: 3px 3px;
 	float: left;
 }
 
 /* Online Listing */
-#main .article span.third {
+main .article span.third {
 	width: 32%;
 	float: left;
 }
@@ -824,12 +824,12 @@ div.pinned { background: url('./images/icons/pin_faded.png') }
 }
 
 /* Footer */
-#footer, #copyright {
+footer {
 	font: 10px Arial, Sans-serif;
 	color: #c0c0c0;
 	text-align: center;
 	margin: 4px 4px 8px;
 }
-#footer a, #copyright a {
+footer a {
 	color: white;
 }

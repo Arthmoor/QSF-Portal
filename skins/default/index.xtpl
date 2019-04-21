@@ -95,28 +95,26 @@
     {board_stats}
    </div>
 
-   <div id="main">
+   <main>
 <!-- BEGIN: Reminder -->
     <div class="article">
      <div class="title">{main_reminder}</div>
      {reminder_text}
     </div>
 <!-- END: Reminder -->
-<!-- BEGIN: Message -->
+    {module_output}
 <!-- BEGIN: Message -->
     <div class="article">
      <div class="title">{title}</div>
      {message}
     </div>
 <!-- END: Message -->
-<!-- END: Message -->
-    {module_output}
-   </div>
+   </main>
 
    <div id="bottom">&nbsp;</div>
   </div>
 
-  <div id="footer">
+  <footer>
    {powered_by} <a href="https://github.com/Arthmoor/QSF-Portal">{qsf_name}</a> &copy; 2006-2019 The {qsf_name} Development Team<br />
    {based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br />
    {based_on} <a href="https://github.com/markelliot/MercuryBoard">MercuryBoard</a> &copy; 2001-2009 The Mercury Development Team<br />
@@ -124,7 +122,7 @@
    <br />100% Valid &lsaquo;&rsaquo; <a href="https://validator.w3.org/check?uri=referer">HTML5</a> <a href="https://jigsaw.w3.org/css-validator/check/referer">CSS</a>
    Best viewed at 1024x768 or better resolution.
    <br />{servertime}
-  </div>
+  </footer>
   {google}
  </body>
 </html>

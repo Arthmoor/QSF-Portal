@@ -663,7 +663,7 @@ class htmlwidgets extends forumutils
 	{
 		$i     = 0;
 		$icons = array();
-		$dir   = opendir( "./skins/$this->skin/mbicons" );
+		$dir   = opendir( "./skins/{$this->skin}/mbicons" );
 
 		while( ( $file = readdir( $dir ) ) !== false )
 		{

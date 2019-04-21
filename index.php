@@ -143,8 +143,6 @@ $qsf->user_cl = new user( $qsf );
 $qsf->user    = $qsf->user_cl->login();
 $qsf->lang    = $qsf->get_lang( $qsf->user['user_language'], $qsf->get['a'] );
 
-$qsf->init();
-
 if( !isset( $qsf->get['skin'] ) ) {
 	$skin = $qsf->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $qsf->user['user_skin'] );
 
@@ -157,6 +155,8 @@ if( !isset( $qsf->get['skin'] ) ) {
 
 	$qsf->skin = $dev_skin['skin_dir'];
 }
+
+$qsf->init();
 
 if( $qsf->is_banned() ) {
 	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
