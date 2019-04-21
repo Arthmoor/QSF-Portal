@@ -140,18 +140,18 @@ textarea {
 }
 
 /* Side Navigation */
-#blocks span a {
+#blocks nav a {
 	font: 12px Arial, Sans-serif;
 	color: #c0c0c0;
 	margin: 0px -7px 4px 4px;
 	padding: 1px 4px 1px 6px;
 	display: block;
 }
-#blocks span a:hover {
+#blocks nav a:hover {
         color:white;
 	text-decoration: underline;
 }
-#blocks span a.active {
+#blocks nav a.active {
 	background: #161616;
 	font: bold 12px Arial, Sans-serif;
 	padding: 3px 4px 2px 6px;
@@ -159,7 +159,7 @@ textarea {
 	border-left: 1px double #292929;
 	display: block;
 }
-#blocks span a.attention {
+#blocks nav a.attention {
 	color:yellow;
 	font-weight:bold;
 }
@@ -168,6 +168,11 @@ textarea {
 	margin:0px;
 	font: 10px Arial, Sans-serif;
 	display:inline;
+}
+#blocks nav {
+	width: 48%;
+	padding: 0px 2% 0px 0px;
+	float: left;
 }
 #blocks span.half {
 	width: 48%;

@@ -25,14 +25,14 @@
 <!-- BEGIN: GuestHeader -->
     <div class="block">
      <div class="title"><a href="{loc_of_board}">{forum_name}</a></div>
-     <span class="half">
+     <nav>
       <a href="{qsf_site}/files/">{main_files}</a>
       <a href="{qsf_self}?a=board">{main_forum}</a>
       <a href="{qsf_self}?a=members">{main_members}</a>
       <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
       {index_left_links}
       {index_right_links}
-     </span>
+     </nav>
      <div style="clear:both"></div>
     </div>
 
@@ -61,7 +61,7 @@
       {main_welcome} <a href="{qsf_self}?a=profile&amp;w={user_id}"><strong>{user_name}</strong></a>!
      </div>
 
-     <span class="half">
+     <nav>
       <a href="{qsf_site}/files/"{new_files}>{main_files}</a>
       <a href="{qsf_self}?a=board">{main_forum}</a>
 <!-- BEGIN: PagesLink -->
@@ -73,9 +73,9 @@
       <a href="{qsf_self}?a=spam_control"{spam_style}>{main_spam_controls}</a>
 <!-- END: SpamLink -->
       {index_left_links}
-     </span>
+     </nav>
 
-     <span class="half">
+     <nav>
       <a href="{qsf_self}?a=pm"{new_pm}>{main_messenger}</a>
       <a href="{qsf_self}?a=cp">{main_cp}</a>
       {index_right_links}
@@ -83,7 +83,7 @@
       <a href="./admincp/index.php">{main_admincp}</a>
 <!-- END: AdminCPLink -->
       <a href="{qsf_self}?a=login&amp;s=off">{main_logout}</a>
-     </span>
+     </nav>
      <div style="clear:both"></div>
     </div>
 <!-- END: MemberHeader -->

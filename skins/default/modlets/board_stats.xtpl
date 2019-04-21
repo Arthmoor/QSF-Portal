@@ -19,6 +19,8 @@
       {members}<br />
       {newest}
      </span>
+     <div style="clear:both"></div>
+     <br />
      {birthdays}
 
 <!-- BEGIN: Admin -->
