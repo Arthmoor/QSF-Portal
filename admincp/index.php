@@ -162,6 +162,7 @@ if( $admin->nohtml ) {
 } else {
 	$xtpl->assign( 'language_code', $admin->user['user_language'] );
 	$xtpl->assign( 'charset', $admin->lang->charset );
+	$xtpl->assign( 'loc_of_board', $admin->sets['loc_of_board'] );
 	$xtpl->assign( 'self', $admin->self );
 	$xtpl->assign( 'skin', $admin->skin );
 

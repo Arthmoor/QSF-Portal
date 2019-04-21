@@ -180,10 +180,7 @@ main {
 	width: 83%;
 	float: right;
 }
-main.middle {
-	width: 50%;
-	float: left;
-}
+
 main .article, #blocks .article {
 	background: #161616;
 	margin: 0px 0px 5px;

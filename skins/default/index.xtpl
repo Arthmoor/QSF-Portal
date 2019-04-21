@@ -10,7 +10,7 @@
   <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/print.css" media="print" />
   {feed_links}
   {mobile_icons}
-  <script src="{loc_of_board}/javascript/utils.js"></script>
+  <script src="{loc_of_board}/javascript/utils.js" async defer></script>
  </head>
 
  <body>
