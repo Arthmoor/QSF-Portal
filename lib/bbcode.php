@@ -41,6 +41,7 @@ class bbcode
 		$this->db = &$module->db;
 		$this->censor = &$module->censor;
 		$this->emoticons = &$module->emoticons;
+		$this->lang = &$module->lang;
 	}
 
 	public function get_bbcode_menu()
@@ -68,10 +69,10 @@ class bbcode
 		$strtr = array();
 
 		if( $options & FORMAT_CENSOR ) {
-			$in = $this->process_censors($in);
+			$in = $this->process_censors( $in );
 		}
 
-		if( $options & FORMAT_HTMLCHARS ) {
+		if( !( $options & FORMAT_HTMLCHARS ) ) {
 			$in = htmlentities( $in, ENT_COMPAT, 'UTF-8' );
 		}
 
@@ -159,7 +160,6 @@ class bbcode
 			'/\\[center\\](.*)\\[\\/center\\]/isU',
 			'/\\[sup\\](.*)\\[\\/sup\\]/isU',
 			'/\\[sub\\](.*)\\[\\/sub\\]/isU',
-			'/\\[ul\\](.*)\\[\\/ul\\]/isU',
 			'/\\[li\\](.*)\\[\\/li\\]/isU',
 			'/\\[p\\](.*)\\[\\/p]/isU',
 			'/\\[br\\]/isU',
@@ -167,7 +167,8 @@ class bbcode
 			'/\\[c\\]/isU',
 			 );
 		$replace = array(
-			'<div class="spoilerbox"><strong>Spoiler:</strong><div class="spoiler">$1</div></div>',
+//			'<details><summary><strong>' . $this->lang->spoiler . ':</strong></summary><br />$1</details>',
+			'<div class="spoilerbox"><strong>' . $this->lang->spoiler . ':</strong><div class="spoiler">$1</div></div>',
 			'<strong>$1</strong>',
 			'<em>$1</em>',
 			'<span style="text-decoration:underline">$1</span>',
@@ -184,7 +185,6 @@ class bbcode
 			'<div style="text-align:center">$1</div>',
 			'<sup>$1</sup>',
 			'<sub>$1</sub>',
-			'<ul>$1</ul>',
 			'<li>$1</li>',
 			'<p>$1</p>',
 			'<br />',
@@ -197,6 +197,7 @@ class bbcode
 
 		// This, this right here, all because some yahoo in charge of PHP decision making decided something was wrong with the old ways.
 		// If this looks really stupid to you, it's because it *IS* really stupid.
+		$in = preg_replace_callback( '/\\[ul\\](.*)\\[\\/ul\\]/isU', function($x) { return $this->process_ul_tag($x); }, $in );
 		$in = preg_replace_callback( '/\\[code\\](.*?)\\[\\/code\\]/is', function($x) { return $this->bbcode_parse_code_callback($x); }, $in );
 		$in = preg_replace_callback( '/\\[codebox\\](.*?)\\[\\/codebox\\]/is', function($x) { return $this->bbcode_parse_codebox_callback($x); }, $in );
 		$in = preg_replace_callback( '/\\[php\\](.*?)\\[\\/php\\]/is', function($x) { return $this->bbcode_parse_php_callback($x); }, $in );
@@ -217,7 +218,7 @@ class bbcode
 				'\\1[url=\\2://\\3]\\2://\\3[/url]')
 		);
 
-		return preg_replace($parse['matches'], $parse['replacements'], $in);
+		return preg_replace( $parse['matches'], $parse['replacements'], $in );
 	}
 
 	private function parse_quotes( $in )
@@ -346,18 +347,18 @@ class bbcode
 		}
 
 		// Check for a query string.
-		if ( !empty( $_SERVER['QUERY_STRING'] ) ) {
+		if( !empty( $_SERVER['QUERY_STRING'] ) ) {
 			$queryString = '?' . $_SERVER['QUERY_STRING'];
 		} else {
 			$queryString = null;
 		}
 
 		// Find the forum's URL base (host without www/directory forum is in)
-		if( isset($_SERVER['HTTP_HOST']) && !empty($_SERVER['HTTP_HOST']) ){ 
+		if( isset( $_SERVER['HTTP_HOST'] ) && !empty( $_SERVER['HTTP_HOST'] ) ){ 
 			$forumURLBase = str_replace( 'www.', null, $_SERVER['HTTP_HOST'] ) . dirname( $_SERVER['SCRIPT_NAME'] );
 
 			// Check if the URL is external.
-			if ( ( strpos( $url, $forumURLBase ) === false ) ) {
+			if( ( strpos( $url, $forumURLBase ) === false ) ) {
 				return '<a href="' . $url . '" onclick="window.open(this.href, \'_blank\'); return false;">' . $text . '</a>';
 			} else {
 				return '<a href="' . $url . '">' . $text . '</a>';
@@ -365,6 +366,20 @@ class bbcode
 		}
 
 		return '<a href="' . $url . '">' . $text . '</a>';
+	}
+
+	private function process_ul_tag( $matches = array() )
+	{
+		$in = $matches[0];
+
+		$strtr["\n"] = null;
+
+		$in = strtr( $in, $strtr );
+
+		$in = str_replace( '[ul]', '<ul>', $in );
+		$in = str_replace( '[/ul]', '</ul>', $in );
+
+		return $in;
 	}
 
 	private function process_youtube( $matches = array() )

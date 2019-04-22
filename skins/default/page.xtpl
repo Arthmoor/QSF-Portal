@@ -58,7 +58,7 @@
 <!-- END: PagesPage -->
 
 <!-- BEGIN: PagesEdit -->
-<form action="{self}?a=page&amp;s=edit&amp;p={$this->get['p']}" method="post">
+<form action="{self}?a=page&amp;s=edit&amp;p={p}" method="post">
 <div class="article">
  <div class="title">
   <img src="{loc_of_board}/skins/{skin}/images/icons/page_edit.png" alt="" />

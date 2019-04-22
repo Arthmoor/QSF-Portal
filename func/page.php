@@ -81,7 +81,7 @@ class page extends qsfglobal
 			$xtpl->assign( 'pages_none', $this->lang->pages_none );
 
 			if( $this->perms->auth( 'page_create' ) ) {
-				$xtpl->parse( 'page_create2', $this->lang->page_create2 );
+				$xtpl->assign( 'page_create2', $this->lang->page_create2 );
 
 				$xtpl->parse( 'PagesNone.CreateLink' );
 			}
@@ -204,6 +204,7 @@ class page extends qsfglobal
 			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
 			$xtpl->assign( 'skin', $this->skin );
+			$xtpl->assign( 'p', $p );
 			$xtpl->assign( 'page_edit', $this->lang->page_edit );
 			$xtpl->assign( 'page_title', $this->lang->page_title );
 			$xtpl->assign( 'title', $page['title'] );
