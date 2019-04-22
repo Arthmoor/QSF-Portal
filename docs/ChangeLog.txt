@@ -46,6 +46,7 @@ Changes for 2.0:
 
 * File updates were not unlinking the old files after replacing them with new ones, leading to large scale space waste.
 * Bare URLs entered into posts were getting stray single quotes placed around them.
+* News post retreival was not correctly handling time stamps. Posts were being displayed in random order.
 
 Changes for 1.5.1:
 

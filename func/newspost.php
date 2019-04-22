@@ -61,7 +61,8 @@ class newspost extends qsfglobal
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
 		    LEFT JOIN %pactive a ON a.active_id=u.user_id
 		    LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
-		    WHERE t.topic_id=%d AND u.user_group=g.group_id LIMIT 1", $post_id );
+		    WHERE t.topic_id=%d AND u.user_group=g.group_id
+		    ORDER BY p.post_time LIMIT 1", $post_id );
 
 		if( !$post ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -134,7 +135,7 @@ class newspost extends qsfglobal
 			LEFT JOIN %pactive a ON a.active_id=u.user_id
 			LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
 			WHERE post_topic=%d AND u.user_group=g.group_id
-			ORDER BY p.post_time", $post['topic_id'] );
+			ORDER BY p.post_time", $post_id );
 
 		$show = false;
 		$pos = 0;
