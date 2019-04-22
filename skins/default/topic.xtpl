@@ -217,7 +217,7 @@
 <form action="{self}?a=post&amp;s=reply&amp;t={topicnum}" method="post" id="mbpost">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{$this->skin}/images/icons/comment_add_blured.png" alt="" />
+  <img src="{loc_of_board}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
   {topic_quickreply}: {title_html}
  </div>
  <span class="head">

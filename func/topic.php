@@ -340,8 +340,6 @@ class topic extends qsfglobal
 		$newest_post_read = 0;
 		$first_unread_post = false;
 
-		$this->readmarker->mark_topic_read( $topicnum, $newest_post_read );
-
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
@@ -464,7 +462,7 @@ class topic extends qsfglobal
 
 			if( !( $post['newpost'] ) && !( $post['post_icon'] ) ) {
 				$xtpl->parse( 'Topic.Post.NewPostTopic' );
-			} else {
+			} elseif( $post['post_icon'] ) {
 				$xtpl->assign( 'post_icon', $post['post_icon'] );
 
 				$xtpl->parse( 'Topic.Post.PostIcon' );
@@ -684,6 +682,8 @@ class topic extends qsfglobal
 
 			$xtpl->parse( 'Topic.Post' );
 		}
+
+		$this->readmarker->mark_topic_read( $topicnum, $newest_post_read );
 
 		// Quickreply
 		if( $can_reply ) {

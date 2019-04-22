@@ -507,6 +507,8 @@ class settings extends admin
 			$xtpl->assign( 'show_email_disabled', $show_email_disabled );
 
 			$xtpl->assign( 'settings_polls', $this->lang->settings_polls );
+			$xtpl->assign( 'settings_polls_yes', $this->lang->settings_polls_yes );
+			$xtpl->assign( 'settings_polls_no', $this->lang->settings_polls_no );
 
 			$vote_after_enabled = null;
 			if( $this->sets['vote_after_results'] )

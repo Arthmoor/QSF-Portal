@@ -161,7 +161,7 @@
 <!-- END: ModEditTopic -->
 
 <!-- BEGIN: ModSplitTopic -->
-<form action="{self}?a=mod&amp;s=split&amp;t={$t}" method="post">
+<form action="{self}?a=mod&amp;s=split&amp;t={t}" method="post">
  <input type="hidden" name="posttarget" value="{posttarget}" />
  <div class="article">
   <div class="title">{mod_label_topic_split}</div>

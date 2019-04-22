@@ -200,8 +200,8 @@
 
  <span class="field">{settings_polls}</span>
  <span class="form">
-  <input class="check" type="radio" name="vote_after_results" value="1" {vote_after_enabled} id="vote_after_results1" /><label for="vote_after_results1">{$this->lang->settings_polls_yes}</label><br />
-  <input class="check" type="radio" name="vote_after_results" value="0" {vote_after_disabled} id="vote_after_results2" /><label for="vote_after_results2">{$this->lang->settings_polls_no}</label>
+  <input class="check" type="radio" name="vote_after_results" value="1" {vote_after_enabled} id="vote_after_results1" /><label for="vote_after_results1">{settings_polls_yes}</label><br />
+  <input class="check" type="radio" name="vote_after_results" value="0" {vote_after_disabled} id="vote_after_results2" /><label for="vote_after_results2">{settings_polls_no}</label>
  </span>
  <p class="line"></p>
 

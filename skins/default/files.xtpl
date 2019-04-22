@@ -82,7 +82,7 @@
 <!-- END: Edit -->
 
 <!-- BEGIN: Move -->
-<form action="{self}?a=files&amp;s=move&amp;fid={$id}" method="post">
+<form action="{self}?a=files&amp;s=move&amp;fid={id}" method="post">
 <div class="article">
  <div class="title">{files_move_file}</div>
  {move_file}
@@ -530,7 +530,7 @@
 <!-- END: AddComment -->
 
 <!-- BEGIN: ListComments -->
-{$file}
+{file}
 <div class="article">
  <div class="title" style="text-align:center">{files_comment_user}: {file_name}</div>
 <!-- BEGIN: Item -->
