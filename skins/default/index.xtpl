@@ -6,8 +6,7 @@
   <meta name="keywords" content="{meta_keywords}" />
   <meta name="description" content="{meta_desc}" />
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/styles.css" media="screen" />
-  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/print.css" media="print" />
+  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/styles.css" />
   {feed_links}
   {mobile_icons}
   <script src="{loc_of_board}/javascript/utils.js" async defer></script>

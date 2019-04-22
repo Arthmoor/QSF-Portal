@@ -68,7 +68,6 @@
 <!-- BEGIN: CommentForm -->
  <div class="article">
   <script src="{loc_of_board}/javascript/postboxplain.js"></script>
-  <script src="{loc_of_board}/javascript/quickquote.js"></script>
   <form action="{self}?a=post&amp;s=reply&amp;t={t}" method="post" id="mbpost">
    <div class="title">{newspost_post_comment}</div>
 
