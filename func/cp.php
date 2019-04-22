@@ -417,10 +417,14 @@ class cp extends qsfglobal
 				return $this->message( $this->lang->cp_err_updating, $this->lang->cp_email_invaid );
 			}
 
-			// FIXME: This isn't checking with proper password hashing!
-			if( $this->post['user_email'] != $this->user['user_email'] && 
-				( !isset( $this->post['passA'] ) || md5( $this->post['passA'] ) != $this->user['user_password'] ) ) {
-				return $this->message( $this->lang->cp_changing_pass, $this->lang->cp_pass_notmatch );
+			if( $this->post['user_email'] != $this->user['user_email'] ) {
+				if( !isset( $this->post['passA'] ) ) {
+					return $this->message( $this->lang->cp_changing_email, $this->lang->cp_pass_notmatch );
+				}
+
+				if( !password_verify( $this->post['passA'], $this->user['user_password'] ) ) {
+					return $this->message( $this->lang->cp_changing_email, $this->lang->cp_pass_notmatch );
+				}
 			}
 
 			if( $this->db->fetch( "SELECT user_email FROM %pusers WHERE user_email='%s' AND user_id !=%d",

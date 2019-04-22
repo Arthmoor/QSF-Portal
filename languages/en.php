@@ -250,6 +250,7 @@ class en
 		$this->cp_been_updated = 'Your profile has been updated.';
 		$this->cp_been_updated1 = 'Your avatar has been updated.';
 		$this->cp_been_updated_prefs = 'Your preferences have been updated.';
+		$this->cp_changing_email = 'Change Email Address';
 		$this->cp_changing_pass = 'Editing Password';
 		$this->cp_contact_pm = 'Allow others to contact you via the messenger?';
 		$this->cp_contact_pm_email = 'Send email notification of personal messages when received?';

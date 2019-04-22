@@ -159,7 +159,7 @@
  <p class="line"></p>
 
  <span class="field">{cp_www}</span>
- <span class="form"><input type="text" name="user_homepage" value="{user_homepage}" size="40" /></span>
+ <span class="form"><input type="text" name="user_homepage" value="{user_homepage}" size="50" /></span>
  <p class="line"></p>
 
  <input type="hidden" name="token" value="{token}" />
@@ -243,7 +243,6 @@
 
 <script src="{loc_of_board}/javascript/avatar.js"></script>
 <script>
-<!--
 function noavatar() // Fix bug introduced when the avatar JS was moved to an external file.
 {
    image = document.images['current_avatar'];
@@ -255,7 +254,6 @@ function noavatar() // Fix bug introduced when the avatar JS was moved to an ext
    document.forms['avatar'].user_avatar_height.value = 50;
 }
 enable('{init}');
-//-->
 </script>
 <!-- END: EditAvatar -->
 
