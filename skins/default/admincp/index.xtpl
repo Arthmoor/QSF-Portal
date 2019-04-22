@@ -23,7 +23,7 @@
      <img src="{loc_of_board}/skins/{skin}/images/icons/wrench.png" alt="" />
      {admin_settings}
     </div>
-    <span>
+    <nav>
      <a href="{self}?a=settings&amp;s=basic">{admin_edit_settings}</a>
      <a href="{self}?a=settings&amp;s=add">{admin_settings_add}</a>
      <a href="{self}?a=settings&amp;s=captcha">{admin_new_captcha}</a>
@@ -33,28 +33,30 @@
      <a href="{self}?a=php_info">{admin_phpinfo}</a>
      <a href="{self}?a=logs">{admin_logs}</a>
      <a href="{self}?a=stats">{admin_stats}</a>
-    </span>
+    </nav>
+    <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
      <img src="{loc_of_board}/skins/{skin}/images/icons/report.png" alt="" />
      {admin_forums}
     </div>
-    <span>
+    <nav>
      <a href="{self}?a=forums&amp;s=add">{admin_create_forum}</a>
      <a href="{self}?a=forums&amp;s=edit">{admin_edit_forum}</a>
      <a href="{self}?a=forums&amp;s=delete">{admin_delete_forum}</a>
      <a href="{self}?a=forums&amp;s=order">{admin_forum_order}</a>
      <a href="{self}?a=forums&amp;s=count">{admin_recount_forums}</a>
      <a href="{self}?a=prune">{admin_prune}</a>
-    </span>
+    </nav>
+    <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
      <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" />
      {admin_members}
     </div>
-    <span>
+    <nav>
      <a href="{self}?a=member_control&amp;s=profile">{admin_edit_member}</a>
      <a href="{self}?a=member_control&amp;s=delete">{admin_delete_member}</a>
      <a href="{self}?a=member_control&amp;s=perms">{admin_edit_member_perms}</a>
@@ -64,42 +66,46 @@
      <a href="{self}?a=ban">{admin_ban_ips}</a>
      <a href="{self}?a=mass_mail">{admin_mass_mail}</a>
      <a href="{self}?a=membercount">{admin_fix_stats}</a>
-    </span>
+    </nav>
+    <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
      <img src="{loc_of_board}/skins/{skin}/images/icons/members.png" alt="" />
      {admin_groups}
     </div>
-    <span>
+    <nav>
      <a href="{self}?a=groups&amp;s=add">{admin_create_group}</a>
      <a href="{self}?a=groups&amp;s=edit">{admin_edit_group_name}</a>
      <a href="{self}?a=perms">{admin_edit_group_perms}</a>
      <a href="{self}?a=file_perms">{admin_edit_group_file_perms}</a>
      <a href="{self}?a=groups&amp;s=delete">{admin_delete_group}</a>
-    </span>
+    </nav>
+    <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
      <img src="{loc_of_board}/skins/{skin}/images/icons/layout_content.png" alt="" />
      {admin_skins}
     </div>
-    <span>
+    <nav>
      <a href="{self}?a=skins">{admin_manage_skins}</a>
-    </span>
+    </nav>
+    <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
      <img src="{loc_of_board}/skins/{skin}/images/icons/database_gear.png" alt="" />
      {admin_db}
     </div>
-    <span>
+    <nav>
      <a href="{self}?a=backup&amp;s=create">{admin_db_backup}</a>
      <a href="{self}?a=backup&amp;s=restore">{admin_db_restore}</a>
      <a href="{self}?a=optimize">{admin_db_optimize}</a>
      <a href="{self}?a=db_repair">{admin_db_repair}</a>
      <a href="{self}?a=query">{admin_db_query}</a>
-    </span>
+    </nav>
+    <div style="clear:both"></div>
    </div>
   </div>
 
