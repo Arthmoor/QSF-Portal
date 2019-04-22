@@ -48,7 +48,14 @@ class main extends qsfglobal
 		}
 
 		$this->lang->news();
-		$items = $this->getposts( 2 ); // FIXME: Have this set up to use a forum flag for news posts.
+
+		$result = $this->db->query( 'SELECT forum_id, forum_news FROM %pforums WHERE forum_news=1' );
+
+		$news_forum = $this->db->nqfetch( $result );
+
+		$items = null;
+		if( $news_forum['forum_news'] == 1 )
+			$items = $this->getposts( $news_forum['forum_id'] );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/main.xtpl' );
 
@@ -67,16 +74,15 @@ class main extends qsfglobal
 		return $xtpl->text( 'Main' );
 	}
 
-	private function getposts( $forums )
+	private function getposts( $id )
 	{
-		$items = "";
+		$items = '';
 
-		$result = $this->db->query(
-		  "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_bbcode, p.post_emoticons
+		$result = $this->db->query( "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_bbcode, p.post_emoticons
 		    FROM %ptopics t
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
-		    WHERE topic_forum IN ($forums) GROUP BY t.topic_id ORDER BY t.topic_posted DESC" );
+		    WHERE topic_forum=%d GROUP BY t.topic_id ORDER BY t.topic_posted DESC", $id );
 
 		// Display the first 5 news posts in the normal boxes.
 		$x = 0;

@@ -618,9 +618,12 @@ class en
 		$this->forum_edit = 'Edit Forum';
 		$this->forum_edited = 'The forum was edited successfully.';
 		$this->forum_empty = 'The forum name is empty. Please go back and enter a name.';
+		$this->forum_is_news = 'This forum is where front page news posts are created.';
 		$this->forum_is_subcat = 'This forum is a subcategory only.';
 		$this->forum_is_url = 'This forum is a URL redirect. The description should be the URL to redirect to.';
 		$this->forum_name = 'Name';
+		$this->forum_news = 'News Forum';
+		$this->forum_news_error = 'The news post forum cannot also be a subcategory or a URL redirect.';
 		$this->forum_no_orphans = 'You cannot orphan a forum by deleting its parent.';
 		$this->forum_none = 'There are no forums to manipulate.';
 		$this->forum_ordered = 'Forum Order Updated';

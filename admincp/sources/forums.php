@@ -68,7 +68,7 @@ class forums extends admin
 			if( isset( $this->get['id'] ) ) {
 				$id = intval( $this->get['id'] );
 
-				$f = $this->db->fetch( "SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect FROM %pforums WHERE forum_id=%d", $id );
+				$f = $this->db->fetch( "SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect, forum_news FROM %pforums WHERE forum_id=%d", $id );
 
 				$this->tree( $this->lang->forum_edit, "{$this->self}?a=forums&amp;s=edit" );
 				$this->tree( $f['forum_name'] );
@@ -95,11 +95,18 @@ class forums extends admin
 					$xtpl->assign( 'forum_description', $f['forum_description'] );
 					$xtpl->assign( 'forum_subcat', $this->lang->forum_subcat );
 					$xtpl->assign( 'forum_is_subcat', $this->lang->forum_is_subcat );
+					$xtpl->assign( 'forum_news', $this->lang->forum_news );
+					$xtpl->assign( 'forum_is_news', $this->lang->forum_is_news );
 
-					$checked = null;
+					$s_checked = null;
 					if( $f['forum_subcat'] )
-						$checked = "checked";
-					$xtpl->assign( 'checked', $checked );
+						$s_checked = "checked";
+					$xtpl->assign( 's_checked', $s_checked );
+
+					$n_checked = null;
+					if( $f['forum_news'] )
+						$n_checked = "checked";
+					$xtpl->assign( 'n_checked', $n_checked );
 
 					$xtpl->assign( 'token', $this->generate_token() );
 					$xtpl->assign( 'submit', $this->lang->submit );
@@ -445,6 +452,7 @@ class forums extends admin
 
 		$subcat = isset( $this->post['subcat'] ) ? 1 : 0;
 		$redirect = isset( $this->post['redirect'] ) ? 1 : 0;
+		$news = isset( $this->post['news'] ) ? 1 : 0;
 
 		$forums = $this->htmlwidgets->forum_grab();
 
@@ -452,8 +460,17 @@ class forums extends admin
 			return $this->message( $this->lang->forum_edit, $this->lang->forum_parent );
 		}
 
-		$this->db->query( "UPDATE %pforums SET forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d, forum_redirect=%d
-			  WHERE forum_id=%d", $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $id );
+		if( $news == 1 ) {
+			if( $subcat == 1 || $redirect == 1 ) {
+				return $this->message( $this->lang->forum_edit, $this->lang->forum_news_error );
+			}
+
+			// Treat this as though we're changing the news forum each time. Set them all to 0 if the news checkbox was ticked.
+			$this->db->query( "UPDATE %pforums SET forum_news=0" );
+		}
+
+		$this->db->query( "UPDATE %pforums SET forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d, forum_redirect=%d, forum_news=%d
+			  WHERE forum_id=%d", $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $news, $id );
 
 		$this->updateForumTrees();
 

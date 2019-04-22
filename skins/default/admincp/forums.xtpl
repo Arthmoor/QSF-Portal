@@ -22,7 +22,11 @@
  <p class="line"></p>
 
  <span class="field">{forum_subcat}<br /><span class="tiny">{forum_is_subcat}</span></span>
- <span class="form"><input type="checkbox" name="subcat" {checked} /></span>
+ <span class="form"><input type="checkbox" name="subcat" {s_checked} /></span>
+ <p class="line"></p>
+
+ <span class="field">{forum_news}<br /><span class="tiny">{forum_is_news}</span></span>
+ <span class="form"><input type="checkbox" name="news" {n_checked} /></span>
  <p class="line"></p>
 
  <input type="hidden" name="token" value="{token}" />

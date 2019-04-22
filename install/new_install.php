@@ -467,6 +467,7 @@ Have fun and enjoy your new site!";
 
 			// Create Forum - Make News Forum
 			$forumId = $this->create_forum( 'News Posts', 'The main page news forum. Only administrators can see this or post in it. Posts here appear as front page news items.', $categoryId );
+			$this->db->query( 'UPDATE %pforums SET forum_news=1 WHERE forum_id=%d', $forumId );
 
 			// Create Topic
 			$this->db->query( "INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 

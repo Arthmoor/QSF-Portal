@@ -157,6 +157,7 @@ $queries[] = "CREATE TABLE %pforums (
   forum_lastpost int(12) unsigned NOT NULL default '0',
   forum_subcat tinyint(1) unsigned NOT NULL default '0',
   forum_redirect tinyint(1) unsigned NOT NULL default '0',
+  forum_news tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY Parent (forum_parent)
 ) ENGINE=MyISAM";
