@@ -1500,12 +1500,13 @@ class files extends qsfglobal
 	{
 		if( !isset( $this->post['submit'] ) )
 		{
-			if( isset($this->get['uid'] ) )
+			if( isset( $this->get['uid'] ) )
 			{
 				$uid = $this->get['uid'];
 				$uname = $this->db->fetch( 'SELECT user_name from %pusers WHERE user_id=%d', $uid );
 				$query = $this->db->query( 'SELECT * FROM %pfiles WHERE file_submitted=%d AND file_approved=1 ORDER BY file_name', $uid );
-				return $this->run_search( $query, 'User: ' . $uname['user_name'] );
+
+				return $this->run_search( $xtpl, $query, 'User: ' . $uname['user_name'] );
 			}
 			$selectItems = $this->nestedSelect();
 
