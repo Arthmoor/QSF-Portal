@@ -40,7 +40,7 @@ class bbcode
 		$this->skin = &$module->skin;
 		$this->db = &$module->db;
 		$this->censor = &$module->censor;
-		$this->emoticons = &$module->emoticons;
+		$this->emojis = &$module->emojis;
 		$this->lang = &$module->lang;
 	}
 
@@ -54,11 +54,11 @@ class bbcode
 		return $bbcode_menu;
 	}
 
-	public function generate_emote_links()
+	public function generate_emoji_links()
 	{
 		$links = '';
 
-		foreach( $this->emoticons['click_replacement'] as $key => $value )
+		foreach( $this->emojis['click_replacement'] as $key => $value )
 			$links .= '<a href="#" onclick="return insertSmiley(\'' . $key . '\', textarea)">' . $value . '</a>';
 
 		return $links;
@@ -85,12 +85,12 @@ class bbcode
 		if( !( $options & FORMAT_HTMLCHARS ) || ( ($options & FORMAT_HTMLCHARS) && ($options & FORMAT_BREAKS) ) )
 			$strtr["\n"] = "<br />\n";
 
-		// Don't format emoticons!
-		if( $options & FORMAT_EMOTICONS ) {
-			if( isset( $this->emoticons['click_replacement'] ) )
-				$strtr = array_merge( $strtr, $this->emoticons['click_replacement'] );
-			if( isset( $this->emoticons['replacement'] ) )
-				$strtr = array_merge( $strtr, $this->emoticons['replacement'] );
+		// Don't format emojis!
+		if( $options & FORMAT_EMOJIS ) {
+			if( isset( $this->emojis['click_replacement'] ) )
+				$strtr = array_merge( $strtr, $this->emojis['click_replacement'] );
+			if( isset( $this->emojis['replacement'] ) )
+				$strtr = array_merge( $strtr, $this->emojis['replacement'] );
 		}
 
 		$in = strtr( $in, $strtr );

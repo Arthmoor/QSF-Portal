@@ -470,17 +470,17 @@ class settings extends admin
 				$view_sigs_disabled = "checked=\"checked\"";
 			$xtpl->assign( 'view_sigs_disabled', $view_sigs_disabled );
 
-			$xtpl->assign( 'settings_show_emotes', $this->lang->settings_show_emotes );
+			$xtpl->assign( 'settings_show_emojis', $this->lang->settings_show_emojis );
 
-			$view_emotes_enabled = null;
+			$view_emojis_enabled = null;
 			if( $this->sets['default_view_emots'] )
-				$view_emotes_enabled = "checked=\"checked\"";
-			$xtpl->assign( 'view_emotes_enabled', $view_emotes_enabled );
+				$view_emojis_enabled = "checked=\"checked\"";
+			$xtpl->assign( 'view_emojis_enabled', $view_emojis_enabled );
 
-			$view_emotes_disabled = null;
+			$view_emojis_disabled = null;
 			if( !$this->sets['default_view_emots'] )
-				$view_emotes_disabled = "checked=\"checked\"";
-			$xtpl->assign( 'view_emotes_disabled', $view_emotes_disabled );
+				$view_emojis_disabled = "checked=\"checked\"";
+			$xtpl->assign( 'view_emojis_disabled', $view_emojis_disabled );
 
 			$xtpl->assign( 'settings_show_pm', $this->lang->settings_show_pm );
 

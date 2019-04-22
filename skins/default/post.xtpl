@@ -88,7 +88,7 @@
 <!-- END: PollOptions -->
  <span class="field">{post_options}</span>
  <span class="form">
-  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{post_option_emoticons}</label><br />
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{post_option_emojis}</label><br />
   <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{post_option_bbcode}</label>
 <!-- BEGIN: Global -->
    <br /><input type="checkbox" name="global_topic" value="1" id="global_topic"{checkGlob} /> <label for="global_topic">{post_option_global}</label>

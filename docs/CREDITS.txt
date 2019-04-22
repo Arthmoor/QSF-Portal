@@ -15,7 +15,7 @@ Jay Little <jayphp at tampabay.rr.com>
     * Bug reports and support
 
 Gene Shepherd <imporiumdotorg at comcast.net>
-    * New emoticon set
+    * New emoji set
     * Bug reports
 
 Mark Plachetta <astroboy at zip.com.au>

@@ -92,7 +92,7 @@ class page extends qsfglobal
 
 		while( $page = $this->db->nqfetch( $result ) )
 		{
-			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOTICONS;
+			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOJIS;
 			$page['page_title'] = $this->format( $page['page_title'], $param );
 
 			$xtpl->assign( 'page_id', $page['page_id'] );
@@ -187,13 +187,13 @@ class page extends qsfglobal
 		}
 
 		$bb = FORMAT_BBCODE;
-		$em = FORMAT_EMOTICONS;
+		$em = FORMAT_EMOJIS;
 		$cn = FORMAT_CENSOR;
 		$nl = FORMAT_BREAKS;
 		$html = FORMAT_HTMLCHARS;
 
 		$bbbox = $page['flags'] & FORMAT_BBCODE ? " checked=\"checked\"" : null;
-		$embox = $page['flags'] & FORMAT_EMOTICONS ? " checked=\"checked\"" : null;
+		$embox = $page['flags'] & FORMAT_EMOJIS ? " checked=\"checked\"" : null;
 		$cnbox = $page['flags'] & FORMAT_CENSOR ? " checked=\"checked\"" : null;
 		$nlbox = $page['flags'] & FORMAT_BREAKS ? " checked=\"checked\"" : null;
 		$htmlbox = $page['flags'] & FORMAT_HTMLCHARS ? " checked=\"checked\"" : null;
@@ -222,7 +222,7 @@ class page extends qsfglobal
 			$xtpl->assign( 'htmlbox', $htmlbox );
 			$xtpl->assign( 'page_format_html', $this->lang->page_format_html );
 			$xtpl->assign( 'page_format_bbcode', $this->lang->page_format_bbcode );
-			$xtpl->assign( 'page_format_emoticons', $this->lang->page_format_emoticons );
+			$xtpl->assign( 'page_format_emojis', $this->lang->page_format_emojis );
 			$xtpl->assign( 'page_format_breaks', $this->lang->page_format_breaks );
 			$xtpl->assign( 'page_format_censor', $this->lang->page_format_censor );
 
@@ -258,7 +258,7 @@ class page extends qsfglobal
 		$this->tree( $this->lang->page_creating );
 
 		$bb = FORMAT_BBCODE;
-		$em = FORMAT_EMOTICONS;
+		$em = FORMAT_EMOJIS;
 		$cn = FORMAT_CENSOR;
 		$nl = FORMAT_BREAKS;
 		$html = FORMAT_HTMLCHARS;
@@ -274,7 +274,7 @@ class page extends qsfglobal
 			$xtpl->assign( 'page_contents', $this->lang->page_contents );
 			$xtpl->assign( 'page_format_html', $this->lang->page_format_html );
 			$xtpl->assign( 'page_format_bbcode', $this->lang->page_format_bbcode );
-			$xtpl->assign( 'page_format_emoticons', $this->lang->page_format_emoticons );
+			$xtpl->assign( 'page_format_emojis', $this->lang->page_format_emojis );
 			$xtpl->assign( 'page_format_breaks', $this->lang->page_format_breaks );
 			$xtpl->assign( 'page_format_censor', $this->lang->page_format_censor );
 

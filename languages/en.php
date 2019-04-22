@@ -96,7 +96,7 @@ class en
 		$this->admin_edit_member_titles = 'Edit or delete automatic member titles';
 		$this->admin_edit_settings = 'Edit board settings';
 		$this->admin_edit_skin = 'Edit or delete a skin';
-		$this->admin_emoticons = 'Emoji Controls';
+		$this->admin_emojis = 'Emoji Controls';
 		$this->admin_export_skin = 'Export a skin';
 		$this->admin_fix_stats = 'Fix the member statistics';
 		$this->admin_forum_order = 'Change the forum ordering';
@@ -334,7 +334,7 @@ class en
 		$this->cp_user_exists = 'A user with that name formatting already exists.';
 		$this->cp_valided = 'Your password was validated and changed.';
 		$this->cp_view_avatar = 'View Avatars?';
-		$this->cp_view_emoticon = 'View Emojis?';
+		$this->cp_view_emoji = 'View Emojis?';
 		$this->cp_view_signature = 'View Signatures?';
 		$this->cp_welcome = 'Welcome to the user control panel. From here, you can configure your account. Please choose from the options above.';
 		$this->cp_width = 'Width';
@@ -362,20 +362,20 @@ class en
 		$this->email_to = 'To:';
 	}
 
-	public function emoticon_control()
+	public function emoji_control()
 	{
-		$this->emote = 'Emoji Controls';
-		$this->emote_add = 'Add New Emoji';
-		$this->emote_added = 'Emoji added.';
-		$this->emote_back = 'Back to Emoji Controls';
-		$this->emote_clickable = 'Clickable';
-		$this->emote_controls = 'QSF Portal Emoji Controls';
-		$this->emote_edit_or_delete = 'Edit or Delete Emoji';
-		$this->emote_image = 'Image File';
-		$this->emote_invalid_image = 'Invalid image type %s. Valid file types are jpg, png and gif.';
-		$this->emote_image_failed = 'Image failed to upload!';
-		$this->emote_no_text = 'No emoji text was given.';
-		$this->emote_text = 'Text';
+		$this->emoji = 'Emoji Controls';
+		$this->emoji_add = 'Add New Emoji';
+		$this->emoji_added = 'Emoji added.';
+		$this->emoji_back = 'Back to Emoji Controls';
+		$this->emoji_clickable = 'Clickable';
+		$this->emoji_controls = 'QSF Portal Emoji Controls';
+		$this->emoji_edit_or_delete = 'Edit or Delete Emoji';
+		$this->emoji_image = 'Image File';
+		$this->emoji_invalid_image = 'Invalid image type %s. Valid file types are jpg, png and gif.';
+		$this->emoji_image_failed = 'Image failed to upload!';
+		$this->emoji_no_text = 'No emoji text was given.';
+		$this->emoji_text = 'Text';
 	}
 
 	public function files()
@@ -857,7 +857,7 @@ class en
 		$this->mc_user_title_custom = 'Use a Custom Member Title';
 		$this->mc_user_uploads = 'Uploads';
 		$this->mc_user_view_avatars = 'Viewing Avatars';
-		$this->mc_user_view_emoticons = 'Viewing Emojis';
+		$this->mc_user_view_emojis = 'Viewing Emojis';
 		$this->mc_user_view_signatures = 'Viewing Signatures';
 	}
 
@@ -905,7 +905,7 @@ class en
 		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />';
 		$this->mod_label_controls = 'Moderator Controls';
 		$this->mod_label_description = 'Description';
-		$this->mod_label_emoticon = 'Convert emojis into images?';
+		$this->mod_label_emoji = 'Convert emojis into images?';
 		$this->mod_label_global = 'Global Topic';
 		$this->mod_label_bbcode = 'Format BBCode?';
 		$this->mod_label_move_to = 'Move to';
@@ -964,7 +964,7 @@ class en
 		$this->newspost_news = 'News';
 		$this->newspost_no_article = 'No such article exists.';
 		$this->newspost_post_comment = 'Post Comment';
-		$this->newspost_post_emoticons = 'Convert emojis into images?';
+		$this->newspost_post_emojis = 'Convert emojis into images?';
 		$this->newspost_post_bbcode = 'Format BBCode?';
 	}
 
@@ -995,7 +995,7 @@ class en
 		$this->page_format_bbcode = 'Format BBCode?';
 		$this->page_format_breaks = 'Format Breaks?';
 		$this->page_format_censor = 'Censor Contents?';
-		$this->page_format_emoticons = 'Format Emojis?';
+		$this->page_format_emojis = 'Format Emojis?';
 		$this->page_format_html = 'Format HTML?';
 		$this->page_not_exist = 'That page does not exist!';
 		$this->page_title = 'Title';
@@ -1167,7 +1167,7 @@ class en
 		$this->post_no_forum = 'That forum was not found.';
 		$this->post_no_topic = 'No topic was specified.';
 		$this->post_no_vote = 'You must choose an option to vote for.';
-		$this->post_option_emoticons = 'Convert emojis into images?';
+		$this->post_option_emojis = 'Convert emojis into images?';
 		$this->post_option_global = 'Make this topic global?';
 		$this->post_option_lock = 'Lock topic after posting?';
 		$this->post_option_bbcode = 'Format BBCode?';
@@ -1536,7 +1536,7 @@ class en
 		$this->settings_server_timezone = 'Server Time Zone';
 		$this->settings_show_avatars = 'Show Avatars';
 		$this->settings_show_email = 'Show Email Address';
-		$this->settings_show_emotes = 'Show Emojis';
+		$this->settings_show_emojis = 'Show Emojis';
 		$this->settings_show_notice = 'Shown when the board is disabled';
 		$this->settings_show_pm = 'Accept Personal Messages';
 		$this->settings_show_sigs = 'Show Signatures';
@@ -1674,7 +1674,7 @@ class en
 		$this->topic_posts = 'Posts';
 		$this->topic_print = 'View Printable';
 		$this->topic_publish = 'Publish';
-		$this->topic_qr_emoticons = 'Emojis';
+		$this->topic_qr_emojis = 'Emojis';
 		$this->topic_quickreply = 'Quick Reply';
 		$this->topic_quote = 'Reply with a quote from this post';
 		$this->topic_reply = 'Reply to Topic';

@@ -233,7 +233,7 @@
  </span>
  <p class="line"></p>
 
- <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{post_option_emoticons}</label>
+ <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{post_option_emojis}</label>
  <p class="line"></p>
 
  <input class="check" type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{post_option_bbcode}</label>

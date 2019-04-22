@@ -171,9 +171,12 @@ class upgrade extends qsfglobal
 					$queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
 					$queries[] = 'ALTER TABLE %psettings ADD settings_mobile_icons text AFTER settings_meta_description';
 					$queries[] = "ALTER TABLE %pforums ADD forum_news tinyint(1) unsigned NOT NULL default '0' AFTER forum_redirect";
+					$queries[] = "ALTER TABLE %pposts CHANGE post_emoticons post_emojis tinyint(1) unsigned NOT NULL default '1'";
 					$queries[] = "ALTER TABLE %pposts CHANGE post_mbcode post_bbcode tinyint(1) unsigned NOT NULL default '1'";
+					$queries[] = "ALTER TABLE %pspam CHANGE spam_emoticons spam_emojis tinyint(1) unsigned NOT NULL default '1'";
 					$queries[] = "ALTER TABLE %pspam CHANGE spam_mbcode spam_bbcode tinyint(1) unsigned NOT NULL default '1'";
 					$queries[] = "ALTER TABLE %pactive CHANGE active_user_agent active_user_agent varchar(255) NOT NULL default 'Unknown'";
+					$queries[] = "ALTER TABLE %pusers CHANGE user_view_emoticons user_view_emojis tinyint(1) unsigned NOT NULL default '1'";
 					$queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
 					$queries[] = "ALTER TABLE %pusers CHANGE user_birthday user_birthday NOT NULL default '1900-01-01'";
 					$queries[] = "ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255) NOT NULL default 'Europe/London'";
@@ -202,59 +205,59 @@ class upgrade extends qsfglobal
 
 					$queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ( 'Ashlander 4', 'default', 1 )";
 
-					$queries[] = "CREATE TABLE %pemoticons (
-					  emote_id int(10) unsigned NOT NULL auto_increment,
-					  emote_string varchar(15) NOT NULL default '',
-					  emote_image varchar(255) NOT NULL default '',
-					  emote_clickable tinyint(1) unsigned NOT NULL default '1',
-					  PRIMARY KEY  (emote_id)
+					$queries[] = "CREATE TABLE %pemojis (
+					  emoji_id int(10) unsigned NOT NULL auto_increment,
+					  emoji_string varchar(15) NOT NULL default '',
+					  emoji_image varchar(255) NOT NULL default '',
+					  emoji_clickable tinyint(1) unsigned NOT NULL default '1',
+					  PRIMARY KEY  (emoji_id)
 					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':alien:', 'alien.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':biggrin:', 'biggrin.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':blues:', 'blues.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cool:', 'cool.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cry:', 'cry.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cyclops:', 'cyclops.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':devil:', 'devil.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':evil:', 'evil.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':ghostface:', 'ghostface.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':grinning:', 'grinning.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':lol:', 'lol.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':mad:', 'angry.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':redface:', 'redface.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':robot:', 'robot.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':rolleyes:', 'rolleyes.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':sad:', 'sad.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':smile:', 'smile.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':stare:', 'stare.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':surprised:', 'surprised.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':thinking:', 'thinking.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':tongue:', 'tongue.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':unclesam:', 'unclesam.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':wink:', 'wink.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':huh:', 'huh.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':blink:', 'blink.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':facepalm:', 'facepalm.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':whistle:', 'whistle.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':sick:', 'sick.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':headbang:', 'headbang.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':innocent:', 'innocent.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':crazy:', 'crazy.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':rofl:', 'rofl.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':lmao:', 'lmao.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':shrug:', 'shrug.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':ninja:', 'ninja.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':nuke:', 'nuke.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':wub:', 'wub.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':imp:', 'imp.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':banana:', 'dancingbanana.gif', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':cricket:', 'cricket.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':troll:', 'trollface.png', 1 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':(', 'sad.png', 0 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':P', 'tongue.png', 0 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (';)', 'wink.png', 0 )";
-					$queries[] = "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES (':)', 'smile.gif', 0 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':alien:', 'alien.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':biggrin:', 'biggrin.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':blues:', 'blues.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':cool:', 'cool.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':cry:', 'cry.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':cyclops:', 'cyclops.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':devil:', 'devil.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':evil:', 'evil.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':ghostface:', 'ghostface.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':grinning:', 'grinning.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':lol:', 'lol.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':mad:', 'angry.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':redface:', 'redface.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':robot:', 'robot.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':rolleyes:', 'rolleyes.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':sad:', 'sad.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':smile:', 'smile.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':stare:', 'stare.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':surprised:', 'surprised.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':thinking:', 'thinking.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':tongue:', 'tongue.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':unclesam:', 'unclesam.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':wink:', 'wink.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':huh:', 'huh.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':blink:', 'blink.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':facepalm:', 'facepalm.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':whistle:', 'whistle.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':sick:', 'sick.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':headbang:', 'headbang.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':innocent:', 'innocent.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':crazy:', 'crazy.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':rofl:', 'rofl.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':lmao:', 'lmao.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':shrug:', 'shrug.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':ninja:', 'ninja.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':nuke:', 'nuke.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':wub:', 'wub.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':imp:', 'imp.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':banana:', 'dancingbanana.gif', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':cricket:', 'cricket.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':troll:', 'trollface.png', 1 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':(', 'sad.png', 0 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':P', 'tongue.png', 0 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (';)', 'wink.png', 0 )";
+					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':)', 'smile.gif', 0 )";
 
 				default:
 					break;

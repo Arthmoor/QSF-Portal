@@ -230,7 +230,7 @@ class cp extends qsfglobal
 
 			$ViewAvCheck = $this->user['user_view_avatars'] ? ' checked=\'checked\'' : null;
 			$ViewSiCheck = $this->user['user_view_signatures'] ? ' checked=\'checked\'' : null;
-			$ViewEmCheck = $this->user['user_view_emoticons'] ? ' checked=\'checked\'' : null;
+			$ViewEmCheck = $this->user['user_view_emojis'] ? ' checked=\'checked\'' : null;
 			$user_email_showCheck = $this->user['user_email_show'] ? ' checked=\'checked\'' : null;
 			$EmailFormCheck = $this->user['user_email_form'] ? ' checked=\'checked\'' : null;
 			$user_pmCheck = $this->user['user_pm'] ? ' checked=\'checked\'' : null;
@@ -248,7 +248,7 @@ class cp extends qsfglobal
 
 			$xtpl->assign( 'cp_topic_option', $this->lang->cp_topic_option );
 			$xtpl->assign( 'cp_view_avatar', $this->lang->cp_view_avatar );
-			$xtpl->assign( 'cp_view_emoticon', $this->lang->cp_view_emoticon );
+			$xtpl->assign( 'cp_view_emoji', $this->lang->cp_view_emoji );
 			$xtpl->assign( 'cp_view_signature', $this->lang->cp_view_signature );
 			$xtpl->assign( 'user_topics_page', $this->user['user_topics_page'] );
 			$xtpl->assign( 'cp_topics_page', $this->lang->cp_topics_page );
@@ -267,7 +267,7 @@ class cp extends qsfglobal
 			$xtpl->parse( 'EditPreferences' );
 			return $xtpl->text( 'EditPreferences' );
 		} else {
-			$view_avatars = $view_sigs = $view_emotes = $show_email = $email_form = $user_pm = $pm_mail = $active = 0;
+			$view_avatars = $view_sigs = $view_emojis = $show_email = $email_form = $user_pm = $pm_mail = $active = 0;
 
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->cp_updated_prefs, $this->lang->invalid_token );
@@ -281,8 +281,8 @@ class cp extends qsfglobal
 				$view_sigs = 1;
 			}
 
-			if( isset( $this->post['user_view_emoticons'] ) ) {
-				$view_emotes = 1;
+			if( isset( $this->post['user_view_emojis'] ) ) {
+				$view_emojis = 1;
 			}
 
 			if( isset( $this->post['user_email_show'] ) ) {
@@ -325,12 +325,12 @@ class cp extends qsfglobal
 
 			$this->post['user_language'] = preg_replace( '/[^a-zA-Z0-9\-]/', '', $this->post['user_language'] );
 
-			$this->db->query( "UPDATE %pusers SET user_view_avatars=%d, user_view_signatures=%d, user_view_emoticons=%d,
+			$this->db->query( "UPDATE %pusers SET user_view_avatars=%d, user_view_signatures=%d, user_view_emojis=%d,
 				  user_email_show=%d, user_email_form=%d, user_active=%d, user_pm=%d, user_pm_mail=%d,
 				  user_timezone='%s', user_skin='%s', user_language='%s',
 				  user_topics_page=%d, user_posts_page=%d
 				WHERE user_id=%d",
-				$view_avatars, $view_sigs, $view_emotes, $show_email, $email_form, $active,
+				$view_avatars, $view_sigs, $view_emojis, $show_email, $email_form, $active,
 				$user_pm, $pm_mail, $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
 				$topic_per_page, $posts_per_page, $this->user['user_id'] );
 
@@ -832,7 +832,7 @@ class cp extends qsfglobal
 		$this->set_title( $this->lang->cp_label_edit_sig );
 		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
 		$this->tree( $this->lang->cp_label_edit_sig );
-		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS;
+		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS;
 
 		if( isset( $this->post['submit'] ) ) {
 			if( !$this->is_valid_token() ) {
@@ -877,7 +877,7 @@ class cp extends qsfglobal
 		$preview = $this->format( $pr['user_signature'], $params );
 		$edit = $pr['user_signature'];
 		$bbcode_menu = $this->bbcode->get_bbcode_menu();
-		$smilies = $this->bbcode->generate_emote_links();
+		$smilies = $this->bbcode->generate_emoji_links();
 
 		$xtpl->assign( 'cp_label_edit_sig', $this->lang->cp_label_edit_sig );
 		$xtpl->assign( 'cp_preview_sig', $this->lang->cp_preview_sig );

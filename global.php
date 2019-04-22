@@ -60,7 +60,7 @@ define( 'DATE_ISO822', 6 ); // For RSS feeds
 
 /* Text Formatting */
 define( 'FORMAT_BBCODE', 1 );
-define( 'FORMAT_EMOTICONS', 2 );
+define( 'FORMAT_EMOJIS', 2 );
 define( 'FORMAT_CENSOR', 4 );
 define( 'FORMAT_BREAKS', 16 );
 define( 'FORMAT_HTMLCHARS', 32 );
@@ -122,7 +122,7 @@ class qsfglobal
 	public $user    = array();           // Information about the user @public array
 	public $sets    = array();           // Settings @public array
 	public $censor  = array();           // Curse words to filter @public array
-	public $emoticons = array();	     // Array of emoticons used for processing post formatting
+	public $emojis  = array();	     // Array of emojis used for processing post formatting
 	public $nohtml  = false;             // To display no board wrapper @public bool
 	public $time;                        // The current Unix time @public int
 	public $ip;                          // The user's IP address @public string
@@ -199,13 +199,13 @@ class qsfglobal
 			$this->censor[] = '/' . $r['replacement_search'] . '/i';
 		}
 
-		$emotes = $this->db->query( 'SELECT * FROM %pemoticons' );
-		while( $e = $this->db->nqfetch( $emotes ) )
+		$emojis = $this->db->query( 'SELECT * FROM %pemojis' );
+		while( $e = $this->db->nqfetch( $emojis ) )
 		{
-			if( $e['emote_clickable'] == 1 )
-				$this->emoticons['click_replacement'][$e['emote_string']] = '<img src="' . $this->site . '/emoticons/' . $e['emote_image'] . '" alt="' . $e['emote_string'] . '" />';
+			if( $e['emoji_clickable'] == 1 )
+				$this->emojis['click_replacement'][$e['emoji_string']] = '<img src="' . $this->site . '/emojis/' . $e['emoji_image'] . '" alt="' . $e['emoji_string'] . '" />';
 			else
-				$this->emoticons['replacement'][$e['emote_string']] = '<img src="' . $this->site . '/emoticons/' . $e['emote_image'] . '" alt="' . $e['emote_string'] . '" />';
+				$this->emojis['replacement'][$e['emoji_string']] = '<img src="' . $this->site . '/emojis/' . $e['emoji_image'] . '" alt="' . $e['emoji_string'] . '" />';
 		}
 	}
 

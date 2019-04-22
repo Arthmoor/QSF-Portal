@@ -95,7 +95,7 @@ Direct your client to your local qsfportal folder and upload everything to the q
 
 Remotely, navigate to the qsfportal directory. Check the directory listing. Here is what it should look like:
 
-admincp		attachments		avatars			docs		downloads		emoticons
+admincp		attachments		avatars			docs		downloads		emojis
 func		install			javascript		languages	lib			modlets
 packages	skins			updates			.htaccess	alternate_robots.txt	favicon.ico
 global.php	index.php		LICENSE			README.md	robots.txt		settings.php
@@ -215,7 +215,7 @@ The following directories and files require world-writeable permissions:
   qsfportal/attachments/
   qsfportal/avatars/uploaded/
   qsfportal/downloads/
-  qsfportal/emoticons/
+  qsfportal/emojis/
   qsfportal/packages/
   qsfportal/updates/
 

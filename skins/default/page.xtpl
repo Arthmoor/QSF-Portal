@@ -77,7 +77,7 @@
  <span class="form">
    <input type="checkbox" name="flags[]" id="post_html" value="{html}"{htmlbox} /><label for="post_html">{page_format_html}</label>
    <input type="checkbox" name="flags[]" id="post_bbcode" value="{bb}"{bbbox} /><label for="post_bbcode">{page_format_bbcode}</label>
-   <input type="checkbox" name="flags[]" id="post_emote" value="{em}"{embox} /><label for="post_emote">{page_format_emoticons}</label>
+   <input type="checkbox" name="flags[]" id="post_emoji" value="{em}"{embox} /><label for="post_emoji">{page_format_emojis}</label>
    <input type="checkbox" name="flags[]" id="post_breaks" value="{nl}"{nlbox} /><label for="post_breaks">{page_format_breaks}</label>
    <input type="checkbox" name="flags[]" id="post_censor" value="{cn}"{cnbox} /><label for="post_censor">{page_format_censor}</label>
  </span>
@@ -109,7 +109,7 @@
  <span class="form">
    <input type="checkbox" name="flags[]" id="post_html" value="" /><label for="post_html">{page_format_html}</label>
    <input type="checkbox" name="flags[]" id="post_bbcode" value="" /><label for="post_bbcode">{page_format_bbcode}</label>
-   <input type="checkbox" name="flags[]" id="post_emote" value="" /><label for="post_emote">{page_format_emoticons}</label>
+   <input type="checkbox" name="flags[]" id="post_emoji" value="" /><label for="post_emoji">{page_format_emojis}</label>
    <input type="checkbox" name="flags[]" id="post_breaks" value="" /><label for="post_breaks">{page_format_breaks}</label>
    <input type="checkbox" name="flags[]" id="post_censor" value="" /><label for="post_censor">{page_format_censor}</label>
  </span>

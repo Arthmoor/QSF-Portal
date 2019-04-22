@@ -7,9 +7,11 @@ Changes for 2.0:
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
 * Emojis are now handled independently of skins and can be added on the fly as desired.
+* All references to "Emoticon" have been changed to "Emoji" to reflect what they're actually called now.
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
 * Default skin is now served as HTML5 instead of XHTML 1.1.
-* Password security has been updated to stronger hashing standards. As a result, PHP 5.5.0 or higher is now required.
+* Password security has been updated to stronger hashing standards.
+* CSRF security tokens have been upgraded to use a cryptographically secure method. This support raises the minimum PHP requirement to 7.0.0.
 * Replaced the Akismet library with my own hand rolled version.
 * Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
 * The unused HELP module has been removed.
@@ -39,7 +41,6 @@ Changes for 2.0:
 * Removed the rss folder as it no longer serves a purpose.
 * Removed server load checking as there is no real use for it anymore.
 * Removed the unused addons folder support.
-* CSRF security tokens have been upgraded to use a cryptographically secure method. This support raises the minimum PHP requirement to 7.0.0.
 * The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
 
    Bugs addressed:

@@ -11,7 +11,7 @@
     ./attachments/
     ./avatars/uploaded/
     ./downloads/
-    ./emoticons/
+    ./emojis/
     ./packages/
     ./settings.php
     ./updates/

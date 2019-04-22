@@ -78,7 +78,7 @@ class main extends qsfglobal
 	{
 		$items = '';
 
-		$result = $this->db->query( "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_bbcode, p.post_emoticons
+		$result = $this->db->query( "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_bbcode, p.post_emojis
 		    FROM %ptopics t
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
@@ -93,8 +93,8 @@ class main extends qsfglobal
 				$params |= FORMAT_BBCODE;
 			}
 
-			if( $row['post_emoticons'] ) {
-				$params |= FORMAT_EMOTICONS;
+			if( $row['post_emojis'] ) {
+				$params |= FORMAT_EMOJIS;
 			}
 
 			$topic = $row['topic_title'];

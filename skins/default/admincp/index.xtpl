@@ -29,7 +29,7 @@
      <a href="{self}?a=settings&amp;s=captcha">{admin_new_captcha}</a>
      <a href="{self}?a=settings&amp;s=showcaptcha">{admin_list_captcha}</a>
      <a href="{self}?a=censoring">{admin_censor}</a>
-     <a href="{self}?a=emoticon_control">{admin_emoticons}</a>
+     <a href="{self}?a=emoji_control">{admin_emojis}</a>
      <a href="{self}?a=php_info">{admin_phpinfo}</a>
      <a href="{self}?a=logs">{admin_logs}</a>
      <a href="{self}?a=stats">{admin_stats}</a>

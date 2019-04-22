@@ -177,10 +177,10 @@
  </span>
  <p class="line"></p>
 
- <span class="field">{settings_show_emotes}</span>
+ <span class="field">{settings_show_emojis}</span>
  <span class="form">
-  <input class="check" type="radio" name="default_view_emots" value="1" {view_emotes_enabled} id="default_view_emots1" /><label for="default_view_emots1">{yes}</label><br />
-  <input class="check" type="radio" name="default_view_emots" value="0" {view_emotes_disabled} id="default_view_emots2" /><label for="default_view_emots2">{no}</label>
+  <input class="check" type="radio" name="default_view_emots" value="1" {view_emojis_enabled} id="default_view_emots1" /><label for="default_view_emots1">{yes}</label><br />
+  <input class="check" type="radio" name="default_view_emots" value="0" {view_emojis_disabled} id="default_view_emots2" /><label for="default_view_emots2">{no}</label>
  </span>
  <p class="line"></p>
 

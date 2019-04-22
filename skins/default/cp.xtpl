@@ -82,7 +82,7 @@
  <span class="field">{cp_topic_option}</span>
  <span class="form">
   <input class="check" type="checkbox" name="user_view_avatars" id="user_view_avatars" value="1"{ViewAvCheck} /> <label for="user_view_avatars">{cp_view_avatar}</label><br />
-  <input class="check" type="checkbox" name="user_view_emoticons" id="user_view_emoticons" value="1"{ViewEmCheck} /> <label for="user_view_emoticons">{cp_view_emoticon}</label><br />
+  <input class="check" type="checkbox" name="user_view_emojis" id="user_view_emojis" value="1"{ViewEmCheck} /> <label for="user_view_emojis">{cp_view_emoji}</label><br />
   <input class="check" type="checkbox" name="user_view_signatures" id="user_view_signatures" value="1"{ViewSiCheck} /> <label for="user_view_signatures">{cp_view_signature}</label><br />
   <input type="text" name="user_topics_page" size="2" value="{user_topics_page}" /> {cp_topics_page}<br />
   <input type="text" name="user_posts_page" size="2" value="{user_posts_page}" /> {cp_posts_page}

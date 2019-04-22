@@ -82,8 +82,8 @@ function check_writeable_files()
 		$fixme .= "../avatars/uploaded/<br />";
 		$writeable = false;
 	}
-	if( !is_writeable( '../emoticons' ) ) {
-		$fixme .= "../emoticons/<br />";
+	if( !is_writeable( '../emojis' ) ) {
+		$fixme .= "../emojis/<br />";
 		$writeable = false;
 	}
 	if( !is_writeable( '../packages' ) ) {

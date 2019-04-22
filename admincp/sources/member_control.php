@@ -222,7 +222,7 @@ class member_control extends admin
 					'user_pm_mail'		=> array($this->lang->mc_user_pm_mail, U_BOOL),
 					'user_view_avatars'	=> array($this->lang->mc_user_view_avatars, U_BOOL),
 					'user_view_signatures'	=> array($this->lang->mc_user_view_signatures, U_BOOL),
-					'user_view_emoticons'	=> array($this->lang->mc_user_view_emoticons, U_BOOL),
+					'user_view_emojis'	=> array($this->lang->mc_user_view_emojis, U_BOOL),
 					'user_id'		=> array($this->lang->mc_user_id, U_IGNORE),
 					'user_joined'		=> array($this->lang->mc_user_joined, U_TIME),
 					'user_lastvisit'	=> array($this->lang->mc_user_lastvisit, U_TIME),
@@ -344,8 +344,8 @@ class member_control extends admin
 					$this->post['user_view_signatures'] = 0;
 				}
 
-				if( !isset( $this->post['user_view_emoticons'] ) ) {
-					$this->post['user_view_emoticons'] = 0;
+				if( !isset( $this->post['user_view_emojis'] ) ) {
+					$this->post['user_view_emojis'] = 0;
 				}
 
 				if( !isset( $this->post['user_email_show'] ) ) {
@@ -390,7 +390,7 @@ class member_control extends admin
 				$user_pm_mail = intval( $this->post['user_pm_mail'] );
 				$user_view_avatars = intval( $this->post['user_view_avatars'] );
 				$user_view_signatures = intval( $this->post['user_view_signatures'] );
-				$user_view_emoticons = intval( $this->post['user_view_emoticons'] );
+				$user_view_emojis = intval( $this->post['user_view_emojis'] );
 
 				$this->db->query( "UPDATE %pusers SET user_name='%s', user_email='%s', user_group=%d, user_title='%s',
 				  user_title_custom=%d, user_language='%s', user_skin=%d, user_avatar='%s',
@@ -398,12 +398,12 @@ class member_control extends admin
 				  user_birthday='%s', user_timezone='%s', user_location='%s', user_homepage='%s', user_facebook='%s',
 				  user_interests='%s', user_signature='%s', user_posts=%d, user_uploads=%d,
 				  user_twitter='%s', user_email_show=%d, user_pm=%d, user_pm_mail=%d, user_view_avatars=%d,
-				  user_view_signatures=%d, user_view_emoticons=%d WHERE user_id=%d",
+				  user_view_signatures=%d, user_view_emojis=%d WHERE user_id=%d",
 				  $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
 				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
 				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
 				  $user_signature, $user_posts, $user_uploads, $user_twitter, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
-				  $user_view_signatures, $user_view_emoticons, $id );
+				  $user_view_signatures, $user_view_emojis, $id );
 
 				if( $user_group == USER_BANNED ) {
 					$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d", $id );

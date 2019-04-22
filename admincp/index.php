@@ -26,7 +26,7 @@
  *
  **/
 
-if( version_compare( PHP_VERSION, "5.5.0", "<" ) ) {
+if( version_compare( PHP_VERSION, "7.0.0", "<" ) ) {
 	die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
 }
 
@@ -175,7 +175,7 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_new_captcha', $admin->lang->admin_new_captcha );
 	$xtpl->assign( 'admin_list_captcha', $admin->lang->admin_list_captcha );
 	$xtpl->assign( 'admin_censor', $admin->lang->admin_censor );
-	$xtpl->assign( 'admin_emoticons', $admin->lang->admin_emoticons );
+	$xtpl->assign( 'admin_emojis', $admin->lang->admin_emojis );
 	$xtpl->assign( 'admin_phpinfo', $admin->lang->admin_phpinfo );
 	$xtpl->assign( 'admin_logs', $admin->lang->admin_logs );
 	$xtpl->assign( 'admin_stats', $admin->lang->admin_stats );

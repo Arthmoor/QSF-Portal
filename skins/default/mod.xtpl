@@ -101,7 +101,7 @@
 
  <span class="field">{mod_label_options}</span>
  <span class="form">
-  <input class="check" type="checkbox" name="emoticons" id="emoticons" value="1"{emot_check} /><label for="emoticons">{mod_label_emoticon}</label><br />
+  <input class="check" type="checkbox" name="emojis" id="emojis" value="1"{emot_check} /><label for="emojis">{mod_label_emoji}</label><br />
   <input class="check" type="checkbox" name="code" id="code" value="1"{code_check} /> <label for="code">{mod_label_bbcode}</label>
  </span>
  <p class="line"></p>

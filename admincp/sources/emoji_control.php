@@ -26,14 +26,14 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
 require_once $set['include_path'] . '/admincp/admin.php';
 
-class emoticon_control extends admin
+class emoji_control extends admin
 {
 	public function execute()
 	{
@@ -45,15 +45,15 @@ class emoticon_control extends admin
 		{
 		case null:
 		case 'edit':
-			$this->set_title( $this->lang->emote );
-			$this->tree( $this->lang->emote );
+			$this->set_title( $this->lang->emoji );
+			$this->tree( $this->lang->emoji );
 
 			$out = null;
 			$edit_id = isset( $this->get['edit'] ) ? intval( $this->get['edit'] ) : 0;
 			$delete_id = isset( $this->get['delete'] ) ? intval( $this->get['delete'] ) : 0;
 
 			if( isset( $this->get['delete'] ) ) {
-				$this->db->query( 'DELETE FROM %pemoticons WHERE emote_id=%d', $delete_id );
+				$this->db->query( 'DELETE FROM %pemojis WHERE emoji_id=%d', $delete_id );
 			}
 
 			if( !isset( $this->get['edit'] ) ) {
@@ -62,80 +62,80 @@ class emoticon_control extends admin
 
 			if( isset( $this->post['submit'] ) && ( trim( $this->post['new_string'] ) != '' ) && ( trim( $this->post['new_image'] ) != '' ) ) {
 				$new_click = intval( isset( $this->post['new_click'] ) );
-				$this->db->query( "UPDATE %pemoticons SET emote_string='%s', emote_image='%s', emote_clickable=%d WHERE emote_id=%d",
+				$this->db->query( "UPDATE %pemojis SET emoji_string='%s', emoji_image='%s', emoji_clickable=%d WHERE emoji_id=%d",
 					$this->post['new_string'], $this->post['new_image'], $new_click, $edit_id );
 				$this->get['edit'] = null;
 			}
 
-			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/emoticon_control.xtpl' );
+			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/emoji_control.xtpl' );
 
-			$xtpl->assign( 'emote_controls', $this->lang->emote_controls );
+			$xtpl->assign( 'emoji_controls', $this->lang->emoji_controls );
 
-			$add_form_action = $this->site . '/admincp/index.php?a=emoticon_control&amp;s=add';
+			$add_form_action = $this->site . '/admincp/index.php?a=emoji_control&amp;s=add';
 			$xtpl->assign( 'add_form_action', $add_form_action );
 
-			$xtpl->assign( 'emote_add', $this->lang->emote_add );
-			$xtpl->assign( 'emote_text', $this->lang->emote_text );
-			$xtpl->assign( 'emote_image', $this->lang->emote_image );
+			$xtpl->assign( 'emoji_add', $this->lang->emoji_add );
+			$xtpl->assign( 'emoji_text', $this->lang->emoji_text );
+			$xtpl->assign( 'emoji_image', $this->lang->emoji_image );
 
-			$em_add_list = $this->list_emoticons( 'New' );
+			$em_add_list = $this->list_emojis( 'New' );
 			$xtpl->assign( 'em_add_list', $em_add_list );
 
-			$xtpl->assign( 'emote_clickable', $this->lang->emote_clickable );
+			$xtpl->assign( 'emoji_clickable', $this->lang->emoji_clickable );
 
-			$form_action = $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;edit=' . $edit_id;
+			$form_action = $this->site . '/admincp/index.php?a=emoji_control&amp;s=edit&amp;edit=' . $edit_id;
 			$xtpl->assign( 'form_action', $form_action );
 
-			$xtpl->assign( 'emote_edit_or_delete', $this->lang->emote_edit_or_delete );
+			$xtpl->assign( 'emoji_edit_or_delete', $this->lang->emoji_edit_or_delete );
 
-			$query = $this->db->query( 'SELECT * FROM %pemoticons ORDER BY emote_clickable,emote_string ASC' );
+			$query = $this->db->query( 'SELECT * FROM %pemojis ORDER BY emoji_clickable, emoji_string ASC' );
 			while( $data = $this->db->nqfetch( $query ) )
 			{
-				$em_id = $data['emote_id'];
-				$em_string = $data['emote_string'];
-				$em_image = $data['emote_image'];
+				$em_id = $data['emoji_id'];
+				$em_string = $data['emoji_string'];
+				$em_image = $data['emoji_image'];
 
-				if( !$this->get['edit'] || ( $edit_id != $data['emote_id'] ) ) {
+				if( !$this->get['edit'] || ( $edit_id != $data['emoji_id'] ) ) {
 					$xtpl->assign( 'em_string', $em_string );
 					$xtpl->assign( 'em_image', $em_image );
 
-					$xtpl->assign( 'img_src', "<img src=\"{$this->site}/emoticons/{$em_image}\" alt=\"{$em_string}\" />" );
+					$xtpl->assign( 'img_src', "<img src=\"{$this->site}/emojis/{$em_image}\" alt=\"{$em_string}\" />" );
 
-					if( $data['emote_clickable'] == 0 )
+					if( $data['emoji_clickable'] == 0 )
 						$xtpl->assign( 'em_clickable', $this->lang->no );
 					else
 						$xtpl->assign( 'em_clickable', $this->lang->yes );
 
-					$xtpl->assign( 'em_edit', "<a href=\"{$this->site}/admincp/index.php?a=emoticon_control&amp;s=edit&amp;edit={$em_id}\">{$this->lang->edit}</a>" );
+					$xtpl->assign( 'em_edit', "<a href=\"{$this->site}/admincp/index.php?a=emoji_control&amp;s=edit&amp;edit={$em_id}\">{$this->lang->edit}</a>" );
 				} else {
 					$xtpl->assign( 'em_string', "<input name=\"new_string\" value=\"{$em_string}\" class=\"input\" />" );
 
-					$em_list = $this->list_emoticons( $em_image );
-					$xtpl->assign( 'em_image', "<select name=\"new_image\" onchange='document.emot_preview.src=\"../emoticons/\"+this.options[selectedIndex].value'>{$em_list}</select>" );
+					$em_list = $this->list_emojis( $em_image );
+					$xtpl->assign( 'em_image', "<select name=\"new_image\" onchange='document.emot_preview.src=\"../emojis/\"+this.options[selectedIndex].value'>{$em_list}</select>" );
 
 					$checked = '';
-					if( $data['emote_clickable'] == 1 )
+					if( $data['emoji_clickable'] == 1 )
 						$checked = 'checked';
 					$xtpl->assign( 'em_clickable', "<input type=\"checkbox\" name=\"new_click\" {$checked} />" );
 
-					$xtpl->assign( 'img_src', "<img name=\"emot_preview\" src=\"{$this->site}/emoticons/{$em_image}\" alt=\"{$em_string}\" />" );
+					$xtpl->assign( 'img_src', "<img name=\"emot_preview\" src=\"{$this->site}/emojis/{$em_image}\" alt=\"{$em_string}\" />" );
 
 					$xtpl->assign( 'em_edit', "<input type=\"submit\" name=\"submit\" value=\"{$this->lang->edit}\">" );
 				}
 
-				$em_delete = '<a href="' . $this->site . '/admincp/index.php?a=emoticon_control&amp;s=edit&amp;delete=' . $em_id . '">' . $this->lang->delete . '</a>';
+				$em_delete = '<a href="' . $this->site . '/admincp/index.php?a=emoji_control&amp;s=edit&amp;delete=' . $em_id . '">' . $this->lang->delete . '</a>';
 				$xtpl->assign( 'em_delete', $em_delete );
 
-				$xtpl->parse( 'Emoticons.SingleEntry' );
+				$xtpl->parse( 'Emojis.SingleEntry' );
 			}
 
-			$xtpl->parse( 'Emoticons' );
-			return $xtpl->text( 'Emoticons' );
+			$xtpl->parse( 'Emojis' );
+			return $xtpl->text( 'Emojis' );
 			break;
 
 		case 'add':
-			$this->set_title( $this->lang->emote_add );
-			$this->tree( $this->lang->emote_add );
+			$this->set_title( $this->lang->emoji_add );
+			$this->tree( $this->lang->emoji_add );
 
 			if( !isset( $this->post['submit'] ) ) {
 				$this->get['s'] = null;
@@ -146,7 +146,7 @@ class emoticon_control extends admin
 				$new_string = isset( $this->post['new_string'] ) ? $this->post['new_string'] : '';
 
 				if( trim( $new_string ) == '') {
-					return $this->message( $this->lang->emote_add, $this->lang->emote_no_text );
+					return $this->message( $this->lang->emoji_add, $this->lang->emoji_no_text );
 				}
 
 				$new_image = '';
@@ -159,28 +159,28 @@ class emoticon_control extends admin
 						$ext = strtolower( end( $system ) );
 
 						if( !preg_match( '/jpg|jpeg|png|gif/', $ext ) ) {
-							return $this->message( $this->lang->emote_add, sprintf( $this->lang->emote_invalid_image, $ext ) );
+							return $this->message( $this->lang->emoji_add, sprintf( $this->lang->emoji_invalid_image, $ext ) );
 						} else {
-							$new_fname = '../emoticons/' . $this->files['new_image']['name'];
+							$new_fname = '../emojis/' . $this->files['new_image']['name'];
 							if ( !move_uploaded_file( $fname, $new_fname ) )
-								return $this->message( $this->lang->emote_add, $this->lang->emote_image_failed );
+								return $this->message( $this->lang->emoji_add, $this->lang->emoji_image_failed );
 							else
 								$new_image = $this->files['new_image']['name'];
 						}
 					}
 				}
 
-				$this->db->query( "INSERT INTO %pemoticons (emote_string, emote_image, emote_clickable) VALUES ('%s', '%s', %d )", $new_string, $new_image, $new_clickable );
+				$this->db->query( "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES ('%s', '%s', %d )", $new_string, $new_image, $new_clickable );
 
-				return $this->message( $this->lang->emote_add, $this->lang->emote_added, $this->lang->emote_back, $this->site . '/admincp/index.php?a=emoticon_control' );
+				return $this->message( $this->lang->emoji_add, $this->lang->emoji_added, $this->lang->emoji_back, $this->site . '/admincp/index.php?a=emoji_control' );
 			}
 			break;
 		}
 	}
 
-	private function list_emoticons( $select )
+	private function list_emojis( $select )
 	{
-		$dirname = "../emoticons/";
+		$dirname = "../emojis/";
 
 		$out = null;
 		$files = array();

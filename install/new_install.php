@@ -476,7 +476,7 @@ Have fun and enjoy your new site!";
 			$topicId = $this->db->insert_id( "topics" );
 
 			// Create Post
-			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_bbcode, post_ip, post_icon)
+			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon)
 				VALUES (%d, %d, '%s', %d, 1, 1, '%s', '%s')",
 				$topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon );
 			$postId = $this->db->insert_id( "posts" );

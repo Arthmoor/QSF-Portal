@@ -1,32 +1,32 @@
-<!-- BEGIN: Emoticons -->
+<!-- BEGIN: Emojis -->
 <div class="article">
- <div class="title">{emote_controls}</div>
+ <div class="title">{emoji_controls}</div>
  <table>
   <form action="{add_form_action}" enctype="multipart/form-data" method="post">
   <tr>
-   <td class="header" colspan="6">{emote_add}</td>
+   <td class="header" colspan="6">{emoji_add}</td>
   </tr>
   <tr>
-   <td width="25%">{emote_text}: <input name="new_string" value="" class="input" /></td>
+   <td width="25%">{emoji_text}: <input name="new_string" value="" class="input" /></td>
    <td width="25%">
-    {emote_image}:
+    {emoji_image}:
     <select name="existing_image">{em_add_list}</select><br />
     <input name="new_image" type="file" class="input" />
    </td>
-   <td width="20%">{emote_clickable}: <input type="checkbox" name="new_click" checked="checked" /></td>
-   <td width="20%"><input type="submit" name="submit" value="{emote_add}"></td>
+   <td width="20%">{emoji_clickable}: <input type="checkbox" name="new_click" checked="checked" /></td>
+   <td width="20%"><input type="submit" name="submit" value="{emoji_add}"></td>
    <td width="10%" colspan="2">&nbsp;</td>
   </tr>
   </form>
 
   <form action="{form_action}" method="post">
   <tr>
-   <td class="header" colspan="6">{emote_edit_or_delete}</td>
+   <td class="header" colspan="6">{emoji_edit_or_delete}</td>
   </tr>
   <tr>
-   <td align="center" class="subheader">{emote_text}</td>
-   <td align="center" class="subheader" colspan="2">{emote_image}</td>
-   <td align="center" class="subheader">{emote_clickable}</td>
+   <td align="center" class="subheader">{emoji_text}</td>
+   <td align="center" class="subheader" colspan="2">{emoji_image}</td>
+   <td align="center" class="subheader">{emoji_clickable}</td>
    <td class="subheader" colspan="2">&nbsp;</td>
   </tr>
 
@@ -47,4 +47,4 @@
   </form>
  </table>
 </div>
-<!-- END: Emoticons -->
+<!-- END: Emojis -->
