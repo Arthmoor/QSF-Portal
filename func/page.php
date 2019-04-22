@@ -92,7 +92,7 @@ class page extends qsfglobal
 
 		while( $page = $this->db->nqfetch( $result ) )
 		{
-			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE | FORMAT_EMOTICONS;
+			$param = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOTICONS;
 			$page['page_title'] = $this->format( $page['page_title'], $param );
 
 			$xtpl->assign( 'page_id', $page['page_id'] );
@@ -186,13 +186,13 @@ class page extends qsfglobal
 			return $this->message( $this->lang->page_editing, $this->lang->page_not_exist );
 		}
 
-		$bb = FORMAT_MBCODE;
+		$bb = FORMAT_BBCODE;
 		$em = FORMAT_EMOTICONS;
 		$cn = FORMAT_CENSOR;
 		$nl = FORMAT_BREAKS;
 		$html = FORMAT_HTMLCHARS;
 
-		$bbbox = $page['flags'] & FORMAT_MBCODE ? " checked=\"checked\"" : null;
+		$bbbox = $page['flags'] & FORMAT_BBCODE ? " checked=\"checked\"" : null;
 		$embox = $page['flags'] & FORMAT_EMOTICONS ? " checked=\"checked\"" : null;
 		$cnbox = $page['flags'] & FORMAT_CENSOR ? " checked=\"checked\"" : null;
 		$nlbox = $page['flags'] & FORMAT_BREAKS ? " checked=\"checked\"" : null;
@@ -257,7 +257,7 @@ class page extends qsfglobal
 		$this->tree( $this->lang->pages, "$this->self?a=page" );
 		$this->tree( $this->lang->page_creating );
 
-		$bb = FORMAT_MBCODE;
+		$bb = FORMAT_BBCODE;
 		$em = FORMAT_EMOTICONS;
 		$cn = FORMAT_CENSOR;
 		$nl = FORMAT_BREAKS;

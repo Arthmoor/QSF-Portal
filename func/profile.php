@@ -106,7 +106,7 @@ class profile extends qsfglobal
 		}
 
 		if( $profile['user_signature'] ) {
-			$profile['user_signature'] = $this->format($profile['user_signature'], FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_EMOTICONS | FORMAT_MBCODE | FORMAT_BREAKS);
+			$profile['user_signature'] = $this->format( $profile['user_signature'], FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_EMOTICONS | FORMAT_BBCODE | FORMAT_BREAKS );
 		} else {
 			$profile['user_signature'] = $this->lang->profile_none;
 		}

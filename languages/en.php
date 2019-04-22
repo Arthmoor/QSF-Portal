@@ -904,7 +904,7 @@ class en
 		$this->mod_label_description = 'Description';
 		$this->mod_label_emoticon = 'Convert emojis into images?';
 		$this->mod_label_global = 'Global Topic';
-		$this->mod_label_mbcode = 'Format BBCode?';
+		$this->mod_label_bbcode = 'Format BBCode?';
 		$this->mod_label_move_to = 'Move to';
 		$this->mod_label_options = 'Options';
 		$this->mod_label_post_delete = 'Delete Post';
@@ -962,7 +962,7 @@ class en
 		$this->newspost_no_article = 'No such article exists.';
 		$this->newspost_post_comment = 'Post Comment';
 		$this->newspost_post_emoticons = 'Convert emojis into images?';
-		$this->newspost_post_mbcode = 'Format BBCode?';
+		$this->newspost_post_bbcode = 'Format BBCode?';
 	}
 
 	public function optimize()
@@ -1167,7 +1167,7 @@ class en
 		$this->post_option_emoticons = 'Convert emojis into images?';
 		$this->post_option_global = 'Make this topic global?';
 		$this->post_option_lock = 'Lock topic after posting?';
-		$this->post_option_mbcode = 'Format BBCode?';
+		$this->post_option_bbcode = 'Format BBCode?';
 		$this->post_option_pin = 'Pin topic after posting?';
 		$this->post_optional = 'optional';
 		$this->post_options = 'Options';

@@ -245,7 +245,7 @@ class mod extends qsfglobal
 
 		$p = intval( $this->get['p'] );
 
-		$data = $this->db->fetch( "SELECT p.post_text, p.post_author, p.post_emoticons, p.post_mbcode, p.post_topic, p.post_icon, p.post_time, t.topic_title, t.topic_forum, t.topic_replies,
+		$data = $this->db->fetch( "SELECT p.post_text, p.post_author, p.post_emoticons, p.post_bbcode, p.post_topic, p.post_icon, p.post_time, t.topic_title, t.topic_forum, t.topic_replies,
 				u.*, m.membertitle_icon, g.group_name
 			FROM (%pposts p, %ptopics t)
 			LEFT JOIN %pusers u ON u.user_id = p.post_author
@@ -280,7 +280,7 @@ class mod extends qsfglobal
 
 		if( !isset( $this->post['submit'] ) ) {
 			$emot_check = $data['post_emoticons'] ? ' checked' : null;
-			$code_check = $data['post_mbcode'] ? ' checked' : null;
+			$code_check = $data['post_bbcode'] ? ' checked' : null;
 			$attached = null;
 			$attached_data = null;
 			$upload_error = null;
@@ -324,7 +324,7 @@ class mod extends qsfglobal
 				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
 				if( isset( $this->post['code'] ) ) {
-					$params |= FORMAT_MBCODE;
+					$params |= FORMAT_BBCODE;
 					$code_check = ' checked=\'checked\'';
 				} else {
 					$code_check = '';
@@ -352,7 +352,7 @@ class mod extends qsfglobal
 					$avatar = $this->htmlwidgets->display_avatar( $data );
 
 					if( $data['user_signature'] ) {
-						$signature = '.........................<br />' . $this->format( $data['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
+						$signature = '.........................<br />' . $this->format( $data['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS );
 					}
 
 					$joined = $this->mbdate( DATE_ONLY_LONG, $data['user_joined'] );
@@ -435,7 +435,7 @@ class mod extends qsfglobal
 			$xtpl->assign( 'emot_check', $emot_check );
 			$xtpl->assign( 'mod_label_emoticon', $this->lang->mod_label_emoticon );
 			$xtpl->assign( 'code_check', $code_check );
-			$xtpl->assign( 'mod_label_mbcode', $this->lang->mod_label_mbcode );
+			$xtpl->assign( 'mod_label_bbcode', $this->lang->mod_label_bbcode );
 
 			$xtpl->assign( 'token', $this->generate_token() );
 			$xtpl->assign( 'submit', $this->lang->submit );
@@ -456,7 +456,7 @@ class mod extends qsfglobal
 			if( $icon == 'None' )
 				$icon = '';
 
-			$this->db->query( "UPDATE %pposts SET post_text='%s', post_emoticons=%d, post_mbcode=%d, post_edited_by='%s', post_edited_time=%d, post_icon='%s' WHERE post_id=%d",
+			$this->db->query( "UPDATE %pposts SET post_text='%s', post_emoticons=%d, post_bbcode=%d, post_edited_by='%s', post_edited_time=%d, post_icon='%s' WHERE post_id=%d",
 				$this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $icon, $p );
 
 			$first = $this->db->fetch( "SELECT p.post_id FROM %pposts p, %ptopics t

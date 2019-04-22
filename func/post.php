@@ -237,7 +237,7 @@ class post extends qsfglobal
 				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
 				if( isset( $this->post['parseCode'] ) ) {
-					$params |= FORMAT_MBCODE;
+					$params |= FORMAT_BBCODE;
 					$checkCode = ' checked=\'checked\'';
 				} else {
 					$checkCode = '';
@@ -278,7 +278,7 @@ class post extends qsfglobal
 					$avatar = $this->htmlwidgets->display_avatar( $this->user );
 
 					if( $this->user['user_signature'] ) {
-						$signature = '.........................<br />' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
+						$signature = '.........................<br />' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS );
 					}
 
 					$joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
@@ -418,7 +418,7 @@ class post extends qsfglobal
 			$xtpl->assign( 'checkEmot', $checkEmot );
 			$xtpl->assign( 'post_option_emoticons', $this->lang->post_option_emoticons );
 			$xtpl->assign( 'checkCode', $checkCode );
-			$xtpl->assign( 'post_option_mbcode', $this->lang->post_option_mbcode );
+			$xtpl->assign( 'post_option_bbcode', $this->lang->post_option_bbcode );
 
 			if( $global_topic && $s != 'reply' ) {
 				$xtpl->assign( 'checkGlob', $checkGlob );
@@ -459,7 +459,7 @@ class post extends qsfglobal
 			switch( $s )
 			{
 				case 'reply':
-					$query = $this->db->query( "SELECT p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, m.user_name
+					$query = $this->db->query( "SELECT p.post_emoticons, p.post_bbcode, p.post_time, p.post_text, p.post_author, m.user_name
 						FROM %pposts p, %pusers m
 						WHERE p.post_topic=%d AND p.post_author = m.user_id
 						ORDER BY p.post_time DESC
@@ -469,8 +469,8 @@ class post extends qsfglobal
 					{
 						$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
 
-						if( $last['post_mbcode'] ) {
-							$params |= FORMAT_MBCODE;
+						if( $last['post_bbcode'] ) {
+							$params |= FORMAT_BBCODE;
 						}
 
 						if( $last['post_emoticons'] ) {
@@ -647,7 +647,7 @@ class post extends qsfglobal
 						// Store the contents of the entire $_SERVER array.
 						$svars = json_encode( $_SERVER );
 
-						$this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emoticons, spam_mbcode, spam_count, spam_ip, spam_icon, spam_svars)
+						$this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emoticons, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
 							VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
 							$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
 
@@ -660,7 +660,7 @@ class post extends qsfglobal
 				}
 			}
 
-			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
+			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_bbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
 				VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
 				$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $this->referrer, $this->agent );
 			$post_id = $this->db->insert_id( "posts" );

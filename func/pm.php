@@ -208,7 +208,7 @@ class pm extends qsfglobal
 			if( isset( $this->post['preview'] ) ) {
 				$preview_text = $this->post['message'];
 				$msg = $this->format( $preview_text, FORMAT_HTMLCHARS );
-				$preview_text = $this->format( $preview_text, FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE | FORMAT_EMOTICONS );
+				$preview_text = $this->format( $preview_text, FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOTICONS );
 
 				$to = $this->format( $this->post['to'], FORMAT_HTMLCHARS );
 				$title = $this->format( $this->post['title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
@@ -366,13 +366,13 @@ class pm extends qsfglobal
 		$pm['user_avatar'] = $this->htmlwidgets->display_avatar( $pm );
 
 		if( $pm['user_signature'] && $this->user['user_view_signatures'] ) {
-			$pm['user_signature'] = '.........................<br />' . $this->format( $pm['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
+			$pm['user_signature'] = '.........................<br />' . $this->format( $pm['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS );
 		} else {
 			$pm['user_signature'] = null;
 		}
 
 		$pm['pm_title']    = $this->format( $pm['pm_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
-		$pm['pm_message']  = $this->format( $pm['pm_message'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE | FORMAT_EMOTICONS );
+		$pm['pm_message']  = $this->format( $pm['pm_message'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOTICONS );
 		$pm['pm_time']     = $this->mbdate( DATE_LONG, $pm['pm_time'] );
 		$pm['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $pm['user_joined'] );
 

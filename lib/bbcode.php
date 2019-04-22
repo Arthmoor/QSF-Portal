@@ -64,7 +64,7 @@ class bbcode
 		return $links;
 	}
 
-	public function format( $in, $options = FORMAT_MBCODE )
+	public function format( $in, $options = FORMAT_BBCODE )
 	{
 		$strtr = array();
 
@@ -76,7 +76,7 @@ class bbcode
 			$in = htmlentities( $in, ENT_COMPAT, 'UTF-8' );
 		}
 
-		if( $options & FORMAT_MBCODE ) {
+		if( $options & FORMAT_BBCODE ) {
 			$in = $this->pre_parse_links( $in );
 			$in = $this->bbcode_parse( $in );
 		}

@@ -247,7 +247,7 @@ class search extends qsfglobal
 			$sql_data[] = $this->post['query'];
 		}
 
-		$sql .= " p.post_id, p.post_text, p.post_topic, p.post_ip, p.post_author, p.post_icon, p.post_time, p.post_mbcode, p.post_emoticons,
+		$sql .= " p.post_id, p.post_text, p.post_topic, p.post_ip, p.post_author, p.post_icon, p.post_time, p.post_bbcode, p.post_emoticons,
 			m.user_name, m.user_title, m.user_avatar_type, m.user_avatar, m.user_avatar_width, m.user_avatar_height, m.user_posts, m.user_joined, m.user_level, m.user_active,
 			m2.user_name AS Starter,
 			t.topic_title, t.topic_forum, t.topic_replies, t.topic_starter,
@@ -445,8 +445,8 @@ class search extends qsfglobal
 
 					$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
 
-					if( $match['post_mbcode'] ) {
-						$params |= FORMAT_MBCODE;
+					if( $match['post_bbcode'] ) {
+						$params |= FORMAT_BBCODE;
 					}
 
 					if( $match['post_emoticons'] ) {

@@ -405,6 +405,14 @@ main .article span.next_prev_topics {
 	float: right;
 }
 
+/* Spoilers */
+details {
+	background: #484848 url('./images/spoiler.png') top right no-repeat;
+	width: 98%;
+	padding: 3px 5px;
+	border: 1px solid black;
+}
+
 /* Quotes */
 main .article blockquote {
 	background: #484848;

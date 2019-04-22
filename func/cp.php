@@ -832,7 +832,7 @@ class cp extends qsfglobal
 		$this->set_title( $this->lang->cp_label_edit_sig );
 		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
 		$this->tree( $this->lang->cp_label_edit_sig );
-		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS;
+		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS;
 
 		if( isset( $this->post['submit'] ) ) {
 			if( !$this->is_valid_token() ) {

@@ -281,7 +281,7 @@ class files extends qsfglobal
 			$list = $this->get_categories( $file_catid );
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 			$filesize = $this->format_filesize( $file_size );
-			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_MBCODE );
+			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE );
 
 			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
 			$xtpl->assign( 'self', $this->self );
@@ -416,7 +416,7 @@ class files extends qsfglobal
 				$i++;
 				$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 				$filesize = $this->format_filesize( $file_size );
-				$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE );
+				$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 				$cid = 0;
 
 				$xtpl->assign( 'self', $this->self );
@@ -459,7 +459,7 @@ class files extends qsfglobal
 				$file_name = $update_name;
 				$date = $this->mbdate( DATE_ONLY_LONG, $update_date );
 				$filesize = $this->format_filesize( $update_size );
-				$file_description = $this->format( $update_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE );
+				$file_description = $this->format( $update_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 
 				$xtpl->assign( 'self', $this->self );
 				$xtpl->assign( 'file_name', $file_name );
@@ -1408,7 +1408,7 @@ class files extends qsfglobal
 		}
 
 		$filesize = $this->format_filesize( $file_size );
-		$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE );
+		$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 		$filename = $this->format( $file_filename, FORMAT_HTMLCHARS );
 
 		$xtpl->assign( 'site', $this->site );
@@ -1649,7 +1649,7 @@ class files extends qsfglobal
 				$revdate = $this->mbdate( DATE_ONLY_LONG, $file_revdate );
 
 			$user = $this->db->fetch( 'SELECT user_name, user_id FROM %pusers WHERE user_id=%d', $file_submitted );
-			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE );
+			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 
 			$user_id = $user['user_id'];
 			$user_name = $user['user_name'];
@@ -1741,7 +1741,7 @@ class files extends qsfglobal
 		while( $row = $this->db->nqfetch( $query ) ) {
 			$fid = $row['file_id'];
 			$user_name = $row['user_name'];
-			$text = $this->format( $row['comment_text'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_MBCODE );
+			$text = $this->format( $row['comment_text'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 
 			$xtpl->assign( 'board_by', $this->lang->board_by );
 			$xtpl->assign( 'user_name', $user_name );

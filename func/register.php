@@ -79,11 +79,11 @@ class register extends qsfglobal
 				return $this->message( $this->lang->register_reging, $this->lang->register_tos_missing );
 			}
 
-			$tos_text = $this->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+			$tos_text = $this->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE );
 			$tos_text .= '<hr>';
 
 			$tos_files = $this->db->fetch( 'SELECT settings_tos_files FROM %psettings' );
-			$tos_text .= $this->format( $tos_files['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+			$tos_text .= $this->format( $tos_files['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE );
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/register.xtpl' );
 

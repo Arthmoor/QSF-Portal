@@ -319,7 +319,7 @@ class topic extends qsfglobal
 			$attachments[$attach['post_id']][] = $attach;
 		}
 
-		$query = $this->db->query( "SELECT p.post_emoticons, p.post_mbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
+		$query = $this->db->query( "SELECT p.post_emoticons, p.post_bbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
 			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_twitter, m.user_facebook,
 			  m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_pm, m.user_email_show, m.user_email_form, m.user_active,
 			  t.membertitle_icon,
@@ -531,8 +531,8 @@ class topic extends qsfglobal
 
 			$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
 
-			if( $post['post_mbcode'] ) {
-				$params |= FORMAT_MBCODE;
+			if( $post['post_bbcode'] ) {
+				$params |= FORMAT_BBCODE;
 			}
 
 			if( $post['post_emoticons'] ) {
@@ -630,7 +630,7 @@ class topic extends qsfglobal
 				}
 
 				if( $post['user_signature'] && $this->user['user_view_signatures'] ) {
-					$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
+					$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS );
 				} else {
 					$post['user_signature'] = null;
 				}
@@ -692,7 +692,7 @@ class topic extends qsfglobal
 			$xtpl->assign( 'topic_quickreply', $this->lang->topic_quickreply );
 			$xtpl->assign( 'post_msg', $this->lang->post_msg );
 			$xtpl->assign( 'post_option_emoticons', $this->lang->post_option_emoticons );
-			$xtpl->assign( 'post_option_mbcode', $this->lang->post_option_mbcode );
+			$xtpl->assign( 'post_option_bbcode', $this->lang->post_option_bbcode );
 			$xtpl->assign( 'post_preview', $this->lang->post_preview );
 
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
@@ -791,7 +791,7 @@ class topic extends qsfglobal
 					$results[$i] = 0;
 				}
 
-				$option = $this->format( $option, FORMAT_MBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS );
+				$option = $this->format( $option, FORMAT_BBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS );
 				$xtpl->assign( 'option', $option );
 
 				$percent = round( $results[$i] / $total_votes * 100, 2 );
@@ -825,7 +825,7 @@ class topic extends qsfglobal
 					continue;
 				}
 
-				$option = $this->format( $option, FORMAT_MBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS );
+				$option = $this->format( $option, FORMAT_BBCODE | FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_EMOTICONS );
 
 				$xtpl->assign( 'i', $i );
 				$xtpl->assign( 'option', $option );

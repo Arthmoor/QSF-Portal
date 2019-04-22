@@ -83,7 +83,7 @@
    <p class="line"></p>
 
    <input type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{newspost_post_emoticons}</label>
-   <input type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{newspost_post_mbcode}</label>
+   <input type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{newspost_post_bbcode}</label>
    <p class="line"></p>
 
    <input type="submit" name="submit" value="{reply}" />

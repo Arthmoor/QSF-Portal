@@ -72,7 +72,7 @@ class main extends qsfglobal
 		$items = "";
 
 		$result = $this->db->query(
-		  "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_mbcode, p.post_emoticons
+		  "SELECT t.*, u.user_name, p.post_author, p.post_text, p.post_bbcode, p.post_emoticons
 		    FROM %ptopics t
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
@@ -83,8 +83,8 @@ class main extends qsfglobal
 		while( $row = $this->db->nqfetch( $result ) )
 		{
 			$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
-			if( $row['post_mbcode'] ) {
-				$params |= FORMAT_MBCODE;
+			if( $row['post_bbcode'] ) {
+				$params |= FORMAT_BBCODE;
 			}
 
 			if( $row['post_emoticons'] ) {

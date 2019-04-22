@@ -55,7 +55,7 @@ class newspost extends qsfglobal
 	{
 		$items = '';
 
-		$post = $this->db->fetch( "SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_mbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
+		$post = $this->db->fetch( "SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_bbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
 		    FROM (%ptopics t, %pgroups g)
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
@@ -91,8 +91,8 @@ class newspost extends qsfglobal
 		$xtpl->assign( 'PosterInfo', $Poster_Info );
 
 		$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
-		if( $post['post_mbcode'] ) {
-			$params |= FORMAT_MBCODE;
+		if( $post['post_bbcode'] ) {
+			$params |= FORMAT_BBCODE;
 		}
 		if( $post['post_emoticons'] ) {
 			$params |= FORMAT_EMOTICONS;
@@ -128,7 +128,7 @@ class newspost extends qsfglobal
 
 		$comments = null;
 
-		$result = $this->db->query( "SELECT u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_mbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
+		$result = $this->db->query( "SELECT u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_bbcode, p.post_emoticons, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
 			FROM (%pposts p, %pgroups g)
 			LEFT JOIN %pusers u ON u.user_id=p.post_author
 			LEFT JOIN %pactive a ON a.active_id=u.user_id
@@ -147,8 +147,8 @@ class newspost extends qsfglobal
 			}
 
 			$pos++;
-			if( $comment['post_mbcode'] ) {
-				$params |= FORMAT_MBCODE;
+			if( $comment['post_bbcode'] ) {
+				$params |= FORMAT_BBCODE;
 			}
 			if( $comment['post_emoticons'] ) {
 				$params |= FORMAT_EMOTICONS;
@@ -180,7 +180,7 @@ class newspost extends qsfglobal
 			$xtpl->assign( 'smilies', $this->bbcode->generate_emote_links() );
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
 			$xtpl->assign( 'newspost_post_emoticons', $this->lang->newspost_post_emoticons );
-			$xtpl->assign( 'newspost_post_mbcode', $this->lang->newspost_post_mbcode );
+			$xtpl->assign( 'newspost_post_bbcode', $this->lang->newspost_post_bbcode );
 			$xtpl->assign( 'reply', $this->lang->reply );
 
 			$request_uri = $this->self . "?" . $this->query . "#p" . ++$pos;
@@ -209,7 +209,7 @@ class newspost extends qsfglobal
 		$post['user_avatar'] = $this->htmlwidgets->display_avatar( $post );
 
 		if( $post['user_signature'] && $this->user['user_view_signatures'] ) {
-			$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE | FORMAT_EMOTICONS );
+			$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOTICONS );
 		} else {
 			$post['user_signature'] = null;
 		}

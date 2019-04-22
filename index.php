@@ -198,12 +198,12 @@ $qsf->xtpl = $xtpl;
 if( $terms_module == 'forum_rules' ) {
 	$tos = $qsf->db->fetch( 'SELECT settings_tos FROM %psettings' );
 
-	$message = $qsf->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+	$message = $qsf->format( $tos['settings_tos'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE );
 	$output = $qsf->message( $qsf->lang->main_tos_forums, $message );
 } elseif ( $terms_module == 'upload_rules' ) {
 	$tos = $qsf->db->fetch( 'SELECT settings_tos_files FROM %psettings' );
 
-	$message = $qsf->format( $tos['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_MBCODE );
+	$message = $qsf->format( $tos['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE );
 	$output = $qsf->message( $qsf->lang->main_tos_files, $message );
 } else {
 	$output = $qsf->execute();

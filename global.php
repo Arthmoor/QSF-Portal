@@ -59,7 +59,7 @@ define( 'DATE_TIME', 5 );
 define( 'DATE_ISO822', 6 ); // For RSS feeds
 
 /* Text Formatting */
-define( 'FORMAT_MBCODE', 1 );
+define( 'FORMAT_BBCODE', 1 );
 define( 'FORMAT_EMOTICONS', 2 );
 define( 'FORMAT_CENSOR', 4 );
 define( 'FORMAT_BREAKS', 16 );
@@ -270,7 +270,7 @@ class qsfglobal
 	 * @param int $options Options
 	 * @return string Formatted string
 	 **/
-	public function format( $in, $options = 0 )
+	public function format( $in, $options = FORMAT_BBCODE )
 	{
 		return $this->bbcode->format( $in, $options );
 	}

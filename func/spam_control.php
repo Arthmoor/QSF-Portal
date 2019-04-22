@@ -105,7 +105,7 @@ class spam_control extends qsfglobal
 
 	private function report_ham( $c )
 	{
-		$spam = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_emoticons, spam_mbcode, spam_count, spam_text, spam_time,
+		$spam = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_emoticons, spam_bbcode, spam_count, spam_text, spam_time,
 			spam_icon, spam_ip, spam_edited_by, spam_edited_time, spam_svars FROM %pspam WHERE spam_id=%d", $c );
 		if( !$spam )
 			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
@@ -127,9 +127,9 @@ class spam_control extends qsfglobal
 
 		$akismet->submit_ham();
 
-		$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_mbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
+		$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emoticons, post_bbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
 			VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
-			$spam['spam_topic'], $spam['spam_author'], $spam['spam_text'], $spam['spam_time'], $spam['spam_emoticons'], $spam['spam_mbcode'], $spam['spam_count'], $spam['spam_ip'], $spam['spam_icon'], $svars['HTTP_REFERER'], $svars['HTTP_USER_AGENT'] );
+			$spam['spam_topic'], $spam['spam_author'], $spam['spam_text'], $spam['spam_time'], $spam['spam_emoticons'], $spam['spam_bbcode'], $spam['spam_count'], $spam['spam_ip'], $spam['spam_icon'], $svars['HTTP_REFERER'], $svars['HTTP_USER_AGENT'] );
 		$post_id = $this->db->insert_id( "posts" );
 
 		$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $spam['spam_topic'] );
