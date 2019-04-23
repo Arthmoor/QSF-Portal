@@ -793,7 +793,10 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_id, topic_forum, topic_starter FROM %ptopics WHERE topic_id=%d", $t );
+		$topic = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_starter, f.forum_name
+			FROM %ptopics t
+			LEFT JOIN %pforums f ON f.forum_id=t.topic_forum
+			WHERE topic_id=%d", $t );
 
 		// Existence check
 		if( !isset( $topic['topic_id'] ) ) {
@@ -817,7 +820,8 @@ class mod extends qsfglobal
 
 		$this->log_action( 'topic_delete', $t );
 
-		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_delete, $this->lang->continue, "{$this->self}?a=forum&amp;f={$topic['topic_forum']}", "$this->self?a=forum&f={$topic['topic_forum']}" );
+		$link = $this->clean_url( $topic['forum_name'] );
+		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_delete, $this->lang->continue, "{$this->site}/forum/{$link}-{$topic['topic_forum']}/", "{$this->site}/forum/{$link}-{$topic['topic_forum']}/" );
 	}
 
 	/**

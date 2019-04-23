@@ -26,7 +26,7 @@
      <div class="title"><a href="{qsf_site}">{forum_name}</a></div>
      <nav>
       <a href="{qsf_site}/files/">{main_files}</a>
-      <a href="{qsf_self}?a=board">{main_forum}</a>
+      <a href="{qsf_site}/board/">{main_forum}</a>
       <a href="{qsf_self}?a=members">{main_members}</a>
       <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
       {index_left_links}
@@ -62,7 +62,7 @@
 
      <nav>
       <a href="{qsf_site}/files/"{new_files}>{main_files}</a>
-      <a href="{qsf_self}?a=board">{main_forum}</a>
+      <a href="{qsf_site}/board/">{main_forum}</a>
 <!-- BEGIN: PagesLink -->
       <a href="{qsf_self}?a=page">{main_pages}</a>
 <!-- END: PagesLink -->

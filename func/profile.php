@@ -59,20 +59,20 @@ class profile extends qsfglobal
 
 		if( !isset( $this->get['uname'] ) || !isset( $this->get['w'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
-			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user .'1');
+			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user );
 		}
 
 		if( !$this->validator->validate( $this->get['uname'], TYPE_STRING ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
-			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user .'2');
+			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user );
 		}
 
 		if( !$this->validator->validate( $this->get['w'], TYPE_INT ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
-			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user .'3');
+			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user );
 		}
 
-		$uname = $this->get['uname'];
+		$uname = strtolower( $this->get['uname'] );
 		$uid = intval( $this->get['w'] );
 
 		$profile = $this->db->fetch( "SELECT u.*, g.group_name, a.active_time
@@ -85,7 +85,7 @@ class profile extends qsfglobal
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
 
-		if( $uname != $this->clean_url( $profile['user_name'] ) ) {
+		if( $uname != $this->clean_url( strtolower( $profile['user_name'] ) ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
@@ -286,13 +286,14 @@ class profile extends qsfglobal
 				if( !$posts_total['count'] ) {
 					$fav_forum = $this->lang->profile_unkown;
 				} else {
-					$fav_forum = sprintf( $this->lang->profile_fav_forum, "<a href=\"{$this->self}?a=forum&amp;f={$final_fav['Forum']}\">{$final_fav['forum_name']}</a>", round( $final_fav['Forumuser_posts'] / $posts_total['count'] * 100 ) );
+					$link = $this->clean_url( $final_fav['forum_name'] );
+					$fav_forum = sprintf( $this->lang->profile_fav_forum, "<a href=\"{$this->site}/forum/{$link}-{$final_fav['Forum']}/\">{$final_fav['forum_name']}</a>", round( $final_fav['Forumuser_posts'] / $posts_total['count'] * 100 ) );
 				}
 			} else {
 				$fav_forum = $this->lang->profile_unkown;
 			}
 
-			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$uid\">" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
+			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$uid\">" . sprintf( $this->lang->profile_postcount, number_format( $profile['user_posts'], 0, null, $this->lang->sep_thousands ), $user_postsPerDay ) . '</a>';
 
 			$xtpl->assign( 'profile_posts', $this->lang->profile_posts );
 			$xtpl->assign( 'user_posts', $profile['user_posts'] );

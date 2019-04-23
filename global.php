@@ -843,6 +843,7 @@ class qsfglobal
 	 */
 	public function clean_url( $link )
 	{
+		$link = strtolower( $link );
 		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
 		$link = str_replace( ' ', '-', $link );
 

@@ -55,6 +55,7 @@ class htmlwidgets extends forumutils
 		$this->skin = &$qsf->skin;
 		$this->user = &$qsf->user;
 		$this->sets = &$qsf->sets;
+		$this->qsf  = &$qsf;
 
 		// Need the time for timezone stuff
 		$this->time = &$qsf->time;
@@ -97,16 +98,16 @@ class htmlwidgets extends forumutils
 			$startlink = '&lt;&lt;';
 			$previouslink = $this->lang->main_prev;
 		} else {
-			$startlink = "<a href=\"{$this->self}?$link&amp;min=0&amp;num=$num\" class=\"pagelinks\">&lt;&lt;</a>";
+			$startlink = "<a href=\"{$this->site}/$link&amp;min=0&amp;num=$num\" class=\"pagelinks\">&lt;&lt;</a>";
 			$prev = $min - $num;
-			$previouslink = "<a href=\"{$this->self}?$link&amp;min=$prev&amp;num=$num\" class=\"pagelinks\">{$this->lang->main_prev}</a> ";
+			$previouslink = "<a href=\"{$this->site}/$link&amp;min=$prev&amp;num=$num\" class=\"pagelinks\">{$this->lang->main_prev}</a> ";
 		}
 
 		// check for next/end
 		if( ( $min + $num ) < $rows ) {
 			$next = $min + $num;
-  			$nextlink = "<a href=\"{$this->self}?$link&amp;min=$next&amp;num=$num\" class=\"pagelinks\">{$this->lang->main_next}</a>";
-  			$endlink = "<a href=\"{$this->self}?$link&amp;min=$end&amp;num=$num\" class=\"pagelinks\">&gt;&gt;</a>";
+  			$nextlink = "<a href=\"{$this->site}/$link&amp;min=$next&amp;num=$num\" class=\"pagelinks\">{$this->lang->main_next}</a>";
+  			$endlink = "<a href=\"{$this->site}/$link&amp;min=$end&amp;num=$num\" class=\"pagelinks\">&gt;&gt;</a>";
 		} else {
   			$nextlink = $this->lang->main_next;
   			$endlink = '&gt;&gt;';
@@ -149,7 +150,7 @@ class htmlwidgets extends forumutils
 		for( $i = $b; $i < $current; $i++ )
 		{
 			$where = $num * $i;
-			$string .= ", <a href=\"{$this->self}?$link&amp;min=$where&amp;num=$num\" class=\"bodylinktype\">" . ($i + 1) . '</a>';
+			$string .= ", <a href=\"{$this->site}/$link&amp;min=$where&amp;num=$num\" class=\"bodylinktype\">" . ($i + 1) . '</a>';
 		}
 
 		// add in page
@@ -159,7 +160,7 @@ class htmlwidgets extends forumutils
 		for( $i = $current + 1; $i <= $e; $i++ )
 		{
 			$where = $num * $i;
-			$string .= ", <a href=\"{$this->self}?$link&amp;min=$where&amp;num=$num\" class=\"bodylinktype\">" . ($i + 1) . '</a>';
+			$string .= ", <a href=\"{$this->site}/$link&amp;min=$where&amp;num=$num\" class=\"bodylinktype\">" . ($i + 1) . '</a>';
 		}
 
 		// get rid of preliminary comma. (optimized by jason: mark uses preg_replace() like candy)
@@ -637,9 +638,11 @@ class htmlwidgets extends forumutils
 		{
 			if( $i ) {
 				if( !$cat ) {
-					$this->tree( $forumData[$i]['forum_name'], "$this->self?a=forum&amp;f={$i}" );
+					$link = $this->qsf->clean_url( $forumData[$i]['forum_name'] );
+					$this->tree( $forumData[$i]['forum_name'], "{$this->site}/forum/{$link}-{$i}/" );
 				} else {
-					$this->tree( $forumData[$i]['forum_name'], "$this->self?a=board&amp;c={$i}" );
+					$link = $this->qsf->clean_url( $forumData[$i]['forum_name'] );
+					$this->tree( $forumData[$i]['forum_name'], "{$this->site}/board/category/{$link}-{$i}/" );
 					$cat = 0;
 				}
 			}
@@ -648,7 +651,8 @@ class htmlwidgets extends forumutils
 		if( !$linklast ) {
 			$this->tree( $forumData[$f]['forum_name'] );
 		} else {
-			$this->tree( $forumData[$f]['forum_name'], "$this->self?a=forum&amp;f={$f}" );
+			$link = $this->qsf->clean_url( $forumData[$f]['forum_name'] );
+			$this->tree( $forumData[$f]['forum_name'], "{$this->site}/forum/{$link}-{$f}/" );
 		}
 	}
 

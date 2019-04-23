@@ -781,7 +781,7 @@ class cp extends qsfglobal
 					$link = "a=topic&amp;t={$sub['topic_id']}";
 				} else {
 					$sub['item_name'] = $sub['forum_name'];
-					$link = "a=forum&amp;f={$sub['forum_id']}";
+					$link = "{$this->site}/forum/" . $this->clean_url( $sub['forum_name'] ) . "-{$sub['forum_id']}/";
 				}
 
 				$sub['item_name'] = $this->format( $sub['item_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR );

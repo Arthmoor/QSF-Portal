@@ -71,16 +71,18 @@ class board extends qsfglobal
 
 					if( $forum_data ) {
 						$forum_name = $forum_data['forum_name'];
+						$link_name = $this->clean_url( $forum_name );
+
 						$this->readmarker->mark_forum_read( $forum_id, $this->time );
 
 						return $this->message( $this->lang->board_markforum,
 							sprintf( $this->lang->board_markforum1, $forum_name ),
-							$this->lang->continue, $this->self . "?a=forum&amp;f={$forum_id}", $this->self . "?a=forum&f={$forum_id}" );
+							$this->lang->continue, "{$this->site}/forum/{$link_name}-{$forum_id}/", "$this->site/forum/{$link_name}-{$forum_id}/" );
 					}
 				} else {
 					$this->readmarker->mark_all_read( $this->time );
 
-					return $this->message( $this->lang->board_mark, $this->lang->board_mark1, $this->lang->continue, $this->sets['loc_of_board'], $this->sets['loc_of_board'] );
+					return $this->message( $this->lang->board_mark, $this->lang->board_mark1, $this->lang->continue, "{$this->site}/board/", "{$this->site}/board/" );
 				}
 			} else {
 				$this->get['s'] = null;
@@ -188,6 +190,7 @@ class board extends qsfglobal
 
 					$xtpl->assign( 'fid', $forum['forum_id'] );
 					$xtpl->assign( 'fname', $forum['forum_name'] );
+					$xtpl->assign( 'cat_link_name', $this->clean_url( $forum['forum_name'] ) );
 
 					$xtpl->parse( 'CategoryIndex' );
 					$return .= $xtpl->text( 'CategoryIndex' );
@@ -272,6 +275,7 @@ class board extends qsfglobal
 
 						$xtpl->assign( 'fid', $forum['forum_id'] );
 						$xtpl->assign( 'fname', $forum['forum_name'] );
+						$xtpl->assign( 'forum_link_name', $this->clean_url( $forum['forum_name'] ) );
 						$xtpl->assign( 'fdesc', $forum['forum_description'] );
 						$xtpl->assign( 'ftopics', $forum['forum_topics'] );
 						$xtpl->assign( 'freplies', $forum['forum_replies'] );

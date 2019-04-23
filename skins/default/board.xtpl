@@ -2,7 +2,7 @@
 <div class="article">
  <div style="float:left">{tree}</div>
  <div style="text-align:right">
-  <a href="{self}?a=forum_rules" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{self}?a=board&amp;s=mark" title="{main_mark1}">{main_mark}</a> | <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a>
+  <a href="{site}/forum_rules/" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{site}/board/mark_all_read/" title="{main_mark1}">{main_mark}</a> | <a href="{site}/recent_posts/" title="{main_recent1}">{main_recent}</a>
  </div>
 </div>
 {forums}
@@ -12,7 +12,7 @@
 <div class="article">
  <div style="float:left">{tree}</div>
  <div style="text-align:right">
-  <a href="{self}?a=forum_rules" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{self}?a=board&amp;s=mark" title="{main_mark1}">{main_mark}</a> | <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a>
+  <a href="{site}/forum_rules/" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{site}/board/mark_all_read/" title="{main_mark1}">{main_mark}</a> | <a href="{site}/recent_posts/" title="{main_recent1}">{main_recent}</a>
  </div>
 </div>
 
@@ -37,7 +37,7 @@
  <div class="title">
   <div style="float:left;">
    <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
-   <a href="{self}?a=board&amp;c={fid}">{fname}</a>
+   <a href="{site}/board/category/{cat_link_name}-{fid}/">{fname}</a>
   </div>
   <div style="text-align:right;">
    <a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{board_bottom_page}" title="{board_bottom_page}" /></a>
@@ -65,7 +65,7 @@
 <!-- END: ForumRead -->
 </span>
 <span class="thread">
- <a href="{self}?a=forum&amp;f={fid}" class="forum">{fname}</a>
+ <a href="{site}/forum/{forum_link_name}-{fid}/" class="forum">{fname}</a>
  {fdesc}
 </span>
 <span class="number">{ftopics}</span><span class="number">{freplies}</span>

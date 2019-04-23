@@ -237,7 +237,8 @@ class activeutil extends forumutils
 				case 'forum':
 					if( $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$forum = $user['topic_forum'];
-						$action_link = "<a href='{$this->self}?a=forum&amp;f={$user['active_item']}'>{$user['forum_name']}</a>";
+						$link = $this->qsf->clean_url( $user['forum_name'] );
+						$action_link = "<a href='{$this->site}/forum/{$link}-{$user['active_item']}/'>{$user['forum_name']}</a>";
 					}
 					break;
 

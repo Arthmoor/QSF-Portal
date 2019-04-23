@@ -91,7 +91,7 @@
  <span class="icon"><img src="{site}/skins/{skin}/images/icons/topic.png" alt="" /></span>
  <span class="thread">
   <a href="{self}?a=topic&amp;t={post_topic}"><strong>{topic_title}</strong></a>
-  <br />- <a href="{self}?a=forum&amp;f={topic_forum}">{forum_name}</a>
+  <br />- <a href="{site}/forum/{forum_link_name}-{topic_forum}/">{forum_name}</a>
  </span>
  <span class="number">{matches}</span>
  <span class="number">{topic_replies}</span>

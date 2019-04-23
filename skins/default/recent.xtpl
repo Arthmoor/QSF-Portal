@@ -36,7 +36,7 @@
   {topic_starter_name}
 <!-- END: TopicStarterGuest -->
  </span>
- <span class="number"><a href="{self}?a=forum&amp;f={forum_id}">{forum_name}</a></span>
+ <span class="number"><a href="{site}/forum/{forum_link_name}-{forum_id}/">{forum_name}</a></span>
  <span class="last_post">
   {topic_edited}<br />
   <a href="{self}?a=topic&amp;t={topic_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}" /></a>

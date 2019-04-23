@@ -2,7 +2,7 @@
 <div class="article">
  <div style="float:left">{tree}</div>
  <div style="text-align:right">
-  <a href="{self}?a=forum_rules" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{self}?a=board&amp;s=mark" title="{main_mark1}">{main_mark}</a> | <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a>
+  <a href="{site}/forum_rules/" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{site}/board/mark_all_read/" title="{main_mark1}">{main_mark}</a> | <a href="{site}/recent_posts/" title="{main_recent1}">{main_recent}</a>
  </div>
 </div>
 <!-- BEGIN: SubForum -->
@@ -34,7 +34,7 @@
 <!-- END: ForumRead -->
  </span>
  <span class="thread">
-  <a href="{self}?a=forum&amp;f={fid}" class="forum">{fname}</a>
+  <a href="{site}/forum/{forum_link_name}-{fid}/" class="forum">{fname}</a>
   {fdesc}
  </span>
  <span class="number">{ftopics}</span><span class="number">{freplies}</span>
@@ -72,11 +72,11 @@
  <span class="head">
   <span class="icon">&nbsp;</span>
   <span class="icon">&nbsp;</span>
-  <span class="topic"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=title&amp;asc={asc}">{forum_topic}</a></span>
-  <span class="starter"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=starter&amp;asc={asc}">{forum_starter}</a></span>
-  <span class="number"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=replies&amp;asc={asc}">{forum_replies}</a></span>
-  <span class="number"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=views&amp;asc={asc}">{forum_views}</a></span>
-  <span class="topic_last_post"><a href="{self}?a=forum&amp;f={f}&amp;min={min}&amp;n={n}&amp;order=last&amp;asc={asc}">{forum_last}</a></span>
+  <span class="topic"><a href="{site}/forum/{forum_link_name}-{f}/&amp;min={min}&amp;n={n}&amp;order=title&amp;asc={asc}">{forum_topic}</a></span>
+  <span class="starter"><a href="{site}/forum/{forum_link_name}-{f}/&amp;min={min}&amp;n={n}&amp;order=starter&amp;asc={asc}">{forum_starter}</a></span>
+  <span class="number"><a href="{site}/forum/{forum_link_name}-{f}/&amp;min={min}&amp;n={n}&amp;order=replies&amp;asc={asc}">{forum_replies}</a></span>
+  <span class="number"><a href="{site}/forum/{forum_link_name}-{f}/&amp;min={min}&amp;n={n}&amp;order=views&amp;asc={asc}">{forum_views}</a></span>
+  <span class="topic_last_post"><a href="{site}/forum/{forum_link_name}-{f}/&amp;min={min}&amp;n={n}&amp;order=last&amp;asc={asc}">{forum_last}</a></span>
  </span>
 <!-- BEGIN: NoTopics -->
  <span class="notice">{forum_no_topics}</span>

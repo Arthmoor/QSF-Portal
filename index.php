@@ -162,7 +162,7 @@ if( $qsf->is_banned() ) {
 	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
 }
 
-$qsf->tree( $qsf->sets['forum_name'], "$qsf->self?a=board" );
+$qsf->tree( $qsf->sets['forum_name'], "{$qsf->site}/board/" );
 
 $qsf->add_feed( $qsf->site . '/index.php?a=rssfeed' );
 

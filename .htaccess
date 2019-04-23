@@ -3,14 +3,22 @@ RewriteEngine On
 
 RewriteRule ^users_online/$ index.php?a=active [L]
 
+RewriteRule ^board/category/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=board&cname=$1&c=$2 [L]
+RewriteRule ^board/mark_all_read/$ index.php?a=board&s=mark [L]
+RewriteRule ^board/$ index.php?a=board [L]
+
 RewriteRule ^files/upload_rules/$ index.php?a=upload_rules [L]
 RewriteRule ^files/search/$ index.php?a=files&s=search [L]
 RewriteRule ^files/recent_uploads/$ index.php?a=files&s=recent [L]
 RewriteRule ^files/upload/([0-9]*)/$ index.php?a=files&s=upload&cid=$1 [L]
 RewriteRule ^files/download/([0-9]*)/$ index.php?a=files&s=download&fid=$1 [L]
 RewriteRule ^files/category/([0-9]*)/$ index.php?a=files&cid=$1 [L]
+RewriteRule ^files/category/$ index.php?a=files [L]
 RewriteRule ^files/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=files&s=viewfile&fname=$1&fid=$2 [L]
 RewriteRule ^files/$ index.php?a=files [L]
+
+RewriteRule ^forum/([-A-Za-z0-9]*)-([0-9]*)/(.*)$ index.php?a=forum&fname=$1&f=$2$3 [L]
+RewriteRule ^forum_rules/$ index.php?a=forum_rules [L]
 
 RewriteRule ^profile/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=profile&uname=$1&w=$2 [L]
 

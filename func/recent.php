@@ -304,6 +304,7 @@ class recent extends qsfglobal
 				$xtpl->assign( 'topic_description', $row['topic_description'] );
 				$xtpl->assign( 'forum_id', $row['forum_id'] );
 				$xtpl->assign( 'forum_name', $row['forum_name'] );
+				$xtpl->assign( 'forum_link_name', $this->clean_url( $row['forum_name'] ) );
 				$xtpl->assign( 'topic_edited', $row['topic_edited'] );
 				$xtpl->assign( 'jump', $jump );
 

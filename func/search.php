@@ -425,6 +425,7 @@ class search extends qsfglobal
 			$xtpl->assign( 'topic_title', $search['topic_title'] );
 			$xtpl->assign( 'topic_forum', $search['topic_forum'] );
 			$xtpl->assign( 'forum_name', $search['forum_name'] );
+			$xtpl->assign( 'forum_link_name', $this->clean_url( $search['forum_name'] ) );
 			$xtpl->assign( 'matches', $matches );
 			$xtpl->assign( 'topic_replies', $search['topic_replies'] );
 

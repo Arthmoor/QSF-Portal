@@ -54,11 +54,22 @@ class forum extends qsfglobal
 			);
 		}
 
-		if( !isset( $this->get['f'] ) ) {
+		if( !isset( $this->get['fname'] ) || !isset( $this->get['f'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
 		}
 
+		if( !$this->validator->validate( $this->get['fname'], TYPE_STRING ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
+		}
+
+		if( !$this->validator->validate( $this->get['f'], TYPE_INT ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
+		}
+
+		$fname = strtolower( $this->get['fname'] );
 		$f = intval( $this->get['f'] );
 
 		if( !$this->perms->auth( 'forum_view', $f ) ) {
@@ -119,6 +130,11 @@ class forum extends qsfglobal
 			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
 		}
 
+		if( $fname != $this->clean_url( strtolower( $exists['forum_name'] ) ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
+		}
+
 		// Add RSS feed link for forum
 		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;f=' . $f, "{$this->lang->forum_forum}: {$exists['forum_name']}" );
 
@@ -126,7 +142,8 @@ class forum extends qsfglobal
 
 		$topic = $this->db->fetch( "SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=%d AND topic_type=%d", $f, TOPIC_TYPE_FORUM );
 
-		$pagelinks = $this->htmlwidgets->get_pages( $topic['count'], "a=forum&amp;f=$f&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
+		$link_name = $this->clean_url( $exists['forum_name'] );
+		$pagelinks = $this->htmlwidgets->get_pages( $topic['count'], "forum/{$link_name}-{$f}/&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 		$forumjump = $this->htmlwidgets->select_forums( $f, 0, null, true );
 
 		$can_post = false;
@@ -164,6 +181,7 @@ class forum extends qsfglobal
 				$xtpl->assign( 'asc', $asc );
 				$xtpl->assign( 'forum_mark_read', $this->lang->forum_mark_read );
 				$xtpl->assign( 'forum_name', $exists['forum_name'] );
+				$xtpl->assign( 'forum_link_name', $this->clean_url( $exists['forum_name'] ) );
 				$xtpl->assign( 'forum_topic', $this->lang->forum_topic );
 				$xtpl->assign( 'forum_starter', $this->lang->forum_starter );
 				$xtpl->assign( 'forum_replies', $this->lang->forum_replies );
@@ -250,6 +268,7 @@ class forum extends qsfglobal
 				else {
 					$xtpl->assign( 'fid', $forum['forum_id'] );
 					$xtpl->assign( 'fname', $forum['forum_name'] );
+					$xtpl->assign( 'forum_link_name', $this->clean_url( $forum['forum_name'] ) );
 					$xtpl->assign( 'fdesc', $forum['forum_description'] );
 					$xtpl->assign( 'ftopics', $forum['forum_topics'] );
 					$xtpl->assign( 'freplies', $forum['forum_replies'] );
@@ -443,7 +462,7 @@ class forum extends qsfglobal
 
 					$xtpl->parse( 'Forum.Topics.ForumTopic.LastPosterMember' );
 				} else {
-					$xtpl->assign( 'topic_last_poster_name', $this->lang->recent_guest );
+					$xtpl->assign( 'topic_last_poster_name', $this->lang->forum_guest );
 
 					$xtpl->parse( 'Forum.Topics.ForumTopic.LastPosterGuest' );
 				}
@@ -455,7 +474,7 @@ class forum extends qsfglobal
 
 					$xtpl->parse( 'Forum.Topics.ForumTopic.TopicStarterMember' );
 				} else {
-					$xtpl->assign( 'topic_starter_name', $this->lang->recent_guest );
+					$xtpl->assign( 'topic_starter_name', $this->lang->forum_guest );
 
 					$xtpl->parse( 'Forum.Topics.ForumTopic.TopicStarterGuest' );
 				}
