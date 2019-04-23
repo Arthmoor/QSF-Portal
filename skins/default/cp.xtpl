@@ -1,15 +1,15 @@
 <!-- BEGIN: ControlPanel -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/control_panel.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/control_panel.png" alt="" />
   {cp_header}
  </div>
- <a href="{self}?a=cp&amp;s=avatar">{cp_label_edit_avatar}</a> |
- <a href="{self}?a=cp&amp;s=cpass">{cp_label_edit_pass}</a> |
- <a href="{self}?a=cp&amp;s=prefs">{cp_label_edit_prefs}</a> |
- <a href="{self}?a=cp&amp;s=profile">{cp_label_edit_profile}</a> |
- <a href="{self}?a=cp&amp;s=subs">{cp_label_edit_subs}</a> |
- <a href="{self}?a=cp&amp;s=sig">{cp_label_edit_sig}</a>
+ <a href="{site}/control_panel/avatar/">{cp_label_edit_avatar}</a> |
+ <a href="{site}/control_panel/password/">{cp_label_edit_pass}</a> |
+ <a href="{site}/control_panel/preferences/">{cp_label_edit_prefs}</a> |
+ <a href="{site}/control_panel/profile/">{cp_label_edit_profile}</a> |
+ <a href="{site}/control_panel/subscriptions/">{cp_label_edit_subs}</a> |
+ <a href="{site}/control_panel/signature/">{cp_label_edit_sig}</a>
 </div>
 
 {control_page}
@@ -22,10 +22,10 @@
 <!-- END: CPHome -->
 
 <!-- BEGIN: EditPassword -->
-<form action="{self}?a=cp&amp;s=cpass" method="post">
+<form action="{site}/control_panel/password/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/key.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/key.png" alt="" />
   {cp_label_edit_pass}
  </div>
 
@@ -48,10 +48,10 @@
 <!-- END: EditPassword -->
 
 <!-- BEGIN: EditPreferences -->
-<form action="{self}?a=cp&amp;s=prefs" method="post">
+<form action="{site}/control_panel/preferences/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/wrench.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/wrench.png" alt="" />
   {cp_label_edit_prefs}
  </div>
 
@@ -106,10 +106,10 @@
 <!-- END: EditPreferences -->
 
 <!-- BEGIN: EditProfile -->
-<form action="{self}?a=cp&amp;s=profile" method="post" id="profile">
+<form action="{site}/control_panel/profile/" method="post" id="profile">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/vcard_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/vcard_edit.png" alt="" />
   {cp_label_edit_profile}
  </div>
 
@@ -169,10 +169,10 @@
 <!-- END: EditProfile -->
 
 <!-- BEGIN: EditAvatar -->
-<form action="{self}?a=cp&amp;s=avatar" enctype="multipart/form-data" method="post" id="avatar">
+<form action="{site}/control_panel/avatar/" enctype="multipart/form-data" method="post" id="avatar">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/picture_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/picture_edit.png" alt="" />
   {cp_label_edit_avatar}
  </div>
 
@@ -197,7 +197,7 @@
    <select size="10" name="avatar_local">
     {avatar_select}
    </select>
-   <img id="localavatar" src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+   <img id="localavatar" src="{site}/skins/{skin}/images/noavatar.png" alt="" />
   </div>
 
   {list_line}
@@ -241,7 +241,7 @@
 </div>
 </form>
 
-<script src="{loc_of_board}/javascript/avatar.js"></script>
+<script src="{site}/javascript/avatar.js"></script>
 <script>
 function noavatar() // Fix bug introduced when the avatar JS was moved to an external file.
 {
@@ -258,10 +258,10 @@ enable('{init}');
 <!-- END: EditAvatar -->
 
 <!-- BEGIN: EditSubs -->
-<form action="{self}?a=cp&amp;s=subs" method="post">
+<form action="{site}/control_panel/subscriptions/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/subscribe.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/subscribe.png" alt="" />
   {cp_label_edit_subs}
  </div>
 
@@ -274,7 +274,7 @@ enable('{init}');
 <!-- BEGIN: Row -->
  <span class="quarter"> <input class="check" type="checkbox" name="delete[{subscription_id}]" /></span>
  <span class="quarter">{subscription_type}</span>
- <span class="quarter"><a href="{self}?{link}">{item_name}</a></span>
+ <span class="quarter"><a href="{link}">{item_name}</a></span>
  <span class="quarter">{subscription_expire}</span>
  <p class="list_line"></p>
 <!-- END: Row -->
@@ -284,10 +284,10 @@ enable('{init}');
 <!-- END: EditSubs -->
 
 <!-- BEGIN: EditSig -->
-<form action="{self}?a=cp&amp;s=sig" method="post" id="mbpost">
+<form action="{site}/control_panel/signature/" method="post" id="mbpost">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/tag_blue_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/tag_blue_edit.png" alt="" />
   {cp_label_edit_sig}
  </div>
 
@@ -302,7 +302,7 @@ enable('{init}');
   {smilies}
  </span>
  <span class="form">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   {bbcode_menu}
   <textarea name="sig" id="bbcode" rows="8" cols="10">{edit}</textarea>
   <script>textarea = bbcodeInit("bbcode");</script>

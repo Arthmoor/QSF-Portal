@@ -59,7 +59,7 @@
 <!-- BEGIN: CanPostTop -->
 <div class="article">
  <a href="{self}?a=board&amp;s=mark&amp;f={f}" class="mark_read"><img src="{site}/skins/{skin}/images/icons/forum_read.png" alt="{forum_mark_read}" title="{forum_mark_read}" /></a>
- <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=forum&amp;item={f}" title="{forum_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=forum&amp;item={f}" title="{forum_subscribe}">{subscribe}</a></div>
  <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={f}" title="{forum_new_poll}">{new_poll}</a></div>
  <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={f}" title="{forum_new_topic}">{new_topic}</a></div>
  <p></p>
@@ -126,7 +126,7 @@
 
 <!-- BEGIN: CanPostBottom -->
 <div class="article">
- <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=forum&amp;item={f}" title="{forum_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=forum&amp;item={f}" title="{forum_subscribe}">{subscribe}</a></div>
  <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={f}" title="{forum_new_poll}">{new_poll}</a></div>
  <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={f}" title="{forum_new_topic}">{new_topic}</a></div>
  <p></p>

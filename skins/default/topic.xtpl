@@ -6,7 +6,7 @@
 {PollDisplay}
 <div class="article">
 <!-- BEGIN: CanPostTop -->
- <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
  <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
  <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
 <!-- END: CanPostTop -->
@@ -189,7 +189,7 @@
 
 <div class="article">
 <!-- BEGIN: CanPostBottom -->
- <div class="bigbutton"><a class="subscribe" href="{self}?a=cp&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
  <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
  <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
 <!-- END: CanPostBottom -->

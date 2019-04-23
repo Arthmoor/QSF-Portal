@@ -51,7 +51,7 @@ class cp extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -63,18 +63,10 @@ class cp extends qsfglobal
 			return $this->message( $this->lang->cp_cp, $this->lang->cp_login_first );
 		}
 
-		$class['avatar']  = 'tablelight';
-		$class['cpass']   = 'tablelight';
-		$class['prefs']   = 'tablelight';
-		$class['profile'] = 'tablelight';
-		$class['subs']    = 'tablelight';
-		$class['sig']     = 'tablelight';
-
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/cp.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
-		$xtpl->assign( 'self', $this->self );
 
 		switch( $this->get['s'] )
 		{
@@ -151,7 +143,7 @@ class cp extends qsfglobal
 	private function edit_pass( $xtpl )
 	{
 		$this->set_title ($this->lang->cp_changing_pass );
-		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
+		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_changing_pass );
 
 		if( !isset($this->post['submit'] ) ) {
@@ -195,7 +187,7 @@ class cp extends qsfglobal
 				$_SESSION['pass'] = md5( $hashed_pass . $this->ip );
 				$this->user['user_password'] = $hashed_pass;
 
-				return $this->message( $this->lang->cp_changing_pass, sprintf( $this->lang->cp_valided, $this->self ) );
+				return $this->message( $this->lang->cp_changing_pass, sprintf( $this->lang->cp_valided, $this->site ) );
 				break;
 			}
 		}
@@ -204,7 +196,7 @@ class cp extends qsfglobal
 	private function edit_prefs( $xtpl )
 	{
 		$this->set_title( $this->lang->cp_preferences );
-		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
+		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_preferences );
 
 		if( !isset( $this->post['submit'] ) ) {
@@ -345,7 +337,7 @@ class cp extends qsfglobal
 		}
 
 		$this->set_title( $this->lang->cp_editing_profile );
-		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
+		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_editing_profile );
 
 		if( !isset( $this->post['submit'] ) ) {
@@ -552,7 +544,7 @@ class cp extends qsfglobal
 		}
 
 		$this->set_title( $this->lang->cp_editing_avatar );
-		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
+		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_editing_avatar );
 
 		if( !isset( $this->post['submit'] ) ) {
@@ -562,7 +554,7 @@ class cp extends qsfglobal
 			$xtpl->assign( 'user_avatar_height', $this->user['user_avatar_height'] );
 
 			if( empty( $this->user['user_avatar'] ) ) {
-				$this->user['user_avatar']   = "./skins/{$this->skin}/images/noavatar.png";
+				$this->user['user_avatar']   = "{$this->site}/skins/{$this->skin}/images/noavatar.png";
 				$this->user['user_avatar_width']  = $this->sets['avatar_width'];
 				$this->user['user_avatar_height'] = $this->sets['avatar_height'];
 			}
@@ -604,6 +596,8 @@ class cp extends qsfglobal
 			} elseif( $this->user['user_avatar_type'] == 'gravatar' )  {
 				$gravatar_url = $avatar;
 				$avatar = $this->htmlwidgets->get_gravatar( $avatar );
+			} else {
+				$avatar = "{$this->site}/$avatar";
 			}
 
 			$xtpl->assign( 'avatar', $avatar );
@@ -755,7 +749,7 @@ class cp extends qsfglobal
 	private function edit_subs( $xtpl )
 	{
 		$this->set_title( $this->lang->cp_sub_change );
-		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
+		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_sub_change );
 
 		$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_expire < %d", $this->time );
@@ -778,7 +772,7 @@ class cp extends qsfglobal
 			{
 				if( $sub['subscription_type'] == 'topic' ) {
 					$sub['item_name'] = $sub['topic_title'];
-					$link = "a=topic&amp;t={$sub['topic_id']}";
+					$link = "{$this->site}/index.php?a=topic&amp;t={$sub['topic_id']}";
 				} else {
 					$sub['item_name'] = $sub['forum_name'];
 					$link = "{$this->site}/forum/" . $this->clean_url( $sub['forum_name'] ) . "-{$sub['forum_id']}/";
@@ -834,7 +828,7 @@ class cp extends qsfglobal
 		}
 
 		$this->set_title( $this->lang->cp_label_edit_sig );
-		$this->tree( $this->lang->cp_cp, $this->self . '?a=cp' );
+		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_label_edit_sig );
 		$params = FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS;
 

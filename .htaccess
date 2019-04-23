@@ -7,6 +7,14 @@ RewriteRule ^board/category/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=board&cname=$
 RewriteRule ^board/mark_all_read/$ index.php?a=board&s=mark [L]
 RewriteRule ^board/$ index.php?a=board [L]
 
+RewriteRule ^control_panel/signature/$ index.php?a=cp&s=sig [L]
+RewriteRule ^control_panel/subscriptions/$ index.php?a=cp&s=subs [L]
+RewriteRule ^control_panel/profile/$ index.php?a=cp&s=profile [L]
+RewriteRule ^control_panel/preferences/$ index.php?a=cp&s=prefs [L]
+RewriteRule ^control_panel/password/$ index.php?a=cp&s=cpass [L]
+RewriteRule ^control_panel/avatar/$ index.php?a=cp&s=avatar [L]
+RewriteRule ^control_panel/(.*)$ index.php?a=cp$1 [L]
+
 RewriteRule ^files/upload_rules/$ index.php?a=upload_rules [L]
 RewriteRule ^files/search/$ index.php?a=files&s=search [L]
 RewriteRule ^files/recent_uploads/$ index.php?a=files&s=recent [L]

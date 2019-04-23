@@ -31,7 +31,6 @@ if( version_compare( PHP_VERSION, "7.0.0", "<" ) ) {
 }
 
 define( 'QUICKSILVERFORUMS', true );
-define( 'QSF_PUBLIC', true );
 
 date_default_timezone_set( 'UTC' );
 
