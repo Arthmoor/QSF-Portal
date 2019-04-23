@@ -215,6 +215,8 @@ class newspost extends qsfglobal
 			$post['user_signature'] = null;
 		}
 
+		$this->lang->members();
+
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
@@ -223,6 +225,11 @@ class newspost extends qsfglobal
 		$xtpl->assign( 'user_avatar', $post['user_avatar'] );
 		$xtpl->assign( 'topic_online', $this->lang->topic_online );
 		$xtpl->assign( 'topic_offline', $this->lang->topic_offline );
+		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
+		$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
+		$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
+		$xtpl->assign( 'members_visit_facebook', $this->lang->members_visit_facebook );
+		$xtpl->assign( 'members_visit_www', $this->lang->members_visit_www );
 
 		if( $online )
 			$xtpl->parse( 'MemberInfo.Online' );
@@ -262,42 +269,37 @@ class newspost extends qsfglobal
 
 		if( $post['user_email_show'] && $this->perms->auth( 'email_use' ) ) {
 			$xtpl->assign( 'user_email', $post['user_email'] );
-			$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
 
 			$xtpl->parse( 'MemberInfo.EmailShow' );
 		}
 
 		if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
 			$xtpl->assign( 'user_id', $post['user_id'] );
-			$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
+			$xtpl->assign( 'email_link_name', $this->clean_url( $post['user_name'] ) );
 
 			$xtpl->parse( 'MemberInfo.EmailForm' );
 		}
 
 		if( $post['user_pm'] ) {
 			$xtpl->assign( 'user_id', $post['user_id'] );
-			$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
 
 			$xtpl->parse( 'MemberInfo.PM' );
 		}
 
 		if( $post['user_twitter'] ) {
 			$xtpl->assign( 'twitter', 'https://twitter.com/' . $post['user_twitter'] );
-			$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
 
 			$xtpl->parse( 'MemberInfo.Twitter' );
 		}
 
 		if( $post['user_facebook'] ) {
 			$xtpl->assign( 'facebook', $post['user_facebook'] );
-			$xtpl->assign( 'members_visit_facebook', $this->lang->members_visit_facebook );
 
 			$xtpl->parse( 'MemberInfo.Facebook' );
 		}
 
 		if( $post['user_homepage'] ) {
 			$xtpl->assign( 'homepage', $post['user_homepage'] );
-			$xtpl->assign( 'members_visit_www', $this->lang->members_visit_www );
 
 			$xtpl->parse( 'MemberInfo.Homepage' );
 		}

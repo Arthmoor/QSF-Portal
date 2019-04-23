@@ -201,7 +201,7 @@ function error_fatal( $type, $message, $file, $line = 0 )
     <div class=\"logo\"></div>
    </div>
    <ul id=\"navigation\">
-    <li><a href=\"index.php\">Home</a></li>
+    <li><a href=\"{$set['loc_of_board']}/index.php\">Home</a></li>
    </ul>
   </div>
 

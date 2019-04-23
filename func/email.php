@@ -54,7 +54,7 @@ class email extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -67,27 +67,41 @@ class email extends qsfglobal
 		}
 
 		if( !isset( $this->post['submit'] ) ) {
+			$to = 0;
 
-			$xtpl = new XTemplate( './skins/' . $this->skin . '/email.xtpl' );
+			if( isset( $this->get['to'] ) ) {
+				if( !$this->validator->validate( $this->get['to'], TYPE_INT ) ) {
+					header( 'HTTP/1.0 404 Not Found' );
+					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
+				}
 
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
-			$xtpl->assign( 'skin', $this->skin );
-			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'email_email', $this->lang->email_email );
-			$xtpl->assign( 'email_to', $this->lang->email_to );
+				$to = intval( $this->get['to'] );
+			}
 
 			$mailto = null;
-			$to = isset( $this->get['to'] ) ? intval( $this->get['to'] ) : 0;
-
 			if( $to ) {
+				if( !isset( $this->get['tname'] ) || !$this->validator->validate( $this->get['tname'], TYPE_STRING ) ) {
+					header( 'HTTP/1.0 404 Not Found' );
+					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
+				}
+
+				$tname = $this->get['tname'];
+
 				$target = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $to );
 
-				if( !isset( $target['user_name'] ) || ( $to == USER_GUEST_UID ) ) {
+				if( !isset( $target['user_name'] ) || ( $to == USER_GUEST_UID ) || strtolower( $target['user_name'] ) != $this->clean_url( $tname ) ) {
 					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
 				}
 
 				$mailto = $target['user_name'];
 			}
+
+			$xtpl = new XTemplate( './skins/' . $this->skin . '/email.xtpl' );
+
+			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
+			$xtpl->assign( 'email_email', $this->lang->email_email );
+			$xtpl->assign( 'email_to', $this->lang->email_to );
 
 			$xtpl->assign( 'mailto', $mailto );
 			$xtpl->assign( 'email_subject', $this->lang->email_subject );
@@ -137,7 +151,7 @@ class email extends qsfglobal
 				catch( Exception $e ) {}
 
 				if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
-					$this->log_action('Spam Email Caught', 0, 0, 0);
+					$this->log_action( 'Spam Email Caught', 0, 0, 0 );
 
 					$this->sets['spam_email_count']++;
 					$this->write_sets();

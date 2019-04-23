@@ -15,6 +15,9 @@ RewriteRule ^control_panel/password/$ index.php?a=cp&s=cpass [L]
 RewriteRule ^control_panel/avatar/$ index.php?a=cp&s=avatar [L]
 RewriteRule ^control_panel/(.*)$ index.php?a=cp$1 [L]
 
+RewriteRule ^email/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=email&tname=$1&to=$2 [L]
+RewriteRule ^email/$ index.php?a=email [L]
+
 RewriteRule ^files/upload_rules/$ index.php?a=upload_rules [L]
 RewriteRule ^files/search/$ index.php?a=files&s=search [L]
 RewriteRule ^files/recent_uploads/$ index.php?a=files&s=recent [L]

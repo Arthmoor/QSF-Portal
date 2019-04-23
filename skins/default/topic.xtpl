@@ -127,7 +127,7 @@
   <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
 <!-- END: EmailShow -->
 <!-- BEGIN: EmailForm -->
-  <span class="smallbutton"><a class="email" href="{self}?a=email&amp;to={user_id}" title="{members_email_member}"></a></span>
+  <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
 <!-- END: EmailForm -->
 <!-- BEGIN: PM -->
   <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>

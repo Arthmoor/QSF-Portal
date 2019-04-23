@@ -125,12 +125,6 @@ class members extends qsfglobal
 		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
-		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
-		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
-		$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
-		$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
-		$xtpl->assign( 'members_visit_facebook', $this->lang->members_visit_facebook );
-		$xtpl->assign( 'members_visit_www', $this->lang->members_visit_www );
 		$xtpl->assign( 'members_list', $this->lang->members_list );
 		$xtpl->assign( 'members_member', $this->lang->members_member );
 		$xtpl->assign( 'members_posts', $this->lang->members_posts );
@@ -139,6 +133,11 @@ class members extends qsfglobal
 		$xtpl->assign( 'members_group', $this->lang->members_group );
 		$xtpl->assign( 'members_www', $this->lang->members_www );
 		$xtpl->assign( 'members_all', $this->lang->members_all );
+		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
+		$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
+		$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
+		$xtpl->assign( 'members_visit_facebook', $this->lang->members_visit_facebook );
+		$xtpl->assign( 'members_visit_www', $this->lang->members_visit_www );
 
 		while( $member = $this->db->nqfetch( $result ) )
 		{
@@ -165,7 +164,7 @@ class members extends qsfglobal
 
 			$xtpl->assign( 'user_id', $member['user_id'] );
 			$xtpl->assign( 'user_name', $member['user_name'] );
-			$xtpl->assign( 'link_name', $this->clean_url( $member['user_name'] ) );
+			$xtpl->assign( 'profile_link_name', $this->clean_url( $member['user_name'] ) );
 
 			if( $member['user_email_show'] && $this->perms->auth('email_use') ) {
 				$xtpl->assign( 'user_email', $member['user_email'] );
@@ -174,6 +173,7 @@ class members extends qsfglobal
 			}
 
 			if( !$member['user_email_show'] && $member['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
+				$xtpl->assign( 'email_link_name', $this->clean_url( $member['user_name'] ) );
 				$xtpl->assign( 'user_id', $member['user_id'] );
 
 				$xtpl->parse( 'Members.User.EmailForm' );

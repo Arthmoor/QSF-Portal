@@ -340,6 +340,8 @@ class topic extends qsfglobal
 		$newest_post_read = 0;
 		$first_unread_post = false;
 
+		$this->lang->members();
+
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
@@ -442,6 +444,11 @@ class topic extends qsfglobal
 		$xtpl->assign( 'topic_split_keep', $this->lang->topic_split_keep );
 		$xtpl->assign( 'topic_split_move', $this->lang->topic_split_move );
 		$xtpl->assign( 'topic_split_finish', $this->lang->topic_split_finish );
+		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
+		$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
+		$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
+		$xtpl->assign( 'members_visit_facebook', $this->lang->members_visit_facebook );
+		$xtpl->assign( 'members_visit_www', $this->lang->members_visit_www );
 
 		while( $post = $this->db->nqfetch( $query ) )
 		{
@@ -600,6 +607,7 @@ class topic extends qsfglobal
 
 				if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
 					$xtpl->assign( 'user_id', $post['user_id'] );
+					$xtpl->assign( 'email_link_name', $this->clean_url( $post['user_name'] ) );
 
 					$xtpl->parse( 'Topic.Post.PosterInfoMember.EmailForm' );
 				}
