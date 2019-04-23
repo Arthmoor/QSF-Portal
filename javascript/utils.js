@@ -107,10 +107,10 @@ function get_folder(select,link)
 
 function get_filecat(select,link)
 {
-   self.location.href = link + '?a=files&cid=' + select.value;
+   self.location.href = link + '/files/category/' + select.value;
 }
 
 function get_newspost(select,link)
 {
-   self.location.href = link + '?a=newspost&t=' + select.value;
+   self.location.href = link + '/newspost/' + select.value;
 }

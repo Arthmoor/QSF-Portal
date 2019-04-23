@@ -43,7 +43,7 @@ class main extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -59,7 +59,7 @@ class main extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/main.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'main_news', $this->lang->main_news );
 		$xtpl->assign( 'items', $items );
@@ -105,16 +105,18 @@ class main extends qsfglobal
 
 			$pos = strrpos( $text, "[more]" );
 
+			$link = $this->clean_url( $topic );
+
 			if( $pos !== false ) {
 				$text = substr( $text, 0, $pos );
-				$text .= "<span style=\"white-space:nowrap\">( <a href=\"{$this->self}?a=newspost&amp;t={$row['topic_id']}\">{$this->lang->news_more}</a> )</span>";
+				$text .= "<span style=\"white-space:nowrap\">( <a href=\"{$this->site}/newspost/{$link}-{$row['topic_id']}/\">{$this->lang->news_more}</a> )</span>";
 			}
 
-			$comments = "<a href=\"{$this->self}?a=newspost&amp;t={$row['topic_id']}\">{$row['topic_replies']} {$this->lang->news_comments}</a>";
+			$comments = "<a href=\"{$this->site}/newspost/{$link}-{$row['topic_id']}/\">{$row['topic_replies']} {$this->lang->news_comments}</a>";
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/main.xtpl' );
 
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'topic', $topic );
 			$xtpl->assign( 'text', $text );
@@ -132,11 +134,12 @@ class main extends qsfglobal
 
 		// Make simple links to the rest.
 		if( $x == 5 ) {
-			$items .= "<select class=\"select\" onchange=\"get_newspost(this,'{$this->self}')\">";
+			$items .= "<select class=\"select\" onchange=\"get_newspost(this,'{$this->site}')\">";
 			$items .= "<option value=\"\">{$this->lang->news_previous}</option>";
 			while( $row = $this->db->nqfetch( $result ) )
 			{
-				$items .= "<option value=\"{$row['topic_id']}\">{$row['topic_title']}</option>";
+				$link = $this->clean_url( $row['topic_title'] );
+				$items .= "<option value=\"{$link}-{$row['topic_id']}/\">{$row['topic_title']}</option>";
 			}
 			$items .= "</select>";
 		}

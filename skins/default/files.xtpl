@@ -16,7 +16,7 @@
   {delcat}
   {admin}
  <br />
- <select class="select" onchange="get_filecat(this,'{self}')">
+ <select class="select" onchange="get_filecat(this,'{site}')">
   {filejump}
  </select>
  <input type="text" name="query" />

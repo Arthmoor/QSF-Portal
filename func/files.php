@@ -347,7 +347,7 @@ class files extends qsfglobal
 		}
 
 		if( !isset( $this->post['submit'] ) ) {
-			$list = $this->get_categories($file['file_catid']);
+			$list = $this->get_categories( $file['file_catid'] );
 			$move_file = sprintf( $this->lang->files_move_category, "<strong>{$file['file_name']}</strong>" );
 
 			$xtpl->assign( 'files_move_file', $this->lang->files_move_file );
@@ -1891,7 +1891,8 @@ class files extends qsfglobal
 
 			if( !$this->file_perms->auth( 'category_view', $cat['fcat_id'] ) )
 				continue;
-			$list .= "<option value=\"{$cat['fcat_id']}\"{$selected}>{$cat['fcat_longpath']}</option>\n";
+
+			$list .= "<option value=\"{$cat['fcat_id']}/\"{$selected}>{$cat['fcat_longpath']}</option>\n";
 		}
 		return $list;
 	}

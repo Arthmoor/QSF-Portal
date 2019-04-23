@@ -42,16 +42,27 @@ class newspost extends qsfglobal
 			);
 		}
 
-		if( !isset( $this->get['t'] ) ) {
+		if( !isset( $this->get['tname'] ) || !isset( $this->get['t'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
+		if( !$this->validator->validate( $this->get['tname'], TYPE_STRING ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
+		}
+
+		if( !$this->validator->validate( $this->get['t'], TYPE_INT ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
+		}
+
+		$post_name = $this->get['tname'];
 		$post_id = intval( $this->get['t'] );
-		return $this->getpost( $post_id );
+		return $this->getpost( $post_id, $post_name );
 	}
 
-	private function getpost( $post_id )
+	private function getpost( $post_id, $post_name )
 	{
 		$items = '';
 
@@ -64,7 +75,7 @@ class newspost extends qsfglobal
 		    WHERE t.topic_id=%d AND u.user_group=g.group_id
 		    ORDER BY p.post_time LIMIT 1", $post_id );
 
-		if( !$post ) {
+		if( !$post || strtolower( $post_name ) != $this->clean_url( $post['topic_title'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
@@ -78,7 +89,7 @@ class newspost extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'topic', $post['topic_title'] );
 		$xtpl->assign( 'post_time', $post['post_time'] );
@@ -166,6 +177,7 @@ class newspost extends qsfglobal
 			$xtpl->assign( 'c_text', $c_text );
 			$xtpl->assign( 'c_date', $c_date );
 			$xtpl->assign( 'post_id', $post_id );
+			$xtpl->assign( 'link_title', $this->clean_url( $post['topic_title'] ) );
 
 			$xtpl->parse( 'NewsPost.Comment' );
 		}
@@ -176,7 +188,7 @@ class newspost extends qsfglobal
 		}
 
 		if( $can_post ) {
-			$xtpl->assign( 't', $post );
+			$xtpl->assign( 't', $post_id );
 			$xtpl->assign( 'newspost_post_comment', $this->lang->newspost_post_comment );
 			$xtpl->assign( 'smilies', $this->bbcode->generate_emoji_links() );
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );

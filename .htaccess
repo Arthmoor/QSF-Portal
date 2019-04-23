@@ -31,6 +31,8 @@ RewriteRule ^files/$ index.php?a=files [L]
 RewriteRule ^forum/([-A-Za-z0-9]*)-([0-9]*)/(.*)$ index.php?a=forum&fname=$1&f=$2$3 [L]
 RewriteRule ^forum_rules/$ index.php?a=forum_rules [L]
 
+RewriteRule ^newspost/([-A-Za-z0-9]*)-([0-9]*)/(.*)$ index.php?a=newspost&tname=$1&t=$2$3 [L]
+
 RewriteRule ^profile/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=profile&uname=$1&w=$2 [L]
 
 RewriteRule ^recent_posts/$ index.php?a=recent [L]

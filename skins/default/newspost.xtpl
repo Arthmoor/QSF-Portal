@@ -42,7 +42,7 @@
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
-  <a href="{self}?a=newspost&amp;t={topicnum}&amp;p={post_id}#p{post_id}">#{pos}</a> {c_date}
+  <a href="{site}/newspost/{link_title}-{topicnum}/&amp;p={post_id}#p{pos}">#{pos}</a> {c_date}
  </div>
  <a id="p{pos}"></a>
  {CommenterInfo}
