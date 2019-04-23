@@ -1,7 +1,7 @@
 <!-- BEGIN: SpamControl -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/spam_controls.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/spam_controls.png" alt="" />
   {spam_controls}
  </div>
  {spam_message1}<br />
@@ -23,7 +23,7 @@
  </span>
  <p></p>
 <!-- BEGIN: Entry -->
- <span class="icon"><img src="loc_of_board}/skins/{skin}/images/icons/spam.png" class="left" /></span>
+ <span class="icon"><img src="{site}/skins/{skin}/images/icons/spam.png" class="left" /></span>
  <span class="spamaction">
   <form action="{ham_link}" method="post">
    <input type="hidden" name="token" value="{token}" />
@@ -35,7 +35,7 @@
   </form>
  </span>
  <span class="spamtopic"><a href="{self}?a=topic&amp;t={tid}">{title}</a></span>
- <span class="spamuser"><a href="{self}?a=profile&amp;w={uid}">{author}</a></span>
+ <span class="spamuser"><a href="{site}/profile/{link_author}-{uid}/">{author}</a></span>
  <span class="spamip">{ip}</span>
  <span class="spamdate">{date}</span>
  <span class="spamtext">{text}</span>

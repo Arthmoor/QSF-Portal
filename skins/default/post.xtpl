@@ -2,12 +2,12 @@
 <!-- BEGIN: Preview -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
   {preview_title}
  </div>
 <!-- BEGIN: PosterGuest -->
  <span class="avatar">
-  <img src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
  </span>
  <span class="member_info">
   <strong>[{topic_guest}]</strong> - ({topic_unreg})
@@ -19,9 +19,9 @@
   {avatar}
  </span>
  <span class="member_info">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" />
-  <strong><a href="{self}?a=profile&amp;w={uid}">{uname}</a></strong><br />
-  <strong>{utitle}</strong>   <img src="{loc_of_board}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
+  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
+  <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br />
+  <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
   <span class="text">{topic_group}</span>{gname}<br />
   <span class="text">{topic_posts}</span> {uposts}<br />
   <span class="text">{topic_joined}</span> {joined}
@@ -51,7 +51,7 @@
 <form action="{self}?a=post&amp;s={s}&amp;{target}" method="post" id="mbpost" enctype="multipart/form-data">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/{icon_file}" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/{icon_file}" alt="" />
   {post_new_topic} {forum_name}
  </div>
 <!-- BEGIN: New -->
@@ -74,7 +74,7 @@
   {smilies}
  </span>
  <span class="form">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   {bbcode_menu}
   <textarea name="post" id="bbcode" rows="12" cols="60">{quote}</textarea>
   <script>textarea = bbcodeInit("bbcode");</script>
@@ -130,7 +130,12 @@
  <div class="title">{post_last_five} [<a href="{self}?a=topic&amp;t={t}">{post_view_topic}</a>]</div>
 <!-- BEGIN: ReplyReview -->
  <span class="head">
-  <strong>{last_user} ({post_posted} {last_time})</strong>
+<!-- BEGIN: LastUserMember -->
+  <strong><a href="{site}/profile/{link_name}-{post_author}/">{user_name}</a> ({post_posted} {last_time})</strong>
+<!-- END: LastUserMember -->
+<!-- BEGIN: LastUserGuest -->
+  <strong>{user_name} ({post_posted} {last_time})</strong>
+<!-- END: LastUserGuest -->
  </span>
  {last_text}
  <p class="list_line"></p><br />

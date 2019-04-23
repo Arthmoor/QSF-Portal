@@ -21,7 +21,7 @@
 
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
   {title_html}
  </div>
  <span class="next_prev_topics">
@@ -53,20 +53,20 @@
  <div class="title">
   <div style="float:left;">
 <!-- BEGIN: NewPost -->
-   <img src="{loc_of_board}/skins/{skin}/images/icons/post_new.png" alt="{topic_new_post}" />
+   <img src="{site}/skins/{skin}/images/icons/post_new.png" alt="{topic_new_post}" />
 <!-- END: NewPost -->
 <!-- BEGIN: NewPostTopic -->
-   <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="{topic_new_post}" />
+   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{topic_new_post}" />
 <!-- END: NewPostTopic -->
 <!-- BEGIN: PostIcon -->
-   <img src="{loc_of_board}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
+   <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
 <!-- END: PostIcon -->
    <a href="{self}?a=topic&amp;t={topicnum}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
    &nbsp;&nbsp;<span class="small_text">{edited}</span>
   </div>
   <div style="text-align:right;">
-   <div style="float:right;"><a href="#top"><img src="{loc_of_board}/skins/{skin}/images/icons/arrow_up.png" alt="{topic_top}" title="{topic_top}" /></a></div>
-   <div style="float:right;"><a href="#bottom"><img src="{loc_of_board}/skins/{skin}/images/icons/arrow_down.png" alt="{topic_bottom}" title="{topic_bottom}" /></a></div>
+   <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{topic_top}" title="{topic_top}" /></a></div>
+   <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{topic_bottom}" title="{topic_bottom}" /></a></div>
 <!-- BEGIN: CanDelete -->
    <div class="button"><a class="spam" href="{self}?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
    <div class="button"><a class="delete" href="{self}?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
@@ -93,7 +93,7 @@
 <!-- END: SplitSelect -->
 <!-- BEGIN: PosterInfoGuest -->
  <span class="avatar">
-  <img src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
  </span>
  <span class="member_info">
   <strong>{topic_guest}</strong> - ({topic_unreg}) {post_ip}
@@ -107,13 +107,13 @@
 
  <span class="member_info">
 <!-- BEGIN: Online -->
-   <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
+   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
-   <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
+   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
 <!-- END: Offline -->
-  <strong><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></strong><br />
-  <strong>{user_title}</strong> <img src="{loc_of_board}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
+  <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br />
+  <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
   <span class="text">{topic_group}</span>{group_name}<br />
   <span class="text">{topic_posts}</span>{user_posts}<br />
   <span class="text">{topic_joined}</span>{user_joined}
@@ -213,11 +213,11 @@
 
 <!-- BEGIN: QuickReplyBox -->
 <div class="quickreply">
-<script src="{loc_of_board}/javascript/postboxplain.js"></script>
+<script src="{site}/javascript/postboxplain.js"></script>
 <form action="{self}?a=post&amp;s=reply&amp;t={topicnum}" method="post" id="mbpost">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
   {topic_quickreply}: {title_html}
  </div>
  <span class="head">
@@ -270,7 +270,7 @@
 <!-- BEGIN: PollResults -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/chart_bar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="" />
   {title_html} ({total_votes} {topic_votes})
  </div>
 <!-- BEGIN: Entry -->
@@ -279,7 +279,7 @@
  </span>
 
  <span class="form">
-  <img src="{loc_of_board}/skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="{loc_of_board}/skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="{loc_of_board}/skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /> &nbsp;{percent}% - {votes}
+  <img src="{site}/skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="{site}/skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="{site}/skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /> &nbsp;{percent}% - {votes}
  </span>
 
  <p class="list_line"></p>
@@ -291,7 +291,7 @@
 <form action="{self}?a=post&amp;s=vote&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/chart_bar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="" />
   {title_html} (<a href="{self}?a=post&amp;s=results&amp;t={t}">{topic_view}</a>)
  </div>
 <!-- BEGIN: Option -->

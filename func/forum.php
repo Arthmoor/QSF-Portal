@@ -138,7 +138,7 @@ class forum extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/forum.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
@@ -222,6 +222,9 @@ class forum extends qsfglobal
 		$xtpl->assign( 'forum_sub_last_post', $this->lang->forum_sub_last_post );
 		$xtpl->assign( 'main_topics_new', $this->lang->main_topics_new );
 		$xtpl->assign( 'main_topics_old', $this->lang->main_topics_old );
+		$xtpl->assign( 'forum_topic_posted', $this->lang->forum_topic_posted );
+		$xtpl->assign( 'forum_jump', $this->lang->forum_jump );
+		$xtpl->assign( 'forum_by', $this->lang->forum_by );
 
 		if( $forum = $this->db->nqfetch( $query ) ) {
 			do {
@@ -257,8 +260,12 @@ class forum extends qsfglobal
 						$forum['LastTime'] = $this->mbdate( DATE_LONG, $forum['LastTime'] );
 						$forum['forum_lastpost_topic'] = $forum['LastTopicID'];
 
-						if( $forum['user_lastposterID'] ) {
-							$forum['user_lastposter'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $forum['user_lastposterID'] . '" class="small">' . $forum['user_lastposter'] . '</a>';
+						if( $forum['user_lastposterID'] != USER_GUEST_UID ) {
+							$xtpl->assign( 'user_lastposterID', $forum['user_lastposterID'] );
+							$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
+							$xtpl->assign( 'link_name', $this->clean_url( $forum['user_lastposter'] ) );
+
+							$xtpl->parse( 'Forum.SubForum.Normal.LastPostBox.UserInfo' );
 						}
 
 						$full_title = $this->format( $forum['user_lastpost'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
@@ -283,8 +290,6 @@ class forum extends qsfglobal
 						$xtpl->assign( 'LastTopicID', $forum['LastTopicID'] );
 						$xtpl->assign( 'full_title', $full_title );
 						$xtpl->assign( 'user_lastpost', $forum['user_lastpost'] );
-						$xtpl->assign( 'board_by', $this->lang->board_by );
-						$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
 						$xtpl->assign( 'LastTime', $forum['LastTime'] );
 
 						$xtpl->parse( 'Forum.SubForum.Normal.LastPostBox' );
@@ -311,10 +316,6 @@ class forum extends qsfglobal
 			LIMIT %d, %d",
 			$this->user['user_id'], $f, TOPIC_GLOBAL, TOPIC_TYPE_FORUM, TOPIC_PINNED, $min, $n );
 
-		$xtpl->assign( 'forum_topic_posted', $this->lang->forum_topic_posted );
-		$xtpl->assign( 'forum_jump', $this->lang->forum_jump );
-		$xtpl->assign( 'forum_by', $this->lang->forum_by );
-
 		while( $row = $this->db->nqfetch( $query ) )
 		{
 			$row['topic_title'] = $this->format( $row['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
@@ -325,18 +326,6 @@ class forum extends qsfglobal
 
 			if( !empty( $row['topic_description'] ) ) {
 				$row['topic_description'] = '<br />&raquo; ' . $this->format( $row['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
-			}
-
-			if( $row['topic_last_poster'] != USER_GUEST_UID ) {
-				$last_poster = '<a href="' . $this->self . '?a=profile&amp;w=' . $row['topic_last_poster'] . '" class="small">' . $row['topic_last_poster_name'] . '</a>';
-			} else {
-				$last_poster = $this->lang->forum_guest;
-			}
-
-			if( $row['topic_starter'] != USER_GUEST_UID ) {
-				$row['topic_starter'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $row['topic_starter'] . '" class="small">' . $row['topic_starter_name'] . '</a>';
-			} else {
-				$row['topic_starter'] = $this->lang->forum_guest;
 			}
 
 			$state = null;
@@ -394,10 +383,10 @@ class forum extends qsfglobal
 			$topic_icon = null;
 
 			if( $row['topic_modes'] & TOPIC_POLL ) {
-				$topic_icon = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/images/icons/chart_bar.png" alt="' . $this->lang->forum_icon . '" />';
+				$topic_icon = '<img src="' . $this->site . '/skins/' . $this->skin . '/images/icons/chart_bar.png" alt="' . $this->lang->forum_icon . '" />';
 			} else {
 				if( $row['topic_icon'] ) {
-					$topic_icon = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->forum_icon . '" />';
+					$topic_icon = '<img src="' . $this->site . '/skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->forum_icon . '" />';
 				}
 			}
 
@@ -428,7 +417,7 @@ class forum extends qsfglobal
 				}
 
 				if( $icon ) {
-					$xtpl->assign( 'topic_icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->forum_icon}\" class=\"left\" />" );
+					$xtpl->assign( 'topic_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->forum_icon}\" class=\"left\" />" );
 				} elseif( $topic_icon ) {
 					$xtpl->assign( 'topic_icon', $topic_icon );
 				} else {
@@ -447,13 +436,35 @@ class forum extends qsfglobal
 					$xtpl->parse( 'Forum.Topics.ForumTopic.NewPost' );
 				}
 
+				if( $row['topic_last_poster'] != USER_GUEST_UID ) {
+					$xtpl->assign( 'topic_last_poster', $row['topic_last_poster'] );
+					$xtpl->assign( 'topic_last_poster_name', $row['topic_last_poster_name'] );
+					$xtpl->assign( 'link_name_last', $this->clean_url( $row['topic_last_poster_name'] ) );
+
+					$xtpl->parse( 'Forum.Topics.ForumTopic.LastPosterMember' );
+				} else {
+					$xtpl->assign( 'topic_last_poster_name', $this->lang->recent_guest );
+
+					$xtpl->parse( 'Forum.Topics.ForumTopic.LastPosterGuest' );
+				}
+
+				if( $row['topic_starter'] != USER_GUEST_UID ) {
+					$xtpl->assign( 'topic_starter', $row['topic_starter'] );
+					$xtpl->assign( 'topic_starter_name', $row['topic_starter_name'] );
+					$xtpl->assign( 'link_name', $this->clean_url( $row['topic_starter_name'] ) );
+
+					$xtpl->parse( 'Forum.Topics.ForumTopic.TopicStarterMember' );
+				} else {
+					$xtpl->assign( 'topic_starter_name', $this->lang->recent_guest );
+
+					$xtpl->parse( 'Forum.Topics.ForumTopic.TopicStarterGuest' );
+				}
+
 				$xtpl->assign( 'topic_description', $row['topic_description'] );
-				$xtpl->assign( 'topic_starter', $row['topic_starter'] );
 				$xtpl->assign( 'topic_replies', $row['topic_replies'] );
 				$xtpl->assign( 'topic_views', $row['topic_views'] );
 				$xtpl->assign( 'topic_edited', $row['topic_edited'] );
 				$xtpl->assign( 'jump', $jump );
-				$xtpl->assign( 'last_poster', $last_poster );
 
 				$xtpl->parse( 'Forum.Topics.ForumTopic' );
 			}

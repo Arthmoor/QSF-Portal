@@ -2,7 +2,7 @@
 <form action="{self}?a=search" method="post" id="search">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/search.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />
   {search_search}
  </div>
 
@@ -77,7 +77,7 @@
 <!-- BEGIN: Results -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/search.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />
   {search_result}
  </div>
  <span class="head">
@@ -88,19 +88,26 @@
   <span class="last_post">{search_starter}</span>
  </span>
 <!-- BEGIN: Entry -->
- <span class="icon"><img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" /></span>
+ <span class="icon"><img src="{site}/skins/{skin}/images/icons/topic.png" alt="" /></span>
  <span class="thread">
   <a href="{self}?a=topic&amp;t={post_topic}"><strong>{topic_title}</strong></a>
   <br />- <a href="{self}?a=forum&amp;f={topic_forum}">{forum_name}</a>
  </span>
  <span class="number">{matches}</span>
  <span class="number">{topic_replies}</span>
- <span class="last_post">{topic_starter}</span>
+ <span class="last_post">
+<!-- BEGIN: TopicStarterMember -->
+  <a href="{site}/profile/{topic_starter_link_name}-{topic_starter}/">{topic_starter_name}</a>
+<!-- END: TopicStarterMember -->
+<!-- BEGIN: TopicStarterGuest -->
+  {topic_starter_name}
+<!-- END: TopicStarterGuest -->
+ </span>
  <p class="list_line"></p>
 <!-- BEGIN: Post -->
 <!-- BEGIN: PosterInfoGuest -->
  <span class="avatar">
-  <img src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
  </span>
  <span class="member_info">
   <strong>{search_guest}</strong> - ({search_unreg})
@@ -113,13 +120,13 @@
  </span>
  <span class="member_info">
 <!-- BEGIN: Online -->
-  <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="{search_online}" title="{search_online}" />
+  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="{search_online}" title="{search_online}" />
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
-  <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="{search_offline}" title="{search_offline}" />
+  <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="{search_offline}" title="{search_offline}" />
 <!-- END: Offline -->
-  <strong><a href="{self}?a=profile&amp;w={post_author}">{user_name}</a></strong><br />
-  <strong>{user_title}</strong>   <img src="{loc_of_board}/skins/{skin}/images/{membertitle_icon}" alt="{search_level}" /><br />
+  <strong><a href="{site}/profile/{link_name}-{post_author}/">{user_name}</a></strong><br />
+  <strong>{user_title}</strong>   <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="{search_level}" /><br />
   <span class="text">{search_group}</span>{group_name}<br />
   <span class="text">{search_posts}</span> {user_posts}<br />
   <span class="text">{search_joined}</span> {user_joined}

@@ -67,7 +67,7 @@ class spam_control extends qsfglobal
 			$this->sets['spam_pending'] = 0;
 			$this->write_sets();
 
-			return $this->message( $this->lang->spam_control, $this->lang->spam_all_deleted, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php' );
+			return $this->message( $this->lang->spam_control, $this->lang->spam_all_deleted, $this->lang->continue, $this->site );
 		}
 
 		if( isset( $this->get['s'] ) ) {
@@ -158,7 +158,7 @@ class spam_control extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/spam_control.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'spam_controls', $this->lang->spam_controls );
 		$xtpl->assign( 'spam_message1', $this->lang->spam_message1 );
@@ -203,6 +203,7 @@ class spam_control extends qsfglobal
 			$xtpl->assign( 'title', $title );
 			$xtpl->assign( 'uid', $user['user_id'] );
 			$xtpl->assign( 'author', $author );
+			$xtpl->assign( 'link_author', $this->clean_url( $author ) );
 			$xtpl->assign( 'ip', $spam['spam_ip'] );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'text', $text );

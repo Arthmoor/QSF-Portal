@@ -57,24 +57,40 @@ class profile extends qsfglobal
 		$this->tree( $this->lang->profile_list, $this->self . '?a=members' );
 		$this->tree( $this->lang->profile_view_profile );
 
-		if( !isset( $this->get['w'] ) ) {
+		if( !isset( $this->get['uname'] ) || !isset( $this->get['w'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
-			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user );
+			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user .'1');
 		}
 
-		$user = intval( $this->get['w'] );
+		if( !$this->validator->validate( $this->get['uname'], TYPE_STRING ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user .'2');
+		}
+
+		if( !$this->validator->validate( $this->get['w'], TYPE_INT ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->profile_profile, $this->lang->profile_must_user .'3');
+		}
+
+		$uname = $this->get['uname'];
+		$uid = intval( $this->get['w'] );
 
 		$profile = $this->db->fetch( "SELECT u.*, g.group_name, a.active_time
 			FROM (%pusers u, %pgroups g)
 			LEFT JOIN %pactive a ON a.active_id=u.user_id
-			WHERE u.user_id=%d AND g.group_id=u.user_group", $user );
+			WHERE u.user_id=%d AND g.group_id=u.user_group", $uid );
 
-		if( !$profile || ( $user == USER_GUEST_UID ) ) {
+		if( !$profile || ( $uid == USER_GUEST_UID ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
 
-		if( $profile['user_birthday'] == '1900-01-01') {
+		if( $uname != $this->clean_url( $profile['user_name'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
+		}
+
+		if( $profile['user_birthday'] == '1900-01-01' ) {
 			$profile['user_birthday'] = null;
 		}
 
@@ -113,10 +129,12 @@ class profile extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/profile.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'profile_profile', $this->lang->profile_profile );
+		$xtpl->assign( 'profile_online', $this->lang->profile_online );
+		$xtpl->assign( 'profile_offline', $this->lang->profile_offline );
 
 		if( $profile['user_avatar'] != null ) {
 			$xtpl->assign( 'user_avatar', $profile['user_avatar'] );
@@ -125,11 +143,11 @@ class profile extends qsfglobal
 		}
 
 		$online = ( $profile['active_time'] && ( $profile['active_time'] > ( $this->time - 900 ) ) && $profile['user_active'] );
-		if( $online )
-			$online_link = "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/images/icons/user_online.png\" alt=\"{$this->lang->profile_online}\" title=\"{$this->lang->profile_online}\" />";
-		else
-			$online_link = "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/images/icons/user_offline.png\" alt=\"{$this->lang->profile_offline}\" title=\"{$this->lang->profile_offline}\" />";
-		$xtpl->assign( 'online_link', $online_link );
+		if( $online ) {
+			$xtpl->parse( 'Profile.Online' );
+		} else {
+			$xtpl->parse( 'Profile.Offline' );
+		}
 
 		$xtpl->assign( 'user_name', $profile['user_name'] );
 		$xtpl->assign( 'user_title', $profile['user_title'] );
@@ -234,16 +252,16 @@ class profile extends qsfglobal
 				FROM %pposts p, %ptopics t, %pforums f
 				WHERE p.post_topic=t.topic_id AND t.topic_forum=f.forum_id AND p.post_author=%d
 				GROUP BY t.topic_forum
-				ORDER BY Forumuser_posts DESC", $user );
+				ORDER BY Forumuser_posts DESC", $uid );
 
 			$final_fav = null;
 
 			while( $f = $this->db->nqfetch( $fav ) )
 			{
-					if( $this->perms->auth( 'forum_view', $f['Forum'] ) ) {
-						$final_fav = $f;
-						break;
-					}
+				if( $this->perms->auth( 'forum_view', $f['Forum'] ) ) {
+					$final_fav = $f;
+					break;
+				}
 			}
 
 			$last = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_title, p.post_time
@@ -252,7 +270,7 @@ class profile extends qsfglobal
 				ORDER BY p.post_time DESC
 				LIMIT 1", $profile['user_id'] );
 
-			if( isset($last['topic_forum']) && $this->perms->auth( 'topic_view', $last['topic_forum'] ) ) {
+			if( isset( $last['topic_forum'] ) && $this->perms->auth( 'topic_view', $last['topic_forum'] ) ) {
 				if( strlen( $last['topic_title'] ) > 25 ) {
 					$last['topic_title'] = substr( $last['topic_title'], 0, 22 ) . '...';
 				}
@@ -263,7 +281,7 @@ class profile extends qsfglobal
 			}
 
 			if( isset( $final_fav['Forum'] ) ) {
-				$posts_total = $this->db->fetch( "SELECT COUNT(post_id) as count FROM %pposts WHERE post_author=%d", $user );
+				$posts_total = $this->db->fetch( "SELECT COUNT(post_id) as count FROM %pposts WHERE post_author=%d", $uid );
 
 				if( !$posts_total['count'] ) {
 					$fav_forum = $this->lang->profile_unkown;
@@ -274,7 +292,7 @@ class profile extends qsfglobal
 				$fav_forum = $this->lang->profile_unkown;
 			}
 
-			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$user\">" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
+			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$uid\">" . sprintf($this->lang->profile_postcount, number_format($profile['user_posts'], 0, null, $this->lang->sep_thousands), $user_postsPerDay) . '</a>';
 
 			$xtpl->assign( 'profile_posts', $this->lang->profile_posts );
 			$xtpl->assign( 'user_posts', $profile['user_posts'] );
@@ -288,7 +306,7 @@ class profile extends qsfglobal
 
 		if( $profile['user_uploads'] ) {
 			$last = $this->db->fetch( "SELECT file_id, file_name, file_date FROM %pfiles
-				WHERE file_submitted=%d ORDER BY file_date DESC LIMIT 1", $user );
+				WHERE file_submitted=%d ORDER BY file_date DESC LIMIT 1", $uid );
 
 			$lastfile = $this->lang->profile_uploads_none_yet;
 			if( isset( $last['file_id'] ) ) {
@@ -303,7 +321,7 @@ class profile extends qsfglobal
 			}
 			$uploadsPerDay = $profile['user_uploads'] / $usetime;
 			$uploadsPerDay = number_format( $uploadsPerDay, 2, $this->lang->sep_decimals, $this->lang->sep_thousands );
-			$uploads = "<a href=\"{$this->self}?a=files&amp;s=search&amp;uid={$user}\">{$profile['user_uploads']} {$this->lang->profile_uploads_total}, {$uploadsPerDay} {$this->lang->profile_uploads_per_day}</a>";
+			$uploads = "<a href=\"{$this->self}?a=files&amp;s=search&amp;uid={$uid}\">{$profile['user_uploads']} {$this->lang->profile_uploads_total}, {$uploadsPerDay} {$this->lang->profile_uploads_per_day}</a>";
 
 			$xtpl->assign( 'profile_uploads', $this->lang->profile_uploads );
 			$xtpl->assign( 'uploads', $uploads );

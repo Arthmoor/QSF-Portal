@@ -47,7 +47,7 @@ class members extends qsfglobal
 			$this->lang->board();
 
 			return $this->message(
-				sprintf( $this->lang->board_message, $this->sets['forum_name']),
+				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
 				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
 			);
 		}
@@ -55,8 +55,8 @@ class members extends qsfglobal
 		$this->set_title( $this->lang->members_list );
 		$this->tree( $this->lang->members_list );
 
-		$this->get['min'] = isset( $this->get['min'] ) ? intval($this->get['min']) : 0;
-		$this->get['num'] = isset( $this->get['num'] ) ? intval($this->get['num']) : 25;
+		$this->get['min'] = isset( $this->get['min'] ) ? intval( $this->get['min'] ) : 0;
+		$this->get['num'] = isset( $this->get['num'] ) ? intval( $this->get['num'] ) : 25;
 		$asc = 0;
 
 		if( isset( $this->get['order'], $this->get['asc'] ) ) {
@@ -123,7 +123,7 @@ class members extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/members.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
 		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
@@ -165,6 +165,7 @@ class members extends qsfglobal
 
 			$xtpl->assign( 'user_id', $member['user_id'] );
 			$xtpl->assign( 'user_name', $member['user_name'] );
+			$xtpl->assign( 'link_name', $this->clean_url( $member['user_name'] ) );
 
 			if( $member['user_email_show'] && $this->perms->auth('email_use') ) {
 				$xtpl->assign( 'user_email', $member['user_email'] );

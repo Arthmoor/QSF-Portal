@@ -50,12 +50,14 @@ class top_uploaders extends modlet
 				continue;
 
 			$uPostRef = "<a href=\"{$this->qsf->self}?a=files&amp;s=search&amp;uid={$uid}\">";
-			$content .= "<a href=\"{$this->qsf->self}?a=profile&amp;w={$uid}\">{$user}</a> {$uPostRef}($uploads)</a><br />";
+
+			$name = $this->qsf->clean_url( $user );
+			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($uploads)</a><br />";
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/top_uploaders.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->qsf->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->qsf->site );
 		$xtpl->assign( 'skin', $this->qsf->skin );
 		$xtpl->assign( 'main_top_uploaders', $this->qsf->lang->main_top_uploaders );
 		$xtpl->assign( 'content', $content );

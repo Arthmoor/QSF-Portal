@@ -52,12 +52,13 @@ class activeutil extends forumutils
 		parent::__construct( $qsf );
 
 		$this->get = &$qsf->get;
-		$this->user_id = $qsf->user['user_id'];
-		$this->time = $qsf->time;
-		$this->ip = $qsf->ip;
-		$this->agent = $qsf->agent;
-		$this->self = $qsf->self;
-		$this->bbcode = $qsf->bbcode;
+		$this->user_id = &$qsf->user['user_id'];
+		$this->time = &$qsf->time;
+		$this->ip = &$qsf->ip;
+		$this->agent = &$qsf->agent;
+		$this->self = &$qsf->self;
+		$this->site = &$qsf->site;
+		$this->bbcode = &$qsf->bbcode;
 		$this->sessionid = session_id();
 	}
 
@@ -198,8 +199,11 @@ class activeutil extends forumutils
 				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ') .  htmlspecialchars( $user['active_user_agent'] );
 
 				if( $user['active_id'] != USER_GUEST_UID ) {
-					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
-						$link = "href=\"{$this->self}?a=profile&amp;w={$user['active_id']}\"";
+					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
+						$name = $this->qsf->clean_url( $user['user_name'] );
+
+						$link = "href=\"{$this->site}/profile/{$name}-{$user['active_id']}/\"";
+					}
 					else
 						$link = '';
 
@@ -238,7 +242,8 @@ class activeutil extends forumutils
 					break;
 
 				case 'profile':
-					$action_link = "<a href='{$this->self}?a=profile&amp;w={$user['active_item']}'>{$user['profile_name']}</a>";
+					$name = $this->qsf->clean_url( $user['profile_name'] );
+					$action_link = "<a href='{$this->site}/profile/{$name}-{$user['active_item']}/'>{$user['profile_name']}</a>";
 					break;
 				}
 

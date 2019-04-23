@@ -22,8 +22,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -56,18 +56,24 @@ class board_stats extends modlet
 
 		$stats = $this->getStats();
 
-		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
+		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
 			$this->qsf->lang->board_stats_string = sprintf( $this->qsf->lang->board_stats_string,
 			    $stats['MEMBERS'], $stats['LASTMEMBER'], $stats['TOPICS'], $stats['REPLIES'], $stats['POSTS'] );
-		else
+		} else {
+			$name = $this->qsf->clean_url( $stats['LASTMEMBER'] );
+
 			$this->qsf->lang->board_stats_string = sprintf( $this->qsf->lang->board_stats_string,
-			    $stats['MEMBERS'], "<a href=\"{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}\">{$stats['LASTMEMBER']}</a>",
+			    $stats['MEMBERS'], "<a href=\"{$this->qsf->site}/profile/{$name}-{$stats['LASTMEMBERID']}/\">{$stats['LASTMEMBER']}</a>",
 			    $stats['TOPICS'], $stats['REPLIES'], $stats['POSTS'] );
+		}
 
 		$this->qsf->lang->board_most_online = sprintf( $this->qsf->lang->board_most_online, $stats['MOSTONLINE'], $stats['MOSTONLINETIME'] );
 
-		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
-			$stats['LASTMEMBER'] = "<a href=\"{$this->qsf->self}?a=profile&amp;w={$stats['LASTMEMBERID']}\">{$stats['LASTMEMBER']}</a>";
+		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
+			$name = $this->qsf->clean_url( $stats['LASTMEMBER'] );
+
+			$stats['LASTMEMBER'] = "<a href=\"{$this->qsf->site}/profile/{$name}-{$stats['LASTMEMBERID']}/\">{$stats['LASTMEMBER']}</a>";
+		}
 
 		$birthdays = '';
 		if( $arg == true ) {
@@ -76,7 +82,7 @@ class board_stats extends modlet
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/board_stats.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->qsf->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->qsf->site );
 		$xtpl->assign( 'skin', $this->qsf->skin );
 		$xtpl->assign( 'main_stats', $this->qsf->lang->main_stats );
 		$xtpl->assign( 'main_files', $this->qsf->lang->main_files );
@@ -136,7 +142,7 @@ class board_stats extends modlet
 	private function getuser_birthdays()
 	{
 		$links  = array();
-		$members  = $this->qsf->db->query( "SELECT user_id, user_name, user_birthday FROM %pusers WHERE user_birthday LIKE '%%%s%%'", $this->qsf->mbdate('%-m-d') );
+		$members  = $this->qsf->db->query( "SELECT user_id, user_name, user_birthday FROM %pusers WHERE user_birthday LIKE '%%%s%%'", $this->qsf->mbdate( '%-m-d' ) );
 		$count    = $this->qsf->db->num_rows( $members );
 
 		if( !$count ) {
@@ -148,10 +154,13 @@ class board_stats extends modlet
 			$year = explode( '-', $m['user_birthday'] );
 			$day = $this->qsf->mbdate( 'Y' ) - $year[0];
 
-			if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT )
-				$links[] = "<a href=\"{$this->qsf->self}?a=profile&amp;w={$m['user_id']}\" class=\"bdaylink\">{$m['user_name']}</a> ($day)";
-			else
+			if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
+				$name = $this->qsf->clean_url( $m['user_name'] );
+
+				$links[] = "<a href=\"{$this->qsf->site}/profile/{$name}-{$m['user_id']}/\" class=\"bdaylink\">{$m['user_name']}</a> ($day)";
+			} else {
 				$links[] = "{$m['user_name']} ($day)";
+			}
 		}
 		return implode( ', ', $links );
 	}

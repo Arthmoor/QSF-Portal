@@ -1,5 +1,4 @@
 <!-- BEGIN: BoardIndex -->
-<!-- BOARD_MAIN -->
 <div class="article">
  <div style="float:left">{tree}</div>
  <div style="text-align:right">
@@ -7,11 +6,9 @@
  </div>
 </div>
 {forums}
-<!-- BOARD_MAIN -->
 <!-- END: BoardIndex -->
 
 <!-- BEGIN: Category -->
-<!-- BOARD_CATEGORY -->
 <div class="article">
  <div style="float:left">{tree}</div>
  <div style="text-align:right">
@@ -21,7 +18,7 @@
 
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/report.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
   {cat_name}
  </div>
  <span class="head">
@@ -33,20 +30,18 @@
  </span>
  {forums}
 </div>
-<!-- BOARD_CATEGORY -->
 <!-- END: Category -->
 
 <!-- BEGIN: CategoryIndex -->
-<!-- CAT_HEADER_TOP -->
 <div class="article">
  <div class="title">
   <div style="float:left;">
-   <img src="{loc_of_board}/skins/{skin}/images/icons/report.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
    <a href="{self}?a=board&amp;c={fid}">{fname}</a>
   </div>
   <div style="text-align:right;">
-   <a href="#bottom"><img src="{loc_of_board}/skins/{skin}/images/icons/arrow_down.png" alt="{board_bottom_page}" title="{board_bottom_page}" /></a>
-   <a href="#top"><img src="{loc_of_board}/skins/{skin}/images/icons/arrow_up.png" alt="{board_top_page}" title="{board_top_page}" /></a>
+   <a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{board_bottom_page}" title="{board_bottom_page}" /></a>
+   <a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{board_top_page}" title="{board_top_page}" /></a>
   </div>
  </div>
 
@@ -58,17 +53,15 @@
   <span class="last_post">{board_last_post}&nbsp;</span>
  </span>
  <p></p>
-<!-- CAT_HEADER_TOP -->
 <!-- END: CategoryIndex -->
 
 <!-- BEGIN: BoardForum -->
-<!-- BOARD_FORUM -->
 <span class="icon">
 <!-- BEGIN: ForumUnread -->
- <img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" alt="{main_topics_new}" title="{main_topics_new}" />
+ <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="{main_topics_new}" title="{main_topics_new}" />
 <!-- END: ForumUnread -->
 <!-- BEGIN: ForumRead -->
- <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="{main_topics_old}" title="{main_topics_old}" />
+ <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{main_topics_old}" title="{main_topics_old}" />
 <!-- END: ForumRead -->
 </span>
 <span class="thread">
@@ -80,12 +73,11 @@
  {user_lastpostBox}
 </span>
 <p class="list_line"></p>
-<!-- BOARD_FORUM -->
 <!-- END: BoardForum -->
 
 <!-- BEGIN: ForumRedirect -->
 <span class="icon">
- <img src="{loc_of_board}/skins/{skin}/images/icons/world_link.png" alt="" />
+ <img src="{site}/skins/{skin}/images/icons/world_link.png" alt="" />
 </span>
 <span class="thread">
  <strong>{board_forum_url}</strong> <a href="{fdesc}">{fname}</a>
@@ -94,12 +86,12 @@
 <!-- END: ForumRedirect -->
 
 <!-- BEGIN: LastPostBox -->
-<!-- BOARD_FORUM_LAST_POST_BOX -->
 <!-- BEGIN: TopicUnread -->
-<a href="{self}?a=topic&amp;t={forum_lastpost_topic}&amp;unread=1#unread"><img src="{loc_of_board}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
+<a href="{self}?a=topic&amp;t={forum_lastpost_topic}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
 <!-- END: TopicUnread -->
 <a href="{self}?a=topic&amp;t={LastTopicID}" title="{full_title}">{user_lastpost}</a><br />
-{board_by} {user_lastposter}<br />
+<!-- BEGIN: UserInfo -->
+{board_by} <a href="{site}/profile/{link_name}-{user_lastposterID}/" class="small">{user_lastposter}</a><br />
+<!-- END: UserInfo -->
 {LastTime}
-<!-- BOARD_FORUM_LAST_POST_BOX -->
 <!-- END: LastPostBox -->

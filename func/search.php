@@ -387,7 +387,7 @@ class search extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/search.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'search_level', $this->lang->search_level );
 		$xtpl->assign( 'search_group', $this->lang->search_group );
@@ -407,7 +407,18 @@ class search extends qsfglobal
 
 			$search['topic_title'] = $this->format( $search['topic_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 
-			$topic_starter = ( $search['topic_starter'] != USER_GUEST_UID ) ? "<a href='{$this->self}?a=profile&amp;w={$search['topic_starter']}'>{$search['Starter']}</a>" : $search['Starter'];
+			if( $search['topic_starter'] != USER_GUEST_UID ) {
+				$xtpl->assign( 'topic_starter', $search['topic_starter'] );
+				$xtpl->assign( 'topic_starter_name', $search['Starter'] );
+				$xtpl->assign( 'topic_starter_link_name', $this->clean_url( $search['Starter'] ) );
+
+				$xtpl->parse( 'Results.Entry.TopicStarterMember' );
+			} else {
+				$xtpl->assign( 'topic_starter_name', $this->lang->recent_guest );
+
+				$xtpl->parse( 'Results.Entry.TopicStarterGuest' );
+			}
+
 			$search['topic_replies']++; // Add first post
 
 			$xtpl->assign( 'post_topic', $search['post_topic'] );
@@ -416,7 +427,6 @@ class search extends qsfglobal
 			$xtpl->assign( 'forum_name', $search['forum_name'] );
 			$xtpl->assign( 'matches', $matches );
 			$xtpl->assign( 'topic_replies', $search['topic_replies'] );
-			$xtpl->assign( 'topic_starter', $topic_starter );
 
 			if( isset( $this->post['showposts_check'] ) || ( $type == 'id' ) ) {
 				foreach( $topic as $match )
@@ -479,6 +489,7 @@ class search extends qsfglobal
 						$xtpl->assign( 'user_avatar', $match['user_avatar'] );
 						$xtpl->assign( 'post_author', $match['post_author'] );
 						$xtpl->assign( 'user_name', $match['user_name'] );
+						$xtpl->assign( 'link_name', $this->clean_url( $match['user_name'] ) );
 						$xtpl->assign( 'user_title', $match['user_title'] );
 						$xtpl->assign( 'membertitle_icon', $match['membertitle_icon'] );
 						$xtpl->assign( 'group_name', $match['group_name'] );

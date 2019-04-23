@@ -108,7 +108,7 @@ class board extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/board.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
@@ -161,7 +161,7 @@ class board extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/board.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'board_bottom_page', $this->lang->board_bottom_page );
@@ -173,6 +173,7 @@ class board extends qsfglobal
 		$xtpl->assign( 'board_forum_url', $this->lang->board_forum_url );
 		$xtpl->assign( 'main_topics_new', $this->lang->main_topics_new );
 		$xtpl->assign( 'main_topics_old', $this->lang->main_topics_old );
+		$xtpl->assign( 'board_by', $this->lang->board_by );
 
 		foreach( $forums[$c] as $category )
 		{
@@ -217,12 +218,16 @@ class board extends qsfglobal
 						$forum['LastTime'] = $this->mbdate( DATE_LONG, $forum['LastTime'] );
 
 						if( $forum['user_lastposterID'] != USER_GUEST_UID ) {
-							$forum['user_lastposter'] = "<a href=\"{$this->self}?a=profile&amp;w={$forum['user_lastposterID']}\" class=\"small\">{$forum['user_lastposter']}</a>";
+							$xtpl->assign( 'user_lastposterID', $forum['user_lastposterID'] );
+							$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
+							$xtpl->assign( 'link_name', $this->clean_url( $forum['user_lastposter'] ) );
+
+							$xtpl->parse( 'LastPostBox.UserInfo' );
 						}
 
 						$full_title = $forum['user_lastpost'];
 						if( strlen( $forum['user_lastpost']) > 19 ) {
-							$forum['user_lastpost'] = substr($forum['user_lastpost'], 0, 19) . '...';
+							$forum['user_lastpost'] = substr( $forum['user_lastpost'], 0, 19 ) . '...';
 						}
 
 						$full_title = $this->format( $full_title, FORMAT_CENSOR | FORMAT_HTMLCHARS );
@@ -240,8 +245,6 @@ class board extends qsfglobal
 						$xtpl->assign( 'LastTopicID', $forum['LastTopicID'] );
 						$xtpl->assign( 'full_title', $full_title );
 						$xtpl->assign( 'user_lastpost', $forum['user_lastpost'] );
-						$xtpl->assign( 'board_by', $this->lang->board_by );
-						$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
 						$xtpl->assign( 'LastTime', $forum['LastTime'] );
 
 						$xtpl->parse( 'LastPostBox' );

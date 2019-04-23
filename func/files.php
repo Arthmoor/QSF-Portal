@@ -264,6 +264,7 @@ class files extends qsfglobal
 	private function edit_file( $xtpl )
 	{
 		$id = intval( $this->get['fid'] );
+
 		$file = $this->db->fetch( 'SELECT f.*, u.user_name
 		    FROM %pfiles f
 		    LEFT JOIN %pusers u ON user_id=file_submitted
@@ -338,6 +339,7 @@ class files extends qsfglobal
 	private function move_file( $xtpl )
 	{
 		$id = intval( $this->get['fid'] );
+
 		$file = $this->db->fetch( 'SELECT file_id, file_name, file_catid FROM %pfiles WHERE file_id=%d', $id );
 
 		if( !$this->file_perms->auth( 'move_files', $file['file_catid'] ) ) {
@@ -378,23 +380,24 @@ class files extends qsfglobal
 
 	private function view_filequeue( $xtpl )
 	{
-		if (!isset($this->get['f'])) {
+		if( !isset( $this->get['f'] ) ) {
 			$this->get['f'] = null;
 		}
-		if (isset($this->get['u']))
+
+		if( isset( $this->get['u'] ) )
 			$getUpdate = true;
 		else
 			$getUpdate = false;
 
-		if(isset($this->get['cid']))
+		if( isset( $this->get['cid'] ) )
 		{
 			$cid = $this->get['cid'];
 
-			if (!$this->file_perms->auth('approve_files', $cid)) {
+			if( !$this->file_perms->auth( 'approve_files', $cid ) ) {
 				return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_approval_not_permitted );
 			}
 		}
-		
+
 		if( !$this->get['f'] ) {
 			$i = 0;
 
@@ -489,6 +492,7 @@ class files extends qsfglobal
 
 		if( !isset( $this->get['cid'] ) )
 			return $this->message( $this->lang->files_approve, $this->lang->files_approve_error );
+
 		if( $this->get['f'] == 'approve' )
 		{
 			$id = intval( $this->get['fid'] );
@@ -1249,6 +1253,7 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
+			$xtpl->assign( 'link_name', $this->clean_url( $user_name ) );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );
@@ -1327,6 +1332,7 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
+			$xtpl->assign( 'link_name', $this->clean_url( $user_name ) );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );
@@ -1666,6 +1672,7 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
+			#xtpl->assign( 'link_name', $this->clean_url( $user_name );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );

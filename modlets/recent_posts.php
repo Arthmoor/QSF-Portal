@@ -16,8 +16,8 @@
  *
  **/
 
-if (!defined('QUICKSILVERFORUMS')) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -73,7 +73,9 @@ class recent_posts extends modlet
 					}
 
 					$content .= "<i>$topic_title</i></a><br />";
-					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->self}?a=profile&amp;w={$row['topic_last_poster']}\">{$row['user_name']}</a><hr />";
+
+					$name = $this->qsf->clean_url( $row['user_name'] );
+					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr />";
 				}
 			} else {
 				if( !$this->qsf->perms->auth('topic_view', $row['topic_forum'] ) ) {
@@ -87,7 +89,9 @@ class recent_posts extends modlet
 					}
 
 					$content .= "$topic_title</a><br />";
-					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->self}?a=profile&amp;w={$row['topic_last_poster']}\">{$row['user_name']}</a><hr />";
+
+					$name = $this->qsf->clean_url( $row['user_name'] );
+					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr />";
 				}
 			}
 		}

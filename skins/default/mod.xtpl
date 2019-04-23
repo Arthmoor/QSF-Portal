@@ -2,7 +2,7 @@
 <form action="{self}?a=mod&amp;s=move&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_moved.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic_moved.png" alt="" />
   {mod_label_topic_move}
  </div>
  <span class="field">{mod_label_move_to}</span>
@@ -30,12 +30,12 @@
 <!-- BEGIN: Preview -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
   {preview_title}
  </div>
 <!-- BEGIN: PosterGuest -->
 <span class="avatar">
- <img src="{loc_of_board}/skins/{skin}/images/noavatar.png" alt="" />
+ <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
 </span>
 <span class="member_info">
  <strong>[{topic_guest}]</strong> - ({topic_unreg})
@@ -47,9 +47,9 @@
  {avatar}
 </span>
 <span class="member_info">
- <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" />
- <strong><a href="{self}?a=profile&amp;w={uid}">{uname}</a></strong><br />
- <strong>{utitle}</strong>   <img src="{loc_of_board}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
+ <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
+ <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br />
+ <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
  <span class="text">{topic_group}</span>{gname}<br />
  <span class="text">{topic_posts}</span> {uposts}<br />
  <span class="text">{topic_joined}</span> {joined}
@@ -78,7 +78,7 @@
 <form action="{self}?a=mod&amp;s=edit_post&amp;p={p}" method="post" name="mbpost" enctype="multipart/form-data">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/comment_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/comment_edit.png" alt="" />
   {mod_label_post_edit} {topic_title}
  </div>
  <span class="field">{post_icon}</span>
@@ -92,7 +92,7 @@
   {smilies}
  </span>
  <span class="form">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   {bbcode_menu}
   <textarea name="post" id="bbcode" rows="12" cols="60">{quote}</textarea>
   <script>textarea = bbcodeInit("bbcode");</script>
@@ -138,7 +138,7 @@
 <form action="{self}?a=mod&amp;s=edit_topic&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/topic_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic_edit.png" alt="" />
   {mod_label_topic_edit}
  </div>
  <span class="field">{mod_label_title}</span>

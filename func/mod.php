@@ -158,7 +158,7 @@ class mod extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 't', $t );
 			$xtpl->assign( 'mod_label_topic_move', $this->lang->mod_label_topic_move );
@@ -312,7 +312,7 @@ class mod extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
 			/**
@@ -360,6 +360,7 @@ class mod extends qsfglobal
 					$xtpl->assign( 'avatar', $avatar );
 					$xtpl->assign( 'uid', $data['user_id'] );
 					$xtpl->assign( 'uname', $data['user_name'] );
+					$xtpl->assign( 'link_name', $this->clean_url( $data['user_name'] ) );
 					$xtpl->assign( 'utitle', $data['user_title'] );
 					$xtpl->assign( 'utitleicon', $data['membertitle_icon'] );
 					$xtpl->assign( 'topic_level', $this->lang->topic_level );
@@ -385,7 +386,7 @@ class mod extends qsfglobal
 							$ext = strtolower( substr( $file, -4 ) );
 
 							if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->sets['loc_of_board']}/attachments/$md5' alt='{$file}' />";
+								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->site}/attachments/$md5' alt='{$file}' />";
 								continue;
 							}
 						}
@@ -514,7 +515,7 @@ class mod extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 't', $t );
 			$xtpl->assign( 'mod_label_topic_edit', $this->lang->mod_label_topic_edit );
@@ -981,7 +982,7 @@ class mod extends qsfglobal
 	/**
 	 * Lists IPs used by a member when posting
 	 *
-	 * @author Roger Libiez [Samson] 
+	 * @author Roger Libiez
 	 * @since 1.4.3
 	 * @return evaluated HTML template
 	 **/

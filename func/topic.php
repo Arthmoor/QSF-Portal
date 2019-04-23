@@ -343,7 +343,7 @@ class topic extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
 		$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
@@ -564,6 +564,7 @@ class topic extends qsfglobal
 
 				$xtpl->assign( 'user_id', $post['user_id'] );
 				$xtpl->assign( 'user_name', $post['user_name'] );
+				$xtpl->assign( 'link_name', $this->clean_url( $post['user_name'] ) );
 				$xtpl->assign( 'user_title', $post['user_title'] );
 				$xtpl->assign( 'membertitle_icon', $post['membertitle_icon'] );
 				$xtpl->assign( 'group_name', $post['group_name'] );
@@ -752,7 +753,7 @@ class topic extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'title_html', $title_html );
 

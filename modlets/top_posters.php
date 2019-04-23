@@ -49,12 +49,14 @@ class top_posters extends modlet
 				continue;
 
 			$uPostRef = "<a href=\"{$this->qsf->self}?a=search&amp;id={$uid}\">";
-			$content .= "<a href=\"{$this->qsf->self}?a=profile&amp;w={$uid}\">{$user}</a> {$uPostRef}($post)</a><br />";
+
+			$name = $this->qsf->clean_url( $user );
+			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($post)</a><br />";
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/top_posters.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->qsf->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->qsf->site );
 		$xtpl->assign( 'skin', $this->qsf->skin );
 		$xtpl->assign( 'main_top_posters', $this->qsf->lang->main_top_posters );
 		$xtpl->assign( 'content', $content );

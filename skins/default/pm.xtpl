@@ -10,7 +10,7 @@
 <form action="{self}?a=pm" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/messenger.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/messenger.png" alt="" />
   {foldername}
  </div>
  <span class="head">
@@ -23,14 +23,14 @@
 <!-- BEGIN: Message -->
  <span class="icon">
 <!-- BEGIN: New -->
-  <img src="{loc_of_board}/skins/{skin}/images/icons/new_message.png" alt="{pm_pm}" />
+  <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="{pm_pm}" />
 <!-- END: New -->
 <!-- BEGIN: Old -->
-  <a href="{self}?a=pm&amp;s=unread&amp;m={pm_id}"><img src="{loc_of_board}/skins/{skin}/images/icons/messenger.png" alt="{pm_pm}" /></a>
+  <a href="{self}?a=pm&amp;s=unread&amp;m={pm_id}"><img src="{site}/skins/{skin}/images/icons/messenger.png" alt="{pm_pm}" /></a>
 <!-- END: Old -->
  </span>
  <span class="message"><a href="{self}?a=pm&amp;s=view&amp;m={pm_id}" title="{preview}">{pm_title}</a></span>
- <span class="quarter"><a href="{self}?a=profile&amp;w={pm_from}">{user_name}</a></span>
+ <span class="quarter"><a href="{site}/profile/{link_name}-{pm_from}/">{user_name}</a></span>
  <span class="last_post">{pm_time}</span>
  <span class="delete"><input class="check" type="checkbox" name="delete[{pm_id}]" /></span>
  <p class="list_line"></p>
@@ -66,7 +66,7 @@
 <form action="{self}?a=pm&amp;s=send" method="post" id="mbpost">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/new_message.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="" />
   {pm_sendingpm}
  </div>
  <span class="field">{pm_to}<br /><span class="tiny">{pm_multiple}</span></span>
@@ -81,7 +81,7 @@
   {smilies}
  </span>
  <span class="form">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   {bbcode_menu}
   <textarea name="message" id="bbcode" rows="12" cols="20">{msg}</textarea>
   <script>textarea = bbcodeInit("bbcode");</script>
@@ -105,7 +105,7 @@
 
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/messenger.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/messenger.png" alt="" />
   {pm_title}
  </div>
 
@@ -115,12 +115,12 @@
 
  <span class="member_info">
 <!-- BEGIN: Online -->
-   <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="{pm_online}" title="{pm_online}" height="16" width="16" />
+   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="{pm_online}" title="{pm_online}" height="16" width="16" />
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
-   <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="{pm_offline}" title="{pm_offline}" height="16" width="16" />
+   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="{pm_offline}" title="{pm_offline}" height="16" width="16" />
 <!-- END: Offline -->
-  <strong><a href="{self}?a=profile&amp;w={pm_from}">{user_name}</a></strong><br />
+  <strong><a href="{site}/profile/{link_name}-{pm_from}/">{user_name}</a></strong><br />
   <strong>{user_title}</strong><br />
   <span class="text">{pm_group}</span>{group_name}<br />
   <span class="text">{pm_posts}</span>{user_posts}<br />

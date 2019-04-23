@@ -218,7 +218,7 @@ class newspost extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'user_avatar', $post['user_avatar'] );
 		$xtpl->assign( 'topic_online', $this->lang->topic_online );
@@ -231,6 +231,7 @@ class newspost extends qsfglobal
 
 		$xtpl->assign( 'user_id', $post['user_id'] );
 		$xtpl->assign( 'user_name', $post['user_name'] );
+		$xtpl->assign( 'link_name', $this->clean_url( $post['user_name'] ) );
 		$xtpl->assign( 'user_title', $post['user_title'] );
 		$xtpl->assign( 'membertitle_icon', $post['membertitle_icon'] );
 		$xtpl->assign( 'topic_group', $this->lang->topic_group );
@@ -240,8 +241,12 @@ class newspost extends qsfglobal
 		$xtpl->assign( 'topic_joined', $this->lang->topic_joined );
 		$xtpl->assign( 'user_joined', $post['user_joined'] );
 
-		if( $post['post_ip'] )
-			$xtpl->assign( 'post_ip', "<br /><span class=\"text\">IP</span><a href=\"{$this->self}?a=mod&amp;s=viewips&amp;t={$post['post_id']}&amp;w={$post['post_author']}\">{$post['post_ip']}</a>" );
+		if( $post['post_ip'] ) {
+			$xtpl->assign( 'post_author', $post['post_author'] );
+			$xtpl->assign( 'post_ip', $post['post_ip'] );
+
+			$xtpl->parse( 'MemberInfo.PostIP' );
+		}
 
 		if( $this->perms->auth( 'email_use' ) ) {
 			if( $post['user_email_show'] ) {

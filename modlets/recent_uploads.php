@@ -40,12 +40,12 @@ class recent_uploads extends modlet
 	public function execute( $arg )
 	{
 		$this->cat_data = false;
-		$content = "";
+		$content = '';
 
 		$cats = $this->create_category_permissions_string();
 
 		// Handle the unlikely case where the user cannot view ANY forums
-		if( $cats == "" ) {
+		if( $cats == '' ) {
 			return $content;
 		}
 
@@ -64,7 +64,9 @@ class recent_uploads extends modlet
 			$author = $this->qsf->format( $file['file_author'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			$content .= "<a href=\"". $this->qsf->site . "/files/{$furl}-{$fid}/\" title=\"{$title}\">{$fname}</a>";
-			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->self}?a=profile&amp;w={$file['file_submitted']}\">{$file['user_name']}</a><hr />";
+
+			$name = $this->qsf->clean_url( $file['user_name'] );
+			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->site}/profile/{$name}-{$file['file_submitted']}/\">{$file['user_name']}</a><hr />";
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/recent_uploads.xtpl' );

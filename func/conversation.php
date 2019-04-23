@@ -131,13 +131,13 @@ class conversation extends qsfglobal
 			}
 
 			if( $row['conv_last_poster'] != USER_GUEST_UID ) {
-				$last_poster = '<a href="' . $this->self . '?a=profile&amp;w=' . $row['conv_last_poster'] . '" class="small">' . $row['conv_last_poster_name'] . '</a>';
+				$last_poster = '<a href="' . $this->site . '/profile/' . $this->clean_url( $row['conv_last_poster_name'] ) . '-' . $row['conv_last_poster'] . '/" class="small">' . $row['conv_last_poster_name'] . '</a>';
 			} else {
 				$last_poster = $this->lang->cv_guest_user;
 			}
 
 			if( $row['conv_starter'] != USER_GUEST_UID ) {
-				$row['conv_starter'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $row['conv_starter'] . '" class="small">' . $row['conv_starter_name'] . '</a>';
+				$row['conv_starter'] = '<a href="' . $this->site . '/profile/' . $this->clean_url( $row['conv_starter_name'] ) . '-' . $row['conv_starter'] . '/" class="small">' . $row['conv_starter_name'] . '</a>';
 			} else {
 				$row['conv_starter'] = $this->lang->cv_guest_user;
 			}

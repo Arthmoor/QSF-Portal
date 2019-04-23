@@ -254,7 +254,6 @@ if( $qsf->nohtml ) {
 		$xtpl->assign( 'qsf_site', $qsf->site );
 		$xtpl->assign( 'qsf_self', $qsf->self );
 		$xtpl->assign( 'forum_name', $qsf->sets['forum_name'] );
-		$xtpl->assign( 'loc_of_board', $qsf->sets['loc_of_board'] );
 		$xtpl->assign( 'main_files', $qsf->lang->main_files );
 		$xtpl->assign( 'main_forum', $qsf->lang->main_forum );
 		$xtpl->assign( 'main_members', $qsf->lang->main_members );
@@ -280,10 +279,10 @@ if( $qsf->nohtml ) {
 		$xtpl->assign( 'qsf_site', $qsf->site );
 		$xtpl->assign( 'qsf_self', $qsf->self );
 		$xtpl->assign( 'forum_name', $qsf->sets['forum_name'] );
-		$xtpl->assign( 'loc_of_board', $qsf->sets['loc_of_board'] );
 		$xtpl->assign( 'main_welcome', $qsf->lang->main_welcome );
 		$xtpl->assign( 'user_id', $qsf->user['user_id'] );
 		$xtpl->assign( 'user_name', $qsf->user['user_name'] );
+		$xtpl->assign( 'link_name', $qsf->clean_url( $qsf->user['user_name'] ) );
 		$xtpl->assign( 'new_files', $new_files );
 		$xtpl->assign( 'main_files', $qsf->lang->main_files );
 		$xtpl->assign( 'main_forum', $qsf->lang->main_forum );

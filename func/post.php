@@ -218,7 +218,7 @@ class post extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/post.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
 			/**
@@ -286,6 +286,7 @@ class post extends qsfglobal
 					$xtpl->assign( 'avatar', $avatar );
 					$xtpl->assign( 'uid', $this->user['user_id'] );
 					$xtpl->assign( 'uname', $this->user['user_name'] );
+					$xtpl->assign( 'link_name', $this->clean_url( $this->user['user_name'] ) );
 					$xtpl->assign( 'utitle', $this->user['user_title'] );
 					$xtpl->assign( 'utitleicon', $this->user['membertitle_icon'] );
 					$xtpl->assign( 'topic_level', $this->lang->topic_level );
@@ -313,7 +314,7 @@ class post extends qsfglobal
 							$ext = strtolower( substr( $file, -4 ) );
 
 							if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->sets['loc_of_board']}/attachments/$md5' alt='{$file}' />";
+								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->site}/attachments/$md5' alt='{$file}' />";
 								continue;
 							}
 						}
@@ -481,12 +482,17 @@ class post extends qsfglobal
 						$last['post_time'] = $this->mbdate( DATE_LONG, $last['post_time'] );
 
 						if( $last['post_author'] != USER_GUEST_UID ) {
-							$last['user_name'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $last['post_author'] . '">' . $last['user_name'] . '</a>';
+							$xtpl->assign( 'user_name', $last['user_name'] );
+							$xtpl->assign( 'link_name', $this->clean_url( $last['user_name'] ) );
+							$xtpl->assign( 'post_author', $last['post_author'] );
+
+							$xtpl->parse( 'Post.Topic.Reply.ReplyReview.LastUserMember' );
 						} else {
-							$last['user_name'] = $this->lang->post_guest;
+							$xtpl->assign( 'user_name', $this->lang->post_guest );
+
+							$xtpl->parse( 'Post.Topic.Reply.ReplyReview.LastUserGuest' );
 						}
 
-						$xtpl->assign( 'last_user', $last['user_name'] );
 						$xtpl->assign( 'post_posted', $this->lang->post_posted );
 						$xtpl->assign( 'last_time', $last['post_time'] );
 						$xtpl->assign( 'last_text', $last['post_text'] );

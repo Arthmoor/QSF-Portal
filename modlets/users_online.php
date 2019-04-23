@@ -72,7 +72,7 @@ class users_online extends modlet
 			return $xtpl->text( 'UsersOnlineMain' );
 		}
 
-		$link = "<a href=\"{$this->qsf->site}/active_users/\" class=\"activeusers\">{$this->qsf->lang->main_users_online}</a>";
+		$link = "<a href=\"{$this->qsf->site}/users_online/\" class=\"activeusers\">{$this->qsf->lang->main_users_online}</a>";
 		if( $this->qsf->perms->is_guest )
 			$link = $this->qsf->lang->main_users_online;
 
@@ -162,7 +162,7 @@ class users_online extends modlet
 
 	private function usersonline()
 	{
-		$which_day = date( "d F Y", $this->qsf->time );
+		$which_day = date( 'd F Y', $this->qsf->time );
 		$today_date = strtotime( "$which_day" );
 
 		if( $this->qsf->user['user_group'] == USER_GUEST || $this->qsf->user['user_group'] == USER_AWAIT )
@@ -194,7 +194,9 @@ class users_online extends modlet
 				if( $count_users > '1' ) {
 					$title_onlinetd_table = "<strong>There have been " . $count_users . " members online today:</strong>";
 				}
-				$user_names = $user_names . '<a href="' . $this->qsf->self . '?a=profile&amp;w=' . $user_id . '">' . $user_name . '</a>' . $comma;
+
+				$name = $this->qsf->clean_url( $user_name );
+				$user_names .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$user_id}/\">{$user_name}</a>$comma";
 			}
 		}
 		return array( 'TITLEONTABLE'  => $title_onlinetd_table, 'USERNAMES' => $user_names );

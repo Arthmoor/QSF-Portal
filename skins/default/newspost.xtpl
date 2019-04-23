@@ -1,7 +1,7 @@
 <!-- BEGIN: NewsPost -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/newspaper.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />
   {topic} <span class="small_text">{post_time}</span>
  </div>
  {PosterInfo}
@@ -41,7 +41,7 @@
 <!-- BEGIN: Comment -->
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
   <a href="{self}?a=newspost&amp;t={topicnum}&amp;p={post_id}#p{post_id}">#{pos}</a> {c_date}
  </div>
  <a id="p{pos}"></a>
@@ -67,7 +67,7 @@
 
 <!-- BEGIN: CommentForm -->
  <div class="article">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   <form action="{self}?a=post&amp;s=reply&amp;t={t}" method="post" id="mbpost">
    <div class="title">{newspost_post_comment}</div>
 
@@ -100,17 +100,19 @@
 
 <span class="member_info">
 <!-- BEGIN: Online -->
- <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
+ <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
- <img src="{loc_of_board}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
+ <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
 <!-- END: Offline -->
- <strong><a href="{self}?a=profile&amp;w={user_id}">{user_name}</a></strong><br />
- <strong>{user_title}</strong> <img src="{loc_of_board}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
+ <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br />
+ <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
  <span class="text">{topic_group}</span>{group_name}<br />
  <span class="text">{topic_posts}</span>{user_posts}<br />
  <span class="text">{topic_joined}</span>{user_joined}
- {post_ip}
+<!-- BEGIN: PostIP -->
+ <br /><span class="text">IP</span><a href="{self}?a=mod&amp;s=viewips&amp;t={post_id}&amp;w={post_author}">{post_ip}</a>
+<!-- END: PostIP -->
 </span>
 
 <span class="member_bits">

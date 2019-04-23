@@ -2,7 +2,7 @@
     <div class="block">
      <div class="title">
       <img src="{site}/skins/{skin}/images/icons/downloads.png" alt="" />
-      <a href="{site}/files/recent/">{main_recent_uploads}</a>
+      <a href="{site}/files/recent_uploads/">{main_recent_uploads}</a>
      </div>
      {content}
     </div>

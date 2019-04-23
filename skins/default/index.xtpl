@@ -6,10 +6,10 @@
   <meta name="keywords" content="{meta_keywords}" />
   <meta name="description" content="{meta_desc}" />
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/styles.css" />
+  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/styles.css" />
   {feed_links}
   {mobile_icons}
-  <script src="{loc_of_board}/javascript/utils.js" async defer></script>
+  <script src="{qsf_site}/javascript/utils.js" async defer></script>
  </head>
 
  <body>
@@ -23,7 +23,7 @@
    <div id="blocks">
 <!-- BEGIN: GuestHeader -->
     <div class="block">
-     <div class="title"><a href="{loc_of_board}">{forum_name}</a></div>
+     <div class="title"><a href="{qsf_site}">{forum_name}</a></div>
      <nav>
       <a href="{qsf_site}/files/">{main_files}</a>
       <a href="{qsf_self}?a=board">{main_forum}</a>
@@ -38,7 +38,7 @@
     <form action="{self}?a=login&amp;s=on" method="post">
     <div class="block">
      <div class="title">
-      <img src="{loc_of_board}/skins/{skin}/images/icons/login.png" alt="" />
+      <img src="{qsf_site}/skins/{skin}/images/icons/login.png" alt="" />
       {login}
      </div>
      <input type="hidden" name="request_uri" value="{request_uri}" />
@@ -55,9 +55,9 @@
 
 <!-- BEGIN: MemberHeader -->
     <div class="block">
-     <div class="title"><a href="{loc_of_board}">{forum_name}</a></div>
+     <div class="title"><a href="{qsf_site}">{forum_name}</a></div>
      <div class="article">
-      {main_welcome} <a href="{qsf_self}?a=profile&amp;w={user_id}"><strong>{user_name}</strong></a>!
+      {main_welcome} <a href="{qsf_site}/profile/{link_name}-{user_id}/"><strong>{user_name}</strong></a>!
      </div>
 
      <nav>

@@ -193,6 +193,7 @@ class recent extends qsfglobal
 			if( $row['topic_last_poster'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'topic_last_poster', $row['topic_last_poster'] );
 				$xtpl->assign( 'topic_last_poster_name', $row['topic_last_poster_name'] );
+				$xtpl->assign( 'topic_last_poster_link_name', $this->clean_url( $row['topic_last_poster_name'] ) );
 
 				$xtpl->parse( 'Recent.Topic.LastPosterMember' );
 			} else {
@@ -204,6 +205,7 @@ class recent extends qsfglobal
 			if( $row['topic_starter'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'topic_starter', $row['topic_starter'] );
 				$xtpl->assign( 'topic_starter_name', $row['topic_starter_name'] );
+				$xtpl->assign( 'topic_starter_link_name', $this->clean_url( $row['topic_starter_name'] ) );
 
 				$xtpl->parse( 'Recent.Topic.TopicStarterMember' );
 			} else {

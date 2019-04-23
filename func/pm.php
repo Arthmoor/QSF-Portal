@@ -109,7 +109,7 @@ class pm extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pm_sendamsg', $this->lang->pm_sendamsg );
 		$xtpl->assign( 'new_message', $this->lang->new_message );
@@ -159,6 +159,7 @@ class pm extends qsfglobal
 				$xtpl->assign( 'pm_title', $pm['pm_title'] );
 				$xtpl->assign( 'pm_from', $pm['pm_from'] );
 				$xtpl->assign( 'user_name', $pm['user_name'] );
+				$xtpl->assign( 'link_name', $this->clean_url( $pm['user_name'] ) );
 				$xtpl->assign( 'pm_time', $pm['pm_time'] );
 
 				$xtpl->parse( 'PMFolder.Message' );
@@ -202,7 +203,7 @@ class pm extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
 			if( isset( $this->post['preview'] ) ) {
@@ -398,7 +399,7 @@ class pm extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pm_sendamsg', $this->lang->pm_sendamsg );
 		$xtpl->assign( 'new_message', $this->lang->new_message );
@@ -423,6 +424,7 @@ class pm extends qsfglobal
 
 		$xtpl->assign( 'pm_from', $pm['pm_from'] );
 		$xtpl->assign( 'user_name', $pm['user_name'] );
+		$xtpl->assign( 'link_name', $this->clean_url( $pm['user_name'] ) );
 		$xtpl->assign( 'user_title', $pm['user_title'] );
 		$xtpl->assign( 'pm_group', $this->lang->pm_group );
 		$xtpl->assign( 'group_name', $pm['group_name'] );

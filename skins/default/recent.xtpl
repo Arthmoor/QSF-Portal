@@ -30,10 +30,10 @@
 
  <span class="number">
 <!-- BEGIN: TopicStarterMember -->
-  <a href="{self}?a=profile&amp;w={topic_starter}" class="small">{topic_starter_name}</a>
+  <a href="{site}/profile/{topic_starter_link_name}-{topic_starter}/" class="small">{topic_starter_name}</a>
 <!-- END: TopicStarterMember -->
 <!-- BEGIN: TopicStarterGuest -->
-  {recent_by}: {topic_starter_name}
+  {topic_starter_name}
 <!-- END: TopicStarterGuest -->
  </span>
  <span class="number"><a href="{self}?a=forum&amp;f={forum_id}">{forum_name}</a></span>
@@ -41,7 +41,7 @@
   {topic_edited}<br />
   <a href="{self}?a=topic&amp;t={topic_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}" /></a>
 <!-- BEGIN: LastPosterMember -->
-  {recent_by}: <a href="{self}?a=profile&amp;w={topic_last_poster}" class="small">{topic_last_poster_name}</a>
+  {recent_by}: <a href="{site}/profile/{topic_last_poster_link_name}-{topic_last_poster}/" class="small">{topic_last_poster_name}</a>
 <!-- END: LastPosterMember -->
 <!-- BEGIN: LastPosterGuest -->
   {recent_by}: {topic_last_poster_name}

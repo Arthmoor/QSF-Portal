@@ -2,7 +2,7 @@
 <div id="profile">
  <div class="article">
   <div class="title">
-   <img src="{loc_of_board}/skins/{skin}/images/icons/vcard.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/vcard.png" alt="" />
    {profile_profile}
   </div>
 
@@ -13,7 +13,12 @@
 <!-- END: Avatar -->
 
   <span class="member_info">
-   {online_link}
+<!-- BEGIN: Online -->
+   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{profile_online}" />
+<!-- END: Online -->
+<!-- BEGIN: Offline -->
+   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{profile_offline}" />
+<!-- END: Offline -->
    <strong>{user_name}</strong><br />
    <strong>{user_title}</strong><br />
    <span class="text">{profile_member}</span>{group_name}<br />
@@ -52,7 +57,7 @@
 
  <div class="article">
   <div class="title">
-   <img src="{loc_of_board}/skins/{skin}/images/icons/phone.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/phone.png" alt="" />
    {profile_contact}
   </div>
 <!-- BEGIN: Email -->
@@ -71,7 +76,7 @@
 
  <div class="article">
   <div class="title">
-   <img src="{loc_of_board}/skins/{skin}/images/icons/control_panel.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/control_panel.png" alt="" />
    {profile_info}
   </div>
   <span class="field">{profile_member}</span>
@@ -122,7 +127,7 @@
 <!-- BEGIN: Posts -->
  <div class="article">
   <div class="title">
-   <img src="{loc_of_board}/skins/{skin}/images/icons/topic.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
    {profile_posts}
   </div>
   <span class="field">{profile_posts}</span>
@@ -144,7 +149,7 @@
 <!-- BEGIN: Uploads -->
  <div class="article">
   <div class="title">
-   <img src="{loc_of_board}/skins/{skin}/images/icons/downloads.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/downloads.png" alt="" />
    {profile_uploads}
   </div>
   <span class="field">{profile_uploads}</span>

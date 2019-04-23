@@ -50,10 +50,11 @@ class htmlwidgets extends forumutils
 		parent::__construct( $qsf );
 
 		$this->lang = &$qsf->lang;
-		$this->self = $qsf->self;
-		$this->skin = $qsf->skin;
-		$this->user = $qsf->user;
-		$this->sets = $qsf->sets;
+		$this->self = &$qsf->self;
+		$this->site = &$qsf->site;
+		$this->skin = &$qsf->skin;
+		$this->user = &$qsf->user;
+		$this->sets = &$qsf->sets;
 
 		// Need the time for timezone stuff
 		$this->time = &$qsf->time;
@@ -723,6 +724,10 @@ class htmlwidgets extends forumutils
 		if( $user['user_avatar_type'] != 'none' && $this->user['user_view_avatars'] ) {
 			if( $user['user_avatar_type'] == 'gravatar' )
 				$avatar = $this->get_gravatar( $user['user_avatar'] );
+			elseif( $user['user_avatar_type'] == 'url' )
+				$avatar = $user['user_avatar'];
+			else
+				$avatar = "{$this->site}/$avatar";
 
 			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$user['user_avatar_width']}px; height:{$user['user_avatar_height']}px;\" />";
 		}

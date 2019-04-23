@@ -1,7 +1,7 @@
 <!-- BEGIN: BoardStats -->
     <div class="block">
      <div class="title">
-      <img src="{loc_of_board}/skins/{skin}/images/icons/chart_pie.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/chart_pie.png" alt="" />
       {main_stats}
      </div>
      <span class="half">
