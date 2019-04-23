@@ -92,7 +92,7 @@ class topic extends qsfglobal
 		if( isset( $this->get['view'] ) ) {
                         $this->validator->validate( $this->get['view'], TYPE_STRING, array('newer', 'older'), false );
                 } else {
-                        $this->get['view']  = false;
+                        $this->get['view'] = false;
                 }
 
 		if( isset( $this->get['p'] ) ) {

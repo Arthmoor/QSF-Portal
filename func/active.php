@@ -64,7 +64,7 @@ class active extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/active.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'active_users', $this->lang->active_users );
 		$xtpl->assign( 'active_user', $this->lang->active_user );
