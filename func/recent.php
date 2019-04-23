@@ -97,8 +97,11 @@ class recent extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/recent.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'recent_jump', $this->lang->recent_jump );
+		$xtpl->assign( 'recent_by', $this->lang->recent_by );
+		$xtpl->assign( 'recent_topic_posted', $this->lang->recent_topic_posted );
 
 		$this->display_topics( $xtpl, $forums_str, $min, $n, $m );
 
@@ -188,15 +191,25 @@ class recent extends qsfglobal
 			}
 
 			if( $row['topic_last_poster'] != USER_GUEST_UID ) {
-				$last_poster = '<a href="' . $this->self . '?a=profile&amp;w=' . $row['topic_last_poster'] . '" class="small">' . $row['topic_last_poster_name'] . '</a>';
+				$xtpl->assign( 'topic_last_poster', $row['topic_last_poster'] );
+				$xtpl->assign( 'topic_last_poster_name', $row['topic_last_poster_name'] );
+
+				$xtpl->parse( 'Recent.Topic.LastPosterMember' );
 			} else {
-				$last_poster = $this->lang->recent_guest;
+				$xtpl->assign( 'topic_last_poster_name', $this->lang->recent_guest );
+
+				$xtpl->parse( 'Recent.Topic.LastPosterGuest' );
 			}
 
 			if( $row['topic_starter'] != USER_GUEST_UID ) {
-				$row['topic_starter'] = '<a href="' . $this->self . '?a=profile&amp;w=' . $row['topic_starter'] . '" class="small">' . $row['topic_starter_name'] . '</a>';
+				$xtpl->assign( 'topic_starter', $row['topic_starter'] );
+				$xtpl->assign( 'topic_starter_name', $row['topic_starter_name'] );
+
+				$xtpl->parse( 'Recent.Topic.TopicStarterMember' );
 			} else {
-				$row['topic_starter'] = $this->lang->recent_guest;
+				$xtpl->assign( 'topic_starter_name', $this->lang->recent_guest );
+
+				$xtpl->parse( 'Recent.Topic.TopicStarterGuest' );
 			}
 
 			$state = null;
@@ -240,13 +253,14 @@ class recent extends qsfglobal
 				$row['topic_title'] = "<i>" . $row['topic_title'] . "</i>";
 			}
 
-			$row['icon'] = $row['topic_icon']; // Store so skin can access
+			$icon = $row['topic_icon']; // Store so skin can still access
+			$topic_icon = null;
 
 			if( $row['topic_modes'] & TOPIC_POLL ) {
-				$row['topic_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/images/poll.png" alt="' . $this->lang->recent_icon . '" />';
+				$topic_icon = "<img src=\"{$this->site}/skins/{$this->skin}/images/icons/chart_bar.png\" alt=\"{$this->lang->recent_icon}\" />";
 			} else {
 				if( $row['topic_icon'] ) {
-					$row['topic_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/mbicons/' . $row['topic_icon'] . '" alt="' . $this->lang->recent_icon . '" />';
+					$topic_icon = "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$row['topic_icon']}\" alt=\"{$this->lang->recent_icon}\" />";
 				}
 			}
 
@@ -273,24 +287,23 @@ class recent extends qsfglobal
 					$xtpl->assign( 'pinned', '&nbsp;' );
 				}
 
-				if( $row['icon'] ) {
-					$xtpl->assign( 'icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/mbicons/{$row['icon']}\" alt=\"{$this->lang->recent_icon}\" class=\"left\" />" );
+				if( $icon ) {
+					$xtpl->assign( 'topic_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->recent_icon}\" class=\"left\" />" );
+				} elseif( $topic_icon ) {
+					$xtpl->assign( 'topic_icon', $topic_icon );
+				} else {
+					$xtpl->assign( 'topic_icon', null );
 				}
 
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
-				$xtpl->assign( 'recent_topic_posted', $this->lang->recent_topic_posted );
 				$xtpl->assign( 'topic_posted', $topic_posted );
 				$xtpl->assign( 'topic_title', $row['topic_title'] );
 				$xtpl->assign( 'Pages', $Pages );
 				$xtpl->assign( 'topic_description', $row['topic_description'] );
-				$xtpl->assign( 'topic_starter', $row['topic_starter'] );
 				$xtpl->assign( 'forum_id', $row['forum_id'] );
 				$xtpl->assign( 'forum_name', $row['forum_name'] );
 				$xtpl->assign( 'topic_edited', $row['topic_edited'] );
 				$xtpl->assign( 'jump', $jump );
-				$xtpl->assign( 'recent_jump', $this->lang->recent_jump );
-				$xtpl->assign( 'recent_by', $this->lang->recent_by );
-				$xtpl->assign( 'last_poster', $last_poster );
 
 				$xtpl->parse( 'Recent.Topic' );
 			}

@@ -41,12 +41,13 @@ class recent_posts extends modlet
 		if( !isset( $this->qsf->lang->board_active_users ) ) {
 			$this->qsf->lang->board();
 		}
-		$content = "";
+
+		$content = '';
 
 		$forums_str = $this->qsf->readmarker->create_forum_permissions_string();
 
 		// Handle the unlikely case where the user cannot view ANY forums
-		if( $forums_str == "" ) {
+		if( $forums_str == '' ) {
 			return $content;
 		}
 
@@ -65,37 +66,36 @@ class recent_posts extends modlet
 					$content .= '';
 				} else {
 					if( !$this->qsf->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] ) ) {
-						$content .= "<img src='{$this->qsf->sets['loc_of_board']}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+						$content .= "<img src='{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
 						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
 					} else {
 						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";
 					}
 
-					$content .= "<i>".$topic_title."</i></a><br />";
-					$content .= $date ."<br />". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">". $row['user_name']."</a><hr />";
+					$content .= "<i>$topic_title</i></a><br />";
+					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->self}?a=profile&amp;w={$row['topic_last_poster']}\">{$row['user_name']}</a><hr />";
 				}
 			} else {
 				if( !$this->qsf->perms->auth('topic_view', $row['topic_forum'] ) ) {
 					$content .= '';
 				} else {
 					if( !$this->qsf->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] ) ) {
-						$content .= "<img src='{$this->qsf->sets['loc_of_board']}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
-						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
+						$content .= "<img src=\"{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png\" alt=\"\" />&nbsp;";
+						$content .= "<a href=\"{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread\">";
 					} else {
-						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";
+						$content .= "<a href=\"{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;p={$row['topic_last_post']}#p{$row['topic_last_post']}\">";
 					}
 
-					$content .= $topic_title."</a><br />";
-					$content .= $date ."<br />". $this->qsf->lang->board_by ." <a href=\"{$this->qsf->self}?a=profile&amp;w=".$row['topic_last_poster']."\">".$row['user_name']."</a><hr />";
+					$content .= "$topic_title</a><br />";
+					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->self}?a=profile&amp;w={$row['topic_last_poster']}\">{$row['user_name']}</a><hr />";
 				}
 			}
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/recent_posts.xtpl' );
 
-		$xtpl->assign( 'loc_of_board', $this->qsf->sets['loc_of_board'] );
 		$xtpl->assign( 'skin', $this->qsf->skin );
-		$xtpl->assign( 'self', $this->qsf->self );
+		$xtpl->assign( 'site', $this->qsf->site );
 		$xtpl->assign( 'main_recent1', $this->qsf->lang->main_recent1 );
 		$xtpl->assign( 'main_recent', $this->qsf->lang->main_recent );
 		$xtpl->assign( 'content', $content );

@@ -11,3 +11,5 @@ RewriteRule ^files/download/([0-9]*)/$ index.php?a=files&s=download&fid=$1 [L]
 RewriteRule ^files/category/([0-9]*)/$ index.php?a=files&cid=$1 [L]
 RewriteRule ^files/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=files&s=viewfile&fname=$1&fid=$2 [L]
 RewriteRule ^files/$ index.php?a=files [L]
+
+RewriteRule ^recent_posts/$ index.php?a=recent [L]

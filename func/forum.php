@@ -429,11 +429,12 @@ class forum extends qsfglobal
 
 				if( $icon ) {
 					$xtpl->assign( 'topic_icon', "<img src=\"{$this->sets['loc_of_board']}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->forum_icon}\" class=\"left\" />" );
+				} elseif( $topic_icon ) {
+					$xtpl->assign( 'topic_icon', $topic_icon );
 				} else {
 					$xtpl->assign( 'topic_icon', null );
 				}
 
-				$xtpl->assign( 'topic_icon', $topic_icon );
 				$xtpl->assign( 'moved', $moved );
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
 				$xtpl->assign( 'topic_posted', $topic_posted );
