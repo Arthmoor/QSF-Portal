@@ -48,7 +48,7 @@ class pm extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -56,7 +56,7 @@ class pm extends qsfglobal
 		$this->tree( $this->lang->pm_messenger );
 
 		if( $this->perms->is_guest ) {
-			return $this->message( $this->lang->pm_personal, sprintf( $this->lang->pm_guest, $this->self, $this->self ) );
+			return $this->message( $this->lang->pm_personal, sprintf( $this->lang->pm_guest, $this->site, $this->site ) );
 		}
 
 		// FIXME: Need permission check for members

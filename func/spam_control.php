@@ -42,7 +42,7 @@ class spam_control extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -85,7 +85,7 @@ class spam_control extends qsfglobal
 		$spam = $this->db->fetch( "SELECT spam_topic FROM %pspam WHERE spam_id=%d", $c );
 
 		if( !$spam )
-			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
+			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->site . '/index.php?a=spam_control' );
 
 		$this->db->query( "DELETE FROM %pspam WHERE spam_id=%d", $c );
 
@@ -100,7 +100,7 @@ class spam_control extends qsfglobal
 		$this->RecountForums();
 		$this->write_sets();
 
-		return $this->message( $this->lang->spam_control, $this->lang->spam_deleted, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
+		return $this->message( $this->lang->spam_control, $this->lang->spam_deleted, $this->lang->continue, $this->site . '/index.php?a=spam_control' );
 	}
 
 	private function report_ham( $c )
@@ -108,7 +108,7 @@ class spam_control extends qsfglobal
 		$spam = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_emojis, spam_bbcode, spam_count, spam_text, spam_time,
 			spam_icon, spam_ip, spam_edited_by, spam_edited_time, spam_svars FROM %pspam WHERE spam_id=%d", $c );
 		if( !$spam )
-			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
+			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->site . '/index.php?a=spam_control' );
 
 		$svars = json_decode( $spam['spam_svars'], true );
 
@@ -148,7 +148,7 @@ class spam_control extends qsfglobal
 		$this->sets['spam_pending']--;
 		$this->write_sets();
 
-		return $this->message( $this->lang->spam_control, $this->lang->spam_false_positive, $this->lang->continue, $this->sets['loc_of_board'] . 'index.php?a=spam_control' );
+		return $this->message( $this->lang->spam_control, $this->lang->spam_false_positive, $this->lang->continue, $this->site . '/index.php?a=spam_control' );
 	}
 
 	private function display_spam()
@@ -182,8 +182,8 @@ class spam_control extends qsfglobal
 
 		while( $spam = $this->db->nqfetch( $result ) )
 		{
-			$ham_link = $this->sets['loc_of_board'] . '/index.php?a=spam_control&amp;s=report_ham&amp;c=' . $spam['spam_id'];
-			$delete_link = $this->sets['loc_of_board'] . '/index.php?a=spam_control&amp;s=delete_spam&amp;c=' . $spam['spam_id'];
+			$ham_link = $this->site . '/index.php?a=spam_control&amp;s=report_ham&amp;c=' . $spam['spam_id'];
+			$delete_link = $this->site . '/index.php?a=spam_control&amp;s=delete_spam&amp;c=' . $spam['spam_id'];
 
 			$topic = $this->db->fetch( "SELECT topic_id, topic_title FROM %ptopics WHERE topic_id=%d", $spam['spam_topic'] );
 			$user = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_id=%d", $spam['spam_author'] );

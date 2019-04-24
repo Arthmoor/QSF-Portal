@@ -88,7 +88,7 @@ class register extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/register.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
 			$xtpl->assign( 'register_reging', $this->lang->register_reging );

@@ -48,7 +48,7 @@ class profile extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -110,7 +110,8 @@ class profile extends qsfglobal
 				$profile['user_email'] = "<a href=\"mailto:{$profile['user_email']}\">{$profile['user_email']}</a>";
 			} else {
 				if( $profile['user_email_form'] ) {
-					$profile['user_email'] = "<a href=\"{$this->self}?a=email&amp;to={$profile['user_id']}\">{$this->lang->profile_private}</a>";
+					$link = $this->clean_url( $profile['user_name'] );
+					$profile['user_email'] = "<a href=\"{$this->site}/email/{$link}-{$profile['user_id']}\">{$this->lang->profile_private}</a>";
 				} else {
 					$profile['user_email'] = $this->lang->profile_private;
 				}

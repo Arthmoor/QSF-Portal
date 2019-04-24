@@ -38,7 +38,7 @@ class page extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -73,7 +73,7 @@ class page extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pages', $this->lang->pages );
 
@@ -202,7 +202,7 @@ class page extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'p', $p );
 			$xtpl->assign( 'page_edit', $this->lang->page_edit );
@@ -267,7 +267,7 @@ class page extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'page_create', $this->lang->page_create );
 			$xtpl->assign( 'page_title', $this->lang->page_title );

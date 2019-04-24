@@ -69,7 +69,7 @@
 
  <span class="field">{files_desc}:</span>
  <span class="form">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   {bbcode_menu}
   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{file_description}</textarea>
   <script>textarea = bbcodeInit("bbcode");</script>
@@ -230,7 +230,7 @@
 
  <span class="field">{files_desc}:</span>
  <span class="form">
-  <script src="{loc_of_board}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js"></script>
   {bbcode_menu}
   <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{desc}</textarea>
   <script>textarea = bbcodeInit("bbcode");</script>

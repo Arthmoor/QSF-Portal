@@ -81,7 +81,7 @@ class login extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/login.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'login_header', $this->lang->login_header );
 			$xtpl->assign( 'login_user', $this->lang->login_user );
@@ -153,7 +153,7 @@ class login extends qsfglobal
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/login.xtpl' );
 
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'login_pass_reset', $this->lang->login_pass_reset );
 			$xtpl->assign( 'login_user', $this->lang->login_user );

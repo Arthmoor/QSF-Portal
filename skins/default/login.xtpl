@@ -2,7 +2,7 @@
 <form action="{self}?a=login&amp;s=on" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/login.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/login.png" alt="" />
   {login_header}
  </div>
  <span class="field">{login_user}</span>
@@ -24,7 +24,7 @@
 <form action="{self}?a=login&amp;s=pass" method="post">
 <div class="article">
  <div class="title">
-  <img src="{loc_of_board}/skins/{skin}/images/icons/key.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/key.png" alt="" />
   {login_pass_reset}
  </div>
  <span class="field">{login_user}</span>

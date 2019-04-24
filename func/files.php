@@ -44,7 +44,7 @@ class files extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -284,7 +284,7 @@ class files extends qsfglobal
 			$filesize = $this->format_filesize( $file_size );
 			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE );
 
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'tree', $tree );
 			$xtpl->assign( 'file_name', $file_name );
@@ -863,7 +863,7 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) )
 		{
 			$xtpl->assign( 'self', $this->self );
-			$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'cid', $cid );
 			$xtpl->assign( 'fid', $fid );
 			$xtpl->assign( 'files_update_file', $this->lang->files_update_file );

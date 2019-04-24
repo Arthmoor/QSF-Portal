@@ -50,7 +50,7 @@ class forum extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -75,7 +75,7 @@ class forum extends qsfglobal
 		if( !$this->perms->auth( 'forum_view', $f ) ) {
 			return $this->message(
 				sprintf( $this->lang->forum_msg, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->forum_regfirst, $this->self ) : $this->lang->forum_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->forum_regfirst, $this->site ) : $this->lang->forum_noview
 			);
 		}
 

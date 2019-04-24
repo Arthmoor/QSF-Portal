@@ -1,7 +1,7 @@
 <!-- BEGIN: Topic -->
 <div class="article">
  <div style="float:left">{tree}</div>
- <div style="text-align:right"><a href="{self}?a=forum_rules" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{self}?a=board&amp;s=mark" title="{main_mark1}">{main_mark}</a> | <a href="{self}?a=recent" title="{main_recent1}">{main_recent}</a></div>
+ <div style="text-align:right"><a href="{site}/forum_rules/" title="{main_forum_rules}">{main_forum_rules}</a> | <a href="{site}/board/mark_all_read/" title="{main_mark1}">{main_mark}</a> | <a href="{site}/recent_posts/" title="{main_recent1}">{main_recent}</a></div>
 </div>
 {PollDisplay}
 <div class="article">

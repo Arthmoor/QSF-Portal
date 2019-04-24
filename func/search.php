@@ -48,7 +48,7 @@ class search extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -75,7 +75,7 @@ class search extends qsfglobal
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/search.xtpl' );
 
 		$xtpl->assign( 'self', $this->self );
-		$xtpl->assign( 'loc_of_board', $this->sets['loc_of_board'] );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'search_search', $this->lang->search_search );
 		$xtpl->assign( 'search_basic', $this->lang->search_basic );

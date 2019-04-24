@@ -48,7 +48,7 @@ class post extends qsfglobal
 
 			return $this->message(
 				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->self ) : $this->lang->board_noview
+				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
 			);
 		}
 
@@ -725,7 +725,7 @@ class post extends qsfglobal
 					WHERE t.topic_id=%d AND t.topic_forum=f.forum_id", $t );
 
 				$message  = "{$this->sets['forum_name']}\n";
-				$message .= "{$this->sets['loc_of_board']}/index.php?a=topic&t={$this->get['t']}\n\n";
+				$message .= "{$this->site}/index.php?a=topic&t={$this->get['t']}\n\n";
 				$message .= "A new post has been made in a topic or forum you are subscribed to.\n\n";
 				$message .= "Forum: {$emailtopic['forum_name']}\n";
 				$message .= "Topic: " . $this->format( $emailtopic['topic_title'], FORMAT_CENSOR );
