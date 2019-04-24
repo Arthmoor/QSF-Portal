@@ -106,7 +106,7 @@ class skins extends admin
 		if( !isset( $this->post['confirm'] ) ) {
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/skins.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin_id', $skin['skin_id'] );
 			$xtpl->assign( 'skin_name', $skin['skin_name'] );
 			$xtpl->assign( 'skins_confirm_disable', $this->lang->skins_confirm_disable );
@@ -152,7 +152,7 @@ class skins extends admin
 							$xtpl->assign( 'skin_name', $skin_name );
 							$xtpl->assign( 'skin_dir', $item );
 
-							$enable_link = "<a href=\"{$this->self}?a=skins&amp;s=enable&amp;dir=$item\">{$this->lang->skins_enable}</a>";
+							$enable_link = "<a href=\"{$this->site}/admincp/index.php?a=skins&amp;s=enable&amp;dir=$item\">{$this->lang->skins_enable}</a>";
 							$xtpl->assign( 'enable_link', $enable_link );
 
 							$xtpl->parse( 'Skins.DisabledSkins.FolderEntry' );
@@ -177,7 +177,7 @@ class skins extends admin
 			$xtpl->assign( 'skin_dir', $skin['skin_dir'] );
 
 			if( $skin['skin_id'] != 1 ) {
-				$disable_link = "<a href=\"{$this->self}?a=skins&amp;s=disable&amp;id={$skin['skin_id']}\">{$this->lang->skins_disable}</a>";
+				$disable_link = "<a href=\"{$this->site}/admincp/index.php?a=skins&amp;s=disable&amp;id={$skin['skin_id']}\">{$this->lang->skins_disable}</a>";
 				$xtpl->assign( 'disable_link', $disable_link );
 			} else {
 				$xtpl->assign( 'disable_link', null );

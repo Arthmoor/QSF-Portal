@@ -1,6 +1,6 @@
 <!-- BEGIN: DBBackup -->
 <!-- BEGIN: BackupForm -->
-<form action="{self}?a=backup&amp;s=create" method="post">
+<form action="{site}/admincp/index.php?a=backup&amp;s=create" method="post">
 <div class="article">
  <div class="title">{options}</div>
  <span class="field">{add_complete} INSERT {statements}?</span>

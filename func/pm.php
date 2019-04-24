@@ -108,7 +108,6 @@ class pm extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pm_sendamsg', $this->lang->pm_sendamsg );
@@ -202,7 +201,6 @@ class pm extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
@@ -398,7 +396,6 @@ class pm extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pm_sendamsg', $this->lang->pm_sendamsg );
@@ -461,7 +458,7 @@ class pm extends qsfglobal
 		}
 
 		if( !isset( $this->get['confirm'] ) ) {
-			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_sure_del, $this->lang->continue, "$this->self?a=pm&amp;s=delete&amp;m={$m}&amp;confirm=1" );
+			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_sure_del, $this->lang->continue, "{$this->site}/index.php?a=pm&amp;s=delete&amp;m={$m}&amp;confirm=1" );
 		} else {
 			$query = $this->db->query( "DELETE FROM %ppmsystem WHERE pm_to=%d AND pm_id=%d", $this->user['user_id'], $m );
 			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_deleted );
@@ -478,7 +475,7 @@ class pm extends qsfglobal
 		$f = intval( $this->get['f'] );
 
 		if( !isset( $this->get['confirm'] ) ) {
-			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_sure_delall, $this->lang->continue, "$this->self?a=pm&amp;s=clear&amp;f={$f}&amp;confirm=1" );
+			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_sure_delall, $this->lang->continue, "{$this->site}/index.php?a=pm&amp;s=clear&amp;f={$f}&amp;confirm=1" );
 		} else {
 			$query = $this->db->query( "DELETE FROM %ppmsystem WHERE pm_to=%d AND pm_folder=%d", $this->user['user_id'], $f );
 			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_deleted_all );

@@ -157,7 +157,6 @@ class spam_control extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/spam_control.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'spam_controls', $this->lang->spam_controls );

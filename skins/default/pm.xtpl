@@ -1,13 +1,13 @@
 <!-- BEGIN: PMFolder -->
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
- <select class="big_button_align" onchange="get_folder(this,'{self}')">
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <select class="big_button_align" onchange="get_folder(this,'{site}/index.php')">
   {folderjump}
  </select>
  <p></p>
 </div>
 
-<form action="{self}?a=pm" method="post">
+<form action="{site}/index.php?a=pm" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/messenger.png" alt="" />
@@ -26,10 +26,10 @@
   <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="{pm_pm}" />
 <!-- END: New -->
 <!-- BEGIN: Old -->
-  <a href="{self}?a=pm&amp;s=unread&amp;m={pm_id}"><img src="{site}/skins/{skin}/images/icons/messenger.png" alt="{pm_pm}" /></a>
+  <a href="{site}/index.php?a=pm&amp;s=unread&amp;m={pm_id}"><img src="{site}/skins/{skin}/images/icons/messenger.png" alt="{pm_pm}" /></a>
 <!-- END: Old -->
  </span>
- <span class="message"><a href="{self}?a=pm&amp;s=view&amp;m={pm_id}" title="{preview}">{pm_title}</a></span>
+ <span class="message"><a href="{site}/index.php?a=pm&amp;s=view&amp;m={pm_id}" title="{preview}">{pm_title}</a></span>
  <span class="quarter"><a href="{site}/profile/{link_name}-{pm_from}/">{user_name}</a></span>
  <span class="last_post">{pm_time}</span>
  <span class="delete"><input class="check" type="checkbox" name="delete[{pm_id}]" /></span>
@@ -48,8 +48,8 @@
 </form>
 
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
- <select class="big_button_align" onchange="get_folder(this,'{self}')">
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <select class="big_button_align" onchange="get_folder(this,'{site}/index.php')">
   {folderjump}
  </select>
  <p></p>
@@ -63,7 +63,7 @@
  {preview_text}
 </div>
 <!-- END: Preview -->
-<form action="{self}?a=pm&amp;s=send" method="post" id="mbpost">
+<form action="{site}/index.php?a=pm&amp;s=send" method="post" id="mbpost">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="" />
@@ -97,9 +97,9 @@
 
 <!-- BEGIN: PMView -->
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
- <div class="bigbutton"><a class="reply" href="{self}?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
- <div class="bigbutton"><a class="delete" href="{self}?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="reply" href="{site}/index.php?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="delete" href="{site}/index.php?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
  <p></p>
 </div>
 
@@ -151,9 +151,9 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{self}?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
- <div class="bigbutton"><a class="reply" href="{self}?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
- <div class="bigbutton"><a class="delete" href="{self}?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="reply" href="{site}/index.php?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="delete" href="{site}/index.php?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
  <p></p>
 </div>
 <!-- END: PMView -->

@@ -63,11 +63,11 @@ class censoring extends admin
 				$words .= str_replace( '(.*?)', '*', $word['replacement_search'] ) . "\n";
 			}
 
-			$words = rtrim($words );
+			$words = rtrim( $words );
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/censor.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'censor', $this->lang->censor );
 			$xtpl->assign( 'censor_one_per_line', $this->lang->censor_one_per_line );
 			$xtpl->assign( 'censor_regex_allowed', $this->lang->censor_regex_allowed );

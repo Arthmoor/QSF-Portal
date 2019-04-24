@@ -1,6 +1,6 @@
 <!-- BEGIN: Forums -->
 <!-- BEGIN: EditForm -->
-<form action="{self}?a=forums&amp;s=edit&amp;id={id}" method="post">
+<form action="{site}/admincp/index.php?a=forums&amp;s=edit&amp;id={id}" method="post">
 <div class="article">
  <div class="title">{forum_edit}: {forum_name}</div>
  <span class="field">{forum_parent_cat}</span>
@@ -36,7 +36,7 @@
 <!-- END: EditForm -->
 
 <!-- BEGIN: DeleteForm -->
-<form action="{self}?a=forums&s=delete&id={id}" method="post">
+<form action="{site}/admincp/index.php?a=forums&s=delete&id={id}" method="post">
 <div class="article">
  <div class="title">{forum_delete}: {forum_name}</div>
  {forum_delete_warning}
@@ -49,7 +49,7 @@
 <!-- END: DeleteForm -->
 
 <!-- BEGIN: AddForm -->
-<form action="{self}?a=forums&amp;s=add" method="post">
+<form action="{site}/admincp/index.php?a=forums&amp;s=add" method="post">
 <div class="article">
  <div class="title">{forum_create}</div>
  <span class="field">{forum_parent_cat}<br /><span class="tiny">{forum_select_cat}</span></span>
@@ -89,7 +89,7 @@
 <!-- END: AddForm -->
 
 <!-- BEGIN: OrderForm -->
-<form action="{self}?a=forums&amp;s=order" method="post">
+<form action="{site}/admincp/index.php?a=forums&amp;s=order" method="post">
 <div class="article">
  <div class="title">{forum_ordering}</div>
  {forum}

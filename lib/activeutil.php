@@ -56,7 +56,6 @@ class activeutil extends forumutils
 		$this->time = &$qsf->time;
 		$this->ip = &$qsf->ip;
 		$this->agent = &$qsf->agent;
-		$this->self = &$qsf->self;
 		$this->site = &$qsf->site;
 		$this->bbcode = &$qsf->bbcode;
 		$this->sessionid = session_id();

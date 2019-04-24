@@ -1,6 +1,6 @@
 <!-- BEGIN: Titles -->
 <!-- BEGIN: AddForm -->
-<form action="{self}?a=titles&amp;s=add" method="post">
+<form action="{site}/admincp/index.php?a=titles&amp;s=add" method="post">
 <div class="article">
  <div class="title">{titles_add}</div>
  <div align="center" style="width:400px">
@@ -21,7 +21,7 @@
 <!-- END: AddForm -->
 
 <!-- BEGIN: EditForm -->
-<form action="{self}?a=titles&amp;s=edit&amp;edit={edit}" method="post">
+<form action="{site}/admincp/index.php?a=titles&amp;s=edit&amp;edit={edit}" method="post">
 <div class="article">
  <div class="title">{titles_edit}</div>
  <span class="head">

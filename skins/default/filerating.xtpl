@@ -13,7 +13,7 @@
    <div class="block">
      <div class="title" style="text-align:center">{files_rate}</div>
 <!-- BEGIN: RateForm -->
-     <form action="{self}?a=filerating&amp;f={f}" method="post">
+     <form action="{site}/index.php?a=filerating&amp;f={f}" method="post">
       <div>
        {files_rate_please}:<br /><br />
        <select name="rate">

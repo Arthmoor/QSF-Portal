@@ -1,5 +1,5 @@
 <!-- BEGIN: LoginMain -->
-<form action="{self}?a=login&amp;s=on" method="post">
+<form action="{site}/index.php?a=login&amp;s=on" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/login.png" alt="" />
@@ -10,7 +10,7 @@
 
  <p class="line"></p>
 
- <span class="field">{login_pass}<br /><span class="tiny"><a href="{self}?a=login&amp;s=pass">{login_forgot_pass}</a></span></span>
+ <span class="field">{login_pass}<br /><span class="tiny"><a href="{site}/index.php?a=login&amp;s=pass">{login_forgot_pass}</a></span></span>
  <span class="form"><input type="password" name="pass" size="30" tabindex="2" /></span>
 
  <p class="line"></p>
@@ -21,7 +21,7 @@
 <!-- END: LoginMain -->
 
 <!-- BEGIN: LoginPass -->
-<form action="{self}?a=login&amp;s=pass" method="post">
+<form action="{site}/index.php?a=login&amp;s=pass" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/key.png" alt="" />

@@ -37,7 +37,7 @@
 <!-- END: Skins -->
 
 <!-- BEGIN: DisableForm -->
-<form action="{self}?a=skins&amp;s=disable&amp;id={skin_id}" method="post">
+<form action="{site}/admincp/index.php?a=skins&amp;s=disable&amp;id={skin_id}" method="post">
 <div class="article">
  <div class="title">{skins_disable_skin}</div>
  <span class="field">{skin_name}</span>

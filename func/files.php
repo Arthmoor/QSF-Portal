@@ -95,19 +95,19 @@ class files extends qsfglobal
 
 		$approve = null;
 		if( $this->file_perms->auth( 'approve_files', $cid ) )
-			$approve = "| <a href=\"{$this->self}?a=files&amp;s=filequeue\">{$this->lang->files_approve}</a>";
+			$approve = "| <a href=\"{$this->site}index.php?a=files&amp;s=filequeue\">{$this->lang->files_approve}</a>";
 
 		$addcat = null;
 		if( $this->file_perms->auth( 'add_category', $cid ) )
-			$addcat = "| <a href=\"{$this->self}?a=files&amp;s=addcategory&amp;cid={$cid}\">{$this->lang->files_add_cat}</a>";
+			$addcat = "| <a href=\"{$this->site}/index.php?a=files&amp;s=addcategory&amp;cid={$cid}\">{$this->lang->files_add_cat}</a>";
 
 		$editcat = null;
 		if( $this->file_perms->auth( 'edit_category', $cid ) )
-			$editcat = "| <a href=\"{$this->self}?a=files&amp;s=editcategory&amp;cid={$cid}\">{$this->lang->files_edit_category}</a>";
+			$editcat = "| <a href=\"{$this->site}/index.php?a=files&amp;s=editcategory&amp;cid={$cid}\">{$this->lang->files_edit_category}</a>";
 
 		$delcat = null;
 		if( $this->file_perms->auth( 'delete_category', $cid ) )
-			$delcat = "| <a href=\"{$this->self}?a=files&amp;s=deletecategory&amp;cid={$cid}\">{$this->lang->files_delete_cat}</a>";
+			$delcat = "| <a href=\"{$this->site}/index.php?a=files&amp;s=deletecategory&amp;cid={$cid}\">{$this->lang->files_delete_cat}</a>";
 
 		$xtpl->assign( 'upload', $upload );
 		$xtpl->assign( 'approve', $approve );
@@ -117,7 +117,7 @@ class files extends qsfglobal
 
 		$admin = null;
 		if( $this->perms->auth('is_admin') ) {
-			$admin .= "| <a href=\"{$this->self}?a=files&amp;s=fixcount\">{$this->lang->files_fix_stats}</a>";
+			$admin .= "| <a href=\"{$this->site}/index.php?a=files&amp;s=fixcount\">{$this->lang->files_fix_stats}</a>";
 		}
 		$xtpl->assign( 'admin', $admin );
 
@@ -285,7 +285,6 @@ class files extends qsfglobal
 			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE );
 
 			$xtpl->assign( 'site', $this->site );
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'tree', $tree );
 			$xtpl->assign( 'file_name', $file_name );
 			$xtpl->assign( 'files_desc', $this->lang->files_desc );
@@ -367,7 +366,7 @@ class files extends qsfglobal
 
 			$cat = $this->db->fetch( 'SELECT fcat_name FROM %pfile_categories WHERE fcat_id=%d', $catid );
 			if( !$cat ) {
-				return $this->message( $this->lang->files_move_file, $this->lang->files_move_no_category, "{$this->lang->continue}", "{$this->self}?a=files&amp;s=move&amp;fid={$id}" );
+				return $this->message( $this->lang->files_move_file, $this->lang->files_move_no_category, "{$this->lang->continue}", "{$this->site}/index.php?a=files&amp;s=move&amp;fid={$id}" );
 			}
 
 			$this->log_action( 'file_move', $file['file_id'], $file['file_catid'], $catid );
@@ -422,7 +421,7 @@ class files extends qsfglobal
 				$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 				$cid = 0;
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'file_name', $file_name );
 				$xtpl->assign( 'files_desc', $this->lang->files_desc );
 				$xtpl->assign( 'file_description', $file_description );
@@ -464,7 +463,7 @@ class files extends qsfglobal
 				$filesize = $this->format_filesize( $update_size );
 				$file_description = $this->format( $update_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'file_name', $file_name );
 				$xtpl->assign( 'files_update', $this->lang->files_update );
 				$xtpl->assign( 'file_description', $file_description );
@@ -507,7 +506,7 @@ class files extends qsfglobal
 			$this->sets['file_count']++;
 			$this->write_sets();
 
-			return $this->message( $this->lang->files_approve, "{$file['file_name']} " . $this->lang->files_approved, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue" );
+			return $this->message( $this->lang->files_approve, "{$file['file_name']} " . $this->lang->files_approved, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=filequeue" );
 		}
 
 		if( $this->get['f'] == 'deny' ) {
@@ -522,7 +521,7 @@ class files extends qsfglobal
 			$this->sets['code_approval']--;
 			$this->write_sets();
 
-			return $this->message( $this->lang->files_approve, "{$name} " . $this->lang->files_denied, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue");
+			return $this->message( $this->lang->files_approve, "{$name} " . $this->lang->files_denied, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=filequeue");
 		}
 
 		if( $this->get['f'] == 'download' ) {
@@ -557,7 +556,7 @@ class files extends qsfglobal
 			header( "X-Robots-Tag: noarchive, nosnippet, noindex" );
 			echo file_get_contents( './downloads/' . $md5name );
 		}
-		return $this->message( $this->lang->files_approve, $this->lang->files_invalid_option, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue" );
+		return $this->message( $this->lang->files_approve, $this->lang->files_invalid_option, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=filequeue" );
 	}
 
 	private function edit_category( $xtpl, $cid )
@@ -574,7 +573,7 @@ class files extends qsfglobal
 			$cat = $this->db->fetch( 'SELECT fcat_name, fcat_parent, fcat_description FROM %pfile_categories WHERE fcat_id=%d', $cid );
 			$list = $this->get_categories( $cat['fcat_parent'] );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'cid', $cid );
 			$xtpl->assign( 'files_edit_category', $this->lang->files_edit_category );
 			$xtpl->assign( 'files_name', $this->lang->files_name );
@@ -643,7 +642,7 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$list = $this->get_categories( $cid );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'files_delete_cat', $this->lang->files_delete_cat );
 			$xtpl->assign( 'files_delete_cat2', $this->lang->files_delete_cat2 );
 			$xtpl->assign( 'list', $list );
@@ -723,7 +722,7 @@ class files extends qsfglobal
 				$quickperms = '<option value="0" selected="selected">Root</option>';
 			}
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'cid', $cid );
 			$xtpl->assign( 'files_add_cat', $this->lang->files_add_cat );
 			$xtpl->assign( 'files_add_cat_name', $this->lang->files_add_cat_name );
@@ -825,7 +824,7 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$file = $this->db->fetch( 'SELECT file_name, file_id FROM %pfiles WHERE file_id=%d', $id );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'file_id', $file['file_id'] );
 			$xtpl->assign( 'cid', $cid );
 			$xtpl->assign( 'files_delete_file', $this->lang->files_delete_file );
@@ -862,7 +861,6 @@ class files extends qsfglobal
 
 		if( !isset( $this->post['submit'] ) )
 		{
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'cid', $cid );
 			$xtpl->assign( 'fid', $fid );
@@ -887,7 +885,7 @@ class files extends qsfglobal
 		}
 
 		if( empty( $this->post['file_description'] ) )
-			return $this->message( $this->lang->files_update_file, $this->lang->files_update_file_need_desc, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
+			return $this->message( $this->lang->files_update_file, $this->lang->files_update_file_need_desc, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
 
 		$desc = $this->post['file_description'];
 		$version = $this->post['file_version'];
@@ -904,16 +902,16 @@ class files extends qsfglobal
 
 			$update = $this->db->fetch( "SELECT update_name FROM %pupdates WHERE update_name='%s'", $filename );
 			if( $update['update_name'] == $filename )
-				return $this->message( $this->lang->files_update_file, $this->lang->files_update_exists, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
+				return $this->message( $this->lang->files_update_file, $this->lang->files_update_exists, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
 
 			if( is_uploaded_file( $this->files['code_update']['tmp_name'] ) )
 			{
 				if( file_exists( $path ) )
-					return $this->message( $this->lang->files_update_file, $this->lang->files_exists, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
+					return $this->message( $this->lang->files_update_file, $this->lang->files_exists, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
 				else
 				{
 					if( !move_uploaded_file( $this->files['code_update']['tmp_name'], $path ) )
-						return $this->message( $this->lang->files_update_file, $this->lang->files_error_unknown, $this->lang->continue, "{$this->self}?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
+						return $this->message( $this->lang->files_update_file, $this->lang->files_error_unknown, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
 				}
 			}
 			else
@@ -968,7 +966,7 @@ class files extends qsfglobal
 		$this->write_sets();
 		$this->db->query( 'DELETE FROM %pupdates WHERE update_id=%d', $uid );
 		$this->log_action( 'file_deny_update', $uid );
-		return $this->message( $this->lang->files_update_deny, $this->lang->files_update_denied, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue}" );
+		return $this->message( $this->lang->files_update_deny, $this->lang->files_update_denied, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=filequeue}" );
 	}
 
 	private function approve_update( $cid, $uid )
@@ -1011,7 +1009,7 @@ class files extends qsfglobal
 		$this->write_sets();
 		$this->log_action( 'file_approve_update', $uid, $fid );
 
-		return $this->message( $this->lang->files_update_approve, $this->lang->files_update_approved, $this->lang->continue, "{$this->self}?a=files&amp;s=filequeue" );
+		return $this->message( $this->lang->files_update_approve, $this->lang->files_update_approved, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=filequeue" );
 	}
 
 	private function upload_file( $xtpl, $cid )
@@ -1023,7 +1021,6 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$list = $this->get_upload_categories( $cid );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'files_name', $this->lang->files_name );
 			$xtpl->assign( 'files_author', $this->lang->files_author );
@@ -1183,7 +1180,7 @@ class files extends qsfglobal
 			$name = $category['fcat_name'];
 			$count = $category['fcat_count'];
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'id', $id );
 			$xtpl->assign( 'name', $name );
@@ -1244,7 +1241,6 @@ class files extends qsfglobal
 			$size = $this->format_filesize( $file_size );
 			$file_url = $this->htmlwidgets->clean_url( $file_name );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'file_url', $file_url );
@@ -1323,7 +1319,6 @@ class files extends qsfglobal
 			$size = $this->format_filesize( $file_size );
 			$file_url = $this->htmlwidgets->clean_url( $file_name );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'file_url', $file_url );
@@ -1418,7 +1413,6 @@ class files extends qsfglobal
 		$filename = $this->format( $file_filename, FORMAT_HTMLCHARS );
 
 		$xtpl->assign( 'site', $this->site );
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'tree', $tree );
 		$xtpl->assign( 'file_name', $file_name );
 		$xtpl->assign( 'files_author', $this->lang->files_author );
@@ -1452,22 +1446,22 @@ class files extends qsfglobal
 
 		$update = null;
 		if( $this->is_submitter( $file_id, $file_catid ) )
-			$update = " | <a href=\"{$this->self}?a=files&amp;s=update&amp;fid={$file_id}&amp;cid={$file_catid}\">{$this->lang->files_update}</a>";
+			$update = " | <a href=\"{$this->site}/index.php?a=files&amp;s=update&amp;fid={$file_id}&amp;cid={$file_catid}\">{$this->lang->files_update}</a>";
 		$xtpl->assign( 'update', $update );
 
 		$move = null;
 		if( $this->file_perms->auth( 'move_files', $cid ) )
-			$move = " | <a href=\"{$this->self}?a=files&amp;s=move&amp;fid={$file_id}\">{$this->lang->files_move}</a>";
+			$move = " | <a href=\"{$this->site}/index.php?a=files&amp;s=move&amp;fid={$file_id}\">{$this->lang->files_move}</a>";
 		$xtpl->assign( 'move', $move );
 
 		$edit = null;
 		if( $this->file_perms->auth( 'edit_files', $cid ) )
-			$edit = " | <a href=\"{$this->self}?a=files&amp;s=edit&amp;fid={$file_id}\">{$this->lang->edit}</a>";
+			$edit = " | <a href=\"{$this->site}/index.php?a=files&amp;s=edit&amp;fid={$file_id}\">{$this->lang->edit}</a>";
 		$xtpl->assign( 'edit', $edit );
 
 		$delete = null;
 		if( $this->file_perms->auth( 'delete_files', $cid ) )
-			$delete = " | <a href=\"{$this->self}?a=files&amp;s=delete&amp;fid={$file_id}&amp;cid={$cid}\">{$this->lang->delete}</a>";
+			$delete = " | <a href=\"{$this->site}/index.php?a=files&amp;s=delete&amp;fid={$file_id}&amp;cid={$cid}\">{$this->lang->delete}</a>";
 		$xtpl->assign( 'delete', $delete );
 
 		$xtpl->parse( 'FileDetails' );
@@ -1494,7 +1488,7 @@ class files extends qsfglobal
 		}
 
 		if( $can_rate && !$has_rated ) {
-			$rating = "<b><a href=\"{$this->self}?a=filerating&amp;f={$fid}\" target=\"qsf_rating\" onclick=\"CenterPopUp('{$this->self}?a=filerating&amp;f={$fid}','qsf_rating',400,200)\">{$this->lang->files_rating}:</a></b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
+			$rating = "<b><a href=\"{$this->site}/index.php?a=filerating&amp;f={$fid}\" target=\"qsf_rating\" onclick=\"CenterPopUp('{$this->site}/index.php?a=filerating&amp;f={$fid}','qsf_rating',400,200)\">{$this->lang->files_rating}:</a></b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
 		}
 		else {
 			$rating = "<b>{$this->lang->files_rating}:</b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
@@ -1663,7 +1657,6 @@ class files extends qsfglobal
 			$size = $this->format_filesize( $file_size );
 			$file_url = $this->htmlwidgets->clean_url( $file_name );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'file_url', $file_url );
@@ -1708,7 +1701,7 @@ class files extends qsfglobal
 		$id = isset( $this->get['fid'] ) ? $this->get['fid'] : 0;
 
 		if( !isset( $this->post['addcomment'] ) ) {
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'id', $id );
 			$xtpl->assign( 'files_comment', $this->lang->files_comment );
 
@@ -1724,7 +1717,7 @@ class files extends qsfglobal
 			$this->db->query( "INSERT INTO %pfilecomments (file_id,comment_text,user_id) VALUES( %d, '%s', %d )", $id, $text, $uid );
 			$this->db->query( 'UPDATE %pfiles SET file_comments=file_comments+1 WHERE file_id=%d', $id );
 
-                        return $this->message( $this->lang->files_comment, $this->lang->files_comment_posted, $this->lang->continue, "{$this->self}?a=files&amp;s=viewfile&amp;fid={$id}" );
+                        return $this->message( $this->lang->files_comment, $this->lang->files_comment_posted, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=viewfile&amp;fid={$id}" );
 		}
 	}
 
@@ -1764,7 +1757,7 @@ class files extends qsfglobal
 		$xtpl->assign( 'file_name', $cfile['file_name'] );
 
 		if( $can_comment ) {
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'cid', $cid );
 			$xtpl->assign( 'id', $id );
 			$xtpl->assign( 'files_comment', $this->lang->files_comment );

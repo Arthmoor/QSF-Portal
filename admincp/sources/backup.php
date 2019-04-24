@@ -87,7 +87,7 @@ class backup extends admin
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/db_backup.xtpl' );
 
 			$xtpl->assign( 'token', $this->generate_token() );
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'options', $this->lang->backup_options );
 			$xtpl->assign( 'add_complete', $this->lang->backup_add_complete );
 			$xtpl->assign( 'statements', $this->lang->backup_statements );
@@ -191,7 +191,7 @@ class backup extends admin
 
 			foreach( $backups as $bkup )
 			{
-				$output .= "<a href='{$this->self}?a=backup&amp;s=restore&amp;restore=".$bkup."'>".$bkup."</a><br />";
+				$output .= "<a href='{$this->site}/admincp/index.php?a=backup&amp;s=restore&amp;restore=".$bkup."'>".$bkup."</a><br />";
 			}
 			return $this->message( $this->lang->backup_restore, $output );
 		}

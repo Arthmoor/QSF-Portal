@@ -57,7 +57,7 @@ class forums extends admin
 		$forums_exist = $this->db->fetch( "SELECT COUNT(forum_id) AS count FROM %pforums" );
 
 		if( !$forums_exist['count'] && ( $this->get['s'] != 'add' ) ) {
-			return $this->message( $this->lang->forum_controls, $this->lang->forum_none, $this->lang->forum_create, "$this->self?a=forums&amp;s=add" );
+			return $this->message( $this->lang->forum_controls, $this->lang->forum_none, $this->lang->forum_create, "{$this->site}/admincp/index.php?a=forums&amp;s=add" );
 		}
 
 		switch( $this->get['s'] )
@@ -70,7 +70,7 @@ class forums extends admin
 
 				$f = $this->db->fetch( "SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect, forum_news FROM %pforums WHERE forum_id=%d", $id );
 
-				$this->tree( $this->lang->forum_edit, "{$this->self}?a=forums&amp;s=edit" );
+				$this->tree( $this->lang->forum_edit, "{$this->site}/admincp/index.php?a=forums&amp;s=edit" );
 				$this->tree( $f['forum_name'] );
 
 				if( isset( $this->post['editforum'] ) ) {
@@ -83,7 +83,7 @@ class forums extends admin
 
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
-					$xtpl->assign( 'self', $this->self );
+					$xtpl->assign( 'site', $this->site );
 					$xtpl->assign( 'id', $id );
 					$xtpl->assign( 'forum_edit', $this->lang->forum_edit );
 					$xtpl->assign( 'forum_name', $f['forum_name'] );
@@ -119,7 +119,7 @@ class forums extends admin
 			} else {
 				$this->tree( $this->lang->forum_edit );
 
-				return $this->message( $this->lang->forum_edit, '<div style="text-align:left">' . $this->Text( $this->htmlwidgets->forum_grab(), "$this->self?a=forums&amp;s=edit&amp;id=" ) . '</div>' );
+				return $this->message( $this->lang->forum_edit, '<div style="text-align:left">' . $this->Text( $this->htmlwidgets->forum_grab(), "{$this->site}/admincp/index.php?a=forums&amp;s=edit&amp;id=" ) . '</div>' );
 			}
 			break;
 
@@ -131,7 +131,7 @@ class forums extends admin
 
 				$f = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id=%d", $id );
 
-				$this->tree( $this->lang->forum_delete, "{$this->self}?a=forums&amp;s=delete" );
+				$this->tree( $this->lang->forum_delete, "{$this->site}/admincp/index.php?a=forums&amp;s=delete" );
 				$this->tree( $f['forum_name'] );
 
 				if( isset( $this->post['submit'] ) ) {
@@ -144,7 +144,7 @@ class forums extends admin
 
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
-					$xtpl->assign( 'self', $this->self );
+					$xtpl->assign( 'site', $this->site );
 					$xtpl->assign( 'id', $id );
 					$xtpl->assign( 'forum_delete', $this->lang->forum_delete );
 					$xtpl->assign( 'forum_name', $f['forum_name'] );
@@ -160,7 +160,7 @@ class forums extends admin
 				}
 			} else {
 				$this->tree( $this->lang->forum_delete );
-				return $this->message( $this->lang->forum_delete, '<div style="text-align:left">' . $this->Text($this->htmlwidgets->forum_grab(), "$this->self?a=forums&amp;s=delete&amp;id=") . '</div>' );
+				return $this->message( $this->lang->forum_delete, '<div style="text-align:left">' . $this->Text($this->htmlwidgets->forum_grab(), "{$this->site}/admincp/index.php?a=forums&amp;s=delete&amp;id=") . '</div>' );
 			}
 			break;
 
@@ -185,7 +185,7 @@ class forums extends admin
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'forum_create', $this->lang->forum_create );
 				$xtpl->assign( 'forum_parent_cat', $this->lang->forum_parent_cat );
 				$xtpl->assign( 'forum_select_cat', $this->lang->forum_select_cat );
@@ -223,7 +223,7 @@ class forums extends admin
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'forum_ordering', $this->lang->forum_ordering );
 			$xtpl->assign( 'forum', $forum );
 			$xtpl->assign( 'token', $this->generate_token() );

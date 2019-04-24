@@ -76,7 +76,7 @@ class ban extends admin
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/ban.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'ban_settings', $this->lang->ban_settings );
 			$xtpl->assign( 'ban_member_explain1', $this->lang->ban_member_explain1 );
 			$xtpl->assign( 'banned_group', $banned_group );

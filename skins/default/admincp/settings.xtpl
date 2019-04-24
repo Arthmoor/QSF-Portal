@@ -1,6 +1,6 @@
 <!-- BEGIN: Settings -->
 <!-- BEGIN: AddForm -->
-<form action="{self}?a=settings&amp;s=add" method="post">
+<form action="{site}/admincp/index.php?a=settings&amp;s=add" method="post">
 <div class="article">
  <div class="title">{settings_new}</div>
  <span class="field">{settings_new_name}:</span>
@@ -22,7 +22,7 @@
 <!-- END: AddForm -->
 
 <!-- BEGIN: EditForm -->
-<form action="{self}?a=settings&amp;s=update" method="post">
+<form action="{site}/admincp/index.php?a=settings&amp;s=update" method="post">
 <input type="hidden" name="token" value="{token}" />
 <div class="article">
  <div class="title">{settings_general}</div>

@@ -11,10 +11,10 @@
  <span class="form">{answer}</span>
  <p class="line"></p>
 
- <form action="{self}?a=settings&amp;s=editcaptcha&amp;c={cap_id}" method="post">
+ <form action="{site}/admincp/index.php?a=settings&amp;s=editcaptcha&amp;c={cap_id}" method="post">
   <input type="submit" name="capedit" value="{edit}" />
  </form>
- <form action="{self}?a=settings&amp;s=deletecaptcha&amp;c={cap_id}" method="post">
+ <form action="{site}/admincp/index.php?a=settings&amp;s=deletecaptcha&amp;c={cap_id}" method="post">
   <input type="submit" name="capdelete" value="{delete}" />
  </form>
  <div class="title"></div>
@@ -23,7 +23,7 @@
 <!-- END: Display -->
 
 <!-- BEGIN: DeleteForm -->
-<form action="{self}?a=settings&amp;s=deletecaptcha&c={cap_id}" method="post">
+<form action="{site}/admincp/index.php?a=settings&amp;s=deletecaptcha&c={cap_id}" method="post">
 <div class="article">
  <div class="title">{settings_captcha_delete}</div>
  <span class="field">{settings_captcha_question}</span>
@@ -41,7 +41,7 @@
 <!-- END: DeleteForm -->
 
 <!-- BEGIN: EditForm -->
-<form action="{self}?a=settings&amp;s=editcaptcha&c={cap_id}" method="post">
+<form action="{site}/admincp/index.php?a=settings&amp;s=editcaptcha&c={cap_id}" method="post">
 <div class="article">
  <div class="title">{settings_captcha_edit}</div>
  <span class="field">{settings_captcha_question}</span>
@@ -59,7 +59,7 @@
 <!-- END: EditForm -->
 
 <!-- BEGIN: AddForm -->
-<form action="{self}?a=settings&amp;s=captcha" method="post">
+<form action="{site}/admincp/index.php?a=settings&amp;s=captcha" method="post">
 <div class="article">
  <div class="title">{settings_captcha_pair}</div>
  <span class="field">{settings_captcha_new_question}</span>

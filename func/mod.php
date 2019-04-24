@@ -159,7 +159,6 @@ class mod extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 't', $t );
@@ -315,7 +314,6 @@ class mod extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
@@ -518,7 +516,6 @@ class mod extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 't', $t );
@@ -738,9 +735,9 @@ class mod extends qsfglobal
 		// Confirmation check
 		if( !isset( $this->get['confirm'] ) ) {
 			if( !$spam )
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete, $this->lang->continue, "$this->self?a=mod&amp;s=del_post&amp;p=$p&amp;confirm=1" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete, $this->lang->continue, "{$this->site}/index.php?a=mod&amp;s=del_post&amp;p=$p&amp;confirm=1" );
 			else
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete_spam, $this->lang->continue, "$this->self?a=mod&amp;s=del_post&amp;p=$p}&amp;confirm=1&amp;c=spam" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete_spam, $this->lang->continue, "{$this->site}/index.php?a=mod&amp;s=del_post&amp;p=$p}&amp;confirm=1&amp;c=spam" );
 		}
 
 		$prev = $this->db->fetch( "SELECT MAX(p.post_id) AS prev_post FROM %pposts p
@@ -827,7 +824,7 @@ class mod extends qsfglobal
 
 		// Confirmation check
 		if( !isset( $this->get['confirm'] ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_topic_delete, $this->lang->continue, "$this->self?a=mod&amp;s=del_topic&amp;t={$t}&amp;confirm=1" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_topic_delete, $this->lang->continue, "{$this->site}/index.php?a=mod&amp;s=del_topic&amp;t={$t}&amp;confirm=1" );
 		}
 
 		$this->htmlwidgets->delete_topic( $t );
@@ -931,7 +928,7 @@ class mod extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 't', $t );
 			$xtpl->assign( 'posttarget', $posttarget );
 			$xtpl->assign( 'mod_label_topic_split', $this->lang->mod_label_topic_split );

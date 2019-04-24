@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -50,7 +50,7 @@ class titles extends admin
 			if( !isset( $this->post['submit'] ) ) {
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/titles.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'titles_add', $this->lang->titles_add );
 				$xtpl->assign( 'titles_title', $this->lang->titles_title );
@@ -116,7 +116,7 @@ class titles extends admin
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/titles.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'edit', $this->get['edit'] );
 			$xtpl->assign( 'titles_edit', $this->lang->titles_edit );
 			$xtpl->assign( 'titles_title', $this->lang->titles_title );
@@ -137,8 +137,8 @@ class titles extends admin
 					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" alt=\"{$data['membertitle_icon']}\" />";
 					$icon = $data['membertitle_icon'];
 					$posts_link = $data['membertitle_posts'];
-					$edit_link = "<a href=\"{$this->self}?a=titles&amp;s=edit&amp;edit={$data['membertitle_id']}\">{$this->lang->edit}</a>";
-					$delete_link = "<a href=\"{$this->self}?a=titles&amp;s=edit&amp;delete={$data['membertitle_id']}\">{$this->lang->delete}</a>";
+					$edit_link = "<a href=\"{$this->site}/admincp/index.php?a=titles&amp;s=edit&amp;edit={$data['membertitle_id']}\">{$this->lang->edit}</a>";
+					$delete_link = "<a href=\"{$this->site}/admincp/index.php?a=titles&amp;s=edit&amp;delete={$data['membertitle_id']}\">{$this->lang->delete}</a>";
 				} else {
 					$options = $this->list_title_images( $data['membertitle_icon'] );
 
@@ -150,7 +150,7 @@ class titles extends admin
 					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" id=\"title_preview\" />";
 					$posts_link = "<input name=\"new_posts\" value=\"{$data['membertitle_posts']}\" size=\"8\" />";
 					$edit_link = "<input type=\"submit\" name=\"submit\" value=\"{$this->lang->edit}\" />";
-					$delete_link = "<a href=\"{$this->self}?a=titles&amp;s=edit&amp;delete={$data['membertitle_id']}\">{$this->lang->delete}</a>";
+					$delete_link = "<a href=\"{$this->site}/admincp/index.php?a=titles&amp;s=edit&amp;delete={$data['membertitle_id']}\">{$this->lang->delete}</a>";
 				}
 
 				$xtpl->assign( 'title_link', $title_link );

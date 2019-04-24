@@ -74,7 +74,6 @@ class search extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/search.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'search_search', $this->lang->search_search );
@@ -171,7 +170,7 @@ class search extends qsfglobal
 
 	private function search_results()
 	{
-		$this->tree( $this->lang->search_search, $this->self . '?a=search' );
+		$this->tree( $this->lang->search_search, "{$this->site}/index.php?a=search" );
 		$this->tree( $this->lang->search_result );
 
 		// We need to ensure that the query is retained over multiple pages
@@ -386,7 +385,6 @@ class search extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/search.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'search_level', $this->lang->search_level );

@@ -48,7 +48,7 @@ class top_posters extends modlet
 			if( $uid == USER_GUEST_UID || $post < 1 )
 				continue;
 
-			$uPostRef = "<a href=\"{$this->qsf->self}?a=search&amp;id={$uid}\">";
+			$uPostRef = "<a href=\"{$this->qsf->site}/index.php?a=search&amp;id={$uid}\">";
 
 			$name = $this->qsf->htmlwidgets->clean_url( $user );
 			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($post)</a><br />";

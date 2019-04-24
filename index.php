@@ -251,7 +251,6 @@ if( $qsf->nohtml ) {
 		$qsf->lang->register(); // For registration word
 
 		$xtpl->assign( 'qsf_site', $qsf->site );
-		$xtpl->assign( 'qsf_self', $qsf->self );
 		$xtpl->assign( 'forum_name', $qsf->sets['forum_name'] );
 		$xtpl->assign( 'main_files', $qsf->lang->main_files );
 		$xtpl->assign( 'main_forum', $qsf->lang->main_forum );
@@ -276,7 +275,6 @@ if( $qsf->nohtml ) {
 		$xtpl->parse( 'Index.GuestHeader' );
 	} else {
 		$xtpl->assign( 'qsf_site', $qsf->site );
-		$xtpl->assign( 'qsf_self', $qsf->self );
 		$xtpl->assign( 'forum_name', $qsf->sets['forum_name'] );
 		$xtpl->assign( 'main_welcome', $qsf->lang->main_welcome );
 		$xtpl->assign( 'user_id', $qsf->user['user_id'] );
@@ -398,7 +396,7 @@ if( $qsf->nohtml ) {
 	if( $qsf->sets['closed'] ) {
 		if( !$qsf->perms->auth( 'board_view_closed' ) ) {
 			if( $qsf->get['a'] != 'login' ) {
-				error( QUICKSILVER_NOTICE, $qsf->sets['closedtext'] . "<br /><hr />If you are an administrator, <a href='{$qsf->self}/index.php?a=login&amp;s=on'>click here</a> to login." );
+				error( QUICKSILVER_NOTICE, $qsf->sets['closedtext'] . "<br /><hr />If you are an administrator, <a href='{$qsf->site}/index.php?a=login&amp;s=on'>click here</a> to login." );
 			}
 		} else {
 			$reminder_text = $qsf->lang->main_reminder_closed . '<br />&quot;' . $qsf->sets['closedtext'] . '&quot;';

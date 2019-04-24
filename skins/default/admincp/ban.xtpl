@@ -1,5 +1,5 @@
 <!-- BEGIN: Ban -->
-<form action="{self}?a=ban" method="post">
+<form action="{site}/admincp/index.php?a=ban" method="post">
 <div class="article">
  <div class="title">{ban_settings}</div>
  {ban_member_explain1} <strong>{banned_group}</strong> {ban_member_explain2}

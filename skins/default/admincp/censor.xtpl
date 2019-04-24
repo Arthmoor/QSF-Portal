@@ -1,5 +1,5 @@
 <!-- BEGIN: Censor -->
-<form action="{self}?a=censoring" method="post">
+<form action="{site}/admincp/index.php?a=censoring" method="post">
 <div class="article">
  <div class="title">{censor}</div>
  {censor_one_per_line}<br />

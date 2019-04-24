@@ -72,7 +72,6 @@ class page extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pages', $this->lang->pages );
@@ -113,7 +112,7 @@ class page extends qsfglobal
 
 	private function view_page( $p )
 	{
-		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 
 		$page = $this->db->fetch( "SELECT page_id, page_title, page_contents, page_flags FROM %ppages WHERE page_id=%d", $p );
 
@@ -141,7 +140,7 @@ class page extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'page_title', $page['page_title'] );
 		$xtpl->assign( 'page_contents', $page['page_contents'] );
 
@@ -175,7 +174,7 @@ class page extends qsfglobal
 			return $this->message( $this->lang->page_action_not_allowed, $this->lang->page_edit_not_permitted );
 
 		$this->set_title( $this->lang->page_editing );
-		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 		$this->tree( $this->lang->page_editing );
 		
 		$page = $this->db->fetch( "SELECT page_id as id, page_title as title, page_contents as contents, page_flags as flags FROM %ppages
@@ -201,7 +200,6 @@ class page extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'p', $p );
@@ -245,7 +243,7 @@ class page extends qsfglobal
 		$this->db->query( "UPDATE %ppages SET page_title='%s', page_contents='%s', page_flags=%d WHERE page_id=%d",
 			$this->post['title'], $this->post['contents'], $flags, $p );
 
-		return $this->message( $this->lang->page_editing, $this->lang->page_edit_done, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}" );
+		return $this->message( $this->lang->page_editing, $this->lang->page_edit_done, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}" );
 	}
 
 	private function create_page()
@@ -254,7 +252,7 @@ class page extends qsfglobal
 			return $this->message( $this->lang->page_action_not_allowed, $this->lang->page_create_not_permitted );
 
 		$this->set_title( $this->lang->page_creating );
-		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 		$this->tree( $this->lang->page_creating );
 
 		$bb = FORMAT_BBCODE;
@@ -266,7 +264,6 @@ class page extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'page_create', $this->lang->page_create );
@@ -297,7 +294,7 @@ class page extends qsfglobal
 		$this->db->query( "INSERT INTO %ppages (page_title,page_contents,page_flags) VALUES('%s', '%s', %d)", $this->post['title'], $this->post['contents'], $flags );
 		$p = $this->db->insert_id( "%ppages" );
 
-		return $this->message( $this->lang->page_creating, $this->lang->page_created, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}" );
+		return $this->message( $this->lang->page_creating, $this->lang->page_created, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}" );
 	}
 
 	private function delete_page( $p )
@@ -306,7 +303,7 @@ class page extends qsfglobal
 			return $this->message( $this->lang->page_action_not_allowed, $this->lang->page_delete_not_permitted );
 
 		$this->set_title( $this->lang->page_delete );
-		$this->tree( $this->lang->pages, "$this->self?a=page" );
+		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 		$this->tree( $this->lang->page_delete );
 
 		$page = $this->db->fetch( "SELECT page_id FROM %ppages WHERE page_id=%d", $p );
@@ -317,10 +314,10 @@ class page extends qsfglobal
 		}
 
 		if( !isset( $this->get['confirm'] ) )
-			return $this->message( $this->lang->page_delete, $this->lang->page_delete_confirm, $this->lang->continue, "{$this->self}?a=page&amp;p={$p}&amp;&amp;s=delete&amp;confirm=1" );
+			return $this->message( $this->lang->page_delete, $this->lang->page_delete_confirm, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}&amp;&amp;s=delete&amp;confirm=1" );
 
 		$this->db->query( "DELETE FROM %ppages WHERE page_id=%d", $p );
-		return $this->message( $this->lang->page_delete, $this->lang->page_deleted, $this->lang->continue, "$this->self?a=page" );
+		return $this->message( $this->lang->page_delete, $this->lang->page_deleted, $this->lang->continue, "{$this->site}/index.php?a=page" );
 	}
 }
 ?>

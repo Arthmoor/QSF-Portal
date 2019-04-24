@@ -112,7 +112,6 @@ class board extends qsfglobal
 
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
 		$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
 		$xtpl->assign( 'main_mark1', $this->lang->main_mark1 );
@@ -165,7 +164,6 @@ class board extends qsfglobal
 
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'board_bottom_page', $this->lang->board_bottom_page );
 		$xtpl->assign( 'board_top_page', $this->lang->board_top_page );
 		$xtpl->assign( 'board_forum', $this->lang->board_forum );

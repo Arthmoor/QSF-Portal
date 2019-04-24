@@ -80,7 +80,6 @@ class login extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/login.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'login_header', $this->lang->login_header );
@@ -126,7 +125,7 @@ class login extends qsfglobal
 		$this->tree( $this->lang->login_out );
 
 		if( !isset( $this->get['sure'] ) && !$this->perms->is_guest ) {
-			return $this->message( $this->lang->login_out, sprintf( $this->lang->login_sure, $this->user['user_name'] ), $this->lang->continue, "$this->self?a=login&amp;s=off&amp;sure=1" );
+			return $this->message( $this->lang->login_out, sprintf( $this->lang->login_sure, $this->user['user_name'] ), $this->lang->continue, "{$this->site}/index.php?a=login&amp;s=off&amp;sure=1" );
 		} else {
 			$this->activeutil->delete( $this->user['user_id'] );
 
@@ -152,7 +151,6 @@ class login extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/login.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'login_pass_reset', $this->lang->login_pass_reset );

@@ -42,7 +42,7 @@ class file_perms extends admin
 
 		if( isset( $this->get['s'] ) && ( $this->get['s'] == 'user' ) ) {
 			if( !isset( $this->get['id'] ) ) {
-				header( "Location: $this->self?a=member_control&amp;s=file_perms" );
+				header( "Location: {$this->site}/admincp/index.php?a=member_control&amp;s=file_perms" );
 			}
 
 			$this->post['group'] = intval( $this->get['id'] );
@@ -55,7 +55,7 @@ class file_perms extends admin
 		} else {
 			if( !isset( $this->post['group'] ) ) {
 				return $this->message( 'User Groups', "
-				<form action='$this->self?a=file_perms' method='post'><div>
+				<form action='$this->site/admincp/index.php?a=file_perms' method='post'><div>
 					{$this->lang->perms_edit_for}
 					<select name='group'>
 					" . $this->htmlwidgets->select_groups(-1) . "
@@ -118,7 +118,7 @@ class file_perms extends admin
 			$out = "
 			<script src='../javascript/permissions.js'></script>
 
-			<form id='form' action='$this->self?a=file_perms$link' method='post'>
+			<form id='form' action='$this->site/admincp/index.php?a=file_perms$link' method='post'>
 			<div align='center'><span style='font-size:14px;'><b>File Permissions For $label</b></span>";
 
 			if( $mode == 'user' ) {

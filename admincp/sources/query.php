@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -56,7 +56,7 @@ class query extends admin
 		if( !isset( $this->post['submit'] ) ) {
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/query.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'query', $this->lang->query );
 
 			$xtpl->assign( 'token', $this->generate_token() );
@@ -78,7 +78,7 @@ class query extends admin
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/query.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'query', $this->lang->query );
 
 				$xtpl->assign( 'token', $this->generate_token() );

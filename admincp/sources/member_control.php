@@ -38,7 +38,7 @@ class member_control extends admin
 	public function execute()
 	{
 		$this->set_title( $this->lang->mc );
-		$this->tree( $this->lang->mc, "$this->self?a=member_control&amp;s=profile" );
+		$this->tree( $this->lang->mc, "{$this->site}/admincp/index.php?a=member_control&amp;s=profile" );
 
 		if( !isset( $this->get['s'] ) ) {
 			$this->get['s'] = null;
@@ -48,7 +48,7 @@ class member_control extends admin
 			if( !isset( $this->post['membername'] ) ) {
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 's', $this->get['s'] );
 				$xtpl->assign( 'mc', $this->lang->mc );
 				$xtpl->assign( 'mc_find', $this->lang->mc_find );
@@ -79,7 +79,7 @@ class member_control extends admin
 
 				while( $member = $this->db->nqfetch( $query ) )
 				{
-					$ret .= "<a href='{$this->self}?$link&amp;id=" . $member['user_id'] . "'>{$member['user_name']}</a><br />";
+					$ret .= "<a href='{$this->site}/admincp/index.php?$link&amp;id=" . $member['user_id'] . "'>{$member['user_name']}</a><br />";
 				}
 
 				return $this->message( $this->lang->mc, "{$this->lang->mc_found}<br /><br />$ret" );
@@ -102,7 +102,7 @@ class member_control extends admin
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc_delete', $this->lang->mc_delete );
 				$xtpl->assign( 'user_name', $member['user_name'] );
@@ -135,7 +135,7 @@ class member_control extends admin
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc_delete', $this->lang->mc_delete );
 				$xtpl->assign( 'user_name', $member['user_name'] );
@@ -309,7 +309,7 @@ class member_control extends admin
 					$xtpl->parse( 'MemberControl.EditForm.Line' );
 				}
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc', $this->lang->mc );
 				$xtpl->assign( 'mc_report_spambot', $this->lang->mc_report_spambot );
@@ -419,7 +419,7 @@ class member_control extends admin
 			break;
 
 		default:
-			return $this->message( $this->lang->mc, "<a href='{$this->self}?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br />" );
+			return $this->message( $this->lang->mc, "<a href='{$this->site}/admincp/index.php?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br />" );
 		}
 	}
 

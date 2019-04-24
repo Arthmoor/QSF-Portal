@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -64,7 +64,7 @@ class groups extends admin
 			if( !isset( $this->post['submit'] ) ) {
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/groups.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'groups_create', $this->lang->groups_create );
 				$xtpl->assign( 'groups_create_new', $this->lang->groups_create_new );
 
@@ -194,7 +194,7 @@ class groups extends admin
 			if( !isset($this->post['submit'] ) ) {
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/groups.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'groups_delete', $this->lang->groups_delete );
 
 				$will_be = "{$this->lang->groups_the} " . $this->list_groups( -1, 'old_group', true ) . " {$this->lang->groups_will_be}";

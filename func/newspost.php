@@ -89,7 +89,6 @@ class newspost extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'topic', $post['topic_title'] );
@@ -233,7 +232,6 @@ class newspost extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/newspost.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'user_avatar', $post['user_avatar'] );

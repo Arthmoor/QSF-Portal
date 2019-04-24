@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -37,48 +37,48 @@ class perms extends admin
 {
 	public function execute()
 	{
-		$perms_obj = new permissions($this);
+		$perms_obj = new permissions( $this );
 
-		if (isset($this->get['s']) && ($this->get['s'] == 'user')) {
-			if (!isset($this->get['id'])) {
-				header("Location: $this->self?a=member&amp;s=perms");
+		if( isset( $this->get['s'] ) && ( $this->get['s'] == 'user' ) ) {
+			if( !isset( $this->get['id'] ) ) {
+				header( "Location: {$this->site}/admincp/index.php?a=member&amp;s=perms" );
 			}
 
-			$this->post['group'] = intval($this->get['id']);
+			$this->post['group'] = intval( $this->get['id'] );
 
 			$mode  = 'user';
 			$title = 'User Control';
 			$link  = '&amp;s=user&amp;id=' . $this->post['group'];
 
-			$perms_obj->get_perms(-1, $this->post['group']);
+			$perms_obj->get_perms( -1, $this->post['group'] );
 		} else {
-			if (!isset($this->post['group'])) {
-				return $this->message('User Groups', "
-				<form action='$this->self?a=perms' method='post'><div>
+			if( !isset( $this->post['group'] ) ) {
+				return $this->message( 'User Groups', "
+				<form action='$this->site/admincp/index.php?a=perms' method='post'><div>
 					{$this->lang->perms_edit_for}
 					<select name='group'>
 					" . $this->htmlwidgets->select_groups(-1) . "
 					</select>
 					<input type='submit' value='{$this->lang->submit}' /></div>
-				</form>");
+				</form>" );
 			}
 
-			$this->post['group'] = intval($this->post['group']);
+			$this->post['group'] = intval( $this->post['group'] );
 
 			$mode  = 'group';
 			$title = $this->lang->perms_title;
 			$link  = null;
 
-			$perms_obj->get_perms($this->post['group'], -1);
+			$perms_obj->get_perms( $this->post['group'], -1 );
 		}
 
-		$this->set_title($title);
-		$this->tree($title);
+		$this->set_title( $title );
+		$this->tree( $title );
 
-		$forums_only = $this->db->query("SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name");
+		$forums_only = $this->db->query( "SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name" );
 
 		$forums_list = array();
-		while ($forum = $this->db->nqfetch($forums_only))
+		while( $forum = $this->db->nqfetch( $forums_only ) )
 		{
 			$forums_list[] = $forum;
 		}
@@ -136,26 +136,26 @@ class perms extends admin
 				'post_attach_download'	=> $this->lang->perms_post_attach_download
 		);
 
-		if (!isset($this->post['submit'])) {
+		if( !isset( $this->post['submit'] ) ) {
 			$token = $this->generate_token();
 
-			$count = count($perms) + 1;
+			$count = count( $perms ) + 1;
 
-			if ($mode == 'user') {
-				$query = $this->db->fetch("SELECT user_name, user_perms FROM %pusers WHERE user_id=%d", $this->post['group']);
+			if( $mode == 'user' ) {
+				$query = $this->db->fetch( "SELECT user_name, user_perms FROM %pusers WHERE user_id=%d", $this->post['group'] );
 				$label = "{$this->lang->perms_user} '{$query['user_name']}'";
 			} else {
-				$query = $this->db->fetch("SELECT group_name FROM %pgroups WHERE group_id=%d", $this->post['group']);
+				$query = $this->db->fetch( "SELECT group_name FROM %pgroups WHERE group_id=%d", $this->post['group'] );
 				$label = "{$this->lang->perms_group} '{$query['group_name']}'";
 			}
 
 			$out = "
-			<script src='../javascript/permissions.js'></script>
+			<script src='{$this->site}/javascript/permissions.js'></script>
 
-			<form id='form' action='$this->self?a=perms$link' method='post'>
+			<form id='form' action='$this->site/admincp/index.php?a=perms$link' method='post'>
 			<div class='article'><div class='title'>{$this->lang->perms_for} $label</div>";
 
-			if ($mode == 'user') {
+			if( $mode == 'user' ) {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />
 				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
 			}
@@ -170,7 +170,7 @@ class perms extends admin
 			$locals = array();
 
 			foreach( $perms as $perm => $label ) {
-				if ( isset($perms_obj->globals[$perm]) )
+				if( isset( $perms_obj->globals[$perm] ) )
 					$globals[$perm] = $label;
 				else
 					$locals[$perm] = $label;
@@ -179,7 +179,7 @@ class perms extends admin
 			$i = 0;
 			$out .= "<tr>\n";
 
-			foreach ($globals as $perm => $label)
+			foreach( $globals as $perm => $label )
 			{
 				$out .= "<td style='width:15%'>$label</td>\n<td align='center'>\n" . 
 					"<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All\n" .
@@ -189,103 +189,115 @@ class perms extends admin
 					$out .= '</tr><tr>';
 				}
 			}
-			while ( $i++ < 4 ) {
+
+			while( $i++ < 4 ) {
 				$out .= "<td></td><td></td>";
 			}
+
 			$out .= "</tr>";
 			$out .= "<tr>
 				<td colspan='8' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
 			</tr></table></div>";
 
 			$out .= "<div class='article'><table><tr><td colspan='" . ($count + 1) . "' class='header'>{$this->lang->perms_forum}</td></tr>";
-			$chunks = array_chunk($locals,8, true);
+
+			$chunks = array_chunk( $locals, 8, true );
+
 			foreach( $chunks as $perms_chunk ) {
-				if ( $perms_chunk != $chunks[0] )
+				if( $perms_chunk != $chunks[0] )
 
 				$out .= "
 					<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
 				</tr>";
+
 				$out .= "<tr>\n";
 				$out .= $this->show_perm_headers( $perms_obj, $perms_chunk );
-				$i = count($perms_chunk);
-				while( $i++ < count($chunks[0]) )
+
+				$i = count( $perms_chunk );
+				while( $i++ < count( $chunks[0] ) )
 					$out .= "<td class='subheader'></td>";
 				$out .= "</tr>";
-				foreach ($forums_list as $forum) {
+
+				foreach( $forums_list as $forum ) {
 					$out .= "<tr>\n";
 					$out .= "  <td>{$forum['forum_name']}</td>\n";
 					$i = 0;
+
 					foreach( $perms_chunk as $perm => $label ) {
-						$checked = ($perms_obj->auth($perm, $forum['forum_id'])) ? " checked='checked'" : '';
+						$checked = ( $perms_obj->auth( $perm, $forum['forum_id'] ) ) ? " checked='checked'" : '';
 						$out .= "  <td align='center'>\n";
 						$out .= "    <input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked />\n";
 						$out .= "  </td>\n";
 						$i++;
 					}
-					while( $i++ < count($chunks[0]) )
+
+					while( $i++ < count( $chunks[0] ) )
 						$out .= "<td></td>";
 					$out .= "</tr>\n";
 				}
 			}
+
 			$out .= "
 			<tr>
 				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}' /><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
 			</tr>
 			</tr></table></div></form>";
+
 			return $out;
 		} else {
 			if( !$this->is_valid_token() ) {
 				return $this->message( $this->lang->perms, $this->lang->invalid_token );
 			}
 
-			if (($mode == 'user') && isset($this->post['usegroup'])) {
+			if( ( $mode == 'user' ) && isset( $this->post['usegroup'] ) ) {
 				$perms_obj->cube = '';
 				$perms_obj->update();
-				return $this->message($this->lang->perms, $this->lang->perms_user_inherit);
+
+				return $this->message( $this->lang->perms, $this->lang->perms_user_inherit );
 			}
 
-			$perms_obj->reset_cube(false);
+			$perms_obj->reset_cube( false );
 
-			if (!isset($this->post['perms'])) {
+			if( !isset( $this->post['perms'] ) ) {
 				$this->post['perms'] = array();
 			}
 
-			if ($mode == 'user') {
-				if ((!isset($this->post['perms']['do_anything'])) && ($this->post['group'] == USER_GUEST_UID)) {
-					return $this->message($this->lang->perms, $this->lang->perms_guest1);
+			if( $mode == 'user' ) {
+				if( ( !isset( $this->post['perms']['do_anything'] ) ) && ( $this->post['group'] == USER_GUEST_UID ) ) {
+					return $this->message( $this->lang->perms, $this->lang->perms_guest1 );
 				}
 			} else {
-				if ((!isset($this->post['perms']['do_anything'])) && ($this->post['group'] == USER_GUEST)) {
-					return $this->message($this->lang->perms, $this->lang->perms_guest2);
+				if( ( !isset( $this->post['perms']['do_anything'] ) ) && ( $this->post['group'] == USER_GUEST ) ) {
+					return $this->message( $this->lang->perms, $this->lang->perms_guest2 );
 				}
 			}
 
-			foreach ($this->post['perms'] as $name => $data)
+			foreach( $this->post['perms'] as $name => $data )
 			{
-				if (isset($data[-1]) || isset($data['-1']) || (count($data) == count($forums_list))) {
-					$perms_obj->set_xy($name, true);
+				if( isset( $data[-1] ) || isset( $data['-1'] ) || ( count( $data ) == count( $forums_list ) ) ) {
+					$perms_obj->set_xy( $name, true );
 				} else {
-					foreach ($data as $forum => $on)
+					foreach( $data as $forum => $on )
 					{
-						$perms_obj->set_xyz($name, intval($forum), true);
+						$perms_obj->set_xyz( $name, intval( $forum ), true );
 					}
 				}
 			}
 
 			$perms_obj->update();
 
-			$this->check_subscriptions($mode, $this->post['group']);
+			$this->check_subscriptions( $mode, $this->post['group'] );
 
-			return $this->message($this->lang->perms, $this->lang->perms_updated);
+			return $this->message( $this->lang->perms, $this->lang->perms_updated );
 		}
 	}
 
-	private function show_headers($forums_list)
+	private function show_headers( $forums_list )
 	{
 		$out = "<tr>
 		<td class='subheader' colspan='2' valign='bottom'>{$this->lang->perm}</td>";
 
-		foreach ($forums_list as $forum)
+		foreach( $forums_list as $forum )
 		{
 			$out .= "\n<td class='subheader' align='center' valign='middle'>{$forum['forum_name']}</td>";
 		}
@@ -296,8 +308,9 @@ class perms extends admin
 	private function show_perm_headers( &$perms_obj, $perms )
 	{
 		$out = "<td class='subheader' valign='bottom'>{$this->lang->perm}</td>\n";
-		foreach ($perms as $perm => $label) {
-			if ( isset($perms_obj->globals[$perm]) )
+
+		foreach( $perms as $perm => $label ) {
+			if( isset( $perms_obj->globals[$perm] ) )
 				continue;
 			$out .= "  <td class='subheader' align='center' valign='middle'>$label</td>";
 		}
@@ -313,56 +326,56 @@ class perms extends admin
 	 * @author Jonathan West <jon@quicksilverforums.com>
 	 * @since 1.3.2
 	 **/
-	private function check_subscriptions($mode, $group)
+	private function check_subscriptions( $mode, $group )
 	{
-		if ($mode == 'user') {
-			$query = $this->db->query("SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, u.user_perms
+		if( $mode == 'user' ) {
+			$query = $this->db->query( "SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, u.user_perms
 				FROM %psubscriptions s, %pusers u
 				WHERE s.subscription_user=%d
-				AND s.subscription_user=u.user_id", $group);
+				AND s.subscription_user=u.user_id", $group );
 
-			while ($sub = $this->db->nqfetch($query))//if the user has subscriptions
+			while( $sub = $this->db->nqfetch( $query ) ) //if the user has subscriptions
 			{
-				$perms = new permissions($this);
-				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['user_perms']);
+				$perms = new permissions( $this );
 
-				if ($sub['subscription_type'] == 'forum') {
-					if (!$perms->auth('forum_view', $sub['subscription_item'])) { //if user can no longer view forum
-						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item']);
+				$perms->get_perms( $sub['user_group'], $sub['user_id'], $sub['user_perms'] );
+
+				if( $sub['subscription_type'] == 'forum' ) {
+					if( !$perms->auth( 'forum_view', $sub['subscription_item'] ) ) { //if user can no longer view forum
+						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item'] );
 					}
 				} else {
-					$check = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item']);
+					$check = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item'] );
 
-					if (!$perms->auth('forum_view', $check['topic_forum'])) { //if user can no longer view forum
-						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item']);
+					if( !$perms->auth( 'forum_view', $check['topic_forum'] ) ) { //if user can no longer view forum
+						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item'] );
 					}
 				}
 			}
 		} else { //if a member of the group has subscriptions
-			$query = $this->db->query("SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, g.group_perms
+			$query = $this->db->query( "SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, g.group_perms
 				FROM %psubscriptions s, %pusers u, %pgroups g
-				WHERE g.group_id=%d
-                                    AND u.user_group=g.group_id
-                                    AND s.subscription_user=u.user_id", $group);
+				WHERE g.group_id=%d AND u.user_group=g.group_id AND s.subscription_user=u.user_id", $group );
 
-			while ($sub = $this->db->nqfetch($query))
+			while( $sub = $this->db->nqfetch( $query ) )
 			{
-				$perms = new permissions($this);
-				$perms->get_perms($sub['user_group'], $sub['user_id'], $sub['group_perms']);
+				$perms = new permissions( $this );
 
-				if ($sub['subscription_type'] == 'forum') {
-					if (!$perms->auth('forum_view', $sub['subscription_item'])) { //if user can no longer view forum
-						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item']);
+				$perms->get_perms( $sub['user_group'], $sub['user_id'], $sub['group_perms'] );
+
+				if( $sub['subscription_type'] == 'forum' ) {
+					if( !$perms->auth( 'forum_view', $sub['subscription_item'] ) ) { //if user can no longer view forum
+						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item'] );
 					}
 				} else {
-					$check = $this->db->fetch("SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item']);
+					$check = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item'] );
 
-					if (!$perms->auth('forum_view', $check['topic_forum'])) { //if user can no longer view forum
-						$this->db->query("DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item']);
+					if( !$perms->auth( 'forum_view', $check['topic_forum'] ) ) { //if user can no longer view forum
+						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
+						$sub['user_id'], $sub['subscription_item'] );
 					}
 				}
 			}

@@ -64,7 +64,7 @@ class filerating extends qsfglobal
 			$file_rated = $this->db->fetch( "SELECT file_id FROM %pfileratings WHERE user_id=%d AND file_id=%d", $this->user['user_id'], $this->get['f'] );
 
 			if( $file_rated['file_id'] != $this->get['f'] ) {
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'f', $this->get['f'] );
 				$xtpl->assign( 'files_rate_please', $this->lang->files_rate_please );

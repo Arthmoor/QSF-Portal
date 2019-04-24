@@ -50,7 +50,6 @@ class htmlwidgets extends forumutils
 		parent::__construct( $qsf );
 
 		$this->lang = &$qsf->lang;
-		$this->self = &$qsf->self;
 		$this->site = &$qsf->site;
 		$this->skin = &$qsf->skin;
 		$this->user = &$qsf->user;

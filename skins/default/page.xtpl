@@ -5,14 +5,14 @@
   {pages}
  </div>
 <!-- BEGIN: Page -->
- <a href="{self}?a=page&amp;p={page_id}">{page_title}</a><br />
+ <a href="{site}/index.php?a=page&amp;p={page_id}">{page_title}</a><br />
 <!-- END: Page -->
 </div>
 
 <!-- BEGIN: CreateLink -->
 <div class="article">
  <div style="text-align:right">
-  [ <a href="{self}?a=page&amp;s=create">{page_create2}</a> ]
+  [ <a href="{site}/index.php?a=page&amp;s=create">{page_create2}</a> ]
  </div>
 </div>
 <!-- END: CreateLink -->
@@ -30,7 +30,7 @@
 <!-- BEGIN: CreateLink -->
 <div class="article">
  <div style="text-align:right">
-  [ <a href="{self}?a=page&amp;s=create">{page_create2}</a> ]
+  [ <a href="{site}/index.php?a=page&amp;s=create">{page_create2}</a> ]
  </div>
 </div>
 <!-- END: CreateLink -->
@@ -45,20 +45,20 @@
 <div class="article">
  <div style="text-align:right">&nbsp;
 <!-- BEGIN: CreateLink -->
-   [ <a href="{self}?a=page&amp;s=create">{page_create2}</a> ]
+   [ <a href="{site}/index.php?a=page&amp;s=create">{page_create2}</a> ]
 <!-- END: CreateLink -->
 <!-- BEGIN: EditLink -->
-   [ <a href="{self}?a=page&amp;p={p}&amp;s=edit">{edit}</a> ]
+   [ <a href="{site}/index.php?a=page&amp;p={p}&amp;s=edit">{edit}</a> ]
 <!-- END: EditLink -->
 <!-- BEGIN: DeleteLink -->
-   [ <a href="{self}?a=page&amp;p={p}&amp;s=delete">{delete}</a> ]
+   [ <a href="{site}/index.php?a=page&amp;p={p}&amp;s=delete">{delete}</a> ]
 <!-- END: DeleteLink -->
  </div>
 </div>
 <!-- END: PagesPage -->
 
 <!-- BEGIN: PagesEdit -->
-<form action="{self}?a=page&amp;s=edit&amp;p={p}" method="post">
+<form action="{site}/index.php?a=page&amp;s=edit&amp;p={p}" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/page_edit.png" alt="" />
@@ -90,7 +90,7 @@
 <!-- END: PagesEdit -->
 
 <!-- BEGIN: PagesCreate -->
-<form action="{self}?a=page&amp;s=create" method="post">
+<form action="{site}/index.php?a=page&amp;s=create" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/page_add.png" alt="" />

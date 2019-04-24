@@ -1,5 +1,5 @@
 <!-- BEGIN: ModMoveTopic -->
-<form action="{self}?a=mod&amp;s=move&amp;t={t}" method="post">
+<form action="{site}/index.php?a=mod&amp;s=move&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/topic_moved.png" alt="" />
@@ -75,7 +75,7 @@
  <p class="line"></p>
 </div>
 <!-- END: Preview -->
-<form action="{self}?a=mod&amp;s=edit_post&amp;p={p}" method="post" name="mbpost" enctype="multipart/form-data">
+<form action="{site}/index.php?a=mod&amp;s=edit_post&amp;p={p}" method="post" name="mbpost" enctype="multipart/form-data">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/comment_edit.png" alt="" />
@@ -135,7 +135,7 @@
 <!-- END: ModEditPost -->
 
 <!-- BEGIN: ModEditTopic -->
-<form action="{self}?a=mod&amp;s=edit_topic&amp;t={t}" method="post">
+<form action="{site}/index.php?a=mod&amp;s=edit_topic&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/topic_edit.png" alt="" />
@@ -161,7 +161,7 @@
 <!-- END: ModEditTopic -->
 
 <!-- BEGIN: ModSplitTopic -->
-<form action="{self}?a=mod&amp;s=split&amp;t={t}" method="post">
+<form action="{site}/index.php?a=mod&amp;s=split&amp;t={t}" method="post">
  <input type="hidden" name="posttarget" value="{posttarget}" />
  <div class="article">
   <div class="title">{mod_label_topic_split}</div>

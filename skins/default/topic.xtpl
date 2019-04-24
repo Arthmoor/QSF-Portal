@@ -7,14 +7,14 @@
 <div class="article">
 <!-- BEGIN: CanPostTop -->
  <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
- <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
- <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
+ <div class="bigbutton"><a class="poll" href="{site}/index.php?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
+ <div class="bigbutton"><a class="topic" href="{site}/index.php?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
 <!-- END: CanPostTop -->
 <!-- BEGIN: LockedTop -->
  <div class="bigbutton"><a class="locked">{topic_locked}</a></div>
 <!-- END: LockedTop -->
 <!-- BEGIN: ReplyTop -->
- <div class="bigbutton"><a class="topic_reply" href="{self}?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
 <!-- END: ReplyTop -->
  <p></p>
 </div>
@@ -68,14 +68,14 @@
    <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{topic_top}" title="{topic_top}" /></a></div>
    <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{topic_bottom}" title="{topic_bottom}" /></a></div>
 <!-- BEGIN: CanDelete -->
-   <div class="button"><a class="spam" href="{self}?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
-   <div class="button"><a class="delete" href="{self}?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
+   <div class="button"><a class="spam" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
+   <div class="button"><a class="delete" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
 <!-- END: CanDelete -->
 <!-- BEGIN: CanEdit -->
-    <div class="button"><a class="edit" href="{self}?a=mod&amp;s=edit_post&amp;p={post_id}" title="{topic_edit_post}">{edit}</a></div>
+    <div class="button"><a class="edit" href="{site}/index.php?a=mod&amp;s=edit_post&amp;p={post_id}" title="{topic_edit_post}">{edit}</a></div>
 <!-- END: CanEdit -->
 <!-- BEGIN: CanReply -->
-    <div class="button"><a class="quotepost" href="{self}?a=post&amp;s=reply&amp;t={topicnum}&amp;f={topic_forum}&amp;qu={post_id}" title="{topic_quote}">{quote}</a></div>
+    <div class="button"><a class="quotepost" href="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}&amp;f={topic_forum}&amp;qu={post_id}" title="{topic_quote}">{quote}</a></div>
 <!-- END: CanReply -->
   </div>
   <p></p>
@@ -118,7 +118,7 @@
   <span class="text">{topic_posts}</span>{user_posts}<br />
   <span class="text">{topic_joined}</span>{user_joined}
 <!-- BEGIN: PostIP -->
-  <br /><span class="text">IP</span><a href="{self}?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
+  <br /><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
 <!-- END: PostIP -->
  </span>
 
@@ -130,7 +130,7 @@
   <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
 <!-- END: EmailForm -->
 <!-- BEGIN: PM -->
-  <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+  <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
 <!-- END: PM -->
 <!-- BEGIN: Twitter -->
    <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>
@@ -190,14 +190,14 @@
 <div class="article">
 <!-- BEGIN: CanPostBottom -->
  <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
- <div class="bigbutton"><a class="poll" href="{self}?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
- <div class="bigbutton"><a class="topic" href="{self}?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
+ <div class="bigbutton"><a class="poll" href="{site}/index.php?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
+ <div class="bigbutton"><a class="topic" href="{site}/index.php?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
 <!-- END: CanPostBottom -->
 <!-- BEGIN: LockedBottom -->
  <div class="bigbutton"><a class="locked">{topic_locked}</a></div>
 <!-- END: LockedBottom -->
 <!-- BEGIN: ReplyBottom -->
- <div class="bigbutton"><a class="topic_reply" href="{self}?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
 <!-- END: ReplyBottom -->
 
 <!-- BEGIN: QuickReplyScript -->
@@ -214,7 +214,7 @@
 <!-- BEGIN: QuickReplyBox -->
 <div class="quickreply">
 <script src="{site}/javascript/postboxplain.js"></script>
-<form action="{self}?a=post&amp;s=reply&amp;t={topicnum}" method="post" id="mbpost">
+<form action="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" method="post" id="mbpost">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
@@ -288,11 +288,11 @@
 <!-- END: PollResults -->
 
 <!-- BEGIN: Poll -->
-<form action="{self}?a=post&amp;s=vote&amp;t={t}" method="post">
+<form action="{site}/index.php?a=post&amp;s=vote&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="" />
-  {title_html} (<a href="{self}?a=post&amp;s=results&amp;t={t}">{topic_view}</a>)
+  {title_html} (<a href="{site}/index.php?a=post&amp;s=results&amp;t={t}&amp;tname={topic_link_name}">{topic_view}</a>)
  </div>
 <!-- BEGIN: Option -->
  <input class="check" type="radio" name="pollvote" id="pollvote_{i}" value="{i}" />

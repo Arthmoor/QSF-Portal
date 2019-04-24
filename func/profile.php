@@ -54,7 +54,7 @@ class profile extends qsfglobal
 
 		$this->set_title( $this->lang->profile_view_profile );
 
-		$this->tree( $this->lang->profile_list, $this->self . '?a=members' );
+		$this->tree( $this->lang->profile_list, $this->site . '/profile/' );
 		$this->tree( $this->lang->profile_view_profile );
 
 		if( !isset( $this->get['uname'] ) || !isset( $this->get['w'] ) ) {
@@ -132,7 +132,6 @@ class profile extends qsfglobal
 
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'profile_profile', $this->lang->profile_profile );
 		$xtpl->assign( 'profile_online', $this->lang->profile_online );
 		$xtpl->assign( 'profile_offline', $this->lang->profile_offline );
@@ -296,7 +295,7 @@ class profile extends qsfglobal
 				$fav_forum = $this->lang->profile_unkown;
 			}
 
-			$profile['user_posts'] = "<a href=\"{$this->self}?a=search&amp;id=$uid\">" . sprintf( $this->lang->profile_postcount, number_format( $profile['user_posts'], 0, null, $this->lang->sep_thousands ), $user_postsPerDay ) . '</a>';
+			$profile['user_posts'] = "<a href=\"{$this->site}/index.php?a=search&amp;id=$uid\">" . sprintf( $this->lang->profile_postcount, number_format( $profile['user_posts'], 0, null, $this->lang->sep_thousands ), $user_postsPerDay ) . '</a>';
 
 			$xtpl->assign( 'profile_posts', $this->lang->profile_posts );
 			$xtpl->assign( 'user_posts', $profile['user_posts'] );
@@ -325,7 +324,7 @@ class profile extends qsfglobal
 			}
 			$uploadsPerDay = $profile['user_uploads'] / $usetime;
 			$uploadsPerDay = number_format( $uploadsPerDay, 2, $this->lang->sep_decimals, $this->lang->sep_thousands );
-			$uploads = "<a href=\"{$this->self}?a=files&amp;s=search&amp;uid={$uid}\">{$profile['user_uploads']} {$this->lang->profile_uploads_total}, {$uploadsPerDay} {$this->lang->profile_uploads_per_day}</a>";
+			$uploads = "<a href=\"{$this->site}/index.php?a=files&amp;s=search&amp;uid={$uid}\">{$profile['user_uploads']} {$this->lang->profile_uploads_total}, {$uploadsPerDay} {$this->lang->profile_uploads_per_day}</a>";
 
 			$xtpl->assign( 'profile_uploads', $this->lang->profile_uploads );
 			$xtpl->assign( 'uploads', $uploads );

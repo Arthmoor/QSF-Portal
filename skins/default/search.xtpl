@@ -1,5 +1,5 @@
 <!-- BEGIN: Search -->
-<form action="{self}?a=search" method="post" id="search">
+<form action="{site}/index.php?a=search" method="post" id="search">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />

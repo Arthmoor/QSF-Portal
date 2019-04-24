@@ -257,43 +257,43 @@ class topic extends qsfglobal
 
 		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
 			if( $this->perms->auth( 'topic_unlock', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_unlock_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_unlock . '</a>';
+				$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_unlock . '</a>';
 			}
 		} else {
 			if( $this->perms->auth( 'topic_lock', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_lock_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_lock . '</a>';
+				$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=lock&amp;t=' . $topicnum . '">' . $this->lang->topic_lock . '</a>';
 			}
 		}
 
 		if( $topic['topic_modes'] & TOPIC_PINNED ) {
 			if( $this->perms->auth( 'topic_unpin', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_unpin_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_unpin . '</a>';
+				$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_unpin . '</a>';
 			}
 		} else {
 			if( $this->perms->auth( 'topic_pin', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_pin_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_pin . '</a>';
+				$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=pin&amp;t=' . $topicnum . '">' . $this->lang->topic_pin . '</a>';
 			}
 		}
 
 		if( $this->perms->auth( 'topic_delete', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_delete_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=del_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_delete . '</a>';
+			$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=del_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_delete . '</a>';
 		}
 
 		if( $this->perms->auth( 'topic_move', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_move_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=move&amp;t=' . $topicnum . '">' . $this->lang->topic_move . '</a>';
+			$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=move&amp;t=' . $topicnum . '">' . $this->lang->topic_move . '</a>';
 		}
 
 		if( $this->perms->auth( 'topic_edit', $topic['topic_forum'] ) || ( $this->perms->auth( 'topic_edit_own', $topic['topic_forum'] ) && $user_started_topic ) ) {
-			$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=edit_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_edit . '</a>';
+			$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=edit_topic&amp;t=' . $topicnum . '">' . $this->lang->topic_edit . '</a>';
 		}
 
 		if( $topic['topic_modes'] & TOPIC_PUBLISH ) {
 			if( $this->perms->auth( 'topic_publish', $topic['topic_forum'] ) ) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_unpublish . '</a>';
+				$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_unpublish . '</a>';
 			}
 		} else {
 			if( $this->perms->auth( 'topic_publish', $topic['topic_forum'] ) ) {
-				$opts[] = '<a href="' . $this->self . '?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_publish . '</a>';
+				$opts[] = '<a href="' . $this->site . '/index.php?a=mod&amp;s=publish&amp;t=' . $topicnum . '">' . $this->lang->topic_publish . '</a>';
 			}
 		}
 		$splitmode = false;
@@ -321,7 +321,7 @@ class topic extends qsfglobal
 
 		$PollDisplay = null;
 		if( $topic['topic_modes'] & TOPIC_POLL ) {
-			$PollDisplay = $this->get_poll( $topicnum, $topic['topic_forum'], $title_html, $topic['topic_modes'], $topic['topic_poll_options'] );
+			$PollDisplay = $this->get_poll( $topicnum, $topic['topic_title'], $topic['topic_forum'], $title_html, $topic['topic_modes'], $topic['topic_poll_options'] );
  		}
 
 		$query = $this->db->query( "SELECT a.attach_id, a.attach_name, a.attach_downloads, a.attach_size, p.post_id
@@ -364,7 +364,6 @@ class topic extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
@@ -776,13 +775,12 @@ class topic extends qsfglobal
 		}
 	}
 
-	private function get_poll( $t, $f, $title_html, $topic_modes, $options )
+	private function get_poll( $t, $tname, $f, $title_html, $topic_modes, $options )
 	{
 		$user_voted = $this->db->fetch( "SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d", $this->user['user_id'], $t );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'title_html', $title_html );
@@ -844,6 +842,7 @@ class topic extends qsfglobal
 			$xtpl->parse( 'PollResults' );
 			return $xtpl->text( 'PollResults' );
 		} else {
+			$xtpl->assign( 'topic_link_name', $this->htmlwidgets->clean_url( $tname ) );
 			$xtpl->assign( 't', $t );
 			$xtpl->assign( 'topic_view', $this->lang->topic_view );
 			$xtpl->assign( 'topic_vote', $this->lang->topic_vote );

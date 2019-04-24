@@ -96,7 +96,6 @@ class recent extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/recent.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'recent_jump', $this->lang->recent_jump );

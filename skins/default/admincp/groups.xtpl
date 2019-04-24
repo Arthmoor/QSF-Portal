@@ -1,6 +1,6 @@
 <!-- BEGIN: Groups -->
 <!-- BEGIN: AddForm -->
-<form action="{self}?a=groups&amp;s=add" method="post">
+<form action="{site}/admincp/index.php?a=groups&amp;s=add" method="post">
 <div class="article">
  <div class="title">{groups_create}</div>
  {groups_create_new} <input class="input" name="group_name" /> {based_on}
@@ -11,7 +11,7 @@
 <!-- END: AddForm -->
 
 <!-- BEGIN: ChooseForm -->
-<form action="{self}?a=groups&amp;s=edit" method="post">
+<form action="{site}/admincp/index.php?a=groups&amp;s=edit" method="post">
 <div class="article">
  <div class="title">{groups_edit}</div>
  {groups_to_edit}: {group_list}<br /><br />
@@ -21,7 +21,7 @@
 <!-- END: ChooseForm -->
 
 <!-- BEGIN: EditForm -->
-<form action="{self}?a=groups&amp;s=edit" method="post">
+<form action="{site}/admincp/index.php?a=groups&amp;s=edit" method="post">
 <div class="article">
  <div class="title">{groups_edit}</div>
 
@@ -45,7 +45,7 @@
 <!-- END: EditForm -->
 
 <!-- BEGIN: DeleteForm -->
-<form action="{self}?a=groups&amp;s=delete" method="post">
+<form action="{site}/admincp/index.php?a=groups&amp;s=delete" method="post">
 <div class="article">
  <div class="title">{groups_delete}</div>
  {groups_will_be}<br />

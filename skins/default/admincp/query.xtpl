@@ -1,5 +1,5 @@
 <!-- BEGIN: Query -->
-<form action="{self}?a=query" method="post">
+<form action="{site}/admincp/index.php?a=query" method="post">
 <div class="article">
  <div class="title">{query}</div>
  <textarea class="input" name="sql" cols="30" rows="15" style="width:100%">SELECT * FROM %pgroups</textarea><br /><br />

@@ -44,7 +44,7 @@
  <strong>{files_size}:</strong> {filesize} <strong>{files_added}:</strong> {date} <strong>{files_downloads}:</strong> {file_downloads}<br />
 </div>
 
-<form action="{self}?a=files&amp;s=edit&amp;fid={id}" method="post">
+<form action="{site}/index.php?a=files&amp;s=edit&amp;fid={id}" method="post">
 <div class="article">
  <div class="title" style="text-align:center">{files_modify_info}</div>
  <span class="field">{files_name}:</span>
@@ -82,7 +82,7 @@
 <!-- END: Edit -->
 
 <!-- BEGIN: Move -->
-<form action="{self}?a=files&amp;s=move&amp;fid={id}" method="post">
+<form action="{site}/index.php?a=files&amp;s=move&amp;fid={id}" method="post">
 <div class="article">
  <div class="title">{files_move_file}</div>
  {move_file}
@@ -105,9 +105,9 @@
 </div>
 
 <div class="article">
-  <a href="{self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={file_id}&amp;cid={file_catid}">{files_download}</a> | 
-  <a href="{self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={file_id}&amp;cid={file_catid}">{files_approve2}</a> | 
-  <a href="{self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={file_id}&amp;cid={file_catid}">{files_deny}</a>
+  <a href="{site}/index.php?a=files&amp;s=filequeue&amp;f=download&amp;fid={file_id}&amp;cid={file_catid}">{files_download}</a> | 
+  <a href="{site}/index.php?a=files&amp;s=filequeue&amp;f=approve&amp;fid={file_id}&amp;cid={file_catid}">{files_approve2}</a> | 
+  <a href="{site}/index.php?a=files&amp;s=filequeue&amp;f=deny&amp;fid={file_id}&amp;cid={file_catid}">{files_deny}</a>
 </div>
 <!-- END: ApproveNew -->
 
@@ -121,14 +121,14 @@
 </div>
 
 <div class="article">
-  <a href="{self}?a=files&amp;s=filequeue&amp;f=download&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_download}</a> | 
-  <a href="{self}?a=files&amp;s=filequeue&amp;f=approve&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_approve2}</a> | 
-  <a href="{self}?a=files&amp;s=filequeue&amp;f=deny&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_deny}</a>
+  <a href="{site}/index.php?a=files&amp;s=filequeue&amp;f=download&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_download}</a> | 
+  <a href="{site}/index.php?a=files&amp;s=filequeue&amp;f=approve&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_approve2}</a> | 
+  <a href="{site}/index.php?a=files&amp;s=filequeue&amp;f=deny&amp;fid={update_id}&amp;cid={file_catid}&amp;u=1">{files_deny}</a>
 </div>
 <!-- END: ApproveUpdate -->
 
 <!-- BEGIN: EditCategory -->
-<form action="{self}?a=files&amp;s=editcategory&amp;cid={cid}" method="post">
+<form action="{site}/index.php?a=files&amp;s=editcategory&amp;cid={cid}" method="post">
 <div class="article">
  <div class="title">{files_edit_category}</div>
  <span class="field"><strong>{files_name}:</strong></span>
@@ -156,7 +156,7 @@
 <!-- END: EditCategory -->
 
 <!-- BEGIN: DeleteCategory -->
-<form action="{self}?a=files&amp;s=deletecategory" method="post">
+<form action="{site}/index.php?a=files&amp;s=deletecategory" method="post">
 <div class="article">
  <div class="title">{files_delete_cat}</div>
  {files_delete_cat2}
@@ -170,7 +170,7 @@
 <!-- END: DeleteCategory -->
 
 <!-- BEGIN: AddCategory -->
-<form action="{self}?a=files&amp;s=addcategory&amp;cid={cid}" method="post">
+<form action="{site}/index.php?a=files&amp;s=addcategory&amp;cid={cid}" method="post">
 <div class="article">
  <div class="title">{files_add_cat}</div>
  <span class="field"><strong>{files_add_cat_name}:</strong></span>
@@ -206,7 +206,7 @@
 <!-- END: AddCategory -->
 
 <!-- BEGIN: DeleteFile -->
-<form action="{self}?a=files&amp;s=delete&amp;fid={file_id}&amp;cid={cid}" method="post">
+<form action="{site}/index.php?a=files&amp;s=delete&amp;fid={file_id}&amp;cid={cid}" method="post">
 <div class="article">
  <div class="title">{files_delete_file}</div>
  {files_delete_confirm} <strong>{file_name}</strong>?<br />
@@ -217,7 +217,7 @@
 <!-- END: DeleteFile -->
 
 <!-- BEGIN: UpdateFile -->
-<form action="{self}?a=files&amp;s=update&amp;cid={cid}&amp;fid={fid}" method="post" enctype="multipart/form-data">
+<form action="{site}/index.php?a=files&amp;s=update&amp;cid={cid}&amp;fid={fid}" method="post" enctype="multipart/form-data">
 <div class="article">
  <div class="title">{files_update_file}: {name}</div>
  <span class="field">{file}:</span>
@@ -244,7 +244,7 @@
 <!-- END: UpdateFile -->
 
 <!-- BEGIN: UploadFile -->
-<form action="{self}?a=files&amp;s=upload" method="post" enctype="multipart/form-data">
+<form action="{site}/index.php?a=files&amp;s=upload" method="post" enctype="multipart/form-data">
 <div class="article">
  <div class="title">{files_upload}</div>
  <span class="field">{files_name}:</span>
@@ -408,7 +408,7 @@
 <div class="article">
  {rating}
  | <a href="{site}/files/download/{file_id}/">{files_download}</a>
- | <a href="{self}?a=files&amp;s=listcomments&amp;fid={file_id}">{files_comments}({file_comments})</a>
+ | <a href="{site}/index.php?a=files&amp;s=listcomments&amp;fid={file_id}">{files_comments}({file_comments})</a>
  {update}
  {move}
  {edit}
@@ -517,7 +517,7 @@
 <!-- END: FileSearchResults -->
 
 <!-- BEGIN: AddComment -->
-<form name="commentadd" method="post" action="{self}?a=files&amp;s=addcomment&amp;fid={id}">
+<form name="commentadd" method="post" action="{site}/index.php?a=files&amp;s=addcomment&amp;fid={id}">
 <div class="article">
  <div class="title">{files_comment}</div>
 
@@ -558,7 +558,7 @@
 <!-- BEGIN: Add -->
 <div class="article">
  <div style="text-align:center">
-  <a href="{self}?a=files&amp;s=addcomment&amp;cid={cid}&amp;fid={id}">{files_comment}</a>
+  <a href="{site}/index.php?a=files&amp;s=addcomment&amp;cid={cid}&amp;fid={id}">{files_comment}</a>
  </div>
 </div>
 <!-- END: Add -->

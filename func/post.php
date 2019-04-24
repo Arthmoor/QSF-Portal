@@ -218,7 +218,6 @@ class post extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/post.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
@@ -793,12 +792,13 @@ class post extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
+		$tname = $this->htmlwidgets->clean_url( $this->get['tname'] );
 
 		if( !$this->sets['vote_after_results'] ) {
 			$this->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, -1)", $this->user['user_id'], $t );
 		}
 
-		header( "Location: {$this->self}?a=topic&t={$t}&results=1" );
+		header( "Location: {$this->site}/topic/{$tname}-{$t}/&results=1" );
 	}
 }
 ?>

@@ -49,7 +49,7 @@ class top_uploaders extends modlet
 			if( $uid == USER_GUEST_UID || $uploads < 1 )
 				continue;
 
-			$uPostRef = "<a href=\"{$this->qsf->self}?a=files&amp;s=search&amp;uid={$uid}\">";
+			$uPostRef = "<a href=\"{$this->qsf->site}/index.php?a=files&amp;s=search&amp;uid={$uid}\">";
 
 			$name = $this->qsf->htmlwidgets->clean_url( $user );
 			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($uploads)</a><br />";

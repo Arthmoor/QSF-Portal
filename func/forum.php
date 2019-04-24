@@ -157,7 +157,6 @@ class forum extends qsfglobal
 
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
 		$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
 		$xtpl->assign( 'main_mark1', $this->lang->main_mark1 );

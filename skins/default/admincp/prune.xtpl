@@ -1,6 +1,6 @@
 <!-- BEGIN: Prune -->
 <!-- BEGIN: Stage1 -->
-<form action="{self}?a=prune" method="post">
+<form action="{site}/admincp/index.php?a=prune" method="post">
 <div class="article">
  <div class="title">{prune_old_topics}</div>
  <span class="field">{prune_topics_older_than}</span>
@@ -32,7 +32,7 @@
 <!-- END: Stage1 -->
 
 <!-- BEGIN: Stage2 -->
-<form action="{self}?a=prune" method="post" name="prune">
+<form action="{site}/admincp/index.php?a=prune" method="post" name="prune">
  <input type="hidden" name="forums" value="{forums}" />
  <div class="article">
   <div class="title">{prune_old_topics}</div>

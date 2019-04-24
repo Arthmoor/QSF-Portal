@@ -68,7 +68,7 @@
 <!-- BEGIN: CommentForm -->
  <div class="article">
   <script src="{site}/javascript/postboxplain.js"></script>
-  <form action="{self}?a=post&amp;s=reply&amp;t={t}" method="post" id="mbpost">
+  <form action="{site}/index.php?a=post&amp;s=reply&amp;t={t}" method="post" id="mbpost">
    <div class="title">{newspost_post_comment}</div>
 
    <span class="field">
@@ -111,7 +111,7 @@
  <span class="text">{topic_posts}</span>{user_posts}<br />
  <span class="text">{topic_joined}</span>{user_joined}
 <!-- BEGIN: PostIP -->
- <br /><span class="text">IP</span><a href="{self}?a=mod&amp;s=viewips&amp;t={post_id}&amp;w={post_author}">{post_ip}</a>
+ <br /><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={post_id}&amp;w={post_author}">{post_ip}</a>
 <!-- END: PostIP -->
 </span>
 
@@ -123,7 +123,7 @@
   <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
 <!-- END: EmailForm -->
 <!-- BEGIN: PM -->
-  <span class="smallbutton"><a class="messenger" href="{self}?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+  <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
 <!-- END: PM -->
 <!-- BEGIN: Twitter -->
    <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>

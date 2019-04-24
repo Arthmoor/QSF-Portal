@@ -44,7 +44,7 @@ class prune extends admin
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/prune.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'prune_old_topics', $this->lang->prune_old_topics );
 			$xtpl->assign( 'prune_topics_older_than', $this->lang->prune_topics_older_than );
 			$xtpl->assign( 'prune_age_hour', $this->lang->prune_age_hour );
@@ -109,7 +109,7 @@ class prune extends admin
 
 			$movetoForum = $this->htmlwidgets->select_forums( 0, 0, null, false );
 
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'forums', $forums );
 			$xtpl->assign( 'prune_old_topics', $this->lang->prune_old_topics );
 			$xtpl->assign( 'prune_select_topics', $this->lang->prune_select_topics );

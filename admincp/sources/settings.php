@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
+if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -63,7 +63,7 @@ class settings extends admin
 				$xtpl->assign( 'question', $question );
 				$xtpl->assign( 'settings_captcha_answer', $this->lang->settings_captcha_answer );
 				$xtpl->assign( 'answer', $answer );
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'cap_id', $cap_id );
 				$xtpl->assign( 'edit', $this->lang->edit );
 				$xtpl->assign( 'delete', $this->lang->delete );
@@ -98,7 +98,7 @@ class settings extends admin
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings_captcha.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'cap_id', $cap_id );
 				$xtpl->assign( 'settings_captcha_delete', $this->lang->settings_captcha_delete );
 				$xtpl->assign( 'settings_captcha_question', $this->lang->settings_captcha_question );
@@ -150,7 +150,7 @@ class settings extends admin
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings_captcha.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'cap_id', $cap_id );
 				$xtpl->assign( 'settings_captcha_edit', $this->lang->settings_captcha_edit );
 				$xtpl->assign( 'settings_captcha_question', $this->lang->settings_captcha_question );
@@ -188,7 +188,7 @@ class settings extends admin
 			if( !isset( $this->post['submit'] ) ) {
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings_captcha.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'settings_captcha_pair', $this->lang->settings_captcha_pair );
 				$xtpl->assign( 'settings_captcha_new_question', $this->lang->settings_captcha_new_question );
 				$xtpl->assign( 'settings_captcha_new_answer', $this->lang->settings_captcha_new_answer );
@@ -220,7 +220,7 @@ class settings extends admin
 			if( !isset( $this->post['submit'] ) ) {
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings.xtpl' );
 
-				$xtpl->assign( 'self', $this->self );
+				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'settings_new', $this->lang->settings_new );
 				$xtpl->assign( 'settings_new_name', $this->lang->settings_new_name );
 				$xtpl->assign( 'settings_new_value', $this->lang->settings_new_value );
@@ -267,7 +267,7 @@ class settings extends admin
 			$this->tree( $this->lang->settings_basic );
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings.xtpl' );
-			$xtpl->assign( 'self', $this->self );
+			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'token', $this->generate_token() );
 			$xtpl->assign( 'submit', $this->lang->submit );
 			$xtpl->assign( 'enabled', $this->lang->settings_enabled );

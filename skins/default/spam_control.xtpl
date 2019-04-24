@@ -7,7 +7,7 @@
  {spam_message1}<br />
  {spam_message2}
 <!-- BEGIN: ClearAll -->
- <form action="{self}?a=spam_control&amp;c=0" method="post"" method="post">
+ <form action="{site}/index.php?a=spam_control&amp;c=0" method="post"" method="post">
   <input type="hidden" name="token" value="{token}" />
   <input class="input" type="submit" name="spam_clear" value="{spam_clear_all}" />
  </form>

@@ -1,6 +1,6 @@
 <!-- BEGIN: MemberControl -->
 <!-- BEGIN: ChooseForm -->
-<form action="{self}?a=member_control&amp;s={s}" method="post">
+<form action="{site}/admincp/index.php?a=member_control&amp;s={s}" method="post">
 <div class="article">
  <div class="title">{mc}</div>
  {mc_find}:<br /><br />
@@ -11,7 +11,7 @@
 <!-- END: ChooseForm -->
 
 <!-- BEGIN: DeleteForm -->
-<form action="{self}?a=member_control&amp;s=delete&amp;id={id}" method="post">
+<form action="{site}/admincp/index.php?a=member_control&amp;s=delete&amp;id={id}" method="post">
 <div class="article">
  <div class="title">{mc_delete}: {user_name}</div>
  {mc_confirm} <b>{user_name}</b>?
@@ -24,7 +24,7 @@
 <!-- END: DeleteForm -->
 
 <!-- BEGIN: Spambot -->
-<form action="{self}?a=member_control&amp;s=profile&amp;id={id}" method="post">
+<form action="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={id}" method="post">
 <div class="article">
  <div class="title">{mc_delete}: {user_name}</div>
  {mc_confirm_bot}
@@ -38,7 +38,7 @@
 <!-- END: Spambot -->
 
 <!-- BEGIN: EditForm -->
-<form action="{self}?a=member_control&amp;s=profile&amp;id={id}" method="post">
+<form action="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={id}" method="post">
 <div class="article">
  <div class="title">{mc}</div>
 

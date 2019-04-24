@@ -4,9 +4,9 @@
  <head>
   <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/styles.css" />
-  <link rel="stylesheet" type="text/css" href="{loc_of_board}/skins/{skin}/acp.css" />
-  <script src="{loc_of_board}/javascript/utils.js" async defer></script>
+  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/styles.css" />
+  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/acp.css" />
+  <script src="{site}/javascript/utils.js" async defer></script>
  </head>
 
 <body>
@@ -20,90 +20,90 @@
   <div id="blocks">
    <div class="block">
     <div class="title">
-     <img src="{loc_of_board}/skins/{skin}/images/icons/wrench.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/wrench.png" alt="" />
      {admin_settings}
     </div>
     <nav>
-     <a href="{self}?a=settings&amp;s=basic">{admin_edit_settings}</a>
-     <a href="{self}?a=settings&amp;s=add">{admin_settings_add}</a>
-     <a href="{self}?a=settings&amp;s=captcha">{admin_new_captcha}</a>
-     <a href="{self}?a=settings&amp;s=showcaptcha">{admin_list_captcha}</a>
-     <a href="{self}?a=censoring">{admin_censor}</a>
-     <a href="{self}?a=emoji_control">{admin_emojis}</a>
-     <a href="{self}?a=php_info">{admin_phpinfo}</a>
-     <a href="{self}?a=logs">{admin_logs}</a>
-     <a href="{self}?a=stats">{admin_stats}</a>
+     <a href="{site}/admincp/index.php?a=settings&amp;s=basic">{admin_edit_settings}</a>
+     <a href="{site}/admincp/index.php?a=settings&amp;s=add">{admin_settings_add}</a>
+     <a href="{site}/admincp/index.php?a=settings&amp;s=captcha">{admin_new_captcha}</a>
+     <a href="{site}/admincp/index.php?a=settings&amp;s=showcaptcha">{admin_list_captcha}</a>
+     <a href="{site}/admincp/index.php?a=censoring">{admin_censor}</a>
+     <a href="{site}/admincp/index.php?a=emoji_control">{admin_emojis}</a>
+     <a href="{site}/admincp/index.php?a=php_info">{admin_phpinfo}</a>
+     <a href="{site}/admincp/index.php?a=logs">{admin_logs}</a>
+     <a href="{site}/admincp/index.php?a=stats">{admin_stats}</a>
     </nav>
     <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
-     <img src="{loc_of_board}/skins/{skin}/images/icons/report.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
      {admin_forums}
     </div>
     <nav>
-     <a href="{self}?a=forums&amp;s=add">{admin_create_forum}</a>
-     <a href="{self}?a=forums&amp;s=edit">{admin_edit_forum}</a>
-     <a href="{self}?a=forums&amp;s=delete">{admin_delete_forum}</a>
-     <a href="{self}?a=forums&amp;s=order">{admin_forum_order}</a>
-     <a href="{self}?a=forums&amp;s=count">{admin_recount_forums}</a>
-     <a href="{self}?a=prune">{admin_prune}</a>
+     <a href="{site}/admincp/index.php?a=forums&amp;s=add">{admin_create_forum}</a>
+     <a href="{site}/admincp/index.php?a=forums&amp;s=edit">{admin_edit_forum}</a>
+     <a href="{site}/admincp/index.php?a=forums&amp;s=delete">{admin_delete_forum}</a>
+     <a href="{site}/admincp/index.php?a=forums&amp;s=order">{admin_forum_order}</a>
+     <a href="{site}/admincp/index.php?a=forums&amp;s=count">{admin_recount_forums}</a>
+     <a href="{site}/admincp/index.php?a=prune">{admin_prune}</a>
     </nav>
     <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
-     <img src="{loc_of_board}/skins/{skin}/images/icons/user_online.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
      {admin_members}
     </div>
     <nav>
-     <a href="{self}?a=member_control&amp;s=profile">{admin_edit_member}</a>
-     <a href="{self}?a=member_control&amp;s=delete">{admin_delete_member}</a>
-     <a href="{self}?a=member_control&amp;s=perms">{admin_edit_member_perms}</a>
-     <a href="{self}?a=member_control&amp;s=file_perms">{admin_edit_member_file_perms}</a>
-     <a href="{self}?a=titles&amp;s=add">{admin_add_member_titles}</a>
-     <a href="{self}?a=titles">{admin_edit_member_titles}</a>
-     <a href="{self}?a=ban">{admin_ban_ips}</a>
-     <a href="{self}?a=mass_mail">{admin_mass_mail}</a>
-     <a href="{self}?a=membercount">{admin_fix_stats}</a>
+     <a href="{site}/admincp/index.php?a=member_control&amp;s=profile">{admin_edit_member}</a>
+     <a href="{site}/admincp/index.php?a=member_control&amp;s=delete">{admin_delete_member}</a>
+     <a href="{site}/admincp/index.php?a=member_control&amp;s=perms">{admin_edit_member_perms}</a>
+     <a href="{site}/admincp/index.php?a=member_control&amp;s=file_perms">{admin_edit_member_file_perms}</a>
+     <a href="{site}/admincp/index.php?a=titles&amp;s=add">{admin_add_member_titles}</a>
+     <a href="{site}/admincp/index.php?a=titles">{admin_edit_member_titles}</a>
+     <a href="{site}/admincp/index.php?a=ban">{admin_ban_ips}</a>
+     <a href="{site}/admincp/index.php?a=mass_mail">{admin_mass_mail}</a>
+     <a href="{site}/admincp/index.php?a=membercount">{admin_fix_stats}</a>
     </nav>
     <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
-     <img src="{loc_of_board}/skins/{skin}/images/icons/members.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/members.png" alt="" />
      {admin_groups}
     </div>
     <nav>
-     <a href="{self}?a=groups&amp;s=add">{admin_create_group}</a>
-     <a href="{self}?a=groups&amp;s=edit">{admin_edit_group_name}</a>
-     <a href="{self}?a=perms">{admin_edit_group_perms}</a>
-     <a href="{self}?a=file_perms">{admin_edit_group_file_perms}</a>
-     <a href="{self}?a=groups&amp;s=delete">{admin_delete_group}</a>
+     <a href="{site}/admincp/index.php?a=groups&amp;s=add">{admin_create_group}</a>
+     <a href="{site}/admincp/index.php?a=groups&amp;s=edit">{admin_edit_group_name}</a>
+     <a href="{site}/admincp/index.php?a=perms">{admin_edit_group_perms}</a>
+     <a href="{site}/admincp/index.php?a=file_perms">{admin_edit_group_file_perms}</a>
+     <a href="{site}/admincp/index.php?a=groups&amp;s=delete">{admin_delete_group}</a>
     </nav>
     <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
-     <img src="{loc_of_board}/skins/{skin}/images/icons/layout_content.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="" />
      {admin_skins}
     </div>
     <nav>
-     <a href="{self}?a=skins">{admin_manage_skins}</a>
+     <a href="{site}/admincp/index.php?a=skins">{admin_manage_skins}</a>
     </nav>
     <div style="clear:both"></div>
    </div>
    <div class="block">
     <div class="title">
-     <img src="{loc_of_board}/skins/{skin}/images/icons/database_gear.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/database_gear.png" alt="" />
      {admin_db}
     </div>
     <nav>
-     <a href="{self}?a=backup&amp;s=create">{admin_db_backup}</a>
-     <a href="{self}?a=backup&amp;s=restore">{admin_db_restore}</a>
-     <a href="{self}?a=optimize">{admin_db_optimize}</a>
-     <a href="{self}?a=db_repair">{admin_db_repair}</a>
-     <a href="{self}?a=query">{admin_db_query}</a>
+     <a href="{site}/admincp/index.php?a=backup&amp;s=create">{admin_db_backup}</a>
+     <a href="{site}/admincp/index.php?a=backup&amp;s=restore">{admin_db_restore}</a>
+     <a href="{site}/admincp/index.php?a=optimize">{admin_db_optimize}</a>
+     <a href="{site}/admincp/index.php?a=db_repair">{admin_db_repair}</a>
+     <a href="{site}/admincp/index.php?a=query">{admin_db_query}</a>
     </nav>
     <div style="clear:both"></div>
    </div>
@@ -119,7 +119,7 @@
 <!-- BEGIN: NavTree -->
    <div class="article">
    {index_table_hack}
-    <span class="tree"><a href="{self}">Admin CP</a>{navtree}</span>
+    <span class="tree"><a href="{site}/admincp/index.php">Admin CP</a>{navtree}</span>
    {index_endtable_hack}
    </div>
 <!-- END: NavTree -->
@@ -134,7 +134,7 @@
 
    <div class="article">
    {index_table_hack}
-    <a href="{loc_of_board}/" style="font-weight:bold">{admin_your_board}</a> -- {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" style="font-weight:bold">{admin_name}</a>
+    <a href="{site}/" style="font-weight:bold">{admin_your_board}</a> -- {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" style="font-weight:bold">{admin_name}</a>
    {index_endtable_hack}
    </div>
   </main>

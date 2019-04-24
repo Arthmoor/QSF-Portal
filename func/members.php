@@ -105,11 +105,11 @@ class members extends qsfglobal
 			$PageNums = $this->htmlwidgets->get_pages(
 				array( "SELECT user_id FROM %pusers m, %pgroups g
 				WHERE m.user_group = g.group_id AND m.user_id != %d AND UPPER(LEFT(LTRIM(m.user_name), 1)) = '%s'", USER_GUEST_UID, $l ),
-				"a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
+				"/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		} else {
 			$PageNums = $this->htmlwidgets->get_pages(
 				array( "SELECT user_id FROM %pusers m, %pgroups g WHERE m.user_group = g.group_id AND m.user_id != %d", USER_GUEST_UID ),
-				"a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
+				"/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		}
 
 		$result = $this->db->query ( "SELECT m.user_joined, m.user_email_show, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id,
@@ -122,7 +122,6 @@ class members extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/members.xtpl' );
 
-		$xtpl->assign( 'self', $this->self );
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'members_list', $this->lang->members_list );
