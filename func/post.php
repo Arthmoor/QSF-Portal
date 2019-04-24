@@ -123,7 +123,7 @@ class post extends qsfglobal
 				$this->lang->post_reply_topic = sprintf( $this->lang->post_reply_topic, $topic['topic_title'] );
 
 				$this->htmlwidgets->tree_forums( $topic['forum_id'], true );
-				$topic_link = $this->clean_url( $topic['topic_title'] );
+				$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 				$this->tree( $shortened_title, "{$this->site}/topic/{$topic_link}-{$t}/&amp;f={$topic['forum_id']}" );
 				$this->tree( $this->lang->post_replying1 );
 				break;
@@ -287,7 +287,7 @@ class post extends qsfglobal
 					$xtpl->assign( 'avatar', $avatar );
 					$xtpl->assign( 'uid', $this->user['user_id'] );
 					$xtpl->assign( 'uname', $this->user['user_name'] );
-					$xtpl->assign( 'link_name', $this->clean_url( $this->user['user_name'] ) );
+					$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $this->user['user_name'] ) );
 					$xtpl->assign( 'utitle', $this->user['user_title'] );
 					$xtpl->assign( 'utitleicon', $this->user['membertitle_icon'] );
 					$xtpl->assign( 'topic_level', $this->lang->topic_level );
@@ -484,7 +484,7 @@ class post extends qsfglobal
 
 						if( $last['post_author'] != USER_GUEST_UID ) {
 							$xtpl->assign( 'user_name', $last['user_name'] );
-							$xtpl->assign( 'link_name', $this->clean_url( $last['user_name'] ) );
+							$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $last['user_name'] ) );
 							$xtpl->assign( 'post_author', $last['post_author'] );
 
 							$xtpl->parse( 'Post.Topic.Reply.ReplyReview.LastUserMember' );
@@ -501,7 +501,7 @@ class post extends qsfglobal
 						$xtpl->parse( 'Post.Topic.Reply.ReplyReview' );
 					}
 
-					$xtpl->assign( 'post_topic_link', $this->clean_url( $topic['topic_title'] ) );
+					$xtpl->assign( 'post_topic_link', $this->htmlwidgets->clean_url( $topic['topic_title'] ) );
 					$xtpl->assign( 'post_last_five', $this->lang->post_last_five );
 					$xtpl->assign( 't', $t );
 					$xtpl->assign( 'post_view_topic', $this->lang->post_view_topic );
@@ -726,7 +726,7 @@ class post extends qsfglobal
 					FROM %ptopics t, %pforums f
 					WHERE t.topic_id=%d AND t.topic_forum=f.forum_id", $t );
 
-				$topic_link = $this->clean_url( $emailtopic['topic_title'] );
+				$topic_link = $this->htmlwidgets->clean_url( $emailtopic['topic_title'] );
 
 				$message  = "{$this->sets['forum_name']}\n";
 				$message .= "{$this->site}/topic/{$topic_link}-{$t}/\n\n";
@@ -776,7 +776,7 @@ class post extends qsfglobal
 		if( !$user_voted && $this->perms->auth( 'poll_vote', $data['topic_forum'] ) ) {
 			$this->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, %d)", $this->user['user_id'], $t, $pollvote );
 
-			$topic_link = $this->clean_url( $data['topic_title'] );
+			$topic_link = $this->htmlwidgets->clean_url( $data['topic_title'] );
 			header( "Location: {$this->site}/topic/{$topic_link}-{$t}" );
 			return;
 		}

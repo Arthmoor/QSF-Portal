@@ -128,7 +128,7 @@ class topic extends qsfglobal
 			FROM %ptopics t, %pforums f
 			WHERE t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $topicnum, TOPIC_TYPE_FORUM );
 
-		if( !$topic || $tname != $this->clean_url( $topic['topic_title'] ) ) {
+		if( !$topic || $tname != $this->htmlwidgets->clean_url( $topic['topic_title'] ) ) {
 			$this->set_title( $this->lang->topic_not_found );
 
 			header( 'HTTP/1.0 404 Not Found' );
@@ -176,7 +176,7 @@ class topic extends qsfglobal
 
 			if( $new_topic ) {
                                 // Move to that topic
-				$topic_link = $this->clean_url( $new_topic['topic_title'] );
+				$topic_link = $this->htmlwidgets->clean_url( $new_topic['topic_title'] );
 				header( "Location: {$this->site}/topic/{$topic_link}-{$new_topic['topic_id']}" );
 				return;
                         } else {
@@ -227,7 +227,7 @@ class topic extends qsfglobal
 		$topic['topic_title'] = $this->format( $topic['topic_title'], FORMAT_CENSOR );
 		$title_html = $this->format( $topic['topic_title'], FORMAT_HTMLCHARS );
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		// Add RSS feed link for forum and topic
 		$this->lang->forum(); // needed for 'Forum' and 'Topic'
@@ -375,7 +375,7 @@ class topic extends qsfglobal
 		$xtpl->assign( 'main_recent', $this->lang->main_recent );
 		$xtpl->assign( 'PollDisplay', $PollDisplay );
 		$xtpl->assign( 'topicnum', $topicnum );
-		$xtpl->assign( 'topic_title_link', $this->clean_url( $topic['topic_title'] ) );
+		$xtpl->assign( 'topic_title_link', $this->htmlwidgets->clean_url( $topic['topic_title'] ) );
 		$xtpl->assign( 'reply', $this->lang->reply );
 
 		$can_post = false;
@@ -592,7 +592,7 @@ class topic extends qsfglobal
 
 				$xtpl->assign( 'user_id', $post['user_id'] );
 				$xtpl->assign( 'user_name', $post['user_name'] );
-				$xtpl->assign( 'link_name', $this->clean_url( $post['user_name'] ) );
+				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $post['user_name'] ) );
 				$xtpl->assign( 'user_title', $post['user_title'] );
 				$xtpl->assign( 'membertitle_icon', $post['membertitle_icon'] );
 				$xtpl->assign( 'group_name', $post['group_name'] );
@@ -628,7 +628,7 @@ class topic extends qsfglobal
 
 				if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
 					$xtpl->assign( 'user_id', $post['user_id'] );
-					$xtpl->assign( 'email_link_name', $this->clean_url( $post['user_name'] ) );
+					$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $post['user_name'] ) );
 
 					$xtpl->parse( 'Topic.Post.PosterInfoMember.EmailForm' );
 				}
@@ -692,7 +692,7 @@ class topic extends qsfglobal
 						$ext = strtolower( substr( $file['attach_name'], -4 ) );
 
 						if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-							$topic_link = $this->clean_url( $post['topic_title'] );
+							$topic_link = $this->htmlwidgets->clean_url( $post['topic_title'] );
 							$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}' />";
 							continue;
 						}

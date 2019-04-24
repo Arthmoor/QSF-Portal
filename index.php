@@ -281,7 +281,7 @@ if( $qsf->nohtml ) {
 		$xtpl->assign( 'main_welcome', $qsf->lang->main_welcome );
 		$xtpl->assign( 'user_id', $qsf->user['user_id'] );
 		$xtpl->assign( 'user_name', $qsf->user['user_name'] );
-		$xtpl->assign( 'link_name', $qsf->clean_url( $qsf->user['user_name'] ) );
+		$xtpl->assign( 'link_name', $qsf->htmlwidgets->clean_url( $qsf->user['user_name'] ) );
 		$xtpl->assign( 'new_files', $new_files );
 		$xtpl->assign( 'main_files', $qsf->lang->main_files );
 		$xtpl->assign( 'main_forum', $qsf->lang->main_forum );

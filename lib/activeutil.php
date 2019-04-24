@@ -200,7 +200,7 @@ class activeutil extends forumutils
 
 				if( $user['active_id'] != USER_GUEST_UID ) {
 					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
-						$link_name = $this->qsf->clean_url( $user['user_name'] );
+						$link_name = $this->qsf->htmlwidgets->clean_url( $user['user_name'] );
 
 						$link = "href=\"{$this->site}/profile/{$link_name}-{$user['active_id']}/\"";
 					}
@@ -230,7 +230,7 @@ class activeutil extends forumutils
 				case 'topic':
 					if( $this->perms->auth( 'topic_view', $user['topic_forum'] ) || $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$topic = $user['topic_forum'];
-						$link_name = $this->qsf->clean_url( $user['topic_title'] );
+						$link_name = $this->qsf->htmlwidgets->clean_url( $user['topic_title'] );
 						$action_link = "<a href='{$this->site}/topic/{$link_name}-{$user['active_item']}/'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
 					}
 					break;
@@ -238,13 +238,13 @@ class activeutil extends forumutils
 				case 'forum':
 					if( $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$forum = $user['topic_forum'];
-						$link_name = $this->qsf->clean_url( $user['forum_name'] );
+						$link_name = $this->qsf->htmlwidgets->clean_url( $user['forum_name'] );
 						$action_link = "<a href='{$this->site}/forum/{$link_name}-{$user['active_item']}/'>{$user['forum_name']}</a>";
 					}
 					break;
 
 				case 'profile':
-					$link_name = $this->qsf->clean_url( $user['profile_name'] );
+					$link_name = $this->qsf->htmlwidgets->clean_url( $user['profile_name'] );
 					$action_link = "<a href='{$this->site}/profile/{$link_name}-{$user['active_item']}/'>{$user['profile_name']}</a>";
 					break;
 				}

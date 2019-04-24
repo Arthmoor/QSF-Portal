@@ -62,6 +62,22 @@ class htmlwidgets extends forumutils
 	}
 
 	/**
+	 * Reformats a URL so it has no spaces in it.
+	 *
+	 * @author Roger Libiez
+	 * @return string
+	 * @since 2.0
+	 */
+	public function clean_url( $link )
+	{
+		$link = strtolower( $link );
+		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
+		$link = str_replace( ' ', '-', $link );
+
+		return $link;
+	}
+
+	/**
 	 * Creates HTML-formatted page numbers
 	 *
 	 * @param mixed $rows Can be either a resource, query, or number; number of total entries for pagination
@@ -518,7 +534,7 @@ class htmlwidgets extends forumutils
 				$selected = ' selected="selected"';
 			}
 
-			$link = $this->qsf->clean_url( $val['forum_name'] );
+			$link = $this->clean_url( $val['forum_name'] );
 
 			$return .= "<option value=\"{$dot}{$link}-{$val['forum_id']}/\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
 			$this->_select_forums_recurse( $array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
@@ -640,10 +656,10 @@ class htmlwidgets extends forumutils
 		{
 			if( $i ) {
 				if( !$cat ) {
-					$link = $this->qsf->clean_url( $forumData[$i]['forum_name'] );
+					$link = $this->clean_url( $forumData[$i]['forum_name'] );
 					$this->tree( $forumData[$i]['forum_name'], "{$this->site}/forum/{$link}-{$i}/" );
 				} else {
-					$link = $this->qsf->clean_url( $forumData[$i]['forum_name'] );
+					$link = $this->clean_url( $forumData[$i]['forum_name'] );
 					$this->tree( $forumData[$i]['forum_name'], "{$this->site}/board/category/{$link}-{$i}/" );
 					$cat = 0;
 				}
@@ -653,7 +669,7 @@ class htmlwidgets extends forumutils
 		if( !$linklast ) {
 			$this->tree( $forumData[$f]['forum_name'] );
 		} else {
-			$link = $this->qsf->clean_url( $forumData[$f]['forum_name'] );
+			$link = $this->clean_url( $forumData[$f]['forum_name'] );
 			$this->tree( $forumData[$f]['forum_name'], "{$this->site}/forum/{$link}-{$f}/" );
 		}
 	}

@@ -76,7 +76,7 @@ class newspost extends qsfglobal
 		    WHERE t.topic_id=%d AND u.user_group=g.group_id
 		    ORDER BY p.post_time LIMIT 1", $post_id );
 
-		if( !$post || $post_name != $this->clean_url( $post['topic_title'] ) ) {
+		if( !$post || $post_name != $this->htmlwidgets->clean_url( $post['topic_title'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
@@ -123,7 +123,7 @@ class newspost extends qsfglobal
 				$ext = strtolower( substr( $file['attach_name'], -4 ) );
 
 				if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-					$topic_link = $this->clean_url( $post['topic_title'] );
+					$topic_link = $this->htmlwidgets->clean_url( $post['topic_title'] );
 					$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}' />";
 					continue;
 				}
@@ -179,7 +179,7 @@ class newspost extends qsfglobal
 			$xtpl->assign( 'c_text', $c_text );
 			$xtpl->assign( 'c_date', $c_date );
 			$xtpl->assign( 'post_id', $post_id );
-			$xtpl->assign( 'link_title', $this->clean_url( $post['topic_title'] ) );
+			$xtpl->assign( 'link_title', $this->htmlwidgets->clean_url( $post['topic_title'] ) );
 
 			$xtpl->parse( 'NewsPost.Comment' );
 		}
@@ -252,7 +252,7 @@ class newspost extends qsfglobal
 
 		$xtpl->assign( 'user_id', $post['user_id'] );
 		$xtpl->assign( 'user_name', $post['user_name'] );
-		$xtpl->assign( 'link_name', $this->clean_url( $post['user_name'] ) );
+		$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $post['user_name'] ) );
 		$xtpl->assign( 'user_title', $post['user_title'] );
 		$xtpl->assign( 'membertitle_icon', $post['membertitle_icon'] );
 		$xtpl->assign( 'topic_group', $this->lang->topic_group );
@@ -289,7 +289,7 @@ class newspost extends qsfglobal
 
 		if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
 			$xtpl->assign( 'user_id', $post['user_id'] );
-			$xtpl->assign( 'email_link_name', $this->clean_url( $post['user_name'] ) );
+			$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $post['user_name'] ) );
 
 			$xtpl->parse( 'MemberInfo.EmailForm' );
 		}

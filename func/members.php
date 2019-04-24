@@ -164,7 +164,7 @@ class members extends qsfglobal
 
 			$xtpl->assign( 'user_id', $member['user_id'] );
 			$xtpl->assign( 'user_name', $member['user_name'] );
-			$xtpl->assign( 'profile_link_name', $this->clean_url( $member['user_name'] ) );
+			$xtpl->assign( 'profile_link_name', $this->htmlwidgets->clean_url( $member['user_name'] ) );
 
 			if( $member['user_email_show'] && $this->perms->auth('email_use') ) {
 				$xtpl->assign( 'user_email', $member['user_email'] );
@@ -173,7 +173,7 @@ class members extends qsfglobal
 			}
 
 			if( !$member['user_email_show'] && $member['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
-				$xtpl->assign( 'email_link_name', $this->clean_url( $member['user_name'] ) );
+				$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $member['user_name'] ) );
 				$xtpl->assign( 'user_id', $member['user_id'] );
 
 				$xtpl->parse( 'Members.User.EmailForm' );

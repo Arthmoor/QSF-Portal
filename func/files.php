@@ -324,7 +324,7 @@ class files extends qsfglobal
 			}
 
 			$name = $this->post['file_name'];
-			$furl = $this->clean_url( $name );
+			$furl = $this->htmlwidgets->clean_url( $name );
 			$catid = intval( $this->post['file_category'] );
 			$author = $this->post['file_author'];
 			$version = $this->post['file_version'];
@@ -1242,7 +1242,7 @@ class files extends qsfglobal
 
 			$i++;
 			$size = $this->format_filesize( $file_size );
-			$file_url = $this->clean_url( $file_name );
+			$file_url = $this->htmlwidgets->clean_url( $file_name );
 
 			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
@@ -1253,7 +1253,7 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
-			$xtpl->assign( 'link_name', $this->clean_url( $user_name ) );
+			$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $user_name ) );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );
@@ -1321,7 +1321,7 @@ class files extends qsfglobal
 
 			$i++;
 			$size = $this->format_filesize( $file_size );
-			$file_url = $this->clean_url( $file_name );
+			$file_url = $this->htmlwidgets->clean_url( $file_name );
 
 			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
@@ -1332,7 +1332,7 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
-			$xtpl->assign( 'link_name', $this->clean_url( $user_name ) );
+			$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $user_name ) );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );
@@ -1379,7 +1379,7 @@ class files extends qsfglobal
                         return $this->message( $this->lang->files_view, $this->lang->files_comment_specify );
 		}
 
-		//if( $this->clean_url( $query['file_name'] ) != $this->get['fname'] ) {
+		//if( $this->htmlwidgets->clean_url( $query['file_name'] ) != $this->get['fname'] ) {
 		//	header('HTTP/1.0 404 Not Found');
 		//	return $this->message( $this->lang->files_view, $this->lang->files_invalid_file );
 		//}
@@ -1661,7 +1661,7 @@ class files extends qsfglobal
 			$user_id = $user['user_id'];
 			$user_name = $user['user_name'];
 			$size = $this->format_filesize( $file_size );
-			$file_url = $this->clean_url( $file_name );
+			$file_url = $this->htmlwidgets->clean_url( $file_name );
 
 			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
@@ -1672,7 +1672,7 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
-			#xtpl->assign( 'link_name', $this->clean_url( $user_name );
+			#xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $user_name );
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );

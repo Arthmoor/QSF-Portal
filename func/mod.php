@@ -148,7 +148,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !$this->perms->auth( 'topic_move', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_move_own', $topic['topic_forum'] ) ) ) ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_move, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
@@ -264,7 +264,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $data['post_author'];
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !$this->perms->auth( 'post_edit', $data['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'post_edit_own', $data['topic_forum'] ) ) ) ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_edit, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/" );
@@ -364,7 +364,7 @@ class mod extends qsfglobal
 					$xtpl->assign( 'avatar', $avatar );
 					$xtpl->assign( 'uid', $data['user_id'] );
 					$xtpl->assign( 'uname', $data['user_name'] );
-					$xtpl->assign( 'link_name', $this->clean_url( $data['user_name'] ) );
+					$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $data['user_name'] ) );
 					$xtpl->assign( 'utitle', $data['user_title'] );
 					$xtpl->assign( 'utitleicon', $data['membertitle_icon'] );
 					$xtpl->assign( 'topic_level', $this->lang->topic_level );
@@ -564,7 +564,7 @@ class mod extends qsfglobal
 
 			$this->log_action( 'topic_edit', $t );
 
-			$topic_link = $this->clean_url( $this->post['title'] );
+			$topic_link = $this->htmlwidgets->clean_url( $this->post['title'] );
 
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_edit, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/", "{$this->site}/topic/{$topic_link}-{$t}/" );
 		}
@@ -600,7 +600,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !($topic['topic_modes'] & TOPIC_PINNED ) ) {
 			if( !$this->perms->auth( 'topic_pin', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_pin_own', $topic['topic_forum'] ) ) ) ) {
@@ -651,7 +651,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !( $topic['topic_modes'] & TOPIC_LOCKED ) ) {
 			if( !$this->perms->auth( 'topic_lock', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_lock_own', $topic['topic_forum'] ) ) ) ) {
@@ -717,7 +717,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $post['post_author'];
 
-		$topic_link = $this->clean_url( $post['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $post['topic_title'] );
 
 		if( !$this->perms->auth( 'post_delete', $post['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'post_delete_own', $post['topic_forum'] ) ) ) ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_delete, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$post['topic_id']}/" );
@@ -819,7 +819,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !$this->perms->auth( 'topic_delete', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_delete_own', $topic['topic_forum'] ) ) ) ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_delete, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
@@ -834,7 +834,7 @@ class mod extends qsfglobal
 
 		$this->log_action( 'topic_delete', $t );
 
-		$forum_link = $this->clean_url( $topic['forum_name'] );
+		$forum_link = $this->htmlwidgets->clean_url( $topic['forum_name'] );
 		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_delete, $this->lang->continue, "{$this->site}/forum/{$forum_link}-{$topic['topic_forum']}/", "{$this->site}/forum/{$forum_link}-{$topic['topic_forum']}/" );
 	}
 
@@ -865,7 +865,7 @@ class mod extends qsfglobal
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_missing_topic,  $this->lang->continue, "javascript:history.go(-1)" );
 		}
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		// Check permissions
 		if( !$this->perms->auth( 'topic_publish', $topic['topic_forum'] ) ) {
@@ -913,7 +913,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
-		$topic_link = $this->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !$this->perms->auth( 'topic_split', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_split_own', $topic['topic_forum'] ) ) ) ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_split, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );

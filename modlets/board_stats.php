@@ -60,7 +60,7 @@ class board_stats extends modlet
 			$this->qsf->lang->board_stats_string = sprintf( $this->qsf->lang->board_stats_string,
 			    $stats['MEMBERS'], $stats['LASTMEMBER'], $stats['TOPICS'], $stats['REPLIES'], $stats['POSTS'] );
 		} else {
-			$name = $this->qsf->clean_url( $stats['LASTMEMBER'] );
+			$name = $this->qsf->htmlwidgets->clean_url( $stats['LASTMEMBER'] );
 
 			$this->qsf->lang->board_stats_string = sprintf( $this->qsf->lang->board_stats_string,
 			    $stats['MEMBERS'], "<a href=\"{$this->qsf->site}/profile/{$name}-{$stats['LASTMEMBERID']}/\">{$stats['LASTMEMBER']}</a>",
@@ -70,7 +70,7 @@ class board_stats extends modlet
 		$this->qsf->lang->board_most_online = sprintf( $this->qsf->lang->board_most_online, $stats['MOSTONLINE'], $stats['MOSTONLINETIME'] );
 
 		if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
-			$name = $this->qsf->clean_url( $stats['LASTMEMBER'] );
+			$name = $this->qsf->htmlwidgets->clean_url( $stats['LASTMEMBER'] );
 
 			$stats['LASTMEMBER'] = "<a href=\"{$this->qsf->site}/profile/{$name}-{$stats['LASTMEMBERID']}/\">{$stats['LASTMEMBER']}</a>";
 		}
@@ -155,7 +155,7 @@ class board_stats extends modlet
 			$day = $this->qsf->mbdate( 'Y' ) - $year[0];
 
 			if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
-				$name = $this->qsf->clean_url( $m['user_name'] );
+				$name = $this->qsf->htmlwidgets->clean_url( $m['user_name'] );
 
 				$links[] = "<a href=\"{$this->qsf->site}/profile/{$name}-{$m['user_id']}/\" class=\"bdaylink\">{$m['user_name']}</a> ($day)";
 			} else {

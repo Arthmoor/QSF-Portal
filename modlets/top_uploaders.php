@@ -51,7 +51,7 @@ class top_uploaders extends modlet
 
 			$uPostRef = "<a href=\"{$this->qsf->self}?a=files&amp;s=search&amp;uid={$uid}\">";
 
-			$name = $this->qsf->clean_url( $user );
+			$name = $this->qsf->htmlwidgets->clean_url( $user );
 			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($uploads)</a><br />";
 		}
 

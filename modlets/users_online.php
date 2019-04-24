@@ -195,7 +195,7 @@ class users_online extends modlet
 					$title_onlinetd_table = "<strong>There have been " . $count_users . " members online today:</strong>";
 				}
 
-				$name = $this->qsf->clean_url( $user_name );
+				$name = $this->qsf->htmlwidgets->clean_url( $user_name );
 				$user_names .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$user_id}/\">{$user_name}</a>$comma";
 			}
 		}

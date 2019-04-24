@@ -271,7 +271,7 @@ class rssfeed extends qsfglobal
 		$item_title = htmlspecialchars( $item_title );
 		$xtpl->assign( 'item_title', $item_title );
 
-		$topic_link = $this->clean_url( $query_row['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $query_row['topic_title'] );
 
 		$item_link = "{$this->site}/topic/{$topic_link}-{$query_row['topic_id']}/&amp;p={$query_row['post_id']}#p{$query_row['post_id']}";
 		$xtpl->assign( 'item_link', $item_link );
@@ -359,7 +359,7 @@ class rssfeed extends qsfglobal
 		$xtpl->assign( 'item_title', htmlspecialchars( $item_title ) );
 
 		$fid = $query_row['file_id'];
-		$furl = $this->clean_url( $item_title );
+		$furl = $this->htmlwidgets->clean_url( $item_title );
 
 		$item_link = "{$this->site}/files/{$furl}-{$fid}/";
 		$xtpl->assign( 'item_link', $item_link );

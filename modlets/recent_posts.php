@@ -60,7 +60,7 @@ class recent_posts extends modlet
 		{
 			$date = $this->qsf->mbdate( DATE_LONG, $row['topic_edited'] );
 			$topic_title = $this->qsf->format( $row['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
-			$topic_link = $this->qsf->clean_url( $topic_title );
+			$topic_link = $this->qsf->htmlwidgets->clean_url( $topic_title );
 
 			if( !( $row['topic_modes'] & TOPIC_PUBLISH ) ) {
 				if( !$this->qsf->perms->auth( 'topic_view_unpublished', $row['topic_forum'] ) || !$this->qsf->perms->auth( 'topic_view', $row['topic_forum'] ) ) {
@@ -75,7 +75,7 @@ class recent_posts extends modlet
 
 					$content .= "<i>$topic_title</i></a><br />";
 
-					$name = $this->qsf->clean_url( $row['user_name'] );
+					$name = $this->qsf->htmlwidgets->clean_url( $row['user_name'] );
 					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr />";
 				}
 			} else {
@@ -91,7 +91,7 @@ class recent_posts extends modlet
 
 					$content .= "$topic_title</a><br />";
 
-					$name = $this->qsf->clean_url( $row['user_name'] );
+					$name = $this->qsf->htmlwidgets->clean_url( $row['user_name'] );
 					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr />";
 				}
 			}

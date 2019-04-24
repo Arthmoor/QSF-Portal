@@ -834,22 +834,6 @@ class qsfglobal
 		return true;
 	}
 
-	/**
-	 * Reformats a URL so it has no spaces in it.
-	 *
-	 * @author Roger Libiez
-	 * @return string
-	 * @since 2.0
-	 */
-	public function clean_url( $link )
-	{
-		$link = strtolower( $link );
-		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
-		$link = str_replace( ' ', '-', $link );
-
-		return $link;
-	}
-
 	public function get_uri()
 	{
 		if( !isset( $this->server['REQUEST_URI'] ) ) {

@@ -105,7 +105,7 @@ class main extends qsfglobal
 
 			$pos = strrpos( $text, "[more]" );
 
-			$link = $this->clean_url( $topic );
+			$link = $this->htmlwidgets->clean_url( $topic );
 
 			if( $pos !== false ) {
 				$text = substr( $text, 0, $pos );
@@ -138,7 +138,7 @@ class main extends qsfglobal
 			$items .= "<option value=\"\">{$this->lang->news_previous}</option>";
 			while( $row = $this->db->nqfetch( $result ) )
 			{
-				$link = $this->clean_url( $row['topic_title'] );
+				$link = $this->htmlwidgets->clean_url( $row['topic_title'] );
 				$items .= "<option value=\"{$link}-{$row['topic_id']}/\">{$row['topic_title']}</option>";
 			}
 			$items .= "</select>";

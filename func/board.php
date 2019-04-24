@@ -71,7 +71,7 @@ class board extends qsfglobal
 
 					if( $forum_data ) {
 						$forum_name = $forum_data['forum_name'];
-						$link_name = $this->clean_url( $forum_name );
+						$link_name = $this->htmlwidgets->clean_url( $forum_name );
 
 						$this->readmarker->mark_forum_read( $forum_id, $this->time );
 
@@ -190,7 +190,7 @@ class board extends qsfglobal
 
 					$xtpl->assign( 'fid', $forum['forum_id'] );
 					$xtpl->assign( 'fname', $forum['forum_name'] );
-					$xtpl->assign( 'cat_link_name', $this->clean_url( $forum['forum_name'] ) );
+					$xtpl->assign( 'cat_link_name', $this->htmlwidgets->clean_url( $forum['forum_name'] ) );
 
 					$xtpl->parse( 'CategoryIndex' );
 					$return .= $xtpl->text( 'CategoryIndex' );
@@ -223,7 +223,7 @@ class board extends qsfglobal
 						if( $forum['user_lastposterID'] != USER_GUEST_UID ) {
 							$xtpl->assign( 'user_lastposterID', $forum['user_lastposterID'] );
 							$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
-							$xtpl->assign( 'user_link_name', $this->clean_url( $forum['user_lastposter'] ) );
+							$xtpl->assign( 'user_link_name', $this->htmlwidgets->clean_url( $forum['user_lastposter'] ) );
 
 							$xtpl->parse( 'LastPostBox.UserInfo' );
 						}
@@ -245,7 +245,7 @@ class board extends qsfglobal
 							$xtpl->parse( 'LastPostBox.TopicUnread' );
 						}
 
-						$xtpl->assign( 'forum_last_topic_link', $this->clean_url( $full_title ) );
+						$xtpl->assign( 'forum_last_topic_link', $this->htmlwidgets->clean_url( $full_title ) );
 						$xtpl->assign( 'LastTopicID', $forum['LastTopicID'] );
 						$xtpl->assign( 'full_title', $full_title );
 						$xtpl->assign( 'user_lastpost', $forum['user_lastpost'] );
@@ -276,7 +276,7 @@ class board extends qsfglobal
 
 						$xtpl->assign( 'fid', $forum['forum_id'] );
 						$xtpl->assign( 'fname', $forum['forum_name'] );
-						$xtpl->assign( 'forum_link_name', $this->clean_url( $forum['forum_name'] ) );
+						$xtpl->assign( 'forum_link_name', $this->htmlwidgets->clean_url( $forum['forum_name'] ) );
 						$xtpl->assign( 'fdesc', $forum['forum_description'] );
 						$xtpl->assign( 'ftopics', $forum['forum_topics'] );
 						$xtpl->assign( 'freplies', $forum['forum_replies'] );

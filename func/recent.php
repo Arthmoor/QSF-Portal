@@ -184,7 +184,7 @@ class recent extends qsfglobal
 
 			$row['newpost'] = !$this->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] );
 
-			$topic_link = $this->clean_url( $row['topic_title'] );
+			$topic_link = $this->htmlwidgets->clean_url( $row['topic_title'] );
 			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], "/topic/{$topic_link}-{$row['topic_id']}/", ', ', 0, $m );
 
 			if( !empty( $row['topic_description'] ) ) {
@@ -194,7 +194,7 @@ class recent extends qsfglobal
 			if( $row['topic_last_poster'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'topic_last_poster', $row['topic_last_poster'] );
 				$xtpl->assign( 'topic_last_poster_name', $row['topic_last_poster_name'] );
-				$xtpl->assign( 'topic_last_poster_link_name', $this->clean_url( $row['topic_last_poster_name'] ) );
+				$xtpl->assign( 'topic_last_poster_link_name', $this->htmlwidgets->clean_url( $row['topic_last_poster_name'] ) );
 
 				$xtpl->parse( 'Recent.Topic.LastPosterMember' );
 			} else {
@@ -206,7 +206,7 @@ class recent extends qsfglobal
 			if( $row['topic_starter'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'topic_starter', $row['topic_starter'] );
 				$xtpl->assign( 'topic_starter_name', $row['topic_starter_name'] );
-				$xtpl->assign( 'topic_starter_link_name', $this->clean_url( $row['topic_starter_name'] ) );
+				$xtpl->assign( 'topic_starter_link_name', $this->htmlwidgets->clean_url( $row['topic_starter_name'] ) );
 
 				$xtpl->parse( 'Recent.Topic.TopicStarterMember' );
 			} else {
@@ -301,12 +301,12 @@ class recent extends qsfglobal
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
 				$xtpl->assign( 'topic_posted', $topic_posted );
 				$xtpl->assign( 'topic_title', $row['topic_title'] );
-				$xtpl->assign( 'topic_title_link', $this->clean_url( $row['topic_title'] ) );
+				$xtpl->assign( 'topic_title_link', $this->htmlwidgets->clean_url( $row['topic_title'] ) );
 				$xtpl->assign( 'Pages', $Pages );
 				$xtpl->assign( 'topic_description', $row['topic_description'] );
 				$xtpl->assign( 'forum_id', $row['forum_id'] );
 				$xtpl->assign( 'forum_name', $row['forum_name'] );
-				$xtpl->assign( 'forum_link_name', $this->clean_url( $row['forum_name'] ) );
+				$xtpl->assign( 'forum_link_name', $this->htmlwidgets->clean_url( $row['forum_name'] ) );
 				$xtpl->assign( 'topic_edited', $row['topic_edited'] );
 				$xtpl->assign( 'jump', $jump );
 

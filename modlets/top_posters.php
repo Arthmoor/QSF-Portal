@@ -50,7 +50,7 @@ class top_posters extends modlet
 
 			$uPostRef = "<a href=\"{$this->qsf->self}?a=search&amp;id={$uid}\">";
 
-			$name = $this->qsf->clean_url( $user );
+			$name = $this->qsf->htmlwidgets->clean_url( $user );
 			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($post)</a><br />";
 		}
 

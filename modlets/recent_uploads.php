@@ -59,13 +59,13 @@ class recent_uploads extends modlet
 			$filesize = ceil( $file['file_size'] / 1024 );
 			$fid = $file['file_id'];
 			$fname = $this->qsf->format( $file['file_name'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
-			$furl = $this->qsf->clean_url( $fname );
+			$furl = $this->qsf->htmlwidgets->clean_url( $fname );
 			$title = "Downloads: {$file['file_downloads']}  Size: {$filesize} KB";
 			$author = $this->qsf->format( $file['file_author'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			$content .= "<a href=\"". $this->qsf->site . "/files/{$furl}-{$fid}/\" title=\"{$title}\">{$fname}</a>";
 
-			$name = $this->qsf->clean_url( $file['user_name'] );
+			$name = $this->qsf->htmlwidgets->clean_url( $file['user_name'] );
 			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->site}/profile/{$name}-{$file['file_submitted']}/\">{$file['user_name']}</a><hr />";
 		}
 

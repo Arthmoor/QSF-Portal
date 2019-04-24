@@ -85,7 +85,7 @@ class profile extends qsfglobal
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
 
-		if( $uname != $this->clean_url( $profile['user_name'] ) ) {
+		if( $uname != $this->htmlwidgets->clean_url( $profile['user_name'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
@@ -110,7 +110,7 @@ class profile extends qsfglobal
 				$profile['user_email'] = "<a href=\"mailto:{$profile['user_email']}\">{$profile['user_email']}</a>";
 			} else {
 				if( $profile['user_email_form'] ) {
-					$link = $this->clean_url( $profile['user_name'] );
+					$link = $this->htmlwidgets->clean_url( $profile['user_name'] );
 					$profile['user_email'] = "<a href=\"{$this->site}/email/{$link}-{$profile['user_id']}\">{$this->lang->profile_private}</a>";
 				} else {
 					$profile['user_email'] = $this->lang->profile_private;
@@ -272,7 +272,7 @@ class profile extends qsfglobal
 				LIMIT 1", $profile['user_id'] );
 
 			if( isset( $last['topic_forum'] ) && $this->perms->auth( 'topic_view', $last['topic_forum'] ) ) {
-				$topic_link = $this->clean_url( $last['topic_title'] );
+				$topic_link = $this->htmlwidgets->clean_url( $last['topic_title'] );
 
 				if( strlen( $last['topic_title'] ) > 25 ) {
 					$last['topic_title'] = substr( $last['topic_title'], 0, 22 ) . '...';
@@ -289,7 +289,7 @@ class profile extends qsfglobal
 				if( !$posts_total['count'] ) {
 					$fav_forum = $this->lang->profile_unkown;
 				} else {
-					$link = $this->clean_url( $final_fav['forum_name'] );
+					$link = $this->htmlwidgets->clean_url( $final_fav['forum_name'] );
 					$fav_forum = sprintf( $this->lang->profile_fav_forum, "<a href=\"{$this->site}/forum/{$link}-{$final_fav['Forum']}/\">{$final_fav['forum_name']}</a>", round( $final_fav['Forumuser_posts'] / $posts_total['count'] * 100 ) );
 				}
 			} else {
@@ -314,7 +314,7 @@ class profile extends qsfglobal
 
 			$lastfile = $this->lang->profile_uploads_none_yet;
 			if( isset( $last['file_id'] ) ) {
-				$furl = $this->clean_url( $last['file_name'] );
+				$furl = $this->htmlwidgets->clean_url( $last['file_name'] );
 				$date = $this->mbdate( DATE_LONG, $last['file_date'] );
 				$lastfile = "<a href=\"{$this->site}/files/{$furl}-{$last['file_id']}/\">{$last['file_name']}</a><br />{$date}";
 			}

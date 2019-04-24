@@ -130,7 +130,7 @@ class forum extends qsfglobal
 			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
 		}
 
-		if( $fname != $this->clean_url( $exists['forum_name'] ) ) {
+		if( $fname != $this->htmlwidgets->clean_url( $exists['forum_name'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
 		}
@@ -142,7 +142,7 @@ class forum extends qsfglobal
 
 		$topic = $this->db->fetch( "SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=%d AND topic_type=%d", $f, TOPIC_TYPE_FORUM );
 
-		$link_name = $this->clean_url( $exists['forum_name'] );
+		$link_name = $this->htmlwidgets->clean_url( $exists['forum_name'] );
 		$pagelinks = $this->htmlwidgets->get_pages( $topic['count'], "forum/{$link_name}-{$f}/&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 		$forumjump = $this->htmlwidgets->select_forums( $f, 0, null, true );
 
@@ -181,7 +181,7 @@ class forum extends qsfglobal
 				$xtpl->assign( 'asc', $asc );
 				$xtpl->assign( 'forum_mark_read', $this->lang->forum_mark_read );
 				$xtpl->assign( 'forum_name', $exists['forum_name'] );
-				$xtpl->assign( 'forum_link_name', $this->clean_url( $exists['forum_name'] ) );
+				$xtpl->assign( 'forum_link_name', $this->htmlwidgets->clean_url( $exists['forum_name'] ) );
 				$xtpl->assign( 'forum_topic', $this->lang->forum_topic );
 				$xtpl->assign( 'forum_starter', $this->lang->forum_starter );
 				$xtpl->assign( 'forum_replies', $this->lang->forum_replies );
@@ -268,7 +268,7 @@ class forum extends qsfglobal
 				else {
 					$xtpl->assign( 'fid', $forum['forum_id'] );
 					$xtpl->assign( 'fname', $forum['forum_name'] );
-					$xtpl->assign( 'forum_link_name', $this->clean_url( $forum['forum_name'] ) );
+					$xtpl->assign( 'forum_link_name', $this->htmlwidgets->clean_url( $forum['forum_name'] ) );
 					$xtpl->assign( 'fdesc', $forum['forum_description'] );
 					$xtpl->assign( 'ftopics', $forum['forum_topics'] );
 					$xtpl->assign( 'freplies', $forum['forum_replies'] );
@@ -282,7 +282,7 @@ class forum extends qsfglobal
 						if( $forum['user_lastposterID'] != USER_GUEST_UID ) {
 							$xtpl->assign( 'user_lastposterID', $forum['user_lastposterID'] );
 							$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
-							$xtpl->assign( 'link_name', $this->clean_url( $forum['user_lastposter'] ) );
+							$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $forum['user_lastposter'] ) );
 
 							$xtpl->parse( 'Forum.SubForum.Normal.LastPostBox.UserInfo' );
 						}
@@ -306,7 +306,7 @@ class forum extends qsfglobal
 							$xtpl->parse( 'Forum.SubForum.Normal.LastPostBox.TopicUnread' );
 						}
 
-						$xtpl->assign( 'forum_last_topic_link', $this->clean_url( $full_title ) );
+						$xtpl->assign( 'forum_last_topic_link', $this->htmlwidgets->clean_url( $full_title ) );
 						$xtpl->assign( 'LastTopicID', $forum['LastTopicID'] );
 						$xtpl->assign( 'full_title', $full_title );
 						$xtpl->assign( 'user_lastpost', $forum['user_lastpost'] );
@@ -342,7 +342,7 @@ class forum extends qsfglobal
 
 			$row['newpost'] = !$this->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] );
 
-			$topic_link = $this->clean_url( $row['topic_title'] );
+			$topic_link = $this->htmlwidgets->clean_url( $row['topic_title'] );
 			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], "/topic/{$topic_link}-{$row['topic_id']}/&amp;f={$f}", ', ', 0, $m );
 
 			if( !empty( $row['topic_description'] ) ) {
@@ -449,7 +449,7 @@ class forum extends qsfglobal
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
 				$xtpl->assign( 'topic_posted', $topic_posted );
 				$xtpl->assign( 'topic_title', $row['topic_title'] );
-				$xtpl->assign( 'topic_title_link', $this->clean_url( $row['topic_title'] ) );
+				$xtpl->assign( 'topic_title_link', $this->htmlwidgets->clean_url( $row['topic_title'] ) );
 				$xtpl->assign( 'Pages', $Pages );
 
 				if( $row['newpost'] ) {
@@ -461,7 +461,7 @@ class forum extends qsfglobal
 				if( $row['topic_last_poster'] != USER_GUEST_UID ) {
 					$xtpl->assign( 'topic_last_poster', $row['topic_last_poster'] );
 					$xtpl->assign( 'topic_last_poster_name', $row['topic_last_poster_name'] );
-					$xtpl->assign( 'link_name_last', $this->clean_url( $row['topic_last_poster_name'] ) );
+					$xtpl->assign( 'link_name_last', $this->htmlwidgets->clean_url( $row['topic_last_poster_name'] ) );
 
 					$xtpl->parse( 'Forum.Topics.ForumTopic.LastPosterMember' );
 				} else {
@@ -473,7 +473,7 @@ class forum extends qsfglobal
 				if( $row['topic_starter'] != USER_GUEST_UID ) {
 					$xtpl->assign( 'topic_starter', $row['topic_starter'] );
 					$xtpl->assign( 'topic_starter_name', $row['topic_starter_name'] );
-					$xtpl->assign( 'link_name', $this->clean_url( $row['topic_starter_name'] ) );
+					$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $row['topic_starter_name'] ) );
 
 					$xtpl->parse( 'Forum.Topics.ForumTopic.TopicStarterMember' );
 				} else {
