@@ -34,7 +34,7 @@
    <input class="input" type="submit" name="delete_comment" value="{delete}" />
   </form>
  </span>
- <span class="spamtopic"><a href="{self}?a=topic&amp;t={tid}">{title}</a></span>
+ <span class="spamtopic"><a href="{site}/topic/{title_link}-{tid}/">{title}</a></span>
  <span class="spamuser"><a href="{site}/profile/{link_author}-{uid}/">{author}</a></span>
  <span class="spamip">{ip}</span>
  <span class="spamdate">{date}</span>

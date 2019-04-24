@@ -130,7 +130,7 @@ class forum extends qsfglobal
 			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
 		}
 
-		if( $fname != $this->clean_url( strtolower( $exists['forum_name'] ) ) ) {
+		if( $fname != $this->clean_url( $exists['forum_name'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->forum_forum, $this->lang->forum_noexist );
 		}
@@ -306,6 +306,7 @@ class forum extends qsfglobal
 							$xtpl->parse( 'Forum.SubForum.Normal.LastPostBox.TopicUnread' );
 						}
 
+						$xtpl->assign( 'forum_last_topic_link', $this->clean_url( $full_title ) );
 						$xtpl->assign( 'LastTopicID', $forum['LastTopicID'] );
 						$xtpl->assign( 'full_title', $full_title );
 						$xtpl->assign( 'user_lastpost', $forum['user_lastpost'] );
@@ -341,7 +342,8 @@ class forum extends qsfglobal
 
 			$row['newpost'] = !$this->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] );
 
-			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], 'a=topic&amp;t=' . $row['topic_id'] . '&amp;f=' . $f, ', ', 0, $m );
+			$topic_link = $this->clean_url( $row['topic_title'] );
+			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], "/topic/{$topic_link}-{$row['topic_id']}/&amp;f={$f}", ', ', 0, $m );
 
 			if( !empty( $row['topic_description'] ) ) {
 				$row['topic_description'] = '<br />&raquo; ' . $this->format( $row['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
@@ -353,7 +355,7 @@ class forum extends qsfglobal
 				$state = 'moved';
 				$row['topic_id'] = $row['topic_moved'];
 
-				$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], 'a=topic&amp;t=' . $row['topic_id'] . '&amp;f=' . $f, ', ', 0, $m );
+				$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], "/topic/{$topic_link}-{$row['topic_id']}/&amp;f={$f}", ', ', 0, $m );
 			} elseif( $row['topic_modes'] & TOPIC_LOCKED ) {
 				if( $row['newpost'] ) {
 					$state = 'new';
@@ -447,6 +449,7 @@ class forum extends qsfglobal
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
 				$xtpl->assign( 'topic_posted', $topic_posted );
 				$xtpl->assign( 'topic_title', $row['topic_title'] );
+				$xtpl->assign( 'topic_title_link', $this->clean_url( $row['topic_title'] ) );
 				$xtpl->assign( 'Pages', $Pages );
 
 				if( $row['newpost'] ) {

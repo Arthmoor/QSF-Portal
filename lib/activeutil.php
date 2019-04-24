@@ -196,13 +196,13 @@ class activeutil extends forumutils
 				$topic = null;
 				$is_bot = false;
 
-				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ') .  htmlspecialchars( $user['active_user_agent'] );
+				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ' ) .  htmlspecialchars( $user['active_user_agent'] );
 
 				if( $user['active_id'] != USER_GUEST_UID ) {
 					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
-						$name = $this->qsf->clean_url( $user['user_name'] );
+						$link_name = $this->qsf->clean_url( $user['user_name'] );
 
-						$link = "href=\"{$this->site}/profile/{$name}-{$user['active_id']}/\"";
+						$link = "href=\"{$this->site}/profile/{$link_name}-{$user['active_id']}/\"";
 					}
 					else
 						$link = '';
@@ -230,21 +230,22 @@ class activeutil extends forumutils
 				case 'topic':
 					if( $this->perms->auth( 'topic_view', $user['topic_forum'] ) || $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$topic = $user['topic_forum'];
-						$action_link = "<a href='{$this->self}?a=topic&amp;t={$user['active_item']}'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
+						$link_name = $this->qsf->clean_url( $user['topic_title'] );
+						$action_link = "<a href='{$this->site}/topic/{$link_name}-{$user['active_item']}/'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
 					}
 					break;
 
 				case 'forum':
 					if( $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$forum = $user['topic_forum'];
-						$link = $this->qsf->clean_url( $user['forum_name'] );
-						$action_link = "<a href='{$this->site}/forum/{$link}-{$user['active_item']}/'>{$user['forum_name']}</a>";
+						$link_name = $this->qsf->clean_url( $user['forum_name'] );
+						$action_link = "<a href='{$this->site}/forum/{$link_name}-{$user['active_item']}/'>{$user['forum_name']}</a>";
 					}
 					break;
 
 				case 'profile':
-					$name = $this->qsf->clean_url( $user['profile_name'] );
-					$action_link = "<a href='{$this->site}/profile/{$name}-{$user['active_item']}/'>{$user['profile_name']}</a>";
+					$link_name = $this->qsf->clean_url( $user['profile_name'] );
+					$action_link = "<a href='{$this->site}/profile/{$link_name}-{$user['active_item']}/'>{$user['profile_name']}</a>";
 					break;
 				}
 

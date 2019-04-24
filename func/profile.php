@@ -85,7 +85,7 @@ class profile extends qsfglobal
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
 
-		if( $uname != $this->clean_url( strtolower( $profile['user_name'] ) ) ) {
+		if( $uname != $this->clean_url( $profile['user_name'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
@@ -272,11 +272,13 @@ class profile extends qsfglobal
 				LIMIT 1", $profile['user_id'] );
 
 			if( isset( $last['topic_forum'] ) && $this->perms->auth( 'topic_view', $last['topic_forum'] ) ) {
+				$topic_link = $this->clean_url( $last['topic_title'] );
+
 				if( strlen( $last['topic_title'] ) > 25 ) {
 					$last['topic_title'] = substr( $last['topic_title'], 0, 22 ) . '...';
 				}
 
-				$lastpost = '<a href="' . $this->self . '?a=topic&amp;t=' . $last['topic_id'] . '">' . $this->format($last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS) . '</a><br />' . $this->mbdate(DATE_LONG, $last['post_time']);
+				$lastpost = "<a href=\"{$this->site}/topic/{$topic_link}-{$last['topic_id']}/\">" . $this->format( $last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a><br />' . $this->mbdate( DATE_LONG, $last['post_time'] );
 			} else {
 				$lastpost = $this->lang->profile_unkown;
 			}

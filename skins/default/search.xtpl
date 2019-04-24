@@ -90,7 +90,7 @@
 <!-- BEGIN: Entry -->
  <span class="icon"><img src="{site}/skins/{skin}/images/icons/topic.png" alt="" /></span>
  <span class="thread">
-  <a href="{self}?a=topic&amp;t={post_topic}"><strong>{topic_title}</strong></a>
+  <a href="{site}/topic/{topic_title_link}-{post_topic}/"><strong>{topic_title}</strong></a>
   <br />- <a href="{site}/forum/{forum_link_name}-{topic_forum}/">{forum_name}</a>
  </span>
  <span class="number">{matches}</span>

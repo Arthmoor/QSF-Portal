@@ -25,8 +25,8 @@
   {title_html}
  </div>
  <span class="next_prev_topics">
-  <a href="{self}?a=topic&amp;t={topicnum}&amp;view=newer">&lt; {topic_newer}</a>
-  :: <a href="{self}?a=topic&amp;t={topicnum}&amp;view=older">{topic_older} &gt;</a>
+  <a href="{site}/topic/{topic_title_link}-{topicnum}/&amp;view=newer">&lt; {topic_newer}</a>
+  :: <a href="{site}/topic/{topic_title_link}-{topicnum}/&amp;view=older">{topic_older} &gt;</a>
  </span>
  <span class="topic_description">{topic_description}</span>
  <p></p>
@@ -61,7 +61,7 @@
 <!-- BEGIN: PostIcon -->
    <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
 <!-- END: PostIcon -->
-   <a href="{self}?a=topic&amp;t={topicnum}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
+   <a href="{site}/topic/{topic_title_link}-{topicnum}/&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
    &nbsp;&nbsp;<span class="small_text">{edited}</span>
   </div>
   <div style="text-align:right;">
@@ -159,7 +159,7 @@
   <div class="filebox">
    <strong>{topic_attached}</strong>
    <div class="file">
-    <br />{topic_attached_filename} <a href="{self}?a=topic&amp;s=attach&amp;id={attach_id}">{attach_name}</a>
+    <br />{topic_attached_filename} <a href="{site}/topic/attachment/{attach_id}/">{attach_name}</a>
     <br />{topic_attached_size} {filesize} KB
     <br />{topic_attached_downloads}: {attach_downloads}
    </div>

@@ -127,7 +127,7 @@
 </form>
 <!-- BEGIN: Reply -->
 <div class="article">
- <div class="title">{post_last_five} [<a href="{self}?a=topic&amp;t={t}">{post_view_topic}</a>]</div>
+ <div class="title">{post_last_five} [<a href="{site}/topic/{post_topic_link}-{t}/">{post_view_topic}</a>]</div>
 <!-- BEGIN: ReplyReview -->
  <span class="head">
 <!-- BEGIN: LastUserMember -->

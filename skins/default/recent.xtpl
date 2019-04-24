@@ -25,7 +25,7 @@
  </span>
 
  <span class="recent_topic">
-  <a href="{self}?a=topic&amp;t={topic_id}&amp;unread=1#unread" title="{recent_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}{topic_description}
+  <a href="{site}/topic/{topic_title_link}-{topic_id}/&amp;unread=1#unread" title="{recent_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}{topic_description}
  </span>
 
  <span class="number">
@@ -39,7 +39,7 @@
  <span class="number"><a href="{site}/forum/{forum_link_name}-{forum_id}/">{forum_name}</a></span>
  <span class="last_post">
   {topic_edited}<br />
-  <a href="{self}?a=topic&amp;t={topic_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}" /></a>
+  <a href="{site}/topic/{topic_title_link}-{topic_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}" /></a>
 <!-- BEGIN: LastPosterMember -->
   {recent_by}: <a href="{site}/profile/{topic_last_poster_link_name}-{topic_last_poster}/" class="small">{topic_last_poster_name}</a>
 <!-- END: LastPosterMember -->

@@ -60,6 +60,7 @@ class recent_posts extends modlet
 		{
 			$date = $this->qsf->mbdate( DATE_LONG, $row['topic_edited'] );
 			$topic_title = $this->qsf->format( $row['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+			$topic_link = $this->qsf->clean_url( $topic_title );
 
 			if( !( $row['topic_modes'] & TOPIC_PUBLISH ) ) {
 				if( !$this->qsf->perms->auth( 'topic_view_unpublished', $row['topic_forum'] ) || !$this->qsf->perms->auth( 'topic_view', $row['topic_forum'] ) ) {
@@ -67,9 +68,9 @@ class recent_posts extends modlet
 				} else {
 					if( !$this->qsf->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] ) ) {
 						$content .= "<img src='{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
-						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread'>";
+						$content .= "<a href='{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;unread=1#unread'>";
 					} else {
-						$content .= "<a href='{$this->qsf->self}?a=topic&amp;t=".$row['topic_id']."&amp;p=".$row['topic_last_post']."#p".$row['topic_last_post']."'>";
+						$content .= "<a href='{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;p={$row['topic_last_post']}#p{$row['topic_last_post']}'>";
 					}
 
 					$content .= "<i>$topic_title</i></a><br />";
@@ -83,9 +84,9 @@ class recent_posts extends modlet
 				} else {
 					if( !$this->qsf->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] ) ) {
 						$content .= "<img src=\"{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png\" alt=\"\" />&nbsp;";
-						$content .= "<a href=\"{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;unread=1#unread\">";
+						$content .= "<a href=\"{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;unread=1#unread\">";
 					} else {
-						$content .= "<a href=\"{$this->qsf->self}?a=topic&amp;t={$row['topic_id']}&amp;p={$row['topic_last_post']}#p{$row['topic_last_post']}\">";
+						$content .= "<a href=\"{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;p={$row['topic_last_post']}#p{$row['topic_last_post']}\">";
 					}
 
 					$content .= "$topic_title</a><br />";

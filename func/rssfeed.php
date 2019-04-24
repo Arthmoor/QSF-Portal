@@ -271,7 +271,9 @@ class rssfeed extends qsfglobal
 		$item_title = htmlspecialchars( $item_title );
 		$xtpl->assign( 'item_title', $item_title );
 
-		$item_link = "{$this->site}/index.php?a=topic&amp;t={$query_row['topic_id']}&amp;p={$query_row['post_id']}#p{$query_row['post_id']}";
+		$topic_link = $this->clean_url( $query_row['topic_title'] );
+
+		$item_link = "{$this->site}/topic/{$topic_link}-{$query_row['topic_id']}/&amp;p={$query_row['post_id']}#p{$query_row['post_id']}";
 		$xtpl->assign( 'item_link', $item_link );
 
 		$item_desc = substr( $query_row['post_text'], 0, 500 );

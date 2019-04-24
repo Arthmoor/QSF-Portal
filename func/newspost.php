@@ -57,8 +57,9 @@ class newspost extends qsfglobal
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
-		$post_name = $this->get['tname'];
 		$post_id = intval( $this->get['t'] );
+		$post_name = strtolower( $this->get['tname'] );
+
 		return $this->getpost( $post_id, $post_name );
 	}
 
@@ -75,7 +76,7 @@ class newspost extends qsfglobal
 		    WHERE t.topic_id=%d AND u.user_group=g.group_id
 		    ORDER BY p.post_time LIMIT 1", $post_id );
 
-		if( !$post || strtolower( $post_name ) != $this->clean_url( $post['topic_title'] ) ) {
+		if( !$post || $post_name != $this->clean_url( $post['topic_title'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
@@ -121,8 +122,9 @@ class newspost extends qsfglobal
 			if( $this->perms->auth( 'post_attach_download', $post['topic_forum'] ) ) {
 				$ext = strtolower( substr( $file['attach_name'], -4 ) );
 
-				if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) || ( $ext == '.bmp' ) ) {
-					$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->self}?a=topic&amp;s=attach&amp;id={$file['attach_id']}' alt='{$file['attach_name']}' />";
+				if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
+					$topic_link = $this->clean_url( $post['topic_title'] );
+					$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}' />";
 					continue;
 				}
 			}

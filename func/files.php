@@ -230,7 +230,7 @@ class files extends qsfglobal
 		$this->update_category_trees();
 
 		$dirname = './downloads/';
-		$dir = opendir($dirname);
+		$dir = opendir( $dirname );
 
 		$files = array();
 		$confirmed_files = array();

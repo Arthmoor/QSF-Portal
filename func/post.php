@@ -123,7 +123,8 @@ class post extends qsfglobal
 				$this->lang->post_reply_topic = sprintf( $this->lang->post_reply_topic, $topic['topic_title'] );
 
 				$this->htmlwidgets->tree_forums( $topic['forum_id'], true );
-				$this->tree( $shortened_title, $this->self . '?a=topic&amp;t=' . $t . '&amp;f=' . $topic['forum_id'] );
+				$topic_link = $this->clean_url( $topic['topic_title'] );
+				$this->tree( $shortened_title, "{$this->site}/topic/{$topic_link}-{$t}/&amp;f={$topic['forum_id']}" );
 				$this->tree( $this->lang->post_replying1 );
 				break;
 
@@ -136,7 +137,7 @@ class post extends qsfglobal
 
 				if( !$this->perms->auth( 'poll_create', $f ) ) {
 					if( $this->perms->is_guest ) {
-						return $this->message( $this->lang->post_creating_poll, sprintf($this->lang->post_cant_poll, $this->self ));
+						return $this->message( $this->lang->post_creating_poll, sprintf( $this->lang->post_cant_poll, $this->self ) );
 					} else {
 						return $this->message( $this->lang->post_creating_poll, $this->lang->post_cant_poll1 );
 					}
@@ -500,6 +501,7 @@ class post extends qsfglobal
 						$xtpl->parse( 'Post.Topic.Reply.ReplyReview' );
 					}
 
+					$xtpl->assign( 'post_topic_link', $this->clean_url( $topic['topic_title'] ) );
 					$xtpl->assign( 'post_last_five', $this->lang->post_last_five );
 					$xtpl->assign( 't', $t );
 					$xtpl->assign( 'post_view_topic', $this->lang->post_view_topic );
@@ -724,8 +726,10 @@ class post extends qsfglobal
 					FROM %ptopics t, %pforums f
 					WHERE t.topic_id=%d AND t.topic_forum=f.forum_id", $t );
 
+				$topic_link = $this->clean_url( $emailtopic['topic_title'] );
+
 				$message  = "{$this->sets['forum_name']}\n";
-				$message .= "{$this->site}/index.php?a=topic&t={$this->get['t']}\n\n";
+				$message .= "{$this->site}/topic/{$topic_link}-{$t}/\n\n";
 				$message .= "A new post has been made in a topic or forum you are subscribed to.\n\n";
 				$message .= "Forum: {$emailtopic['forum_name']}\n";
 				$message .= "Topic: " . $this->format( $emailtopic['topic_title'], FORMAT_CENSOR );
@@ -743,10 +747,10 @@ class post extends qsfglobal
 				$mailer->doSend();
 			}
 
-			if( isset($this->post['request_uri']) ) {
-				header('Location: ' . $this->post['request_uri']);
+			if( isset( $this->post['request_uri'] ) ) {
+				header( 'Location: ' . $this->post['request_uri'] );
 			} else {
-				header('Location: ' . $this->self . '?a=topic&t=' . $t . '&p=' . $post_id . '#p' . $post_id );
+				header( "Location: {$this->site}/topic/{$topic_link}-{$t}/&p={$post_id}#p{$post_id}" );
 			}
 		}
 	}
@@ -767,11 +771,13 @@ class post extends qsfglobal
 		$pollvote = intval( $this->post['pollvote'] );
 
 		$user_voted = $this->db->fetch( "SELECT vote_option FROM %pvotes WHERE vote_user=%d AND vote_topic=%d",	$this->user['user_id'], $t );
-		$data = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$data = $this->db->fetch( "SELECT topic_title, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
 
 		if( !$user_voted && $this->perms->auth( 'poll_vote', $data['topic_forum'] ) ) {
 			$this->db->query( "INSERT INTO %pvotes (vote_user, vote_topic, vote_option) VALUES (%d, %d, %d)", $this->user['user_id'], $t, $pollvote );
-			header( 'Location: ' . $this->self . '?a=topic&t=' . $t );
+
+			$topic_link = $this->clean_url( $data['topic_title'] );
+			header( "Location: {$this->site}/topic/{$topic_link}-{$t}" );
 			return;
 		}
 

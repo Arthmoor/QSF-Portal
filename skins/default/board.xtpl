@@ -87,11 +87,11 @@
 
 <!-- BEGIN: LastPostBox -->
 <!-- BEGIN: TopicUnread -->
-<a href="{self}?a=topic&amp;t={forum_lastpost_topic}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
+<a href="{site}/topic/{forum_last_topic_link}-{forum_lastpost_topic}/&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
 <!-- END: TopicUnread -->
-<a href="{self}?a=topic&amp;t={LastTopicID}" title="{full_title}">{user_lastpost}</a><br />
+<a href="{site}/topic/{forum_last_topic_link}-{LastTopicID}" title="{full_title}">{user_lastpost}</a><br />
 <!-- BEGIN: UserInfo -->
-{board_by} <a href="{site}/profile/{link_name}-{user_lastposterID}/" class="small">{user_lastposter}</a><br />
+{board_by} <a href="{site}/profile/{user_link_name}-{user_lastposterID}/" class="small">{user_lastposter}</a><br />
 <!-- END: UserInfo -->
 {LastTime}
 <!-- END: LastPostBox -->

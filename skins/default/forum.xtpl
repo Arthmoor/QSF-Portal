@@ -41,9 +41,9 @@
  <span class="last_post">
 <!-- BEGIN: LastPostBox -->
 <!-- BEGIN: TopicUnread -->
-  <a href="{self}?a=topic&amp;t={forum_lastpost_topic}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
+  <a href="{site}/topic/{forum_last_topic_link}-{forum_lastpost_topic}/&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
 <!-- END: TopicUnread -->
-  <a href="{self}?a=topic&amp;t={LastTopicID}" title="{full_title}">{user_lastpost}</a><br />
+  <a href="{site}/topic/{forum_last_topic_link}-{LastTopicID}/" title="{full_title}">{user_lastpost}</a><br />
 <!-- BEGIN: UserInfo -->
   {forum_by} <a href="{site}/profile/{link_name}-{user_lastposterID}/" class="small">{user_lastposter}</a><br />
 <!-- END: UserInfo -->
@@ -94,9 +94,9 @@
  </span>
 
  <span class="topic">
-  {moved}<a href="{self}?a=topic&amp;t={topic_id}" title="{forum_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}
+  {moved}<a href="{site}/topic/{topic_title_link}-{topic_id}/" title="{forum_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}
 <!-- BEGIN: NewPost -->
-  &mdash; <a href="{self}?a=topic&amp;t={topic_id}&amp;unread=1#unread\"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{forum_unread}" alt="{forum_unread}" /></a>
+  &mdash; <a href="{site}/topic/{topic_title_link}-{topic_id}/&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{forum_unread}" alt="{forum_unread}" /></a>
 <!-- END: NewPost -->
   {topic_description}
  </span>
@@ -112,7 +112,7 @@
  <span class="number">{topic_views}</span>
  <span class="topic_last_post">
   {topic_edited}<br />
-  <a href="{self}?a=topic&amp;t={topic_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{forum_jump}" alt="{forum_jump}" /></a> &nbsp;
+  <a href="{site}/topic/{topic_title_link}-{topic_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{forum_jump}" alt="{forum_jump}" /></a> &nbsp;
 <!-- BEGIN: LastPosterMember -->
   {forum_by} <a href="{site}/profile/{link_name_last}-{topic_last_poster}/" class="small">{topic_last_poster_name}</a>
 <!-- END: LastPosterMember -->

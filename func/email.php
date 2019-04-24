@@ -85,11 +85,11 @@ class email extends qsfglobal
 					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
 				}
 
-				$tname = $this->get['tname'];
+				$tname = strtolower( $this->get['tname'] );
 
 				$target = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $to );
 
-				if( !isset( $target['user_name'] ) || ( $to == USER_GUEST_UID ) || strtolower( $target['user_name'] ) != $this->clean_url( $tname ) ) {
+				if( !isset( $target['user_name'] ) || ( $to == USER_GUEST_UID ) || $tname != $this->clean_url( $target['user_name'] ) ) {
 					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
 				}
 

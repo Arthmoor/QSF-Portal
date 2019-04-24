@@ -184,7 +184,8 @@ class recent extends qsfglobal
 
 			$row['newpost'] = !$this->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] );
 
-			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], 'a=topic&amp;t=' . $row['topic_id'], ', ', 0, $m );
+			$topic_link = $this->clean_url( $row['topic_title'] );
+			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], "/topic/{$topic_link}-{$row['topic_id']}/", ', ', 0, $m );
 
 			if( !empty( $row['topic_description'] ) ) {
 				$row['topic_description'] = '<br />&raquo; ' . $this->format( $row['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
@@ -300,6 +301,7 @@ class recent extends qsfglobal
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
 				$xtpl->assign( 'topic_posted', $topic_posted );
 				$xtpl->assign( 'topic_title', $row['topic_title'] );
+				$xtpl->assign( 'topic_title_link', $this->clean_url( $row['topic_title'] ) );
 				$xtpl->assign( 'Pages', $Pages );
 				$xtpl->assign( 'topic_description', $row['topic_description'] );
 				$xtpl->assign( 'forum_id', $row['forum_id'] );

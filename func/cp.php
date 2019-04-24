@@ -772,10 +772,12 @@ class cp extends qsfglobal
 			{
 				if( $sub['subscription_type'] == 'topic' ) {
 					$sub['item_name'] = $sub['topic_title'];
-					$link = "{$this->site}/index.php?a=topic&amp;t={$sub['topic_id']}";
+					$topic_link = $this->clean_url( $sub['topic_title'] );
+					$link = "{$this->site}/topic/{$topic_link}-{$sub['topic_id']}/";
 				} else {
 					$sub['item_name'] = $sub['forum_name'];
-					$link = "{$this->site}/forum/" . $this->clean_url( $sub['forum_name'] ) . "-{$sub['forum_id']}/";
+					$forum_link = $this->clean_url( $sub['forum_name'] );
+					$link = "{$this->site}/forum/{$forum_link}-{$sub['forum_id']}/";
 				}
 
 				$sub['item_name'] = $this->format( $sub['item_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR );

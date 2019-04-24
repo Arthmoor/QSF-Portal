@@ -201,6 +201,7 @@ class spam_control extends qsfglobal
 			$xtpl->assign( 'delete_link', $delete_link );
 			$xtpl->assign( 'tid', $topic['topic_id'] );
 			$xtpl->assign( 'title', $title );
+			$xtpl->assign( 'title_link', $this->clean_url( $title ) );
 			$xtpl->assign( 'uid', $user['user_id'] );
 			$xtpl->assign( 'author', $author );
 			$xtpl->assign( 'link_author', $this->clean_url( $author ) );

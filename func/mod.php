@@ -122,7 +122,7 @@ class mod extends qsfglobal
 	 **/
 	private function move_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_topic_move );
 
 		// Parameters check
@@ -148,8 +148,10 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		if( !$this->perms->auth( 'topic_move', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_move_own', $topic['topic_forum'] ) ) ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_move, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_move, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
 		}
 
 		if( !isset($this->post['submit'] ) ) {
@@ -181,19 +183,19 @@ class mod extends qsfglobal
 			$this->post['newforum'] = intval( $this->post['newforum'] );
 
 			if( $this->post['newforum'] == $topic['topic_forum'] ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_same, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_same, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
 			}
 
 			if( !$this->perms->auth( 'topic_create', $this->post['newforum'] ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_create, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_create, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
 			}
 
 			$target = $this->db->fetch( "SELECT forum_parent FROM %pforums WHERE forum_id=%d", $this->post['newforum'] );
 
 			if( !isset( $target['forum_parent'] ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_forum, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_forum, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
 			} elseif( !$target['forum_parent'] ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_category, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_category, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
 			}
 
 			if( $this->post['operation'] == 'lock' ) {
@@ -221,7 +223,7 @@ class mod extends qsfglobal
 
 			$this->log_action( 'topic_move', $t, $topic['topic_forum'], $this->post['newforum'] );
 
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_move, $this->lang->continue, "{$this->self}?a=topic&amp;t={$newtopic}", "$this->self?a=topic&t={$newtopic}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_move, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$newtopic}/", "{$this->site}/topic/{$topic_link}-{$newtopic}/" );
 		}
 	}
 
@@ -234,7 +236,7 @@ class mod extends qsfglobal
 	 **/
 	private function edit_post()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_post_edit );
 
 		// Parameters check
@@ -262,20 +264,22 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $data['post_author'];
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		if( !$this->perms->auth( 'post_edit', $data['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'post_edit_own', $data['topic_forum'] ) ) ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_edit, $this->lang->continue, "$this->self?a=topic&amp;t={$data['post_topic']}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_edit, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/" );
 		}
 
 		// Locked topic?
 		$topic = $this->db->fetch( "SELECT topic_modes FROM %ptopics WHERE topic_id=%d", $data['post_topic'] );
 		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_edit_post_locked, $this->lang->continue, "$this->self?a=topic&amp;t={$data['post_topic']}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_edit_post_locked, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/" );
 		}
 
 		// Too old?
 		$hours = $this->sets['edit_post_age'];
 		if( !$this->perms->auth( 'post_edit_old', $data['topic_forum'] ) && $hours > 0 && $this->time - ( $hours * 60 * 60) > $data['post_time'] ) {
-			return $this->message( $this->lang->mod_label_controls, sprintf( $this->lang->mod_edit_post_old, $hours ), $this->lang->continue, "$this->self?a=topic&amp;t={$data['post_topic']}" );
+			return $this->message( $this->lang->mod_label_controls, sprintf( $this->lang->mod_edit_post_old, $hours ), $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/" );
 		}
 
 		if( !isset( $this->post['submit'] ) ) {
@@ -470,7 +474,7 @@ class mod extends qsfglobal
 
 			$jump = '&amp;p=' . $p . '#p' . $p;
 
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_post_edit, $this->lang->continue, "{$this->self}?a=topic&amp;t={$data['post_topic']}$jump", "$this->self?a=topic&t={$data['post_topic']}$jump" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_post_edit, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/$jump", "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/$jump" );
 		}
 	}
 
@@ -483,7 +487,7 @@ class mod extends qsfglobal
 	 **/
 	function edit_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_topic_edit );
 
 		// Parameters check
@@ -560,7 +564,9 @@ class mod extends qsfglobal
 
 			$this->log_action( 'topic_edit', $t );
 
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_edit, $this->lang->continue, "{$this->self}?a=topic&amp;t={$this->get['t']}", "$this->self?a=topic&t={$t}" );
+			$topic_link = $this->clean_url( $this->post['title'] );
+
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_edit, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/", "{$this->site}/topic/{$topic_link}-{$t}/" );
 		}
 	}
 
@@ -573,7 +579,7 @@ class mod extends qsfglobal
 	 **/
 	private function pin_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_topic_pin );
 
 		// Parameters check
@@ -583,7 +589,7 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$topic = $this->db->fetch( "SELECT topic_title, topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
 
 		// Existence check
 		if( !$topic ) {
@@ -594,23 +600,25 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		if( !($topic['topic_modes'] & TOPIC_PINNED ) ) {
 			if( !$this->perms->auth( 'topic_pin', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_pin_own', $topic['topic_forum'] ) ) ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_pin, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_pin, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			} else {
 				$this->log_action( 'topic_pin', $t );
 				$this->pin( $t, $topic['topic_modes'] );
 			}
 		} else {
 			if( !$this->perms->auth( 'topic_unpin', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_unpin_own', $topic['topic_forum'] ) ) ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_unpin, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_unpin, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			} else {
 				$this->log_action( 'topic_unpin', $t );
 				$this->unpin( $t, $topic['topic_modes'] );
 			}
 		}
 
-		header( 'Location: ' . $this->self . '?a=topic&t=' . $t );
+		header( "Location:  {$this->site}/topic/{$topic_link}-{$t}/" );
 	}
 
 	/**
@@ -622,7 +630,7 @@ class mod extends qsfglobal
 	 **/
 	private function lock_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_topic_lock );
 
 		// Parameters check
@@ -632,7 +640,7 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$topic = $this->db->fetch( "SELECT topic_title, topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
 
 		// Existence check
 		if( !$topic ) {
@@ -643,23 +651,25 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		if( !( $topic['topic_modes'] & TOPIC_LOCKED ) ) {
 			if( !$this->perms->auth( 'topic_lock', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_lock_own', $topic['topic_forum'] ) ) ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_lock, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_lock, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			} else {
 				$this->log_action( 'topic_lock', $t );
 				$lock = $this->lock( $t, $topic['topic_modes'] );
 			}
 		} else {
 			if( !$this->perms->auth( 'topic_unlock', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_unlock_own', $topic['topic_forum'] ) ) ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_unlock, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_unlock, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			} else {
 				$this->log_action( 'topic_unlock', $t );
 				$lock = $this->unlock( $t, $topic['topic_modes'] );
 			}
 		}
 
-		header( 'Location: ' . $this->self . '?a=topic&t=' . $t );
+		header( "Location:  {$this->site}/topic/{$topic_link}-{$t}/" );
 	}
 
 	/**
@@ -671,7 +681,7 @@ class mod extends qsfglobal
 	 **/
 	private function del_post()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_post_delete );
 
 		// Parameters check
@@ -686,7 +696,7 @@ class mod extends qsfglobal
 
 		$p = intval( $this->get['p'] );
 		$post = $this->db->fetch( "SELECT p.post_id, p.post_author, p.post_topic, p.post_time, p.post_text, p.post_ip, p.post_referrer, p.post_agent,
-			t.topic_id, t.topic_forum, t.topic_replies
+			t.topic_id, t.topic_forum, t.topic_replies, t.topic_title
 			FROM %pposts p,	%ptopics t
 			WHERE p.post_id=%d AND p.post_topic=t.topic_id", $p );
 
@@ -707,20 +717,22 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $post['post_author'];
 
+		$topic_link = $this->clean_url( $post['topic_title'] );
+
 		if( !$this->perms->auth( 'post_delete', $post['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'post_delete_own', $post['topic_forum'] ) ) ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_delete, $this->lang->continue, "$this->self?a=topic&amp;t={$post['topic_id']}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_delete, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$post['topic_id']}/" );
 		}
 
 		// Locked topic?
 		$topic = $this->db->fetch( "SELECT topic_modes FROM %ptopics WHERE topic_id=%d", $post['post_topic'] );
 		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_delete_post_locked, $this->lang->continue, "$this->self?a=topic&amp;t={$post['post_topic']}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_delete_post_locked, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$post['post_topic']}/" );
 		}
 
 		// Too old?
 		$hours = $this->sets['edit_post_age'];
 		if( !$this->perms->auth( 'post_delete_old', $post['topic_forum'] ) && $hours > 0 && $this->time - ( $hours * 60 * 60 ) > $post['post_time'] ) {
-			return $this->message( $this->lang->mod_label_controls, sprintf( $this->lang->mod_edit_post_old, $hours ), $this->lang->continue, "$this->self?a=topic&amp;t={$post['post_topic']}" );
+			return $this->message( $this->lang->mod_label_controls, sprintf( $this->lang->mod_edit_post_old, $hours ), $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$post['post_topic']}/" );
 		}
 
 		// Confirmation check
@@ -771,7 +783,7 @@ class mod extends qsfglobal
 			$this->log_action( 'post_delete', $p );
 		}
 
-		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_post_delete, $this->lang->continue, "{$this->self}?a=topic&amp;t={$post['topic_id']}$jump", "$this->self?a=topic&t={$post['topic_id']}$jump" );
+		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_post_delete, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$post['topic_id']}/$jump", "{$this->site}/topic/{$topic_link}-{$post['topic_id']}/$jump" );
 	}
 
 	/**
@@ -783,7 +795,7 @@ class mod extends qsfglobal
 	 **/
 	private function del_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_topic_delete );
 
 		// Parameters check
@@ -793,7 +805,7 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_starter, f.forum_name
+		$topic = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_starter, t.topic_title, f.forum_name
 			FROM %ptopics t
 			LEFT JOIN %pforums f ON f.forum_id=t.topic_forum
 			WHERE topic_id=%d", $t );
@@ -807,8 +819,10 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		if( !$this->perms->auth( 'topic_delete', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_delete_own', $topic['topic_forum'] ) ) ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_delete, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_delete, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 		}
 
 		// Confirmation check
@@ -820,8 +834,8 @@ class mod extends qsfglobal
 
 		$this->log_action( 'topic_delete', $t );
 
-		$link = $this->clean_url( $topic['forum_name'] );
-		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_delete, $this->lang->continue, "{$this->site}/forum/{$link}-{$topic['topic_forum']}/", "{$this->site}/forum/{$link}-{$topic['topic_forum']}/" );
+		$forum_link = $this->clean_url( $topic['forum_name'] );
+		return $this->message( $this->lang->mod_label_controls, $this->lang->mod_success_topic_delete, $this->lang->continue, "{$this->site}/forum/{$forum_link}-{$topic['topic_forum']}/", "{$this->site}/forum/{$forum_link}-{$topic['topic_forum']}/" );
 	}
 
 	/**
@@ -833,7 +847,7 @@ class mod extends qsfglobal
 	 **/
 	private function publish_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
 		$this->tree( $this->lang->mod_label_publish );
 
 		// Parameters check
@@ -843,7 +857,7 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_modes, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$topic = $this->db->fetch( "SELECT topic_title, topic_modes, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
 
 		// Existence check
 		if( !$topic ) {
@@ -851,9 +865,11 @@ class mod extends qsfglobal
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_missing_topic,  $this->lang->continue, "javascript:history.go(-1)" );
 		}
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		// Check permissions
 		if( !$this->perms->auth( 'topic_publish', $topic['topic_forum'] ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_publish, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_publish, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 		}
 
 		if( !( $topic['topic_modes'] & TOPIC_PUBLISH ) ) {
@@ -864,7 +880,7 @@ class mod extends qsfglobal
 			$this->unpublish( $t, $topic['topic_modes'] );
 		}
 
-		header( 'Location: ' . $this->self . '?a=topic&t=' . $t );
+		header( "Location: {$this->site}/topic/{$topic_link}-{$t}/" );
 	}
 
 	/**
@@ -876,8 +892,8 @@ class mod extends qsfglobal
 	 **/
 	private function split_topic()
 	{
-		$this->tree( $this->lang->mod_label_controls, $this->self . '?a=mod' );
-		$this->tree($this->lang->mod_label_topic_split);
+		$this->tree( $this->lang->mod_label_controls, $this->site . '/index.php?a=mod' );
+		$this->tree( $this->lang->mod_label_topic_split );
 
 		// Parameters check
 		if( !isset( $this->get['t'] ) || !isset( $this->post['posttarget'] ) ) {
@@ -897,8 +913,10 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $topic['topic_starter'];
 
+		$topic_link = $this->clean_url( $topic['topic_title'] );
+
 		if( !$this->perms->auth( 'topic_split', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_split_own', $topic['topic_forum'] ) ) ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_split, $this->lang->continue, "$this->self?a=topic&amp;t={$t}" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_split, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 		}
 
 		if( !isset( $this->post['submitsplit'] ) ) {

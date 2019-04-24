@@ -68,8 +68,26 @@ class topic extends qsfglobal
 
 	private function get_topic()
 	{
-		$num = $min = $topicnum = $postnum = 0;
+		if( !isset( $this->get['tname'] ) || !isset( $this->get['t'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_error, $this->lang->topic_not_found_message );
+		}
+
+		if( !$this->validator->validate( $this->get['tname'], TYPE_STRING ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_error, $this->lang->topic_not_found_message );
+		}
+
+		if( !$this->validator->validate( $this->get['t'], TYPE_INT ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_error, $this->lang->topic_not_found_message );
+		}
+
+		$num = $min = $postnum = 0;
 		$unread = false;
+
+		$topicnum = intval( $this->get['t'] );
+		$tname = strtolower( $this->get['tname'] );
 
 		if( isset( $this->get['num'] ) ) {
 			$num = intval( $this->get['num'] );
@@ -80,7 +98,6 @@ class topic extends qsfglobal
 		}
 
 		$min = isset( $this->get['min'] ) ? intval( $this->get['min'] ) : 0;
-		$topicnum = isset( $this->get['t'] ) ? intval( $this->get['t'] ) : 0;
 
 		if( $min < 0 )
 			$min = 0;
@@ -111,7 +128,7 @@ class topic extends qsfglobal
 			FROM %ptopics t, %pforums f
 			WHERE t.topic_id=%d AND t.topic_type=%d AND f.forum_id=t.topic_forum", $topicnum, TOPIC_TYPE_FORUM );
 
-		if( !$topic ) {
+		if( !$topic || $tname != $this->clean_url( $topic['topic_title'] ) ) {
 			$this->set_title( $this->lang->topic_not_found );
 
 			header( 'HTTP/1.0 404 Not Found' );
@@ -152,14 +169,15 @@ class topic extends qsfglobal
 				$where .= "(topic_modes & " . TOPIC_PINNED . ") = " . TOPIC_PINNED;
 			}
  
-			$new_topic = $this->db->fetch( "SELECT topic_id FROM %ptopics
+			$new_topic = $this->db->fetch( "SELECT topic_id, topic_title FROM %ptopics
 					WHERE topic_forum=%d AND topic_type=%d AND ($where)
 					ORDER BY (topic_modes & %d) $order, topic_edited $order
 					LIMIT 1", $topic['topic_forum'], TOPIC_TYPE_FORUM, $topic['topic_edited'], TOPIC_PINNED );
 
 			if( $new_topic ) {
                                 // Move to that topic
-				header( 'Location: ' . $this->self . '?a=topic&t=' . $new_topic['topic_id'] );
+				$topic_link = $this->clean_url( $new_topic['topic_title'] );
+				header( "Location: {$this->site}/topic/{$topic_link}-{$new_topic['topic_id']}" );
 				return;
                         } else {
 				header( 'HTTP/1.0 404 Not Found' );
@@ -207,7 +225,9 @@ class topic extends qsfglobal
 		$this->db->query( "UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=%d", $topicnum );
 
 		$topic['topic_title'] = $this->format( $topic['topic_title'], FORMAT_CENSOR );
-		$title_html = $this->format($topic['topic_title'], FORMAT_HTMLCHARS);
+		$title_html = $this->format( $topic['topic_title'], FORMAT_HTMLCHARS );
+
+		$topic_link = $this->clean_url( $topic['topic_title'] );
 
 		// Add RSS feed link for forum and topic
 		$this->lang->forum(); // needed for 'Forum' and 'Topic'
@@ -285,7 +305,7 @@ class topic extends qsfglobal
 				$num = $topic['topic_replies'] + 1;
 			}
 
-			$opts[] = '<a href="' . $this->self . '?a=topic&amp;s=split&amp;t=' . $topicnum . '">' . $this->lang->topic_split . '</a>';
+			$opts[] = "<a href=\"{$this->site}/topic/{$topic_link}-{$topicnum}/&amp;s=split\">{$this->lang->topic_split}</a>";
 		}
 
 		$topic_icon = null;
@@ -355,6 +375,7 @@ class topic extends qsfglobal
 		$xtpl->assign( 'main_recent', $this->lang->main_recent );
 		$xtpl->assign( 'PollDisplay', $PollDisplay );
 		$xtpl->assign( 'topicnum', $topicnum );
+		$xtpl->assign( 'topic_title_link', $this->clean_url( $topic['topic_title'] ) );
 		$xtpl->assign( 'reply', $this->lang->reply );
 
 		$can_post = false;
@@ -404,7 +425,7 @@ class topic extends qsfglobal
 
 		$xtpl->assign( 'topic_description', $topic['topic_description'] );
 
-		$pagelinks = $this->htmlwidgets->get_pages( $topic['topic_replies'] + 1, 'a=topic&amp;t=' . $topicnum, $min, $num );
+		$pagelinks = $this->htmlwidgets->get_pages( $topic['topic_replies'] + 1, "/topic/{$topic_link}-{$topicnum}/", $min, $num );
 
 		$xtpl->assign( 'topic_pages', $this->lang->topic_pages );
 		$xtpl->assign( 'pagelinks', $pagelinks );
@@ -670,8 +691,9 @@ class topic extends qsfglobal
 					if( $download_perm ) {
 						$ext = strtolower( substr( $file['attach_name'], -4 ) );
 
-						if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) || ( $ext == '.bmp' ) ) {
-							$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->self}?a=topic&amp;s=attach&amp;id={$file['attach_id']}' alt='{$file['attach_name']}' />";
+						if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
+							$topic_link = $this->clean_url( $post['topic_title'] );
+							$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}' />";
 							continue;
 						}
 					}

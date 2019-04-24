@@ -100,6 +100,7 @@ class prune extends admin
 
 				$xtpl->assign( 'topic_id', $topic['topic_id'] );
 				$xtpl->assign( 'topic_title', $topic['topic_title'] );
+				$xtpl->assign( 'topic_title_link', $this->clean_url( $topic['topic_title'] ) );
 				$xtpl->assign( 'topic_description', $topic['topic_description'] );
 
 				$xtpl->parse( 'Prune.Stage2.Topic' );

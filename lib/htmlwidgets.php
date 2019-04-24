@@ -204,7 +204,7 @@ class htmlwidgets extends forumutils
 		{
 			$minpag = $i * $n;
 			$page   = $i + 1;
-			$pagelinks .= "<a href=\"{$this->self}?$link&amp;min=$minpag&amp;num=$n\" class=\"pages\">$page</a>{$sep}";
+			$pagelinks .= "<a href=\"{$this->site}/$link&amp;min=$minpag&amp;num=$n\" class=\"pages\">$page</a>{$sep}";
 		}
 
 		if( substr( $pagelinks, -( strlen( $sep ) ) ) == $sep ) {
@@ -213,7 +213,7 @@ class htmlwidgets extends forumutils
 
 		if( $pages > 3 ) {
 			$ellipsis = ( $pages == 4 ) ? '' : '..';
-			$pagelinks .= "$sep<a href=\"{$this->self}?$link&amp;min=$max_page&amp;num=$n\" class=\"pages\">{$ellipsis}{$pages}</a>";
+			$pagelinks .= "$sep<a href=\"{$this->site}/$link&amp;min=$max_page&amp;num=$n\" class=\"pages\">{$ellipsis}{$pages}</a>";
 		}
 
 		$pagelinks = "( $pagelinks )";

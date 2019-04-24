@@ -223,7 +223,7 @@ class board extends qsfglobal
 						if( $forum['user_lastposterID'] != USER_GUEST_UID ) {
 							$xtpl->assign( 'user_lastposterID', $forum['user_lastposterID'] );
 							$xtpl->assign( 'user_lastposter', $forum['user_lastposter'] );
-							$xtpl->assign( 'link_name', $this->clean_url( $forum['user_lastposter'] ) );
+							$xtpl->assign( 'user_link_name', $this->clean_url( $forum['user_lastposter'] ) );
 
 							$xtpl->parse( 'LastPostBox.UserInfo' );
 						}
@@ -237,7 +237,7 @@ class board extends qsfglobal
 						$forum['user_lastpost'] = $this->format( $forum['user_lastpost'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 						$forum['forum_lastpost_topic'] = $forum['LastTopicID'];
-						$forum['LastTopicID'] .= '&amp;p=' . $forum['forum_lastpost'] . '#p' . $forum['forum_lastpost'];
+						$forum['LastTopicID'] .= '/&amp;p=' . $forum['forum_lastpost'] . '#p' . $forum['forum_lastpost'];
 
 						if( $topic_unread ) {
 							$xtpl->assign( 'forum_lastpost_topic', $forum['forum_lastpost_topic'] );
@@ -245,6 +245,7 @@ class board extends qsfglobal
 							$xtpl->parse( 'LastPostBox.TopicUnread' );
 						}
 
+						$xtpl->assign( 'forum_last_topic_link', $this->clean_url( $full_title ) );
 						$xtpl->assign( 'LastTopicID', $forum['LastTopicID'] );
 						$xtpl->assign( 'full_title', $full_title );
 						$xtpl->assign( 'user_lastpost', $forum['user_lastpost'] );
