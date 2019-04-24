@@ -111,7 +111,7 @@ class profile extends qsfglobal
 			} else {
 				if( $profile['user_email_form'] ) {
 					$link = $this->htmlwidgets->clean_url( $profile['user_name'] );
-					$profile['user_email'] = "<a href=\"{$this->site}/email/{$link}-{$profile['user_id']}\">{$this->lang->profile_private}</a>";
+					$profile['user_email'] = "<a href=\"{$this->site}/email/{$link}-{$profile['user_id']}/\">{$this->lang->profile_private}</a>";
 				} else {
 					$profile['user_email'] = $this->lang->profile_private;
 				}

@@ -37,5 +37,7 @@ RewriteRule ^profile/([-A-Za-z0-9]*)-([0-9]*)/$ index.php?a=profile&uname=$1&w=$
 
 RewriteRule ^recent_posts/$ index.php?a=recent [L]
 
+RewriteRule ^register/(.*)$ index.php?a=register [L]
+
 RewriteRule ^topic/attachment/([0-9]*)/$ index.php?a=topic&s=attach&id=$1 [L]
 RewriteRule ^topic/([-A-Za-z0-9]*)-([0-9]*)/(.*)$ index.php?a=topic&tname=$1&t=$2$3 [L]

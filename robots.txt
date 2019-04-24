@@ -10,11 +10,10 @@
 User-agent: *
 Disallow: /index.php?a=search
 Disallow: /index.php?a=members
-Disallow: /index.php?a=help
 Disallow: /index.php?a=active
 Disallow: /index.php?a=register
+Disallow: /register/
 Disallow: /index.php?a=login
-Disallow: /index.php?a=recent
 Disallow: /index.php?a=board&s=mark
 Disallow: /index.php?a=files&s=search
 Disallow: /index.php?a=topic&s=attach

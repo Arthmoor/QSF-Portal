@@ -1,5 +1,5 @@
 <!-- BEGIN: Register -->
-<form action="{self}?a=register" method="post">
+<form action="{site}/register/" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/user_add.png" alt="" />

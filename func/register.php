@@ -87,7 +87,6 @@ class register extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/register.xtpl' );
 
-			$xtpl->assign( 'self', $this->self );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
 
@@ -281,7 +280,7 @@ class register extends qsfglobal
 		$message .= "{$this->lang->register_email_msg}\n";
 		$message .= "{$this->lang->register_email_msg2} {$this->sets['forum_name']}.\n\n";
 		$message .= "{$this->lang->register_email_msg3}\n";
-		$message .= "{$this->site}/index.php?a=register&s=activate&e=" . md5($email . $username . $pass . $jointime) ."\n\n";
+		$message .= "{$this->site}/register/&s=activate&e=" . md5( $email . $username . $pass . $jointime ) ."\n\n";
 
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->register_activating}" );
 		$mailer->setMessage( $message );

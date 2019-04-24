@@ -27,15 +27,15 @@
      <nav>
       <a href="{qsf_site}/files/">{main_files}</a>
       <a href="{qsf_site}/board/">{main_forum}</a>
-      <a href="{qsf_self}?a=members">{main_members}</a>
-      <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
+      <a href="{qsf_self}/index.php?a=members">{main_members}</a>
+      <a href="{qsf_self}/index.php?a=search{searchlink}">{main_search}</a>
       {index_left_links}
       {index_right_links}
      </nav>
      <div style="clear:both"></div>
     </div>
 
-    <form action="{self}?a=login&amp;s=on" method="post">
+    <form action="{qsf_self}/index.php?a=login&amp;s=on" method="post">
     <div class="block">
      <div class="title">
       <img src="{qsf_site}/skins/{skin}/images/icons/login.png" alt="" />
@@ -47,8 +47,8 @@
      {login_pass}:<br />
      <input class="input" type="password" name="pass" size="17" /><br />
      <input type="submit" name="submit" value="{submit}" /><br /><br />
-     <a href="{self}?a=register">{register_reg}</a><br />
-     <a href="{self}?a=login&amp;s=pass">{login_forgot_pass}</a>
+     <a href="{site}/register/">{register_reg}</a><br /><br />
+     <a href="{site}/index.php?a=login&amp;s=pass">{login_forgot_pass}</a>
     </div>
     </form>
 <!-- END: GuestHeader -->
@@ -64,24 +64,24 @@
       <a href="{qsf_site}/files/"{new_files}>{main_files}</a>
       <a href="{qsf_site}/board/">{main_forum}</a>
 <!-- BEGIN: PagesLink -->
-      <a href="{qsf_self}?a=page">{main_pages}</a>
+      <a href="{qsf_self}/index.php?a=page">{main_pages}</a>
 <!-- END: PagesLink -->
-      <a href="{qsf_self}?a=members">{main_members}</a>
-      <a href="{qsf_self}?a=search{searchlink}">{main_search}</a>
+      <a href="{qsf_self}/index.php?a=members">{main_members}</a>
+      <a href="{qsf_self}/index.php?a=search{searchlink}">{main_search}</a>
 <!-- BEGIN: SpamLink -->
-      <a href="{qsf_self}?a=spam_control"{spam_style}>{main_spam_controls}</a>
+      <a href="{qsf_self}/index.php?a=spam_control"{spam_style}>{main_spam_controls}</a>
 <!-- END: SpamLink -->
       {index_left_links}
      </nav>
 
      <nav>
-      <a href="{qsf_self}?a=pm"{new_pm}>{main_messenger}</a>
+      <a href="{qsf_self}/index.php?a=pm"{new_pm}>{main_messenger}</a>
       <a href="{qsf_site}/control_panel/">{main_cp}</a>
       {index_right_links}
 <!-- BEGIN: AdminCPLink -->
       <a href="./admincp/index.php">{main_admincp}</a>
 <!-- END: AdminCPLink -->
-      <a href="{qsf_self}?a=login&amp;s=off">{main_logout}</a>
+      <a href="{qsf_self}/index.php?a=login&amp;s=off">{main_logout}</a>
      </nav>
      <div style="clear:both"></div>
     </div>
