@@ -263,7 +263,7 @@ class mod extends qsfglobal
 		// Permissions check
 		$is_owner = $this->user['user_id'] == $data['post_author'];
 
-		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
+		$topic_link = $this->htmlwidgets->clean_url( $data['topic_title'] );
 
 		if( !$this->perms->auth( 'post_edit', $data['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'post_edit_own', $data['topic_forum'] ) ) ) ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_post_edit, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/" );
@@ -692,6 +692,7 @@ class mod extends qsfglobal
 			$spam = true;
 
 		$p = intval( $this->get['p'] );
+
 		$post = $this->db->fetch( "SELECT p.post_id, p.post_author, p.post_topic, p.post_time, p.post_text, p.post_ip, p.post_referrer, p.post_agent,
 			t.topic_id, t.topic_forum, t.topic_replies, t.topic_title
 			FROM %pposts p,	%ptopics t
@@ -802,6 +803,7 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
+
 		$topic = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_starter, t.topic_title, f.forum_name
 			FROM %ptopics t
 			LEFT JOIN %pforums f ON f.forum_id=t.topic_forum

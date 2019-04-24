@@ -48,10 +48,10 @@ class en
 		$this->active_modules_file_rating = 'Rating a file';
 		$this->active_modules_files = 'Browsing files';
 		$this->active_modules_forum = 'Viewing a forum: %s';
-		$this->active_modules_help = 'Viewing a help topic';
 		$this->active_modules_login = 'Logging in or out';
 		$this->active_modules_members = 'Viewing the member list';
 		$this->active_modules_mod = 'Moderating';
+		$this->active_modules_newspost = 'Viewing a newspost: %s';
 		$this->active_modules_pages = 'Viewing a custom page';
 		$this->active_modules_pm = 'Using the messenger';
 		$this->active_modules_post = 'Posting';

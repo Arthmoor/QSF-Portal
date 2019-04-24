@@ -195,7 +195,7 @@ class activeutil extends forumutils
 				$topic = null;
 				$is_bot = false;
 
-				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ' ) .  htmlspecialchars( $user['active_user_agent'] );
+				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ' ) . htmlspecialchars( $user['active_user_agent'] );
 
 				if( $user['active_id'] != USER_GUEST_UID ) {
 					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
@@ -226,6 +226,12 @@ class activeutil extends forumutils
 
 				switch( $user['active_action'] )
 				{
+				case 'newspost':
+					$topic = $user['topic_forum'];
+					$link_name = $this->qsf->htmlwidgets->clean_url( $user['topic_title'] );
+					$action_link = "<a href='{$this->site}/newspost/{$link_name}-{$user['active_item']}/'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
+					break;
+
 				case 'topic':
 					if( $this->perms->auth( 'topic_view', $user['topic_forum'] ) || $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$topic = $user['topic_forum'];
@@ -302,6 +308,7 @@ class activeutil extends forumutils
 			case 'forum': $item = isset( $this->get['f'] ) ? intval( $this->get['f'] ) : 0; break;
 			case 'topic': $item = isset( $this->get['t'] ) ? intval( $this->get['t'] ) : 0; break;
 			case 'profile': $item = isset( $this->get['w'] ) ? intval( $this->get['w'] ) : 0; break;
+			case 'newspost': $item = isset( $this->get['t'] ) ? intval( $this->get['t'] ) : 0; break;
 		}
 		return $item;
 	}
