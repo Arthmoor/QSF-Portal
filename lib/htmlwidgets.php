@@ -518,7 +518,9 @@ class htmlwidgets extends forumutils
 				$selected = ' selected="selected"';
 			}
 
-			$return .= '<option value="' . $dot . $val['forum_id'] . '"' . $selected . '>' . $space . $val['forum_name'] . "</option>\n" .
+			$link = $this->qsf->clean_url( $val['forum_name'] );
+
+			$return .= "<option value=\"{$dot}{$link}-{$val['forum_id']}/\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
 			$this->_select_forums_recurse( $array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 		}
 

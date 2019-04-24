@@ -94,9 +94,9 @@ function select_all_groups()
 function get_forum(select,link)
 {
   if(select.value.substring(0, 1) == '.'){
-    self.location.href = link + '?a=board&c=' + select.value.substring(1, select.value.length);
+    self.location.href = link + '/board/category/' + select.value.substring(1, select.value.length);
   }else{
-    self.location.href = link + '?a=forum&f=' + select.value;
+    self.location.href = link + '/forum/' + select.value;
   }
 }
 

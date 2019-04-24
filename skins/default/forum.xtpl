@@ -135,7 +135,7 @@
 
 <div class="article">
  <span class="right">
-  <select onchange="get_forum(this,'{self}')">
+  <select onchange="get_forum(this,'{site}')">
    {forumjump}
   </select>
  </span>
