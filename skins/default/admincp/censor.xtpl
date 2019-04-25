@@ -1,7 +1,7 @@
 <!-- BEGIN: Censor -->
 <form action="{site}/admincp/index.php?a=censoring" method="post">
 <div class="article">
- <div class="title">{censor}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/asterisk_orange.png" alt="" /> {censor}</div>
  {censor_one_per_line}<br />
  {censor_regex_allowed}
  <p class="line"></p>

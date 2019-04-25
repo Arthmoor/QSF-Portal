@@ -68,6 +68,7 @@ class censoring extends admin
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/censor.xtpl' );
 
 			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'censor', $this->lang->censor );
 			$xtpl->assign( 'censor_one_per_line', $this->lang->censor_one_per_line );
 			$xtpl->assign( 'censor_regex_allowed', $this->lang->censor_regex_allowed );

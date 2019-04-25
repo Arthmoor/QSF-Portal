@@ -65,6 +65,7 @@ class groups extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/groups.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'groups_create', $this->lang->groups_create );
 				$xtpl->assign( 'groups_create_new', $this->lang->groups_create_new );
 
@@ -108,6 +109,7 @@ class groups extends admin
 				if( !isset( $this->post['choose_group'] ) ) {
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/groups.xtpl' );
 
+					$xtpl->assign( 'skin', $this->skin );
 					$xtpl->assign( 'groups_edit', $this->lang->groups_edit );
 					$xtpl->assign( 'groups_to_edit', $this->lang->groups_to_edit );
 
@@ -139,6 +141,7 @@ class groups extends admin
 
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/groups.xtpl' );
 
+					$xtpl->assign( 'skin', $this->skin );
 					$xtpl->assign( 'groups_edit', $this->lang->groups_edit );
 					$xtpl->assign( 'groups_type', $this->lang->groups_type );
 
@@ -195,6 +198,7 @@ class groups extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/groups.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'groups_delete', $this->lang->groups_delete );
 
 				$will_be = "{$this->lang->groups_the} " . $this->list_groups( -1, 'old_group', true ) . " {$this->lang->groups_will_be}";

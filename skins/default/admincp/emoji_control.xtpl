@@ -1,6 +1,6 @@
 <!-- BEGIN: Emojis -->
 <div class="article">
- <div class="title">{emoji_controls}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/emoji_surprised.png" alt="" /> {emoji_controls}</div>
  <table>
   <form action="{add_form_action}" enctype="multipart/form-data" method="post">
   <tr>

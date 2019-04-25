@@ -55,6 +55,7 @@ class stats extends admin
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/stats.xtpl' );
 
 		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'stats', $this->lang->stats );
 		$xtpl->assign( 'stats_spam_statistics', $this->lang->stats_spam_statistics );
 		$xtpl->assign( 'stats_forum_posts', $this->lang->stats_forum_posts );

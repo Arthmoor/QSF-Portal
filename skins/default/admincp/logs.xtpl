@@ -4,7 +4,7 @@
 </div>
 
 <div class="article">
- <div class="title">{logs_view}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/database_table.png" alt="" /> {logs_view}</div>
  <span class="head">
   <span class="quarter">{logs_time}</span>
   <span class="quarter">{logs_user}</span>

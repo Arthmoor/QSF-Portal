@@ -88,6 +88,7 @@ class backup extends admin
 
 			$xtpl->assign( 'token', $this->generate_token() );
 			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'options', $this->lang->backup_options );
 			$xtpl->assign( 'add_complete', $this->lang->backup_add_complete );
 			$xtpl->assign( 'statements', $this->lang->backup_statements );

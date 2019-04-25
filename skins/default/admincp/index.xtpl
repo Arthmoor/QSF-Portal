@@ -112,7 +112,7 @@
   <main>
    <div class="article">
    {index_table_hack}
-    <div class="title">{admin_heading}</div>
+    <div class="title"><img src="{site}/skins/{skin}/images/icons/admincp.png" alt="" /> {admin_heading}</div>
    {index_endtable_hack}
    </div>
 

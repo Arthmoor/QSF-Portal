@@ -38,7 +38,7 @@ class file_perms extends admin
 	public function execute()
 	{
 		$this->lang->perms(); // Load up permissions related translations
-		$perms_obj = new file_permissions($this);
+		$perms_obj = new file_permissions( $this );
 
 		if( isset( $this->get['s'] ) && ( $this->get['s'] == 'user' ) ) {
 			if( !isset( $this->get['id'] ) ) {
@@ -119,7 +119,7 @@ class file_perms extends admin
 			<script src='../javascript/permissions.js'></script>
 
 			<form id='form' action='$this->site/admincp/index.php?a=file_perms$link' method='post'>
-			<div align='center'><span style='font-size:14px;'><b>File Permissions For $label</b></span>";
+			<div class='article'><div class='title'><img src='$this->site/skins/$this->skin/images/icons/downloads.png' alt='' /> File Permissions For $label</div>";
 
 			if( $mode == 'user' ) {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />

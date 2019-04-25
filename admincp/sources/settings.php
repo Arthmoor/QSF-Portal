@@ -53,20 +53,22 @@ class settings extends admin
 
 			$xtpl->assign( 'settings_captcha_display', $this->lang->settings_captcha_display );
 
+			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
+			$xtpl->assign( 'settings_captcha_question', $this->lang->settings_captcha_question );
+			$xtpl->assign( 'settings_captcha_answer', $this->lang->settings_captcha_answer );
+			$xtpl->assign( 'edit', $this->lang->edit );
+			$xtpl->assign( 'delete', $this->lang->delete );
+
 			while( $item = $this->db->nqfetch( $list ) )
 			{
 				$question = $item['cap_question'];
 				$answer = $item['cap_answer'];
 				$cap_id = $item['cap_id'];
 
-				$xtpl->assign( 'settings_captcha_question', $this->lang->settings_captcha_question );
 				$xtpl->assign( 'question', $question );
-				$xtpl->assign( 'settings_captcha_answer', $this->lang->settings_captcha_answer );
 				$xtpl->assign( 'answer', $answer );
-				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'cap_id', $cap_id );
-				$xtpl->assign( 'edit', $this->lang->edit );
-				$xtpl->assign( 'delete', $this->lang->delete );
 
 				$xtpl->parse( 'Captchas.Display.Entry' );
 			}
@@ -99,6 +101,7 @@ class settings extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings_captcha.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'cap_id', $cap_id );
 				$xtpl->assign( 'settings_captcha_delete', $this->lang->settings_captcha_delete );
 				$xtpl->assign( 'settings_captcha_question', $this->lang->settings_captcha_question );
@@ -151,6 +154,7 @@ class settings extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings_captcha.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'cap_id', $cap_id );
 				$xtpl->assign( 'settings_captcha_edit', $this->lang->settings_captcha_edit );
 				$xtpl->assign( 'settings_captcha_question', $this->lang->settings_captcha_question );
@@ -189,6 +193,7 @@ class settings extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings_captcha.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'settings_captcha_pair', $this->lang->settings_captcha_pair );
 				$xtpl->assign( 'settings_captcha_new_question', $this->lang->settings_captcha_new_question );
 				$xtpl->assign( 'settings_captcha_new_answer', $this->lang->settings_captcha_new_answer );
@@ -221,6 +226,7 @@ class settings extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'settings_new', $this->lang->settings_new );
 				$xtpl->assign( 'settings_new_name', $this->lang->settings_new_name );
 				$xtpl->assign( 'settings_new_value', $this->lang->settings_new_value );
@@ -267,6 +273,8 @@ class settings extends admin
 			$this->tree( $this->lang->settings_basic );
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/settings.xtpl' );
+
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'token', $this->generate_token() );
 			$xtpl->assign( 'submit', $this->lang->submit );

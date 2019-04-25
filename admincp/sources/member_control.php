@@ -49,6 +49,7 @@ class member_control extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 's', $this->get['s'] );
 				$xtpl->assign( 'mc', $this->lang->mc );
 				$xtpl->assign( 'mc_find', $this->lang->mc_find );
@@ -103,6 +104,7 @@ class member_control extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc_delete', $this->lang->mc_delete );
 				$xtpl->assign( 'user_name', $member['user_name'] );
@@ -136,6 +138,7 @@ class member_control extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc_delete', $this->lang->mc_delete );
 				$xtpl->assign( 'user_name', $member['user_name'] );
@@ -182,54 +185,54 @@ class member_control extends admin
 
 				$out = '';
 
-				define('U_IGNORE', 0);
-				define('U_TEXT', 1);
-				define('U_BOOL', 2);
-				define('U_BLOB', 3);
-				define('U_DATE', 4);
-				define('U_TIME', 5);
-				define('U_FLOAT', 6);
-				define('U_INT', 7);
-				define('U_CALLBACK', 8);
-				define('U_TZONE', 9);
-				define('U_IP', 10);
+				define( 'U_IGNORE', 0 );
+				define( 'U_TEXT', 1 );
+				define( 'U_BOOL', 2 );
+				define( 'U_BLOB', 3 );
+				define( 'U_DATE', 4 );
+				define( 'U_TIME', 5 );
+				define( 'U_FLOAT', 6 );
+				define( 'U_INT', 7 );
+				define( 'U_CALLBACK', 8 );
+				define( 'U_TZONE', 9 );
+				define( 'U_IP', 10 );
 
 				$cols = array(
-					'user_name'		=> array($this->lang->mc_user_name, U_TEXT, 20),
-					'user_email'		=> array($this->lang->mc_user_email, U_TEXT, 100),
-					'user_group'		=> array($this->lang->mc_user_group, U_CALLBACK, 'list_groups'),
-					'user_title'		=> array($this->lang->mc_user_title, U_TEXT, 100),
-					'user_title_custom'	=> array($this->lang->mc_user_title_custom, U_BOOL),
-					'user_language'		=> array($this->lang->mc_user_language, U_CALLBACK, 'list_langs'),
-					'user_skin'		=> array($this->lang->mc_user_skin, U_CALLBACK, 'list_skins'),
-					'user_avatar'		=> array($this->lang->mc_user_avatar, U_TEXT, 150),
-					'user_avatar_type'	=> array($this->lang->mc_user_avatar_type, U_CALLBACK, 'list_user_avatar_types'),
-					'user_avatar_width'	=> array($this->lang->mc_user_avatar_width, U_INT, 3),
-					'user_avatar_height'	=> array($this->lang->mc_user_avatar_height, U_INT, 3),
-					'user_level'		=> array($this->lang->mc_user_level, U_TEXT, 2),
-					'user_birthday'		=> array($this->lang->mc_user_birthday, U_TEXT, 10),
-					'user_timezone'		=> array($this->lang->mc_user_timezone, U_TZONE),
-					'user_location'		=> array($this->lang->mc_user_location, U_TEXT, 100),
-					'user_twitter'		=> array($this->lang->mc_user_twitter, U_TEXT, 50),
-					'user_facebook'		=> array($this->lang->mc_user_facebook, U_TEXT, 255),
-					'user_homepage'		=> array($this->lang->mc_user_homepage, U_TEXT, 255),
-					'user_interests'	=> array($this->lang->mc_user_interests, U_BLOB, 255),
-					'user_signature'	=> array($this->lang->mc_user_signature, U_BLOB, 255),
-					'user_posts'		=> array($this->lang->mc_user_posts, U_INT, 10),
-					'user_uploads'		=> array($this->lang->mc_user_uploads, U_INT, 10),
-					'user_email_show'	=> array($this->lang->mc_user_email_show, U_BOOL),
-					'user_pm'		=> array($this->lang->mc_user_pm, U_BOOL),
-					'user_pm_mail'		=> array($this->lang->mc_user_pm_mail, U_BOOL),
-					'user_view_avatars'	=> array($this->lang->mc_user_view_avatars, U_BOOL),
-					'user_view_signatures'	=> array($this->lang->mc_user_view_signatures, U_BOOL),
-					'user_view_emojis'	=> array($this->lang->mc_user_view_emojis, U_BOOL),
-					'user_id'		=> array($this->lang->mc_user_id, U_IGNORE),
-					'user_joined'		=> array($this->lang->mc_user_joined, U_TIME),
-					'user_lastvisit'	=> array($this->lang->mc_user_lastvisit, U_TIME),
-					'user_lastpost'		=> array($this->lang->mc_user_lastpost, U_TIME),
-					'user_regip'		=> array($this->lang->mc_user_regip, U_IGNORE),
-                                        'user_register_email'   => array($this->lang->mc_user_regemail, U_IGNORE),
-					'user_server_data'	=> array($this->lang->mc_user_server_data, U_IGNORE)
+					'user_name'		=> array( $this->lang->mc_user_name, U_TEXT, 20 ),
+					'user_email'		=> array( $this->lang->mc_user_email, U_TEXT, 100 ),
+					'user_group'		=> array( $this->lang->mc_user_group, U_CALLBACK, 'list_groups' ),
+					'user_title'		=> array( $this->lang->mc_user_title, U_TEXT, 100 ),
+					'user_title_custom'	=> array( $this->lang->mc_user_title_custom, U_BOOL ),
+					'user_language'		=> array( $this->lang->mc_user_language, U_CALLBACK, 'list_langs' ),
+					'user_skin'		=> array( $this->lang->mc_user_skin, U_CALLBACK, 'list_skins' ),
+					'user_avatar'		=> array( $this->lang->mc_user_avatar, U_TEXT, 150 ),
+					'user_avatar_type'	=> array( $this->lang->mc_user_avatar_type, U_CALLBACK, 'list_user_avatar_types' ),
+					'user_avatar_width'	=> array( $this->lang->mc_user_avatar_width, U_INT, 3 ),
+					'user_avatar_height'	=> array( $this->lang->mc_user_avatar_height, U_INT, 3 ),
+					'user_level'		=> array( $this->lang->mc_user_level, U_TEXT, 2 ),
+					'user_birthday'		=> array( $this->lang->mc_user_birthday, U_TEXT, 10 ),
+					'user_timezone'		=> array( $this->lang->mc_user_timezone, U_TZONE ),
+					'user_location'		=> array( $this->lang->mc_user_location, U_TEXT, 100 ),
+					'user_twitter'		=> array( $this->lang->mc_user_twitter, U_TEXT, 50 ),
+					'user_facebook'		=> array( $this->lang->mc_user_facebook, U_TEXT, 255 ),
+					'user_homepage'		=> array( $this->lang->mc_user_homepage, U_TEXT, 255 ),
+					'user_interests'	=> array( $this->lang->mc_user_interests, U_BLOB, 255 ),
+					'user_signature'	=> array( $this->lang->mc_user_signature, U_BLOB, 255 ),
+					'user_posts'		=> array( $this->lang->mc_user_posts, U_INT, 10 ),
+					'user_uploads'		=> array( $this->lang->mc_user_uploads, U_INT, 10 ),
+					'user_email_show'	=> array( $this->lang->mc_user_email_show, U_BOOL ),
+					'user_pm'		=> array( $this->lang->mc_user_pm, U_BOOL ),
+					'user_pm_mail'		=> array( $this->lang->mc_user_pm_mail, U_BOOL ),
+					'user_view_avatars'	=> array( $this->lang->mc_user_view_avatars, U_BOOL ),
+					'user_view_signatures'	=> array( $this->lang->mc_user_view_signatures, U_BOOL ),
+					'user_view_emojis'	=> array( $this->lang->mc_user_view_emojis, U_BOOL ),
+					'user_id'		=> array( $this->lang->mc_user_id, U_IGNORE ),
+					'user_joined'		=> array( $this->lang->mc_user_joined, U_TIME ),
+					'user_lastvisit'	=> array( $this->lang->mc_user_lastvisit, U_TIME ),
+					'user_lastpost'		=> array( $this->lang->mc_user_lastpost, U_TIME ),
+					'user_regip'		=> array( $this->lang->mc_user_regip, U_IGNORE ),
+                                        'user_register_email'   => array( $this->lang->mc_user_regemail, U_IGNORE ),
+					'user_server_data'	=> array( $this->lang->mc_user_server_data, U_IGNORE )
 				);
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
@@ -310,6 +313,7 @@ class member_control extends admin
 				}
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'id', $id );
 				$xtpl->assign( 'mc', $this->lang->mc );
 				$xtpl->assign( 'mc_report_spambot', $this->lang->mc_report_spambot );

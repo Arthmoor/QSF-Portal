@@ -1,7 +1,7 @@
 <!-- BEGIN: Query -->
 <form action="{site}/admincp/index.php?a=query" method="post">
 <div class="article">
- <div class="title">{query}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/database_go.png" alt="" /> {query}</div>
  <textarea class="input" name="sql" cols="30" rows="15" style="width:100%">SELECT * FROM %pgroups</textarea><br /><br />
  <input type="hidden" name="token" value="{token}" />
  <input type="submit" name="submit" value="{submit}" />

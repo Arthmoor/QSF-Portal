@@ -39,6 +39,8 @@ class home extends admin
 	{
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/home.xtpl' );
 
+		$xtpl->assign( 'site', $this->site );
+		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'home_menu_title', $this->lang->home_menu_title );
 		$xtpl->assign( 'home_choose', $this->lang->home_choose );
 

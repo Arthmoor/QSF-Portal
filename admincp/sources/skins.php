@@ -107,6 +107,7 @@ class skins extends admin
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/skins.xtpl' );
 
 			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'skin_id', $skin['skin_id'] );
 			$xtpl->assign( 'skin_name', $skin['skin_name'] );
 			$xtpl->assign( 'skins_confirm_disable', $this->lang->skins_confirm_disable );
@@ -133,6 +134,9 @@ class skins extends admin
 		$disabled_skins = false;
 
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/skins.xtpl' );
+
+		$xtpl->assign( 'site', $this->site );
+		$xtpl->assign( 'skin', $this->skin );
 
 		if( $dh = opendir( '../skins/' ) )
 		{

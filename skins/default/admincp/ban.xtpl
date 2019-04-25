@@ -1,17 +1,17 @@
 <!-- BEGIN: Ban -->
 <form action="{site}/admincp/index.php?a=ban" method="post">
 <div class="article">
- <div class="title">{ban_settings}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/cog.png" alt="" /> {ban_settings}</div>
  {ban_member_explain1} <strong>{banned_group}</strong> {ban_member_explain2}
 </div>
 
 <div class="article">
- <div class="title">{ban_banned_members}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt="" /> {ban_banned_members}</div>
  {banned}
 </div>
 
 <div class="article">
- <div class="title">{ban_banned_ips}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/world_delete.png" alt="" /> {ban_banned_ips}</div>
  {ban_one_per_line}<br />
  {ban_regex_allowed}<br />
  {ban_cidr}

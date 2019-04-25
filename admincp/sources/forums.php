@@ -84,6 +84,7 @@ class forums extends admin
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
 					$xtpl->assign( 'site', $this->site );
+					$xtpl->assign( 'skin', $this->skin );
 					$xtpl->assign( 'id', $id );
 					$xtpl->assign( 'forum_edit', $this->lang->forum_edit );
 					$xtpl->assign( 'forum_name', $f['forum_name'] );
@@ -145,6 +146,7 @@ class forums extends admin
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
 					$xtpl->assign( 'site', $this->site );
+					$xtpl->assign( 'skin', $this->skin );
 					$xtpl->assign( 'id', $id );
 					$xtpl->assign( 'forum_delete', $this->lang->forum_delete );
 					$xtpl->assign( 'forum_name', $f['forum_name'] );
@@ -160,7 +162,7 @@ class forums extends admin
 				}
 			} else {
 				$this->tree( $this->lang->forum_delete );
-				return $this->message( $this->lang->forum_delete, '<div style="text-align:left">' . $this->Text($this->htmlwidgets->forum_grab(), "{$this->site}/admincp/index.php?a=forums&amp;s=delete&amp;id=") . '</div>' );
+				return $this->message( $this->lang->forum_delete, '<div style="text-align:left">' . $this->Text( $this->htmlwidgets->forum_grab(), "{$this->site}/admincp/index.php?a=forums&amp;s=delete&amp;id=" ) . '</div>' );
 			}
 			break;
 
@@ -186,6 +188,7 @@ class forums extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'forum_create', $this->lang->forum_create );
 				$xtpl->assign( 'forum_parent_cat', $this->lang->forum_parent_cat );
 				$xtpl->assign( 'forum_select_cat', $this->lang->forum_select_cat );
@@ -224,6 +227,7 @@ class forums extends admin
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
 			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'forum_ordering', $this->lang->forum_ordering );
 			$xtpl->assign( 'forum', $forum );
 			$xtpl->assign( 'token', $this->generate_token() );
@@ -420,7 +424,7 @@ class forums extends admin
 		}
 
 		// Users
-		while( $perms->get_group(true) )
+		while( $perms->get_group( true ) )
 		{
 			$perms->remove_z( $id );
 			$perms->update();

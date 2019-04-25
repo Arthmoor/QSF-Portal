@@ -57,6 +57,7 @@ class query extends admin
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/query.xtpl' );
 
 			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'query', $this->lang->query );
 
 			$xtpl->assign( 'token', $this->generate_token() );
@@ -79,6 +80,7 @@ class query extends admin
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/query.xtpl' );
 
 				$xtpl->assign( 'site', $this->site );
+				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'query', $this->lang->query );
 
 				$xtpl->assign( 'token', $this->generate_token() );

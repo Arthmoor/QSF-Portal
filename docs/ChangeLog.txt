@@ -36,6 +36,10 @@ Changes for 2.0:
 * Updated timezone handling to use more modern methods.
 * Updated the upgrade system so that a bunch of little files full of stuff aren't needed anymore. One file is sufficient with all the changes listed in sequence going forward.
 * The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
+* The AdminCP has new icons for decoration.
+
+   Removed:
+
 * Conversion from other ancient forum packages has been removed as they're all woefully obsolete and writing new ones would be a huge time sink for little gain.
 * Removed GTalk/Skype profile fields and replaced them with Twitter ID.
 * Eliminated Debug Mode as it was only truly useful for the old template system.

@@ -53,6 +53,8 @@ class mass_mail extends admin
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/mass_mail.xtpl' );
 
+			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'mail', $this->lang->mail );
 			$xtpl->assign( 'mail_subject', $this->lang->mail_subject );
 			$xtpl->assign( 'announcement', $announcement );

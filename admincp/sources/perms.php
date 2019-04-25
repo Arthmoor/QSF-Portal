@@ -153,7 +153,7 @@ class perms extends admin
 			<script src='{$this->site}/javascript/permissions.js'></script>
 
 			<form id='form' action='$this->site/admincp/index.php?a=perms$link' method='post'>
-			<div class='article'><div class='title'>{$this->lang->perms_for} $label</div>";
+			<div class='article'><div class='title'><img src='$this->site/skins/$this->skin/images/icons/group_edit.png' alt='' /> {$this->lang->perms_for} $label</div>";
 
 			if( $mode == 'user' ) {
 				$out .= "<br />{$this->lang->perms_override_user}<br /><br />

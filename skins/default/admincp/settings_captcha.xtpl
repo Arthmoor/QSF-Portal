@@ -1,7 +1,7 @@
 <!-- BEGIN: Captchas -->
 <!-- BEGIN: Display -->
 <div class="article">
- <div class="title">{settings_captcha_display}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_display}</div>
 <!-- BEGIN: Entry -->
  <span class="field">{settings_captcha_question}</span>
  <span class="form">{question}</span>
@@ -25,7 +25,7 @@
 <!-- BEGIN: DeleteForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=deletecaptcha&c={cap_id}" method="post">
 <div class="article">
- <div class="title">{settings_captcha_delete}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_delete}</div>
  <span class="field">{settings_captcha_question}</span>
  <span class="form">{question}</span>
  <p class="line"></p>
@@ -43,7 +43,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=editcaptcha&c={cap_id}" method="post">
 <div class="article">
- <div class="title">{settings_captcha_edit}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_edit}</div>
  <span class="field">{settings_captcha_question}</span>
  <span class="form"><textarea name="cap_question">{question}</textarea></span>
  <p class="line"></p>
@@ -61,7 +61,7 @@
 <!-- BEGIN: AddForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=captcha" method="post">
 <div class="article">
- <div class="title">{settings_captcha_pair}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_pair}</div>
  <span class="field">{settings_captcha_new_question}</span>
  <span class="form"><textarea name="cap_question"></textarea></span>
  <p class="line"></p>

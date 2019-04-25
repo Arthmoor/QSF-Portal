@@ -117,6 +117,7 @@ class titles extends admin
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/titles.xtpl' );
 
 			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'edit', $this->get['edit'] );
 			$xtpl->assign( 'titles_edit', $this->lang->titles_edit );
 			$xtpl->assign( 'titles_title', $this->lang->titles_title );

@@ -54,6 +54,8 @@ class logs extends admin
 
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/logs.xtpl' );
 
+		$xtpl->assign( 'site', $this->site );
+		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'pages', $pages );
 		$xtpl->assign( 'logs_view', $this->lang->logs_view );
 		$xtpl->assign( 'logs_time', $this->lang->logs_time );

@@ -1,10 +1,10 @@
 <!-- BEGIN: Skins -->
 <div class="article">
- <div class="title">{skins_manage_skins}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="" /> {skins_manage_skins}</div>
 </div>
 <!-- BEGIN: DisabledSkins -->
 <div class="article">
- <div class="title">{skins_disabled}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="" /> {skins_disabled}</div>
  <span class="head">
   <span class="icon">&nbsp;</span>
   <span class="topic">{skins_name}</span>
@@ -20,7 +20,7 @@
 </div>
 <!-- END: DisabledSkins -->
 <div class="article">
- <div class="title">{skins_enabled}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="" /> {skins_enabled}</div>
  <span class="head">
   <span class="icon">&nbsp;</span>
   <span class="topic">{skins_name}</span>
@@ -39,7 +39,7 @@
 <!-- BEGIN: DisableForm -->
 <form action="{site}/admincp/index.php?a=skins&amp;s=disable&amp;id={skin_id}" method="post">
 <div class="article">
- <div class="title">{skins_disable_skin}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="" /> {skins_disable_skin}</div>
  <span class="field">{skin_name}</span>
  <span class="form">{skins_confirm_disable}</span>
  <p class="line"></p>

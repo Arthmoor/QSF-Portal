@@ -69,6 +69,7 @@ class emoji_control extends admin
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/emoji_control.xtpl' );
 
+			$xtpl->assign( 'skin', $this->skin );
 			$xtpl->assign( 'emoji_controls', $this->lang->emoji_controls );
 
 			$add_form_action = $this->site . '/admincp/index.php?a=emoji_control&amp;s=add';

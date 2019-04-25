@@ -2,7 +2,7 @@
 <!-- BEGIN: Stage1 -->
 <form action="{site}/admincp/index.php?a=prune" method="post">
 <div class="article">
- <div class="title">{prune_old_topics}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_delete.png" alt="" /> {prune_old_topics}</div>
  <span class="field">{prune_topics_older_than}</span>
  <span class="form">
   <select id="age" name="age">
@@ -35,7 +35,7 @@
 <form action="{site}/admincp/index.php?a=prune" method="post" name="prune">
  <input type="hidden" name="forums" value="{forums}" />
  <div class="article">
-  <div class="title">{prune_old_topics}</div>
+  <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_delete.png" alt="" /> {prune_old_topics}</div>
   <div class="title">{prune_select_topics}</div>
 
 <!-- BEGIN: Topic -->

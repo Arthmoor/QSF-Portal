@@ -2,7 +2,7 @@
 <!-- BEGIN: ChooseForm -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s={s}" method="post">
 <div class="article">
- <div class="title">{mc}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" /> {mc}</div>
  {mc_find}:<br /><br />
  <input type="text" name="membername" size="30" class="input" />
  <input type="submit" name="submit" value="{submit}" />
@@ -13,7 +13,7 @@
 <!-- BEGIN: DeleteForm -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s=delete&amp;id={id}" method="post">
 <div class="article">
- <div class="title">{mc_delete}: {user_name}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt="" /> {mc_delete}: {user_name}</div>
  {mc_confirm} <b>{user_name}</b>?
  <p class="line"></p>
 
@@ -26,7 +26,7 @@
 <!-- BEGIN: Spambot -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={id}" method="post">
 <div class="article">
- <div class="title">{mc_delete}: {user_name}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt="" /> {mc_delete}: {user_name}</div>
  {mc_confirm_bot}
  <p class="line"></p>
 
@@ -40,7 +40,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={id}" method="post">
 <div class="article">
- <div class="title">{mc}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_edit.png" alt="" /> {mc}</div>
 
 <!-- BEGIN: Line -->
  <span class="field">{field}</span>

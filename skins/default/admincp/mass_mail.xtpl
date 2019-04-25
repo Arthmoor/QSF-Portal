@@ -2,7 +2,7 @@
 <script src="../javascript/groupselect.js"></script>
 <form action="{self}?a=mass_mail" method="post" id="mailer">
 <div class="article">
- <div class="title">{mail}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/email.png" alt="" /> {mail}</div>
 
  <span class="field">{mail_subject}</span>
  <span class="form"><input type="text" name="subject" size="60" value="{announcement}" /></span>

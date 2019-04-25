@@ -2,7 +2,7 @@
 <!-- BEGIN: AddForm -->
 <form action="{site}/admincp/index.php?a=groups&amp;s=add" method="post">
 <div class="article">
- <div class="title">{groups_create}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/group_add.png" alt="" /> {groups_create}</div>
  {groups_create_new} <input class="input" name="group_name" /> {based_on}
  <input type="hidden" name="token" value="{token}" />
  <input type="submit" name="submit" value="{submit}" />
@@ -13,7 +13,7 @@
 <!-- BEGIN: ChooseForm -->
 <form action="{site}/admincp/index.php?a=groups&amp;s=edit" method="post">
 <div class="article">
- <div class="title">{groups_edit}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/group_edit.png" alt="" /> {groups_edit}</div>
  {groups_to_edit}: {group_list}<br /><br />
  <input type="submit" name="choose_group" value="{submit}" />
 </div>
@@ -23,7 +23,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=groups&amp;s=edit" method="post">
 <div class="article">
- <div class="title">{groups_edit}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/group_edit.png" alt="" /> {groups_edit}</div>
 
  <span class="field">{groups_type}</span>
  <span class="form">{g_type}</span>
@@ -47,7 +47,7 @@
 <!-- BEGIN: DeleteForm -->
 <form action="{site}/admincp/index.php?a=groups&amp;s=delete" method="post">
 <div class="article">
- <div class="title">{groups_delete}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/group_delete.png" alt="" /> {groups_delete}</div>
  {groups_will_be}<br />
  {groups_will_become}<br /><br />
  <hr>

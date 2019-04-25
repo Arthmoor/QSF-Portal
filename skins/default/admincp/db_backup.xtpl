@@ -2,7 +2,7 @@
 <!-- BEGIN: BackupForm -->
 <form action="{site}/admincp/index.php?a=backup&amp;s=create" method="post">
 <div class="article">
- <div class="title">{options}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/database_gear.png" alt="" /> {options}</div>
  <span class="field">{add_complete} INSERT {statements}?</span>
  <span class="form"><input type="checkbox" checked="checked" name="insert" value="1" /></span>
  <p class="line"></p>

@@ -2,7 +2,7 @@
 <!-- BEGIN: AddForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=add" method="post">
 <div class="article">
- <div class="title">{settings_new}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench.png" alt="" /> {settings_new}</div>
  <span class="field">{settings_new_name}:</span>
  <span class="form"><input class="input" name="new_setting" type="text" value="" /></span>
  <p class="line"></p>
@@ -25,7 +25,7 @@
 <form action="{site}/admincp/index.php?a=settings&amp;s=update" method="post">
 <input type="hidden" name="token" value="{token}" />
 <div class="article">
- <div class="title">{settings_general}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench.png" alt="" /> {settings_general}</div>
  <span class="field">{settings_board_enabled}</span>
  <span class="form">
   <input class="check" type="radio" name="closed" value="0" {enable_checked} id="closed2" /><label for="closed2">{settings_enabled}</label><br />
@@ -102,7 +102,7 @@
 </div>
 
  <div class="article">
-  <div class="title">{settings_security}</div>
+  <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_locked.png" alt="" /> {settings_security}</div>
 
   <span class="field">
    <label for="htts_enabled">{settings_security_htts}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="htts_enabled" id="htts_enabled"{htts_enabled} />
@@ -173,7 +173,7 @@
  </div>
 
 <div class="article">
- <div class="title">Akismet {settings}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/spam_edit.png" alt="" /> Akismet {settings}</div>
  <span class="field">{settings_wordpress_id}<br /><span class="tiny">{settings_wordpress_msg}<a href="https://akismet.com/">https://akismet.com/</a></span></span>
  <span class="form"><input class="input" type="text" name="wordpress_api_key" value="{wordpress_api_key}" size="40" /></span>
  <p class="line"></p>
@@ -217,7 +217,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_members}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/members.png" alt="" /> {settings_members}</div>
  <span class="field">{settings_default_skin}</span>
  <span class="form"><select name="default_skin">{selectSkins}</select></span>
  <p class="line"></p>
@@ -284,7 +284,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_avatar}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/avatars.png" alt="" /> {settings_avatar}</div>
 
  <span class="field">{settings_avatar_max_width}<br /><span class="tiny">{settings_pixels}</span></span>
  <span class="form"><input type="text" name="avatar_width" value="{avatar_width}" size="40" maxlength="5" /></span>
@@ -302,7 +302,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_files}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/downloads.png" alt="" /> {settings_files}</div>
 
  <span class="field">{settings_max_attach_size}<br /><span class="tiny">{settings_kilobytes}</span></span>
  <span class="form"><input type="text" name="attach_upload_size" value="{attachsize}" size="40" maxlength="5" /></span>
@@ -323,7 +323,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_email}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/email.png" alt="" /> {settings_email}</div>
  <p class="line"></p>
 
  <span class="field">{settings_email_reply}<br /><span class="tiny">{settings_email_real}</span></span>
@@ -349,7 +349,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_cookie}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/cookie.png" alt="" /> {settings_cookie}</div>
  <p class="line"></p>
 
  <span class="field">{settings_cookie_time}<br /><span class="tiny">{seconds}</span></span>
@@ -391,7 +391,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_server}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/server_edit.png" alt="" /> {settings_server}</div>
 
  <span class="field">{settings_server_timezone}</span>
  <span class="form"><select class="timezone" name="servertime">{severTimezones}</select></span>
@@ -405,7 +405,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_active}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" /> {settings_active}</div>
  <span class="field">{settings_spider_enable}<br /><span class="tiny">{settings_spider_enable_msg}</span></span>
  <span class="form">
   <input class="check" type="radio" name="spider_active" value="1" {spider_display_enabled} id="spider_active1" /><label for="spider_active1">{option_yes}</label>
@@ -425,7 +425,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_board_rss}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/feed_edit.png" alt="" /> {settings_board_rss}</div>
  <span class="field">{settings_board_rssfeed_title}</span>
  <span class="form"><input class="check" type="text" name="rss_feed_title" value="{rss_feed_title}" size="40" /></span>
  <p class="line"></p>
@@ -446,7 +446,7 @@
 </div>
 
 <div class="article">
- <div class="title">{settings_front_page_links}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/world_link.png" alt="" /> {settings_front_page_links}</div>
  <span class="field">{settings_left_sidebar}<br /><span class="tiny">{settings_one_per}</span></span>
  <span class="form"><textarea name="left_sidebar_links" rows="10" cols="39">{left_links}</textarea></span>
  <p class="line"></p>

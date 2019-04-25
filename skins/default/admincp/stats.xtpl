@@ -1,8 +1,8 @@
 <!-- BEGIN: Stats -->
 <div class="article">
- <div class="title">{stats}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/chart_pie.png" alt="" /> {stats}</div>
 
- <div class="title">{stats_spam_statistics}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/spam.png" alt="" /> {stats_spam_statistics}</div>
  <span class="field">{stats_forum_posts}:</span>
  <span class="form">{spam_posts}</span>
  <p class="list_line"></p>
@@ -31,14 +31,14 @@
  <span class="form">{spam_prof}</span>
  <p class="list_line"></p>
 
- <div class="title">{stats_post_by_month}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/chart_curve.png" alt="" /> {stats_post_by_month}</div>
 <!-- BEGIN: Post -->
  <span class="field">{month} - {stat}</span>
  <span class="form"><img src="../skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="../skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="../skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /></span>
  <p class="list_line"></p>
 <!-- END: Post -->
 
- <div class="title">{stats_reg_by_month}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/chart_curve.png" alt="" /> {stats_reg_by_month}</div>
 <!-- BEGIN: Registration -->
  <span class="field">{month} - {stat}</span>
  <span class="form"><img src="../skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="../skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="../skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /></span>
