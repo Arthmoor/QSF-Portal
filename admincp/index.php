@@ -136,6 +136,51 @@ $admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get[
 // Init function also checks permissions and kicks out non-admins
 $admin->init();
 
+// Security header options
+if( $admin->sets['htts_enabled'] && $admin->sets['htts_max_age'] > -1 ) {
+	header( "Strict-Transport-Security: max-age={$admin->sets['htts_max_age']}" );
+}
+
+if( $admin->sets['xss_enabled'] ) {
+	if( $admin->sets['xss_policy'] == 0 ) {
+		header( 'X-XSS-Protection: 0' );
+	}
+
+	if( $admin->sets['xss_policy'] == 1 ) {
+		header( 'X-XSS-Protection: 1' );
+	}
+
+	if( $admin->sets['xss_policy'] == 2 ) {
+		header( 'X-XSS-Protection: 1; mode=block' );
+	}
+}
+
+if( $admin->sets['xfo_enabled'] ) {
+	if( $admin->sets['xfo_policy'] == 0 ) {
+		header( 'X-Frame-Options: deny' );
+	}
+
+	if( $admin->sets['xfo_policy'] == 1 ) {
+		header( 'X-Frame-Options: sameorigin' );
+	}
+
+	if( $admin->sets['xfo_policy'] == 2 ) {
+		header( "X-Frame-Options: allow-from {$admin->sets['xfo_allowed_origin']}" );
+	}
+}
+
+if( $admin->sets['xcto_enabled'] ) {
+	header( 'X-Content-Type-Options: nosniff' );
+}
+
+if( $admin->sets['ect_enabled'] ) {
+	header( "Expect-CT: max-age={$admin->sets['ect_max_age']}" );
+}
+
+if( $admin->sets['csp_enabled'] ) {
+	header( "Content-Security-Policy: {$admin->sets['csp_details']}" );
+}
+
 if( !isset( $admin->get['skin'] ) ) {
 	$skin = $admin->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $admin->user['user_skin'] );
 

@@ -672,6 +672,74 @@ class settings extends admin
 			$right_links = implode( "\r\n", $this->sets['right_sidebar_links'] );
 			$xtpl->assign( 'right_links', $right_links );
 
+			$xtpl->assign( 'settings_security', $this->lang->settings_security );
+			$xtpl->assign( 'settings_security_htts', $this->lang->settings_security_htts );
+			$xtpl->assign( 'settings_security_htts_detail', $this->lang->settings_security_htts_detail );
+			$xtpl->assign( 'settings_security_htts_max_age', $this->lang->settings_security_htts_max_age );
+			$xtpl->assign( 'settings_security_htts_warning', $this->lang->settings_security_htts_warning );
+			$xtpl->assign( 'settings_security_xss', $this->lang->settings_security_xss );
+			$xtpl->assign( 'settings_security_xss_detail', $this->lang->settings_security_xss_detail );
+			$xtpl->assign( 'settings_security_xss_disabled', $this->lang->settings_security_xss_disabled );
+			$xtpl->assign( 'settings_security_xss_sanitize', $this->lang->settings_security_xss_sanitize );
+			$xtpl->assign( 'settings_security_xss_block', $this->lang->settings_security_xss_block );
+			$xtpl->assign( 'settings_security_xfo', $this->lang->settings_security_xfo );
+			$xtpl->assign( 'settings_security_xfo_detail', $this->lang->settings_security_xfo_detail );
+			$xtpl->assign( 'settings_security_xfo_deny', $this->lang->settings_security_xfo_deny );
+			$xtpl->assign( 'settings_security_xfo_frames', $this->lang->settings_security_xfo_frames );
+			$xtpl->assign( 'settings_security_xfo_same', $this->lang->settings_security_xfo_same );
+			$xtpl->assign( 'settings_security_xcto', $this->lang->settings_security_xcto );
+			$xtpl->assign( 'settings_security_xcto_detail', $this->lang->settings_security_xcto_detail );
+			$xtpl->assign( 'settings_security_xcto_explain', $this->lang->settings_security_xcto_explain );
+			$xtpl->assign( 'settings_security_ect', $this->lang->settings_security_ect );
+			$xtpl->assign( 'settings_security_ect_detail', $this->lang->settings_security_ect_detail );
+			$xtpl->assign( 'settings_security_ect_max_age', $this->lang->settings_security_ect_max_age );
+			$xtpl->assign( 'settings_security_ect_warning', $this->lang->settings_security_ect_warning );
+			$xtpl->assign( 'settings_security_csp', $this->lang->settings_security_csp );
+			$xtpl->assign( 'settings_security_csp_detail', $this->lang->settings_security_csp_detail );
+			$xtpl->assign( 'settings_security_csp_warning', $this->lang->settings_security_csp_warning );
+
+			$xtpl->assign( 'htts_enabled', $this->sets['htts_enabled'] ? ' checked="checked"' : null );
+			$xtpl->assign( 'htts_max_age', $this->sets['htts_max_age'] );
+
+			$xtpl->assign( 'xss_enabled', $this->sets['xss_enabled'] ? ' checked="checked"' : null );
+			if( $this->sets['xss_policy'] == 0 ) {
+				$xtpl->assign( 'xss_policy0', ' checked="checked"' );
+				$xtpl->assign( 'xss_policy1', null );
+				$xtpl->assign( 'xss_policy2', null );
+			} elseif( $this->sets['xss_policy'] == 1 ) {
+				$xtpl->assign( 'xss_policy0', null );
+				$xtpl->assign( 'xss_policy1', ' checked="checked"' );
+				$xtpl->assign( 'xss_policy2', null );
+			} elseif( $this->sets['xss_policy'] == 2 ) {
+				$xtpl->assign( 'xss_policy0', null );
+				$xtpl->assign( 'xss_policy1', null );
+				$xtpl->assign( 'xss_policy2', ' checked="checked"' );
+			}
+
+			$xtpl->assign( 'xfo_enabled', $this->sets['xfo_enabled'] ? ' checked="checked"' : null );
+			if( $this->sets['xfo_policy'] == 0 ) {
+				$xtpl->assign( 'xfo_policy0', ' checked="checked"' );
+				$xtpl->assign( 'xfo_policy1', null );
+				$xtpl->assign( 'xfo_policy2', null );
+			} elseif( $this->sets['xfo_policy'] == 1 ) {
+				$xtpl->assign( 'xfo_policy0', null );
+				$xtpl->assign( 'xfo_policy1', ' checked="checked"' );
+				$xtpl->assign( 'xfo_policy2', null );
+			} elseif( $this->sets['xfo_policy'] == 2 ) {
+				$xtpl->assign( 'xfo_policy0', null );
+				$xtpl->assign( 'xfo_policy1', null );
+				$xtpl->assign( 'xfo_policy2', ' checked="checked"' );
+			}
+			$xtpl->assign( 'xfo_allowed_origin', $this->sets['xfo_allowed_origin'] );
+
+			$xtpl->assign( 'xcto_enabled', $this->sets['xcto_enabled'] ? ' checked="checked"' : null );
+
+			$xtpl->assign( 'ect_enabled', $this->sets['ect_enabled'] ? ' checked="checked"' : null );
+			$xtpl->assign( 'ect_max_age', $this->sets['ect_max_age'] );
+
+			$xtpl->assign( 'csp_enabled', $this->sets['csp_enabled'] ? ' checked="checked"' : null );
+			$xtpl->assign( 'csp_details', $this->sets['csp_details'] );
+
 			$xtpl->parse( 'Settings.EditForm' );
 			$xtpl->parse( 'Settings' );
 
@@ -760,7 +828,19 @@ class settings extends admin
 				'akismet_posts_number' => 'int',
 				'file_approval' => 'bool',
 				'left_sidebar_links' => 'array',
-				'right_sidebar_links' => 'array'
+				'right_sidebar_links' => 'array',
+				'htts_enabled' => 'checkbox',
+				'htts_max_age' => 'int',
+				'xfo_enabled' => 'checkbox',
+				'xfo_policy' => 'int',
+				'xfo_allowed_origin' => 'string',
+				'xss_enabled' => 'checkbox',
+				'xss_policy' => 'int',
+				'xcto_enabled' => 'checkbox',
+				'ect_enabled' => 'checkbox',
+				'ect_max_age' => 'int',
+				'csp_enabled' => 'checkbox',
+				'csp_details' => 'string'
 			);
 
 			foreach( $this->post as $var => $val )
@@ -768,11 +848,13 @@ class settings extends admin
 				if( $var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' || $var == 'mobile_icons' )
 					continue;
 				if( ( $vartypes[$var] == 'int' ) || ( $vartypes[$var] == 'bool' ) ) {
-					$val = intval($val);
+					$val = intval( $val );
+				} elseif( $vartypes[$var] == 'checkbox' ) {
+					$val = isset( $this->post[$var] );
 				} elseif( $vartypes[$var] == 'float' ) {
 					$val = (float)$val;
 				} elseif( $vartypes[$var] == 'kilobytes' ) {
-					$val = intval($val) * 1024;
+					$val = intval( $val ) * 1024;
 				} elseif( $vartypes[$var] == 'array' ) {
 					$val = explode( "\n", $val );
 					$count = count( $val );
@@ -787,9 +869,11 @@ class settings extends admin
 
 				if( $var == 'cookie_path' && $val != '/' ) {
 					$newval = '';
+
 					if( $val{0} != '/' )
 						$newval .= '/';
 					$newval .= $val;
+
 					if( $val{strlen($val)-1} != '/' )
 						$newval .= '/';
 					$val = $newval;

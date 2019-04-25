@@ -431,6 +431,19 @@ break;
 			$this->sets['left_sidebar_links'] = array();
 			$this->sets['right_sidebar_links'] = array();
 
+			// Security header settings
+			$this->sets['htts_enabled'] = 0;
+			$this->sets['htts_max_age'] = 0;
+			$this->sets['xfo_enabled'] = 0;
+			$this->sets['xfo_policy'] = 1;
+			$this->sets['xfo_allowed_origin'] = '';
+			$this->sets['xss_enabled'] = 0;
+			$this->sets['xss_policy'] = 1;
+			$this->sets['xcto_enabled'] = 0;
+			$this->sets['ect_enabled'] = 0;
+			$this->sets['ect_max_age'] = 0;
+			$this->sets['csp_enabled'] = 0;
+			$this->sets['csp_details'] = '';
 
 			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_signature)
 				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', '%s', '%s', '%s', %d, %d, '%s')",

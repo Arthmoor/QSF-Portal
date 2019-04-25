@@ -3,24 +3,9 @@ QSF Portal Changes
 
 Changes for 2.0:
 
-* Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
-* HTTP server data submitted with user registrations is now shown on the member control editing screen.
-* Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
-* Emojis are now handled independently of skins and can be added on the fly as desired.
-* All references to "Emoticon" have been changed to "Emoji" to reflect what they're actually called now.
-* Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
-* Default skin is now served as HTML5 instead of XHTML 1.1.
-* Password security has been updated to stronger hashing standards.
-* CSRF security tokens have been upgraded to use a cryptographically secure method. This support raises the minimum PHP requirement to 7.0.0.
-* Replaced the Akismet library with my own hand rolled version.
-* Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
-* The unused HELP module has been removed.
-* Updated avatar handling.
-* Updated timezone handling to use more modern methods.
-* Updated the upgrade system so that a bunch of little files full of stuff aren't needed anymore. One file is sufficient with all the changes listed in sequence going forward.
-* Conversion from other ancient forum packages has been removed as they're all woefully obsolete and writing new ones would be a huge time sink for little gain.
-* Removed GTalk/Skype profile fields and replaced them with Twitter ID.
-* The "Add Setting" function can now properly set up a new array.
+   New Features:
+
+* Added security header options to the site settings.
 * Added support for mobile icon metatags.
 * Added support to report spambot registrations to Akismet.
 * Added support for Gravatars. See: https://en.gravatar.com/
@@ -32,16 +17,37 @@ Changes for 2.0:
 * Added a new setting to block new user registration.
 * Added Facebook page to user profile data.
 * Added the ability to put extra links on the sidebar box to reduce the need for editing the base templates.
+* Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
+
+   Changes:
+
+* Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
+* HTTP server data submitted with user registrations is now shown on the member control editing screen.
+* Emojis are now handled independently of skins and can be added on the fly as desired.
+* All references to "Emoticon" have been changed to "Emoji" to reflect what they're actually called now.
+* Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
+* Default skin is now served as HTML5 instead of XHTML 1.1.
+* Password security has been updated to stronger hashing standards.
+* CSRF security tokens have been upgraded to use a cryptographically secure method. This support raises the minimum PHP requirement to 7.0.0.
+* Replaced the Akismet library with my own hand rolled version.
+* Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
+* The "Add Setting" function can now properly set up a new array.
+* Updated avatar handling.
+* Updated timezone handling to use more modern methods.
+* Updated the upgrade system so that a bunch of little files full of stuff aren't needed anymore. One file is sufficient with all the changes listed in sequence going forward.
+* The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
+* Conversion from other ancient forum packages has been removed as they're all woefully obsolete and writing new ones would be a huge time sink for little gain.
+* Removed GTalk/Skype profile fields and replaced them with Twitter ID.
 * Eliminated Debug Mode as it was only truly useful for the old template system.
+* The unused HELP module has been removed.
 * Removed ICQ, MSN, AIM, and Yahoo from user profile data as those platforms are essentially all dead now.
 * Removed the defaultutils.php module as it seems unrealistic to have ever expected custom overrides of basic functions anyway.
 * Removed pgsql support as it became apparent nobody ever used it.
-* Removed the old mysql library as mysqli is the only thing officially supported in PHP 5.5 and above.
+* Removed the old mysql library as mysqli is the only thing officially supported in PHP 7.0 and above.
 * Removed the obsolete JSON libraries from the code.
 * Removed the rss folder as it no longer serves a purpose.
 * Removed server load checking as there is no real use for it anymore.
 * Removed the unused addons folder support.
-* The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
 
    Bugs addressed:
 

@@ -101,6 +101,77 @@
  <input type="submit" value="{submit}" />
 </div>
 
+ <div class="article">
+  <div class="title">{settings_security}</div>
+
+  <span class="field">
+   <label for="htts_enabled">{settings_security_htts}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="htts_enabled" id="htts_enabled"{htts_enabled} />
+   <br /><br />
+   <span class="tiny">{settings_security_htts_detail}</span>
+  </span>
+  <span class="form">
+   {settings_security_htts_max_age} <input class="input" type="text" name="htts_max_age" id="htts_max_age" value="{htts_max_age}" />
+   <br /><br />{settings_security_htts_warning}
+  </span>
+  <p class="line"></p>
+
+  <span class="field">
+   <label for="xss_enabled">{settings_security_xss}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="xss_enabled" id="xss_enabled"{xss_enabled} />
+   <br /><br />
+   <span class="tiny">{settings_security_xss_detail}</span>
+  </span>
+  <span class="form">
+   <input type="radio" name="xss_policy" id="xss_policy0" value="0"{xss_policy0} /> <label for="xss_policy0">{settings_security_xss_disabled}</label><br />
+   <input type="radio" name="xss_policy" id="xss_policy1" value="1"{xss_policy1} /> <label for="xss_policy1">{settings_security_xss_sanitize}</label><br />
+   <input type="radio" name="xss_policy" id="xss_policy2" value="2"{xss_policy2} /> <label for="xss_policy2">{settings_security_xss_block}</label>
+  </span>
+  <p class="line"></p>
+
+  <span class="field">
+   <label for="xfo_enabled">{settings_security_xfo}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="xfo_enabled" id="xfo_enabled"{xfo_enabled} />
+   <br /><br />
+   <span class="tiny">{settings_security_xfo_detail}</span>
+  </span>
+  <span class="form">
+   <input type="radio" name="xfo_policy" id="xfo_policy0" value="0"{xfo_policy0} /> <label for="xfo_policy0">{settings_security_xfo_deny}</label><br />
+   <input type="radio" name="xfo_policy" id="xfo_policy1" value="1"{xfo_policy1} /> <label for="xfo_policy1">{settings_security_xfo_same}</label><br />
+   <input type="radio" name="xfo_policy" id="xfo_policy2" value="2"{xfo_policy2} /> <label for="xfo_policy2">{settings_security_xfo_frames}</label> <input class="input" style="width:30%" type="text" name="xfo_allowed_origin" id="xfo_allowed_origin" value="{xfo_allowed_origin}" />
+  </span>
+  <p class="line"></p>
+
+  <span class="field">
+   <label for="xcto_enabled">{settings_security_xcto}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="xcto_enabled" id="xcto_enabled"{xcto_enabled} />
+   <br /><br />
+   <span class="tiny">{settings_security_xcto_detail}</span>
+  </span>
+  <span class="form">{settings_security_xcto_explain}</span>
+  <p class="line"></p>
+
+  <span class="field">
+   <label for="ect_enabled">{settings_security_ect}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="ect_enabled" id="ect_enabled"{ect_enabled} />
+   <br /><br />
+   <span class="tiny">{settings_security_ect_detail}</span>
+  </span>
+  <span class="form">
+   {settings_security_ect_max_age} <input class="input" type="text" name="ect_max_age" id="ect_max_age" value="{ect_max_age}" />
+   <br /><br />{settings_security_ect_warning}
+  </span>
+  <p class="line"></p>
+
+  <span class="field">
+   <label for="csp_enabled">{settings_security_csp}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="csp_enabled" id="csp_enabled"{csp_enabled} />
+   <br /><br />
+   <span class="tiny">{settings_security_csp_detail}</span>
+  </span>
+  <span class="form">
+   {settings_security_csp_warning}
+   <textarea name="csp_details" rows="15">{csp_details}</textarea>
+  </span>
+  <p class="line"></p>
+
+  <input type="submit" value="{submit}" />
+ </div>
+
 <div class="article">
  <div class="title">Akismet {settings}</div>
  <span class="field">{settings_wordpress_id}<br /><span class="tiny">{settings_wordpress_msg}<a href="https://akismet.com/">https://akismet.com/</a></span></span>

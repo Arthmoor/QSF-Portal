@@ -160,6 +160,18 @@ class upgrade extends qsfglobal
 					$this->sets['servertime'] = 'Europe/London';
 					$this->sets['left_sidebar_links'] = array();
 					$this->sets['right_sidebar_links'] = array();
+					$this->sets['htts_enabled'] = 0;
+					$this->sets['htts_max_age'] = 0;
+					$this->sets['xfo_enabled'] = 0;
+					$this->sets['xfo_policy'] = 1;
+					$this->sets['xfo_allowed_origin'] = '';
+					$this->sets['xss_enabled'] = 0;
+					$this->sets['xss_policy'] = 1;
+					$this->sets['xcto_enabled'] = 0;
+					$this->sets['ect_enabled'] = 0;
+					$this->sets['ect_max_age'] = 0;
+					$this->sets['csp_enabled'] = 0;
+					$this->sets['csp_details'] = '';
 
 					// Deleted settings
 					unset( $this->sets['analytics_id'] );

@@ -134,11 +134,13 @@ class login extends qsfglobal
 			setcookie( $this->sets['cookie_prefix'] . 'user', '', $this->time - 9000, $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 			setcookie( $this->sets['cookie_prefix'] . 'pass', '', $this->time - 9000, $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 
-			unset( $_SESSION['user'] );
-			unset( $_SESSION['pass'] );
+			$_SESSION = array();
+
+			session_destroy();
 
 			$this->perms->is_guest = true;
 
+			header( 'Clear-Site-Data: "*"' );
 			return $this->message( $this->lang->login_out, sprintf( $this->lang->login_now_out, $this->self, $this->self ) );
 		}
 	}

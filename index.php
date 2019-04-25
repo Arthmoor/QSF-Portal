@@ -157,6 +157,51 @@ if( !isset( $qsf->get['skin'] ) ) {
 
 $qsf->init();
 
+// Security header options
+if( $qsf->sets['htts_enabled'] && $qsf->sets['htts_max_age'] > -1 ) {
+	header( "Strict-Transport-Security: max-age={$qsf->sets['htts_max_age']}" );
+}
+
+if( $qsf->sets['xss_enabled'] ) {
+	if( $qsf->sets['xss_policy'] == 0 ) {
+		header( 'X-XSS-Protection: 0' );
+	}
+
+	if( $qsf->sets['xss_policy'] == 1 ) {
+		header( 'X-XSS-Protection: 1' );
+	}
+
+	if( $qsf->sets['xss_policy'] == 2 ) {
+		header( 'X-XSS-Protection: 1; mode=block' );
+	}
+}
+
+if( $qsf->sets['xfo_enabled'] ) {
+	if( $qsf->sets['xfo_policy'] == 0 ) {
+		header( 'X-Frame-Options: deny' );
+	}
+
+	if( $qsf->sets['xfo_policy'] == 1 ) {
+		header( 'X-Frame-Options: sameorigin' );
+	}
+
+	if( $qsf->sets['xfo_policy'] == 2 ) {
+		header( "X-Frame-Options: allow-from {$qsf->sets['xfo_allowed_origin']}" );
+	}
+}
+
+if( $qsf->sets['xcto_enabled'] ) {
+	header( 'X-Content-Type-Options: nosniff' );
+}
+
+if( $qsf->sets['ect_enabled'] ) {
+	header( "Expect-CT: max-age={$qsf->sets['ect_max_age']}" );
+}
+
+if( $qsf->sets['csp_enabled'] ) {
+	header( "Content-Security-Policy: {$qsf->sets['csp_details']}" );
+}
+
 if( $qsf->is_banned() ) {
 	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
 }
