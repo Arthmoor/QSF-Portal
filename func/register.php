@@ -171,7 +171,7 @@ class register extends qsfglobal
 				return $this->message( $this->lang->register_reging, $this->lang->register_fields );
 			}
 
-			if( !$this->validator->validate( $username ) ) {
+			if( !$this->validator->validate( $username, TYPE_USERNAME ) ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_name_invalid );
 			}
 
