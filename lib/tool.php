@@ -131,7 +131,7 @@ class tool
 
 			case TYPE_EMAIL:
 				// $range is unused
-				if( !filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
+				if( !filter_var( $var, FILTER_VALIDATE_EMAIL ) ) {
 					$unchanged = false;
 				}
 				break;
