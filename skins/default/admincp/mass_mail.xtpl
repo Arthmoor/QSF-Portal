@@ -1,6 +1,6 @@
 <!-- BEGIN: MassMail -->
-<script src="../javascript/groupselect.js"></script>
-<form action="{self}?a=mass_mail" method="post" id="mailer">
+<script src="{site}/javascript/groupselect.js"  async defer></script>
+<form action="{site}/index.php?a=mass_mail" method="post" id="mailer">
 <div class="article">
  <div class="title"><img src="{site}/skins/{skin}/images/icons/email.png" alt="" /> {mail}</div>
 

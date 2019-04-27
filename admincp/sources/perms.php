@@ -150,7 +150,7 @@ class perms extends admin
 			}
 
 			$out = "
-			<script src='{$this->site}/javascript/permissions.js'></script>
+			<script src='{$this->site}/javascript/permissions.js' async defer></script>
 
 			<form id='form' action='$this->site/admincp/index.php?a=perms$link' method='post'>
 			<div class='article'><div class='title'><img src='$this->site/skins/$this->skin/images/icons/group_edit.png' alt='' /> {$this->lang->perms_for} $label</div>";

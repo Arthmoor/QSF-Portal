@@ -1,7 +1,8 @@
 <!-- BEGIN: PMFolder -->
+<script src="{site}/javascript/pm.js"></script>
 <div class="article">
  <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
- <select class="big_button_align" onchange="get_folder(this,'{site}/index.php')">
+ <select class="big_button_align" id="pm_jumpselect1">
   {folderjump}
  </select>
  <p></p>
@@ -40,7 +41,7 @@
  <p class="list_line"></p>
 <!-- END: NoMessages -->
  <span class="right">
-  <input class="button" type="button" value="{select_all}" onclick="return select_all_boxes();" />
+  <input class="button" type="button" value="{select_all}" id="pm_select_all" />
   <input class="button" type="submit" name="submit" value="{pm_delete_selected}" />
  </span>
  <p></p>
@@ -49,7 +50,7 @@
 
 <div class="article">
  <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
- <select class="big_button_align" onchange="get_folder(this,'{site}/index.php')">
+ <select class="big_button_align" id="pm_jumpselect2">
   {folderjump}
  </select>
  <p></p>
@@ -81,10 +82,9 @@
   {smilies}
  </span>
  <span class="form">
-  <script src="{site}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea name="message" id="bbcode" rows="12" cols="20">{msg}</textarea>
-  <script>textarea = bbcodeInit("bbcode");</script>
+  <textarea name="message" id="bbcode_textbox" rows="12" cols="20">{msg}</textarea>
  </span>
  <p class="line"></p>
 

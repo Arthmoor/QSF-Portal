@@ -169,6 +169,7 @@
 <!-- END: EditProfile -->
 
 <!-- BEGIN: EditAvatar -->
+<script src="{site}/javascript/avatar.js" async defer></script>
 <form action="{site}/control_panel/avatar/" enctype="multipart/form-data" method="post" id="avatar">
 <div class="article">
  <div class="title">
@@ -240,21 +241,6 @@
  <input class="button" type="submit" name="submit" value="{submit}" />
 </div>
 </form>
-
-<script src="{site}/javascript/avatar.js"></script>
-<script>
-function noavatar() // Fix bug introduced when the avatar JS was moved to an external file.
-{
-   image = document.images['current_avatar'];
-   image.onerror = "";
-   image.src = './skins/{skin}/images/noavatar.png';
-   image.height = 50;
-   image.width = 50;
-   document.forms['avatar'].user_avatar_width.value = 50;
-   document.forms['avatar'].user_avatar_height.value = 50;
-}
-enable('{init}');
-</script>
 <!-- END: EditAvatar -->
 
 <!-- BEGIN: EditSubs -->
@@ -302,10 +288,9 @@ enable('{init}');
   {smilies}
  </span>
  <span class="form">
-  <script src="{site}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea name="sig" id="bbcode" rows="8" cols="10">{edit}</textarea>
-  <script>textarea = bbcodeInit("bbcode");</script>
+  <textarea name="sig" id="bbcode_textbox" rows="8" cols="10">{edit}</textarea>
  </span>
 
  <br /><br />

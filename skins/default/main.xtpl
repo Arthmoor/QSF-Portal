@@ -1,4 +1,5 @@
 <!-- BEGIN: Main -->
+    <script src="{site}/javascript/newspost.js"></script>
     <div class="article">
      <div class="title" style="text-align:center">
       <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />

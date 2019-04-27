@@ -116,7 +116,7 @@ class file_perms extends admin
 			}
 
 			$out = "
-			<script src='../javascript/permissions.js'></script>
+			<script src='$this->site/javascript/permissions.js' async defer></script>
 
 			<form id='form' action='$this->site/admincp/index.php?a=file_perms$link' method='post'>
 			<div class='article'><div class='title'><img src='$this->site/skins/$this->skin/images/icons/downloads.png' alt='' /> File Permissions For $label</div>";

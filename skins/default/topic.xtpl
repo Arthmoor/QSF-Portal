@@ -198,23 +198,15 @@
 <!-- END: LockedBottom -->
 <!-- BEGIN: ReplyBottom -->
  <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" title="{topic_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="quick_reply" id="quick_reply" title="{topic_quickreply}">{topic_quickreply}</a></div>
 <!-- END: ReplyBottom -->
-
-<!-- BEGIN: QuickReplyScript -->
- <script>
-  function toggleQuickReplyButton()
-  {
-   document.write('<div class="bigbutton"><a class="quick_reply" href="javascript:toggleQuickReplyBox();" title="{topic_quickreply}">{topic_quickreply}</a></div>');
-  } toggleQuickReplyButton();
- </script>
-<!-- END: QuickReplyScript -->
  <p></p>
 </div>
 
 <!-- BEGIN: QuickReplyBox -->
-<div class="quickreply">
-<script src="{site}/javascript/postboxplain.js"></script>
-<form action="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" method="post" id="mbpost">
+<script src="{site}/javascript/quickreply.js" async defer></script>
+<div class="quickreply" id="quickreplyform">
+<form action="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" method="post">
 <div class="article">
  <div class="title">
   <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
@@ -228,8 +220,9 @@
   {smilies}
  </span>
  <span class="form">
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea name="post" id="bbcodequick" rows="8" cols="75"></textarea>
+  <textarea name="post" id="bbcode_textbox" rows="8" cols="75"></textarea>
  </span>
  <p class="line"></p>
 
@@ -243,26 +236,6 @@
  <input type="submit" name="preview" value="{post_preview}" />
 </div>
 </form>
-
-<script>
- /* Quick Reply Box Toggle JavaScript */
- var textareaInit = 0;
- var toggleQuickReplyBoxStatus = 0;
- var quickReplyBox = document.getElementById( 'mbpost' );
- var textarea = bbcodeInit( 'bbcodequick' );
- quickReplyBox.style.display = 'none';
-
- function toggleQuickReplyBox()
- {
-  if( toggleQuickReplyBoxStatus == 0 ) {
-   quickReplyBox.style.display = 'inline';
-   toggleQuickReplyBoxStatus = 1;
-  } else {
-   quickReplyBox.style.display = 'none';
-   toggleQuickReplyBoxStatus = 0;
-  }
- }
-</script>
 </div>
 <!-- END: QuickReplyBox -->
 <!-- END: Topic -->

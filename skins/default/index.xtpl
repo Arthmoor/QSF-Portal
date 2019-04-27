@@ -10,6 +10,7 @@
   {feed_links}
   {mobile_icons}
   <script src="{qsf_site}/javascript/utils.js" async defer></script>
+  <script src="{qsf_site}/javascript/spoilerlib.js" async defer></script>
  </head>
 
  <body>

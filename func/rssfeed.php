@@ -137,6 +137,7 @@ class rssfeed extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
+		$xtpl->assign( 'atom_url', $this->site . '/index.php?a=rssfeed' );
 		$xtpl->assign( 'title', htmlspecialchars( $this->sets['rss_feed_title'] ) );
 		$xtpl->assign( 'link', $this->link );
 		$xtpl->assign( 'description', htmlspecialchars( $this->sets['rss_feed_desc'] ) );
@@ -172,6 +173,7 @@ class rssfeed extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
+		$xtpl->assign( 'atom_url', $this->site . '/index.php?a=rssfeed&amp;f=' . $forum );
 		$rss_title_block = htmlspecialchars( $this->sets['rss_feed_title'] . ' - ' . $this->lang->rssfeed_forum . ' ' . $exists['forum_name'] );
 		$xtpl->assign( 'title', $rss_title_block );
 
@@ -225,6 +227,7 @@ class rssfeed extends qsfglobal
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
+		$xtpl->assign( 'atom_url', $this->site . '/index.php?a=rssfeed&amp;t=' . $topic );
 		$title = "{$this->sets['rss_feed_title']} - {$this->lang->rssfeed_topic} {$topicdata['topic_title']}";
 		$xtpl->assign( 'title', htmlspecialchars( $title ) );
 
@@ -324,6 +327,7 @@ class rssfeed extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
+			$xtpl->assign( 'atom_url', $this->site . '/index.php?a=rssfeed&amp;files=1' );
 			$xtpl->assign( 'title', htmlspecialchars( $this->sets['rss_feed_title'] ) );
 
 			$xtpl->assign( 'link', $this->link );

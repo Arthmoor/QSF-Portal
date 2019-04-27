@@ -547,7 +547,7 @@ class post extends qsfglobal
 			if( !isset( $this->post['parseCode'] ) ) $this->post['parseCode'] = 0;
 			if( !isset( $this->post['parseEmot'] ) ) $this->post['parseEmot'] = 0;
 
-			if( ( $s == 'topic' ) || ( $s == 'poll' ) ) {
+			if( $s == 'topic' || $s == 'poll' ) {
 				$mode = 0;
 
 				if( $this->perms->auth( 'topic_global') && isset( $this->post['global_topic'] ) ) {
@@ -749,7 +749,11 @@ class post extends qsfglobal
 			if( isset( $this->post['request_uri'] ) ) {
 				header( 'Location: ' . $this->post['request_uri'] );
 			} else {
-				$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
+				$topic_link = null;
+				if( $s == 'topic' || $s == 'poll' )
+					$topic_link = $this->htmlwidgets->clean_url( $this->post['title'] );
+				else
+					$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 				header( "Location: {$this->site}/topic/{$topic_link}-{$t}/&p={$post_id}#p{$post_id}" );
 			}
 		}

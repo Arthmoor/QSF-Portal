@@ -12,8 +12,9 @@
 <!-- END: RSSFeedError -->
 
 <!-- BEGIN: RSSFeedFull -->
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
  <channel>
+  <atom:link href="{atom_url}" rel="self" type="application/rss+xml" />
   <title>{title}</title>
   <link>{link}</link>
   <description>{description}</description>
@@ -36,8 +37,9 @@
 <!-- END: RSSFeedFull -->
 
 <!-- BEGIN: RSSFeedForum -->
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
  <channel>
+  <atom:link href="{atom_url}" rel="self" type="application/rss+xml" />
   <title>{title}</title>
   <link>{link}</link>
   <description>{description}</description>
@@ -60,8 +62,9 @@
 <!-- END: RSSFeedForum -->
 
 <!-- BEGIN: RSSFeedTopic -->
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
  <channel>
+  <atom:link href="{atom_url}" rel="self" type="application/rss+xml" />
   <title>{title}</title>
   <link>{link}</link>
   <description>{description}</description>
@@ -84,8 +87,9 @@
 <!-- END: RSSFeedTopic -->
 
 <!-- BEGIN: RSSFeedFile -->
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
  <channel>
+  <atom:link href="{atom_url}" rel="self" type="application/rss+xml" />
   <title>{title}</title>
   <link>{link}</link>
   <description>{description}</description>

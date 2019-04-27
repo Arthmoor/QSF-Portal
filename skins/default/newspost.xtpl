@@ -67,7 +67,6 @@
 
 <!-- BEGIN: CommentForm -->
  <div class="article">
-  <script src="{site}/javascript/postboxplain.js"></script>
   <form action="{site}/index.php?a=post&amp;s=reply&amp;t={t}" method="post" id="mbpost">
    <div class="title">{newspost_post_comment}</div>
 
@@ -75,9 +74,9 @@
     {smilies}
    </span>
    <span class="form">
+    <script src="{site}/javascript/postboxplain.js" async defer></script>
     {bbcode_menu}
-    <textarea class="input" name="post" id="bbcode" rows="8" cols="10"></textarea>
-    <script>textarea = bbcodeInit("bbcode");</script>
+    <textarea class="input" name="post" id="bbcode_textbox" rows="8" cols="10"></textarea>
    </span>
    <p class="line"></p>
 

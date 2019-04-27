@@ -409,6 +409,7 @@ class topic extends qsfglobal
 
 		if( $can_reply ) {
 			$xtpl->assign( 'topic_reply', $this->lang->topic_reply );
+			$xtpl->assign( 'topic_quickreply', $this->lang->topic_quickreply );
 
 			$xtpl->parse( 'Topic.ReplyTop' );
 			$xtpl->parse( 'Topic.ReplyBottom' );
@@ -719,7 +720,6 @@ class topic extends qsfglobal
 		if( $can_reply ) {
 			$this->lang->post();
 
-			$xtpl->assign( 'topic_quickreply', $this->lang->topic_quickreply );
 			$xtpl->assign( 'post_msg', $this->lang->post_msg );
 			$xtpl->assign( 'post_option_emojis', $this->lang->post_option_emojis );
 			$xtpl->assign( 'post_option_bbcode', $this->lang->post_option_bbcode );
@@ -728,7 +728,6 @@ class topic extends qsfglobal
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
 			$xtpl->assign( 'smilies', $this->bbcode->generate_emoji_links() );
 
-			$xtpl->parse( 'Topic.QuickReplyScript' );
 			$xtpl->parse( 'Topic.QuickReplyBox' );
 		}
 

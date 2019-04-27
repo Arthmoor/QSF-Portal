@@ -135,7 +135,8 @@
 
 <div class="article">
  <span class="right">
-  <select onchange="get_forum(this,'{site}')">
+  <script src="{site}/javascript/forum.js" async defer></script>
+  <select id="forum_jump">
    {forumjump}
   </select>
  </span>

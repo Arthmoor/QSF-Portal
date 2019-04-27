@@ -59,7 +59,7 @@ class bbcode
 		$links = '';
 
 		foreach( $this->emojis['click_replacement'] as $key => $value )
-			$links .= '<a href="#" onclick="return insertSmiley(\'' . $key . '\', textarea)">' . $value . '</a>';
+			$links .= "<a href=\"#\" class=\"clickable_emoji\" name=\"{$key}\">{$value}</a>";
 
 		return $links;
 	}
@@ -167,7 +167,7 @@ class bbcode
 			'/\\[c\\]/isU',
 			 );
 		$replace = array(
-//			'<details><summary><strong>' . $this->lang->spoiler . ':</strong></summary><br />$1</details>',
+//			'<details class="spoilerbox"><summary class="spoiler"><strong>' . $this->lang->spoiler . ':</strong></summary><br />$1</details>',
 			'<div class="spoilerbox"><strong>' . $this->lang->spoiler . ':</strong><div class="spoiler">$1</div></div>',
 			'<strong>$1</strong>',
 			'<em>$1</em>',
@@ -359,9 +359,9 @@ class bbcode
 
 			// Check if the URL is external.
 			if( ( strpos( $url, $forumURLBase ) === false ) ) {
-				return '<a href="' . $url . '" onclick="window.open(this.href, \'_blank\'); return false;">' . $text . '</a>';
+				return "<a href=\"{$url}\" target=\"_blank\">{$text}</a>";
 			} else {
-				return '<a href="' . $url . '">' . $text . '</a>';
+				return "<a href=\"{$url}\">{$text}</a>";
 			}
 		}
 

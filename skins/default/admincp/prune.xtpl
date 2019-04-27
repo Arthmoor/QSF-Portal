@@ -44,7 +44,8 @@
   <p class="line"></p>
 <!-- END: Topic -->
 
-  <input type="button" value="{select_all}" onclick="return select_all_boxes();" />
+  <script src="{site}/javascript/prune.js"></script>
+  <input type="button" value="{select_all}" id="prune_select_all" />
   <p class="line"></p>
 
   <span class="field">{prune_action}</span>

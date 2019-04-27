@@ -16,7 +16,8 @@
   {delcat}
   {admin}
  <br />
- <select class="select" onchange="get_filecat(this,'{site}')">
+ <script src="{site}/javascript/files.js" async defer></script>
+ <select class="select" id="file_jump">
   {filejump}
  </select>
  <input type="text" name="query" />
@@ -69,10 +70,9 @@
 
  <span class="field">{files_desc}:</span>
  <span class="form">
-  <script src="{site}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{file_description}</textarea>
-  <script>textarea = bbcodeInit("bbcode");</script>
+  <textarea class="input" name="file_description" id="bbcode_textbox" rows="10" cols="60">{file_description}</textarea>
  </span>
  <p class="line"></p>
 
@@ -230,10 +230,9 @@
 
  <span class="field">{files_desc}:</span>
  <span class="form">
-  <script src="{site}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60">{desc}</textarea>
-  <script>textarea = bbcodeInit("bbcode");</script>
+  <textarea class="input" name="file_description" id="bbcode_textbox" rows="10" cols="60">{desc}</textarea>
  </span>
  <p class="line"></p>
 
@@ -273,10 +272,9 @@
 
  <span class="field">{files_desc}:</span>
  <span class="form">
-  <script src="{site}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea class="input" name="file_description" id="bbcode" rows="10" cols="60"></textarea>
-  <script>textarea = bbcodeInit("bbcode");</script>
+  <textarea class="input" name="file_description" id="bbcode_textbox" rows="10" cols="60"></textarea>
  </span>
  <p class="line"></p>
 

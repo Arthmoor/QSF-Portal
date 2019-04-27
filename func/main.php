@@ -134,7 +134,7 @@ class main extends qsfglobal
 
 		// Make simple links to the rest.
 		if( $x == 5 ) {
-			$items .= "<select class=\"select\" onchange=\"get_newspost(this,'{$this->site}')\">";
+			$items .= "<select class=\"select\" id=\"newspost_select\">";
 			$items .= "<option value=\"\">{$this->lang->news_previous}</option>";
 			while( $row = $this->db->nqfetch( $result ) )
 			{

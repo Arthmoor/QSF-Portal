@@ -57,7 +57,8 @@
 
 <div class="article">
  <span class="right">
-  <select onchange="get_forum(this,'{site}')">
+  <script src="{site}/javascript/recent.js" async defer></script>
+  <select id="recent_jump">
    {forumjump}
   </select>
  </span>

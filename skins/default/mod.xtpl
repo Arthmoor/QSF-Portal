@@ -92,10 +92,9 @@
   {smilies}
  </span>
  <span class="form">
-  <script src="{site}/javascript/postboxplain.js"></script>
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
   {bbcode_menu}
-  <textarea name="post" id="bbcode" rows="12" cols="60">{quote}</textarea>
-  <script>textarea = bbcodeInit("bbcode");</script>
+  <textarea name="post" id="bbcode_textbox" rows="12" cols="60">{quote}</textarea>
  </span>
  <p class="line"></p>
 

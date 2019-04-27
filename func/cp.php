@@ -682,7 +682,8 @@ class cp extends qsfglobal
 				}
 
 				// Get extension
-				$fileExtension  = array_pop( explode( '.',  $this->files['avatar_upload']['name'] ) );
+				$tmp = explode( '.',  $this->files['avatar_upload']['name'] );
+				$fileExtension  = array_pop( $tmp );
 				if( !in_array( $fileExtension, $this->fileExtensions ) ) {
 					return $this->message( $this->lang->cp_label_edit_avatar, $this->lang->cp_avatar_upload_not_image );
 				}

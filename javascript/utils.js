@@ -90,27 +90,3 @@ function select_all_groups()
     opts[i].selected = true;
   }
 }
-
-function get_forum(select,link)
-{
-  if(select.value.substring(0, 1) == '.'){
-    self.location.href = link + '/board/category/' + select.value.substring(1, select.value.length);
-  }else{
-    self.location.href = link + '/forum/' + select.value;
-  }
-}
-
-function get_folder(select,link)
-{
-  self.location.href = link + '?a=pm&f=' + select.value;
-}
-
-function get_filecat(select,link)
-{
-   self.location.href = link + '/files/category/' + select.value;
-}
-
-function get_newspost(select,link)
-{
-   self.location.href = link + '/newspost/' + select.value;
-}

@@ -41,6 +41,17 @@ function enable(what)
   }
 }
 
+function noavatar( )
+{
+  image = document.images['current_avatar'];
+  image.onerror = '';
+  image.src = '../skins/default/images/noavatar.png';
+  image.height = 64;
+  image.width = 64;
+  document.forms['avatar'].user_avatar_width.value = 64;
+  document.forms['avatar'].user_avatar_height.value = 64;
+}
+
 function set_local_avatar(url)
 {
   if(document.images){
@@ -57,17 +68,6 @@ function set_local_avatar(url)
       }
     }
   }
-}
-
-function noavatar( )
-{
-  image = document.images['current_avatar'];
-  image.onerror = '';
-  image.src = '../skins/default/images/noavatar.png';
-  image.height = 64;
-  image.width = 64;
-  document.forms['avatar'].user_avatar_width.value = 64;
-  document.forms['avatar'].user_avatar_height.value = 64;
 }
 
 function check(i)
@@ -127,4 +127,11 @@ function initAvatarPage()
 	};
 }
 
-addLoadEvent(initAvatarPage);
+function avatar_ready(triggerEvents) {
+    if (document.readyState != "loading") return triggerEvents();
+    document.addEventListener("DOMContentLoaded", triggerEvents);
+}
+
+avatar_ready(function () {
+  initAvatarPage();
+})
