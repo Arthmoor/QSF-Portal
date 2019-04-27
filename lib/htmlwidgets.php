@@ -536,7 +536,7 @@ class htmlwidgets extends forumutils
 			$link = $this->clean_url( $val['forum_name'] );
 
 			// Ugly hack time!
-			if( $this->qsf->get['a'] == 'prune' ) {
+			if( $this->qsf->get['a'] == 'prune' || $this->qsf->get['a'] == 'search' ) {
 				$return .= "<option value=\"{$dot}{$val['forum_id']}\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
 				$this->_select_forums_recurse( $array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 			} else {

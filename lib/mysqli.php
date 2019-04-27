@@ -102,7 +102,7 @@ class db_mysqli extends database
 		if( is_array( $query ) ) {
 			$args = $query; // only use arg 1
 		} else {
-			$args  = func_get_args();
+			$args = func_get_args();
 		}
 
 		$query = $this->_format_query( $args );

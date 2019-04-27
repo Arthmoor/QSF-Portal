@@ -69,7 +69,7 @@ class search extends qsfglobal
 	{
 		$this->tree( $this->lang->search_search );
 
-		$select = !isset( $this->get['f'] ) ? -1 : $this->get['f'];
+		$select = !isset( $this->get['f'] ) ? -1 : intval( $this->get['f'] );
 		$forum_options = $this->htmlwidgets->select_forums( $select );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/search.xtpl' );
@@ -227,6 +227,22 @@ class search extends qsfglobal
 
 			if( $this->post['searchtype'] == 'match' ) {
 				$type = 'fulltext';
+			} else {
+				$type = 'normal';
+
+				if( $this->post['searchtype'] != 'regex' ) {
+					$this->post['query'] = preg_split( '/[^a-zA-Z0-9_\']/', $this->post['query'], -1, PREG_SPLIT_NO_EMPTY );
+					$size = count( $this->post['query'] );
+
+					for( $i = 0; $i < $size; $i++ )
+					{
+						if( strlen( $this->post['query'][$i] ) < 4 ) {
+							unset( $this->post['query'][$i] );
+						}
+					}
+
+					$this->post['query'] = implode( ' ', $this->post['query'] );
+				}
 			}
 
 			if( trim( $this->post['query'] ) == '' ) {
@@ -286,7 +302,7 @@ class search extends qsfglobal
 		}
 
 		if( $type != 'id' ) {
-			$this->post['limit_chars'] = intval($this->post['limit_chars']);
+			$this->post['limit_chars'] = intval( $this->post['limit_chars'] );
 
 			// Limit forums being searched
 			if( $this->post['forums'] ) {
@@ -328,8 +344,8 @@ class search extends qsfglobal
 			$sql .= ' ORDER BY p.post_time DESC';
 		}
 
-		$this->get['min'] = isset($this->get['min']) ? intval($this->get['min']) : 0;
-		$this->get['num'] = isset($this->get['num']) ? intval($this->get['num']) : 10;
+		$this->get['min'] = isset( $this->get['min'] ) ? intval( $this->get['min'] ) : 0;
+		$this->get['num'] = isset( $this->get['num'] ) ? intval( $this->get['num'] ) : 10;
 
 		if( $type == 'id' ) {
 			$url = "id={$this->get['id']}";
@@ -351,13 +367,14 @@ class search extends qsfglobal
 		$pages_sql = $sql_data;
 		array_unshift( $pages_sql, $sql );
 
-		$pages = $this->htmlwidgets->get_pages( $pages_sql, "a=search&amp;$url", $this->get['min'], $this->get['num'] );
+		$pages = $this->htmlwidgets->get_pages( $pages_sql, "index.php?a=search&amp;$url", $this->get['min'], $this->get['num'] );
 
 		$sql .= " LIMIT %d, %d";
 		$sql_data[] = $this->get['min'];
 		$sql_data[] = $this->get['num'];
 
 		array_unshift( $sql_data, $sql );
+
 		$query = $this->db->query( $sql_data );
 
 		$results = false;

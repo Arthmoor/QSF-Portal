@@ -749,6 +749,7 @@ class post extends qsfglobal
 			if( isset( $this->post['request_uri'] ) ) {
 				header( 'Location: ' . $this->post['request_uri'] );
 			} else {
+				$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 				header( "Location: {$this->site}/topic/{$topic_link}-{$t}/&p={$post_id}#p{$post_id}" );
 			}
 		}
