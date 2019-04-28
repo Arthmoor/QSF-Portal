@@ -92,7 +92,7 @@ class recent extends qsfglobal
 
 		$pagelinks = $this->htmlwidgets->get_pages( $topicCount, 'a=recent', $min, $n );
 
-		$forumjump = $this->htmlwidgets->select_forums( 0, 0, null, true );
+		$forumjump = $this->htmlwidgets->select_forums( false, 0, 0, null, true );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/recent.xtpl' );
 

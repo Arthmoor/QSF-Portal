@@ -70,7 +70,7 @@ class search extends qsfglobal
 		$this->tree( $this->lang->search_search );
 
 		$select = !isset( $this->get['f'] ) ? -1 : intval( $this->get['f'] );
-		$forum_options = $this->htmlwidgets->select_forums( $select );
+		$forum_options = $this->htmlwidgets->select_forums( false, $select );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/search.xtpl' );
 

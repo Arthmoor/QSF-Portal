@@ -79,7 +79,7 @@ class forums extends admin
 					}
 					return $this->EditForum( $id );
 				} else {
-					$forum = $this->htmlwidgets->select_forums( $f['forum_parent'] );
+					$forum = $this->htmlwidgets->select_forums( true, $f['forum_parent'] );
 
 					$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/forums.xtpl' );
 
@@ -177,7 +177,7 @@ class forums extends admin
 
 				return $this->message( $this->lang->forum_create, $this->AddForum() );
 			} else {
-				$select = $this->htmlwidgets->select_forums();
+				$select = $this->htmlwidgets->select_forums( true );
 
 				if( $forums_exist['count'] ) {
 					$quickperms = $select;

@@ -144,7 +144,7 @@ class forum extends qsfglobal
 
 		$link_name = $this->htmlwidgets->clean_url( $exists['forum_name'] );
 		$pagelinks = $this->htmlwidgets->get_pages( $topic['count'], "forum/{$link_name}-{$f}/&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
-		$forumjump = $this->htmlwidgets->select_forums( $f, 0, null, true );
+		$forumjump = $this->htmlwidgets->select_forums( false, $f, 0, null, true );
 
 		$can_post = false;
 		if( $this->perms->auth( 'topic_create', $exists['forum_id'] ) ) {

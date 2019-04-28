@@ -155,7 +155,7 @@ class mod extends qsfglobal
 		}
 
 		if( !isset($this->post['submit'] ) ) {
-			$forumlist = $this->htmlwidgets->select_forums( $topic['topic_forum'] );
+			$forumlist = $this->htmlwidgets->select_forums( false, $topic['topic_forum'] );
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 

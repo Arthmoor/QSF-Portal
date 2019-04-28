@@ -121,7 +121,7 @@ class files extends qsfglobal
 		}
 		$xtpl->assign( 'admin', $admin );
 
-		$filejump = $this->get_categories( $cid );
+		$filejump = $this->get_categories( $cid, false );
 		$xtpl->assign( 'filejump', $filejump );
 
 		$xtpl->assign( 'main_search', $this->lang->main_search );
@@ -279,7 +279,7 @@ class files extends qsfglobal
 				$$key = $value;
 
 			$tree = $this->get_filetree( $file_catid, true );
-			$list = $this->get_categories( $file_catid );
+			$list = $this->get_categories( $file_catid, true );
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 			$filesize = $this->format_filesize( $file_size );
 			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE );
@@ -346,7 +346,7 @@ class files extends qsfglobal
 		}
 
 		if( !isset( $this->post['submit'] ) ) {
-			$list = $this->get_categories( $file['file_catid'] );
+			$list = $this->get_categories( $file['file_catid'], true );
 			$move_file = sprintf( $this->lang->files_move_category, "<strong>{$file['file_name']}</strong>" );
 
 			$xtpl->assign( 'files_move_file', $this->lang->files_move_file );
@@ -571,7 +571,7 @@ class files extends qsfglobal
 
 		if( !isset( $this->post['submit'] ) ) {
 			$cat = $this->db->fetch( 'SELECT fcat_name, fcat_parent, fcat_description FROM %pfile_categories WHERE fcat_id=%d', $cid );
-			$list = $this->get_categories( $cat['fcat_parent'] );
+			$list = $this->get_categories( $cat['fcat_parent'], true );
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'cid', $cid );
@@ -640,7 +640,7 @@ class files extends qsfglobal
 		}
 
 		if( !isset( $this->post['submit'] ) ) {
-			$list = $this->get_categories( $cid );
+			$list = $this->get_categories( $cid, true );
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'files_delete_cat', $this->lang->files_delete_cat );
@@ -713,7 +713,7 @@ class files extends qsfglobal
 		}
 
 		if( !isset( $this->post['submit'] ) ) {
-			$list = $this->get_categories( $cid );
+			$list = $this->get_categories( $cid, true );
 			$cats_exist = $this->db->fetch( 'SELECT COUNT(fcat_id) AS count FROM %pfile_categories' );
 
 			if( $cats_exist['count'] ) {
@@ -797,7 +797,7 @@ class files extends qsfglobal
 					foreach( $perms->standard as $perm => $false )
 					{
 						if( !isset( $perms->globals[$perm] ) ) {
-							$perms->set_xyz( $perm, $newid, $perms->auth($perm, $this->post['sync'] ) );
+							$perms->set_xyz( $perm, $newid, $perms->auth( $perm, $this->post['sync'] ) );
 						}
 					}
 				}
@@ -1868,7 +1868,7 @@ class files extends qsfglobal
 	 * Grabs a list of all file categories, sorted by the longpath.
 	 * Used in various dialogues for easier category selections.
 	 */
-	private function get_categories( $cid )
+	private function get_categories( $cid, $num_select )
 	{
 		$list = '';
 
@@ -1885,7 +1885,10 @@ class files extends qsfglobal
 			if( !$this->file_perms->auth( 'category_view', $cat['fcat_id'] ) )
 				continue;
 
-			$list .= "<option value=\"{$cat['fcat_id']}/\"{$selected}>{$cat['fcat_longpath']}</option>\n";
+			if( $num_select )
+				$list .= "<option value=\"{$cat['fcat_id']}\"{$selected}>{$cat['fcat_longpath']}</option>\n";
+			else
+				$list .= "<option value=\"{$cat['fcat_id']}/\"{$selected}>{$cat['fcat_longpath']}</option>\n";
 		}
 		return $list;
 	}

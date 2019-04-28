@@ -568,15 +568,15 @@ Have fun and enjoy your new site!";
 				An administrator account was registered.<br />";
 				echo "Click here to download your settings.php file. You must put this file on the webhost before the board is ready to use<br/>\n";
 				echo "<form action=\"{$this->self}?mode=new_install&amp;step=3\" method=\"post\">\n
-					<input type=\"hidden\" name=\"db_host\" value=\"" . htmlspecialchars($this->post['db_host']) . "\" />\n
-					<input type=\"hidden\" name=\"db_name\" value=\"" . htmlspecialchars($this->post['db_name']) . "\" />\n
-					<input type=\"hidden\" name=\"db_user\" value=\"" . htmlspecialchars($this->post['db_user']) . "\" />\n
-					<input type=\"hidden\" name=\"db_pass\" value=\"" . htmlspecialchars($this->post['db_pass']) . "\" />\n
-					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars($this->post['db_port']) . "\" />\n
-					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars($this->post['db_socket']) . "\" />\n
-					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars($this->post['prefix']) . "\" />\n
-					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars($this->post['db_type']) . "\" />\n
-					<input type=\"hidden\" name=\"admin_email\" value=\"" . htmlspecialchars($this->post['admin_email']) . "\" />\n
+					<input type=\"hidden\" name=\"db_host\" value=\"" . htmlspecialchars( $this->post['db_host'] ) . "\" />\n
+					<input type=\"hidden\" name=\"db_name\" value=\"" . htmlspecialchars( $this->post['db_name'] ) . "\" />\n
+					<input type=\"hidden\" name=\"db_user\" value=\"" . htmlspecialchars( $this->post['db_user'] ) . "\" />\n
+					<input type=\"hidden\" name=\"db_pass\" value=\"" . htmlspecialchars( $this->post['db_pass'] ) . "\" />\n
+					<input type=\"hidden\" name=\"db_port\" value=\"" . htmlspecialchars( $this->post['db_port'] ) . "\" />\n
+					<input type=\"hidden\" name=\"db_socket\" value=\"" . htmlspecialchars( $this->post['db_socket'] ) . "\" />\n
+					<input type=\"hidden\" name=\"prefix\" value=\"" . htmlspecialchars( $this->post['prefix'] ) . "\" />\n
+					<input type=\"hidden\" name=\"dbtype\" value=\"" . htmlspecialchars( $this->post['db_type'] ) . "\" />\n
+					<input type=\"hidden\" name=\"admin_email\" value=\"" . htmlspecialchars( $this->post['admin_email'] ) . "\" />\n
 					<input type=\"submit\" value=\"Download settings.php\" />
 					</form>
 					<br/>\n
@@ -584,7 +584,7 @@ Have fun and enjoy your new site!";
 					<a href='../index.php'>Go to your board.</a>
 					 ";
 			} else {
-				echo "Congratulations! Your portal has been installed.<br />
+				echo "Congratulations! Your site has been installed.<br />
 				An administrator account was registered.<br /><br />
 				<span style='color:yellow; font-weight:bold;'>REMEMBER TO DELETE THE INSTALL DIRECTORY!</span><br /><br />
 				<a href='../index.php'>Go to your site.</a>";

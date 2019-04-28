@@ -40,7 +40,7 @@ class prune extends admin
 			$token = $this->generate_token();
 
 			// Stage 1
-			$forum_options = $this->htmlwidgets->select_forums( -1, 0 );
+			$forum_options = $this->htmlwidgets->select_forums( true, -1, 0 );
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/prune.xtpl' );
 
@@ -108,7 +108,7 @@ class prune extends admin
 				$topicCount++;
 			}
 
-			$movetoForum = $this->htmlwidgets->select_forums( 0, 0, null, false );
+			$movetoForum = $this->htmlwidgets->select_forums( true, 0, 0, null, false );
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );

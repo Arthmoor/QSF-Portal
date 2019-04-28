@@ -488,11 +488,11 @@ class htmlwidgets extends forumutils
 	 * @param bool $identify_category Set to true to place a period before the value of a category
 	 * @return string Options for an HTML select box (all forums in correct order)
 	 **/
-	public function select_forums( $select = 0, $parent = 0, $space = '', $identify_category = false )
+	public function select_forums( $num_select, $select = 0, $parent = 0, $space = '', $identify_category = false )
 	{
 		$array = $this->forum_grab();
 
-		return $this->_select_forums_recurse( $array, $select, $parent, $space, $identify_category );
+		return $this->_select_forums_recurse( $array, $num_select, $select, $parent, $space, $identify_category );
 	}
 
 	/**
@@ -509,7 +509,7 @@ class htmlwidgets extends forumutils
 	 * @since Beta 4.0
 	 * @return string Options for an HTML select box (all forums in correct order)
 	 **/
-	private function _select_forums_recurse( $array, $select, $parent, $space, $identify_category = false )
+	private function _select_forums_recurse( $array, $num_select, $select, $parent, $space, $identify_category = false )
 	{
 		$arr = $this->forum_array( $array, $parent );
 
@@ -536,12 +536,12 @@ class htmlwidgets extends forumutils
 			$link = $this->clean_url( $val['forum_name'] );
 
 			// Ugly hack time!
-			if( $this->qsf->get['a'] == 'prune' || $this->qsf->get['a'] == 'search' ) {
+			if( $num_select ) {
 				$return .= "<option value=\"{$dot}{$val['forum_id']}\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
-				$this->_select_forums_recurse( $array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
+				$this->_select_forums_recurse( $array, true, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 			} else {
 				$return .= "<option value=\"{$dot}{$link}-{$val['forum_id']}/\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
-				$this->_select_forums_recurse( $array, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
+				$this->_select_forums_recurse( $array, false, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 			}
 		}
 
