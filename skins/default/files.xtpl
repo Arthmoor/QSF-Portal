@@ -533,21 +533,9 @@
  <div class="title" style="text-align:center">{files_comment_user}: {file_name}</div>
 <!-- BEGIN: Item -->
  <div><strong>{board_by}: {user_name}</strong></div>
- <span class="postbit_top"></span>
- <div class="rounded_top" style="background-position:35px 0px;">
-  <span class="one"></span>
-  <span class="two"></span>
-  <span class="three"></span>
-  <span class="four"></span>
- </div>
- <div class="postbit">
+ <div class="post_triangle">&nbsp;</div>
+ <div class="rounded_box">
   {text}
- </div>
- <div class="rounded_bottom">
- <span class="one">&nbsp;</span>
-  <span class="two">&nbsp;</span>
-  <span class="three">&nbsp;</span>
-  <span class="four">&nbsp;</span>
  </div>
  <br />
 <!-- END: Item -->

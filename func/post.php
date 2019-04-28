@@ -300,9 +300,6 @@ class post extends qsfglobal
 					$xtpl->parse( 'Post.Preview.PosterMember' );
 				}
 
-				$avatar_center = ( $this->user['user_avatar_width'] ? ( ( $this->user['user_avatar_width'] / 2 ) - 3 ) : 22 );
-				$xtpl->assign( 'avatar_center', $avatar_center );
-
 				if( $this->post['attached_data'] ) {
 					$this->lang->topic();
 

@@ -127,25 +127,11 @@
   <span class="text">{pm_joined}</span>{user_joined}
  </span>
  <p></p>
- <span class="postbit_top"></span>
- <div class="rounded_top" style="background-position:{avatar_center}px 0px;">
-  <span class="one"></span>
-  <span class="two"></span>
-  <span class="three"></span>
-  <span class="four"></span>
- </div>
-
- <div class="postbit">
+ <div class="post_triangle">&nbsp;</div>
+ <div class="rounded_box">
   {recipients}{pm_message}<br />
   <div class="signature">{user_signature}</div><hr />
   <div>{pm_sendon} {pm_time}</div>
- </div>
-
- <div class="rounded_bottom">
-  <span class="one">&nbsp;</span>
-  <span class="two">&nbsp;</span>
-  <span class="three">&nbsp;</span>
-  <span class="four">&nbsp;</span>
  </div>
  <p></p>
 </div>

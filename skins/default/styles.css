@@ -81,37 +81,17 @@ textarea {
 	width: 400px;
 }
 
-/* Rounding */
-#container .rounded_top span,
-#container .rounded_bottom span {
-	height: 1px;
-	display: block;
-	overflow: hidden;
+/* Rounded Boxes */
+#container .rounded_box {
+	border-radius: 10px;
+	border: 1px solid #3e3e3e;
+	background: #292929;
+	padding: 2px 5px;
 }
-#container .rounded_top span.one, 
-#container .rounded_bottom span.four {
-	margin: 0px 4px;
-	height: 0px;
-	border-top: 1px solid #3e3e3e;
-}
-#container .rounded_top span.two, 
-#container .rounded_bottom span.three {
-	margin: 0px 3px;
-	border-left: 1px solid #3e3e3e;
-	border-right: 1px solid #3e3e3e;
-}
-#container .rounded_top span.three, 
-#container .rounded_bottom span.two {
-	margin: 0px 2px;
-	border-left: 1px solid #3e3e3e;
-	border-right: 1px solid #3e3e3e;
-}
-#container .rounded_top span.four, 
-#container .rounded_bottom span.one {
-	height: 2px;
-	margin: 0px 1px;
-	border-left: 1px solid #3e3e3e;
-	border-right: 1px solid #3e3e3e;
+.article .post_triangle {
+	background: url("./images/postbit_lip.png") no-repeat;
+	background-position:22px 8px;
+	margin-top:-8px;
 }
 
 /* Blocks */

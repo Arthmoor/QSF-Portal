@@ -159,10 +159,6 @@ class profile extends qsfglobal
 		$xtpl->assign( 'user_joined', $user_joined );
 
 		if( $profile['user_signature'] != $this->lang->profile_none || $profile['user_interests'] ) {
-			$avatar_center = ( $profile['user_avatar_width'] ? ( ( $profile['user_avatar_width'] / 2 ) - 3 ) : 22 );
-
-			$xtpl->assign( 'avatar_center', $avatar_center );
-
 			$xtpl->parse( 'Profile.SigBlockHeader' );
 		}
 

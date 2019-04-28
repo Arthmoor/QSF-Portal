@@ -430,9 +430,6 @@ class pm extends qsfglobal
 		$xtpl->assign( 'pm_joined', $this->lang->pm_joined );
 		$xtpl->assign( 'user_joined', $pm['user_joined'] );
 
-		$avatar_center = ( $pm['user_avatar_width'] ? ( ( $pm['user_avatar_width'] / 2 ) - 3 ) : 22 );
-		$xtpl->assign( 'avatar_center', $avatar_center );
-
 		if( $recipients )
 			$xtpl->assign( 'recipients', "{$this->lang->pm_recipients}: {$recipients}<hr />" );
 

@@ -518,9 +518,6 @@ class search extends qsfglobal
 						$xtpl->parse( 'Results.Entry.Post.PosterInfoGuest' );
 					}
 
-					$avatar_center = ( $match['user_avatar_width'] ? ( ( $match['user_avatar_width'] / 2 ) - 3 ) : 22 );
-					$xtpl->assign( 'avatar_center', $avatar_center );
-
 					$xtpl->assign( 'post_text', $match['post_text'] );
 					$xtpl->assign( 'score', $match['score'] );
 					$xtpl->assign( 'post_time', $match['post_time'] );

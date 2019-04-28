@@ -376,9 +376,6 @@ class mod extends qsfglobal
 					$xtpl->parse( 'ModEditPost.Preview.PosterMember' );
 				}
 
-				$avatar_center = ( $data['user_avatar_width'] ? ( ( $data['user_avatar_width'] / 2 ) - 3 ) : 22 );
-				$xtpl->assign( 'avatar_center', $avatar_center );
-
 				if( $this->post['attached_data'] ) {
 					$download_perm = $this->perms->auth( 'post_attach_download', $data['topic_forum'] );
 

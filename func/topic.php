@@ -680,9 +680,6 @@ class topic extends qsfglobal
 
 			$xtpl->assign( 'user_signature', $post['user_signature'] );
 
-			$avatar_center = ( $post['user_avatar_width'] ? ( ( $post['user_avatar_width'] / 2 ) - 3 ) : 22 );
-			$xtpl->assign( 'avatar_center', $avatar_center );
-
 			if( isset( $attachments[$post['post_id']] ) ) {
 				$download_perm = $this->perms->auth( 'post_attach_download', $topic['topic_forum'] );
 
