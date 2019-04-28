@@ -37,6 +37,7 @@ Changes for 2.0:
 * Updated the upgrade system so that a bunch of little files full of stuff aren't needed anymore. One file is sufficient with all the changes listed in sequence going forward.
 * The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
 * The AdminCP has new icons for decoration.
+* The custom logo section of the CSS has been separated into its own file which should not need to be updated during upgrades.
 
    Removed:
 

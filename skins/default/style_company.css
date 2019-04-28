@@ -1,0 +1,14 @@
+/* Custom logo section of the top menu - should not need to be messed with during updates. */
+/* Company */
+#header {
+	height: 100px;
+	margin: 0px 0px 2px;
+}
+#header #company {
+	text-align:left;
+}
+#header #company .title {
+	background: url('./images/qsfportal_logo.png') no-repeat;
+	height: 100px;
+	width: 400px;
+}

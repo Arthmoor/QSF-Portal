@@ -67,20 +67,6 @@ textarea {
 	text-align: left;
 }
 
-/* Company */
-#header {
-	height: 100px;
-	margin: 0px 0px 2px;
-}
-#header #company {
-	text-align:left;
-}
-#header #company .title {
-	background: url('./images/qsfportal_logo.png') no-repeat;
-	height: 100px;
-	width: 400px;
-}
-
 /* Rounded Boxes */
 #container .rounded_box {
 	border-radius: 10px;
@@ -165,7 +151,6 @@ main {
 	width: 83%;
 	float: right;
 }
-
 main .article, #blocks .article {
 	background: #161616;
 	margin: 0px 0px 5px;
@@ -216,10 +201,7 @@ main .title {
 	text-decoration: none;
 	border: 1px solid #484848;
 }
-.postbit .button a {
-	margin: 1px 2px 5px;
-	padding: 3px 2px 2px 22px;
-}
+
 .smallbutton .messenger { background-image: url('./images/icons/messenger.png'); }
 .smallbutton .email { background-image: url('./images/icons/email.png'); }
 .smallbutton .home { background-image: url('./images/icons/homesite.png'); }
@@ -468,9 +450,6 @@ main .article div.spoilerbox .spoiler {
 }
 
 /* Postbit */
-main .article .hidden {
-	display: none;
-}
 main .article span.avatar {
 	margin: 4px 4px 0px;
 	overflow: hidden;
@@ -500,29 +479,10 @@ main .article span.member_info span.text {
 	padding: 0px;
 	float: left;
 }
-main .article .rounded_top {
-	padding: 2px 0px 0px;
-}
-main .article .rounded_top span,
-main .article .rounded_bottom span {
-	background: #292929;
-}
-main .article div.postbit {
-	background: #292929;
-	padding: 1px 5px;
-	border-left: 1px solid #3e3e3e;
-	border-right: 1px solid #3e3e3e;
-	display: block;
-	margin: 0px;
-}
-main .article div.postbit span.signature {
+main .article span.signature {
 	font: 11px Arial, Sans-serif;
 	margin: 2px 4px 0px;
 	display: block;
-}
-main .article span.posted {
-	float: right;
-	margin: 0px 2px 2px;
 }
 
 /* New Post */

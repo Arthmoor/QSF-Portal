@@ -5,6 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
   <title>{title}</title>
   <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/styles.css" />
+  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/style_company.css" />
   <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/acp.css" />
   <script src="{site}/javascript/utils.js" async defer></script>
  </head>
