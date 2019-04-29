@@ -38,6 +38,7 @@ Changes for 2.0:
 * The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
 * The AdminCP has new icons for decoration.
 * The custom logo section of the CSS has been separated into its own file which should not need to be updated during upgrades.
+* Tweaked the initial module selection code to block out potential attacks and notify administrators when this happens.
 
    Removed:
 
