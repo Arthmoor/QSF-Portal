@@ -196,6 +196,7 @@ class member_control extends admin
 				define( 'U_CALLBACK', 8 );
 				define( 'U_TZONE', 9 );
 				define( 'U_IP', 10 );
+				define( 'U_SVARS', 11 );
 
 				$cols = array(
 					'user_name'		=> array( $this->lang->mc_user_name, U_TEXT, 20 ),
@@ -232,7 +233,7 @@ class member_control extends admin
 					'user_lastpost'		=> array( $this->lang->mc_user_lastpost, U_TIME ),
 					'user_regip'		=> array( $this->lang->mc_user_regip, U_IGNORE ),
                                         'user_register_email'   => array( $this->lang->mc_user_regemail, U_IGNORE ),
-					'user_server_data'	=> array( $this->lang->mc_user_server_data, U_IGNORE )
+					'user_server_data'	=> array( $this->lang->mc_user_server_data, U_SVARS )
 				);
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
@@ -302,6 +303,12 @@ class member_control extends admin
 						$line = $this->{$cols[$var][2]}($val);
 						break;
 
+					case U_SVARS:
+						$svars = json_decode( $val, true );
+
+						foreach( $svars as $name => $value )
+							$line .= $name . ': ' . $value . '<br />';
+						break;
 					default:
 						$line = $val;
 					}

@@ -244,7 +244,7 @@ class register extends qsfglobal
 				catch( Exception $e ) {}
 
 				if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
-					$this->log_action('Blocked Registration', 0, 0, 0);
+					$this->log_action( 'Blocked Registration', 0, 0, 0 );
 
 					$this->sets['spam_reg_count']++;
 					$this->write_sets();
