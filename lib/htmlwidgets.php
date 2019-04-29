@@ -271,7 +271,7 @@ class htmlwidgets extends forumutils
 				continue;
 			}
 
-			$out .= "<option value=\"./avatars$subfolder$file\"" . ( ( "./avatars$subfolder$file" == $current ) ? ' selected="selected"' : null ) . '>' . implode('.', $split) . "</option>\n";
+			$out .= "<option value=\"$file\"" . ( ( "$file" == $current ) ? ' selected="selected"' : null ) . '>' . implode('.', $split) . "</option>\n";
 		}
 
 		foreach( $subDirs as $file ) {
@@ -748,13 +748,20 @@ class htmlwidgets extends forumutils
 		$url = null;
 		$avatar = $user['user_avatar'];
 
-		if( $user['user_avatar_type'] != 'none' && $this->user['user_view_avatars'] ) {
-			if( $user['user_avatar_type'] == 'gravatar' )
+		if( $this->user['user_view_avatars'] ) {
+			if( $user['user_avatar_type'] == 'local' )
+				$avatar = "{$this->site}/avatars/$avatar";
+			elseif( $user['user_avatar_type'] == 'gravatar' )
 				$avatar = $this->get_gravatar( $user['user_avatar'] );
 			elseif( $user['user_avatar_type'] == 'url' )
 				$avatar = $user['user_avatar'];
-			else
-				$avatar = "{$this->site}/$avatar";
+			elseif( $user['user_avatar_type'] == 'uploaded' )
+				$avatar = "{$this->site}/avatars/uploaded/$avatar";
+			else {
+				$avatar = "{$this->site}/skins/{$this->skin}/images/noavatar.png";
+				$user['user_avatar_width'] = 100;
+				$user['user_avatar_height'] = 100;
+			}
 
 			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$user['user_avatar_width']}px; height:{$user['user_avatar_height']}px;\" />";
 		}

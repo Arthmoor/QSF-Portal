@@ -45,14 +45,32 @@ function noavatar( )
 {
   image = document.images['current_avatar'];
   image.onerror = '';
-  image.src = '../skins/default/images/noavatar.png';
-  image.height = 64;
-  image.width = 64;
-  document.forms['avatar'].user_avatar_width.value = 64;
-  document.forms['avatar'].user_avatar_height.value = 64;
+  image.src = window.location.protocol + '//' + window.location.hostname + '/skins/default/images/noavatar.png';
+  image.height = 100;
+  image.width = 100;
+  document.forms['avatar'].user_avatar_width.value = 100;
+  document.forms['avatar'].user_avatar_height.value = 100;
 }
 
-function set_local_avatar(url)
+function set_local_avatar(filename)
+{
+  if(document.images){
+    image = document.images['localavatar'];
+    if(filename == ''){
+      noavatar();
+    }else{
+      image.src = window.location.protocol + '//' + window.location.hostname + '/avatars/' + filename;
+
+      if(image.fileSize){
+        if(image.fileSize == -1){
+          noavatar();
+        }
+      }
+    }
+  }
+}
+
+function set_url_avatar(url)
 {
   if(document.images){
     image = document.images['localavatar'];
@@ -123,7 +141,7 @@ function initAvatarPage()
 		set_local_avatar(document.forms['avatar'].avatar_local.value);
 	};
 	document.forms['avatar'].avatar_url.onchange = function() {
-		set_local_avatar(document.forms['avatar'].avatar_url.value);
+		set_url_avatar(document.forms['avatar'].avatar_url.value);
 	};
 }
 

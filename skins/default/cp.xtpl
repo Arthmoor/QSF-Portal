@@ -198,7 +198,7 @@
    <select size="10" name="avatar_local">
     {avatar_select}
    </select>
-   <img id="localavatar" src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+   <img id="localavatar" src="{localavatarsrc}" alt="" />
   </div>
 
   {list_line}

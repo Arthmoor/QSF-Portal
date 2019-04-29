@@ -591,16 +591,25 @@ class cp extends qsfglobal
 			$avatar = $this->user['user_avatar'];
 			$avatar_url = null;
 			$gravatar_url = null;
-			if( $this->user['user_avatar_type'] == 'url' ) {
+
+			$localavatarsrc = "{$this->site}/skins/{$this->skin}/images/noavatar.png";
+
+			if( $this->user['user_avatar_type'] == 'local' ) {
+				$avatar = "{$this->site}/avatars/$avatar";
+				$localavatarsrc = $avatar;
+			} elseif( $this->user['user_avatar_type'] == 'url' ) {
 				$avatar_url = $avatar;
 			} elseif( $this->user['user_avatar_type'] == 'gravatar' )  {
 				$gravatar_url = $avatar;
 				$avatar = $this->htmlwidgets->get_gravatar( $avatar );
+			} elseif( $this->user['user_avatar_type'] == 'uploaded' ) {
+				$avatar = "{$this->site}/avatars/uploaded/$avatar";
 			} else {
-				$avatar = "{$this->site}/$avatar";
+				$avatar = "{$this->site}/skins/{$this->skin}/images/noavatar.png";
 			}
 
 			$xtpl->assign( 'avatar', $avatar );
+			$xtpl->assign( 'localavatarsrc', $localavatarsrc );
 			$xtpl->assign( 'cp_avatar_url', $this->lang->cp_avatar_url );
 			$xtpl->assign( 'avatar_url', $avatar_url );
 			$xtpl->assign( 'cp_avatar_gravatar', $this->lang->cp_avatar_gravatar );
@@ -638,7 +647,7 @@ class cp extends qsfglobal
 					return $this->message( $this->lang->cp_err_avatar, $this->lang->cp_avatar_must_select );
 				}
 
-				$image = getimagesize( $this->post['avatar_local'] );
+				$image = getimagesize( './avatars/' . $this->post['avatar_local'] );
 
 				if( $image[0] > $this->sets['avatar_width'] )
 					$image[0] = $this->sets['avatar_width'];
@@ -718,7 +727,7 @@ class cp extends qsfglobal
 
 				// Deliberate fall through
 			case 'use_uploaded':
-				$avatar = './avatars/uploaded/' . $this->user['user_id'] . '.' . $fileExtension;
+				$avatar = $this->user['user_id'] . '.' . $fileExtension;
 				$type = 'uploaded';
 				break;
 
@@ -735,6 +744,9 @@ class cp extends qsfglobal
 			default:
 				$avatar = '';
 				$type = 'none';
+				$image = getimagesize( "{$this->site}/skins/{$this->skin}/images/noavatar.png" );
+				$this->user['user_avatar_width']  = $image[0];
+				$this->user['user_avatar_height'] = $image[1];
 				$this->delete_avatar();
 				break;
 			}
@@ -925,7 +937,7 @@ class cp extends qsfglobal
 	private function delete_avatar()
 	{
 		if( $this->user['user_avatar_type'] == 'uploaded' ) {
-			@unlink( $this->user['user_avatar'] );
+			@unlink( "./avatars/uploaded/{$this->user['user_avatar']}" );
 		}
 	}
 

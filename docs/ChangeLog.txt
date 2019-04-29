@@ -60,6 +60,7 @@ Changes for 2.0:
 * Bare URLs entered into posts were getting stray single quotes placed around them.
 * News post retreival was not correctly handling time stamps. Posts were being displayed in random order.
 * When changing emails, passwords were not being verified using the proper secure hashing.
+* Corrected a number of long standing issues with selecting an avatar.
 
 Changes for 1.5.1:
 
