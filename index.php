@@ -59,8 +59,6 @@ session_start();
 $time_now   = explode( ' ', microtime() );
 $time_start = $time_now[1] + $time_now[0];
 
-srand( (double)microtime() * 1234567 );
-
 $_REQUEST = array();
 
 require './settings.php';

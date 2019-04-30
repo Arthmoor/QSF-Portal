@@ -80,8 +80,6 @@ if( !$set['installed'] ) {
 	header( 'Location: ../install/index.php' );
 }
 
-ob_start( 'ob_gzhandler' );
-
 session_start();
 
 set_error_handler( 'error' );
@@ -240,7 +238,12 @@ $admin->xtpl = $xtpl;
 $output = $admin->execute();
 
 if( $admin->nohtml ) {
+	ob_start( 'ob_gzhandler' );
+
 	echo $output;
+
+	@ob_end_flush();
+	@flush();
 } else {
 	$xtpl->assign( 'language_code', $admin->user['user_language'] );
 	$xtpl->assign( 'charset', $admin->lang->charset );
@@ -297,20 +300,6 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_db_repair', $admin->lang->admin_db_repair );
 	$xtpl->assign( 'admin_db_query', $admin->lang->admin_db_query );
 
-	$table = null;
-	if( $admin->get['a'] == 'perms' || $admin->get['a'] == 'file_perms' )
-		$table = '<table>';
-
-	$xtpl->assign( 'index_table_hack', $table );
-
-	$xtpl->assign( 'admin_heading', $admin->lang->admin_heading );
-
-	$endtable = null;
-	if( $admin->get['a'] == 'perms' || $admin->get['a'] == 'file_perms' )
-		$endtable = '</table>';
-
-	$xtpl->assign( 'index_endtable_hack', $endtable );
-
 	if( $admin->get['a'] != 'home' ) {
 		$xtpl->assign( 'navtree', $admin->htmlwidgets->tree );
 
@@ -325,19 +314,21 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_version', $admin->version );
 	$xtpl->assign( 'admin_based_on', $admin->lang->based_on );
 
-	$time_now  = explode(' ', microtime());
-	$time_exec = round(($time_now[1] + $time_now[0]) - $time_start, 4);
+	$time_now  = explode( ' ', microtime() );
+	$time_exec = round( ( $time_now[1] + $time_now[0] ) - $time_start, 4 );
 
 	$xtpl->assign( 'time_exec', $time_exec );
 	$xtpl->assign( 'query_count', $admin->db->querycount );
 
 	$xtpl->parse( 'Index' );
 
-	$xtpl->out( 'Index' );
-}
+	ob_start( 'ob_gzhandler' );
 
-@ob_end_flush();
-@flush();
+	$xtpl->out( 'Index' );
+
+	@ob_end_flush();
+	@flush();
+}
 
 // Close the DB connection.
 $admin->db->close();

@@ -5,7 +5,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
   <title>{title}</title>
   <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/styles.css" />
-  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/style_company.css" />
+  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/style_company.css" />
   <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/acp.css" />
   <script src="{site}/javascript/utils.js" async defer></script>
  </head>
@@ -112,16 +112,12 @@
 
   <main>
    <div class="article">
-   {index_table_hack}
     <div class="title"><img src="{site}/skins/{skin}/images/icons/admincp.png" alt="" /> {admin_heading}</div>
-   {index_endtable_hack}
    </div>
 
 <!-- BEGIN: NavTree -->
    <div class="article">
-   {index_table_hack}
     <span class="tree"><a href="{site}/admincp/index.php">Admin CP</a>{navtree}</span>
-   {index_endtable_hack}
    </div>
 <!-- END: NavTree -->
 <!-- BEGIN: Message -->
@@ -134,9 +130,7 @@
    {admin_main}
 
    <div class="article">
-   {index_table_hack}
     <a href="{site}/" style="font-weight:bold">{admin_your_board}</a> -- {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" style="font-weight:bold">{admin_name}</a>
-   {index_endtable_hack}
    </div>
   </main>
   <div id="bottom">&nbsp;</div>
