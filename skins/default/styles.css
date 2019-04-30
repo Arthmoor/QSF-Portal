@@ -59,6 +59,12 @@ textarea {
 	padding: 1px 2px 0px 0px;
 	border:1px solid #292929;
 }
+button.clickable_emoji {
+	border:none;
+	background:none;
+	padding:0px;
+	cursor: pointer;
+}
 
 /* Container */
 #container {

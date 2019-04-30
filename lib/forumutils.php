@@ -90,9 +90,9 @@ require_once $set['include_path'] . '/lib/tool.php';
 	public function forum_array( $array, $parent )
 	{
 		$arr = array();
-		for ($i = 0; $i < count($array); $i++)
+		for( $i = 0; $i < count( $array ); $i++ )
 		{
-			if ($array[$i]['forum_parent'] == $parent) {
+			if( $array[$i]['forum_parent'] == $parent ) {
 				$arr[] = $array[$i];
 			}
 		}

@@ -131,7 +131,7 @@ class readmarker extends forumutils
 			setcookie( $this->sets['cookie_prefix'] . 'lastallread', $time, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
 		} else {
 			$this->db->query( "UPDATE %pusers SET user_lastallread=%s WHERE user_id=%d", $time, $this->user_id );
-			$this->db->query("DELETE FROM %preadmarks WHERE readmark_user=%d AND readmark_lastread<%d", $this->user_id, $time );
+			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d AND readmark_lastread<%d", $this->user_id, $time );
 		}
 		$this->readmarkers_loaded = false;
 	}
@@ -353,7 +353,7 @@ class readmarker extends forumutils
 	}
 
 	/**
-	 * Deletes unneeded records frop readmarks because they are for topics
+	 * Deletes unneeded records from readmarks because they are for topics
 	 * that are older than the last time we've hit Mark All
 	 *
 	 * PRIVATE

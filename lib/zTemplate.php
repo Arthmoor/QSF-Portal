@@ -16,8 +16,8 @@
  * distributed under the GPL 2.0, licensing info at http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-if ( !defined('QUICKSILVERFORUMS') ) {
-	header('HTTP/1.0 403 Forbidden');
+if( !defined( 'QUICKSILVERFORUMS' ) ) {
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 

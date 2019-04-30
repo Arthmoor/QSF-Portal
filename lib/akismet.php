@@ -41,7 +41,7 @@ class Akismet
 	// Constructor takes the QSF Portal global instance which has all of the needed data to initalize with.
 	public function __construct( $qsf )
 	{
-		$this->site_url = $qsf->sets['loc_of_board'] . '/';
+		$this->site_url = $qsf->site . '/';
 		$this->api_key = $qsf->sets['wordpress_api_key'];
 		$this->akismet_useragent = 'QSF Portal/' . $qsf->version . ' | Akismet/' . $this->akismet_version;
 
