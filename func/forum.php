@@ -169,50 +169,49 @@ class forum extends qsfglobal
 		if( $exists['forum_subcat'] == 0 ) {
 			$this->display_topics( $xtpl, $f, $min, $n, $m, $order ); // Yes, this is a bit odd looking but it works.
 
+			$xtpl->assign( 'forum_mark_read', $this->lang->forum_mark_read );
+			$xtpl->assign( 'forum_topic', $this->lang->forum_topic );
+			$xtpl->assign( 'forum_starter', $this->lang->forum_starter );
+			$xtpl->assign( 'forum_replies', $this->lang->forum_replies );
+			$xtpl->assign( 'forum_views', $this->lang->forum_views );
+			$xtpl->assign( 'forum_last', $this->lang->forum_last );
+			$xtpl->assign( 'forum_new', $this->lang->forum_new );
+			$xtpl->assign( 'forum_hot', $this->lang->forum_hot );
+			$xtpl->assign( 'forum_pinned', $this->lang->forum_pinned );
+			$xtpl->assign( 'forum_moved', $this->lang->forum_moved );
+			$xtpl->assign( 'forum_not', $this->lang->forum_not );
+			$xtpl->assign( 'forum_poll', $this->lang->forum_poll );
+			$xtpl->assign( 'forum_locked', $this->lang->forum_locked );
+			$xtpl->assign( 'forum_dot_detail', $this->lang->forum_dot_detail );
+			$xtpl->assign( 'forum_pages', $this->lang->forum_pages );
+			$xtpl->assign( 'forum_name', $exists['forum_name'] );
+			$xtpl->assign( 'forumjump', $forumjump );
+			$xtpl->assign( 'pagelinks', $pagelinks );
+			$xtpl->assign( 'f', $f );
+
+			if( $can_post ) {
+				$xtpl->assign( 'forum_subscribe', $this->lang->forum_subscribe );
+				$xtpl->assign( 'subscribe', $this->lang->subscribe );
+				$xtpl->assign( 'forum_new_poll', $this->lang->forum_new_poll );
+				$xtpl->assign( 'new_poll', $this->lang->new_poll );
+				$xtpl->assign( 'forum_new_topic', $this->lang->forum_new_topic );
+				$xtpl->assign( 'new_topic', $this->lang->new_topic );
+
+				$xtpl->parse( 'Forum.Topics.CanPostTop' );
+				$xtpl->parse( 'Forum.Topics.CanPostBottom' );
+			}
+
 			if( !$this->has_topics ) {
 				$xtpl->assign( 'forum_no_topics', $this->lang->forum_no_topics );
 
 				$xtpl->parse( 'Forum.Topics.NoTopics' );
 			} else {
-				$xtpl->assign( 'f', $f );
 				$xtpl->assign( 'min', $min );
 				$xtpl->assign( 'n', $n );
 				$xtpl->assign( 'asc', $asc );
-				$xtpl->assign( 'forum_mark_read', $this->lang->forum_mark_read );
-				$xtpl->assign( 'forum_name', $exists['forum_name'] );
 				$xtpl->assign( 'forum_link_name', $this->htmlwidgets->clean_url( $exists['forum_name'] ) );
-				$xtpl->assign( 'forum_topic', $this->lang->forum_topic );
-				$xtpl->assign( 'forum_starter', $this->lang->forum_starter );
-				$xtpl->assign( 'forum_replies', $this->lang->forum_replies );
-				$xtpl->assign( 'forum_views', $this->lang->forum_views );
-				$xtpl->assign( 'forum_last', $this->lang->forum_last );
-
-				if( $can_post ) {
-					$xtpl->assign( 'forum_subscribe', $this->lang->forum_subscribe );
-					$xtpl->assign( 'subscribe', $this->lang->subscribe );
-					$xtpl->assign( 'forum_new_poll', $this->lang->forum_new_poll );
-					$xtpl->assign( 'new_poll', $this->lang->new_poll );
-					$xtpl->assign( 'forum_new_topic', $this->lang->forum_new_topic );
-					$xtpl->assign( 'new_topic', $this->lang->new_topic );
-
-					$xtpl->parse( 'Forum.Topics.CanPostTop' );
-					$xtpl->parse( 'Forum.Topics.CanPostBottom' );
-				}
-
-				$xtpl->assign( 'forumjump', $forumjump );
-				$xtpl->assign( 'forum_pages', $this->lang->forum_pages );
-				$xtpl->assign( 'pagelinks', $pagelinks );
-				$xtpl->assign( 'forum_new', $this->lang->forum_new );
-				$xtpl->assign( 'forum_hot', $this->lang->forum_hot );
-				$xtpl->assign( 'forum_pinned', $this->lang->forum_pinned );
-				$xtpl->assign( 'forum_moved', $this->lang->forum_moved );
-				$xtpl->assign( 'forum_not', $this->lang->forum_not );
-				$xtpl->assign( 'forum_poll', $this->lang->forum_poll );
-				$xtpl->assign( 'forum_locked', $this->lang->forum_locked );
-				$xtpl->assign( 'forum_dot_detail', $this->lang->forum_dot_detail );
-
-				$xtpl->parse( 'Forum.Topics' );
 			}
+			$xtpl->parse( 'Forum.Topics' );
 		}
 
 		$xtpl->parse( 'Forum.SubForum' );
