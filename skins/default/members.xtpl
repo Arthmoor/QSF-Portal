@@ -1,7 +1,7 @@
 <!-- BEGIN: Members -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/members.png" alt="" />
   {members_list}
  </div>
  <span class="head">
@@ -15,7 +15,7 @@
   <span class="nine">{members_www}</span>
  </span>
 <!-- BEGIN: User -->
- <span class="icon"><img src="{site}/skins/{skin}/images/icons/members.png" alt="" /></span>
+ <span class="icon"><img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" /></span>
  <span class="member"><a href="{site}/profile/{profile_link_name}-{user_id}/">{user_name}</a></span>
  <span class="nine">
 <!-- BEGIN: EmailShow -->
