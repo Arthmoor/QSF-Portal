@@ -225,7 +225,7 @@ require_once $set['include_path'] . '/lib/tool.php';
 			WHERE forum_parent > 0 AND forum_id IN (%s) OR forum_id=%d",
 			$forums['forum_tree'], $result['topic_forum'] );
 
-		$this->update_last_post( $TopicForum );
+		$this->update_last_post( $result['topic_forum'] );
 
 		$this->sets['posts'] -= ( $deleted + 1 );
 		$this->sets['topics'] -= 1;

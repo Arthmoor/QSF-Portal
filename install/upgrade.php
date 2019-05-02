@@ -180,6 +180,7 @@ class upgrade extends qsfglobal
 					unset( $this->sets['debug_mode'] );
 
 					// Queries to run
+					$queries[] = "ALTER TABLE %ptopics CHANGE topic_description topic_description varchar(255)";
 					$queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
 					$queries[] = 'ALTER TABLE %psettings ADD settings_mobile_icons text AFTER settings_meta_description';
 					$queries[] = "ALTER TABLE %pforums ADD forum_news tinyint(1) unsigned NOT NULL default '0' AFTER forum_redirect";
