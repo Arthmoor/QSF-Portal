@@ -30,26 +30,6 @@ if( version_compare( PHP_VERSION, "7.0.0", "<" ) ) {
 	die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
 }
 
-function log_hostile_action( $set, $qstring )
-{
-	if( isset( $set['admin_email'] ) ) {
-		$https = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
-
-		$headers = "From: Your QSF Portal Site <{$set['admin_email']}>\r\n" . "X-Mailer: PHP/" . phpversion();
-
-		$agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? $_SERVER['HTTP_USER_AGENT'] : 'N/A';
-		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
-
-		$error_report = "QSF Portal has intercepted a possible attack!\n";
-		$error_report .= "The details are as follows:\n\nURL: $https" . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] . "?" . $qstring . "\n";
-		$error_report .= "Querying user agent: " . $agent . "\n";
-		$error_report .= "Querying IP: " . $ip . "\n\n";
-		$error_report = str_replace( "&nbsp;", " ", html_entity_decode( $error_report ) );
-
-		@mail( $set['admin_email'], "[QSF Portal] Potential Attack Intercepted", $error_report, $headers );
-	}
-}
-
 define( 'QUICKSILVERFORUMS', true );
 
 date_default_timezone_set( 'UTC' );
@@ -126,8 +106,6 @@ if( !isset( $_GET['a'] ) ) {
 		$_SESSION = array();
 
 		session_destroy();
-
-		log_hostile_action( $set, $qstring );
 
 		header( 'Clear-Site-Data: "*"' );
 	} elseif( !file_exists( 'func/' . $a . '.php' ) ) {
