@@ -34,8 +34,6 @@ define( 'QUICKSILVERFORUMS', true );
 
 date_default_timezone_set( 'UTC' );
 
-session_start();
-
 $time_now   = explode( ' ', microtime() );
 $time_start = $time_now[1] + $time_now[0];
 
@@ -172,6 +170,14 @@ if( !isset( $qsf->get['skin'] ) ) {
 }
 
 $qsf->init();
+
+$options = array( 'cookie_httponly' => true );
+
+if( $qsf->settings['cookie_secure'] ) {
+	$options['cookie_secure'] = true;
+}
+
+session_start( $options );
 
 // Security header options
 if( $qsf->sets['htts_enabled'] && $qsf->sets['htts_max_age'] > -1 ) {

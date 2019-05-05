@@ -60,8 +60,6 @@ if( !$set['installed'] ) {
 	header( 'Location: ../install/index.php' );
 }
 
-session_start();
-
 set_error_handler( 'error' );
 
 error_reporting( E_ALL );
@@ -151,6 +149,14 @@ $admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get[
 
 // Init function also checks permissions and kicks out non-admins
 $admin->init();
+
+$options = array( 'cookie_httponly' => true );
+
+if( $qsf->settings['cookie_secure'] ) {
+	$options['cookie_secure'] = true;
+}
+
+session_start( $options );
 
 // Security header options
 if( $admin->sets['htts_enabled'] && $admin->sets['htts_max_age'] > -1 ) {
