@@ -93,10 +93,6 @@ if( !isset( $_GET['a'] ) ) {
 
 		$missing = true;
 
-		$_SESSION = array();
-
-		session_destroy();
-
 		header( 'Clear-Site-Data: "*"' );
 	} elseif( !file_exists( 'sources/' . $a . '.php' ) ) {
 		$qstring = $_SERVER['REQUEST_URI'];
