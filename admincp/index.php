@@ -148,7 +148,7 @@ $admin->init();
 
 $options = array( 'cookie_httponly' => true );
 
-if( $qsf->settings['cookie_secure'] ) {
+if( $admin->settings['cookie_secure'] ) {
 	$options['cookie_secure'] = true;
 }
 
