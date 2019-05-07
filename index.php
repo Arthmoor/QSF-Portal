@@ -272,8 +272,6 @@ if( $terms_module == 'forum_rules' ) {
 }
 
 if( $qsf->nohtml ) {
-	ob_start( 'ob_gzhandler' );
-
 	echo $output;
 
 	@ob_end_flush();

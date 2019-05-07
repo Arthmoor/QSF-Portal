@@ -221,8 +221,6 @@ $admin->xtpl = $xtpl;
 $output = $admin->execute();
 
 if( $admin->nohtml ) {
-	ob_start( 'ob_gzhandler' );
-
 	echo $output;
 
 	@ob_end_flush();
