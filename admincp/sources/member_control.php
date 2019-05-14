@@ -144,6 +144,7 @@ class member_control extends admin
 				$xtpl->assign( 'user_name', $member['user_name'] );
 				$xtpl->assign( 'mc_confirm_bot', $this->lang->mc_confirm_bot );
 				$xtpl->assign( 'yes', $this->lang->yes );
+				$xtpl->assign( 'token', $this->generate_token() );
 
 				$xtpl->parse( 'MemberControl.Spambot' );
 				$xtpl->parse( 'MemberControl' );
