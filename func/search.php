@@ -429,7 +429,7 @@ class search extends qsfglobal
 
 				$xtpl->parse( 'Results.Entry.TopicStarterMember' );
 			} else {
-				$xtpl->assign( 'topic_starter_name', $this->lang->recent_guest );
+				$xtpl->assign( 'topic_starter_name', $this->lang->search_guest );
 
 				$xtpl->parse( 'Results.Entry.TopicStarterGuest' );
 			}
