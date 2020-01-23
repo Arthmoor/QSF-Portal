@@ -167,8 +167,7 @@ class bbcode
 			'/\\[c\\]/isU',
 			 );
 		$replace = array(
-//			'<details class="spoilerbox"><summary class="spoiler"><strong>' . $this->lang->spoiler . ':</strong></summary><br />$1</details>',
-			'<div class="spoilerbox"><strong>' . $this->lang->spoiler . ':</strong><div class="spoiler">$1</div></div>',
+			'<details><summary><strong>' . $this->lang->spoiler . ':</strong></summary><br />$1</details>',
 			'<strong>$1</strong>',
 			'<em>$1</em>',
 			'<span style="text-decoration:underline">$1</span>',

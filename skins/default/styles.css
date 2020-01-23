@@ -445,16 +445,6 @@ main .article div.filebox {
 	border: 1px solid black;
 }
 
-/* Spoilers */
-main .article div.spoilerbox {
-	background: #484848 url('./images/spoiler.png') top right  no-repeat;
-	padding: 3px 6px;
-	border: 1px solid black;
-}
-main .article div.spoilerbox .spoiler {
-	color: #484848;
-}
-
 /* Postbit */
 main .article span.avatar {
 	margin: 4px 4px 0px;
