@@ -148,7 +148,7 @@ $admin->init();
 
 $options = array( 'cookie_httponly' => true );
 
-if( $admin->settings['cookie_secure'] ) {
+if( $admin->sets['cookie_secure'] ) {
 	$options['cookie_secure'] = true;
 }
 
