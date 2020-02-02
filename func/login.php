@@ -102,6 +102,10 @@ class login extends qsfglobal
 
 			$data  = $this->db->fetch( "SELECT user_id, user_password FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
 				str_replace( ' ', '', strtolower( $username ) ), USER_GUEST_UID );
+
+			if( !isset( $data ) )
+				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
+
 			$pass  = $data['user_password'];
 			$user  = $data['user_id'];
 

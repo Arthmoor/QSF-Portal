@@ -1800,7 +1800,7 @@ class files extends qsfglobal
 			array_push( $selectArray, $row['fcat_id'] );
 			$selectArray = array_merge( $selectArray, $sArray );
 			array_push( $sArray, $row['fcat_id'] );
-			$selectItems .= "<option value='{$row['fcat_id']}' selected='selected' ondblclick='select_all_children(".implode($sArray, ", ").")'>{$nestSpace}{$row['fcat_name']}</option>\n";
+			$selectItems .= "<option value='{$row['fcat_id']}' selected='selected' ondblclick='select_all_children(".implode(", ", $sArray).")'>{$nestSpace}{$row['fcat_name']}</option>\n";
 			$selectItems .= $toAdd;
 			if( $cid == 0 )
 				$selectArray = array();
