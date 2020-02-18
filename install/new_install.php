@@ -560,8 +560,10 @@ Have fun and enjoy your new site!";
 			$writeSetsWorked = $this->write_db_sets( '../settings.php' );
 			$this->write_sets();
 
-			setcookie( $this->sets['cookie_prefix'] . 'user', $admin_uid, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			setcookie( $this->sets['cookie_prefix'] . 'pass', $admin_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+			setcookie( $this->sets['cookie_prefix'] . 'user', $admin_uid, $options );
+			setcookie( $this->sets['cookie_prefix'] . 'pass', $admin_pass, $options );
 
 			if( !$writeSetsWorked ) {
 				echo "Congratulations! Your site has been installed.<br />

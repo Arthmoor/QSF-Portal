@@ -68,7 +68,9 @@ class readmarker extends forumutils
 			} else {
 				$this->last_read_all = $this->time - $this->day_in_seconds;
 
-				setcookie( $this->sets['cookie_prefix'] . 'lastallread', $this->last_read_all, $qsf->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+				$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+				setcookie( $this->sets['cookie_prefix'] . 'lastallread', $this->last_read_all, $options );
 			}
 
 			if( !isset( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'] ) ) {
@@ -128,7 +130,9 @@ class readmarker extends forumutils
 					unset( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'][$topic] );
 				}
 			}
-			setcookie( $this->sets['cookie_prefix'] . 'lastallread', $time, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+			setcookie( $this->sets['cookie_prefix'] . 'lastallread', $time, $options );
 		} else {
 			$this->db->query( "UPDATE %pusers SET user_lastallread=%s WHERE user_id=%d", $time, $this->user_id );
 			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d AND readmark_lastread<%d", $this->user_id, $time );

@@ -182,7 +182,9 @@ class cp extends qsfglobal
 				$hashed_pass = $this->qsfp_password_hash( $this->post['passA'] );
 				$this->db->query( "UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $hashed_pass, $this->user['user_id'] );
 
-				setcookie( $this->sets['cookie_prefix'] . 'pass', $hashed_pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+				$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+				setcookie( $this->sets['cookie_prefix'] . 'pass', $hashed_pass, $options );
 
 				$_SESSION['pass'] = md5( $hashed_pass . $this->ip );
 				$this->user['user_password'] = $hashed_pass;

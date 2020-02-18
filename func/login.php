@@ -110,8 +110,10 @@ class login extends qsfglobal
 			$user  = $data['user_id'];
 
 			if( password_verify( $this->post['pass'], $pass ) ) {
-				setcookie( $this->sets['cookie_prefix'] . 'user', $user, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-				setcookie( $this->sets['cookie_prefix'] . 'pass', $pass, $this->time + $this->sets['logintime'], $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+				$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+				setcookie( $this->sets['cookie_prefix'] . 'user', $user, $options );
+				setcookie( $this->sets['cookie_prefix'] . 'pass', $pass, $options );
 
 				$_SESSION['user'] = $user;
 				$_SESSION['pass'] = md5( $pass . $this->ip );
@@ -135,8 +137,10 @@ class login extends qsfglobal
 
 			$this->db->query( "UPDATE %pusers SET user_lastvisit=%d WHERE user_id=%d", $this->time, $this->user['user_id'] );
 
-			setcookie( $this->sets['cookie_prefix'] . 'user', '', $this->time - 9000, $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			setcookie( $this->sets['cookie_prefix'] . 'pass', '', $this->time - 9000, $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			$options = array( 'expires' => $this->time - 9000, 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+			setcookie( $this->sets['cookie_prefix'] . 'user', '', $options );
+			setcookie( $this->sets['cookie_prefix'] . 'pass', '', $options );
 
 			$_SESSION = array();
 

@@ -26,7 +26,7 @@
  *
  **/
 
-if( version_compare( PHP_VERSION, "7.0.0", "<" ) ) {
+if( version_compare( PHP_VERSION, "7.3.0", "<" ) ) {
 	die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
 }
 
@@ -167,7 +167,7 @@ if( !isset( $qsf->get['skin'] ) ) {
 
 $qsf->init();
 
-$options = array( 'cookie_httponly' => true );
+$options = array( 'cookie_httponly' => true, 'cookie_samesite' => 'Lax' );
 
 if( $qsf->sets['cookie_secure'] ) {
 	$options['cookie_secure'] = true;

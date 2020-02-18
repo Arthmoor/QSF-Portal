@@ -96,8 +96,10 @@ class user
 				WHERE m.user_id=%d AND s.skin_id=m.user_skin AND g.group_id=m.user_group
 				LIMIT 1", USER_GUEST_UID );
 
-			setcookie( $this->sets['cookie_prefix'] . 'user', '', $this->time - 9000, $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
-			setcookie( $this->sets['cookie_prefix'] . 'pass', '', $this->time - 9000, $this->sets['cookie_path'], $this->sets['cookie_domain'], $this->sets['cookie_secure'], true );
+			$options = array( 'expires' => $this->time - 9000, 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+			setcookie( $this->sets['cookie_prefix'] . 'user', '', $options );
+			setcookie( $this->sets['cookie_prefix'] . 'pass', '', $options );
 
 			unset( $_SESSION['user'] );
 			unset( $_SESSION['pass'] );
