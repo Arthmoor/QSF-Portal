@@ -220,6 +220,10 @@ if( $qsf->sets['csp_enabled'] ) {
 	header( "Content-Security-Policy: {$qsf->sets['csp_details']}" );
 }
 
+if( $qsf->sets['fp_enabled'] ) {
+	header( "Feature-Policy: {$qsf->sets['fp_details']}" );
+}
+
 if( $qsf->is_banned() ) {
 	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
 }

@@ -172,6 +172,8 @@ class upgrade extends qsfglobal
 					$this->sets['ect_max_age'] = 0;
 					$this->sets['csp_enabled'] = 0;
 					$this->sets['csp_details'] = '';
+					$this->sets['fp_enabled'] = 0;
+					$this->sets['fp_details'] = '';
 
 					// Deleted settings
 					unset( $this->sets['analytics_id'] );

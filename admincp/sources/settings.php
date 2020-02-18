@@ -705,6 +705,9 @@ class settings extends admin
 			$xtpl->assign( 'settings_security_csp', $this->lang->settings_security_csp );
 			$xtpl->assign( 'settings_security_csp_detail', $this->lang->settings_security_csp_detail );
 			$xtpl->assign( 'settings_security_csp_warning', $this->lang->settings_security_csp_warning );
+			$xtpl->assign( 'settings_security_fp', $this->lang->settings_security_fp );
+			$xtpl->assign( 'settings_security_fp_detail', $this->lang->settings_security_fp_detail );
+			$xtpl->assign( 'settings_security_fp_warning', $this->lang->settings_security_fp_warning );
 
 			$xtpl->assign( 'htts_enabled', $this->sets['htts_enabled'] ? ' checked="checked"' : null );
 			$xtpl->assign( 'htts_max_age', $this->sets['htts_max_age'] );
@@ -747,6 +750,9 @@ class settings extends admin
 
 			$xtpl->assign( 'csp_enabled', $this->sets['csp_enabled'] ? ' checked="checked"' : null );
 			$xtpl->assign( 'csp_details', $this->sets['csp_details'] );
+
+			$xtpl->assign( 'fp_enabled', $this->sets['fp_enabled'] ? ' checked="checked"' : null );
+			$xtpl->assign( 'fp_details', $this->sets['fp_details'] );
 
 			$xtpl->parse( 'Settings.EditForm' );
 			$xtpl->parse( 'Settings' );
@@ -848,7 +854,9 @@ class settings extends admin
 				'ect_enabled' => 'checkbox',
 				'ect_max_age' => 'int',
 				'csp_enabled' => 'checkbox',
-				'csp_details' => 'string'
+				'csp_details' => 'string',
+				'fp_enabled' => 'checkbox',
+				'fp_details' => 'string'
 			);
 
 			foreach( $this->post as $var => $val )

@@ -444,6 +444,8 @@ break;
 			$this->sets['ect_max_age'] = 0;
 			$this->sets['csp_enabled'] = 0;
 			$this->sets['csp_details'] = '';
+			$this->sets['fp_enabled'] = 0;
+			$this->sets['fp_details'] = '';
 
 			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_signature)
 				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', '%s', '%s', '%s', %d, %d, '%s')",

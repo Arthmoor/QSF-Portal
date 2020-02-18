@@ -1537,6 +1537,9 @@ class en
 		$this->settings_security_csp = 'Content-Security-Policy';
 		$this->settings_security_csp_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content-Security-Policy security header</a>.';
 		$this->settings_security_csp_warning = 'This is a complex and often detailed policy. Please note that this field performs NO VALIDATION on the input you provide. You will need to determine policy based on your site\'s individual needs. Incorrect setup can lead to your site functioning improperly or failing to load at all.';
+		$this->settings_security_fp = 'Feature-Policy';
+		$this->settings_security_fp_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy">Feature-Policy security header</a>.';
+		$this->settings_security_fp_warning = 'This policy can have numerous directives to enable or deny. NO VALIDATION is performed on the input in this field. Incorrect setup may lead to your site functioning improperly.';
 		$this->settings_security_ect = 'Expect-CT';
 		$this->settings_security_ect_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT">Expect-CT security header</a>.';
 		$this->settings_security_ect_max_age = 'Maximum age for the header to be valid, in seconds:';
