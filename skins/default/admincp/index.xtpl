@@ -35,7 +35,7 @@
      <a href="{site}/admincp/index.php?a=logs">{admin_logs}</a>
      <a href="{site}/admincp/index.php?a=stats">{admin_stats}</a>
     </nav>
-    <div style="clear:both"></div>
+    <div class="clearboth"></div>
    </div>
    <div class="block">
     <div class="title">
@@ -50,7 +50,7 @@
      <a href="{site}/admincp/index.php?a=forums&amp;s=count">{admin_recount_forums}</a>
      <a href="{site}/admincp/index.php?a=prune">{admin_prune}</a>
     </nav>
-    <div style="clear:both"></div>
+    <div class="clearboth"></div>
    </div>
    <div class="block">
     <div class="title">
@@ -68,7 +68,7 @@
      <a href="{site}/admincp/index.php?a=mass_mail">{admin_mass_mail}</a>
      <a href="{site}/admincp/index.php?a=membercount">{admin_fix_stats}</a>
     </nav>
-    <div style="clear:both"></div>
+    <div class="clearboth"></div>
    </div>
    <div class="block">
     <div class="title">
@@ -82,7 +82,7 @@
      <a href="{site}/admincp/index.php?a=file_perms">{admin_edit_group_file_perms}</a>
      <a href="{site}/admincp/index.php?a=groups&amp;s=delete">{admin_delete_group}</a>
     </nav>
-    <div style="clear:both"></div>
+    <div class="clearboth"></div>
    </div>
    <div class="block">
     <div class="title">
@@ -92,7 +92,7 @@
     <nav>
      <a href="{site}/admincp/index.php?a=skins">{admin_manage_skins}</a>
     </nav>
-    <div style="clear:both"></div>
+    <div class="clearboth"></div>
    </div>
    <div class="block">
     <div class="title">
@@ -106,7 +106,7 @@
      <a href="{site}/admincp/index.php?a=db_repair">{admin_db_repair}</a>
      <a href="{site}/admincp/index.php?a=query">{admin_db_query}</a>
     </nav>
-    <div style="clear:both"></div>
+    <div class="clearboth"></div>
    </div>
   </div>
 
@@ -130,7 +130,7 @@
    {admin_main}
 
    <div class="article">
-    <a href="{site}/" style="font-weight:bold">{admin_your_board}</a> -- {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" style="font-weight:bold">{admin_name}</a>
+    <a href="{site}/" class="bold">{admin_your_board}</a> -- {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" class="bold">{admin_name}</a>
    </div>
   </main>
   <div id="bottom">&nbsp;</div>

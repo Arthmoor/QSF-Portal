@@ -12,7 +12,7 @@
 
 <!-- BEGIN: UsersOnlineMain -->
     <div class="article">
-     <div class="title" style="text-align:center">{main_visitors} {date}</div>
+     <div class="titlecenter">{main_visitors} {date}</div>
      {userlist}
     </div>
 <!-- END: UsersOnlineMain -->

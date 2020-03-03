@@ -1,7 +1,7 @@
 <!-- BEGIN: Main -->
     <script src="{site}/javascript/newspost.js"></script>
     <div class="article">
-     <div class="title" style="text-align:center">
+     <div class="titlecenter">
       <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />
       {main_news}
       <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />

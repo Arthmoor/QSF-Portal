@@ -843,30 +843,36 @@ class settings extends admin
 				'file_approval' => 'bool',
 				'left_sidebar_links' => 'array',
 				'right_sidebar_links' => 'array',
-				'htts_enabled' => 'checkbox',
 				'htts_max_age' => 'int',
-				'xfo_enabled' => 'checkbox',
 				'xfo_policy' => 'int',
 				'xfo_allowed_origin' => 'string',
-				'xss_enabled' => 'checkbox',
 				'xss_policy' => 'int',
-				'xcto_enabled' => 'checkbox',
-				'ect_enabled' => 'checkbox',
 				'ect_max_age' => 'int',
-				'csp_enabled' => 'checkbox',
 				'csp_details' => 'string',
-				'fp_enabled' => 'checkbox',
 				'fp_details' => 'string'
 			);
 
+			$checkboxes = array( 'htts_enabled', 'xfo_enabled', 'xss_enabled', 'xcto_enabled', 'ect_enabled', 'csp_enabled', 'fp_enabled' );
+			foreach( $checkboxes as $key )
+			{
+				if( !isset( $this->sets[$key] ) )
+					$this->sets[$key] = 0;
+			}
+
+			$this->sets['htts_enabled'] = isset( $this->post['htts_enabled'] );
+			$this->sets['xfo_enabled'] = isset( $this->post['xfo_enabled'] );
+			$this->sets['xss_enabled'] = isset( $this->post['xss_enabled'] );
+			$this->sets['xcto_enabled'] = isset( $this->post['xcto_enabled'] );
+			$this->sets['ect_enabled'] = isset( $this->post['ect_enabled'] );
+			$this->sets['csp_enabled'] = isset( $this->post['csp_enabled'] );
+			$this->sets['fp_enabled'] = isset( $this->post['fp_enabled'] );
+
 			foreach( $this->post as $var => $val )
 			{
-				if( $var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' || $var == 'mobile_icons' )
+				if( $var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' || $var == 'mobile_icons' || in_array($var, $checkboxes) )
 					continue;
 				if( ( $vartypes[$var] == 'int' ) || ( $vartypes[$var] == 'bool' ) ) {
 					$val = intval( $val );
-				} elseif( $vartypes[$var] == 'checkbox' ) {
-					$val = isset( $this->post[$var] );
 				} elseif( $vartypes[$var] == 'float' ) {
 					$val = (float)$val;
 				} elseif( $vartypes[$var] == 'kilobytes' ) {

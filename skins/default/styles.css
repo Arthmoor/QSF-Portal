@@ -9,6 +9,9 @@ a {
 	color: #c0c0c0;
 	text-decoration: underline;
 }
+a.bold {
+	font-weight: bold;
+}
 a:hover {
         color:white;
 	text-decoration: underline;
@@ -64,6 +67,9 @@ button.clickable_emoji {
 	background:none;
 	padding:0px;
 	cursor: pointer;
+}
+div.clearboth {
+	clear: both;
 }
 
 /* Container */
@@ -172,6 +178,19 @@ main .title {
 	padding: 3px 4px 2px 7px;
 	border: 1px solid #3e3e3e;
 	border-right: 3px double #3e3e3e;
+}
+main .titlecenter {
+	background: #292929;
+	font: 18px Arial, Sans-serif;
+	color: #c0c0c0;
+	margin: 0px -2px 4px -7px;
+	padding: 3px 4px 2px 7px;
+	border: 1px solid #3e3e3e;
+	border-right: 3px double #3e3e3e;
+	text-align:center;
+}
+main .readmore {
+	white-space:nowrap;
 }
 
 /* Button effects */

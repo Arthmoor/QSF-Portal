@@ -19,7 +19,7 @@
       {members}<br />
       {newest}
      </span>
-     <div style="clear:both"></div>
+     <div class="clearboth"></div>
      <br />
      {birthdays}
 
@@ -29,6 +29,6 @@
       {time_exec} {seconds} - {querycount} {main_queries}
      </span>
 <!-- END: Admin -->
-     <div style="clear:both"></div>
+     <div class="clearboth"></div>
     </div>
 <!-- END: BoardStats -->

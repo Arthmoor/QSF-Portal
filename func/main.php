@@ -109,7 +109,7 @@ class main extends qsfglobal
 
 			if( $pos !== false ) {
 				$text = substr( $text, 0, $pos );
-				$text .= "<span style=\"white-space:nowrap\">( <a href=\"{$this->site}/newspost/{$link}-{$row['topic_id']}/\">{$this->lang->news_more}</a> )</span>";
+				$text .= "<span class=\"readmore\">( <a href=\"{$this->site}/newspost/{$link}-{$row['topic_id']}/\">{$this->lang->news_more}</a> )</span>";
 			}
 
 			$comments = "<a href=\"{$this->site}/newspost/{$link}-{$row['topic_id']}/\">{$row['topic_replies']} {$this->lang->news_comments}</a>";

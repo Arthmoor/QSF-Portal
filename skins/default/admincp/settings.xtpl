@@ -467,6 +467,7 @@
  <p class="line"></p>
 
  <input type="submit" value="{submit}" />
+</div>
 </form>
 <!-- END: EditForm -->
 <!-- END: Settings -->

@@ -175,6 +175,8 @@ if( $qsf->sets['cookie_secure'] ) {
 
 session_start( $options );
 
+$crypto_nonce = '';
+
 // Security header options
 if( $qsf->sets['htts_enabled'] && $qsf->sets['htts_max_age'] > -1 ) {
 	header( "Strict-Transport-Security: max-age={$qsf->sets['htts_max_age']}" );
@@ -217,12 +219,18 @@ if( $qsf->sets['ect_enabled'] ) {
 }
 
 if( $qsf->sets['csp_enabled'] ) {
-	header( "Content-Security-Policy: {$qsf->sets['csp_details']}" );
+	$crypto_nonce = hash( 'sha512', microtime() );
+
+	$csp = str_replace( '?nonce?', 'nonce-' . $crypto_nonce, $qsf->sets['csp_details'] );
+	header( "Content-Security-Policy: {$csp}" );
 }
 
 if( $qsf->sets['fp_enabled'] ) {
 	header( "Feature-Policy: {$qsf->sets['fp_details']}" );
 }
+
+header( "Referrer-Policy: no-referrer-when-downgrade" );
+// End security header options
 
 if( $qsf->is_banned() ) {
 	error( QUICKSILVER_NOTICE, $qsf->lang->main_banned );
@@ -490,6 +498,8 @@ if( $qsf->nohtml ) {
 	$google = null;
 	if( isset( $qsf->sets['analytics_code'] ) && !empty( $qsf->sets['analytics_code'] ) ) {
 		$google = $qsf->sets['analytics_code'];
+
+		$google = str_replace( '?nonce?', ' nonce="' . $crypto_nonce . '"', $google );
 	}
 	$xtpl->assign( 'google', $google );
 

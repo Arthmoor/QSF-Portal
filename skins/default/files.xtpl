@@ -47,7 +47,7 @@
 
 <form action="{site}/index.php?a=files&amp;s=edit&amp;fid={id}" method="post">
 <div class="article">
- <div class="title" style="text-align:center">{files_modify_info}</div>
+ <div class="titlecenter">{files_modify_info}</div>
  <span class="field">{files_name}:</span>
  <span class="form"><input class="input" name="file_name" type="text" size="50" maxlength="50" value="{file_name}" /></span>
  <p class="line"></p>
@@ -295,7 +295,7 @@
 <div class="article">
  {tree}<br /><br />
  {catlinks}
- <div style="clear:both;"></div>
+ <div class="clearboth"></div>
 </div>
 <br />
 {displaycat}
@@ -307,7 +307,7 @@
 <!-- END: Desc -->
 <div class="article">
 <!-- BEGIN: Top20 -->
- <div class="title" style="text-align:center">{files_top20}</div>
+ <div class="titlecenter">{files_top20}</div>
 <!-- END: Top20 -->
 <!-- BEGIN: Header -->
  <span class="file_head">
@@ -329,9 +329,9 @@
  <span class="submitter"><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></span>
  <span class="filedate">{date}</span>
  <span class="filedate">{revdate}</span>
- <span class="file_number" style="text-align:center">{file_downloads}</span>
- <span class="file_number" style="text-align:center">{size}</span>
- <span class="file_number" style="text-align:center">{file_comments}</span>
+ <span class="file_number">{file_downloads}</span>
+ <span class="file_number">{size}</span>
+ <span class="file_number">{file_comments}</span>
  <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
 
  <p class="list_line"></p>
@@ -341,7 +341,7 @@
 
 <!-- BEGIN: RecentUploads -->
 <div class="article">
- <div class="title" style="text-align:center">{files_recent_uploads}:</div>
+ <div class="titlecenter">{files_recent_uploads}:</div>
  <span class="file_head">
   <span class="filename">{files_name}</span>
   <span class="fileversion">{files_version}</span>
@@ -360,9 +360,9 @@
  <span class="submitter"><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></span>
  <span class="filedate">{date}</span>
  <span class="filedate">{revdate}</span>
- <span class="file_number" style="text-align:center">{file_downloads}</span>
- <span class="file_number" style="text-align:center">{size}</span>
- <span class="file_number" style="text-align:center">{file_comments}</span>
+ <span class="file_number">{file_downloads}</span>
+ <span class="file_number">{size}</span>
+ <span class="file_number">{file_comments}</span>
  <span class="file_rating"><img src="{site}/skins/{this->skin}/images/{file_rating}.png" alt="" /></span>
 
  <p class="list_line"></p>
@@ -505,9 +505,9 @@
  <span class="submitter"><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></span>
  <span class="filedate">{date}</span>
  <span class="filedate">{revdate}</span>
- <span class="file_number" style="text-align:center">{file_downloads}</span>
- <span class="file_number" style="text-align:center">{size}</span>
- <span class="file_number" style="text-align:center">{file_comments}</span>
+ <span class="file_number">{file_downloads}</span>
+ <span class="file_number">{size}</span>
+ <span class="file_number">{file_comments}</span>
  <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
  <p class="list_line"></p>
 <!-- END: Item -->
@@ -530,7 +530,7 @@
 <!-- BEGIN: ListComments -->
 {file}
 <div class="article">
- <div class="title" style="text-align:center">{files_comment_user}: {file_name}</div>
+ <div class="titlecenter">{files_comment_user}: {file_name}</div>
 <!-- BEGIN: Item -->
  <div><strong>{board_by}: {user_name}</strong></div>
  <div class="post_triangle">&nbsp;</div>

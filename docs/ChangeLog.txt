@@ -21,6 +21,7 @@ Changes for 2.0:
 
    Changes:
 
+* Minimum supported PHP version is now 7.3.0.
 * Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Emojis are now handled independently of skins and can be added on the fly as desired.
@@ -28,7 +29,7 @@ Changes for 2.0:
 * Changed all usage of serialize and unserialize to json_encode and json_decode to address potential PHP related vulnerabilities.
 * Default skin is now served as HTML5 instead of XHTML 1.1.
 * Password security has been updated to stronger hashing standards.
-* CSRF security tokens have been upgraded to use a cryptographically secure method. This support raises the minimum PHP requirement to 7.0.0.
+* CSRF security tokens have been upgraded to use a cryptographically secure method.
 * Replaced the Akismet library with my own hand rolled version.
 * Updated Google Analytics support so you can just input the code snippet directly instead of altering source code.
 * The "Add Setting" function can now properly set up a new array.

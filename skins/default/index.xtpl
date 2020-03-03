@@ -33,7 +33,7 @@
       {index_left_links}
       {index_right_links}
      </nav>
-     <div style="clear:both"></div>
+     <div class="clearboth"></div>
     </div>
 
     <form action="{qsf_site}/index.php?a=login&amp;s=on" method="post">
@@ -84,7 +84,7 @@
 <!-- END: AdminCPLink -->
       <a href="{qsf_site}/index.php?a=login&amp;s=off">{main_logout}</a>
      </nav>
-     <div style="clear:both"></div>
+     <div class="clearboth"></div>
     </div>
 <!-- END: MemberHeader -->
     {recent_posts}
