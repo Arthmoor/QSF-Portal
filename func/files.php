@@ -1482,7 +1482,7 @@ class files extends qsfglobal
 		if( $can_rate ) {
 			$file_rated = $this->db->fetch( "SELECT file_id FROM %pfileratings WHERE user_id=%d AND file_id=%d", $this->user['user_id'] , $fid );
 
-			if( $file_rated['file_id'] == $fid ) {
+			if( isset( $file_rated['file_id'] ) && $file_rated['file_id'] == $fid ) {
 				$has_rated = true;
 			}
 		}
