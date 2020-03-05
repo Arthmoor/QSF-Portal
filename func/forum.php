@@ -447,7 +447,7 @@ class forum extends qsfglobal
 				$xtpl->assign( 'topic_id', $row['topic_id'] );
 				$xtpl->assign( 'topic_posted', $topic_posted );
 				$xtpl->assign( 'topic_title', $row['topic_title'] );
-				$xtpl->assign( 'topic_title_link', $this->htmlwidgets->clean_url( $row['topic_title'] ) );
+				$xtpl->assign( 'topic_title_link', $topic_link );
 				$xtpl->assign( 'Pages', $Pages );
 
 				if( $row['newpost'] ) {
