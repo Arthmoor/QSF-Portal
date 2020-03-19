@@ -1064,7 +1064,7 @@ class files extends qsfglobal
 		$date = $this->time;
 
 		$file = $this->db->fetch( "SELECT file_filename FROM %pfiles WHERE file_filename='%s'", $filename );
-		if( $file['file_filename'] == $filename ) {
+		if( isset( $file['file_filename'] ) && $file['file_filename'] == $filename ) {
 			return $this->message( $this->lang->files_upload, $this->lang->files_update_exists );
 		}
 
