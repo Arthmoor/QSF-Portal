@@ -173,7 +173,7 @@ class users_online extends modlet
 		$count_users = $this->qsf->db->num_rows( $query );
 		$user_names = '';
 
-		if( $count_users == '0' ) {
+		if( $count_users == 0 ) {
 			$title_onlinetd_table = '<strong>There have been no members online today.</strong>';
 		} else {
 			$i = 0;

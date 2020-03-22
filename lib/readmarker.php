@@ -125,9 +125,11 @@ class readmarker extends forumutils
 
 		// Clean out unneeded entries
 		if( $this->guest_mode ) {
-			foreach( array_keys( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'] ) as $topic ) {
-				if( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'][$topic] < $time ) {
-					unset( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'][$topic] );
+			if( isset( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'] ) ) {
+				foreach( array_keys( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'] ) as $topic ) {
+					if( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'][$topic] < $time ) {
+						unset( $_SESSION[$this->sets['cookie_prefix'] . 'read_topics'][$topic] );
+					}
 				}
 			}
 			$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
