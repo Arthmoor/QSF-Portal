@@ -754,14 +754,14 @@ class qsfglobal
 				WHERE NOT(topic_modes & %d) AND topic_forum=%d', TOPIC_MOVED, $forum );
 		$rc = $this->db->fetch( 'SELECT COUNT(p.post_id) rc FROM %pposts p, %ptopics t 
 				WHERE p.post_topic=t.topic_id AND topic_forum=%d', $forum );
-		$lp = $this->db->fetch('SELECT p.post_time pt, p.post_id post
+		$lp = $this->db->fetch( 'SELECT p.post_time pt, p.post_id post
 				FROM %pposts p, %ptopics t 
 				WHERE p.post_topic=t.topic_id AND topic_forum=%d
 				ORDER BY p.post_time DESC LIMIT 1', $forum );
 
 		$topicCount += $tc['tc'];
 		$replyCount += $rc['rc'];
-		if( $lp['pt'] > $lastPostTime ) {
+		if( isset( $lp['pt'] ) && $lp['pt'] > $lastPostTime ) {
 			$lastPostTime = $lp['pt'];
 			$lastPost = $lp['post'];
 		}
