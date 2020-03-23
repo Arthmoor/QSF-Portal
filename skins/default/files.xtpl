@@ -363,7 +363,7 @@
  <span class="file_number">{file_downloads}</span>
  <span class="file_number">{size}</span>
  <span class="file_number">{file_comments}</span>
- <span class="file_rating"><img src="{site}/skins/{this->skin}/images/{file_rating}.png" alt="" /></span>
+ <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
 
  <p class="list_line"></p>
 <!-- END: Item -->
