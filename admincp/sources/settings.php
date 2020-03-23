@@ -894,11 +894,11 @@ class settings extends admin
 				if( $var == 'cookie_path' && $val != '/' ) {
 					$newval = '';
 
-					if( $val{0} != '/' )
+					if( $val[0] != '/' )
 						$newval .= '/';
 					$newval .= $val;
 
-					if( $val{strlen($val)-1} != '/' )
+					if( $val[strlen($val)-1] != '/' )
 						$newval .= '/';
 					$val = $newval;
 				}
