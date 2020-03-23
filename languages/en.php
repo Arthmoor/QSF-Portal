@@ -1534,6 +1534,8 @@ class en
 		$this->settings_search_flood = 'Search Flood Control';
 		$this->settings_search_min_time = 'Minimum time between searches.';
 		$this->settings_security = 'Security Settings';
+		$this->settings_security_caution = 'CAUTION - These settings should only be used if you do not have direct control over the web server configuration and the headers are not already being sent by the site your installation is hosted on. Duplicating security headers can cause conflicting information that may render your site inoperable.';
+		$this->settings_security_test = 'Check your header responses with a trusted testing site such as <a href="https://securityheaders.com/">Security Headers</a> before attempting to enable or adjust any of these settings.';
 		$this->settings_security_csp = 'Content-Security-Policy';
 		$this->settings_security_csp_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">Content-Security-Policy security header</a>.';
 		$this->settings_security_csp_warning = 'This is a complex and often detailed policy. Please note that this field performs NO VALIDATION on the input you provide. You will need to determine policy based on your site\'s individual needs. Incorrect setup can lead to your site functioning improperly or failing to load at all.';
@@ -1558,7 +1560,7 @@ class en
 		$this->settings_security_xfo_same = 'Same Origin - Only this site is allowed to put itself in frames [Default]';
 		$this->settings_security_xss = 'X-XSS-Protection';
 		$this->settings_security_xss_block = 'Block - If an XSS attack is detected, the browser will stop the page from rendering at all.';
-		$this->settings_security_xss_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">X-XSS-Protection security header</a>.';
+		$this->settings_security_xss_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">X-XSS-Protection security header</a>.';
 		$this->settings_security_xss_disabled = 'Disable - XSS Filtering will be disabled.';
 		$this->settings_security_xss_sanitize = 'Sanitize - If an XSS attack is detected, the browser will sanitize the page by removing the unsafe parts. [Default]';
 		$this->settings_server = 'Server Settings';

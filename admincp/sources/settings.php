@@ -681,6 +681,8 @@ class settings extends admin
 			$xtpl->assign( 'right_links', $right_links );
 
 			$xtpl->assign( 'settings_security', $this->lang->settings_security );
+			$xtpl->assign( 'settings_security_caution', $this->lang->settings_security_caution );
+			$xtpl->assign( 'settings_security_test', $this->lang->settings_security_test );
 			$xtpl->assign( 'settings_security_htts', $this->lang->settings_security_htts );
 			$xtpl->assign( 'settings_security_htts_detail', $this->lang->settings_security_htts_detail );
 			$xtpl->assign( 'settings_security_htts_max_age', $this->lang->settings_security_htts_max_age );

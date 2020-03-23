@@ -105,6 +105,15 @@
   <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_locked.png" alt="" /> {settings_security}</div>
 
   <span class="field">
+   &nbsp;
+  </span>
+  <span class="form">
+   <span style="font-size:18px; color:yellow">{settings_security_caution}</span>
+   <br /><br />{settings_security_test}
+  </span>
+  <p class="line"></p>
+
+  <span class="field">
    <label for="htts_enabled">{settings_security_htts}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="htts_enabled" id="htts_enabled"{htts_enabled} />
    <br /><br />
    <span class="tiny">{settings_security_htts_detail}</span>
