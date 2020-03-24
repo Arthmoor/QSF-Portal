@@ -125,18 +125,6 @@
   <p class="line"></p>
 
   <span class="field">
-   <label for="xss_enabled">{settings_security_xss}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="xss_enabled" id="xss_enabled"{xss_enabled} />
-   <br /><br />
-   <span class="tiny">{settings_security_xss_detail}</span>
-  </span>
-  <span class="form">
-   <input type="radio" name="xss_policy" id="xss_policy0" value="0"{xss_policy0} /> <label for="xss_policy0">{settings_security_xss_disabled}</label><br />
-   <input type="radio" name="xss_policy" id="xss_policy1" value="1"{xss_policy1} /> <label for="xss_policy1">{settings_security_xss_sanitize}</label><br />
-   <input type="radio" name="xss_policy" id="xss_policy2" value="2"{xss_policy2} /> <label for="xss_policy2">{settings_security_xss_block}</label>
-  </span>
-  <p class="line"></p>
-
-  <span class="field">
    <label for="xfo_enabled">{settings_security_xfo}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="xfo_enabled" id="xfo_enabled"{xfo_enabled} />
    <br /><br />
    <span class="tiny">{settings_security_xfo_detail}</span>

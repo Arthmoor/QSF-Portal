@@ -687,11 +687,6 @@ class settings extends admin
 			$xtpl->assign( 'settings_security_htts_detail', $this->lang->settings_security_htts_detail );
 			$xtpl->assign( 'settings_security_htts_max_age', $this->lang->settings_security_htts_max_age );
 			$xtpl->assign( 'settings_security_htts_warning', $this->lang->settings_security_htts_warning );
-			$xtpl->assign( 'settings_security_xss', $this->lang->settings_security_xss );
-			$xtpl->assign( 'settings_security_xss_detail', $this->lang->settings_security_xss_detail );
-			$xtpl->assign( 'settings_security_xss_disabled', $this->lang->settings_security_xss_disabled );
-			$xtpl->assign( 'settings_security_xss_sanitize', $this->lang->settings_security_xss_sanitize );
-			$xtpl->assign( 'settings_security_xss_block', $this->lang->settings_security_xss_block );
 			$xtpl->assign( 'settings_security_xfo', $this->lang->settings_security_xfo );
 			$xtpl->assign( 'settings_security_xfo_detail', $this->lang->settings_security_xfo_detail );
 			$xtpl->assign( 'settings_security_xfo_deny', $this->lang->settings_security_xfo_deny );

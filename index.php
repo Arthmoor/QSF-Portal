@@ -172,20 +172,6 @@ if( $qsf->sets['htts_enabled'] && $qsf->sets['htts_max_age'] > -1 ) {
 	header( "Strict-Transport-Security: max-age={$qsf->sets['htts_max_age']}" );
 }
 
-if( $qsf->sets['xss_enabled'] ) {
-	if( $qsf->sets['xss_policy'] == 0 ) {
-		header( 'X-XSS-Protection: 0' );
-	}
-
-	if( $qsf->sets['xss_policy'] == 1 ) {
-		header( 'X-XSS-Protection: 1' );
-	}
-
-	if( $qsf->sets['xss_policy'] == 2 ) {
-		header( 'X-XSS-Protection: 1; mode=block' );
-	}
-}
-
 if( $qsf->sets['xfo_enabled'] ) {
 	if( $qsf->sets['xfo_policy'] == 0 ) {
 		header( 'X-Frame-Options: deny' );

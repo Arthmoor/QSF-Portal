@@ -165,8 +165,6 @@ class upgrade extends qsfglobal
 					$this->sets['xfo_enabled'] = 0;
 					$this->sets['xfo_policy'] = 1;
 					$this->sets['xfo_allowed_origin'] = '';
-					$this->sets['xss_enabled'] = 0;
-					$this->sets['xss_policy'] = 1;
 					$this->sets['xcto_enabled'] = 0;
 					$this->sets['ect_enabled'] = 0;
 					$this->sets['ect_max_age'] = 0;

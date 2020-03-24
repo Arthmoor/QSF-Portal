@@ -1558,11 +1558,6 @@ class en
 		$this->settings_security_xfo_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options">X-Frame-Options security header</a>.';
 		$this->settings_security_xfo_frames = 'Frames are only allowed from the specified origin:';
 		$this->settings_security_xfo_same = 'Same Origin - Only this site is allowed to put itself in frames [Default]';
-		$this->settings_security_xss = 'X-XSS-Protection';
-		$this->settings_security_xss_block = 'Block - If an XSS attack is detected, the browser will stop the page from rendering at all.';
-		$this->settings_security_xss_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection">X-XSS-Protection security header</a>.';
-		$this->settings_security_xss_disabled = 'Disable - XSS Filtering will be disabled.';
-		$this->settings_security_xss_sanitize = 'Sanitize - If an XSS attack is detected, the browser will sanitize the page by removing the unsafe parts. [Default]';
 		$this->settings_server = 'Server Settings';
 		$this->settings_server_timezone = 'Server Time Zone';
 		$this->settings_show_avatars = 'Show Avatars';
