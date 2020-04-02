@@ -205,7 +205,6 @@ if( $qsf->sets['fp_enabled'] ) {
 	header( "Feature-Policy: {$qsf->sets['fp_details']}" );
 }
 
-header( "Referrer-Policy: no-referrer-when-downgrade" );
 // End security header options
 
 if( $qsf->is_banned() ) {

@@ -64,6 +64,7 @@ Changes for 2.0:
 * News post retreival was not correctly handling time stamps. Posts were being displayed in random order.
 * When changing emails, passwords were not being verified using the proper secure hashing.
 * Corrected a number of long standing issues with selecting an avatar.
+* Timezones were being incorrectly stored in the database when new users registered.
 
 Changes for 1.5.1:
 
