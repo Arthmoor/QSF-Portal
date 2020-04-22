@@ -26,7 +26,7 @@
  *
  **/
 
-if( version_compare( PHP_VERSION, "7.3.0", "<" ) ) {
+if( version_compare( PHP_VERSION, "7.4.0", "<" ) ) {
 	die( 'PHP version does not meet minimum requirements. Contact your system administrator.' );
 }
 
@@ -43,6 +43,7 @@ require './settings.php';
 $set['include_path'] = '.';
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 $database = 'db_' . $set['dbtype'];
+require_once $set['include_path'] . '/lib/constants.php';
 require_once $set['include_path'] . '/lib/globalfunctions.php';
 require_once $set['include_path'] . '/lib/perms.php';
 require_once $set['include_path'] . '/lib/file_perms.php';
