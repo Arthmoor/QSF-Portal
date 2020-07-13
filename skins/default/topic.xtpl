@@ -175,7 +175,7 @@
 
 <div class="article">
 <!-- BEGIN: CanPostBottom -->
- <div class="bigbutton"><a class="subscribe" href="{site}/control_panel/&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
+ <div class="bigbutton"><a class="subscribe" href="{site}/index.php?a=cp&amp;s=addsub&amp;type=topic&amp;item={topicnum}" title="{topic_subscribe}">{subscribe}</a></div>
  <div class="bigbutton"><a class="poll" href="{site}/index.php?a=post&amp;s=poll&amp;f={topic_forum}" title="{topic_create_poll}">{new_poll}</a></div>
  <div class="bigbutton"><a class="topic" href="{site}/index.php?a=post&amp;s=topic&amp;f={topic_forum}" title="{topic_create_topic}">{new_topic}</a></div>
 <!-- END: CanPostBottom -->
