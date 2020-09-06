@@ -40,7 +40,7 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 class qsfglobal
 {
 	public $name    = 'QSF Portal';      // The name of the software @public string
-	public $version = '2.0';             // QSF Portal version @public int
+	public $version = '2.0';             // QSF Portal version @public float
 	public $server  = array();           // Alias for $_SERVER @public array
 	public $get     = array();           // Alias for $_GET @public array
 	public $post    = array();           // Alias for $_POST @public array
@@ -49,24 +49,24 @@ class qsfglobal
 	public $user    = array();           // Information about the user @public array
 	public $sets    = array();           // Settings @public array
 	public $censor  = array();           // Curse words to filter @public array
-	public $emojis  = array();	     // Array of emojis used for processing post formatting
+	public $emojis  = array();           // Array of emojis used for processing post formatting
 	public $nohtml  = false;             // To display no board wrapper @public bool
 	public $time;                        // The current Unix time @public int
 	public $ip;                          // The user's IP address @public string
 	public $agent;                       // The browser's user agent @public string
 	public $referrer;                    // The browser's referrer setting @public string
 	public $self;                        // Alias for $PHP_SELF @public string
-	public $site;			     // Root URL for the site @public string
+	public $site;			                // Root URL for the site @public string
 	public $db;                          // Database object @public object
 	public $perms;                       // Permissions object @public object
-	public $file_perms;		     // File permissions object @public object
+	public $file_perms;		             // File permissions object @public object
 	public $skin;                        // The user's selected skin @public string
 	public $lang;                        // Loaded words @public object
 	public $query;                       // The query string @public string
 	public $time_exec;                   // Execution time for the whole page
-	public $feed_links = null;	     // HTML of RSS link tags
+	public $feed_links = null;	          // HTML of RSS link tags
 
-	public $attachmentutil;		  // Attachment handler @public object
+	public $attachmentutil;   // Attachment handler @public object
 	public $htmlwidgets;		  // HTML widget handler @public object
 	public $bbcode;			  // BBCode formatter @public object
 	public $readmarker;		  // Handles tracking what posts are read and unread
