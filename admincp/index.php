@@ -42,6 +42,7 @@ require '../settings.php';
 $set['include_path'] = '..';
 require_once $set['include_path'] . '/lib/' . $set['dbtype'] . '.php';
 $database = 'db_' . $set['dbtype'];
+require_once $set['include_path'] . '/lib/constants.php';
 require_once $set['include_path'] . '/lib/globalfunctions.php';
 require_once $set['include_path'] . '/lib/perms.php';
 require_once $set['include_path'] . '/lib/file_perms.php';
@@ -109,19 +110,9 @@ if( !isset( $_GET['a'] ) ) {
 	}
 }
 
-// I know this looks corny and all but it mimics the output from a real 404 page.
+// Throw a 404 error and be done with it.
 if( $missing ) {
 	header( 'HTTP/1.0 404 Not Found' );
-
-	echo( "<!DOCTYPE HTML PUBLIC \"-//IETF//DTD HTML 2.0//EN\">
-	<html><head>
-	<title>404 Not Found</title>
-	</head><body>
-	<h1>Not Found</h1>
-	<p>The requested URL $qstring was not found on this server.</p>
-	<hr>
-	{$_SERVER['SERVER_SIGNATURE']}	</body></html>" );
-
 	exit( );
 }
 
@@ -139,12 +130,6 @@ $admin->get['a'] = $module;
 $admin->pre      = $set['prefix'];
 $admin->sets     = $admin->get_settings( $set );
 $admin->site     = $admin->sets['loc_of_board']; // Will eventually replace $admin->self once the SEO URL changes are done.
-$admin->user_cl  = new user( $admin );
-$admin->user     = $admin->user_cl->login();
-$admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get['a'] );
-
-// Init function also checks permissions and kicks out non-admins
-$admin->init();
 
 $options = array( 'cookie_httponly' => true );
 
@@ -153,6 +138,13 @@ if( $admin->sets['cookie_secure'] ) {
 }
 
 session_start( $options );
+
+$admin->user_cl  = new user( $admin );
+$admin->user     = $admin->user_cl->login();
+$admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get['a'] );
+
+// Init function also checks permissions and kicks out non-admins
+$admin->init();
 
 // Security header options
 if( $admin->sets['htts_enabled'] && $admin->sets['htts_max_age'] > -1 ) {

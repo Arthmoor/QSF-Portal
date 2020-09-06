@@ -139,6 +139,14 @@ $qsf->get['a'] = $module;
 $qsf->sets     = $qsf->get_settings( $set );
 $qsf->site     = $qsf->sets['loc_of_board']; // Will eventually replace $qsf->self once the SEO URL changes are done.
 
+$options = array( 'cookie_httponly' => true, 'cookie_samesite' => 'Lax' );
+
+if( $qsf->sets['cookie_secure'] ) {
+	$options['cookie_secure'] = true;
+}
+
+session_start( $options );
+
 $qsf->user_cl = new user( $qsf );
 $qsf->user    = $qsf->user_cl->login();
 $qsf->lang    = $qsf->get_lang( $qsf->user['user_language'], $qsf->get['a'] );
@@ -157,14 +165,6 @@ if( !isset( $qsf->get['skin'] ) ) {
 }
 
 $qsf->init();
-
-$options = array( 'cookie_httponly' => true, 'cookie_samesite' => 'Lax' );
-
-if( $qsf->sets['cookie_secure'] ) {
-	$options['cookie_secure'] = true;
-}
-
-session_start( $options );
 
 $crypto_nonce = '';
 

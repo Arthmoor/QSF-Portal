@@ -519,7 +519,7 @@ class en
 		$this->files_search_year = 'year';
 		$this->files_size = 'File Size';
 		$this->files_submitted_by = 'Submitted by';
-		$this->files_top20 = 'Top 20 Downloads';
+		$this->files_top20 = 'Recent Uploads';
 		$this->files_type = 'File Type';
 		$this->files_update = 'Update';
 		$this->files_update_approval_not_permitted = 'You do not have the permission to approve this update.';
@@ -1577,6 +1577,7 @@ class en
 		$this->settings_tos = 'Terms of Service';
 		$this->settings_tos_files = 'Terms of Service: Uploads';
 		$this->settings_updated = 'Settings have been updated.';
+		$this->settings_validating_user_purge_time = 'Number of days to wait before purging unvalidated user accounts.';
 		$this->settings_wordpress_id = 'Wordpress API Key';
 		$this->settings_wordpress_msg = 'Enter your Wordpress API Key here. It is required before the anti-spam filters will work. An API key may be obtained at: ';
 	}

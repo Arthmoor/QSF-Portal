@@ -389,6 +389,7 @@ break;
 			$this->sets['cookie_secure'] = 0;
 
 			$this->sets['emailactivation'] = 1;
+			$this->sets['validation_purge_timeout'] = 10;
 			$this->sets['flood_time'] = 30;
 			$this->sets['hot_limit'] = 20;
 			$this->sets['logintime'] = 31536000;

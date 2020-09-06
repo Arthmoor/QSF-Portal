@@ -77,6 +77,9 @@ class activeutil extends forumutils
 					VALUES (%d, '%s', %d, %d, '%s', '%s', '%s')",
 					$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid );
 			}
+
+			$this->purge_unvalidated_users();
+
 			$this->doneUpdate = true; // Flag to make sure we only call once
 		}
 	}
@@ -150,6 +153,39 @@ class activeutil extends forumutils
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Deletes all user accounts still in validating mode that are older than 10 days and have contributed no posts or uploads.
+	 * This is a more than reasonable amount of time to validate an account in.
+	 **/
+	private function purge_unvalidated_users()
+	{
+		$expired = $this->time - ( 86400 * $this->sets['validation_purge_timeout'] ); // Defaults to 10 Days
+
+		$query = $this->db->query( 'SELECT * FROM %pusers WHERE user_group=%d AND user_joined < %d AND user_posts=0 AND user_uploads=0', USER_AWAIT, $expired );
+
+		while( $user = $this->db->nqfetch( $query ) )
+		{
+			$id = $user['user_id'];
+
+			$this->db->query( "DELETE FROM %pusers WHERE user_id=%d", $id );
+			$this->db->query( "DELETE FROM %plogs WHERE log_user=%d", $id );
+			$this->db->query( "DELETE FROM %pfilecomments WHERE user_id=%d", $id );
+			$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d", $id );
+			$this->db->query( "DELETE FROM %pvotes WHERE vote_user=%d", $id );
+			$this->db->query( "DELETE FROM %pfileratings WHERE user_id=%d", $id );
+			$this->db->query( "DELETE FROM %ppmsystem WHERE pm_to=%d", $id );
+			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d", $id );
+
+			$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
+			$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
+
+			$this->sets['last_member'] = $member['user_name'];
+			$this->sets['last_member_id'] = $member['user_id'];
+			$this->sets['members'] = $counts['count']-1;
+			$this->write_sets();
+		}
 	}
 
 	/**

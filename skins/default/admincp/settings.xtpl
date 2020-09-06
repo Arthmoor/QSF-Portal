@@ -288,6 +288,10 @@
  <span class="form"><input type="text" name="akismet_posts_number" value="{akismet_posts_number}" size="40" /></span>
  <p class="line"></p>
 
+ <span class="field">{settings_validating_user_purge_time}</span>
+ <span class="form"><input type="text" name="validation_purge_timeout" value="{validation_purge_timeout}" size="40" /></span>
+ <p class="line"></p>
+
  <input type="submit" value="{submit}" />
 </div>
 

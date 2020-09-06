@@ -154,6 +154,7 @@ class upgrade extends qsfglobal
 				case '1.5.1':
 					// New settings
 					$this->sets['registrations_allowed'] = 1;
+					$this->sets['validation_purge_timeout'] = 10;
 					$this->sets['analytics_code'] = '';
 					$this->sets['default_skin'] = 1;
 					$this->sets['default_timezone'] = 'Europe/London';
@@ -203,6 +204,15 @@ class upgrade extends qsfglobal
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_skin';
 					$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
 					$queries[] = "UPDATE %pusers SET user_skin=1";
+
+					$queries[] = "CREATE TABLE %pvalidation (
+					  validate_id int(10) unsigned NOT NULL,
+					  validate_hash varchar(255) NOT NULL,
+					  validate_time int(10) unsigned NOT NULL,
+					  validate_ip varchar(40) NOT NULL DEFAULT '127.0.0.1',
+					  validate_user_agent varchar(255) NOT NULL,
+					  PRIMARY KEY (validate_id)
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 					$queries[] = "DROP TABLE IF EXISTS %phelp";
 					$queries[] = "DROP TABLE IF EXISTS %ptemplates";

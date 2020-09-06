@@ -531,6 +531,9 @@ class settings extends admin
 			$xtpl->assign( 'settings_akismet_posts_number', $this->lang->settings_akismet_posts_number );
 			$xtpl->assign( 'akismet_posts_number', $this->sets['akismet_posts_number'] );
 
+			$xtpl->assign( 'settings_validating_user_purge_time', $this->lang->settings_validating_user_purge_time );
+			$xtpl->assign( 'validation_purge_timeout', $this->sets['validation_purge_timeout'] );
+
 			$xtpl->assign( 'settings_avatar', $this->lang->settings_avatar );
 			$xtpl->assign( 'settings_avatar_max_width', $this->lang->settings_avatar_max_width );
 			$xtpl->assign( 'settings_pixels', $this->lang->settings_pixels );
@@ -807,6 +810,7 @@ class settings extends admin
 				'mailserver' => 'string',
 				'admin_outgoing' => 'string',
 				'emailactivation' => 'bool',
+				'validation_purge_timeout' => 'int',
 				'logintime' => 'int',
 				'flood_time' => 'int',
 				'flood_time_pm' => 'int',

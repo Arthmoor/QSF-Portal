@@ -263,16 +263,19 @@ class register extends qsfglobal
 			$this->sets['members']++;
 			$this->write_sets();
 
-			if( $this->sets['emailactivation'] ) {
-				return $this->send_activation_email( $email, $username, $pass, $this->time );
+			if( $this->sets['emailactivation'] && $this->sets['emailactivation'] == true ) {
+				$this->update_validation_table();
+				return $this->send_activation_email( $email, $username, $pass, $this->sets['last_member_id'] );
 			}
 
 			return $this->message( $this->lang->register_reging, $this->lang->register_done );
 		}
 	}
 
-	private function send_activation_email( $email, $username, $pass, $jointime )
+	private function send_activation_email( $email, $username, $pass, $id )
 	{
+		$vhash = hash( 'sha512', $email . $username . $pass . $this->time );
+
 		$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
 
 		$message = "{$this->lang->register_requested} {$username}\n";
@@ -280,7 +283,7 @@ class register extends qsfglobal
 		$message .= "{$this->lang->register_email_msg}\n";
 		$message .= "{$this->lang->register_email_msg2} {$this->sets['forum_name']}.\n\n";
 		$message .= "{$this->lang->register_email_msg3}\n";
-		$message .= "{$this->site}/index.php?a=register&s=activate&e=" . md5( $email . $username . $pass . $jointime ) ."\n\n";
+		$message .= "{$this->site}/index.php?a=register&s=activate&e=" . $vhash . "\n\n";
 
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->register_activating}" );
 		$mailer->setMessage( $message );
@@ -288,21 +291,43 @@ class register extends qsfglobal
 		$mailer->setServer( $this->sets['mailserver'] );
 		$mailer->doSend();
 
+		$this->db->query( "REPLACE INTO %pvalidation (validate_id, validate_hash, validate_time, validate_ip, validate_user_agent) VALUES ( %d, '%s', %d, '%s', '%s' )",
+			$id, $vhash, $this->time, $this->ip, $this->agent );
+
 		return $this->message( $this->lang->register_reging, sprintf( $this->lang->register_must_activate, $email ) );
 	}
 
 	private function activateUser()
 	{
+		$this->update_validation_table();
+
 		if( isset( $this->get['e'] ) ) {
-			$member = $this->db->fetch( "SELECT user_id, user_group FROM %pusers WHERE MD5(CONCAT(user_email, user_name, user_password, user_joined))='%s' LIMIT 1", $this->get['e'] );
+			$member = $this->db->fetch( "SELECT * FROM %pusers WHERE user_id=%d", $this->user['user_id'] );
 
-			if( isset( $member['user_id'] ) && USER_GUEST_UID != $member['user_id'] && USER_AWAIT == $member['user_group'] ) {
-				$this->db->query( "UPDATE %pusers SET user_group=%d WHERE user_id=%d", $this->sets['default_group'], $member['user_id'] );
+			if( $member && $member['user_id'] != USER_GUEST_UID && $member['user_group'] == USER_AWAIT ) {
+				$valid = $this->db->fetch( "SELECT * FROM %pvalidation WHERE validate_id=%d", $this->user['user_id'] );
 
-				return $this->message( $this->lang->register_activating, $this->lang->register_activated );
+				if( $valid ) {
+					$vhash = hash( 'sha512', $member['user_email'] . $member['user_name'] . $member['user_password'] . $valid['validate_time'] );
+
+					if( $vhash == $this->get['e'] ) {
+						$this->db->query( "UPDATE %pusers SET user_group=%d WHERE user_id=%d", $this->sets['default_group'], $member['user_id'] );
+
+						$this->db->query( 'DELETE FROM %pvalidation WHERE validate_id=%d', $valid['validate_id'] );
+
+						return $this->message( $this->lang->register_activating, $this->lang->register_activated );
+					}
+				}
 			}
 		}
 		return $this->message( $this->lang->register_activating, $this->lang->register_activation_error );
+	}
+
+	private function update_validation_table()
+	{
+		$expire = $this->time - 14400; // 4 hours
+
+		$this->db->query( 'DELETE FROM %pvalidation WHERE validate_time < %d', $expire );
 	}
 }
 ?>
