@@ -1215,7 +1215,7 @@ class files extends qsfglobal
 			$query = $this->db->query( 'SELECT f.*, u.user_name, u.user_id FROM %pfiles f
 			    LEFT JOIN %pusers u ON u.user_id=f.file_submitted
 			    WHERE f.file_approved=1
-			    ORDER BY f.file_downloads DESC LIMIT 20' );
+			    ORDER BY f.file_date DESC LIMIT 20' );
 		} else {
 			$query = $this->db->query( 'SELECT f.*, u.user_name, u.user_id FROM %pfiles f
 			    LEFT JOIN %pusers u ON u.user_id=f.file_submitted
