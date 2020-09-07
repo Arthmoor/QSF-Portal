@@ -46,7 +46,6 @@ function error( $type, $message, $file = null, $line = 0 )
 		return;
 	}
 
-	include $set['include_path'] . '/lib/constants.php';
 	include $set['include_path'] . '/lib/error.php';
 
 	switch( $type )

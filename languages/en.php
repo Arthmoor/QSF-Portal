@@ -204,18 +204,18 @@ class en
 		$this->censor_updated = 'Word list updated.';
 	}
 
-	public function conversation()
+	public function conversations()
 	{
-		$this->cv_conversation = 'Private Conversations';
+		$this->cv_conversations = 'Private Conversations';
 		$this->cv_by = 'By';
 		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
 		$this->cv_guest_user = 'Guest';
 		$this->cv_icon = 'Message Icon';
 		$this->cv_jump = 'Jump to newest post in topic';
 		$this->cv_last = 'Last Post';
-		$this->cv_no_topics = 'You have no private conversations to display.';
-		$this->cv_new_convo = 'New Conversation';
+		$this->cv_no_convos = 'You have no private conversations to display.';
 		$this->cv_pages = 'Pages';
+      $this->cv_private_conversations = 'Private Conversations';
 		$this->cv_replies = 'Replies';
 		$this->cv_start_convo = 'Start a Conversation';
 		$this->cv_starter = 'Starter';

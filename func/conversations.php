@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -33,7 +33,7 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 
 require_once $set['include_path'] . '/global.php';
 
-class conversation extends qsfglobal
+class conversations extends qsfglobal
 {
 	public function execute()
 	{
@@ -46,11 +46,11 @@ class conversation extends qsfglobal
 			);
 		}
 
-		$this->set_title( $this->lang->cv_conversation );
-		$this->tree( $this->lang->cv_conversation );
+		$this->set_title( $this->lang->cv_conversations );
+		$this->tree( $this->lang->cv_conversations );
 
 		if( $this->perms->is_guest ) {
-			return $this->message( $this->lang->cv_conversation, sprintf( $this->lang->pm_guest, $this->site, $this->site ) );
+			return $this->message( $this->lang->cv_conversations, sprintf( $this->lang->cv_guest, $this->site, $this->site ) );
 		}
 
 		if( isset( $this->get['num'] ) ) {
@@ -94,20 +94,40 @@ class conversation extends qsfglobal
 		}
 
 		// Figure out if it will need page navigation links
-		$conv = $this->db->fetch( 'SELECT COUNT(conv_id) AS count FROM %pconversations' );
+		$conv = $this->db->fetch( 'SELECT COUNT(conv_id) AS count FROM %pconversations WHERE %d IN(conv_users)', $this->user['user_id'] );
 		$pagelinks = $this->htmlwidgets->get_pages( $conv['count'], "a=conversations&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 
-		$convos = $this->getConvos( $min, $n, $m, $order );
-		if( !$convos )
-			$convos = eval( $this->template( 'CONV_NO_TOPICS' ) );
+		$xtpl = new XTemplate( './skins/' . $this->skin . '/conversations.xtpl' );
 
-		$convo_TopicList = eval( $this->template( 'CONV_TOPICS_MAIN' ) );
-		return eval( $this->template( 'CONV_MAIN' ) );
+		$xtpl->assign( 'site', $this->site );
+		$xtpl->assign( 'skin', $this->skin );
+		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
+		$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
+      $xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
+      $xtpl->assign( 'cv_start_convo', $this->lang->cv_start_convo );
+		$xtpl->assign( 'cv_topic', $this->lang->cv_topic );
+		$xtpl->assign( 'cv_starter', $this->lang->cv_starter );
+		$xtpl->assign( 'cv_replies', $this->lang->cv_replies );
+		$xtpl->assign( 'cv_views', $this->lang->cv_views );
+		$xtpl->assign( 'cv_last', $this->lang->cv_last );
+      $xtpl->assign( 'cv_pages', $this->lang->cv_pages );
+ 
+		$convos = $this->getConvos( $xtpl, $min, $n, $m, $order );
+		if( !$convos ) {
+         $xtpl->assign( 'cv_no_convos', $this->lang->cv_no_convos );
+			$xtpl->parse( 'Conversations.Topics.NoTopics' );
+      } else {
+         // $convo_TopicList = eval( $this->template( 'CONV_TOPICS_MAIN' ) );
+      }
+
+      $xtpl->parse( 'Conversations.Topics' );
+      $xtpl->parse( 'Conversations' );
+		return $xtpl->text( 'Conversations' );
 	}
 
-	private function getConvos( $min, $n, $m, $order )
+	private function getConvos( $xtpl, $min, $n, $m, $order )
 	{
-		$out = null;
+		$has_topics = false;
 
 		$query = $this->db->query( "SELECT c.conv_id, c.conv_title, c.conv_starter, c.conv_last_poster, c.conv_replies, c.conv_posted, c.conv_edited,
 				c.conv_icon, c.conv_views, c.conv_description, c.conv_users, c.conv_last_post,
@@ -120,11 +140,13 @@ class conversation extends qsfglobal
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
+         $has_topics = true;
+
 			$row['conv_title'] = $this->format( $row['conv_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			// $row['newpost'] = !$this->readmarker->is_topic_read($row['topic_id'], $row['topic_edited']);
 
-			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], 'a=conversation&amp;c=' . $row['conv_id'], ', ', 0, $m );
+			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], 'a=conversations&amp;c=' . $row['conv_id'], ', ', 0, $m );
 
 			if( !empty( $row['conv_description'] ) ) {
 				$row['conv_description'] = '<br />&raquo; ' . $this->format( $row['conv_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
@@ -170,8 +192,8 @@ class conversation extends qsfglobal
 
 			$conv_posted = $this->mbdate( DATE_LONG, $row['conv_posted'] );
 
-			$out .= eval( $this->template( 'CONV_TOPIC' ) );
+			// $out .= eval( $this->template( 'CONV_TOPIC' ) );
 		}
-		return $out;
+		return $has_topics;
 	}
 }
