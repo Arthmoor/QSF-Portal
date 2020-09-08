@@ -31,7 +31,7 @@
  <p class="list_line"></p>
 <!-- END: NoTopics -->
 
-<!-- BEGIN: ForumTopic -->
+<!-- BEGIN: ConvoTopic -->
  <div class="topic_icon">
   <div class="{state}{poll}">
    {pinned}
@@ -39,38 +39,38 @@
  </div>
 
  <span class="icon">
-  {topic_icon}
+  {conv_icon}
  </span>
 
  <span class="topic">
-  {moved}<a href="{site}/topic/{topic_title_link}-{topic_id}/" title="{forum_topic_posted}: {topic_posted}">{topic_title}</a> {Pages}
+  <a href="{site}/index.php?a=conversations&amp;s=topic&amp;id={conv_id}" title="{conv_topic_posted}: {conv_posted}">{conv_title}</a> {Pages}
 <!-- BEGIN: NewPost -->
-  &mdash; <a href="{site}/topic/{topic_title_link}-{topic_id}/&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{forum_unread}" alt="{forum_unread}" /></a>
+  &mdash; <a href="{site}/index.php?a=conversations&amp;s=topic&amp;id={conv_id}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{conv_unread}" alt="{conv_unread}" /></a>
 <!-- END: NewPost -->
-  {topic_description}
+  {conv_description}
  </span>
  <span class="starter">
-<!-- BEGIN: TopicStarterMember -->
-  <a href="{site}/profile/{link_name}-{topic_starter}/" class="small">{topic_starter_name}</a>
-<!-- END: TopicStarterMember -->
-<!-- BEGIN: TopicStarterGuest -->
-  {topic_starter_name}
-<!-- END: TopicStarterGuest -->
+<!-- BEGIN: ConvoStarterMember -->
+  <a href="{site}/profile/{link_name}-{conv_starter}/" class="small">{conv_starter_name}</a>
+<!-- END: ConvoStarterMember -->
+<!-- BEGIN: ConvoStarterGuest -->
+  {conv_starter_name}
+<!-- END: ConvoStarterGuest -->
  </span>
- <span class="number">{topic_replies}</span>
- <span class="number">{topic_views}</span>
+ <span class="number">{conv_replies}</span>
+ <span class="number">{conv_views}</span>
  <span class="topic_last_post">
-  {topic_edited}<br />
-  <a href="{site}/topic/{topic_title_link}-{topic_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{forum_jump}" alt="{forum_jump}" /></a> &nbsp;
+  {conv_edited}<br />
+  <a href="{site}/conversations/{conv_title_link}-{conv_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{conv_jump}" alt="{conv_jump}" /></a> &nbsp;
 <!-- BEGIN: LastPosterMember -->
-  {forum_by} <a href="{site}/profile/{link_name_last}-{topic_last_poster}/" class="small">{topic_last_poster_name}</a>
+  {conv_by} <a href="{site}/profile/{link_name_last}-{conv_last_poster}/" class="small">{conv_last_poster_name}</a>
 <!-- END: LastPosterMember -->
 <!-- BEGIN: LastPosterGuest -->
-  {forum_by} {topic_last_poster_name}
+  {conv_by} {conv_last_poster_name}
 <!-- END: LastPosterGuest -->
  </span>
  <p class="list_line"></p>
-<!-- END: ForumTopic -->
+<!-- END: ConvoTopic -->
 </div>
 
 <div class="article">

@@ -66,7 +66,7 @@ $queries[] = "CREATE TABLE %pcaptcha (
 $queries[] = "DROP TABLE IF EXISTS %pconversations";
 $queries[] = "CREATE TABLE %pconversations (
   conv_id int(10) unsigned NOT NULL auto_increment,
-  conv_title varchar(75) NOT NULL default '0',
+  conv_title varchar(75) NOT NULL default '',
   conv_description varchar(255) NOT NULL default '',
   conv_starter int(10) unsigned NOT NULL default '0',
   conv_last_post int(10) unsigned NOT NULL default '0',

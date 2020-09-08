@@ -138,6 +138,10 @@ class conversations extends qsfglobal
 			ORDER BY $order
 			LIMIT %d, %d", $this->user['user_id'], $min, $n );
 
+      $xtpl->assign( 'conv_jump', $this->lang->cv_jump );
+      $xtpl->assign( 'conv_topic_posted', $this->lang->cv_topic_posted );
+      $xtpl->assign( 'conv_by', $this->lang->cv_by );
+
 		while( $row = $this->db->nqfetch( $query ) )
 		{
          $has_topics = true;
@@ -158,12 +162,6 @@ class conversations extends qsfglobal
 				$last_poster = $this->lang->cv_guest_user;
 			}
 
-			if( $row['conv_starter'] != USER_GUEST_UID ) {
-				$row['conv_starter'] = '<a href="' . $this->site . '/profile/' . $this->htmlwidgets->clean_url( $row['conv_starter_name'] ) . '-' . $row['conv_starter'] . '/" class="small">' . $row['conv_starter_name'] . '</a>';
-			} else {
-				$row['conv_starter'] = $this->lang->cv_guest_user;
-			}
-
 			$state = null;
 			$row['newpost'] = null;
 
@@ -182,17 +180,64 @@ class conversations extends qsfglobal
 			$row['edited'] = $row['conv_edited']; // Store so skin can access
 			$row['conv_edited'] = $this->mbdate( DATE_LONG, $row['conv_edited'] );
 
-			$row['conv_replies']  = number_format( $row['conv_replies'], 0, null, $this->lang->sep_thousands );
-			$row['conv_views']  = number_format( $row['conv_views'], 0, null, $this->lang->sep_thousands );
+			$row['conv_replies'] = number_format( $row['conv_replies'], 0, null, $this->lang->sep_thousands );
+			$row['conv_views'] = number_format( $row['conv_views'], 0, null, $this->lang->sep_thousands );
 
-			$row['icon'] = $row['conv_icon']; // Store so skin can still access
+			$icon = $row['conv_icon']; // Store so skin can still access
 			if( $row['conv_icon'] ) {
-				$row['conv_icon'] = '<img src="' . $this->sets['loc_of_board'] . '/skins/' . $this->skin . '/mbicons/' . $row['conv_icon'] . '" alt="' . $this->lang->cv_icon . '" />';
+            $xtpl->assign( 'conv_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->cv_icon}\" class=\"left\" />" );
 			}
 
 			$conv_posted = $this->mbdate( DATE_LONG, $row['conv_posted'] );
 
-			// $out .= eval( $this->template( 'CONV_TOPIC' ) );
+         $xtpl->assign( 'state', $state );
+         $xtpl->assign( 'conv_id', $row['conv_id'] );
+         $xtpl->assign( 'conv_topic_posted', 'conv_topic_posted' );
+         $xtpl->assign( 'conv_posted', $row['conv_posted'] );
+         $xtpl->assign( 'conv_title', $row['conv_title'] );
+
+         $conv_link = $this->htmlwidgets->clean_url( $row['conv_title'] );
+         $xtpl->assign( 'conv_title_link', $conv_link );
+
+         $Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], "/conversations/{$conv_link}-{$row['conv_id']}", ', ', 0, $m );
+         $xtpl->assign( 'Pages', $Pages );
+
+         $xtpl->assign( 'conv_unread', 'conv_unread' );
+         $xtpl->assign( 'conv_description', $row['conv_description'] );
+
+			if( $row['conv_starter'] != USER_GUEST_UID ) {
+				$xtpl->assign( 'conv_starter', $row['conv_starter'] );
+				$xtpl->assign( 'conv_starter_name', $row['conv_starter_name'] );
+				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $row['conv_starter_name'] ) );
+
+				$xtpl->parse( 'Conversations.Topics.ConvoTopic.ConvoStarterMember' );
+			} else {
+				$xtpl->assign( 'conv_starter_name', $this->lang->cv_guest_user );
+ 
+				$xtpl->parse( 'Conversations.Topics.ConvoTopic.ConvoStarterGuest' );
+			}
+
+         $xtpl->assign( 'conv_replies', $row['conv_replies'] );
+         $xtpl->assign( 'conv_views', $row['conv_views'] );
+         $xtpl->assign( 'conv_edited', $row['conv_edited'] );
+         
+         $jump = '&amp;p=' . $row['conv_last_post'] . '#p' . $row['conv_last_post'];
+
+         $xtpl->assign( 'jump', $jump );
+
+			if( $row['conv_last_poster'] != USER_GUEST_UID ) {
+				$xtpl->assign( 'conv_last_poster', $row['conv_last_poster'] );
+				$xtpl->assign( 'conv_last_poster_name', $row['conv_last_poster_name'] );
+				$xtpl->assign( 'link_name_last', $this->htmlwidgets->clean_url( $row['conv_last_poster_name'] ) );
+
+				$xtpl->parse( 'Conversations.Topics.ConvoTopic.LastPosterMember' );
+			} else {
+				$xtpl->assign( 'conv_last_poster_name', $this->lang->cv_guest_user );
+
+				$xtpl->parse( 'Conversations.Topics.ConvoTopic.LastPosterGuest' );
+			}
+
+         $xtpl->parse( 'Conversations.Topics.ConvoTopic' );
 		}
 		return $has_topics;
 	}
