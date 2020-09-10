@@ -80,10 +80,16 @@ class db_mysqli extends database
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.1
 	 * @return int Insert ID
+    *
+    * Modified due to apparently not working every time it's called. Now returns the SELECT MAX() from the specified table and column. Returns that as an integer.
 	 **/
-	public function insert_id( $table )
+	public function insert_id( $table, $column )
 	{
-		return $this->connection->insert_id;
+      $result = $this->fetch( "SELECT MAX(%s) AS max_value FROM %s", $column, $this->prefix . $table );
+
+      return $result['max_value'];
+
+		// return $this->connection->insert_id;
 	}
 
 	/**

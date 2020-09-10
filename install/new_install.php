@@ -127,7 +127,7 @@ class new_install extends qsfglobal
 			('%s', %d, '%s', '%s', '0', '0')",
 			$tree, $parent, $name, $desc );
 
-		$forumId = $this->db->insert_id( "forums" );
+		$forumId = $this->db->insert_id( 'forums', 'forum_id' );
 
 		$perms = new permissions( $this );
 
@@ -449,7 +449,7 @@ break;
 			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_signature)
 				VALUES ('%s', '%s', %d, 'Administrator', 1, %d, '%s', '%s', '%s', '%s', %d, %d, '%s')",
 				$this->post['admin_name'], $admin_pass, USER_ADMIN, $this->time, $this->post['admin_email'], $this->post['user_timezone'], './avatars/avatar.jpg', 'local', 100, 100, '' );
-			$admin_uid = $this->db->insert_id( "users" );
+			$admin_uid = $this->db->insert_id( 'users', 'user_id' );
 
 			$this->sets['last_member'] = $this->post['admin_name'];
 			$this->sets['last_member_id'] = $admin_uid;
@@ -487,13 +487,13 @@ Have fun and enjoy your new site!";
 			$this->db->query( "INSERT INTO %ptopics (topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes) 
 				VALUES ('%s', %d, '%s', %d, '%s', %d, %d, %d, %d)",
 				$topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, TOPIC_PUBLISH );
-			$topicId = $this->db->insert_id( "topics" );
+			$topicId = $this->db->insert_id( 'topics', 'topic_id' );
 
 			// Create Post
 			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon)
 				VALUES (%d, %d, '%s', %d, 1, 1, '%s', '%s')",
 				$topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon );
-			$postId = $this->db->insert_id( "posts" );
+			$postId = $this->db->insert_id( 'posts', 'post_id' );
 
 			$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $postId, $topicId );
 

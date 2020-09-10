@@ -777,7 +777,7 @@ class files extends qsfglobal
 			$this->db->query( "INSERT INTO %pfile_categories (fcat_parent, fcat_name, fcat_longpath, fcat_tree, fcat_description)
 			 VALUES( %d, '%s', '%s', '%s', '%s' )", $parent, $name, $longpath, $tree, $desc );
 
-			$newid = $this->db->insert_id( 'file_categories' );
+			$newid = $this->db->insert_id( 'file_categories', 'fcat_id' );
 			$perms = new file_permissions( $this );
 
 			while( $perms->get_group() )

@@ -311,7 +311,7 @@ class pm extends qsfglobal
 					VALUES (%d, %d, '%s', '%s', %d, '%s', 0)",
 					$who['user_id'], $this->user['user_id'], $this->ip, $this->post['title'], $this->time, $this->post['message'] );
 
-				$message_id = $this->db->insert_id( "pmsystem" );
+				$message_id = $this->db->insert_id( 'pmsystem', 'pm_id' );
 				if( $who['user_pm_mail'] ) {
 					$message  = "{$this->sets['forum_name']}\n";
 					$message .= "{$this->site}/index.php?a=pm&s=view&m={$message_id}\n\n";

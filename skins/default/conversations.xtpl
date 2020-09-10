@@ -12,7 +12,7 @@
 
 <!-- BEGIN: Topics -->
 <div class="article">
- <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_start_convo}">{cv_start_convo}</a></div>
+ <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
  <p></p>
 </div>
 
@@ -43,11 +43,10 @@
  </span>
 
  <span class="topic">
-  <a href="{site}/index.php?a=conversations&amp;s=topic&amp;id={conv_id}" title="{conv_topic_posted}: {conv_posted}">{conv_title}</a> {Pages}
+  <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}" title="{conv_topic_posted}: {conv_posted}">{conv_title}</a> {Pages}
 <!-- BEGIN: NewPost -->
-  &mdash; <a href="{site}/index.php?a=conversations&amp;s=topic&amp;id={conv_id}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{conv_unread}" alt="{conv_unread}" /></a>
+  &mdash; <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{conv_unread}" alt="{conv_unread}" /></a>
 <!-- END: NewPost -->
-  {conv_description}
  </span>
  <span class="starter">
 <!-- BEGIN: ConvoStarterMember -->
@@ -74,7 +73,7 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_start_convo}">{cv_start_convo}</a></div>
+ <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
  <p></p>
 </div>
 
@@ -85,4 +84,42 @@
  <p></p>
 </div>
 <!-- END: Topics -->
+
+<!-- BEGIN: NewConvo -->
+<!-- BEGIN: Preview -->
+<div class="article">
+ <div class="title">{preview_title}</div>
+ {preview_text}
+</div>
+<!-- END: Preview -->
+<form action="{site}/index.php?a=conversations&amp;s=newconvo" method="post" id="mbpost">
+<div class="article">
+ <div class="title">
+  <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="" />
+  {cv_new_convo}
+ </div>
+ <span class="field">{cv_to}<br /><span class="tiny">{cv_multiple}</span></span>
+ <span class="form"><input name="to" size="60" value="{to}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cv_title}</span>
+ <span class="form"><input name="title" size="60" value="{title}" /></span>
+ <p class="line"></p>
+
+ <span class="field">
+  {smilies}
+ </span>
+ <span class="form">
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
+  {bbcode_menu}
+  <textarea name="message" id="bbcode_textbox" rows="12" cols="20">{msg}</textarea>
+ </span>
+ <p class="line"></p>
+
+ <input type="hidden" name="token" value="{token}" />
+ <input name="submit" type="submit" value="{cv_post}" />
+ <input type="submit" name="preview" value="{cv_preview}" />
+</div>
+</form>
+<!-- END: NewConvo -->
 <!-- END: Conversations -->

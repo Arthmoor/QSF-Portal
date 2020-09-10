@@ -259,7 +259,7 @@ class register extends qsfglobal
 				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone'], $this->ip, $email, $svars );
 
 			$this->sets['last_member'] = $username;
-			$this->sets['last_member_id'] = $this->db->insert_id( "users" );
+			$this->sets['last_member_id'] = $this->db->insert_id( 'users', 'user_id' );
 			$this->sets['members']++;
 			$this->write_sets();
 

@@ -66,8 +66,7 @@ $queries[] = "CREATE TABLE %pcaptcha (
 $queries[] = "DROP TABLE IF EXISTS %pconversations";
 $queries[] = "CREATE TABLE %pconversations (
   conv_id int(10) unsigned NOT NULL auto_increment,
-  conv_title varchar(75) NOT NULL default '',
-  conv_description varchar(255) NOT NULL default '',
+  conv_title varchar(255) NOT NULL default '',
   conv_starter int(10) unsigned NOT NULL default '0',
   conv_last_post int(10) unsigned NOT NULL default '0',
   conv_last_poster int(10) unsigned NOT NULL default '0',
@@ -79,6 +78,24 @@ $queries[] = "CREATE TABLE %pconversations (
   conv_users varchar(255) NOT NULL default '',
   PRIMARY KEY  (conv_id),
   KEY User (conv_starter)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+$queries[] = "DROP TABLE IF EXISTS %pconv_posts";
+$queries[] = "CREATE TABLE %pconv_posts (
+  post_id int(10) unsigned NOT NULL auto_increment,
+  post_convo int(10) unsigned NOT NULL,
+  post_author int(10) unsigned NOT NULL,
+  post_time int(10) unsigned NOT NULL default '0',
+  post_edited_by varchar(32) NOT NULL default '',
+  post_edited_time int(10) unsigned NOT NULL default '0',
+  post_ip varchar(40) NOT NULL default '127.0.0.1',
+  post_icon varchar(32),
+  post_text text NOT NULL,
+  post_referrer tinytext,
+  post_agent tinytext,
+  PRIMARY KEY  (post_id),
+  KEY Conversation (post_convo),
+  FULLTEXT KEY post_text (post_text)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
 
 $queries[] = "DROP TABLE IF EXISTS %pemojis";

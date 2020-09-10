@@ -81,7 +81,7 @@ class database
 	 * @param string $table Table name - unused
 	 * @return int Insert ID
 	 **/
-	public function insert_id( $table )
+	public function insert_id( $table, $column )
 	{
 		return null;
 	}

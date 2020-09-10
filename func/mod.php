@@ -199,7 +199,7 @@ class mod extends qsfglobal
 
 			if( $this->post['operation'] == 'lock' ) {
 				$this->db->clone_row( 'topics', 'topic_id', $t );
-				$newtopic = $this->db->insert_id( 'topics' );
+				$newtopic = $this->db->insert_id( 'topics', 'topic_id' );
 
 				$this->db->query( "UPDATE %ptopics SET topic_modes=%d, topic_moved=%d WHERE topic_id=%d OR topic_moved=%d",
 					$topic['topic_modes'] | TOPIC_MOVED, $newtopic, $t, $t );
@@ -968,7 +968,7 @@ class mod extends qsfglobal
 			{
 				if( isset( $where[$x] ) ) {
 					$this->db->clone_row( 'topics', 'topic_id', $t );
-					$id = $this->db->insert_id( 'topics' );
+					$id = $this->db->insert_id( 'topics', 'topic_id' );
 
 					if( $topic['topic_modes'] & TOPIC_PUBLISH ) {
 						$mode = TOPIC_PUBLISH;

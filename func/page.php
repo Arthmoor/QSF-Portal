@@ -292,7 +292,7 @@ class page extends qsfglobal
 				$flags |= intval( $flag );
 
 		$this->db->query( "INSERT INTO %ppages (page_title,page_contents,page_flags) VALUES('%s', '%s', %d)", $this->post['title'], $this->post['contents'], $flags );
-		$p = $this->db->insert_id( "%ppages" );
+		$p = $this->db->insert_id( 'pages', 'page_id' );
 
 		return $this->message( $this->lang->page_creating, $this->lang->page_created, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}" );
 	}

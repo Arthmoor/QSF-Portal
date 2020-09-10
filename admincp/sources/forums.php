@@ -507,7 +507,7 @@ class forums extends admin
 			$this->CreateTree($forums, $this->post['parent']),
 			$this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect );
 
-		$id = $this->db->insert_id( "forums" );
+		$id = $this->db->insert_id( 'forums', 'forum_id' );
 
 		$perms = new permissions( $this );
 

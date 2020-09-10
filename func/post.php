@@ -595,7 +595,7 @@ class post extends qsfglobal
 						$this->post['icon'], $this->time, $this->time, $this->user['user_id'], $mode, TOPIC_TYPE_FORUM, $this->post['options'] );
 				}
 
-				$t = $this->db->insert_id( "topics" );
+				$t = $this->db->insert_id( 'topics', 'topic_id' );
 
 				// Topic pin and lock were not being tracked here before. Oops.
 				if( $mode & TOPIC_PINNED )
@@ -667,7 +667,7 @@ class post extends qsfglobal
 			$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
 				VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
 				$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $this->referrer, $this->agent );
-			$post_id = $this->db->insert_id( "posts" );
+			$post_id = $this->db->insert_id( 'posts', 'post_id' );
 
 			$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $t );
 
