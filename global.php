@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -70,6 +70,7 @@ class qsfglobal
 	public $htmlwidgets;		  // HTML widget handler @public object
 	public $bbcode;			  // BBCode formatter @public object
 	public $readmarker;		  // Handles tracking what posts are read and unread
+   public $conv_readmarker;  // Handles tracking which private conversatons have been read
 	public $validator;		  // Handler for checking usernames, passwords, etc
 	public $activeutil;		  // Handler user activity
 
@@ -117,6 +118,7 @@ class qsfglobal
 		$this->bbcode = new bbcode( $this );
 		$this->validator = new tool();
 		$this->readmarker = new readmarker( $this );
+      $this->conv_readmarker = new conv_readmarker( $this );
 		$this->activeutil = new activeutil( $this );
 
 		$replace = $this->db->query( 'SELECT * FROM %preplacements ORDER BY LENGTH(replacement_search) DESC' );
@@ -152,6 +154,7 @@ class qsfglobal
 		}
 
 		$this->readmarker->cleanup();
+      $this->conv_readmarker->cleanup();
 	}
 
 	/**

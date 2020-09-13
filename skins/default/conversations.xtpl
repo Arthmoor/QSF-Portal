@@ -10,12 +10,11 @@
  <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {cv_conversations}</div>
 </div>
 
-<!-- BEGIN: Topics -->
 <div class="article">
  <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
  <p></p>
 </div>
-
+<!-- BEGIN: Topics -->
 <div class="article">
  <span class="head">
   <span class="icon">&nbsp;</span>
@@ -44,6 +43,7 @@
 
  <span class="topic">
   <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}" title="{conv_topic_posted}: {conv_posted}">{conv_title}</a> {Pages}
+  {conv_description}
 <!-- BEGIN: NewPost -->
   &mdash; <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{conv_unread}" alt="{conv_unread}" /></a>
 <!-- END: NewPost -->
@@ -106,6 +106,17 @@
  <span class="form"><input name="title" size="60" value="{title}" /></span>
  <p class="line"></p>
 
+ <span class="field">{cv_description}</span>
+ <span class="form"><input name="description" size="60" value="{description}" /></span>
+ <p class="line"></p>
+
+ <span class="field">{cv_icon}</span>
+ <div class="form">
+  <ul class="post_icons">
+   {msg_icons}
+  </ul>
+ </div>
+ 
  <span class="field">
   {smilies}
  </span>
@@ -116,6 +127,32 @@
  </span>
  <p class="line"></p>
 
+ <span class="field">{cv_options}</span>
+ <span class="form">
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{cv_option_emojis}</label><br />
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{cv_option_bbcode}</label>
+ </span>
+ <p class="line"></p>
+<!-- BEGIN: AttachBox -->
+ <span class="field">{cv_attach_add}<br /><span class="tiny">{cv_attach_disrupt}</span></span>
+ <span class="form">
+  <input type="file" name="attach_upload" /><br />
+  <input type="submit" name="attach" value="{cv_attach_add}" /> <b>{upload_error}</b>
+ </span>
+ <p class="line"></p>
+
+<!-- BEGIN: Remove -->
+ <span class="field">{cv_attach}</span>
+ <span class="form">
+  <select name="attached">
+   {attached}
+  </select>
+  <input type="submit" name="detach" value="{post_attach_remove}" />
+ </span>
+ {attached_data}
+ <p class="line"></p>
+<!-- END: Remove -->
+<!-- END: AttachBox -->
  <input type="hidden" name="token" value="{token}" />
  <input name="submit" type="submit" value="{cv_post}" />
  <input type="submit" name="preview" value="{cv_preview}" />

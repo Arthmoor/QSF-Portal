@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -197,6 +197,7 @@ class upgrade extends qsfglobal
 					$queries[] = "UPDATE %pusers SET user_birthday='1900-01-01' WHERE CAST(user_birthday AS CHAR(10)) = '0000-00-00'";
 					$queries[] = "UPDATE %pusers SET user_timezone='Europe/London'";
 					$queries[] = "ALTER TABLE %pusers ADD user_facebook varchar(255) NOT NULL default '' AFTER user_twitter";
+               $queries[] = "ALTER TABLE %pusers ADD user_lastcvallread int(10) unsigned NOT NULL default '0' AFTER user_lastallread";
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_icq';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_aim';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_msn';
@@ -204,6 +205,8 @@ class upgrade extends qsfglobal
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_skin';
 					$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
 					$queries[] = "UPDATE %pusers SET user_skin=1";
+					$queries[] = 'ALTER TABLE %pattach ADD attach_pm int(12) unsigned NOT NULL default 0 AFTER attach_post';
+               $queries[] = 'ALTER TABLE %pattach ADD KEY (attach_pm)';
 
 					$queries[] = "CREATE TABLE %pvalidation (
 					  validate_id int(10) unsigned NOT NULL,
@@ -284,7 +287,8 @@ class upgrade extends qsfglobal
 
                $queries[] = "CREATE TABLE %pconversations (
                  conv_id int(10) unsigned NOT NULL auto_increment,
-                 conv_title varchar(255) NOT NULL default '',
+                 conv_title varchar(75) NOT NULL default '',
+                 conv_description varchar(255),
                  conv_starter int(10) unsigned NOT NULL default '0',
                  conv_last_post int(10) unsigned NOT NULL default '0',
                  conv_last_poster int(10) unsigned NOT NULL default '0',
@@ -303,8 +307,10 @@ class upgrade extends qsfglobal
                  post_convo int(10) unsigned NOT NULL,
                  post_author int(10) unsigned NOT NULL,
                  post_time int(10) unsigned NOT NULL default '0',
-                 post_edited_by varchar(32) NOT NULL default '',
+                 post_edited_by varchar(32) default '',
                  post_edited_time int(10) unsigned NOT NULL default '0',
+                 post_emojis tinyint(1) unsigned NOT NULL default '1',
+                 post_bbcode tinyint(1) unsigned NOT NULL default '1',
                  post_ip varchar(40) NOT NULL default '127.0.0.1',
                  post_icon varchar(32),
                  post_text text NOT NULL,
@@ -314,6 +320,13 @@ class upgrade extends qsfglobal
                  KEY Conversation (post_convo),
                  FULLTEXT KEY post_text (post_text)
                ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+
+               $queries[] = "CREATE TABLE %pconv_readmarks (
+                 readmark_user int(10) unsigned NOT NULL default '0',
+                 readmark_conv int(10) unsigned NOT NULL default '0',
+                 readmark_lastread int(10) unsigned NOT NULL default '0',
+                 PRIMARY KEY  (readmark_user,readmark_conv)
+               ) ENGINE=MyISAM";               
 
 				default:
 					break;

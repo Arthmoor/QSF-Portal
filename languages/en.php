@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -207,35 +207,71 @@ class en
 	public function conversations()
 	{
 		$this->cv_conversations = 'Private Conversations';
+		$this->cv_attach = 'Attachments';
+		$this->cv_attach_add = 'Add Attachment';
+		$this->cv_attach_disrupt = 'Adding or removing attachments will not disrupt your post.';
+      $this->cv_attached_downloads = 'Downloads';
+		$this->cv_attach_failed = 'The attachment upload failed. The file you specified may not exist.';
+      $this->cv_attached_image = 'Attached image:';
+		$this->cv_attach_not_allowed = 'You cannot attach files of that type.';
+		$this->cv_attach_remove = 'Remove Attachment';
+		$this->cv_attach_too_large = 'The specified file is too large. The maximum size is %d KB.';
+      $this->cv_attached = 'Attached file:';
+      $this->cv_attached_downloads = 'Downloads';
+      $this->cv_attached_filename = 'Filename:';
+      $this->cv_attached_size = 'Size:';
+      $this->cv_bottom = 'Go to the bottom of the page';
 		$this->cv_by = 'By';
       $this->cv_cannot_send = 'The conversation cannot be started. The recipients may not exist, or they all have private conversations disabled.';
+      $this->cv_edited = 'Last edited %s by %s';
       $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting private conversations: %s';
       $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br /><br />Please try again in a few seconds.';
+      $this->cv_group = 'Group';
 		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
 		$this->cv_guest_user = 'Guest';
 		$this->cv_icon = 'Message Icon';
-		$this->cv_new_convo = 'New Conversation';
+      $this->cv_joined = 'Joined';
 		$this->cv_jump = 'Jump to newest post in topic';
 		$this->cv_last = 'Last Post';
       $this->cv_multiple = 'Separate multiple recipients with commas.';
+      $this->cv_msg = 'Message';
+		$this->cv_new_convo = 'New Conversation';
+      $this->cv_newer = 'Newer Conversation';
+      $this->cv_new_post = 'Post is unread';
 		$this->cv_no_convos = 'You have no private conversations to display.';
       $this->cv_no_message = 'No message content was provided for the conversation you are trying to start.';
       $this->cv_no_recipients = 'You cannot start a conversation without specifying at least one recipient.';
       $this->cv_no_title = 'A conversation requires a title. Please go back and enter one.';
+      $this->cv_not_found_message = 'The conversation could not be found. It may have been deleted, moved, or perhaps never existed.';
+      $this->cv_no_newer = 'There is no newer conversation.';
+		$this->cv_no_older = 'There is no older conversation.';
+      $this->cv_older = 'Older Conversation';
+		$this->cv_offline = 'This member is currently offline';
+		$this->cv_online = 'This member is currently online';
+		$this->cv_option_emojis = 'Convert emojis into images?';
+		$this->cv_option_bbcode = 'Format BBCode?';
+      $this->cv_options = 'Options';
 		$this->cv_pages = 'Pages';
       $this->cv_post = 'Post';
+      $this->cv_posts = 'Posts';
       $this->cv_preview = 'Preview';
       $this->cv_private_conversations = 'Private Conversations';
+      $this->cv_quickreply = 'Quick Reply';
+      $this->cv_quote = 'Reply with a quote from this post';
 		$this->cv_replies = 'Replies';
+      $this->cv_reply = 'Reply to Topic';
       $this->cv_sent_mail = 'has started a private conversation with you.';
       $this->cv_started = 'Your conversation has been started.';
 		$this->cv_starter = 'Starter';
       $this->cv_title = 'Title';
       $this->cv_to = 'To';
+      $this->cv_top = 'Go to the top of the page';
 		$this->cv_topic = 'Topic';
 		$this->cv_topic_posted = 'Posted';
 		$this->cv_unread = 'Jump to oldest unread post';
+      $this->cv_unreg = 'Unregistered';
 		$this->cv_views = 'Views';
+      $this->cv_viewing = 'Viewing Conversation';
 	}
 
 	public function cp()

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -177,6 +177,7 @@ class activeutil extends forumutils
 			$this->db->query( "DELETE FROM %pfileratings WHERE user_id=%d", $id );
 			$this->db->query( "DELETE FROM %ppmsystem WHERE pm_to=%d", $id );
 			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d", $id );
+         $this->db->query( "DELETE FROM %pconv_readmarks WHERE readmark_user=%d", $id );
 
 			$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
 			$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
@@ -184,7 +185,7 @@ class activeutil extends forumutils
 			$this->sets['last_member'] = $member['user_name'];
 			$this->sets['last_member_id'] = $member['user_id'];
 			$this->sets['members'] = $counts['count']-1;
-			$this->write_sets();
+			$this->qsf->write_sets();
 		}
 	}
 

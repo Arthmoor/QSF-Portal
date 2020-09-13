@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -54,6 +54,7 @@ require_once $set['include_path'] . '/lib/htmlwidgets.php';
 require_once $set['include_path'] . '/lib/bbcode.php';
 require_once $set['include_path'] . '/lib/tool.php';
 require_once $set['include_path'] . '/lib/readmarker.php';
+require_once $set['include_path'] . '/lib/conv_readmarker.php';
 require_once $set['include_path'] . '/lib/activeutil.php';
 require_once $set['include_path'] . '/lib/modlet.php';
 require_once $set['include_path'] . '/lib/zTemplate.php';
@@ -272,7 +273,6 @@ if( $qsf->nohtml ) {
 	$xtpl->assign( 'meta_desc', $qsf->sets['meta_description'] );
 	$xtpl->assign( 'mobile_icons', $qsf->sets['mobile_icons'] );
 	$xtpl->assign( 'title', $title );
-	$xtpl->assign( 'loc_of_board', $qsf->sets['loc_of_board'] );
 	$xtpl->assign( 'skin', $qsf->skin );
 	$xtpl->assign( 'feed_links', $qsf->feed_links );
 

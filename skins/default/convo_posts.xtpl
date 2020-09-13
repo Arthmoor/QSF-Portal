@@ -1,0 +1,203 @@
+<!-- BEGIN: Conversation -->
+<div class="article">
+ <div style="float:left">{tree}</div>
+ <div style="text-align:right">
+  <a href="{site}/forum_rules/" title="{main_forum_rules}">{main_forum_rules}</a>
+ </div>
+</div>
+
+<div class="article">
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {cv_conversations}</div>
+</div>
+
+<div class="article">
+ <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" title="{cv_reply}">{reply}</a></div>
+ <p></p>
+</div>
+
+<div class="article">
+ <div class="title">
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
+  {title_html}
+ </div>
+ <span class="next_prev_topics">
+  <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}&amp;view=older">&lt; {cv_older}</a>
+  :: <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}&amp;view=newer">{cv_newer} &gt;</a>
+ </span>
+ <span class="topic_description">{conv_description}</span>
+ <p></p>
+</div>
+
+<div class="article">
+<!-- BEGIN: ModPageLinksTop -->
+ <div style="float:left">{cv_pages}:{pagelinks}</div>
+ <div style="text-align:right">{mod_opts}</div>
+<!-- END: ModPageLinksTop -->
+<!-- BEGIN: PageLinksTop -->
+ {cv_pages}:{pagelinks}
+<!-- END: PageLinksTop -->
+</div>
+
+<!-- BEGIN: Post -->
+<div class="hidden">
+ <a id="p{post_id}"></a>
+<!-- BEGIN: FirstUnread -->
+ <a id="unread"></a>
+<!-- END: FirstUnread -->
+</div>
+
+<div class="article">
+ <div class="title">
+  <div style="float:left;">
+<!-- BEGIN: NewPost -->
+   <img src="{site}/skins/{skin}/images/icons/post_new.png" alt="{cv_new_post}" />
+<!-- END: NewPost -->
+<!-- BEGIN: NewPostTopic -->
+   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{cv_new_post}" />
+<!-- END: NewPostTopic -->
+<!-- BEGIN: PostIcon -->
+   <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
+<!-- END: PostIcon -->
+   <a href="{site}/index.php?a=conversations&amp;id={conv_id}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
+   &nbsp;&nbsp;<span class="small_text">{edited}</span>
+  </div>
+  <div style="text-align:right;">
+   <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{cv_top}" title="{cv_top}" /></a></div>
+   <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{cv_bottom}" title="{cv_bottom}" /></a></div>
+<!-- BEGIN: CanDelete -->
+   <div class="button"><a class="spam" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
+   <div class="button"><a class="delete" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
+<!-- END: CanDelete -->
+<!-- BEGIN: CanEdit -->
+    <div class="button"><a class="edit" href="{site}/index.php?a=mod&amp;s=edit_post&amp;p={post_id}" title="{topic_edit_post}">{edit}</a></div>
+<!-- END: CanEdit -->
+    <div class="button"><a class="quotepost" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}&amp;qu={post_id}" title="{cv_quote}">{quote}</a></div>
+  </div>
+  <p></p>
+ </div>
+<!-- BEGIN: PosterInfoGuest -->
+ <span class="avatar">
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+ </span>
+ <span class="member_info">
+  <strong>{cv_guest_user}</strong> - ({cv_unreg}) {post_ip}
+ </span>
+ <p></p>
+<!-- END: PosterInfoGuest -->
+<!-- BEGIN: PosterInfoMember -->
+ <span class="avatar">
+  {user_avatar}
+ </span>
+
+ <span class="member_info">
+<!-- BEGIN: Online -->
+   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{cp_online}" />
+<!-- END: Online -->
+<!-- BEGIN: Offline -->
+   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{cp_offline}" />
+<!-- END: Offline -->
+  <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br />
+  <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
+  <span class="text">{cv_group}</span>{group_name}<br />
+  <span class="text">{cv_posts}</span>{user_posts}<br />
+  <span class="text">{cv_joined}</span>{user_joined}
+<!-- BEGIN: PostIP -->
+  <br /><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
+<!-- END: PostIP -->
+ </span>
+
+ <span class="member_bits">
+<!-- BEGIN: EmailShow -->
+  <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
+<!-- END: EmailShow -->
+<!-- BEGIN: EmailForm -->
+  <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
+<!-- END: EmailForm -->
+<!-- BEGIN: PM -->
+  <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+<!-- END: PM -->
+<!-- BEGIN: Twitter -->
+   <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>
+<!-- END: Twitter -->
+<!-- BEGIN: Facebook -->
+   <span class="smallbutton"><a class="facebook" href="{facebook}" title="{members_visit_facebook}"></a></span>
+<!-- END: Facebook -->
+<!-- BEGIN: Homepage -->
+   <span class="smallbutton"><a class="home" href="{homepage}" title="{members_visit_www}"></a></span>
+<!-- END: Homepage -->
+ </span>
+ <p></p>
+<!-- END: PosterInfoMember -->
+ <div class="post_triangle">&nbsp;</div>
+ <div class="rounded_box">
+  {post_text}
+  <p></p>
+<!-- BEGIN: Attachment -->
+  <div class="filebox">
+   <strong>{cv_attached}</strong>
+   <div class="file">
+    <br />{cv_attached_filename} <a href="{site}/topic/attachment/{attach_id}/">{attach_name}</a>
+    <br />{cv_attached_size} {filesize} KB
+    <br />{cv_attached_downloads}: {attach_downloads}
+   </div>
+  </div>
+<!-- END: Attachment -->
+  <span class="signature">{user_signature}</span>
+ </div>
+</div>
+<!-- END: Post -->
+
+<div class="article">
+<!-- BEGIN: ModPageLinksBottom -->
+ <div style="float:left">{cv_pages}:{pagelinks}</div>
+ <div style="text-align:right">{mod_opts}</div>
+<!-- END: ModPageLinksBottom -->
+<!-- BEGIN: PageLinksBottom -->
+ {cv_pages}:{pagelinks}
+<!-- END: PageLinksBottom -->
+</div>
+
+<div class="article">
+ <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" title="{cv_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="quick_reply" id="quick_reply" title="{cv_quickreply}">{cv_quickreply}</a></div>
+ <p></p>
+</div>
+
+<!-- BEGIN: QuickReplyBox -->
+<script src="{site}/javascript/quickreply.js" async defer></script>
+<div class="quickreply" id="quickreplyform">
+<form action="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" method="post">
+<div class="article">
+ <div class="title">
+  <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
+  {cv_quickreply}: {title_html}
+ </div>
+ <span class="head">
+  <strong>{cv_msg}</strong>
+ </span>
+
+ <span class="field">
+  {smilies}
+ </span>
+ <span class="form">
+  <script src="{site}/javascript/postboxplain.js" async defer></script>
+  {bbcode_menu}
+  <textarea name="post" id="bbcode_textbox" rows="8" cols="75"></textarea>
+ </span>
+ <p class="line"></p>
+
+ <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{cv_option_emojis}</label>
+ <p class="line"></p>
+
+ <input class="check" type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{cv_option_bbcode}</label>
+ <p class="line"></p>
+
+ <input type="submit" name="submit" value="{reply}" />
+ <input type="submit" name="preview" value="{cv_preview}" />
+</div>
+</form>
+</div>
+<!-- END: QuickReplyBox -->
+<!-- END: Conversation -->

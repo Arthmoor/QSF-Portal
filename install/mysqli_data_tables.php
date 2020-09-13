@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -49,10 +49,12 @@ $queries[] = "CREATE TABLE %pattach (
   attach_file varchar(32) NOT NULL default '',
   attach_name varchar(255) NOT NULL default '',
   attach_post int(12) unsigned NOT NULL default '0',
+  attach_pm int(12) unsigned NOT NULL default '0',
   attach_downloads int(10) unsigned NOT NULL default '0',
   attach_size int(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (attach_id),
-  KEY attach_post (attach_post)
+  KEY attach_post (attach_post),
+  KEY attach_pm (attach_pm)
 ) ENGINE=MyISAM ROW_FORMAT=FIXED";
 
 $queries[] = "DROP TABLE IF EXISTS %pcaptcha";
@@ -66,7 +68,8 @@ $queries[] = "CREATE TABLE %pcaptcha (
 $queries[] = "DROP TABLE IF EXISTS %pconversations";
 $queries[] = "CREATE TABLE %pconversations (
   conv_id int(10) unsigned NOT NULL auto_increment,
-  conv_title varchar(255) NOT NULL default '',
+  conv_title varchar(75) NOT NULL default '',
+  conv_description varchar(255),
   conv_starter int(10) unsigned NOT NULL default '0',
   conv_last_post int(10) unsigned NOT NULL default '0',
   conv_last_poster int(10) unsigned NOT NULL default '0',
@@ -86,8 +89,10 @@ $queries[] = "CREATE TABLE %pconv_posts (
   post_convo int(10) unsigned NOT NULL,
   post_author int(10) unsigned NOT NULL,
   post_time int(10) unsigned NOT NULL default '0',
-  post_edited_by varchar(32) NOT NULL default '',
+  post_edited_by varchar(32) default '',
   post_edited_time int(10) unsigned NOT NULL default '0',
+  post_emojis tinyint(1) unsigned NOT NULL default '1',
+  post_bbcode tinyint(1) unsigned NOT NULL default '1',
   post_ip varchar(40) NOT NULL default '127.0.0.1',
   post_icon varchar(32),
   post_text text NOT NULL,
@@ -266,6 +271,14 @@ $queries[] = "CREATE TABLE %preadmarks (
   PRIMARY KEY  (readmark_user,readmark_topic)
 ) ENGINE=MyISAM";
 
+$queries[] = "DROP TABLE IF EXISTS %pconv_readmarks";
+$queries[] = "CREATE TABLE %pcv_readmarks (
+  readmark_user int(10) unsigned NOT NULL default '0',
+  readmark_conv int(10) unsigned NOT NULL default '0',
+  readmark_lastread int(10) unsigned NOT NULL default '0',
+  PRIMARY KEY  (readmark_user,readmark_conv)
+) ENGINE=MyISAM";
+
 $queries[] = "DROP TABLE IF EXISTS %preplacements";
 $queries[] = "CREATE TABLE %preplacements (
   replacement_id smallint(3) unsigned NOT NULL auto_increment,
@@ -398,6 +411,7 @@ $queries[] = "CREATE TABLE %pusers (
   user_signature text,
   user_lastvisit int(10) unsigned NOT NULL default '0',
   user_lastallread int(10) unsigned NOT NULL default '0',
+  user_lastcvallread int(10) unsigned NOT NULL default '0',
   user_lastpost int(10) unsigned NOT NULL default '0',
   user_lastpm int(10) unsigned NOT NULL default '0',
   user_lastsearch int(10) unsigned NOT NULL default '0',
