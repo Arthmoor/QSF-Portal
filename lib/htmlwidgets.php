@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -712,7 +712,7 @@ class htmlwidgets extends forumutils
 		foreach( $icons as $icon )
 		{
 			$msgicons .= "<li><input type=\"radio\" name=\"icon\" id=\"icon$i\" value=\"$icon\"" . ( ( $select == $icon ) ? '
-				checked=\'checked\'' : null ) . " />&nbsp;<label for=\"icon$i\"><img src=\"{$this->sets['loc_of_board']}/skins/$this->skin/mbicons/$icon\" alt=\"{$this->lang->post_icon}\" /></label></li>\n";
+				checked=\'checked\'' : null ) . " />&nbsp;<label for=\"icon$i\"><img src=\"{$this->site}/skins/$this->skin/mbicons/$icon\" alt=\"\" /></label></li>\n";
 			$i++;
 		}
 		return $msgicons;
