@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -136,7 +136,7 @@ class readmarker extends forumutils
 
 			setcookie( $this->sets['cookie_prefix'] . 'lastallread', $time, $options );
 		} else {
-			$this->db->query( "UPDATE %pusers SET user_lastallread=%s WHERE user_id=%d", $time, $this->user_id );
+			$this->db->query( "UPDATE %pusers SET user_lastallread=%d WHERE user_id=%d", $time, $this->user_id );
 			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d AND readmark_lastread<%d", $this->user_id, $time );
 		}
 		$this->readmarkers_loaded = false;
