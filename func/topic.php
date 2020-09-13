@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -235,10 +235,10 @@ class topic extends qsfglobal
 		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;f=' . $topic['topic_forum'], "{$this->lang->forum_forum}: {$topic['forum_name']}" );
 		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;t=' . $topicnum, "{$this->lang->forum_topic}: $title_html" );
 
+      $title_short = $topic['topic_title'];
+
 		if( strlen( $topic['topic_title'] ) > 30 ) {
 			$title_short = substr( $topic['topic_title'], 0, 29 ) . '...';
-		} else {
-			$title_short = $topic['topic_title'];
 		}
 
 		$this->set_title( $this->lang->topic_viewing . ': ' . $title_html );
@@ -247,7 +247,7 @@ class topic extends qsfglobal
 		$this->tree( $title_short );
 
 		if( trim( $topic['topic_description'] ) != '' ) {
-			$topic['topic_description'] = ', ' . $this->format( $topic['topic_description'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
+			$topic['topic_description'] = $this->format( $topic['topic_description'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 		} else {
 			$topic['topic_description'] = null;
 		}
@@ -418,10 +418,6 @@ class topic extends qsfglobal
 		$xtpl->assign( 'title_html', $title_html );
 		$xtpl->assign( 'topic_newer', $this->lang->topic_newer );
 		$xtpl->assign( 'topic_older', $this->lang->topic_older );
-
-		if( ( substr( $topic['topic_description'], 0, 1 ) == ',' ) && ( $topic['topic_description'] = substr( $topic['topic_description'], 2 ) ) ) {
-			// What is this I don't even.....
-		}
 
 		$xtpl->assign( 'topic_description', $topic['topic_description'] );
 
