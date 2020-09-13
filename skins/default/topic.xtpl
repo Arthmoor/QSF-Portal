@@ -48,7 +48,7 @@
  <a id="unread"></a>
 <!-- END: FirstUnread -->
 </div>
-<form>
+
 <div class="article">
  <div class="title">
   <div style="float:left;">
@@ -161,8 +161,8 @@
   <span class="signature">{user_signature}</span>
  </div>
 </div>
-</form>
 <!-- END: Post -->
+
 <div class="article">
 <!-- BEGIN: ModPageLinksBottom -->
  <div style="float:left">{topic_pages}:{pagelinks}</div>
