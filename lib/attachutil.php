@@ -108,10 +108,11 @@ class attachutil
 	 * @param int $post_id post to attach the file to
 	 * @param array $file file upload information
 	 * @param array $attached_data attachments to insert
+    * @param bool $convo whether or not the attachment is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 **/
-	public function attach_now( $post_id, &$file, &$attached_data )
+	public function attach_now( $post_id, &$file, &$attached_data, $convo = false )
 	{
 		$temp_attached_data = array();
 		$error = $this->attach( $file, $temp_attached_data );
@@ -120,9 +121,9 @@ class attachutil
 			$md5 = key( $temp_attached_data );
 			$filename = $temp_attached_data[$md5];
 
-			$this->db->query( "INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size) VALUES 
-				('%s', '%s', %d, %d)",
-				$md5, $filename, $post_id, filesize( './attachments/' . $md5 ) );
+         $this->db->query( "INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES 
+            ('%s', '%s', %d, %d, %d)",
+            $md5, $filename, $post_id, filesize( './attachments/' . $md5 ), $convo );
 
 			$attached_data = array_merge( $attached_data, $temp_attached_data );
 		}
@@ -135,14 +136,15 @@ class attachutil
 	 * @param int $post_id post to attach the file to
 	 * @param string $filename md5 encoded filename
 	 * @param array $attached_data attachments to insert
+    * @param bool $convo whether or not the attachment is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 **/
-	public function delete_now( $post_id, $filename, &$attached_data )
+	public function delete_now( $post_id, $filename, &$attached_data, $convo = false )
 	{
 		$this->delete( $filename, $attached_data );
 
-		$this->db->query( "DELETE FROM %pattach WHERE attach_post=%d AND attach_file='%s'", $post_id, $filename );
+      $this->db->query( "DELETE FROM %pattach WHERE attach_post=%d AND attach_file='%s' AND attach_pm=%d", $post_id, $filename, $convo );
 	}
 
 	/**
@@ -170,15 +172,16 @@ class attachutil
 	 *
 	 * @param int $post_id id number of the post we're attaching to
 	 * @param array $attached_data attachments to insert
+    * @param bool $convo whether or not the post ID is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.8
 	 **/
-	public function insert( $post_id, $attached_data )
+	public function insert( $post_id, $attached_data, $convo = false )
 	{
 		foreach( $attached_data as $md5 => $filename )
 		{
-			$this->db->query( "INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size) VALUES 
-				('%s', '%s', %d, %d)", $md5, $filename, $post_id, filesize( './attachments/' . $md5 ) );
+         $this->db->query( "INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES 
+            ('%s', '%s', %d, %d, %d)", $md5, $filename, $post_id, filesize( './attachments/' . $md5 ), $convo );
 		}
 	}
 
@@ -220,15 +223,16 @@ class attachutil
 	 * Fetch attachment data from database and return it as an array
 	 *
 	 * @param int $post_id Post to get attachments for
+    * @param bool $convo whether or not the post ID is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 * @return array $attached_data attachments to for post
 	 **/
-	public function build_attached_data( $post_id )
+	public function build_attached_data( $post_id, $convo = false )
 	{
 		$attached_data = array();
 
-		$query = $this->db->query( "SELECT attach_file, attach_name FROM %pattach WHERE attach_post=%d", $post_id );
+      $query = $this->db->query( "SELECT attach_file, attach_name FROM %pattach WHERE attach_post=%d AND attach_pm=%d", $post_id, $convo );
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{

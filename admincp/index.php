@@ -53,6 +53,7 @@ require_once $set['include_path'] . '/lib/htmlwidgets.php';
 require_once $set['include_path'] . '/lib/bbcode.php';
 require_once $set['include_path'] . '/lib/tool.php';
 require_once $set['include_path'] . '/lib/readmarker.php';
+require_once $set['include_path'] . '/lib/conv_readmarker.php';
 require_once $set['include_path'] . '/lib/activeutil.php';
 require_once $set['include_path'] . '/lib/modlet.php';
 require_once $set['include_path'] . '/lib/zTemplate.php';

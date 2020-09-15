@@ -173,6 +173,8 @@ class upgrade extends qsfglobal
 					$this->sets['csp_details'] = '';
 					$this->sets['fp_enabled'] = 0;
 					$this->sets['fp_details'] = '';
+               $this->sets['conversations'] = 0;
+               $this->sets['spam_pm_count'] = 0;
 
 					// Deleted settings
 					unset( $this->sets['analytics_id'] );
@@ -205,8 +207,7 @@ class upgrade extends qsfglobal
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_skin';
 					$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
 					$queries[] = "UPDATE %pusers SET user_skin=1";
-					$queries[] = 'ALTER TABLE %pattach ADD attach_pm int(12) unsigned NOT NULL default 0 AFTER attach_post';
-               $queries[] = 'ALTER TABLE %pattach ADD KEY (attach_pm)';
+					$queries[] = 'ALTER TABLE %pattach ADD attach_pm tinyint(1) unsigned NOT NULL default 0 AFTER attach_size';
 
 					$queries[] = "CREATE TABLE %pvalidation (
 					  validate_id int(10) unsigned NOT NULL,

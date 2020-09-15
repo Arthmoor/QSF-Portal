@@ -207,6 +207,7 @@ class en
 	public function conversations()
 	{
 		$this->cv_conversations = 'Private Conversations';
+      $this->cv_akismet_posts_spam = 'Your post has been flagged as spam and must be approved by a moderator.';
 		$this->cv_attach = 'Attachments';
 		$this->cv_attach_add = 'Add Attachment';
 		$this->cv_attach_disrupt = 'Adding or removing attachments will not disrupt your post.';
@@ -223,6 +224,7 @@ class en
       $this->cv_bottom = 'Go to the bottom of the page';
 		$this->cv_by = 'By';
       $this->cv_cannot_send = 'The conversation cannot be started. The recipients may not exist, or they all have private conversations disabled.';
+      $this->cv_cant_reply = 'You do not have permission to reply to this conversation.';
       $this->cv_edited = 'Last edited %s by %s';
       $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting private conversations: %s';
       $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br /><br />Please try again in a few seconds.';
@@ -233,8 +235,11 @@ class en
       $this->cv_joined = 'Joined';
 		$this->cv_jump = 'Jump to newest post in topic';
 		$this->cv_last = 'Last Post';
+      $this->cv_last_five = 'Last Five Posts In Reverse Order';
+      $this->cv_level = 'Member Level';
       $this->cv_multiple = 'Separate multiple recipients with commas.';
       $this->cv_msg = 'Message';
+      $this->cv_must_msg = 'You must include a message when posting.';
 		$this->cv_new_convo = 'New Conversation';
       $this->cv_newer = 'Newer Conversation';
       $this->cv_new_post = 'Post is unread';
@@ -253,6 +258,8 @@ class en
       $this->cv_options = 'Options';
 		$this->cv_pages = 'Pages';
       $this->cv_post = 'Post';
+      $this->cv_posted = 'Posted';
+      $this->cv_posting = 'Posting';
       $this->cv_posts = 'Posts';
       $this->cv_preview = 'Preview';
       $this->cv_private_conversations = 'Private Conversations';
@@ -260,6 +267,8 @@ class en
       $this->cv_quote = 'Reply with a quote from this post';
 		$this->cv_replies = 'Replies';
       $this->cv_reply = 'Reply to Topic';
+      $this->cv_reply_topic = 'Replying to conversation \'%s\':';
+      $this->cv_replying = 'Replying To Conversation';
       $this->cv_sent_mail = 'has started a private conversation with you.';
       $this->cv_started = 'Your conversation has been started.';
 		$this->cv_starter = 'Starter';
@@ -270,6 +279,7 @@ class en
 		$this->cv_topic_posted = 'Posted';
 		$this->cv_unread = 'Jump to oldest unread post';
       $this->cv_unreg = 'Unregistered';
+      $this->cv_view_topic = 'View Entire Conversation';
 		$this->cv_views = 'Views';
       $this->cv_viewing = 'Viewing Conversation';
 	}

@@ -67,6 +67,10 @@ class conversations extends qsfglobal
             return $this->view_conversation();
             break;
 
+         case 'reply':
+            return $this->reply();
+            break;
+ 
          default: // Falls down to the view page for all of a user's conversations.
             break;
       }
@@ -635,7 +639,7 @@ class conversations extends qsfglobal
 
 		$query = $this->db->query( "SELECT a.attach_id, a.attach_name, a.attach_downloads, a.attach_size, p.post_id
 			FROM %pconv_posts p, %pattach a
-			WHERE p.post_convo = %d AND a.attach_post = p.post_id", $conv_id );
+			WHERE p.post_convo = %d AND a.attach_post = p.post_id AND attach_pm = 1", $conv_id );
 
 		$attachments = array();
 
@@ -917,5 +921,308 @@ class conversations extends qsfglobal
 
 		$xtpl->parse( 'Conversation' );
 		return $xtpl->text( 'Conversation' );
-   }   
+   }
+
+   private function reply()
+   {
+		if( !isset( $this->get['c'] ) ) {
+			return $this->message( $this->lang->cv_replying, $this->lang->cv_cant_reply );
+		}
+
+		$c = intval( $this->get['c'] );
+
+		$conv = $this->db->fetch( "SELECT *	FROM %pconversations WHERE conv_id=%d AND %d IN(conv_users)", $c, $this->user['user_id'] );
+
+		if( !$conv ) {
+			return $this->message( $this->lang->cv_replying, $this->lang->cv_cant_reply );
+		}
+
+      $this->lang->cv_reply_topic = sprintf( $this->lang->cv_reply_topic, $conv['conv_title'] );
+
+		/**
+		 * Show the form
+		 */
+		if( !isset( $this->post['submit'] ) ) {
+         $attached = null;
+         $attached_data = null;
+         $upload_error = null;
+         $icon = -1;
+         $preview = '';
+         $quote = '';
+
+         $checkEmot = ' checked="checked"';
+         $checkCode = ' checked="checked"';
+         $checkGlob = '';
+
+         if( !isset( $this->post['attached_data'] ) ) {
+            $this->post['attached_data'] = array();
+         }
+
+         // if( $this->perms->auth( 'post_attach', -1 ) ) {
+            // Attach
+            if( isset( $this->post['attach'] ) ) {
+               $upload_error = $this->attachmentutil->attach( $this->files['attach_upload'], $this->post['attached_data'] );
+            // Detach
+            } elseif( isset( $this->post['detach'] ) ) {
+               $this->attachmentutil->delete( $this->post['attached'], $this->post['attached_data'] );
+            }
+
+            $this->attachmentutil->getdata( $attached, $attached_data, $this->post['attached_data'] );
+         // }
+
+         $xtpl = new XTemplate( './skins/' . $this->skin . '/convo_posts.xtpl' );
+
+         $xtpl->assign( 'site', $this->site );
+         $xtpl->assign( 'skin', $this->skin );
+         $xtpl->assign( 'conv_id', $conv['conv_id'] );
+
+         /**
+         * Preview
+         */
+         if( isset( $this->post['preview'] ) || isset( $this->post['attach'] ) || isset( $this->post['detach'] ) ) {
+            $title = $this->format( $conv['conv_title'], FORMAT_HTMLCHARS );
+            $desc  = $this->format( $conv['conv_description'], FORMAT_HTMLCHARS );
+
+            $params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
+
+            if( isset( $this->post['parseCode'] ) ) {
+               $params |= FORMAT_BBCODE;
+               $checkCode = ' checked=\'checked\'';
+            } else {
+               $checkCode = '';
+            }
+
+            if( isset( $this->post['parseEmot'] ) ) {
+               $params |= FORMAT_EMOJIS;
+               $checkEmot = ' checked=\'checked\'';
+            } else {
+               $checkEmot = '';
+            }
+
+            $quote = $this->format( $this->post['post'], FORMAT_HTMLCHARS );
+            $preview_text = $this->format( $this->post['post'], $params );
+
+            if( $title != '' ) {
+               $preview_title = $title;
+               $preview_title = $desc != '' ? $preview_title . ', ' . $desc : $preview_title;
+            } else {
+               $preview_title = $this->lang->cv_preview;
+            }
+
+            $avatar = $this->htmlwidgets->display_avatar( $this->user );
+
+            $signature = null;
+            if( $this->user['user_signature'] ) {
+               $signature = '.........................<br />' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+            }
+
+            $joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
+
+            $xtpl->assign( 'avatar', $avatar );
+            $xtpl->assign( 'uid', $this->user['user_id'] );
+            $xtpl->assign( 'uname', $this->user['user_name'] );
+            $xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $this->user['user_name'] ) );
+            $xtpl->assign( 'utitle', $this->user['user_title'] );
+            $xtpl->assign( 'utitleicon', $this->user['membertitle_icon'] );
+            $xtpl->assign( 'cv_level', $this->lang->cv_level );
+            $xtpl->assign( 'cv_group', $this->lang->cv_group );
+            $xtpl->assign( 'gname', $this->user['group_name'] );
+            $xtpl->assign( 'cv_posts', $this->lang->cv_posts );
+            $xtpl->assign( 'uposts', $this->user['user_posts'] );
+            $xtpl->assign( 'cv_joined', $this->lang->cv_joined );
+            $xtpl->assign( 'joined', $joined );
+
+            $xtpl->parse( 'ConvoReply.Preview.PosterMember' );
+
+            if( $this->post['attached_data'] ) {
+               $download_perm = $this->perms->auth( 'post_attach_download', -1 );
+
+               foreach( $this->post['attached_data'] as $md5 => $file )
+               {
+                  if( $download_perm ) {
+                     $ext = strtolower( substr( $file, -4 ) );
+
+                     if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
+                        $preview_text .= "<br /><br />{$this->lang->cv_attached} {$file}<br /><img src='{$this->site}/attachments/$md5' alt='{$file}' />";
+                        continue;
+                     }
+                  }
+
+                  $preview_text .= "<br /><br />{$this->lang->cv_attached} {$file}";
+               }
+            }
+
+            $xtpl->assign( 'preview_title', $preview_title );
+            $xtpl->assign( 'preview_text', $preview_text );
+            $xtpl->assign( 'signature', $signature );
+
+            $xtpl->parse( 'ConvoReply.Preview' );
+         } // End Preview
+
+         if( isset( $this->get['qu'] ) ) {
+            $qu = intval( $this->get['qu'] );
+
+            $query = $this->db->fetch( "SELECT p.post_text, m.user_name FROM %pconv_posts p, %pusers m
+               WHERE p.post_id=%d AND p.post_author=m.user_id AND p.post_convo=%d", $qu, $c );
+
+            if( $query['post_text'] != '' ) {
+               $quote = '[quote=' . $query['user_name'] . ']' . $this->format( $query['post_text'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '[/quote]';
+            }
+         }
+
+         $xtpl->assign( 'cv_new_reply', $this->lang->cv_reply_topic );
+
+			$icon = isset( $this->post['icon'] ) ? $this->post['icon'] : -1;
+			$msg_icons = $this->htmlwidgets->get_icons( $icon );
+
+			$xtpl->assign( 'post_icon', $this->lang->cv_icon );
+			$xtpl->assign( 'msg_icons', $msg_icons );
+
+			$bbcode_menu = $this->bbcode->get_bbcode_menu();
+			$smilies = $this->bbcode->generate_emoji_links();
+			$xtpl->assign( 'smilies', $smilies );
+			$xtpl->assign( 'bbcode_menu', $bbcode_menu );
+			$xtpl->assign( 'quote', $quote );
+
+			// if( $this->perms->auth( 'post_attach', -1 ) ) {
+				if( $attached ) {
+					$xtpl->assign( 'cv_attach', $this->lang->cv_attach );
+					$xtpl->assign( 'attached', $attached );
+					$xtpl->assign( 'cv_attach_remove', $this->lang->cv_attach_remove );
+					$xtpl->assign( 'attached_data', $attached_data );
+
+					$xtpl->parse( 'ConvoReply.AttachBox.Remove' );
+				}
+
+				$xtpl->assign( 'cv_attach_add', $this->lang->cv_attach_add );
+				$xtpl->assign( 'cv_attach_disrupt', $this->lang->cv_attach_disrupt );
+				$xtpl->assign( 'upload_error', $upload_error );
+
+				$xtpl->parse( 'ConvoReply.AttachBox' );
+			// }
+
+         $xtpl->assign( 'cv_reply', $this->lang->reply );
+         $xtpl->assign( 'cv_preview', $this->lang->cv_preview );
+
+         $xtpl->assign( 'cv_last_five', $this->lang->cv_last_five );
+         $xtpl->assign( 'cv_view_topic', $this->lang->cv_view_topic );
+
+			$query = $this->db->query( "SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, m.user_name
+				FROM %pconv_posts p, %pusers m
+				WHERE p.post_convo=%d AND p.post_author = m.user_id
+				ORDER BY p.post_time DESC
+				LIMIT %d", $conv['conv_id'], 5 );
+
+			$xtpl->assign( 'cv_posted', $this->lang->cv_posted );
+
+			while( $last = $this->db->nqfetch( $query ) )
+			{
+				$params = FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR;
+
+				if( $last['post_bbcode'] ) {
+               $params |= FORMAT_BBCODE;
+				}
+
+				if( $last['post_emojis'] ) {
+					$params |= FORMAT_EMOJIS;
+				}
+
+				$last['post_text'] = $this->format( $last['post_text'], $params );
+				$last['post_time'] = $this->mbdate( DATE_LONG, $last['post_time'] );
+
+				if( $last['post_author'] != USER_GUEST_UID ) {
+					$xtpl->assign( 'user_name', $last['user_name'] );
+					$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $last['user_name'] ) );
+					$xtpl->assign( 'post_author', $last['post_author'] );
+
+					$xtpl->parse( 'ConvoReply.ReplyReview.LastUserMember' );
+				} else {
+					$xtpl->assign( 'user_name', $this->lang->cv_guest );
+
+					$xtpl->parse( 'ConvoReply.ReplyReview.LastUserGuest' );
+				}
+
+				$xtpl->assign( 'last_time', $last['post_time'] );
+				$xtpl->assign( 'last_text', $last['post_text'] );
+
+				$xtpl->parse( 'ConvoReply.ReplyReview' );
+			}
+
+         $xtpl->parse( 'ConvoReply' );
+         return $xtpl->text( 'ConvoReply' );
+      } // End Form Presentation
+
+		/**
+		 * Final submission of form, after all attachments and previews
+		 */
+		if( !$this->perms->auth( 'pm_noflood' ) && ( $this->user['user_lastpm'] > ( $this->time - $this->sets['flood_time_pm'] ) ) ) {
+			return $this->message( $this->lang->cv_private_conversations, sprintf( $this->lang->cv_flood, $this->sets['flood_time_pm'] ) );
+		}
+
+		if( trim( $this->post['post'] ) == '' ) {
+			return $this->message( $this->lang->cv_posting, $this->lang->cv_must_msg );
+		}
+
+		if( !isset( $this->post['icon'] ) )      $this->post['icon'] = '';
+		if( !isset( $this->post['parseCode'] ) ) $this->post['parseCode'] = 0;
+		if( !isset( $this->post['parseEmot'] ) ) $this->post['parseEmot'] = 0;
+
+		// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
+		if( !empty( $this->sets['wordpress_api_key'] ) && $this->sets['akismet_posts'] ) {
+			if( !$this->perms->auth( 'is_admin' ) && $this->user['user_posts'] < $this->sets['akismet_posts_number'] ) {
+				require_once $this->sets['include_path'] . '/lib/akismet.php';
+
+				$spam_checked = false;
+				$akismet = null;
+
+				try {
+					$akismet = new Akismet( $this );
+					$akismet->set_comment_author( $this->user['user_name'] );
+					$akismet->set_comment_author_email( $this->user['user_email'] );
+					$akismet->set_comment_content( $this->post['post'] );
+					$akismet->set_comment_type( 'forum-post' );
+
+					$spam_checked = true;
+				}
+				// Try and deal with it rather than say something.
+				catch(Exception $e) {}
+
+				if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
+					$this->log_action( 'Possible Spam Posted', 0, 0, 0 );
+
+					// Store the contents of the entire $_SERVER array.
+					$svars = json_encode( $_SERVER );
+
+					$this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
+						VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
+						$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+
+					$this->sets['spam_pm_count']++;
+					$this->sets['spam_pending']++;
+					$this->write_sets();
+
+					return $this->message( $this->lang->cv_posting, $this->lang->cv_akismet_posts_spam );
+				}
+			}
+		}
+
+		$this->db->query( "INSERT INTO %pconv_posts (post_convo, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon, post_referrer, post_agent)
+			VALUES (%d, %d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s')",
+			$c, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $this->ip, $this->post['icon'], $this->referrer, $this->agent );
+		$post_id = $this->db->insert_id( 'conv_posts', 'post_id' );
+
+		$this->db->query( "UPDATE %pconversations SET conv_last_post=%d WHERE conv_id=%d", $post_id, $c );
+
+		$this->db->query( "UPDATE %pconversations SET conv_replies=conv_replies+1, conv_edited=%d, conv_last_poster=%d WHERE conv_id=%d", $this->time, $this->user['user_id'], $c );
+
+		if( isset( $this->post['attached_data'] ) /* && $this->perms->auth( 'post_attach', $f ) */ ) {
+			$this->attachmentutil->insert( $post_id, $this->post['attached_data'], true );
+		}
+
+		if( isset( $this->post['request_uri'] ) ) {
+			header( 'Location: ' . $this->post['request_uri'] );
+		} else {
+			header( "Location: {$this->site}/index.php?a=conversations&s=viewconvo&id=$c&&p={$post_id}#p{$post_id}" );
+		}
+   }
 }

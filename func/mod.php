@@ -297,16 +297,16 @@ class mod extends qsfglobal
 			
 			// Handle attachment stuff
 			if( !isset( $this->post['attached_data'] ) ) {
-				$this->post['attached_data'] = $this->attachmentutil->build_attached_data( $p );
+				$this->post['attached_data'] = $this->attachmentutil->build_attached_data( $p, false );
 			}
 
 			if( $this->perms->auth( 'post_attach', $data['topic_forum'] ) ) {
 				// Attach
 				if( isset( $this->post['attach'] ) ) {
-					$upload_error = $this->attachmentutil->attach_now( $p, $this->files['attach_upload'], $this->post['attached_data'] );
+					$upload_error = $this->attachmentutil->attach_now( $p, $this->files['attach_upload'], $this->post['attached_data'], false );
 				// Detach
 				} elseif( isset( $this->post['detach'] ) ) {
-					$this->attachmentutil->delete_now( $p, $this->post['attached'], $this->post['attached_data'] );
+					$this->attachmentutil->delete_now( $p, $this->post['attached'], $this->post['attached_data'], false );
 				}
 
 				$this->attachmentutil->getdata( $attached, $attached_data, $this->post['attached_data'] );

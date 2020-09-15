@@ -325,7 +325,7 @@ class post extends qsfglobal
 				$xtpl->assign( 'signature', $signature );
 
 				$xtpl->parse( 'Post.Preview' );
-			}
+			} // End Preview
 
 			if( $s == 'reply' ) {
 				if( isset( $this->get['qu'] ) ) {
@@ -706,7 +706,7 @@ class post extends qsfglobal
 				$post_id, $forums['forum_tree'], $f );
 			
 			if( isset( $this->post['attached_data'] ) && $this->perms->auth( 'post_attach', $f ) ) {
-				$this->attachmentutil->insert( $post_id, $this->post['attached_data'] );
+				$this->attachmentutil->insert( $post_id, $this->post['attached_data'], false );
 			}
 
 			$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_expire < %d", $this->time );

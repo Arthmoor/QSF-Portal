@@ -357,6 +357,7 @@ break;
 			$this->sets['spam_reg_count'] = 0;
 			$this->sets['spam_sig_count'] = 0;
 			$this->sets['spam_profile_count'] = 0;
+         $this->sets['spam_pm_count'] = 0;
 			$this->sets['ham_count'] = 0;
 			$this->sets['spam_false_count'] = 0;
 			$this->sets['spam_pending'] = 0;
@@ -388,6 +389,7 @@ break;
 			$this->sets['cookie_prefix'] = 'qsfp_';
 			$this->sets['cookie_secure'] = 0;
 
+         $this->sets['conversations'] = 0;
 			$this->sets['emailactivation'] = 1;
 			$this->sets['validation_purge_timeout'] = 10;
 			$this->sets['flood_time'] = 30;

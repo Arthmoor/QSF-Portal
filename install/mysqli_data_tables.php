@@ -49,12 +49,11 @@ $queries[] = "CREATE TABLE %pattach (
   attach_file varchar(32) NOT NULL default '',
   attach_name varchar(255) NOT NULL default '',
   attach_post int(12) unsigned NOT NULL default '0',
-  attach_pm int(12) unsigned NOT NULL default '0',
   attach_downloads int(10) unsigned NOT NULL default '0',
   attach_size int(8) unsigned NOT NULL default '0',
+  attach_pm tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (attach_id),
-  KEY attach_post (attach_post),
-  KEY attach_pm (attach_pm)
+  KEY attach_post (attach_post)
 ) ENGINE=MyISAM ROW_FORMAT=FIXED";
 
 $queries[] = "DROP TABLE IF EXISTS %pcaptcha";
