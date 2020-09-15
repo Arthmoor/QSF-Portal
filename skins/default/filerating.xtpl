@@ -4,7 +4,7 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
  <title>{files_rate}</title>
- <link rel="stylesheet" type="text/css" href="/skins/{skin}/styles.css" media="screen" />
+ <link rel="stylesheet" type="text/css" href="/skins/{skin}/styles.css" />
 </head>
 
 <body>
@@ -37,4 +37,3 @@
 </body>
 </html>
 <!-- END: FileRating -->
-

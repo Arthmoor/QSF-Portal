@@ -30,12 +30,12 @@ require_once $set['include_path'] . '/global.php';
  **/
 class filerating extends qsfglobal
 {
-        /**
-         * Main interface. Process display after clicking on a "rating" link.
-         *
-         **/
-        function execute()
-        {
+   /**
+    * Main interface. Process display after clicking on a "rating" link.
+    *
+    **/
+   function execute()
+   {
 		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
 
@@ -63,7 +63,7 @@ class filerating extends qsfglobal
 		if( !isset( $this->post['rate'] ) ) {
 			$file_rated = $this->db->fetch( "SELECT file_id FROM %pfileratings WHERE user_id=%d AND file_id=%d", $this->user['user_id'], $this->get['f'] );
 
-			if( $file_rated['file_id'] != $this->get['f'] ) {
+			if( !$file_rated || $file_rated['file_id'] != $this->get['f'] ) {
 				$xtpl->assign( 'site', $this->site );
 				$xtpl->assign( 'skin', $this->skin );
 				$xtpl->assign( 'f', $this->get['f'] );
@@ -101,6 +101,6 @@ class filerating extends qsfglobal
 
 		$xtpl->parse( 'FileRating' );
 		return $xtpl->text( 'FileRating' );
-        }
+   }
 }
 ?>
