@@ -1,7 +1,7 @@
 <!-- BEGIN: PMFolder -->
 <script src="{site}/javascript/pm.js"></script>
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{pm_sendamsg}">{new_message}</a></div>
  <select class="big_button_align" id="pm_jumpselect1">
   {folderjump}
  </select>
@@ -49,7 +49,7 @@
 </form>
 
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{pm_sendamsg}">{new_message}</a></div>
  <select class="big_button_align" id="pm_jumpselect2">
   {folderjump}
  </select>
@@ -97,7 +97,7 @@
 
 <!-- BEGIN: PMView -->
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{pm_sendamsg}">{new_message}</a></div>
  <div class="bigbutton"><a class="reply" href="{site}/index.php?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
  <div class="bigbutton"><a class="delete" href="{site}/index.php?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
  <p></p>
@@ -137,7 +137,7 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=pm&amp;s=send" title="{pm_sendamsg}">{new_message}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{pm_sendamsg}">{new_message}</a></div>
  <div class="bigbutton"><a class="reply" href="{site}/index.php?a=pm&amp;s=send&amp;re={pm_id}" title="{pm_reply}">{reply}</a></div>
  <div class="bigbutton"><a class="delete" href="{site}/index.php?a=pm&amp;s=delete&amp;m={pm_id}" title="{pm_delete}">{delete}</a></div>
  <p></p>

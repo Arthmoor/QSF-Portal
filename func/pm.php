@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -197,144 +197,27 @@ class pm extends qsfglobal
 			$to    = null;
 			$title = null;
 			$msg   = null;
-			$preview = '';
 
-			$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
+         // Time to do some short circuitry
+			$re = intval( $this->get['re'] );
 
-			$xtpl->assign( 'site', $this->site );
-			$xtpl->assign( 'skin', $this->skin );
+			$reply = $this->db->fetch( "SELECT p.pm_to, p.pm_title, p.pm_message, m.user_name
+				FROM %ppmsystem p, %pusers m WHERE p.pm_id=%d AND p.pm_from=m.user_id", $re );
 
-			if( isset( $this->post['preview'] ) ) {
-				$preview_text = $this->post['message'];
-				$msg = $this->format( $preview_text, FORMAT_HTMLCHARS );
-				$preview_text = $this->format( $preview_text, FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOJIS );
+			if( $reply['pm_to'] == $this->user['user_id'] ) {
+				$to    = $reply['user_name'];
+				$title = $this->format( $reply['pm_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 
-				$to = $this->format( $this->post['to'], FORMAT_HTMLCHARS );
-				$title = $this->format( $this->post['title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
-				$preview_title = $title;
-
-				$xtpl->assign( 'preview_title', $preview_title );
-				$xtpl->assign( 'preview_text', $preview_text );
-
-				$xtpl->parse( 'PMSend.Preview' );
-			} else {
-				if( !isset( $this->get['re'] ) ) {
-					if( isset( $this->get['to'] ) ) {
-						$to = intval( $this->get['to'] );
-
-						$query = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $to );
-
-						if( !isset( $query['user_name'] ) || ( $to == USER_GUEST_UID ) ) {
-							return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_no_member );
-						}
-
-						$to = $query['user_name'];
-					}
-				} else {
-					$re = intval( $this->get['re'] );
-
-					$reply = $this->db->fetch( "SELECT p.pm_to, p.pm_title, p.pm_message, m.user_name
-						FROM %ppmsystem p, %pusers m WHERE p.pm_id=%d AND p.pm_from=m.user_id", $re );
-
-					if( $reply['pm_to'] == $this->user['user_id'] ) {
-						$to    = $reply['user_name'];
-						$title = $this->format( $reply['pm_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
-
-						if( strpos($title, 'Re:' ) === false) {
-							$title = 'Re: ' . $title;
-						}
-						$msg = '[quote]' . $this->format( $reply['pm_message'], FORMAT_HTMLCHARS | FORMAT_CENSOR ) . "[/quote]\n\n";
-					}
+				if( strpos( $title, 'Re:' ) === false ) {
+					$title = 'Re: ' . $title;
 				}
+				$msg = "[quote]{$reply['pm_message']}[/quote]\n\n";
+
+            header( "Location: {$this->site}/index.php?a=conversations&s=newconvo&to=$to&title=$title&text=$msg" );
 			}
-			$this->lang->post();
-
-			$xtpl->assign( 'pm_sendingpm', $this->lang->pm_sendingpm );
-			$xtpl->assign( 'pm_to', $this->lang->pm_to );
-			$xtpl->assign( 'pm_multiple', $this->lang->pm_multiple );
-			$xtpl->assign( 'to', $to );
-			$xtpl->assign( 'pm_title', $this->lang->pm_title );
-			$xtpl->assign( 'title', $title );
-			$xtpl->assign( 'msg', $msg );
-
-			$xtpl->assign( 'smilies', $this->bbcode->generate_emoji_links() );
-			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
-
-			$xtpl->assign( 'token', $this->generate_token() );
-			$xtpl->assign( 'pm_send', $this->lang->pm_send );
-			$xtpl->assign( 'pm_preview', $this->lang->pm_preview );
-
-			$xtpl->parse( 'PMSend' );
-			return $xtpl->text( 'PMSend' );
-		} else {
-			if( !$this->perms->auth( 'pm_noflood' ) && ( $this->user['user_lastpm'] > ( $this->time - $this->sets['flood_time_pm'] ) ) ) {
-				return $this->message( $this->lang->pm_personal_msging, sprintf( $this->lang->pm_flood, $this->sets['flood_time_pm'] ) );
-			}
-
-			if( empty( $this->post['to'] ) || empty( $this->post['message'] ) ) {
-				return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_fields );
-			}
-
-			if( empty( $this->post['title'] ) ) {
-				$this->post['title'] = $this->lang->pm_no_title;
-			}
-
-			$users = explode( ';', $this->post['to'] );
-			$bad_name = array();
-			$bad_pm = array();
-			$ok_pm = array();
-
-			$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
-			$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->pm_personal}" );
-			$mailer->setServer( $this->sets['mailserver'] );
-
-			foreach( $users as $username )
-			{
-				$username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
-				$who = $this->db->fetch( "SELECT user_id, user_pm, user_name, user_email, user_pm_mail FROM %pusers
-					WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
-					str_replace( ' ', '', strtolower( $username ) ), USER_GUEST_UID );
-
-				if( !isset( $who['user_id'] ) ) {
-					$bad_name[] = $username;
-					continue;
-				}
-
-				if( !$who['user_pm'] ) {
-					$bad_pm[] = $who['user_name'];
-					continue;
-				}
-
-				$ok_pm[] = $who['user_id'];
-
-				$this->db->query( "INSERT INTO %ppmsystem (pm_to, pm_from, pm_ip, pm_title, pm_time, pm_message, pm_folder)
-					VALUES (%d, %d, '%s', '%s', %d, '%s', 0)",
-					$who['user_id'], $this->user['user_id'], $this->ip, $this->post['title'], $this->time, $this->post['message'] );
-
-				$message_id = $this->db->insert_id( 'pmsystem', 'pm_id' );
-				if( $who['user_pm_mail'] ) {
-					$message  = "{$this->sets['forum_name']}\n";
-					$message .= "{$this->site}/index.php?a=pm&s=view&m={$message_id}\n\n";
-					$message .= $this->user['user_name'] . " " . $this->lang->pm_sent_mail . "\n\n";
-					$message .= $this->lang->pm_title . ": " . $this->format( $this->post['title'], FORMAT_CENSOR );
-
-					$mailer->setMessage( $message );
-					$mailer->setRecipient( $who['user_email'] );
-					$mailer->doSend();
-				}
-			}
-
-			$this->db->query( "INSERT INTO %ppmsystem (pm_to, pm_from, pm_ip, pm_bcc, pm_title, pm_time, pm_message, pm_folder, pm_read)
-				VALUES (%d, %d, '%s', '%s', '%s', %d, '%s', 1, 1)",
-				$this->user['user_id'], $this->user['user_id'], $this->ip, implode(';', $ok_pm), $this->post['title'], $this->time, $this->post['message'] );
-			$this->db->query( "UPDATE %pusers SET user_lastpm=%d WHERE user_id=%d", $this->time, $this->user['user_id'] );
-
-			if( $bad_name || $bad_pm ) {
-				return $this->message( $this->lang->pm_personal_msging, sprintf( $this->lang->pm_error, implode( '; ', $bad_name ), implode( '; ', $bad_pm ) ) );
-			} else {
-				return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_success );
-			}
-		}
+      } else {
+         return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_system_disabled );
+      }
 	}
 
 	private function view()

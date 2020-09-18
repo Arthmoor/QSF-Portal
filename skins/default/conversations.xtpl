@@ -11,7 +11,8 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="messenger" href="{site}/index.php?a=pm" title="{cv_old_pmsystem}">{cv_old_pmsystem}</a></div>
  <p></p>
 </div>
 <!-- BEGIN: Topics -->
@@ -73,7 +74,8 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="messenger" href="{site}/index.php?a=pm" title="{cv_old_pmsystem}">{cv_old_pmsystem}</a></div>
  <p></p>
 </div>
 

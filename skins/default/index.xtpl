@@ -76,7 +76,7 @@
      </nav>
 
      <nav>
-      <a href="{qsf_site}/index.php?a=pm"{new_pm}>{main_messenger}</a>
+      <a href="{qsf_site}/index.php?a=conversations">{main_conversations}</a>
       <a href="{qsf_site}/control_panel/">{main_cp}</a>
       {index_right_links}
 <!-- BEGIN: AdminCPLink -->

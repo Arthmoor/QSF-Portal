@@ -223,15 +223,20 @@ class en
       $this->cv_attached_size = 'Size:';
       $this->cv_bottom = 'Go to the bottom of the page';
 		$this->cv_by = 'By';
+      $this->cv_cannot_invite = 'No valid users were specified for invitation. They either do not exist or have private conversations disabled.';
       $this->cv_cannot_send = 'The conversation cannot be started. The recipients may not exist, or they all have private conversations disabled.';
       $this->cv_cant_reply = 'You do not have permission to reply to this conversation.';
       $this->cv_edited = 'Last edited %s by %s';
       $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting private conversations: %s';
+      $this->cv_error_invite = 'There were problems inviting some of the people you selected.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting private conversations: %s';
       $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br /><br />Please try again in a few seconds.';
       $this->cv_group = 'Group';
 		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
 		$this->cv_guest_user = 'Guest';
 		$this->cv_icon = 'Message Icon';
+      $this->cv_invite = 'Invite Others';
+      $this->cv_invite_others = 'Invite Others to Conversation';
+      $this->cv_invited = 'New users have been invited to the conversation.';
       $this->cv_joined = 'Joined';
 		$this->cv_jump = 'Jump to newest post in topic';
 		$this->cv_last = 'Last Post';
@@ -250,6 +255,7 @@ class en
       $this->cv_not_found_message = 'The conversation could not be found. It may have been deleted, moved, or perhaps never existed.';
       $this->cv_no_newer = 'There is no newer conversation.';
 		$this->cv_no_older = 'There is no older conversation.';
+      $this->cv_old_pmsystem = 'Old Message System';
       $this->cv_older = 'Older Conversation';
 		$this->cv_offline = 'This member is currently offline';
 		$this->cv_online = 'This member is currently online';
@@ -257,6 +263,7 @@ class en
 		$this->cv_option_bbcode = 'Format BBCode?';
       $this->cv_options = 'Options';
 		$this->cv_pages = 'Pages';
+      $this->cv_participants = 'Participants';
       $this->cv_post = 'Post';
       $this->cv_posted = 'Posted';
       $this->cv_posting = 'Posting';
@@ -269,7 +276,10 @@ class en
       $this->cv_reply = 'Reply to Topic';
       $this->cv_reply_topic = 'Replying to conversation \'%s\':';
       $this->cv_replying = 'Replying To Conversation';
+      $this->cv_sent_invite = 'has invited you into a private conversation.';
       $this->cv_sent_mail = 'has started a private conversation with you.';
+      $this->cv_sent_reply = 'has replied to a private conversation you are participating in.';
+      $this->cv_separate_names = 'Separate names with commas.';
       $this->cv_started = 'Your conversation has been started.';
 		$this->cv_starter = 'Starter';
       $this->cv_title = 'Title';
@@ -279,6 +289,7 @@ class en
 		$this->cv_topic_posted = 'Posted';
 		$this->cv_unread = 'Jump to oldest unread post';
       $this->cv_unreg = 'Unregistered';
+      $this->cv_users = 'Users:';
       $this->cv_view_topic = 'View Entire Conversation';
 		$this->cv_views = 'Views';
       $this->cv_viewing = 'Viewing Conversation';
@@ -805,6 +816,7 @@ class en
 		$this->main_affiliates = 'Related Links';
 		$this->main_banned = 'You have been banned from viewing any portion of this board.';
 		$this->main_code = 'Code';
+      $this->main_conversations = 'Conversations';
 		$this->main_cp = 'Control Panel';
 		$this->main_files = 'Files';
 		$this->main_forum = 'Forum';
@@ -1186,6 +1198,7 @@ class en
 		$this->pm_success = 'Your message was sent successfully.';
 		$this->pm_sure_del = 'Are you sure you want to delete this message?';
 		$this->pm_sure_delall = 'Are you sure you want to delete all messages from this folder?';
+      $this->pm_system_disabled = 'The old private messaging system has been disabled. Please use the new private conversations system instead.';
 		$this->pm_title = 'Title';
 		$this->pm_to = 'To';
 	}

@@ -197,7 +197,7 @@ main .readmore {
 .smallbutton a {
 	background-position: 2px center;
 	background-repeat: no-repeat;
-        background-color:#292929;
+    background-color:#292929;
 	font: 10px Arial, Sans-serif;
 	text-align: center;
 	text-decoration: none;
@@ -211,7 +211,7 @@ main .readmore {
 .button a {
 	background-position: 2px center;
 	background-repeat: no-repeat;
-        background-color:#292929;
+    background-color:#292929;
 	font: 10px Arial, Sans-serif;
 	text-align: center;
 	text-decoration: none;
@@ -240,9 +240,9 @@ main .readmore {
 .bigbutton a {
 	background-position: 6px center;
 	background-repeat: no-repeat;
-        background-color:#292929;
+    background-color:#292929;
 	font: 12px Arial, Sans-serif;
-        font-weight:bold;
+    font-weight:bold;
 	text-align: center;
 	text-decoration: none;
 	margin: 0px 1px;
@@ -265,6 +265,7 @@ main .readmore {
 .bigbutton .subscribe {	background-image: url('./images/icons/subscribe.png') }
 .bigbutton .quick_reply { background-image: url('./images/icons/comment_add_blured.png') }
 .bigbutton .locked { background-image: url('./images/icons/topic_locked.png') }
+.bigbutton .convo_invite { background-image: url('./images/icons/user_add.png') }
 
 /* Button-align */
 main .article span.big_button_align {
@@ -454,6 +455,18 @@ main .article pre.phpcode {
 }
 main .article div.codetitle {
 	font-weight: bold;
+}
+
+/* Invite Users Box */
+main .inviteusersbox {
+	width:25%;
+	background-color: #161616;
+	border: 1px solid #292929;
+	border-bottom: 3px double #292929;
+	z-index: 1;
+	position: absolute;
+	padding: 4px 6px;
+	margin: 30px 0px 0px 210px;
 }
 
 /* Attachments */

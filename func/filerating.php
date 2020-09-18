@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2020 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ class filerating extends qsfglobal
 				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview );
 		}
 
-                $this->nohtml = true;
+      $this->nohtml = true;
 
 		$this->lang->files();
 

@@ -351,7 +351,7 @@ if( $qsf->nohtml ) {
 		}
 
 		$xtpl->assign( 'new_pm', $new_pm );
-		$xtpl->assign( 'main_messenger', $qsf->lang->main_messenger );
+		$xtpl->assign( 'main_conversations', $qsf->lang->main_conversations );
 		$xtpl->assign( 'main_cp', $qsf->lang->main_cp );
 
 		if( $qsf->perms->auth( 'is_admin' ) ) {

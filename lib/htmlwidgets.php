@@ -743,10 +743,17 @@ class htmlwidgets extends forumutils
 	 * @author Roger Libiez
 	 * @since 1.5.2
 	 **/
-	public function display_avatar( $user )
+	public function display_avatar( $user, $height = 0, $width = 0 )
 	{
 		$url = null;
 		$avatar = $user['user_avatar'];
+      $img_height = $user['user_avatar_height'];
+      $img_width = $user['user_avatar_width'];
+
+      if( $height != 0 )
+         $img_height = $height;
+      if( $width != 0 )
+         $img_width = $width;
 
 		if( $this->user['user_view_avatars'] ) {
 			if( $user['user_avatar_type'] == 'local' )
@@ -759,11 +766,13 @@ class htmlwidgets extends forumutils
 				$avatar = "{$this->site}/avatars/uploaded/$avatar";
 			else {
 				$avatar = "{$this->site}/skins/{$this->skin}/images/noavatar.png";
-				$user['user_avatar_width'] = 100;
-				$user['user_avatar_height'] = 100;
+            if( $height == 0 )
+               $img_height = 100;
+            if( $width == 0 )
+               $img_width = 100;
 			}
 
-			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$user['user_avatar_width']}px; height:{$user['user_avatar_height']}px;\" />";
+			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$img_width}px; height:{$img_height}px;\" />";
 		}
 
 		return $url;

@@ -11,8 +11,33 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
- <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" title="{cv_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="reply" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" title="{cv_reply}">{reply}</a></div>
+ <div class="bigbutton" id="inviteuserslink"><a href="#" class="convo_invite">{cv_invite}</a></div>
+ <script src="{site}/javascript/inviteuserbox.js" async defer></script>
+ <div id="inviteuserbox">
+  <form action="{site}/index.php?a=conversations&amp;s=invite&amp;c={conv_id}" method="post">
+   <div class="inviteusersbox">
+    <div class="title"><img src="{site}/skins/{skin}/images/icons/user_add.png" alt="" /> {cv_invite_others}</div>
+    <span class="field">{cv_users}</span>
+    <span class="form"><input type="text" name="invite_users" value="" size="60" /><br />{cv_separate_names}</span>
+    <p class="line"></p>
+
+    <input type="submit" name="invite" value="Invite Users" />
+   </div>
+  </form>
+ </div>
+ <p></p>
+</div>
+
+<div class="article">
+ <span class="topic_description">{cv_participants}:</span>
+ <br />
+ <ul style="float:left">
+<!-- BEGIN: Participant -->
+  <li style="float:left; padding: 5px;">{list_avatar} {list_name}</li>
+<!-- END: Participant -->
+ </ul>
  <p></p>
 </div>
 
@@ -159,8 +184,8 @@
 </div>
 
 <div class="article">
- <div class="bigbutton"><a class="topic" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
- <div class="bigbutton"><a class="topic_reply" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" title="{cv_reply}">{reply}</a></div>
+ <div class="bigbutton"><a class="new_message" href="{site}/index.php?a=conversations&amp;s=newconvo" title="{cv_new_convo}">{cv_new_convo}</a></div>
+ <div class="bigbutton"><a class="reply" href="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" title="{cv_reply}">{reply}</a></div>
  <div class="bigbutton"><a class="quick_reply" id="quick_reply" title="{cv_quickreply}">{cv_quickreply}</a></div>
  <p></p>
 </div>
