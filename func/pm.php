@@ -205,7 +205,7 @@ class pm extends qsfglobal
 				FROM %ppmsystem p, %pusers m WHERE p.pm_id=%d AND p.pm_from=m.user_id", $re );
 
 			if( $reply['pm_to'] == $this->user['user_id'] ) {
-				$to    = $reply['user_name'];
+				$to    = base64_encode( $reply['user_name'] );
 				$title = $this->format( $reply['pm_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 
 				if( strpos( $title, 'Re:' ) === false ) {
@@ -213,6 +213,7 @@ class pm extends qsfglobal
 				}
 				$msg = "[quote]{$reply['pm_message']}[/quote]\n\n";
 
+            $title = base64_encode( $title );
             $msg = base64_encode( $msg );
             header( "Location: {$this->site}/index.php?a=conversations&s=newconvo&to=$to&title=$title&text=$msg" );
 			}

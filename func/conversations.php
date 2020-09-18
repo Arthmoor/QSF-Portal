@@ -328,8 +328,12 @@ class conversations extends qsfglobal
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
 
          if( isset( $this->get['to'] ) && isset( $this->get['title'] ) && isset( $this->get['text'] ) ) {
-            $to = $this->format( $this->get['to'], FORMAT_HTMLCHARS );
-            $title = $this->format( $this->get['title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
+            $to = base64_decode( $this->get['to'] );
+            $to = $this->format( $to, FORMAT_HTMLCHARS );
+
+            $title = base64_decode( $this->get['title'] );
+            $title = $this->format( $title, FORMAT_HTMLCHARS | FORMAT_CENSOR );
+
 				$text = base64_decode( $this->get['text'] );
 				$msg = $this->format( $text, FORMAT_HTMLCHARS );
          }
