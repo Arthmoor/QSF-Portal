@@ -120,7 +120,7 @@ class conversations extends qsfglobal
 		}
 
 		// Figure out if it will need page navigation links
-		$conv = $this->db->fetch( 'SELECT COUNT(conv_id) AS count FROM %pconversations WHERE %d IN(conv_users)', $this->user['user_id'] );
+		$conv = $this->db->fetch( "SELECT COUNT(conv_id) AS count FROM %pconversations WHERE FIND_IN_SET( '%s', conv_users )", $this->user['user_id'] );
 		$pagelinks = $this->htmlwidgets->get_pages( $conv['count'], "a=conversations&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/conversations.xtpl' );
@@ -158,11 +158,9 @@ class conversations extends qsfglobal
 		$has_topics = false;
 
 		$query = $this->db->query( "SELECT c.conv_id, c.conv_title, c.conv_description, c.conv_starter, c.conv_last_poster, c.conv_replies, c.conv_posted, c.conv_edited,
-				c.conv_icon, c.conv_views, c.conv_users, c.conv_last_post,
-				s.user_name AS conv_starter_name, m.user_name AS conv_last_poster_name
-			FROM (%pconversations c, %pusers s, %pusers m)
-			WHERE %d IN(c.conv_users) AND s.user_id=c.conv_starter AND m.user_id=c.conv_last_poster
-			GROUP BY c.conv_id
+				c.conv_icon, c.conv_views, c.conv_users, c.conv_last_post
+			FROM (%pconversations c)
+			WHERE FIND_IN_SET( '%s', c.conv_users )
 			ORDER BY $order
 			LIMIT %d, %d", $this->user['user_id'], $min, $n );
 
@@ -172,14 +170,18 @@ class conversations extends qsfglobal
 		{
          $has_topics = true;
 
+         // There's almost certainly a better way to do this but I can't come up with it, so we're going to very hackishly do this the ugly way.
+         $cv_starter = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_starter'] );
+         $cv_last_poster  = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_last_poster'] );
+
 			$row['conv_title'] = $this->format( $row['conv_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			$row['newpost'] = !$this->conv_readmarker->is_conv_read( $row['conv_id'], $row['conv_edited'] );
 
 			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], 'a=conversations&amp;c=' . $row['conv_id'], ', ', 0, $m );
 
-			if( $row['conv_last_poster'] != USER_GUEST_UID ) {
-				$last_poster = '<a href="' . $this->site . '/profile/' . $this->htmlwidgets->clean_url( $row['conv_last_poster_name'] ) . '-' . $row['conv_last_poster'] . '/" class="small">' . $row['conv_last_poster_name'] . '</a>';
+			if( $cv_last_poster['user_id'] != USER_GUEST_UID ) {
+				$last_poster = '<a href="' . $this->site . '/profile/' . $this->htmlwidgets->clean_url( $cv_last_poster['user_name'] ) . '-' . $cv_last_poster['user_id'] . '/" class="small">' . $cv_last_poster['user_name'] . '</a>';
 			} else {
 				$last_poster = $this->lang->cv_guest_user;
 			}
@@ -208,7 +210,9 @@ class conversations extends qsfglobal
 			$icon = $row['conv_icon']; // Store so skin can still access
 			if( $row['conv_icon'] ) {
             $xtpl->assign( 'conv_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->cv_icon}\" class=\"left\" />" );
-			}
+			} else {
+            $xtpl->assign( 'conv_icon', null );
+         }
 
 			$conv_posted = $this->mbdate( DATE_LONG, $row['conv_posted'] );
 
@@ -235,8 +239,8 @@ class conversations extends qsfglobal
 
 			if( $row['conv_starter'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'conv_starter', $row['conv_starter'] );
-				$xtpl->assign( 'conv_starter_name', $row['conv_starter_name'] );
-				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $row['conv_starter_name'] ) );
+				$xtpl->assign( 'conv_starter_name', $cv_starter['user_name'] );
+				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $cv_starter['user_name'] ) );
 
 				$xtpl->parse( 'Conversations.Topics.ConvoTopic.ConvoStarterMember' );
 			} else {
@@ -253,10 +257,10 @@ class conversations extends qsfglobal
 
          $xtpl->assign( 'jump', $jump );
 
-			if( $row['conv_last_poster'] != USER_GUEST_UID ) {
-				$xtpl->assign( 'conv_last_poster', $row['conv_last_poster'] );
-				$xtpl->assign( 'conv_last_poster_name', $row['conv_last_poster_name'] );
-				$xtpl->assign( 'link_name_last', $this->htmlwidgets->clean_url( $row['conv_last_poster_name'] ) );
+			if( $cv_last_poster['user_id'] != USER_GUEST_UID ) {
+				$xtpl->assign( 'conv_last_poster', $cv_last_poster['user_id'] );
+				$xtpl->assign( 'conv_last_poster_name', $cv_last_poster['user_name'] );
+				$xtpl->assign( 'link_name_last', $this->htmlwidgets->clean_url( $cv_last_poster['user_name'] ) );
 
 				$xtpl->parse( 'Conversations.Topics.ConvoTopic.LastPosterMember' );
 			} else {
@@ -553,7 +557,7 @@ class conversations extends qsfglobal
 		$conv = $this->db->fetch( "SELECT c.conv_title, c.conv_description, c.conv_starter, c.conv_last_post, c.conv_last_poster, 
          c.conv_icon, c.conv_posted, c.conv_edited, c.conv_replies, c.conv_users
 			FROM %pconversations c
-			WHERE %d IN(c.conv_users)
+			WHERE FIND_IN_SET( '%s', c.conv_users )
          AND c.conv_id=%d", $this->user['user_id'], $conv_id );
 
 		if( !$conv ) {
@@ -573,7 +577,7 @@ class conversations extends qsfglobal
 			}
  
 			$new_conv = $this->db->fetch( "SELECT conv_id, conv_title FROM %pconversations
-					WHERE %d IN(conv_users) AND ($where)
+					WHERE FIND_IN_SET( '%s', conv_users ) AND ($where)
 					ORDER BY conv_edited $order
 					LIMIT 1", $this->user['user_id'], $conv['conv_edited'] );
 
@@ -983,7 +987,7 @@ class conversations extends qsfglobal
 
 		$c = intval( $this->get['c'] );
 
-		$conv = $this->db->fetch( "SELECT *	FROM %pconversations WHERE conv_id=%d AND %d IN(conv_users)", $c, $this->user['user_id'] );
+      $conv = $this->db->fetch( "SELECT *	FROM %pconversations WHERE FIND_IN_SET( '%s', conv_users ) AND conv_id=%d", $this->user['user_id'], $c );
 
 		if( !$conv ) {
 			return $this->message( $this->lang->cv_replying, $this->lang->cv_cant_reply );
@@ -1271,6 +1275,10 @@ class conversations extends qsfglobal
 			$this->attachmentutil->insert( $post_id, $this->post['attached_data'], true );
 		}
 
+		$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
+		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->cv_private_conversations}" );
+		$mailer->setServer( $this->sets['mailserver'] );
+
       $ok_pm = explode( ',', $conv['conv_users'] );
       foreach( $ok_pm as $user )
       {
@@ -1315,7 +1323,7 @@ class conversations extends qsfglobal
 
 		$conv = $this->db->fetch( "SELECT *
 			FROM %pconversations c
-			WHERE %d IN(c.conv_users)
+			WHERE FIND_IN_SET( '%s', c.conv_users )
          AND c.conv_id=%d", $this->user['user_id'], $c );
 
 		if( !$conv ) {
