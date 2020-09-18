@@ -63,8 +63,7 @@ Many thanks to:
     * Our users for the consistent support of the project
     * Bug reporters for helping to making the project better
     * The community and moderating team at mercuryboard.com
-    * The phpMyAdmin team for their fantastic tool, which was heavily used
-      during development
+    * The phpMyAdmin team for their fantastic tool, which was heavily used during development
     * Sunsite.dk for free CVS hosting
     * The Webmin team for their awesome administration tool that aided greatly in further development.
     * Google Code for their free project hosting.

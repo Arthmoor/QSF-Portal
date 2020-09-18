@@ -21,7 +21,7 @@ Changes for 2.0:
 
    Changes:
 
-* Minimum supported PHP version is now 7.3.0.
+* Minimum supported PHP version is now 7.4.0.
 * Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Emojis are now handled independently of skins and can be added on the fly as desired.
@@ -39,9 +39,9 @@ Changes for 2.0:
 * The forum for news posts is now settable in the ACP instead of being hardcoded in the PHP files.
 * The AdminCP has new icons for decoration.
 * The custom logo section of the CSS has been separated into its own file which should not need to be updated during upgrades.
-* Tweaked the initial module selection code to block out potential attacks and notify administrators when this happens.
 * Topic descriptions extended to 255 character.
 * Overhauled the new user validation system to be more robust.
+* Overhauled private messages to be presented more like topics in a forum and posts in a topic.
 
    Removed:
 

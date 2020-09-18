@@ -36,8 +36,10 @@
  See https://github.com/Arthmoor/QSF-Portal for more information
 
 === Requirements ===
- QSF Portal works with PHP 7.0.0 or higher. MySQL 5.7 or higher is required.
- QSF Portal works on any operating system and web server combination.
+ QSF Portal works with PHP 7.4.0 or higher.
+ MySQL 5.7 or higher (or MariaDB 10.3 or higher) is required.
+ QSF Portal should work on any operating system and web server combination.
+ It has only been tested on Apache and Nginx though.
 
  If you experience a problem and you meet these requirements, please report it
  as a bug. The latest versions of PHP and MySQL are recommended to keep

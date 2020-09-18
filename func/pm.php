@@ -206,6 +206,7 @@ class pm extends qsfglobal
 
 			if( $reply['pm_to'] == $this->user['user_id'] ) {
 				$to    = base64_encode( $reply['user_name'] );
+
 				$title = $this->format( $reply['pm_title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 
 				if( strpos( $title, 'Re:' ) === false ) {
