@@ -213,6 +213,7 @@ class pm extends qsfglobal
 				}
 				$msg = "[quote]{$reply['pm_message']}[/quote]\n\n";
 
+            $msg = base64_encode( $msg );
             header( "Location: {$this->site}/index.php?a=conversations&s=newconvo&to=$to&title=$title&text=$msg" );
 			}
       } else {

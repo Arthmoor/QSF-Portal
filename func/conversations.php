@@ -326,7 +326,7 @@ class conversations extends qsfglobal
          if( isset( $this->get['to'] ) && isset( $this->get['title'] ) && isset( $this->get['text'] ) ) {
             $to = $this->format( $this->get['to'], FORMAT_HTMLCHARS );
             $title = $this->format( $this->get['title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
-				$text = $this->get['text'];
+				$text = base64_decode( $this->get['text'] );
 				$msg = $this->format( $text, FORMAT_HTMLCHARS );
          }
 
