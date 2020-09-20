@@ -61,7 +61,7 @@
  <span class="number">{conv_views}</span>
  <span class="topic_last_post">
   {conv_edited}<br />
-  <a href="{site}/conversations/{conv_title_link}-{conv_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{conv_jump}" alt="{conv_jump}" /></a> &nbsp;
+  <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{conv_jump}" alt="{conv_jump}" /></a> &nbsp;
 <!-- BEGIN: LastPosterMember -->
   {conv_by} <a href="{site}/profile/{link_name_last}-{conv_last_poster}/" class="small">{conv_last_poster_name}</a>
 <!-- END: LastPosterMember -->

@@ -121,7 +121,7 @@ class conversations extends qsfglobal
 
 		// Figure out if it will need page navigation links
 		$conv = $this->db->fetch( "SELECT COUNT(conv_id) AS count FROM %pconversations WHERE FIND_IN_SET( '%s', conv_users )", $this->user['user_id'] );
-		$pagelinks = $this->htmlwidgets->get_pages( $conv['count'], "a=conversations&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
+		$pagelinks = $this->htmlwidgets->get_pages( $conv['count'], "index.php?a=conversations&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/conversations.xtpl' );
 
@@ -178,7 +178,7 @@ class conversations extends qsfglobal
 
 			$row['newpost'] = !$this->conv_readmarker->is_conv_read( $row['conv_id'], $row['conv_edited'] );
 
-			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], 'a=conversations&amp;c=' . $row['conv_id'], ', ', 0, $m );
+			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], 'index.php?a=conversations&amp;s=viewconvo&amp;id=' . $row['conv_id'], ', ', 0, $m );
 
 			if( $cv_last_poster['user_id'] != USER_GUEST_UID ) {
 				$last_poster = '<a href="' . $this->site . '/profile/' . $this->htmlwidgets->clean_url( $cv_last_poster['user_name'] ) . '-' . $cv_last_poster['user_id'] . '/" class="small">' . $cv_last_poster['user_name'] . '</a>';
@@ -221,9 +221,6 @@ class conversations extends qsfglobal
          $xtpl->assign( 'conv_posted', $this->mbdate( DATE_LONG, $row['conv_posted'] ) );
          $xtpl->assign( 'conv_title', $row['conv_title'] );
 
-         $conv_link = $this->htmlwidgets->clean_url( $row['conv_title'] );
-         $xtpl->assign( 'conv_title_link', $conv_link );
-
          if( trim( $row['conv_description'] ) != '' ) {
             $row['conv_description'] = '<br />&raquo; ' . $this->format( $row['conv_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
          } else {
@@ -232,7 +229,7 @@ class conversations extends qsfglobal
 
          $xtpl->assign( 'conv_description', $row['conv_description'] );
 
-         $Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], "/conversations/{$conv_link}-{$row['conv_id']}", ', ', 0, $m );
+         $Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], "index.php?a=conversations&amp;s=viewconvo&amp;id={$row['conv_id']}", ', ', 0, $m );
          $xtpl->assign( 'Pages', $Pages );
 
          $xtpl->assign( 'conv_unread', 'conv_unread' );
@@ -764,7 +761,7 @@ class conversations extends qsfglobal
 
       // Page Links
       $xtpl->assign( 'cv_pages', $this->lang->cv_pages );
-		$pagelinks = $this->htmlwidgets->get_pages( $conv['conv_replies'] + 1, "{$this->site}/index.php?a=conversations&ampc={$conv_id}", $min, $num );
+		$pagelinks = $this->htmlwidgets->get_pages( $conv['conv_replies'] + 1, "index.php?a=conversations&amp;s=viewconvo&amp;id={$conv_id}", $min, $num );
 		$xtpl->assign( 'pagelinks', $pagelinks );
 
 		$xtpl->assign( 'cv_reply', $this->lang->cv_reply );
