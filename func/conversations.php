@@ -780,8 +780,15 @@ class conversations extends qsfglobal
       // Quick Reply
       $xtpl->assign( 'cv_quickreply', $this->lang->cv_quickreply );
 		$xtpl->assign( 'cv_msg', $this->lang->cv_msg );
+      $xtpl->assign( 'cv_options', $this->lang->cv_options );
 		$xtpl->assign( 'cv_option_emojis', $this->lang->cv_option_emojis );
 		$xtpl->assign( 'cv_option_bbcode', $this->lang->cv_option_bbcode );
+
+      $checkEmot = ' checked="checked"';
+      $checkCode = ' checked="checked"';
+		$xtpl->assign( 'checkEmot', $checkEmot );
+      $xtpl->assign( 'checkCode', $checkCode );
+
 		$xtpl->assign( 'cv_preview', $this->lang->cv_preview );
 		$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
 		$xtpl->assign( 'smilies', $this->bbcode->generate_emoji_links() );
@@ -1009,7 +1016,6 @@ class conversations extends qsfglobal
 
          $checkEmot = ' checked="checked"';
          $checkCode = ' checked="checked"';
-         $checkGlob = '';
 
          if( !isset( $this->post['attached_data'] ) ) {
             $this->post['attached_data'] = array();
@@ -1140,6 +1146,12 @@ class conversations extends qsfglobal
 			$xtpl->assign( 'smilies', $smilies );
 			$xtpl->assign( 'bbcode_menu', $bbcode_menu );
 			$xtpl->assign( 'quote', $quote );
+
+			$xtpl->assign( 'cv_options', $this->lang->cv_options );
+			$xtpl->assign( 'checkEmot', $checkEmot );
+			$xtpl->assign( 'cv_option_emojis', $this->lang->cv_option_emojis );
+			$xtpl->assign( 'checkCode', $checkCode );
+			$xtpl->assign( 'cv_option_bbcode', $this->lang->cv_option_bbcode );
 
 			// if( $this->perms->auth( 'post_attach', -1 ) ) {
 				if( $attached ) {

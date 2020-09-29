@@ -213,10 +213,11 @@
  </span>
  <p class="line"></p>
 
- <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{cv_option_emojis}</label>
- <p class="line"></p>
-
- <input class="check" type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{cv_option_bbcode}</label>
+ <span class="field">{cv_options}</span>
+ <span class="form">
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{cv_option_emojis}</label><br />
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{cv_option_bbcode}</label>
+ </span>
  <p class="line"></p>
 
  <input type="submit" name="submit" value="{reply}" />
@@ -280,6 +281,14 @@
   <textarea name="post" id="bbcode_textbox" rows="12" cols="60">{quote}</textarea>
  </span>
  <p class="line"></p>
+
+ <span class="field">{cv_options}</span>
+ <span class="form">
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{cv_option_emojis}</label><br />
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{cv_option_bbcode}</label>
+ </span>
+ <p class="line"></p>
+
 <!-- BEGIN: AttachBox -->
  <span class="field">{cv_attach_add}<br /><span class="tiny">{cv_attach_disrupt}</span></span>
  <span class="form">
