@@ -324,10 +324,12 @@ class conversations extends qsfglobal
 			$xtpl->assign( 'smilies', $this->bbcode->generate_emoji_links() );
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
 
-         if( isset( $this->get['to'] ) && isset( $this->get['title'] ) && isset( $this->get['text'] ) ) {
+         if( isset( ( $this->get['to'] ) ) ) {
             $to = base64_decode( $this->get['to'] );
             $to = $this->format( $to, FORMAT_HTMLCHARS );
-
+         }
+ 
+         if( isset( $this->get['title'] ) && isset( $this->get['text'] ) ) {
             $title = base64_decode( $this->get['title'] );
             $title = $this->format( $title, FORMAT_HTMLCHARS | FORMAT_CENSOR );
 
@@ -894,7 +896,7 @@ class conversations extends qsfglobal
 				}
 
 				if( $post['user_pm'] ) {
-					$xtpl->assign( 'user_id', $post['user_id'] );
+					$xtpl->assign( 'encoded_name', base64_encode( $post['user_name'] ) );
 
 					$xtpl->parse( 'Conversation.Post.PosterInfoMember.PM' );
 				}

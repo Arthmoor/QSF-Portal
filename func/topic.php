@@ -630,7 +630,7 @@ class topic extends qsfglobal
 				}
 
 				if( $post['user_pm'] ) {
-					$xtpl->assign( 'user_id', $post['user_id'] );
+					$xtpl->assign( 'encoded_name', base64_encode( $post['user_name'] ) );
 
 					$xtpl->parse( 'Topic.Post.PosterInfoMember.PM' );
 				}

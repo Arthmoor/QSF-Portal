@@ -56,7 +56,7 @@
    <p class="line"></p>
    <span class="field">{profile_pm}</span>
    <span class="form">
-    <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=pm&amp;s=send&amp;to={user_id}"></a></span>
+    <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=conversations&amp;s=newconvo&amp;to={encoded_name}"></a></span>
    </span>
 <!-- END: PM -->
   <p></p>

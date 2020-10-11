@@ -140,7 +140,7 @@
   <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
 <!-- END: EmailForm -->
 <!-- BEGIN: PM -->
-  <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=pm&amp;s=send&amp;to={user_id}" title="{members_send_pm}"></a></span>
+  <span class="smallbutton"><a class="messenger" href="{site}/index.php?a=conversations&amp;s=newconvo&amp;to={encoded_name}" title="{members_send_pm}"></a></span>
 <!-- END: PM -->
 <!-- BEGIN: Twitter -->
    <span class="smallbutton"><a class="twitter" href="{twitter}" title="{members_visit_twitter}"></a></span>

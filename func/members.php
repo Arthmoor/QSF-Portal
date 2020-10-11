@@ -179,7 +179,7 @@ class members extends qsfglobal
 			}
 
 			if( $member['user_pm'] ) {
-				$xtpl->assign( 'user_id', $member['user_id'] );
+				$xtpl->assign( 'encoded_name', base64_encode( $member['user_name'] ) );
 
 				$xtpl->parse( 'Members.User.PM' );
 			}

@@ -190,7 +190,7 @@ class profile extends qsfglobal
 
 		if( $profile['user_pm'] ) {
 			$xtpl->assign( 'profile_pm', $this->lang->profile_pm );
-			$xtpl->assign( 'user_id', $profile['user_id'] );
+			$xtpl->assign( 'encoded_name', base64_encode( $profile['user_name'] ) );
 
 			$xtpl->parse( 'Profile.PM' );
 		}
