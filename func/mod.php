@@ -1009,12 +1009,26 @@ class mod extends qsfglobal
 		$t = intval( $this->get['t'] );
 		$id = intval( $this->get['w'] );
 
+      if( !$this->validator->validate( $t, TYPE_INT ) )
+         return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
+
+      if( !$this->validator->validate( $id, TYPE_INT ) )
+         return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
+
 		$topic = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+
+      if( !$topic )
+         return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
+
 		if( !$this->perms->auth( 'post_viewip', $topic['topic_forum'] ) ) {
 			return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
 		}
 
 		$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
+      
+      if( !$user )
+         return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_no_user );
+
 		$iplist = $this->db->query( "SELECT post_ip FROM %pposts WHERE post_author=%d GROUP BY post_ip", $id );
 
 		$out = '';

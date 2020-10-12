@@ -973,6 +973,7 @@ class en
 		$this->mod_error_move_global = 'You cannot move a global topic. Edit the topic before moving it.';
 		$this->mod_error_move_same = 'You cannot move a topic to the forum it is already in.';
 		$this->mod_ip_view = 'View IP History';
+      $this->mod_ip_view_no_user = 'No such user ID exists.';
 		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.';
 		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />';
 		$this->mod_label_controls = 'Moderator Controls';
