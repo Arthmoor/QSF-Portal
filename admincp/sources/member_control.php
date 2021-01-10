@@ -233,7 +233,7 @@ class member_control extends admin
 					'user_lastvisit'	=> array( $this->lang->mc_user_lastvisit, U_TIME ),
 					'user_lastpost'		=> array( $this->lang->mc_user_lastpost, U_TIME ),
 					'user_regip'		=> array( $this->lang->mc_user_regip, U_IGNORE ),
-                                        'user_register_email'   => array( $this->lang->mc_user_regemail, U_IGNORE ),
+               'user_register_email'   => array( $this->lang->mc_user_regemail, U_IGNORE ),
 					'user_server_data'	=> array( $this->lang->mc_user_server_data, U_SVARS )
 				);
 
@@ -247,7 +247,7 @@ class member_control extends admin
 
 					$val = $member[$var];
 
-					if( ( $var == 'user_signature' ) || ( $var == 'user_email' ) || ( $var == 'user_register_email' ) || ( $var == 'user_title' ) ) {
+					if( ( $var == 'user_location' ) || ( $var == 'user_signature' ) || ( $var == 'user_email' ) || ( $var == 'user_register_email' ) || ( $var == 'user_title' ) ) {
 						$val = $this->format( $val, FORMAT_HTMLCHARS );
 					}
 
@@ -382,21 +382,44 @@ class member_control extends admin
 				$user_title_custom = intval( $this->post['user_title_custom'] );
 				$user_language = $this->post['user_language'];
 				$user_skin = $this->post['user_skin'];
-				$user_avatar = $this->post['user_avatar'];
 				$user_avatar_type = $this->post['user_avatar_type'];
+            if( $user_avatar_type != 'none' )
+               $user_avatar = $this->post['user_avatar'];
+            else
+               $user_avatar = '';
 				$user_avatar_width = intval( $this->post['user_avatar_width'] );
 				$user_avatar_height = intval( $this->post['user_avatar_height'] );
 				$user_level = intval( $this->post['user_level'] );
 				$user_birthday = $this->post['user_birthday'];
 				$user_timezone = $this->post['user_timezone'];
-				$user_location = $this->format( $this->post['user_location'], FORMAT_HTMLCHARS );
-				$user_homepage = $this->format( $this->post['user_homepage'], FORMAT_HTMLCHARS );
-				$user_facebook = $this->format( $this->post['user_facebook'], FORMAT_HTMLCHARS );
-				$user_interests = $this->format( $this->post['user_interests'], FORMAT_HTMLCHARS );
-				$user_signature = $this->post['user_signature'];
+
+            if( isset( $this->post['user_location'] ) )
+               $user_location = $this->format( $this->post['user_location'], FORMAT_HTMLCHARS );
+            else
+               $user_location = '';
+            if( isset( $this->post['user_homepage'] ) )
+               $user_homepage = $this->format( $this->post['user_homepage'], FORMAT_HTMLCHARS );
+            else
+               $user_homepage = '';
+            if( isset( $this->post['user_facebook'] ) )
+               $user_facebook = $this->format( $this->post['user_facebook'], FORMAT_HTMLCHARS );
+            else
+               $user_facebook = '';
+            if( isset( $this->post['user_twitter'] ) )
+            	$user_twitter = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
+            else
+               $user_twitter = '';
+            if( isset( $this->post['user_interests'] ) )
+               $user_interests = $this->format( $this->post['user_interests'], FORMAT_HTMLCHARS );
+            else
+               $user_interests = '';
+            if( isset( $this->post['user_signature'] ) )
+               $user_signature = $this->post['user_signature'];
+            else
+               $user_signature = '';
+
 				$user_posts = intval( $this->post['user_posts'] );
 				$user_uploads = intval( $this->post['user_uploads'] );
-				$user_twitter = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
 				$user_email_show = intval( $this->post['user_email_show'] );
 				$user_pm = intval( $this->post['user_pm'] );
 				$user_pm_mail = intval( $this->post['user_pm_mail'] );
