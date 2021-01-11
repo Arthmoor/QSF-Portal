@@ -1249,7 +1249,16 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
-			$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $user_name ) );
+
+         if( $user_id != USER_GUEST_UID ) {
+            $link_name = $this->htmlwidgets->clean_url( $user_name );
+            $link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
+         }
+         else
+            $link_name = $user_name;
+         
+			$xtpl->assign( 'link_name', $link_name );
+
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );
@@ -1327,7 +1336,16 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
-			$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $user_name ) );
+
+         if( $user_id != USER_GUEST_UID ) {
+            $link_name = $this->htmlwidgets->clean_url( $user_name );
+            $link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
+         }
+         else
+            $link_name = $user_name;
+         
+			$xtpl->assign( 'link_name', $link_name );
+
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );
@@ -1665,7 +1683,16 @@ class files extends qsfglobal
 			$xtpl->assign( 'file_fileversion', $file_fileversion );
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
-			#xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $user_name );
+
+         if( $user_id != USER_GUEST_UID ) {
+            $link_name = $this->htmlwidgets->clean_url( $user_name );
+            $link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
+         }
+         else
+            $link_name = $user_name;
+         
+			$xtpl->assign( 'link_name', $link_name );
+
 			$xtpl->assign( 'date', $date );
 			$xtpl->assign( 'revdate', $revdate );
 			$xtpl->assign( 'file_downloads', $file_downloads );

@@ -326,7 +326,7 @@
 <!-- BEGIN: Item -->
  <span class="filename"><a href="{site}/files/{file_url}-{file_id}/">{file_name}</a></span>
  <span class="fileversion">{file_fileversion}</span>
- <span class="submitter"><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></span>
+ <span class="submitter">{link_name}</span>
  <span class="filedate">{date}</span>
  <span class="filedate">{revdate}</span>
  <span class="file_number">{file_downloads}</span>
@@ -357,7 +357,7 @@
 <!-- BEGIN: Item -->
  <span class="filename"><a href="{site}/files/{file_url}-{file_id}/">{file_name}</a></span>
  <span class="fileversion">{file_fileversion}</span>
- <span class="submitter"><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></span>
+ <span class="submitter">{link_name}</span>
  <span class="filedate">{date}</span>
  <span class="filedate">{revdate}</span>
  <span class="file_number">{file_downloads}</span>
@@ -502,7 +502,7 @@
 <!-- BEGIN: Item -->
  <span class="filename"><a href="{site}/files/{file_url}-{file_id}/">{file_name}</a></span>
  <span class="fileversion">{file_fileversion}</span>
- <span class="submitter"><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></span>
+ <span class="submitter">{link_name}</span>
  <span class="filedate">{date}</span>
  <span class="filedate">{revdate}</span>
  <span class="file_number">{file_downloads}</span>
