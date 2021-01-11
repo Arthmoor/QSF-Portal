@@ -57,7 +57,7 @@ class register extends qsfglobal
 			break;
 
 		case 'resend':
-			return $this->send_activation_email( $this->user['user_email'], $this->user['user_name'], $this->user['user_password'], $this->user['user_joined'] );
+			return $this->send_activation_email( $this->user['user_email'], $this->user['user_name'], $this->user['user_password'], $this->user['user_id'] );
 			break;
 
 		default:
@@ -221,9 +221,9 @@ class register extends qsfglobal
 				$group_id = $this->sets['default_group'];
 			}
 
-                        // Store the contents of the entire $_SERVER array. Along with the captcha question. If bots get past this, knowing which question they got right may be helpful.
+         // Store the contents of the entire $_SERVER array. Along with the captcha question. If bots get past this, knowing which question they got right may be helpful.
 			$_SERVER['cap_question'] = $_SESSION['question'];
-                        $svars = json_encode( $_SERVER );
+         $svars = json_encode( $_SERVER );
 
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
 			if( !empty( $this->sets['wordpress_api_key'] ) && $this->sets['akismet_ureg'] ) {
@@ -262,6 +262,11 @@ class register extends qsfglobal
 			$this->sets['last_member_id'] = $this->db->insert_id( 'users', 'user_id' );
 			$this->sets['members']++;
 			$this->write_sets();
+
+			$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
+
+			setcookie( $this->sets['cookie_prefix'] . 'user', $this->sets['last_member_id'], $options );
+			setcookie( $this->sets['cookie_prefix'] . 'pass', $pass, $options );
 
 			if( $this->sets['emailactivation'] && $this->sets['emailactivation'] == true ) {
 				$this->update_validation_table();
@@ -311,7 +316,7 @@ class register extends qsfglobal
 					$vhash = hash( 'sha512', $member['user_email'] . $member['user_name'] . $member['user_password'] . $valid['validate_time'] );
 
 					if( $vhash == $this->get['e'] ) {
-						$this->db->query( "UPDATE %pusers SET user_group=%d WHERE user_id=%d", $this->sets['default_group'], $member['user_id'] );
+						$this->db->query( "UPDATE %pusers SET user_group=%d WHERE user_id=%d", USER_MEMBER, $member['user_id'] );
 
 						$this->db->query( 'DELETE FROM %pvalidation WHERE validate_id=%d', $valid['validate_id'] );
 

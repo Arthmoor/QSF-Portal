@@ -1390,7 +1390,7 @@ class en
 	{
 		$this->register_activated = 'Your account has been activated!';
 		$this->register_activating = 'Account Activation';
-		$this->register_activation_error = 'There was an error while activating your account. Check to see if your browser contains the full url in the activation email. If the problem persists, contact the board administrator to have your email resent.';
+		$this->register_activation_error = 'There was an error during account validation. Check to see if your browser contains the full url in the activation email, and that you are logged into the account you are trying to validate. Please note that activation links are only valid for 4 hours from the time of registration.';
 		$this->register_akismet_ureg_spam = 'Registration blocked by spam filtering. If you believe this to be in error, please contact the administration.';
 		$this->register_confirm_passwd = 'Confirm Password';
 		$this->register_cookie_required = 'You must enable cookies in order to register on this site.';

@@ -453,7 +453,7 @@ if( $qsf->nohtml ) {
 	}
 
 	if( $qsf->user['user_group'] == USER_AWAIT ) {
-		$reminder_text = "{$qsf->lang->main_activate}<br /><a href='{$qsf->site}/register/&amp;s=resend'>{$qsf->lang->main_activate_resend}</a>";
+		$reminder_text = "{$qsf->lang->main_activate}<br /><a href='{$qsf->site}/index.php?a=register&amp;s=resend'>{$qsf->lang->main_activate_resend}</a>";
 	}
 	if( $reminder_text ) {
 		$xtpl->assign( 'main_reminder', $qsf->lang->main_reminder );
