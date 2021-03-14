@@ -183,6 +183,26 @@ class upgrade extends qsfglobal
 					unset( $this->sets['debug_mode'] );
 
 					// Queries to run
+               $queries[] = 'ALTER TABLE %pactive CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pattach CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pcaptcha CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pfile_categories CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pfilecomments CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pfiles CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pforums CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pgroups CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %plogs CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pmembertitles CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %ppmsystem CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pposts CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %preplacements CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %psettings CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pspam CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %psubscriptions CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %ptopics CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pupdates CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+               $queries[] = 'ALTER TABLE %pusers CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
+
 					$queries[] = "ALTER TABLE %ptopics CHANGE topic_description topic_description varchar(255)";
 					$queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
 					$queries[] = 'ALTER TABLE %psettings ADD settings_mobile_icons text AFTER settings_meta_description';
@@ -216,7 +236,7 @@ class upgrade extends qsfglobal
 					  validate_ip varchar(40) NOT NULL DEFAULT '127.0.0.1',
 					  validate_user_agent varchar(255) NOT NULL,
 					  PRIMARY KEY (validate_id)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 					$queries[] = "DROP TABLE IF EXISTS %phelp";
 					$queries[] = "DROP TABLE IF EXISTS %ptemplates";
@@ -228,7 +248,7 @@ class upgrade extends qsfglobal
 					  skin_dir varchar(255) NOT NULL default '',
 					  skin_enabled tinyint(1) unsigned NOT NULL default '0',
 					  PRIMARY KEY  (skin_id)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 					$queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ( 'Ashlander 4', 'default', 1 )";
 
@@ -238,7 +258,7 @@ class upgrade extends qsfglobal
 					  emoji_image varchar(255) NOT NULL default '',
 					  emoji_clickable tinyint(1) unsigned NOT NULL default '1',
 					  PRIMARY KEY  (emoji_id)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':alien:', 'alien.gif', 1 )";
 					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':biggrin:', 'biggrin.gif', 1 )";
@@ -301,7 +321,7 @@ class upgrade extends qsfglobal
                  conv_users varchar(255) NOT NULL default '',
                  PRIMARY KEY  (conv_id),
                  KEY User (conv_starter)
-               ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+               ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
                $queries[] = "CREATE TABLE %pconv_posts (
                  post_id int(10) unsigned NOT NULL auto_increment,
@@ -320,7 +340,7 @@ class upgrade extends qsfglobal
                  PRIMARY KEY  (post_id),
                  KEY Conversation (post_convo),
                  FULLTEXT KEY post_text (post_text)
-               ) ENGINE=MyISAM DEFAULT CHARSET=utf8";
+               ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
                $queries[] = "CREATE TABLE %pconv_readmarks (
                  readmark_user int(10) unsigned NOT NULL default '0',
