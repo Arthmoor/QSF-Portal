@@ -147,23 +147,11 @@ $admin->lang     = $admin->get_lang( $admin->user['user_language'], $admin->get[
 // Init function also checks permissions and kicks out non-admins
 $admin->init();
 
+$crypto_nonce = '';
+
 // Security header options
 if( $admin->sets['htts_enabled'] && $admin->sets['htts_max_age'] > -1 ) {
 	header( "Strict-Transport-Security: max-age={$admin->sets['htts_max_age']}" );
-}
-
-if( $admin->sets['xss_enabled'] ) {
-	if( $admin->sets['xss_policy'] == 0 ) {
-		header( 'X-XSS-Protection: 0' );
-	}
-
-	if( $admin->sets['xss_policy'] == 1 ) {
-		header( 'X-XSS-Protection: 1' );
-	}
-
-	if( $admin->sets['xss_policy'] == 2 ) {
-		header( 'X-XSS-Protection: 1; mode=block' );
-	}
 }
 
 if( $admin->sets['xfo_enabled'] ) {
@@ -189,8 +177,17 @@ if( $admin->sets['ect_enabled'] ) {
 }
 
 if( $admin->sets['csp_enabled'] ) {
-	header( "Content-Security-Policy: {$admin->sets['csp_details']}" );
+	$crypto_nonce = hash( 'sha512', microtime() );
+
+	$csp = str_replace( '?nonce?', 'nonce-' . $crypto_nonce, $admin->sets['csp_details'] );
+	header( "Content-Security-Policy: {$csp}" );
 }
+
+if( $admin->sets['fp_enabled'] ) {
+	header( "Permissions-Policy: {$admin->sets['fp_details']}" );
+}
+
+// End security header options
 
 if( !isset( $admin->get['skin'] ) ) {
 	$skin = $admin->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $admin->user['user_skin'] );
@@ -224,7 +221,7 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'site', $admin->site );
 	$xtpl->assign( 'skin', $admin->skin );
 
-	$title = isset( $qsf->title ) ? $qsf->title : $admin->name .' Admin CP';
+	$title = isset( $admin->title ) ? $admin->title : $admin->name .' Admin CP';
 	$xtpl->assign( 'title', $title );
 
 	$xtpl->assign( 'admin_settings', $admin->lang->admin_settings );

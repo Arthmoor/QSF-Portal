@@ -204,7 +204,7 @@ if( $qsf->sets['csp_enabled'] ) {
 }
 
 if( $qsf->sets['fp_enabled'] ) {
-	header( "Feature-Policy: {$qsf->sets['fp_details']}" );
+	header( "Permissions-Policy: {$qsf->sets['fp_details']}" );
 }
 
 // End security header options
