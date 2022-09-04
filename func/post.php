@@ -724,23 +724,19 @@ class post extends qsfglobal
 
 				$topic_link = $this->htmlwidgets->clean_url( $emailtopic['topic_title'] );
 
+            $headers = "From: {$this->sets['forum_name']} <{$this->sets['admin_outgoing']}>\r\n" . "X-Mailer: PHP/" . phpversion();
+				$subject = "[{$this->sets['forum_name']}] :: Topic Subscription";
+
 				$message  = "{$this->sets['forum_name']}\n";
-				$message .= "{$this->site}/topic/{$topic_link}-{$t}/\n\n";
 				$message .= "A new post has been made in a topic or forum you are subscribed to.\n\n";
+				$message .= "{$this->site}/topic/{$topic_link}-{$t}/\n\n";
 				$message .= "Forum: {$emailtopic['forum_name']}\n";
 				$message .= "Topic: " . $this->format( $emailtopic['topic_title'], FORMAT_CENSOR );
 
-				$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
-				$mailer->setSubject( "{$this->sets['forum_name']} - Subscriptions" );
-				$mailer->setMessage( $message );
-				$mailer->setServer( $this->sets['mailserver'] );
-
-				while( $sub = $this->db->nqfetch( $subs ) )
-				{
-					$mailer->setBcc( $sub['user_email'] );
-				}
-
-				$mailer->doSend();
+            while( $sub = $this->db->nqfetch( $subs ) )
+            {
+               mail( $sub['user_email'], '[' . $this->sets['forum_name'] . '] ' . str_replace( '\n', '\\n', $subject ), $message, $headers );
+            }
 			}
 
 			if( isset( $this->post['request_uri'] ) ) {

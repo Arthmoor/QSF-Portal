@@ -69,6 +69,8 @@ class htmlwidgets extends forumutils
 	 */
 	public function clean_url( $link )
 	{
+      if( $link == null )
+         $link = '';
 		$link = strtolower( $link );
 		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
 		$link = str_replace( ' ', '-', $link );

@@ -492,8 +492,10 @@ class member_control extends admin
 
 	private function delete_member_account( $id )
 	{
+      $name = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
+ 
 		$this->db->query( "UPDATE %pposts SET post_author=%d WHERE post_author=%d", USER_GUEST_UID, $id );
-		$this->db->query( "UPDATE %pposts SET post_edited_by=%d WHERE post_edited_by=%d", USER_GUEST_UID, $id );
+		$this->db->query( "UPDATE %pposts SET post_edited_by='%s' WHERE post_edited_by='%s'", USER_GUEST_UID, $name['user_name'] );
 		$this->db->query( "UPDATE %ptopics SET topic_starter=%d WHERE topic_starter=%d", USER_GUEST_UID, $id );
 		$this->db->query( "UPDATE %ptopics SET topic_last_poster=%d WHERE topic_last_poster=%d", USER_GUEST_UID, $id );
 		$this->db->query( "UPDATE %plogs SET log_user=%d WHERE log_user=%d", USER_GUEST_UID, $id );

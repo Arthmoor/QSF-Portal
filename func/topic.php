@@ -246,7 +246,7 @@ class topic extends qsfglobal
 		$this->htmlwidgets->tree_forums( $topic['topic_forum'], true );
 		$this->tree( $title_short );
 
-		if( trim( $topic['topic_description'] ) != '' ) {
+		if( $topic['topic_description'] != null && trim( $topic['topic_description'] ) != '' ) {
 			$topic['topic_description'] = $this->format( $topic['topic_description'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 		} else {
 			$topic['topic_description'] = null;

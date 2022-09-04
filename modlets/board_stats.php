@@ -154,6 +154,9 @@ class board_stats extends modlet
 			$year = explode( '-', $m['user_birthday'] );
 			$day = $this->qsf->mbdate( 'Y' ) - $year[0];
 
+         if( $year[0] == '1900' )
+            continue;
+
 			if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
 				$name = $this->qsf->htmlwidgets->clean_url( $m['user_name'] );
 
