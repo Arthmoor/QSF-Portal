@@ -41,7 +41,7 @@ $queries[] = "CREATE TABLE %pactive (
   active_session varchar(32) NOT NULL default '',
   UNIQUE KEY active_session (active_session),
   UNIQUE KEY active_ip (active_ip)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pattach";
 $queries[] = "CREATE TABLE %pattach (
@@ -54,7 +54,7 @@ $queries[] = "CREATE TABLE %pattach (
   attach_pm tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (attach_id),
   KEY attach_post (attach_post)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pcaptcha";
 $queries[] = "CREATE TABLE %pcaptcha (
@@ -62,7 +62,7 @@ $queries[] = "CREATE TABLE %pcaptcha (
   cap_question text NOT NULL,
   cap_answer text NOT NULL,
   PRIMARY KEY (cap_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pconversations";
 $queries[] = "CREATE TABLE %pconversations (
@@ -80,7 +80,7 @@ $queries[] = "CREATE TABLE %pconversations (
   conv_users varchar(255) NOT NULL default '',
   PRIMARY KEY  (conv_id),
   KEY User (conv_starter)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pconv_posts";
 $queries[] = "CREATE TABLE %pconv_posts (
@@ -100,7 +100,7 @@ $queries[] = "CREATE TABLE %pconv_posts (
   PRIMARY KEY  (post_id),
   KEY Conversation (post_convo),
   FULLTEXT KEY post_text (post_text)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pemojis";
 $queries[] = "CREATE TABLE %pemojis (
@@ -109,7 +109,7 @@ $queries[] = "CREATE TABLE %pemojis (
   emoji_image varchar(255) NOT NULL default '',
   emoji_clickable tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (emoji_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pfile_categories";
 $queries[] = "CREATE TABLE %pfile_categories (
@@ -122,7 +122,7 @@ $queries[] = "CREATE TABLE %pfile_categories (
   fcat_tree varchar(255) NOT NULL default '',
   fcat_longpath varchar(255) NOT NULL default '',
   PRIMARY KEY  (fcat_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pfilecomments";
 $queries[] = "CREATE TABLE %pfilecomments (
@@ -132,14 +132,14 @@ $queries[] = "CREATE TABLE %pfilecomments (
   comment_date int(10) unsigned NOT NULL default '0',
   comment_text text NOT NULL,
   PRIMARY KEY  (comment_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pfileratings";
 $queries[] = "CREATE TABLE %pfileratings (
   file_id int(10) unsigned NOT NULL default '0',
   user_id int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (file_id,user_id)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pfiles";
 $queries[] = "CREATE TABLE %pfiles (
@@ -163,7 +163,7 @@ $queries[] = "CREATE TABLE %pfiles (
   file_revdate int(10) unsigned default '0',
   file_description text NOT NULL,
   PRIMARY KEY  (file_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pforums";
 $queries[] = "CREATE TABLE %pforums (
@@ -181,7 +181,7 @@ $queries[] = "CREATE TABLE %pforums (
   forum_news tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (forum_id),
   KEY Parent (forum_parent)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pgroups";
 $queries[] = "CREATE TABLE %pgroups (
@@ -192,7 +192,7 @@ $queries[] = "CREATE TABLE %pgroups (
   group_perms text NOT NULL,
   group_file_perms text NOT NULL,
   PRIMARY KEY  (group_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %plogs";
 $queries[] = "CREATE TABLE %plogs (
@@ -204,7 +204,7 @@ $queries[] = "CREATE TABLE %plogs (
   log_data2 smallint(4) unsigned NOT NULL default '0',
   log_data3 smallint(4) unsigned NOT NULL default '0',
   PRIMARY KEY  (log_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pmembertitles";
 $queries[] = "CREATE TABLE %pmembertitles (
@@ -214,7 +214,7 @@ $queries[] = "CREATE TABLE %pmembertitles (
   membertitle_icon varchar(25) NOT NULL default '',
   PRIMARY KEY  (membertitle_id),
   KEY Posts (membertitle_posts)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %ppages";
 $queries[] = "CREATE TABLE %ppages (
@@ -223,7 +223,7 @@ $queries[] = "CREATE TABLE %ppages (
   page_flags int(10) unsigned NOT NULL default '0',
   page_contents text NOT NULL,
   PRIMARY KEY  (page_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %ppmsystem";
 $queries[] = "CREATE TABLE %ppmsystem (
@@ -239,7 +239,7 @@ $queries[] = "CREATE TABLE %ppmsystem (
   pm_folder tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (pm_id),
   KEY NewPMs (pm_to,pm_read,pm_folder)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pposts";
 $queries[] = "CREATE TABLE %pposts (
@@ -260,7 +260,7 @@ $queries[] = "CREATE TABLE %pposts (
   PRIMARY KEY  (post_id),
   KEY Topic (post_topic),
   FULLTEXT KEY post_text (post_text)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %preadmarks";
 $queries[] = "CREATE TABLE %preadmarks (
@@ -268,7 +268,7 @@ $queries[] = "CREATE TABLE %preadmarks (
   readmark_topic int(10) unsigned NOT NULL default '0',
   readmark_lastread int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (readmark_user,readmark_topic)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pconv_readmarks";
 $queries[] = "CREATE TABLE %pcv_readmarks (
@@ -276,14 +276,14 @@ $queries[] = "CREATE TABLE %pcv_readmarks (
   readmark_conv int(10) unsigned NOT NULL default '0',
   readmark_lastread int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (readmark_user,readmark_conv)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %preplacements";
 $queries[] = "CREATE TABLE %preplacements (
   replacement_id smallint(3) unsigned NOT NULL auto_increment,
   replacement_search varchar(50) NOT NULL default '',
   PRIMARY KEY  (replacement_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %psettings";
 $queries[] = "CREATE TABLE %psettings (
@@ -296,7 +296,7 @@ $queries[] = "CREATE TABLE %psettings (
   settings_meta_description tinytext,
   settings_mobile_icons text,
   PRIMARY KEY  (settings_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pskins";
 $queries[] = "CREATE TABLE %pskins (
@@ -305,7 +305,7 @@ $queries[] = "CREATE TABLE %pskins (
   skin_dir varchar(255) NOT NULL default '',
   skin_enabled tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (skin_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pspam";
 $queries[] = "CREATE TABLE %pspam (
@@ -325,7 +325,7 @@ $queries[] = "CREATE TABLE %pspam (
   PRIMARY KEY  (spam_id),
   KEY Topic (spam_topic),
   FULLTEXT KEY spam_text (spam_text)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %psubscriptions";
 $queries[] = "CREATE TABLE %psubscriptions (
@@ -336,7 +336,7 @@ $queries[] = "CREATE TABLE %psubscriptions (
   subscription_expire int(10) unsigned NOT NULL default '0',
   PRIMARY KEY  (subscription_id),
   KEY subscription_item (subscription_item)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %ptopics";
 $queries[] = "CREATE TABLE %ptopics (
@@ -358,7 +358,7 @@ $queries[] = "CREATE TABLE %ptopics (
   topic_poll_options text,
   PRIMARY KEY  (topic_id),
   KEY Forum (topic_forum)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pupdates";
 $queries[] = "CREATE TABLE %pupdates (
@@ -372,7 +372,7 @@ $queries[] = "CREATE TABLE %pupdates (
   update_size int(8) unsigned default NULL,
   update_updater int(10) unsigned default NULL,
   PRIMARY KEY  (update_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pusers";
 $queries[] = "CREATE TABLE %pusers (
@@ -423,7 +423,7 @@ $queries[] = "CREATE TABLE %pusers (
   user_perms text,
   user_file_perms text,
   PRIMARY KEY  (user_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pvalidation";
 $queries[] = "CREATE TABLE %pvalidation (
@@ -433,7 +433,7 @@ $queries[] = "CREATE TABLE %pvalidation (
   validate_ip varchar(40) NOT NULL DEFAULT '127.0.0.1',
   validate_user_agent varchar(255) NOT NULL,
   PRIMARY KEY (validate_id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "DROP TABLE IF EXISTS %pvotes";
 $queries[] = "CREATE TABLE %pvotes (
@@ -441,7 +441,7 @@ $queries[] = "CREATE TABLE %pvotes (
   vote_topic int(10) unsigned NOT NULL default '0',
   vote_option smallint(4) NOT NULL default '-1',
   PRIMARY KEY  (vote_user,vote_topic)
-) ENGINE=MyISAM";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 $queries[] = "INSERT INTO %pgroups (group_id, group_name, group_type, group_format, group_perms, group_file_perms) VALUES (1, 'Administrators', 'ADMIN', '<b>%%s</b>',
 				'{\"board_view\":true,\"board_view_closed\":true,\"do_anything\":true,\"edit_avatar\":true,\"edit_profile\":true,\"edit_sig\":true,\"email_use\":true,\"forum_view\":{\"1\":true,\"2\":true,\"3\":true},\"is_admin\":true,\"page_create\":true,\"page_delete\":true,\"page_edit\":true,\"pm_noflood\":true,\"poll_create\":{\"1\":true,\"2\":true,\"3\":true},\"poll_vote\":{\"1\":true,\"2\":true,\"3\":true},\"post_attach\":{\"1\":true,\"2\":true,\"3\":true},\"post_attach_download\":{\"1\":true,\"2\":true,\"3\":true},\"post_create\":{\"1\":true,\"2\":true,\"3\":true},\"post_delete\":{\"1\":true,\"2\":true,\"3\":true},\"post_delete_old\":{\"1\":true,\"2\":true,\"3\":true},\"post_delete_own\":{\"1\":true,\"2\":true,\"3\":true},\"post_edit\":{\"1\":true,\"2\":true,\"3\":true},\"post_edit_old\":{\"1\":true,\"2\":true,\"3\":true},\"post_edit_own\":{\"1\":true,\"2\":true,\"3\":true},\"post_inc_userposts\":{\"1\":true,\"2\":true,\"3\":true},\"post_noflood\":{\"1\":true,\"2\":true,\"3\":true},\"post_viewip\":{\"1\":true,\"2\":true,\"3\":true},\"search_noflood\":true,\"topic_create\":{\"1\":true,\"2\":true,\"3\":true},\"topic_delete\":{\"1\":true,\"2\":true,\"3\":true},\"topic_delete_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_edit\":{\"1\":true,\"2\":true,\"3\":true},\"topic_edit_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_global\":true,\"topic_lock\":{\"1\":true,\"2\":true,\"3\":true},\"topic_lock_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_move\":{\"1\":true,\"2\":true,\"3\":true},\"topic_move_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_pin\":{\"1\":true,\"2\":true,\"3\":true},\"topic_pin_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_publish\":{\"1\":true,\"2\":true,\"3\":true},\"topic_publish_auto\":{\"1\":true,\"2\":true,\"3\":true},\"topic_split\":{\"1\":true,\"2\":true,\"3\":true},\"topic_split_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_unlock\":{\"1\":true,\"2\":true,\"3\":true},\"topic_unlock_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_unpin\":{\"1\":true,\"2\":true,\"3\":true},\"topic_unpin_own\":{\"1\":true,\"2\":true,\"3\":true},\"topic_view\":{\"1\":true,\"2\":true,\"3\":true},\"topic_view_unpublished\":{\"1\":true,\"2\":true,\"3\":true}}',

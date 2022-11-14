@@ -229,6 +229,36 @@ class upgrade extends qsfglobal
 					$queries[] = "UPDATE %pusers SET user_skin=1";
 					$queries[] = 'ALTER TABLE %pattach ADD attach_pm tinyint(1) unsigned NOT NULL default 0 AFTER attach_size';
 
+               $queries[] = 'ALTER TABLE %pvotes ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
+               $queries[] = 'ALTER TABLE %pvalidation ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pusers ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pupdates ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %ptopics ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %psubscriptions ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pspam ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pskins ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %psettings ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %preplacements ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %preadmarks ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
+               $queries[] = 'ALTER TABLE %pposts ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %ppmsystem ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %ppages ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pmembertitles ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %plogs ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pgroups ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pforums ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pfile_categories ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pfiles ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pfileratings ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
+               $queries[] = 'ALTER TABLE %pfilecomments ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pemojis ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pconv_readmarks ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pconv_posts ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pconversations ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pcaptcha ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pattach ENGINE=InnoDB';
+               $queries[] = 'ALTER TABLE %pactive ENGINE=InnoDB';
+
 					$queries[] = "CREATE TABLE %pvalidation (
 					  validate_id int(10) unsigned NOT NULL,
 					  validate_hash varchar(255) NOT NULL,
