@@ -12,7 +12,7 @@
   {mobile_icons}
   <script src="{qsf_site}/javascript/utils.js" async defer></script>
  </head>
-
+ {google}
  <body>
   <div id="container">
    <div><a id="top"></a></div>
@@ -123,7 +123,6 @@
    Best viewed at 1024x768 or better resolution.
    <br />{servertime}
   </footer>
-  {google}
  </body>
 </html>
 <!-- END: Index -->

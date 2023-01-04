@@ -1258,24 +1258,31 @@ class conversations extends qsfglobal
 				// Try and deal with it rather than say something.
 				catch(Exception $e) {}
 
-				if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
-					$this->log_action( 'Possible Spam Posted', 0, 0, 0 );
+				if( $spam_checked && $akismet != null ) {
+               $response = $akismet->is_this_spam();
 
-					// Store the contents of the entire $_SERVER array.
-					$svars = json_encode( $_SERVER );
+               if( isset( $response[1] ) && $response[1] == 'true' ) {
+                  // Only store this if Akismet has not issues the x-akismet-pro-tip header
+                  if( !isset( $response[0]['x-akismet-pro-tip'] ) || $response[0]['x-akismet-pro-tip'] != 'discard' ) {
+                     $this->log_action( 'Possible Spam Posted', 0, 0, 0 );
 
-					$this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
-						VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
-						$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+                     // Store the contents of the entire $_SERVER array.
+                     $svars = json_encode( $_SERVER );
 
-					$this->sets['spam_pm_count']++;
-					$this->sets['spam_pending']++;
-					$this->write_sets();
+                     $this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
+                        VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
+                        $t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+                  }
 
-					return $this->message( $this->lang->cv_posting, $this->lang->cv_akismet_posts_spam );
-				}
-			}
-		}
+                  $this->sets['spam_pm_count']++;
+                  $this->sets['spam_pending']++;
+                  $this->write_sets();
+
+                  return $this->message( $this->lang->cv_posting, $this->lang->cv_akismet_posts_spam );
+               }
+            }
+         }
+      }
 
 		$this->db->query( "INSERT INTO %pconv_posts (post_convo, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon, post_referrer, post_agent)
 			VALUES (%d, %d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s')",

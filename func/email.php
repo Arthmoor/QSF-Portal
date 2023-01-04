@@ -150,13 +150,17 @@ class email extends qsfglobal
 				// Try and deal with it rather than say something.
 				catch( Exception $e ) {}
 
-				if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
-					$this->log_action( 'Spam Email Caught', 0, 0, 0 );
+				if( $spam_checked && $akismet != null ) {
+               $response = $akismet->is_this_spam();
 
-					$this->sets['spam_email_count']++;
-					$this->write_sets();
+               if( isset( $response[1] ) && $response[1] == 'true' ) {
+                  $this->log_action( 'Spam Email Caught', 0, 0, 0 );
 
-					return $this->message( $this->lang->email_email, $this->lang->email_akismet_email_spam );
+                  $this->sets['spam_email_count']++;
+                  $this->write_sets();
+
+                  return $this->message( $this->lang->email_email, $this->lang->email_akismet_email_spam );
+               }
 				}
 			}
 

@@ -645,21 +645,27 @@ class post extends qsfglobal
 					// Try and deal with it rather than say something.
 					catch(Exception $e) {}
 
-					if( $spam_checked && $akismet != null && $akismet->is_this_spam() ) {
-						$this->log_action( 'Possible Spam Posted', 0, 0, 0 );
+					if( $spam_checked && $akismet != null ) {
+                  $response = $akismet->is_this_spam();
 
-						// Store the contents of the entire $_SERVER array.
-						$svars = json_encode( $_SERVER );
+                  if( isset( $response[1] ) && $response[1] == 'true' ) {
+                     $this->log_action( 'Possible Spam Posted', 0, 0, 0 );
 
-						$this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
-							VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
-							$t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+                     if( isset( $response[0]['x-akismet-pro-tip'] ) && $response[0]['x-akismet-pro-tip'] != 'discard' ) {
+                        // Store the contents of the entire $_SERVER array.
+                        $svars = json_encode( $_SERVER );
 
-						$this->sets['spam_post_count']++;
-						$this->sets['spam_pending']++;
-						$this->write_sets();
+                        $this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
+                           VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
+                           $t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+                     }
 
-						return $this->message( $this->lang->post_posting, $this->lang->post_akismet_posts_spam );
+                     $this->sets['spam_post_count']++;
+                     $this->sets['spam_pending']++;
+                     $this->write_sets();
+
+                     return $this->message( $this->lang->post_posting, $this->lang->post_akismet_posts_spam );
+                  }
 					}
 				}
 			}
