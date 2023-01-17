@@ -172,7 +172,7 @@ class conversations extends qsfglobal
 
          // There's almost certainly a better way to do this but I can't come up with it, so we're going to very hackishly do this the ugly way.
          $cv_starter = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_starter'] );
-         $cv_last_poster  = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_last_poster'] );
+         $cv_last_poster = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_last_poster'] );
 
 			$row['conv_title'] = $this->format( $row['conv_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
@@ -180,7 +180,7 @@ class conversations extends qsfglobal
 
 			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], 'index.php?a=conversations&amp;s=viewconvo&amp;id=' . $row['conv_id'], ', ', 0, $m );
 
-			if( $cv_last_poster['user_id'] != USER_GUEST_UID ) {
+			if( $cv_last_poster != null && $cv_last_poster['user_id'] != USER_GUEST_UID ) {
 				$last_poster = '<a href="' . $this->site . '/profile/' . $this->htmlwidgets->clean_url( $cv_last_poster['user_name'] ) . '-' . $cv_last_poster['user_id'] . '/" class="small">' . $cv_last_poster['user_name'] . '</a>';
 			} else {
 				$last_poster = $this->lang->cv_guest_user;
@@ -425,7 +425,7 @@ class conversations extends qsfglobal
          return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_no_message );
       }
 
-      $icon = null;
+      $icon = '';
       if( isset( $this->post['icon'] ) )
          $icon = $this->post['icon'];
 
