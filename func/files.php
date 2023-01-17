@@ -64,7 +64,7 @@ class files extends qsfglobal
 		}
 
 		$cid = 0;
-		if( isset ($this->get['cid'] ) ) {
+		if( isset( $this->get['cid'] ) ) {
 			if( !is_numeric( $this->get['cid'] ) ) {
 				return $this->message( $this->lang->files, $this->lang->files_invalid_category );
 			}
@@ -1518,9 +1518,15 @@ class files extends qsfglobal
 	{
 		if( !isset( $this->post['submit'] ) )
 		{
-			if( isset( $this->get['uid'] ) )
-			{
-				$uid = $this->get['uid'];
+			if( isset( $this->get['uid'] ) )	{
+            $uid = 0;
+            if( isset( $this->get['uid'] ) ) {
+            	if( !is_numeric( $this->get['uid'] ) ) {
+                  return $this->message( $this->lang->files, $this->lang->files_invalid_user );
+               }
+            }
+
+			   $uid = intval( $this->get['uid'] );
 				$uname = $this->db->fetch( 'SELECT user_name from %pusers WHERE user_id=%d', $uid );
 				$query = $this->db->query( 'SELECT * FROM %pfiles WHERE file_submitted=%d AND file_approved=1 ORDER BY file_name', $uid );
 

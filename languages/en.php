@@ -532,6 +532,7 @@ class en
 		$this->files_invalid_category = 'An invalid category was entered. Please check the URL.';
 		$this->files_invalid_file = 'An invalid file ID was entered. Please check the URL.';
 		$this->files_invalid_option = 'Invalid option flag';
+      $this->files_invalid_user = 'An invalid user ID was entered. Please check the URL.';
 		$this->files_moderator = 'Moderator';
 		$this->files_modify_info = 'Modify File Information';
 		$this->files_move = 'Move';
