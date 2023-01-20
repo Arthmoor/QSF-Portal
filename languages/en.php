@@ -67,6 +67,7 @@ class en
 	public function admin()
 	{
 		$this->admin_add_member_titles = 'Add automatic member titles';
+      $this->admin_akismet_api_key_test = 'Test Akismet API Key';
 		$this->admin_ban_ips = 'Ban IP addresses';
 		$this->admin_censor = 'Censor words';
 		$this->admin_cp_denied = 'Access Denied';
@@ -1498,7 +1499,11 @@ class en
 	{
 		$this->settings = 'Settings';
 		$this->settings_active = 'Active Users Settings';
-		$this->settings_allow = 'Allow';
+      $this->settings_allow = 'Allow';
+      $this->settings_akismet_api_key_invalid = 'Your Akismet API Key is not valid. Check with the Akismet website to make sure you have the right key specified.';
+      $this->settings_akismet_api_key_missing = 'You have not set an API Key for Akismet yet.';
+      $this->settings_akismet_api_key_test = 'Test Akismet API Key';
+      $this->settings_akismet_api_key_valid = 'Your Akismet API Key is valid.';
 		$this->settings_akismet_email_enable = 'Email Form Protection';
 		$this->settings_akismet_email_enable_msg = 'Spam filter protection for the user email forms.';
 		$this->settings_akismet_posts_enable = 'Forum Post Protection';

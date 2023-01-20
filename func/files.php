@@ -1520,14 +1520,17 @@ class files extends qsfglobal
 		{
 			if( isset( $this->get['uid'] ) )	{
             $uid = 0;
-            if( isset( $this->get['uid'] ) ) {
-            	if( !is_numeric( $this->get['uid'] ) ) {
-                  return $this->message( $this->lang->files, $this->lang->files_invalid_user );
-               }
+           	if( !is_numeric( $this->get['uid'] ) ) {
+               return $this->message( $this->lang->files, $this->lang->files_invalid_user );
             }
 
 			   $uid = intval( $this->get['uid'] );
 				$uname = $this->db->fetch( 'SELECT user_name from %pusers WHERE user_id=%d', $uid );
+
+            if( $uname == null ) {
+               return $this->message( $this->lang->files, $this->lang->files_invalid_user );
+            }
+
 				$query = $this->db->query( 'SELECT * FROM %pfiles WHERE file_submitted=%d AND file_approved=1 ORDER BY file_name', $uid );
 
 				return $this->run_search( $xtpl, $query, 'User: ' . $uname['user_name'] );

@@ -43,6 +43,21 @@ class settings extends admin
 
 		switch( $this->get['s'] )
 		{
+      case 'akismet_api_key_test':
+         $this->set_title( $this->lang->settings_akismet_api_key_test );
+         $this->tree( $this->lang->settings_akismet_api_key_test );
+
+         if( empty( $this->sets['wordpress_api_key'] ) ) {
+            return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_missing );
+         }
+
+         $key_test = $this->test_akismet_key();
+         if( $key_test )
+            return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_valid );
+         else
+            return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_invalid );
+         break;
+
 		case 'showcaptcha':
 			$this->set_title( $this->lang->settings_captcha_display );
 			$this->tree( $this->lang->settings_captcha_display );
@@ -925,6 +940,16 @@ class settings extends admin
 			return $this->message( $this->lang->settings, $this->lang->settings_updated );
 			break;
 		}
+	}
+
+	private function test_akismet_key()
+	{
+		require_once $this->sets['include_path'] . '/lib/akismet.php';
+		$akismet = new Akismet( $this );
+
+		$response = $akismet->is_key_valid();
+
+      return $response;
 	}
 }
 ?>

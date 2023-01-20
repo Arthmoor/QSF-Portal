@@ -234,6 +234,7 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_phpinfo', $admin->lang->admin_phpinfo );
 	$xtpl->assign( 'admin_logs', $admin->lang->admin_logs );
 	$xtpl->assign( 'admin_stats', $admin->lang->admin_stats );
+  	$xtpl->assign( 'admin_akismet_api_key_test', $admin->lang->admin_akismet_api_key_test );
 
 	$xtpl->assign( 'admin_forums', $admin->lang->admin_forums );
 	$xtpl->assign( 'admin_create_forum', $admin->lang->admin_create_forum );

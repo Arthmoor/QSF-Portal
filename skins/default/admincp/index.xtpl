@@ -34,6 +34,7 @@
      <a href="{site}/admincp/index.php?a=php_info">{admin_phpinfo}</a>
      <a href="{site}/admincp/index.php?a=logs">{admin_logs}</a>
      <a href="{site}/admincp/index.php?a=stats">{admin_stats}</a>
+	 <a href="{site}/admincp/index.php?a=settings&amp;s=akismet_api_key_test">{admin_akismet_api_key_test}</a>
     </nav>
     <div class="clearboth"></div>
    </div>
