@@ -266,7 +266,7 @@ class upgrade extends qsfglobal
 					  validate_ip varchar(40) NOT NULL DEFAULT '127.0.0.1',
 					  validate_user_agent varchar(255) NOT NULL,
 					  PRIMARY KEY (validate_id)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 					$queries[] = "DROP TABLE IF EXISTS %phelp";
 					$queries[] = "DROP TABLE IF EXISTS %ptemplates";
@@ -278,7 +278,7 @@ class upgrade extends qsfglobal
 					  skin_dir varchar(255) NOT NULL default '',
 					  skin_enabled tinyint(1) unsigned NOT NULL default '0',
 					  PRIMARY KEY  (skin_id)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 					$queries[] = "INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ( 'Ashlander 4', 'default', 1 )";
 
@@ -288,7 +288,7 @@ class upgrade extends qsfglobal
 					  emoji_image varchar(255) NOT NULL default '',
 					  emoji_clickable tinyint(1) unsigned NOT NULL default '1',
 					  PRIMARY KEY  (emoji_id)
-					) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+					) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
 					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':alien:', 'alien.gif', 1 )";
 					$queries[] = "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES (':biggrin:', 'biggrin.gif', 1 )";
@@ -351,7 +351,7 @@ class upgrade extends qsfglobal
                  conv_users varchar(255) NOT NULL default '',
                  PRIMARY KEY  (conv_id),
                  KEY User (conv_starter)
-               ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+               ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
                $queries[] = "CREATE TABLE %pconv_posts (
                  post_id int(10) unsigned NOT NULL auto_increment,
@@ -370,14 +370,14 @@ class upgrade extends qsfglobal
                  PRIMARY KEY  (post_id),
                  KEY Conversation (post_convo),
                  FULLTEXT KEY post_text (post_text)
-               ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+               ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
 
                $queries[] = "CREATE TABLE %pconv_readmarks (
                  readmark_user int(10) unsigned NOT NULL default '0',
                  readmark_conv int(10) unsigned NOT NULL default '0',
                  readmark_lastread int(10) unsigned NOT NULL default '0',
                  PRIMARY KEY  (readmark_user,readmark_conv)
-               ) ENGINE=MyISAM";               
+               ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";               
 
 				default:
 					break;
