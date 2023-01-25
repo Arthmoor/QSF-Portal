@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="{user_language}">
  <head>
+  {google}
   <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
   <meta name="keywords" content="{meta_keywords}" />
   <meta name="description" content="{meta_desc}" />
@@ -12,7 +13,6 @@
   {mobile_icons}
   <script src="{qsf_site}/javascript/utils.js" async defer></script>
  </head>
- {google}
  <body>
   <div id="container">
    <div><a id="top"></a></div>
