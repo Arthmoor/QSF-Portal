@@ -136,6 +136,16 @@ class tool
 				}
 				break;
 
+         case TYPE_EMAIL_DOMAIN:
+            // $range is unused
+            list( $username, $domainname ) = explode( '@', $var );
+
+            $response = checkdnsrr( $domainname, 'MX' );
+
+            if( !response )
+               $unchanged = false;
+            break;
+
 			default:
 				// Invalid type! Only developers should ever see this error
 				error( QUICKSILVER_ERROR, "Invalid type sent to validate()", __FILE__, __LINE__ );

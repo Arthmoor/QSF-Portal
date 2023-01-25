@@ -199,6 +199,10 @@ class register extends qsfglobal
 				return $this->message( $this->lang->register_reging, $this->lang->register_email_invalid );
 			}
 
+         if( !$this->validator->validate( $email ) ) {
+            return $this->message( $this->lang->register_reging, $this->lang->register_email_domain_invalid );
+         }
+
 			if( $pass != $pass2 ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_pass_match );
 			}
