@@ -441,8 +441,6 @@ break;
 			$this->sets['xfo_policy'] = 1;
 			$this->sets['xfo_allowed_origin'] = '';
 			$this->sets['xcto_enabled'] = 0;
-			$this->sets['ect_enabled'] = 0;
-			$this->sets['ect_max_age'] = 0;
 			$this->sets['csp_enabled'] = 0;
 			$this->sets['csp_details'] = '';
 			$this->sets['fp_enabled'] = 0;

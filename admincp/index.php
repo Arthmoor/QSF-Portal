@@ -172,10 +172,6 @@ if( $admin->sets['xcto_enabled'] ) {
 	header( 'X-Content-Type-Options: nosniff' );
 }
 
-if( $admin->sets['ect_enabled'] ) {
-	header( "Expect-CT: max-age={$admin->sets['ect_max_age']}" );
-}
-
 if( $admin->sets['csp_enabled'] ) {
 	$crypto_nonce = hash( 'sha512', microtime() );
 

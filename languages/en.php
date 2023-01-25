@@ -1621,10 +1621,6 @@ class en
 		$this->settings_security_fp = 'Permissions-Policy';
 		$this->settings_security_fp_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy">Permissions-Policy security header</a>.';
 		$this->settings_security_fp_warning = 'This policy can have numerous directives to enable or deny. NO VALIDATION is performed on the input in this field. Incorrect setup may lead to your site functioning improperly.';
-		$this->settings_security_ect = 'Expect-CT';
-		$this->settings_security_ect_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Expect-CT">Expect-CT security header</a>.';
-		$this->settings_security_ect_max_age = 'Maximum age for the header to be valid, in seconds:';
-		$this->settings_security_ect_warning = 'NOTE: Test this with short duration values in case your Certificate Authority is non-compliant with this tag. If they are not, you will not be able to connect to the site until the timer expires.';
 		$this->settings_security_htts = 'Strict Transport Security';
 		$this->settings_security_htts_detail = 'Check this box to enable the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security">HSTS security header</a>.';
 		$this->settings_security_htts_max_age = 'Maximum age for the header to be valid, in seconds:';

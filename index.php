@@ -192,10 +192,6 @@ if( $qsf->sets['xcto_enabled'] ) {
 	header( 'X-Content-Type-Options: nosniff' );
 }
 
-if( $qsf->sets['ect_enabled'] ) {
-	header( "Expect-CT: max-age={$qsf->sets['ect_max_age']}" );
-}
-
 if( $qsf->sets['csp_enabled'] ) {
 	$crypto_nonce = hash( 'sha512', microtime() );
 

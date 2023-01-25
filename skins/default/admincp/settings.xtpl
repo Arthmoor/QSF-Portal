@@ -145,17 +145,6 @@
   <p class="line"></p>
 
   <span class="field">
-   <label for="ect_enabled">{settings_security_ect}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="ect_enabled" id="ect_enabled"{ect_enabled} />
-   <br /><br />
-   <span class="tiny">{settings_security_ect_detail}</span>
-  </span>
-  <span class="form">
-   {settings_security_ect_max_age} <input class="input" type="text" name="ect_max_age" id="ect_max_age" value="{ect_max_age}" />
-   <br /><br />{settings_security_ect_warning}
-  </span>
-  <p class="line"></p>
-
-  <span class="field">
    <label for="fp_enabled">{settings_security_fp}</label> <input style="float:right; margin-right:10px;" type="checkbox" name="fp_enabled" id="fp_enabled"{fp_enabled} />
    <br /><br />
    <span class="tiny">{settings_security_fp_detail}</span>

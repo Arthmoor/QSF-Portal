@@ -760,9 +760,6 @@ class settings extends admin
 
 			$xtpl->assign( 'xcto_enabled', $this->sets['xcto_enabled'] ? ' checked="checked"' : null );
 
-			$xtpl->assign( 'ect_enabled', $this->sets['ect_enabled'] ? ' checked="checked"' : null );
-			$xtpl->assign( 'ect_max_age', $this->sets['ect_max_age'] );
-
 			$xtpl->assign( 'csp_enabled', $this->sets['csp_enabled'] ? ' checked="checked"' : null );
 			$xtpl->assign( 'csp_details', $this->sets['csp_details'] );
 
@@ -868,7 +865,7 @@ class settings extends admin
 				'fp_details' => 'string'
 			);
 
-			$checkboxes = array( 'htts_enabled', 'xfo_enabled', 'xss_enabled', 'xcto_enabled', 'ect_enabled', 'csp_enabled', 'fp_enabled' );
+			$checkboxes = array( 'htts_enabled', 'xfo_enabled', 'xss_enabled', 'xcto_enabled', 'csp_enabled', 'fp_enabled' );
 			foreach( $checkboxes as $key )
 			{
 				if( !isset( $this->sets[$key] ) )
@@ -879,7 +876,6 @@ class settings extends admin
 			$this->sets['xfo_enabled'] = isset( $this->post['xfo_enabled'] );
 			$this->sets['xss_enabled'] = isset( $this->post['xss_enabled'] );
 			$this->sets['xcto_enabled'] = isset( $this->post['xcto_enabled'] );
-			$this->sets['ect_enabled'] = isset( $this->post['ect_enabled'] );
 			$this->sets['csp_enabled'] = isset( $this->post['csp_enabled'] );
 			$this->sets['fp_enabled'] = isset( $this->post['fp_enabled'] );
 
