@@ -187,7 +187,7 @@ class recent extends qsfglobal
 			$Pages = $this->htmlwidgets->get_pages_topic( $row['topic_replies'], "/topic/{$topic_link}-{$row['topic_id']}/", ', ', 0, $m );
 
 			if( !empty( $row['topic_description'] ) ) {
-				$row['topic_description'] = '<br />&raquo; ' . $this->format( $row['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+				$row['topic_description'] = '<br>&raquo; ' . $this->format( $row['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 			}
 
 			if( $row['topic_last_poster'] != USER_GUEST_UID ) {
@@ -259,10 +259,10 @@ class recent extends qsfglobal
 			$topic_icon = null;
 
 			if( $row['topic_modes'] & TOPIC_POLL ) {
-				$topic_icon = "<img src=\"{$this->site}/skins/{$this->skin}/images/icons/chart_bar.png\" alt=\"{$this->lang->recent_icon}\" />";
+				$topic_icon = "<img src=\"{$this->site}/skins/{$this->skin}/images/icons/chart_bar.png\" alt=\"{$this->lang->recent_icon}\">";
 			} else {
 				if( $row['topic_icon'] ) {
-					$topic_icon = "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$row['topic_icon']}\" alt=\"{$this->lang->recent_icon}\" />";
+					$topic_icon = "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$row['topic_icon']}\" alt=\"{$this->lang->recent_icon}\">";
 				}
 			}
 
@@ -290,7 +290,7 @@ class recent extends qsfglobal
 				}
 
 				if( $icon ) {
-					$xtpl->assign( 'topic_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->recent_icon}\" class=\"left\" />" );
+					$xtpl->assign( 'topic_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->recent_icon}\" class=\"left\">" );
 				} elseif( $topic_icon ) {
 					$xtpl->assign( 'topic_icon', $topic_icon );
 				} else {

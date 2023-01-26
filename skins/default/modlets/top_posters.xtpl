@@ -1,7 +1,7 @@
 <!-- BEGIN: TopPosters -->
     <div class="block">
      <div class="title">
-      <img src="{site}/skins/{skin}/images/icons/award_star_gold_1.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/award_star_gold_1.png" alt="">
       {main_top_posters}
      </div>
      {content}

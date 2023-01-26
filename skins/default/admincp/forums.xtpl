@@ -2,7 +2,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=forums&amp;s=edit&amp;id={id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {forum_edit}: {forum_name}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt=""> {forum_edit}: {forum_name}</div>
  <span class="field">{forum_parent_cat}</span>
  <span class="form">
   <select name="parent">
@@ -14,23 +14,23 @@
  <p class="line"></p>
 
  <span class="field">{forum_edit_name}</span>
- <span class="form"><input name="name" value="{forum_name}" size="60" /></span>
+ <span class="form"><input name="name" value="{forum_name}" size="60"></span>
  <p class="line"></p>
 
  <span class="field">{forum_edit_description}</span>
  <span class="form"><textarea name="description" rows="8" cols="60">{forum_description}</textarea></span>
  <p class="line"></p>
 
- <span class="field">{forum_subcat}<br /><span class="tiny">{forum_is_subcat}</span></span>
- <span class="form"><input type="checkbox" name="subcat" {s_checked} /></span>
+ <span class="field">{forum_subcat}<br><span class="tiny">{forum_is_subcat}</span></span>
+ <span class="form"><input type="checkbox" name="subcat" {s_checked}></span>
  <p class="line"></p>
 
- <span class="field">{forum_news}<br /><span class="tiny">{forum_is_news}</span></span>
- <span class="form"><input type="checkbox" name="news" {n_checked} /></span>
+ <span class="field">{forum_news}<br><span class="tiny">{forum_is_news}</span></span>
+ <span class="form"><input type="checkbox" name="news" {n_checked}></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="editforum" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="editforum" value="{submit}">
 </div>
 </form>
 <!-- END: EditForm -->
@@ -38,12 +38,12 @@
 <!-- BEGIN: DeleteForm -->
 <form action="{site}/admincp/index.php?a=forums&s=delete&id={id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {forum_delete}: {forum_name}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt=""> {forum_delete}: {forum_name}</div>
  {forum_delete_warning}
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: DeleteForm -->
@@ -51,8 +51,8 @@
 <!-- BEGIN: AddForm -->
 <form action="{site}/admincp/index.php?a=forums&amp;s=add" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {forum_create}</div>
- <span class="field">{forum_parent_cat}<br /><span class="tiny">{forum_select_cat}</span></span>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt=""> {forum_create}</div>
+ <span class="field">{forum_parent_cat}<br><span class="tiny">{forum_select_cat}</span></span>
  <span class="form">
   <select name="parent">
    <option value="0">{forum_create_cat}</option>
@@ -63,14 +63,14 @@
  <p class="line"></p>
 
  <span class="field">{forum_name}</span>
- <span class="form"><input name="name" size="60" /></span>
+ <span class="form"><input name="name" size="60"></span>
  <p class="line"></p>
 
  <span class="field">{forum_description}</span>
  <span class="form"><textarea name="description" rows="8" cols="60"></textarea></span>
  <p class="line"></p>
 
- <span class="field">{forum_quickperms}<br /><span class="tiny">{forum_quickperm_select}</span></span>
+ <span class="field">{forum_quickperms}<br><span class="tiny">{forum_quickperm_select}</span></span>
  <span class="form">
   <select name="sync">
    {quickperms}
@@ -78,12 +78,12 @@
  </span>
  <p class="line"></p>
 
- <span class="field">{forum_subcat}<br /><span class="tiny">{forum_is_subcat}</span></span>
- <span class="form"><input type="checkbox" name="subcat" /></span>
+ <span class="field">{forum_subcat}<br><span class="tiny">{forum_is_subcat}</span></span>
+ <span class="form"><input type="checkbox" name="subcat"></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="addforum" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="addforum" value="{submit}">
 </div>
 </form>
 <!-- END: AddForm -->
@@ -91,12 +91,12 @@
 <!-- BEGIN: OrderForm -->
 <form action="{site}/admincp/index.php?a=forums&amp;s=order" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {forum_ordering}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt=""> {forum_ordering}</div>
  {forum}
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="orderforum" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="orderforum" value="{submit}">
 </div>
 </form>
 <!-- END: OrderForm -->

@@ -18,7 +18,7 @@
 
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/report.png" alt="">
   {cat_name}
  </div>
  <span class="head">
@@ -36,7 +36,7 @@
 <div class="article">
  <div class="title">
   <div style="float:left;">
-   <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
+   <img src="{site}/skins/{skin}/images/icons/report.png" alt="">
    <a href="{site}/board/category/{cat_link_name}-{fid}/">{fname}</a>
   </div>
   <div style="text-align:right;">
@@ -58,10 +58,10 @@
 <!-- BEGIN: BoardForum -->
 <span class="icon">
 <!-- BEGIN: ForumUnread -->
- <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="{main_topics_new}" title="{main_topics_new}" />
+ <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="{main_topics_new}" title="{main_topics_new}">
 <!-- END: ForumUnread -->
 <!-- BEGIN: ForumRead -->
- <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{main_topics_old}" title="{main_topics_old}" />
+ <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{main_topics_old}" title="{main_topics_old}">
 <!-- END: ForumRead -->
 </span>
 <span class="thread">
@@ -77,7 +77,7 @@
 
 <!-- BEGIN: ForumRedirect -->
 <span class="icon">
- <img src="{site}/skins/{skin}/images/icons/world_link.png" alt="" />
+ <img src="{site}/skins/{skin}/images/icons/world_link.png" alt="">
 </span>
 <span class="thread">
  <strong>{board_forum_url}</strong> <a href="{fdesc}">{fname}</a>
@@ -87,11 +87,11 @@
 
 <!-- BEGIN: LastPostBox -->
 <!-- BEGIN: TopicUnread -->
-<a href="{site}/topic/{forum_last_topic_link}-{forum_lastpost_topic}/&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" /></a>
+<a href="{site}/topic/{forum_last_topic_link}-{forum_lastpost_topic}/&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt=""></a>
 <!-- END: TopicUnread -->
-<a href="{site}/topic/{forum_last_topic_link}-{LastTopicID}" title="{full_title}">{user_lastpost}</a><br />
+<a href="{site}/topic/{forum_last_topic_link}-{LastTopicID}" title="{full_title}">{user_lastpost}</a><br>
 <!-- BEGIN: UserInfo -->
-{board_by} <a href="{site}/profile/{user_link_name}-{user_lastposterID}/" class="small">{user_lastposter}</a><br />
+{board_by} <a href="{site}/profile/{user_link_name}-{user_lastposterID}/" class="small">{user_lastposter}</a><br>
 <!-- END: UserInfo -->
 {LastTime}
 <!-- END: LastPostBox -->

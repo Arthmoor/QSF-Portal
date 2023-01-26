@@ -2,7 +2,7 @@
 <!-- BEGIN: Stage1 -->
 <form action="{site}/admincp/index.php?a=prune" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_delete.png" alt="" /> {prune_old_topics}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_delete.png" alt=""> {prune_old_topics}</div>
  <span class="field">{prune_topics_older_than}</span>
  <span class="form">
   <select id="age" name="age">
@@ -25,33 +25,33 @@
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: Stage1 -->
 
 <!-- BEGIN: Stage2 -->
 <form action="{site}/admincp/index.php?a=prune" method="post" name="prune">
- <input type="hidden" name="forums" value="{forums}" />
+ <input type="hidden" name="forums" value="{forums}">
  <div class="article">
-  <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_delete.png" alt="" /> {prune_old_topics}</div>
+  <div class="title"><img src="{site}/skins/{skin}/images/icons/topic_delete.png" alt=""> {prune_old_topics}</div>
   <div class="title">{prune_select_topics}</div>
 
 <!-- BEGIN: Topic -->
-  <span class="icon"><input class="check" type="checkbox" name="topics[]" value="{topic_id}" /></span>
+  <span class="icon"><input class="check" type="checkbox" name="topics[]" value="{topic_id}"></span>
   <span class="prune"><a href="{site}/topic/{topic_title_link}-{topic_id}/">{topic_title}</a>{topic_description}</span>
   <p class="line"></p>
 <!-- END: Topic -->
 
   <script src="{site}/javascript/prune.js"></script>
-  <input type="button" value="{select_all}" id="prune_select_all" />
+  <input type="button" value="{select_all}" id="prune_select_all">
   <p class="line"></p>
 
   <span class="field">{prune_action}</span>
   <span class="form">
-   <input class="check" type="radio" name="prune_action" value="move" id="move" checked="checked" /> <label for="move">{prune_move}</label>
-   <input class="check" type="radio" name="prune_action" value="delete" id="delete" /> <label for="delete">{delete}</label>
+   <input class="check" type="radio" name="prune_action" value="move" id="move" checked="checked"> <label for="move">{prune_move}</label>
+   <input class="check" type="radio" name="prune_action" value="delete" id="delete"> <label for="delete">{delete}</label>
   </span>
   <p class="line"></p>
 
@@ -63,8 +63,8 @@
   </span>
   <p class="line"></p>
 
-  <input type="hidden" name="token" value="{token}" />
-  <input type="submit" name="submit" value="{submit}" />
+  <input type="hidden" name="token" value="{token}">
+  <input type="submit" name="submit" value="{submit}">
  </div>
 </form>
 <!-- END: Stage2 -->

@@ -72,7 +72,7 @@ class admin extends qsfglobal
 	public function message( $title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4 )
 	{
 		if( $link_text ) {
-			$message .= "<br /><br /><a href=\"$link\">$link_text</a>";
+			$message .= "<br><br><a href=\"$link\">$link_text</a>";
 		}
 
 		if( $redirect ) {

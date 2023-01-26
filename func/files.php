@@ -1191,7 +1191,7 @@ class files extends qsfglobal
 			$xtpl->reset( 'CategoryLink' );
 
 			if( !( ++$break % 5 ) ) {
-				$catlinks .= '<br />';
+				$catlinks .= '<br>';
 			}
 		}
 
@@ -1506,10 +1506,10 @@ class files extends qsfglobal
 		}
 
 		if( $can_rate && !$has_rated ) {
-			$rating = "<b><a href=\"{$this->site}/index.php?a=filerating&amp;f={$fid}\" target=\"qsf_rating\" onclick=\"CenterPopUp('{$this->site}/index.php?a=filerating&amp;f={$fid}','qsf_rating',400,200)\">{$this->lang->files_rating}:</a></b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
+			$rating = "<b><a href=\"{$this->site}/index.php?a=filerating&amp;f={$fid}\" target=\"qsf_rating\" onclick=\"CenterPopUp('{$this->site}/index.php?a=filerating&amp;f={$fid}','qsf_rating',400,200)\">{$this->lang->files_rating}:</a></b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\">";
 		}
 		else {
-			$rating = "<b>{$this->lang->files_rating}:</b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\" />";
+			$rating = "<b>{$this->lang->files_rating}:</b> <img src=\"{$this->site}/skins/{$this->skin}/images/{$file_rating['file_rating']}.png\" alt=\"\">";
 		}
 		return $rating;
 	}

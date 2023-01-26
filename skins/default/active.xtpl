@@ -1,7 +1,7 @@
 <!-- BEGIN: Active -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/members.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/members.png" alt="">
   {active_users}
  </div>
  <span class="head">
@@ -11,7 +11,7 @@
   <span class="third">{active_time}</span>
  </span>
 <!-- BEGIN: Item -->
- <span class="icon"><img src="{site}/skins/{skin}/images/icons/{icon}" alt="" /></span>
+ <span class="icon"><img src="{site}/skins/{skin}/images/icons/{icon}" alt=""></span>
  <span class="third"><a {link} title="{title}">{name}</a></span>
  <span class="third">{action}</span>
  <span class="third">{time}</span>

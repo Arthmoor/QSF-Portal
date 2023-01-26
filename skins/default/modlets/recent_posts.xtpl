@@ -1,7 +1,7 @@
 <!-- BEGIN: RecentPosts -->
     <div class="block">
      <div class="title">
-      <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="">
       <a href="{site}/recent_posts/" title="{main_recent1}">{main_recent}</a>
      </div>
      {content}

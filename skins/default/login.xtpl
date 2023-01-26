@@ -2,20 +2,20 @@
 <form action="{site}/index.php?a=login&amp;s=on" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/login.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/login.png" alt="">
   {login_header}
  </div>
  <span class="field">{login_user}</span>
- <span class="form"><input type="text" name="user" size="30" tabindex="1" /></span>
+ <span class="form"><input type="text" name="user" size="30" tabindex="1"></span>
 
  <p class="line"></p>
 
- <span class="field">{login_pass}<br /><span class="tiny"><a href="{site}/index.php?a=login&amp;s=pass">{login_forgot_pass}</a></span></span>
- <span class="form"><input type="password" name="pass" size="30" tabindex="2" /></span>
+ <span class="field">{login_pass}<br><span class="tiny"><a href="{site}/index.php?a=login&amp;s=pass">{login_forgot_pass}</a></span></span>
+ <span class="form"><input type="password" name="pass" size="30" tabindex="2"></span>
 
  <p class="line"></p>
- <input type="hidden" name="request_uri" value="{request_uri}" />
- <input type="submit" name="submit" value="{submit}" tabindex="3" />
+ <input type="hidden" name="request_uri" value="{request_uri}">
+ <input type="submit" name="submit" value="{submit}" tabindex="3">
 </div>
 </form>
 <!-- END: LoginMain -->
@@ -24,14 +24,14 @@
 <form action="{site}/index.php?a=login&amp;s=pass" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/key.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/key.png" alt="">
   {login_pass_reset}
  </div>
  <span class="field">{login_user}</span>
- <span class="form"><input type="text" name="user" size="30" /></span>
+ <span class="form"><input type="text" name="user" size="30"></span>
 
  <p class="line"></p>
- <input type="submit" name="submit" value="{submit}" />
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: LoginPass -->

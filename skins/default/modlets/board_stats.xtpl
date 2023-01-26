@@ -1,30 +1,30 @@
 <!-- BEGIN: BoardStats -->
     <div class="block">
      <div class="title">
-      <img src="{site}/skins/{skin}/images/icons/chart_pie.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/chart_pie.png" alt="">
       {main_stats}
      </div>
      <span class="half">
-      {main_files}<br />
-      {main_topics}<br />
-      {main_posts}<br />
-      {main_members}<br />
+      {main_files}<br>
+      {main_topics}<br>
+      {main_posts}<br>
+      {main_members}<br>
       {main_member_newest}
      </span>
 
      <span class="half">
-      {files}<br />
-      {topics}<br />
-      {posts}<br />
-      {members}<br />
+      {files}<br>
+      {topics}<br>
+      {posts}<br>
+      {members}<br>
       {newest}
      </span>
      <div class="clearboth"></div>
-     <br />
+     <br>
      {birthdays}
 
 <!-- BEGIN: Admin -->
-     <br /><br />
+     <br><br>
      <span class="small_text">
       {time_exec} {seconds} - {querycount} {main_queries}
      </span>

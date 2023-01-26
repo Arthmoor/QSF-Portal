@@ -1,7 +1,7 @@
 <!-- BEGIN: ControlPanel -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/control_panel.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/control_panel.png" alt="">
   {cp_header}
  </div>
  <a href="{site}/control_panel/avatar/">{cp_label_edit_avatar}</a> |
@@ -25,24 +25,24 @@
 <form action="{site}/control_panel/password/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/key.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/key.png" alt="">
   {cp_label_edit_pass}
  </div>
 
  <span class="field">{cp_old_pass}</span>
- <span class="form"><input type="password" name="old_pass" size="40" /></span>
+ <span class="form"><input type="password" name="old_pass" size="40"></span>
  <p class="line"></p>
 
  <span class="field">{cp_new_pass}</span>
- <span class="form"><input type="password" name="passA" size="40" /></span>
+ <span class="form"><input type="password" name="passA" size="40"></span>
  <p class="line"></p>
 
  <span class="field">{cp_repeat_pass}</span>
- <span class="form"><input type="password" name="passB" size="40" /></span>
+ <span class="form"><input type="password" name="passB" size="40"></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input class="button" type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input class="button" type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditPassword -->
@@ -51,7 +51,7 @@
 <form action="{site}/control_panel/preferences/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/wrench.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/wrench.png" alt="">
   {cp_label_edit_prefs}
  </div>
 
@@ -59,7 +59,7 @@
  <span class="form">
   <select class="select timezone" name="user_timezone">
    {time_list}
-  </select><br />{current_time}
+  </select><br>{current_time}
  </span>
  <p class="line"></p>
 
@@ -81,26 +81,26 @@
  
  <span class="field">{cp_topic_option}</span>
  <span class="form">
-  <input class="check" type="checkbox" name="user_view_avatars" id="user_view_avatars" value="1"{ViewAvCheck} /> <label for="user_view_avatars">{cp_view_avatar}</label><br />
-  <input class="check" type="checkbox" name="user_view_emojis" id="user_view_emojis" value="1"{ViewEmCheck} /> <label for="user_view_emojis">{cp_view_emoji}</label><br />
-  <input class="check" type="checkbox" name="user_view_signatures" id="user_view_signatures" value="1"{ViewSiCheck} /> <label for="user_view_signatures">{cp_view_signature}</label><br />
-  <input type="text" name="user_topics_page" size="2" value="{user_topics_page}" /> {cp_topics_page}<br />
-  <input type="text" name="user_posts_page" size="2" value="{user_posts_page}" /> {cp_posts_page}
+  <input class="check" type="checkbox" name="user_view_avatars" id="user_view_avatars" value="1"{ViewAvCheck}> <label for="user_view_avatars">{cp_view_avatar}</label><br>
+  <input class="check" type="checkbox" name="user_view_emojis" id="user_view_emojis" value="1"{ViewEmCheck}> <label for="user_view_emojis">{cp_view_emoji}</label><br>
+  <input class="check" type="checkbox" name="user_view_signatures" id="user_view_signatures" value="1"{ViewSiCheck}> <label for="user_view_signatures">{cp_view_signature}</label><br>
+  <input type="text" name="user_topics_page" size="2" value="{user_topics_page}"> {cp_topics_page}<br>
+  <input type="text" name="user_posts_page" size="2" value="{user_posts_page}"> {cp_posts_page}
  </span>
  <p class="line"></p>
 
  <span class="field">{cp_privacy}</span>
  <span class="form">
-  <input class="check" type="checkbox" name="user_email_show" id="user_email_show" value="1"{user_email_showCheck} /> <label for="user_email_show">{cp_show_email}</label><br />
-  <input class="check" type="checkbox" name="user_email_form" id="user_email_form" value="1"{EmailFormCheck} /> <label for="user_email_form">{cp_email_form}</label><br />
-  <input class="check" type="checkbox" name="user_pm" id="user_pm" value="1"{user_pmCheck} /> <label for="user_pm">{cp_contact_pm}</label><br />
-  <input class="check" type="checkbox" name="user_pm_mail" id="user_pm_mail" value="1"{user_pm_mailCheck} /> <label for="user_pm_mail">{cp_contact_pm_email}</label><br />
-  <input class="check" type="checkbox" name="user_active" id="user_active" value="1"{active_check} /> <label for="user_active">{cp_show_active}</label>
+  <input class="check" type="checkbox" name="user_email_show" id="user_email_show" value="1"{user_email_showCheck}> <label for="user_email_show">{cp_show_email}</label><br>
+  <input class="check" type="checkbox" name="user_email_form" id="user_email_form" value="1"{EmailFormCheck}> <label for="user_email_form">{cp_email_form}</label><br>
+  <input class="check" type="checkbox" name="user_pm" id="user_pm" value="1"{user_pmCheck}> <label for="user_pm">{cp_contact_pm}</label><br>
+  <input class="check" type="checkbox" name="user_pm_mail" id="user_pm_mail" value="1"{user_pm_mailCheck}> <label for="user_pm_mail">{cp_contact_pm_email}</label><br>
+  <input class="check" type="checkbox" name="user_active" id="user_active" value="1"{active_check}> <label for="user_active">{cp_show_active}</label>
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input class="button" type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input class="button" type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditPreferences -->
@@ -109,23 +109,23 @@
 <form action="{site}/control_panel/profile/" method="post" id="profile">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/vcard_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/vcard_edit.png" alt="">
   {cp_label_edit_profile}
  </div>
 
  <span class="field">{cp_format}</span>
- <span class="form"><input type="text" name="Newuser_name" value="{user_name}" size="40" /></span>
+ <span class="form"><input type="text" name="Newuser_name" value="{user_name}" size="40"></span>
  <p class="line"></p>
 
  <span class="field">{cp_email}</span>
- <span class="form"><input type="text" name="user_email" value="{user_email}" size="40" /></span>
+ <span class="form"><input type="text" name="user_email" value="{user_email}" size="40"></span>
  <p class="line"></p>
 
  <span class="field">
-  {cp_pass}<br />
+  {cp_pass}<br>
   <span class="tiny">{cp_pass2}</span>
  </span>
- <span class="form"><input type="password" name="passA" value="" size="40" autocomplete="off" /></span>
+ <span class="form"><input type="password" name="passA" value="" size="40" autocomplete="off"></span>
  <p class="line"></p>
 
  <span class="field">{cp_bday}</span>
@@ -137,12 +137,12 @@
  <p class="line"></p>
 
  <span class="field">{cp_location}</span>
- <span class="form"><input type="text" name="user_location" value="{user_location}" size="40" /></span>
+ <span class="form"><input type="text" name="user_location" value="{user_location}" size="40"></span>
  <p class="line"></p>
 
  <!-- BEGIN: Admin -->
-  <span class="field">{cp_custom_title}<br /><span class="tiny">{cp_custom_title2}</span></span>
-  <span class="form"><input type="text" name="user_title" value="{user_title}" size="40" /></span>
+  <span class="field">{cp_custom_title}<br><span class="tiny">{cp_custom_title2}</span></span>
+  <span class="form"><input type="text" name="user_title" value="{user_title}" size="40"></span>
   <p class="line"></p>
  <!-- END: Admin -->
 
@@ -151,19 +151,19 @@
  <p class="line"></p>
  
  <span class="field">{cp_twitter}</span>
- <span class="form"><input type="text" name="user_twitter" value="{user_twitter}" size="50" /></span>
+ <span class="form"><input type="text" name="user_twitter" value="{user_twitter}" size="50"></span>
  <p class="line"></p>
 
  <span class="field">{cp_facebook}</span>
- <span class="form"><input type="text" name="user_facebook" value="{user_facebook}" size="50" /></span>
+ <span class="form"><input type="text" name="user_facebook" value="{user_facebook}" size="50"></span>
  <p class="line"></p>
 
  <span class="field">{cp_www}</span>
- <span class="form"><input type="text" name="user_homepage" value="{user_homepage}" size="50" /></span>
+ <span class="form"><input type="text" name="user_homepage" value="{user_homepage}" size="50"></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input class="button" type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input class="button" type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditProfile -->
@@ -173,7 +173,7 @@
 <form action="{site}/control_panel/avatar/" enctype="multipart/form-data" method="post" id="avatar">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/picture_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/picture_edit.png" alt="">
   {cp_label_edit_avatar}
  </div>
 
@@ -182,10 +182,10 @@
  </span>
 
  <div class="avatar_dimensions">
-  <img id="current_avatar" src="{avatar}" width="{user_avatar_width}" height="{user_avatar_height}" alt="{cp_current_avatar}" />
+  <img id="current_avatar" src="{avatar}" width="{user_avatar_width}" height="{user_avatar_height}" alt="{cp_current_avatar}">
  </div>
 
- <br /><br />
+ <br><br>
  <p></p>
  <span class="head">
   <strong>{cp_label_edit_avatar} ({avatar_width} x {avatar_height} Max)</strong>
@@ -193,52 +193,52 @@
 
  <div class="avatar_settings">
   <div id="local_row"{no_display}>
-   <input class="check" type="radio" name="user_avatar_type" value="local" id="local_radio" {checks0} />
-   {cp_avatar_select}<br />
+   <input class="check" type="radio" name="user_avatar_type" value="local" id="local_radio" {checks0}>
+   {cp_avatar_select}<br>
    <select size="10" name="avatar_local">
     {avatar_select}
    </select>
-   <img id="localavatar" src="{localavatarsrc}" alt="" />
+   <img id="localavatar" src="{localavatarsrc}" alt="">
   </div>
 
   {list_line}
   <div id="url_row">
-   <input class="check" type="radio" name="user_avatar_type" value="url" id="url_radio" {checks1} />
+   <input class="check" type="radio" name="user_avatar_type" value="url" id="url_radio" {checks1}>
    {cp_avatar_url}&nbsp;&nbsp;
-   <input type="text" name="avatar_url" value="{avatar_url}" size="40" />
+   <input type="text" name="avatar_url" value="{avatar_url}" size="40">
   </div>
   <p class="line"></p>
 
   <div id="gravatar_row">
-   <input class="check" type="radio" name="user_avatar_type" value="gravatar" id="gurl_radio" {checks2} />
+   <input class="check" type="radio" name="user_avatar_type" value="gravatar" id="gurl_radio" {checks2}>
    {cp_avatar_gravatar}&nbsp;&nbsp;
-   <input type="text" name="avatar_gurl" value="{gravatar_url}" size="40" />
+   <input type="text" name="avatar_gurl" value="{gravatar_url}" size="40">
   </div>
   <p class="line"></p>
 
   <div id="upload_row">
-   <input class="check" type="radio" name="user_avatar_type" value="upload" id="upload_radio" />
+   <input class="check" type="radio" name="user_avatar_type" value="upload" id="upload_radio">
    {cp_avatar_upload}&nbsp;&nbsp;
-   <input type="file" name="avatar_upload" size="40" />
+   <input type="file" name="avatar_upload" size="40">
   </div>
   <p class="line"></p>
 
   <div id="uploaded_row">
-   <input class="check" type="radio" name="user_avatar_type" value="use_uploaded" id="uploaded_radio" {checks3} />
+   <input class="check" type="radio" name="user_avatar_type" value="use_uploaded" id="uploaded_radio" {checks3}>
    {cp_avatar_use}
   </div>
   <p class="line"></p>
 
   <div id="none_row">
-   <input class="check" type="radio" name="user_avatar_type" value="none" id="none_radio" {checks4} />
+   <input class="check" type="radio" name="user_avatar_type" value="none" id="none_radio" {checks4}>
    {cp_avatar_none}
   </div>
  </div>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="hidden" name="old_avatar" value="{old_avatar}" />
- <input class="button" type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="hidden" name="old_avatar" value="{old_avatar}">
+ <input class="button" type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditAvatar -->
@@ -247,7 +247,7 @@
 <form action="{site}/control_panel/subscriptions/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/subscribe.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/subscribe.png" alt="">
   {cp_label_edit_subs}
  </div>
 
@@ -258,13 +258,13 @@
   <span class="quarter">{cp_sub_expire}</span>
  </span>
 <!-- BEGIN: Row -->
- <span class="quarter"> <input class="check" type="checkbox" name="delete[{subscription_id}]" /></span>
+ <span class="quarter"> <input class="check" type="checkbox" name="delete[{subscription_id}]"></span>
  <span class="quarter">{subscription_type}</span>
  <span class="quarter"><a href="{link}">{item_name}</a></span>
  <span class="quarter">{subscription_expire}</span>
  <p class="list_line"></p>
 <!-- END: Row -->
- <input class="button" type="submit" name="submit" value="{submit}" />
+ <input class="button" type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditSubs -->
@@ -273,7 +273,7 @@
 <form action="{site}/control_panel/signature/" method="post" id="mbpost">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/tag_blue_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/tag_blue_edit.png" alt="">
   {cp_label_edit_sig}
  </div>
 
@@ -282,7 +282,7 @@
  </span>
 
  <div class="signature">{preview}</div>
- <p class="line"></p><br />
+ <p class="line"></p><br>
 
  <span class="field">
   {smilies}
@@ -293,11 +293,11 @@
   <textarea name="sig" id="bbcode_textbox" rows="8" cols="10">{edit}</textarea>
  </span>
 
- <br /><br />
+ <br><br>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input class="button" type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input class="button" type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditSig -->

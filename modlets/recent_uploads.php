@@ -66,7 +66,7 @@ class recent_uploads extends modlet
 			$content .= "<a href=\"". $this->qsf->site . "/files/{$furl}-{$fid}/\" title=\"{$title}\">{$fname}</a>";
 
 			$name = $this->qsf->htmlwidgets->clean_url( $file['user_name'] );
-			$content .= "<br />Author: {$author}<br />Submitted by: <a href=\"{$this->qsf->site}/profile/{$name}-{$file['file_submitted']}/\">{$file['user_name']}</a><hr />";
+			$content .= "<br>Author: {$author}<br>Submitted by: <a href=\"{$this->qsf->site}/profile/{$name}-{$file['file_submitted']}/\">{$file['user_name']}</a><hr>";
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/recent_uploads.xtpl' );

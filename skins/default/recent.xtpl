@@ -1,7 +1,7 @@
 <!-- BEGIN: Recent -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic_unread.png" alt="">
   {main_recent}
  </div>
  <span class="head">
@@ -38,8 +38,8 @@
  </span>
  <span class="number"><a href="{site}/forum/{forum_link_name}-{forum_id}/">{forum_name}</a></span>
  <span class="last_post">
-  {topic_edited}<br />
-  <a href="{site}/topic/{topic_title_link}-{topic_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}" /></a>
+  {topic_edited}<br>
+  <a href="{site}/topic/{topic_title_link}-{topic_id}/{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{recent_jump}" alt="{recent_jump}"></a>
 <!-- BEGIN: LastPosterMember -->
   {recent_by}: <a href="{site}/profile/{topic_last_poster_link_name}-{topic_last_poster}/" class="small">{topic_last_poster_name}</a>
 <!-- END: LastPosterMember -->
@@ -64,46 +64,46 @@
  </span>
  <span class="select_align">
   {recent_pages}: {pagelinks}
- </span><br />
+ </span><br>
  <p></p>
 </div>
 
 <div class="article">
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{recent_new}" alt="{recent_new}" />
+  <img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{recent_new}" alt="{recent_new}">
   {recent_new}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/topic_hot_unread.png" title="{recent_new} {recent_hot}" alt="{recent_new} {recent_hot}" />
+  <img src="{site}/skins/{skin}/images/icons/topic_hot_unread.png" title="{recent_new} {recent_hot}" alt="{recent_new} {recent_hot}">
   {recent_new} {recent_hot}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/pin.png" title="{recent_pinned}" alt="{recent_pinned}" />
+  <img src="{site}/skins/{skin}/images/icons/pin.png" title="{recent_pinned}" alt="{recent_pinned}">
   {recent_pinned}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/topic_moved.png" title="{recent_moved}" alt="{recent_moved}" />
+  <img src="{site}/skins/{skin}/images/icons/topic_moved.png" title="{recent_moved}" alt="{recent_moved}">
   {recent_moved}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/topic.png" title="{recent_not} {recent_new}" alt="{recent_not} {recent_new}" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" title="{recent_not} {recent_new}" alt="{recent_not} {recent_new}">
   {recent_not} {recent_new}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/topic_hot.png" title="{recent_hot}" alt="{recent_hot}" />
+  <img src="{site}/skins/{skin}/images/icons/topic_hot.png" title="{recent_hot}" alt="{recent_hot}">
   {recent_hot}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" title="{recent_poll}" alt="{recent_poll}" />
+  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" title="{recent_poll}" alt="{recent_poll}">
   {recent_poll}
  </span>
  <span class="eight">
-  <img src="{site}/skins/{skin}/images/icons/topic_locked.png" title="{recent_locked}" alt="{recent_locked}" />
+  <img src="{site}/skins/{skin}/images/icons/topic_locked.png" title="{recent_locked}" alt="{recent_locked}">
   {recent_locked}
  </span>
  <p></p>
  <span class="small_text">
-  <img src="{site}/skins/{skin}/images/icons/topic_posted_to.png" title="{recent_dot_detail}" alt="{recent_dot_detail}" />
+  <img src="{site}/skins/{skin}/images/icons/topic_posted_to.png" title="{recent_dot_detail}" alt="{recent_dot_detail}">
   {recent_dot_detail}
  </span>
  <p></p>

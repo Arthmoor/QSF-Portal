@@ -1,6 +1,6 @@
 <!-- BEGIN: Home -->
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/admincp.png" alt="" /> {home_menu_title}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/admincp.png" alt=""> {home_menu_title}</div>
  {home_choose}
 </div>
 <!-- END: Home -->

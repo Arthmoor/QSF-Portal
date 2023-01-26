@@ -59,7 +59,7 @@ class perms extends admin
 					<select name='group'>
 					" . $this->htmlwidgets->select_groups(-1) . "
 					</select>
-					<input type='submit' value='{$this->lang->submit}' /></div>
+					<input type='submit' value='{$this->lang->submit}'></div>
 				</form>" );
 			}
 
@@ -153,11 +153,11 @@ class perms extends admin
 			<script src='{$this->site}/javascript/permissions.js' async defer></script>
 
 			<form id='form' action='$this->site/admincp/index.php?a=perms$link' method='post'>
-			<div class='article'><div class='title'><img src='$this->site/skins/$this->skin/images/icons/group_edit.png' alt='' /> {$this->lang->perms_for} $label</div>";
+			<div class='article'><div class='title'><img src='$this->site/skins/$this->skin/images/icons/group_edit.png' alt=''> {$this->lang->perms_for} $label</div>";
 
 			if( $mode == 'user' ) {
-				$out .= "<br />{$this->lang->perms_override_user}<br /><br />
-				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_perms'] ? ' checked' : '') . " /> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
+				$out .= "<br>{$this->lang->perms_override_user}<br><br>
+				<div style='border:1px dashed #ff0000; width:25%; padding:5px'><input type='checkbox' name='usegroup' id='usegroup' style='vertical-align:middle'" . (!$query['user_perms'] ? ' checked' : '') . "> <label for='usegroup' style='vertical-align:middle'>{$this->lang->perms_only_user}</label></div>";
 			}
 
 			$out .= "</div>
@@ -182,7 +182,7 @@ class perms extends admin
 			foreach( $globals as $perm => $label )
 			{
 				$out .= "<td style='width:15%'>$label</td>\n<td align='center'>\n" . 
-					"<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . " />All\n" .
+					"<input type='checkbox' name='perms[$perm][-1]' id='perms_{$perm}' onclick='checkrow(\"$perm\", this.checked)'" . ($perms_obj->auth($perm) ? ' checked=\'checked\'' : '') . ">All\n" .
 					"</td>\n";
 				if ( ++$i == 4 ) {
 					$i = 0;
@@ -196,7 +196,7 @@ class perms extends admin
 
 			$out .= "</tr>";
 			$out .= "<tr>
-				<td colspan='8' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+				<td colspan='8' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}'><input type='submit' name='submit' value='{$this->lang->perms_update}'></td>
 			</tr></table></div>";
 
 			$out .= "<div class='article'><table><tr><td colspan='" . ($count + 1) . "' class='header'>{$this->lang->perms_forum}</td></tr>";
@@ -208,7 +208,7 @@ class perms extends admin
 
 				$out .= "
 				<tr>
-					<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+					<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='group' value='{$this->post['group']}'><input type='submit' name='submit' value='{$this->lang->perms_update}'></td>
 				</tr>";
 
 				$out .= "<tr>\n";
@@ -227,7 +227,7 @@ class perms extends admin
 					foreach( $perms_chunk as $perm => $label ) {
 						$checked = ( $perms_obj->auth( $perm, $forum['forum_id'] ) ) ? " checked='checked'" : '';
 						$out .= "  <td align='center'>\n";
-						$out .= "    <input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked />\n";
+						$out .= "    <input type='checkbox' name='perms[$perm][{$forum['forum_id']}]' onclick='changeall(\"$perm\", this.checked)'$checked>\n";
 						$out .= "  </td>\n";
 						$i++;
 					}
@@ -240,7 +240,7 @@ class perms extends admin
 
 			$out .= "
 			<tr>
-				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}' /><input type='hidden' name='group' value='{$this->post['group']}' /><input type='submit' name='submit' value='{$this->lang->perms_update}' /></td>
+				<td colspan='" . ($count + 1) . "' class='footer' align='center'><input type='hidden' name='token' value='{$token}'><input type='hidden' name='group' value='{$this->post['group']}'><input type='submit' name='submit' value='{$this->lang->perms_update}'></td>
 			</tr>
 			</table></div></form>";
 

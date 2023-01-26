@@ -83,7 +83,7 @@ class bbcode
 
 		// Yes, this looks silly, but trust me.
 		if( !( $options & FORMAT_HTMLCHARS ) || ( ($options & FORMAT_HTMLCHARS) && ($options & FORMAT_BREAKS) ) )
-			$strtr["\n"] = "<br />\n";
+			$strtr["\n"] = "<br>\n";
 
 		// Don't format emojis!
 		if( $options & FORMAT_EMOJIS ) {
@@ -167,14 +167,14 @@ class bbcode
 			'/\\[c\\]/isU',
 			 );
 		$replace = array(
-			'<details><summary><strong>' . $this->lang->spoiler . ':</strong></summary><br />$1</details>',
+			'<details><summary><strong>' . $this->lang->spoiler . ':</strong></summary><br>$1</details>',
 			'<strong>$1</strong>',
 			'<em>$1</em>',
 			'<span style="text-decoration:underline">$1</span>',
 			'<s>$1</s>',
 			'<pre>$1</pre>',
-			'<img src="$1" alt="" />',
-			'<img src="$1" alt="$2" />',
+			'<img src="$1" alt="">',
+			'<img src="$1" alt="$2">',
 			'<a href="mailto:$1">$2</a>',
 			'<span style="font-size:$1ex">$2</span>',
 			'<span style="font-family:$1">$2</span>',
@@ -186,7 +186,7 @@ class bbcode
 			'<sub>$1</sub>',
 			'<li>$1</li>',
 			'<p>$1</p>',
-			'<br />',
+			'<br>',
 			'&trade;',
 			'&copy;',
 			 );
@@ -231,7 +231,7 @@ class bbcode
 		$search[] = '~\[quote=(.+?)]~i';
 		$search[] = '~\[quote]~i';
 
-		$replace[] = '<blockquote><span class="quote">$1 said:</span><br /><br /><span class="left-quote"></span>';
+		$replace[] = '<blockquote><span class="quote">$1 said:</span><br><br><span class="left-quote"></span>';
 		$replace[] = '<blockquote><span class="left-quote"></span>';
 
 		$startCount = preg_match_all( $search[0], $in, $matches );
@@ -302,7 +302,7 @@ class bbcode
 		}
 
 		if( $php ) {
-			$lines = explode( '<br />', $input );
+			$lines = explode( '<br>', $input );
 		} else {
 			$lines = explode( "\n", $input );
 		}

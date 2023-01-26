@@ -2,12 +2,12 @@
 <!-- BEGIN: Preview -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="">
   {preview_title}
  </div>
 <!-- BEGIN: PosterGuest -->
  <span class="avatar">
-  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="">
  </span>
  <span class="member_info">
   <strong>[{topic_guest}]</strong> - ({topic_unreg})
@@ -19,11 +19,11 @@
   {avatar}
  </span>
  <span class="member_info">
-  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
-  <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br />
-  <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
-  <span class="text">{topic_group}</span>{gname}<br />
-  <span class="text">{topic_posts}</span> {uposts}<br />
+  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="">
+  <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br>
+  <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{topic_level}"><br>
+  <span class="text">{topic_group}</span>{gname}<br>
+  <span class="text">{topic_posts}</span> {uposts}<br>
   <span class="text">{topic_joined}</span> {joined}
  </span>
  <p></p>
@@ -40,16 +40,16 @@
 <form action="{site}/index.php?a=post&amp;s={s}&amp;{target}" method="post" id="mbpost" enctype="multipart/form-data">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/{icon_file}" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/{icon_file}" alt="">
   {post_new_topic} {forum_name}
  </div>
 <!-- BEGIN: New -->
  <span class="field">{post_topic_title}</span>
- <span class="form"><input type="text" name="title" value="{title}" size="60" maxlength="75" /></span>
+ <span class="form"><input type="text" name="title" value="{title}" size="60" maxlength="75"></span>
  <p class="line"></p>
 
- <span class="field">{post_topic_detail}<br /><span class="tiny">({post_optional})</span></span>
- <span class="form"><input type="text" name="desc" value="{desc}" size="60" maxlength="35" /></span>
+ <span class="field">{post_topic_detail}<br><span class="tiny">({post_optional})</span></span>
+ <span class="form"><input type="text" name="desc" value="{desc}" size="60" maxlength="35"></span>
  <p class="line"></p>
 <!-- END: New -->
  <span class="field">{post_icon}</span>
@@ -69,31 +69,31 @@
  </span>
  <p class="line"></p>
 <!-- BEGIN: PollOptions -->
- <span class="field">{post_poll_options}<br /><span class="tiny">{post_poll_row}</span></span>
+ <span class="field">{post_poll_options}<br><span class="tiny">{post_poll_row}</span></span>
  <span class="form"><textarea name="options" rows="12" cols="60">{options}</textarea></span>
 
  <p class="line"></p>
 <!-- END: PollOptions -->
  <span class="field">{post_options}</span>
  <span class="form">
-  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{post_option_emojis}</label><br />
-  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{post_option_bbcode}</label>
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot}> <label for="parseEmot">{post_option_emojis}</label><br>
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode}> <label for="parseCode">{post_option_bbcode}</label>
 <!-- BEGIN: Global -->
-   <br /><input type="checkbox" name="global_topic" value="1" id="global_topic"{checkGlob} /> <label for="global_topic">{post_option_global}</label>
+   <br><input type="checkbox" name="global_topic" value="1" id="global_topic"{checkGlob}> <label for="global_topic">{post_option_global}</label>
 <!-- END: Global -->
 <!-- BEGIN: Lock -->
-   <br /><input type="checkbox" name="locktopic" value="1" id="locktopic" /> <label for="locktopic">{post_option_lock}</label>
+   <br><input type="checkbox" name="locktopic" value="1" id="locktopic"> <label for="locktopic">{post_option_lock}</label>
 <!-- END: Lock -->
 <!-- BEGIN: Pin -->
-   <br /><input type="checkbox" name="pintopic" value="1" id="pintopic" /> <label for="pintopic">{post_option_pin}</label>
+   <br><input type="checkbox" name="pintopic" value="1" id="pintopic"> <label for="pintopic">{post_option_pin}</label>
 <!-- END: Pin -->
  </span>
  <p class="line"></p>
 <!-- BEGIN: AttachBox -->
- <span class="field">{post_attach_add}<br /><span class="tiny">{post_attach_disrupt}</span></span>
+ <span class="field">{post_attach_add}<br><span class="tiny">{post_attach_disrupt}</span></span>
  <span class="form">
-  <input type="file" name="attach_upload" /><br />
-  <input type="submit" name="attach" value="{post_attach_add}" /> <b>{upload_error}</b>
+  <input type="file" name="attach_upload"><br>
+  <input type="submit" name="attach" value="{post_attach_add}"> <b>{upload_error}</b>
  </span>
  <p class="line"></p>
 
@@ -103,14 +103,14 @@
   <select name="attached">
    {attached}
   </select>
-  <input type="submit" name="detach" value="{post_attach_remove}" />
+  <input type="submit" name="detach" value="{post_attach_remove}">
  </span>
  {attached_data}
  <p class="line"></p>
 <!-- END: Remove -->
 <!-- END: AttachBox -->
- <input type="submit" name="submit" value="{post_create_topic}" />
- <input type="submit" name="preview" value="{post_preview}" />
+ <input type="submit" name="submit" value="{post_create_topic}">
+ <input type="submit" name="preview" value="{post_preview}">
 </div>
 </form>
 <!-- BEGIN: Reply -->
@@ -126,7 +126,7 @@
 <!-- END: LastUserGuest -->
  </span>
  {last_text}
- <p class="list_line"></p><br />
+ <p class="list_line"></p><br>
 <!-- END: ReplyReview -->
 </div>
 <!-- END: Reply -->

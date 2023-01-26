@@ -80,10 +80,10 @@ class member_control extends admin
 
 				while( $member = $this->db->nqfetch( $query ) )
 				{
-					$ret .= "<a href='{$this->site}/admincp/index.php?$link&amp;id=" . $member['user_id'] . "'>{$member['user_name']}</a><br />";
+					$ret .= "<a href='{$this->site}/admincp/index.php?$link&amp;id=" . $member['user_id'] . "'>{$member['user_name']}</a><br>";
 				}
 
-				return $this->message( $this->lang->mc, "{$this->lang->mc_found}<br /><br />$ret" );
+				return $this->message( $this->lang->mc, "{$this->lang->mc_found}<br><br>$ret" );
 			}
 		}
 
@@ -293,7 +293,7 @@ class member_control extends admin
 
 					case U_TEXT:
 					case U_INT:
-						$line = '<input class="input" type="text" name="'. $var . '" value="' . $val . '" size="50" maxlength="' . $cols[$var][2] . '" />';
+						$line = '<input class="input" type="text" name="'. $var . '" value="' . $val . '" size="50" maxlength="' . $cols[$var][2] . '">';
 						break;
 
 					case U_BLOB:
@@ -308,7 +308,7 @@ class member_control extends admin
 						$svars = json_decode( $val, true );
 
 						foreach( $svars as $name => $value )
-							$line .= $name . ': ' . $value . '<br />';
+							$line .= $name . ': ' . $value . '<br>';
 						break;
 					default:
 						$line = $val;
@@ -454,7 +454,7 @@ class member_control extends admin
 			break;
 
 		default:
-			return $this->message( $this->lang->mc, "<a href='{$this->site}/admincp/index.php?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br />" );
+			return $this->message( $this->lang->mc, "<a href='{$this->site}/admincp/index.php?a=member_control&amp;s=profile'>{$this->lang->mc_edit}</a><br>" );
 		}
 	}
 

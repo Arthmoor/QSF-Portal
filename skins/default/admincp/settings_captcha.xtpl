@@ -1,7 +1,7 @@
 <!-- BEGIN: Captchas -->
 <!-- BEGIN: Display -->
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_display}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt=""> {settings_captcha_display}</div>
 <!-- BEGIN: Entry -->
  <span class="field">{settings_captcha_question}</span>
  <span class="form">{question}</span>
@@ -12,10 +12,10 @@
  <p class="line"></p>
 
  <form action="{site}/admincp/index.php?a=settings&amp;s=editcaptcha&amp;c={cap_id}" method="post">
-  <input type="submit" name="capedit" value="{edit}" />
+  <input type="submit" name="capedit" value="{edit}">
  </form>
  <form action="{site}/admincp/index.php?a=settings&amp;s=deletecaptcha&amp;c={cap_id}" method="post">
-  <input type="submit" name="capdelete" value="{delete}" />
+  <input type="submit" name="capdelete" value="{delete}">
  </form>
  <div class="title"></div>
 <!-- END: Entry -->
@@ -25,7 +25,7 @@
 <!-- BEGIN: DeleteForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=deletecaptcha&c={cap_id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_delete}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt=""> {settings_captcha_delete}</div>
  <span class="field">{settings_captcha_question}</span>
  <span class="form">{question}</span>
  <p class="line"></p>
@@ -34,8 +34,8 @@
  <span class="form">{answer}</span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{delete}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{delete}">
 </div>
 </form>
 <!-- END: DeleteForm -->
@@ -43,7 +43,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=editcaptcha&c={cap_id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_edit}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt=""> {settings_captcha_edit}</div>
  <span class="field">{settings_captcha_question}</span>
  <span class="form"><textarea name="cap_question">{question}</textarea></span>
  <p class="line"></p>
@@ -52,8 +52,8 @@
  <span class="form"><textarea name="cap_answer">{answer}</textarea></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditForm -->
@@ -61,17 +61,17 @@
 <!-- BEGIN: AddForm -->
 <form action="{site}/admincp/index.php?a=settings&amp;s=captcha" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt="" /> {settings_captcha_pair}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/wrench_orange.png" alt=""> {settings_captcha_pair}</div>
  <span class="field">{settings_captcha_new_question}</span>
  <span class="form"><textarea name="cap_question"></textarea></span>
  <p class="line"></p>
 
  <span class="field">{settings_captcha_new_answer}</span>
- <span class="form">Separate acceptable answers with commas.<br /><textarea name="cap_answer"></textarea></span>
+ <span class="form">Separate acceptable answers with commas.<br><textarea name="cap_answer"></textarea></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: AddForm -->

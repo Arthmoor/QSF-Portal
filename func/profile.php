@@ -273,7 +273,7 @@ class profile extends qsfglobal
 					$last['topic_title'] = substr( $last['topic_title'], 0, 22 ) . '...';
 				}
 
-				$lastpost = "<a href=\"{$this->site}/topic/{$topic_link}-{$last['topic_id']}/\">" . $this->format( $last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a><br />' . $this->mbdate( DATE_LONG, $last['post_time'] );
+				$lastpost = "<a href=\"{$this->site}/topic/{$topic_link}-{$last['topic_id']}/\">" . $this->format( $last['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a><br>' . $this->mbdate( DATE_LONG, $last['post_time'] );
 			} else {
 				$lastpost = $this->lang->profile_unkown;
 			}
@@ -311,7 +311,7 @@ class profile extends qsfglobal
 			if( isset( $last['file_id'] ) ) {
 				$furl = $this->htmlwidgets->clean_url( $last['file_name'] );
 				$date = $this->mbdate( DATE_LONG, $last['file_date'] );
-				$lastfile = "<a href=\"{$this->site}/files/{$furl}-{$last['file_id']}/\">{$last['file_name']}</a><br />{$date}";
+				$lastfile = "<a href=\"{$this->site}/files/{$furl}-{$last['file_id']}/\">{$last['file_name']}</a><br>{$date}";
 			}
 
 			$usetime = ( ( ( $this->time - $profile['user_joined'] ) / 86400 ) );

@@ -96,7 +96,7 @@ class prune extends admin
 			while( $topic = $this->db->nqfetch( $query ) ) {
 				$topic['topic_title'] = $this->format( $topic['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 				if( !empty( $topic['topic_description'] ) ) {
-					$topic['topic_description'] = '<br />&raquo; ' . $this->format( $topic['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+					$topic['topic_description'] = '<br>&raquo; ' . $this->format( $topic['topic_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 				}
 
 				$xtpl->assign( 'topic_id', $topic['topic_id'] );

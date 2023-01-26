@@ -1,12 +1,12 @@
 <!-- BEGIN: UsersOnlineBlock -->
     <div class="block">
      <div class="title">
-      <img src="{site}/skins/{skin}/images/icons/members.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/members.png" alt="">
       {link}
      </div>
      {users}
-     <br /><br />{main_members}: {membercount}
-     <br />{main_guests}: {guestcount}
+     <br><br>{main_members}: {membercount}
+     <br>{main_guests}: {guestcount}
     </div>
 <!-- END: UsersOnlineBlock -->
 

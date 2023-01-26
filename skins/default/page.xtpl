@@ -1,11 +1,11 @@
 <!-- BEGIN: PagesList -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/page.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/page.png" alt="">
   {pages}
  </div>
 <!-- BEGIN: Page -->
- <a href="{site}/index.php?a=page&amp;p={page_id}">{page_title}</a><br />
+ <a href="{site}/index.php?a=page&amp;p={page_id}">{page_title}</a><br>
 <!-- END: Page -->
 </div>
 
@@ -21,7 +21,7 @@
 <!-- BEGIN: PagesNone -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/page.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/page.png" alt="">
   {pages}
  </div>
  {pages_none}
@@ -61,12 +61,12 @@
 <form action="{site}/index.php?a=page&amp;s=edit&amp;p={p}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/page_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/page_edit.png" alt="">
   {page_edit}
  </div>
 
  <span class="field">{page_title}:</span>
- <span class="form"><input class="input" type="text" size="40" name="title" value="{title}" /></span>
+ <span class="form"><input class="input" type="text" size="40" name="title" value="{title}"></span>
  <p class="line"></p>
 
  <span class="field">{page_contents}:</span>
@@ -75,16 +75,16 @@
 
  <span class="field">Options:</span>
  <span class="form">
-   <input type="checkbox" name="flags[]" id="post_html" value="{html}"{htmlbox} /><label for="post_html">{page_format_html}</label>
-   <input type="checkbox" name="flags[]" id="post_bbcode" value="{bb}"{bbbox} /><label for="post_bbcode">{page_format_bbcode}</label>
-   <input type="checkbox" name="flags[]" id="post_emoji" value="{em}"{embox} /><label for="post_emoji">{page_format_emojis}</label>
-   <input type="checkbox" name="flags[]" id="post_breaks" value="{nl}"{nlbox} /><label for="post_breaks">{page_format_breaks}</label>
-   <input type="checkbox" name="flags[]" id="post_censor" value="{cn}"{cnbox} /><label for="post_censor">{page_format_censor}</label>
+   <input type="checkbox" name="flags[]" id="post_html" value="{html}"{htmlbox}><label for="post_html">{page_format_html}</label>
+   <input type="checkbox" name="flags[]" id="post_bbcode" value="{bb}"{bbbox}><label for="post_bbcode">{page_format_bbcode}</label>
+   <input type="checkbox" name="flags[]" id="post_emoji" value="{em}"{embox}><label for="post_emoji">{page_format_emojis}</label>
+   <input type="checkbox" name="flags[]" id="post_breaks" value="{nl}"{nlbox}><label for="post_breaks">{page_format_breaks}</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value="{cn}"{cnbox}><label for="post_censor">{page_format_censor}</label>
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: PagesEdit -->
@@ -93,12 +93,12 @@
 <form action="{site}/index.php?a=page&amp;s=create" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/page_add.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/page_add.png" alt="">
   {page_create}
  </div>
 
  <span class="field">{page_title}:</span>
- <span class="form"><input class="input" type="text" size="40" name="title" value="" /></span>
+ <span class="form"><input class="input" type="text" size="40" name="title" value=""></span>
  <p class="line"></p>
 
  <span class="field">{page_contents}:</span>
@@ -107,16 +107,16 @@
 
  <span class="field">Options:</span>
  <span class="form">
-   <input type="checkbox" name="flags[]" id="post_html" value="" /><label for="post_html">{page_format_html}</label>
-   <input type="checkbox" name="flags[]" id="post_bbcode" value="" /><label for="post_bbcode">{page_format_bbcode}</label>
-   <input type="checkbox" name="flags[]" id="post_emoji" value="" /><label for="post_emoji">{page_format_emojis}</label>
-   <input type="checkbox" name="flags[]" id="post_breaks" value="" /><label for="post_breaks">{page_format_breaks}</label>
-   <input type="checkbox" name="flags[]" id="post_censor" value="" /><label for="post_censor">{page_format_censor}</label>
+   <input type="checkbox" name="flags[]" id="post_html" value=""><label for="post_html">{page_format_html}</label>
+   <input type="checkbox" name="flags[]" id="post_bbcode" value=""><label for="post_bbcode">{page_format_bbcode}</label>
+   <input type="checkbox" name="flags[]" id="post_emoji" value=""><label for="post_emoji">{page_format_emojis}</label>
+   <input type="checkbox" name="flags[]" id="post_breaks" value=""><label for="post_breaks">{page_format_breaks}</label>
+   <input type="checkbox" name="flags[]" id="post_censor" value=""><label for="post_censor">{page_format_censor}</label>
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: PagesCreate -->

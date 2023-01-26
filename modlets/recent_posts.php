@@ -67,32 +67,32 @@ class recent_posts extends modlet
 					$content .= '';
 				} else {
 					if( !$this->qsf->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] ) ) {
-						$content .= "<img src='{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png' alt='' />&nbsp;";
+						$content .= "<img src='{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png' alt=''>&nbsp;";
 						$content .= "<a href='{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;unread=1#unread'>";
 					} else {
 						$content .= "<a href='{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;p={$row['topic_last_post']}#p{$row['topic_last_post']}'>";
 					}
 
-					$content .= "<i>$topic_title</i></a><br />";
+					$content .= "<i>$topic_title</i></a><br>";
 
 					$name = $this->qsf->htmlwidgets->clean_url( $row['user_name'] );
-					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr />";
+					$content .= "$date<br>{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr>";
 				}
 			} else {
 				if( !$this->qsf->perms->auth('topic_view', $row['topic_forum'] ) ) {
 					$content .= '';
 				} else {
 					if( !$this->qsf->readmarker->is_topic_read( $row['topic_id'], $row['topic_edited'] ) ) {
-						$content .= "<img src=\"{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png\" alt=\"\" />&nbsp;";
+						$content .= "<img src=\"{$this->qsf->site}/skins/{$this->qsf->skin}/images/icons/star.png\" alt=\"\">&nbsp;";
 						$content .= "<a href=\"{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;unread=1#unread\">";
 					} else {
 						$content .= "<a href=\"{$this->qsf->site}/topic/{$topic_link}-{$row['topic_id']}/&amp;p={$row['topic_last_post']}#p{$row['topic_last_post']}\">";
 					}
 
-					$content .= "$topic_title</a><br />";
+					$content .= "$topic_title</a><br>";
 
 					$name = $this->qsf->htmlwidgets->clean_url( $row['user_name'] );
-					$content .= "$date<br />{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr />";
+					$content .= "$date<br>{$this->qsf->lang->board_by} <a href=\"{$this->qsf->site}/profile/{$name}-{$row['topic_last_poster']}/\">{$row['user_name']}</a><hr>";
 				}
 			}
 		}

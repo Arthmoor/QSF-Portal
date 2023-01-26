@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 <html lang="{language_code}">
  <head>
-  <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
+  <meta http-equiv="Content-Type" content="text/html; charset={charset}">
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/styles.css" />
-  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/style_company.css" />
-  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/acp.css" />
+  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/styles.css">
+  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/style_company.css">
+  <link rel="stylesheet" type="text/css" href="{site}/skins/{skin}/acp.css">
   <script src="{site}/javascript/utils.js" async defer></script>
  </head>
 
@@ -21,7 +21,7 @@
   <div id="blocks">
    <div class="block">
     <div class="title">
-     <img src="{site}/skins/{skin}/images/icons/wrench.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/wrench.png" alt="">
      {admin_settings}
     </div>
     <nav>
@@ -40,7 +40,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="{site}/skins/{skin}/images/icons/report.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/report.png" alt="">
      {admin_forums}
     </div>
     <nav>
@@ -55,7 +55,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="">
      {admin_members}
     </div>
     <nav>
@@ -73,7 +73,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="{site}/skins/{skin}/images/icons/members.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/members.png" alt="">
      {admin_groups}
     </div>
     <nav>
@@ -87,7 +87,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/layout_content.png" alt="">
      {admin_skins}
     </div>
     <nav>
@@ -97,7 +97,7 @@
    </div>
    <div class="block">
     <div class="title">
-     <img src="{site}/skins/{skin}/images/icons/database_gear.png" alt="" />
+     <img src="{site}/skins/{skin}/images/icons/database_gear.png" alt="">
      {admin_db}
     </div>
     <nav>
@@ -113,7 +113,7 @@
 
   <main>
    <div class="article">
-    <div class="title"><img src="{site}/skins/{skin}/images/icons/admincp.png" alt="" /> {admin_heading}</div>
+    <div class="title"><img src="{site}/skins/{skin}/images/icons/admincp.png" alt=""> {admin_heading}</div>
    </div>
 
 <!-- BEGIN: NavTree -->
@@ -138,10 +138,10 @@
  </div>
 
  <footer>
-  {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" class="small"><b>{admin_name}</b></a> [{admin_version}] &copy; 2006-2019 The {admin_name} Development Team<br />
-  {admin_based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2011 The Quicksilver Forums Development Team<br />
-  {admin_based_on} <a href="https://github.com/markelliot/MercuryBoard" class="small"><b>MercuryBoard</b></a> &copy; 2001-2009 The Mercury Development Team<br />
-  Ashlander 4 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {admin_based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a><br />
+  {admin_poweredby} <a href="https://github.com/Arthmoor/QSF-Portal" class="small"><b>{admin_name}</b></a> [{admin_version}] &copy; 2006-2019 The {admin_name} Development Team<br>
+  {admin_based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums" class="small"><b>Quicksilver Forums</b></a> v1.3.1 &copy; 2005-2011 The Quicksilver Forums Development Team<br>
+  {admin_based_on} <a href="https://github.com/markelliot/MercuryBoard" class="small"><b>MercuryBoard</b></a> &copy; 2001-2009 The Mercury Development Team<br>
+  Ashlander 4 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {admin_based_on} Syridium HForum v3 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a><br>
   {time_exec} seconds - {query_count} queries
  </footer>
 </body>

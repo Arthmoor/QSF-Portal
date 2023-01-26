@@ -2,13 +2,13 @@
 <script src="{site}/javascript/groupselect.js"  async defer></script>
 <form action="{site}/index.php?a=mass_mail" method="post" id="mailer">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/email.png" alt="" /> {mail}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/email.png" alt=""> {mail}</div>
 
  <span class="field">{mail_subject}</span>
- <span class="form"><input type="text" name="subject" size="60" value="{announcement}" /></span>
+ <span class="form"><input type="text" name="subject" size="60" value="{announcement}"></span>
  <p class="line"></p>
 
- <span class="field">{mail_groups}<br />[<a href="javascript:select_all_groups();">{mail_select_all}</a>]</span>
+ <span class="field">{mail_groups}<br>[<a href="javascript:select_all_groups();">{mail_select_all}</a>]</span>
  <span class="form">
   <select name="groups[]" size="8" multiple="multiple" class="full">
    {group_list}
@@ -20,8 +20,8 @@
  <span class="form"><textarea name="message" rows="12" cols="60" class="input"></textarea></span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="massmail" value="{mail_send}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="massmail" value="{mail_send}">
 </div>
 </form>
 <!-- END: MassMail -->

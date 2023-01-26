@@ -577,7 +577,7 @@ class forums extends admin
 			$return = "<ul>\n";
 
 			foreach( $arr as $val ) {
-				$return .= "<li><input class='input' name='_{$val['forum_id']}' value='{$val['forum_position']}' size='2' /> {$val['forum_name']}";
+				$return .= "<li><input class='input' name='_{$val['forum_id']}' value='{$val['forum_position']}' size='2'> {$val['forum_name']}";
 				$return .= $this->InputBox( $array, $val['forum_id'] );
 				$return .= "</li>\n";
 			}

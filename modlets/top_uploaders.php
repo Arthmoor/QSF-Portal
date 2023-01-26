@@ -52,7 +52,7 @@ class top_uploaders extends modlet
 			$uPostRef = "<a href=\"{$this->qsf->site}/index.php?a=files&amp;s=search&amp;uid={$uid}\">";
 
 			$name = $this->qsf->htmlwidgets->clean_url( $user );
-			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($uploads)</a><br />";
+			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($uploads)</a><br>";
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/top_uploaders.xtpl' );

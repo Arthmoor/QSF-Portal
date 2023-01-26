@@ -3,12 +3,12 @@
 <html lang="{user_language}">
  <head>
   {google}
-  <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
-  <meta name="keywords" content="{meta_keywords}" />
-  <meta name="description" content="{meta_desc}" />
+  <meta http-equiv="Content-Type" content="text/html; charset={charset}">
+  <meta name="keywords" content="{meta_keywords}">
+  <meta name="description" content="{meta_desc}">
   <title>{title}</title>
-  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/styles.css" />
-  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/style_company.css" />
+  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/styles.css">
+  <link rel="stylesheet" type="text/css" href="{qsf_site}/skins/{skin}/style_company.css">
   {feed_links}
   {mobile_icons}
   <script src="{qsf_site}/javascript/utils.js" async defer></script>
@@ -39,16 +39,16 @@
     <form action="{qsf_site}/index.php?a=login&amp;s=on" method="post">
     <div class="block">
      <div class="title">
-      <img src="{qsf_site}/skins/{skin}/images/icons/login.png" alt="" />
+      <img src="{qsf_site}/skins/{skin}/images/icons/login.png" alt="">
       {login}
      </div>
-     <input type="hidden" name="request_uri" value="{request_uri}" />
-     {login_user}:<br />
-     <input class="input" type="text" name="user" size="17" /><br />
-     {login_pass}:<br />
-     <input class="input" type="password" name="pass" size="17" /><br />
-     <input type="submit" name="submit" value="{submit}" /><br /><br />
-     <a href="{site}/register/">{register_reg}</a><br /><br />
+     <input type="hidden" name="request_uri" value="{request_uri}">
+     {login_user}:<br>
+     <input class="input" type="text" name="user" size="17"><br>
+     {login_pass}:<br>
+     <input class="input" type="password" name="pass" size="17"><br>
+     <input type="submit" name="submit" value="{submit}"><br><br>
+     <a href="{site}/register/">{register_reg}</a><br><br>
      <a href="{site}/index.php?a=login&amp;s=pass">{login_forgot_pass}</a>
     </div>
     </form>
@@ -115,13 +115,13 @@
   </div>
 
   <footer>
-   {powered_by} <a href="https://github.com/Arthmoor/QSF-Portal">{qsf_name}</a> &copy; 2006-2019 The {qsf_name} Development Team<br />
-   {based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br />
-   {based_on} <a href="https://github.com/markelliot/MercuryBoard">MercuryBoard</a> &copy; 2001-2009 The Mercury Development Team<br />
+   {powered_by} <a href="https://github.com/Arthmoor/QSF-Portal">{qsf_name}</a> &copy; 2006-2019 The {qsf_name} Development Team<br>
+   {based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br>
+   {based_on} <a href="https://github.com/markelliot/MercuryBoard">MercuryBoard</a> &copy; 2001-2009 The Mercury Development Team<br>
    Ashlander 4 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {based_on} HForumv3.1 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a>
-   <br />100% Valid &lsaquo;&rsaquo; <a href="https://validator.w3.org/check?uri=referer">HTML5</a> <a href="https://jigsaw.w3.org/css-validator/check/referer">CSS</a>
+   <br>100% Valid &lsaquo;&rsaquo; <a href="https://validator.w3.org/check?uri=referer">HTML5</a> <a href="https://jigsaw.w3.org/css-validator/check/referer">CSS</a>
    Best viewed at 1024x768 or better resolution.
-   <br />{servertime}
+   <br>{servertime}
   </footer>
  </body>
 </html>

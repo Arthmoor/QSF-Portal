@@ -7,7 +7,7 @@
 </div>
 
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {cv_conversations}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt=""> {cv_conversations}</div>
 </div>
 
 <div class="article">
@@ -18,12 +18,12 @@
  <div id="inviteuserbox">
   <form action="{site}/index.php?a=conversations&amp;s=invite&amp;c={conv_id}" method="post">
    <div class="inviteusersbox">
-    <div class="title"><img src="{site}/skins/{skin}/images/icons/user_add.png" alt="" /> {cv_invite_others}</div>
+    <div class="title"><img src="{site}/skins/{skin}/images/icons/user_add.png" alt=""> {cv_invite_others}</div>
     <span class="field">{cv_users}</span>
-    <span class="form"><input type="text" name="invite_users" value="" size="60" /><br />{cv_separate_names}</span>
+    <span class="form"><input type="text" name="invite_users" value="" size="60"><br>{cv_separate_names}</span>
     <p class="line"></p>
 
-    <input type="submit" name="invite" value="Invite Users" />
+    <input type="submit" name="invite" value="Invite Users">
    </div>
   </form>
  </div>
@@ -32,7 +32,7 @@
 
 <div class="article">
  <span class="topic_description">{cv_participants}:</span>
- <br />
+ <br>
  <ul style="float:left">
 <!-- BEGIN: Participant -->
   <li style="float:left; padding: 5px;">{list_avatar} {list_name}</li>
@@ -43,7 +43,7 @@
 
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="">
   {title_html}
  </div>
  <span class="next_prev_topics">
@@ -76,20 +76,20 @@
  <div class="title">
   <div style="float:left;">
 <!-- BEGIN: NewPost -->
-   <img src="{site}/skins/{skin}/images/icons/post_new.png" alt="{cv_new_post}" />
+   <img src="{site}/skins/{skin}/images/icons/post_new.png" alt="{cv_new_post}">
 <!-- END: NewPost -->
 <!-- BEGIN: NewPostTopic -->
-   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{cv_new_post}" />
+   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{cv_new_post}">
 <!-- END: NewPostTopic -->
 <!-- BEGIN: PostIcon -->
-   <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
+   <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px">
 <!-- END: PostIcon -->
    <a href="{site}/index.php?a=conversations&amp;id={conv_id}&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
    &nbsp;&nbsp;<span class="small_text">{edited}</span>
   </div>
   <div style="text-align:right;">
-   <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{cv_top}" title="{cv_top}" /></a></div>
-   <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{cv_bottom}" title="{cv_bottom}" /></a></div>
+   <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{cv_top}" title="{cv_top}"></a></div>
+   <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{cv_bottom}" title="{cv_bottom}"></a></div>
 <!-- BEGIN: CanDelete -->
    <div class="button"><a class="spam" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
    <div class="button"><a class="delete" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
@@ -103,7 +103,7 @@
  </div>
 <!-- BEGIN: PosterInfoGuest -->
  <span class="avatar">
-  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="">
  </span>
  <span class="member_info">
   <strong>{cv_guest_user}</strong> - ({cv_unreg}) {post_ip}
@@ -117,18 +117,18 @@
 
  <span class="member_info">
 <!-- BEGIN: Online -->
-   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{cp_online}" />
+   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{cp_online}">
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
-   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{cp_offline}" />
+   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{cp_offline}">
 <!-- END: Offline -->
-  <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br />
-  <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
-  <span class="text">{cv_group}</span>{group_name}<br />
-  <span class="text">{cv_posts}</span>{user_posts}<br />
+  <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br>
+  <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt=""><br>
+  <span class="text">{cv_group}</span>{group_name}<br>
+  <span class="text">{cv_posts}</span>{user_posts}<br>
   <span class="text">{cv_joined}</span>{user_joined}
 <!-- BEGIN: PostIP -->
-  <br /><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
+  <br><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
 <!-- END: PostIP -->
  </span>
 
@@ -162,9 +162,9 @@
   <div class="filebox">
    <strong>{cv_attached}</strong>
    <div class="file">
-    <br />{cv_attached_filename} <a href="{site}/topic/attachment/{attach_id}/">{attach_name}</a>
-    <br />{cv_attached_size} {filesize} KB
-    <br />{cv_attached_downloads}: {attach_downloads}
+    <br>{cv_attached_filename} <a href="{site}/topic/attachment/{attach_id}/">{attach_name}</a>
+    <br>{cv_attached_size} {filesize} KB
+    <br>{cv_attached_downloads}: {attach_downloads}
    </div>
   </div>
 <!-- END: Attachment -->
@@ -196,7 +196,7 @@
 <form action="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="">
   {cv_quickreply}: {title_html}
  </div>
  <span class="head">
@@ -215,13 +215,13 @@
 
  <span class="field">{cv_options}</span>
  <span class="form">
-  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{cv_option_emojis}</label><br />
-  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{cv_option_bbcode}</label>
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot}> <label for="parseEmot">{cv_option_emojis}</label><br>
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode}> <label for="parseCode">{cv_option_bbcode}</label>
  </span>
  <p class="line"></p>
 
- <input type="submit" name="submit" value="{reply}" />
- <input type="submit" name="preview" value="{cv_preview}" />
+ <input type="submit" name="submit" value="{reply}">
+ <input type="submit" name="preview" value="{cv_preview}">
 </div>
 </form>
 </div>
@@ -232,7 +232,7 @@
 <!-- BEGIN: Preview -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="">
   {preview_title}
  </div>
 <!-- BEGIN: PosterMember -->
@@ -240,11 +240,11 @@
   {avatar}
  </span>
  <span class="member_info">
-  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
-  <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br />
-  <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{cv_level}" /><br />
-  <span class="text">{cv_group}</span>{gname}<br />
-  <span class="text">{cv_posts}</span> {uposts}<br />
+  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="">
+  <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br>
+  <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{cv_level}"><br>
+  <span class="text">{cv_group}</span>{gname}<br>
+  <span class="text">{cv_posts}</span> {uposts}<br>
   <span class="text">{cv_joined}</span> {joined}
  </span>
  <p></p>
@@ -260,7 +260,7 @@
 <form action="{site}/index.php?a=conversations&amp;s=reply&amp;c={conv_id}" method="post" id="mbpost" enctype="multipart/form-data">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/{icon_file}" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/{icon_file}" alt="">
   {cv_new_reply}
  </div>
 </div>
@@ -284,16 +284,16 @@
 
  <span class="field">{cv_options}</span>
  <span class="form">
-  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{cv_option_emojis}</label><br />
-  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{cv_option_bbcode}</label>
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot}> <label for="parseEmot">{cv_option_emojis}</label><br>
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode}> <label for="parseCode">{cv_option_bbcode}</label>
  </span>
  <p class="line"></p>
 
 <!-- BEGIN: AttachBox -->
- <span class="field">{cv_attach_add}<br /><span class="tiny">{cv_attach_disrupt}</span></span>
+ <span class="field">{cv_attach_add}<br><span class="tiny">{cv_attach_disrupt}</span></span>
  <span class="form">
-  <input type="file" name="attach_upload" /><br />
-  <input type="submit" name="attach" value="{cv_attach_add}" /> <b>{upload_error}</b>
+  <input type="file" name="attach_upload"><br>
+  <input type="submit" name="attach" value="{cv_attach_add}"> <b>{upload_error}</b>
  </span>
  <p class="line"></p>
 
@@ -303,14 +303,14 @@
   <select name="attached">
    {attached}
   </select>
-  <input type="submit" name="detach" value="{cv_attach_remove}" />
+  <input type="submit" name="detach" value="{cv_attach_remove}">
  </span>
  {attached_data}
  <p class="line"></p>
 <!-- END: Remove -->
 <!-- END: AttachBox -->
- <input type="submit" name="submit" value="{cv_reply}" />
- <input type="submit" name="preview" value="{cv_preview}" />
+ <input type="submit" name="submit" value="{cv_reply}">
+ <input type="submit" name="preview" value="{cv_preview}">
 </div>
 <div class="article">
  <div class="title">{cv_last_five} [<a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}">{cv_view_topic}</a>]</div>
@@ -324,7 +324,7 @@
 <!-- END: LastUserGuest -->
  </span>
  {last_text}
- <p class="list_line"></p><br />
+ <p class="list_line"></p><br>
 <!-- END: ReplyReview -->
 </div>
 </form>

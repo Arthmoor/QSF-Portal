@@ -1,15 +1,15 @@
 <!-- BEGIN: SpamControl -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/spam_controls.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/spam_controls.png" alt="">
   {spam_controls}
  </div>
- {spam_message1}<br />
+ {spam_message1}<br>
  {spam_message2}
 <!-- BEGIN: ClearAll -->
  <form action="{site}/index.php?a=spam_control&amp;c=0" method="post"" method="post">
-  <input type="hidden" name="token" value="{token}" />
-  <input class="input" type="submit" name="spam_clear" value="{spam_clear_all}" />
+  <input type="hidden" name="token" value="{token}">
+  <input class="input" type="submit" name="spam_clear" value="{spam_clear_all}">
  </form>
 <!-- END: ClearAll -->
  <span class="head">
@@ -23,15 +23,15 @@
  </span>
  <p></p>
 <!-- BEGIN: Entry -->
- <span class="icon"><img src="{site}/skins/{skin}/images/icons/spam.png" class="left" /></span>
+ <span class="icon"><img src="{site}/skins/{skin}/images/icons/spam.png" class="left"></span>
  <span class="spamaction">
   <form action="{ham_link}" method="post">
-   <input type="hidden" name="token" value="{token}" />
-   <input class="input" type="submit" name="ham_comment" value="{spam_not_spam}" />
+   <input type="hidden" name="token" value="{token}">
+   <input class="input" type="submit" name="ham_comment" value="{spam_not_spam}">
   </form>
   <form action="{delete_link}" method="post">
-   <input type="hidden" name="token" value="{token}" />
-   <input class="input" type="submit" name="delete_comment" value="{delete}" />
+   <input type="hidden" name="token" value="{token}">
+   <input class="input" type="submit" name="delete_comment" value="{delete}">
   </form>
  </span>
  <span class="spamtopic"><a href="{site}/topic/{title_link}-{tid}/">{title}</a></span>

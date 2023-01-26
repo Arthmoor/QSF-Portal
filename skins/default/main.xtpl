@@ -2,11 +2,11 @@
     <script src="{site}/javascript/newspost.js"></script>
     <div class="article">
      <div class="titlecenter">
-      <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="">
       {main_news}
-      <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="">
      </div>
-     <br />
+     <br>
      {items}
     </div>
 
@@ -16,11 +16,11 @@
 <!-- BEGIN: NewsItem -->
     <div class="article">
      <div class="title">
-      <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="" />
+      <img src="{site}/skins/{skin}/images/icons/newspaper.png" alt="">
       {topic}
      </div>
-     <br />
-     {text}<br /><br />{comments}<br />
+     <br>
+     {text}<br><br>{comments}<br>
      <div class="newsfooter">{main_posted_by}: {user} {date}</div>
-    </div><br />
+    </div><br>
 <!-- END: NewsItem -->

@@ -59,7 +59,7 @@ class users_online extends modlet
 		$userlist = '';
 		if( $arg == true ) {
 			$this->userlist = $this->usersonline();
-			$userlist = $this->userlist['TITLEONTABLE'] . "<br /><br />" . $this->userlist['USERNAMES'];
+			$userlist = $this->userlist['TITLEONTABLE'] . "<br><br>" . $this->userlist['USERNAMES'];
 			$date = $this->qsf->mbdate( DATE_ONLY_LONG, $this->qsf->time, false );
 
 			$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/users_online.xtpl' );

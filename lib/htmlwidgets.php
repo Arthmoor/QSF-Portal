@@ -714,7 +714,7 @@ class htmlwidgets extends forumutils
 		foreach( $icons as $icon )
 		{
 			$msgicons .= "<li><input type=\"radio\" name=\"icon\" id=\"icon$i\" value=\"$icon\"" . ( ( $select == $icon ) ? '
-				checked=\'checked\'' : null ) . " />&nbsp;<label for=\"icon$i\"><img src=\"{$this->site}/skins/$this->skin/mbicons/$icon\" alt=\"\" /></label></li>\n";
+				checked=\'checked\'' : null ) . ">&nbsp;<label for=\"icon$i\"><img src=\"{$this->site}/skins/$this->skin/mbicons/$icon\" alt=\"\"></label></li>\n";
 			$i++;
 		}
 		return $msgicons;
@@ -774,7 +774,7 @@ class htmlwidgets extends forumutils
                $img_width = 100;
 			}
 
-			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$img_width}px; height:{$img_height}px;\" />";
+			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$img_width}px; height:{$img_height}px;\">";
 		}
 
 		return $url;

@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="{language}">
 <head>
- <meta http-equiv="Content-Type" content="text/html; charset={charset}" />
+ <meta http-equiv="Content-Type" content="text/html; charset={charset}">
  <title>{files_rate}</title>
- <link rel="stylesheet" type="text/css" href="/skins/{skin}/styles.css" />
+ <link rel="stylesheet" type="text/css" href="/skins/{skin}/styles.css">
 </head>
 
 <body>
@@ -15,7 +15,7 @@
 <!-- BEGIN: RateForm -->
      <form action="{site}/index.php?a=filerating&amp;f={f}" method="post">
       <div>
-       {files_rate_please}:<br /><br />
+       {files_rate_please}:<br><br>
        <select name="rate">
         <option value="1">1 - {files_rate_sucks}</option>
         <option value="2">2 - {files_rate_poor}</option>
@@ -23,12 +23,12 @@
         <option value="4">4 - {files_rate_good}</option>
         <option value="5" selected="selected">5 - {files_rate_excellent}</option>
        </select>
-       <input type="submit" value="{submit}" />
+       <input type="submit" value="{submit}">
       </div>
      </form>
 <!-- END: RateForm -->
 <!-- BEGIN: Other -->
-     {other}<br />
+     {other}<br>
 <!-- END: Other -->
      <a href="javascript:window.close()">{files_close_window}</a>
    </div>

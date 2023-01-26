@@ -354,7 +354,7 @@ class mod extends qsfglobal
 					$avatar = $this->htmlwidgets->display_avatar( $data );
 
 					if( $data['user_signature'] ) {
-						$signature = '.........................<br />' . $this->format( $data['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+						$signature = '.........................<br>' . $this->format( $data['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
 					}
 
 					$joined = $this->mbdate( DATE_ONLY_LONG, $data['user_joined'] );
@@ -385,12 +385,12 @@ class mod extends qsfglobal
 							$ext = strtolower( substr( $file, -4 ) );
 
 							if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->site}/attachments/$md5' alt='{$file}' />";
+								$preview_text .= "<br><br>{$this->lang->topic_attached} {$file}<br><img src='{$this->site}/attachments/$md5' alt='{$file}'>";
 								continue;
 							}
 						}
 
-						$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}";
+						$preview_text .= "<br><br>{$this->lang->topic_attached} {$file}";
 					}
 				}
 
@@ -404,7 +404,7 @@ class mod extends qsfglobal
 
 			$icon = isset( $this->post['icon'] ) ? $this->post['icon'] : $icon;
 			$msg_icons = $this->htmlwidgets->get_icons( $icon );
-			$msg_icons = "<li><input type=\"radio\" name=\"icon\" value=\"None\" />{$this->lang->none}&nbsp;</li>" . $msg_icons;
+			$msg_icons = "<li><input type=\"radio\" name=\"icon\" value=\"None\">{$this->lang->none}&nbsp;</li>" . $msg_icons;
 
 			if( $this->perms->auth( 'post_attach', $data['topic_forum'] ) ) {
 				if( $attached ) {
@@ -1034,7 +1034,7 @@ class mod extends qsfglobal
 		$out = '';
 		while( $ip = $this->db->nqfetch( $iplist ) )
 		{
-			$out .= "<br />" . $ip['post_ip'];
+			$out .= "<br>" . $ip['post_ip'];
 		}
 
 		return $this->message( $this->lang->mod_ip_view, sprintf( $this->lang->mod_ip_view_posted, $user['user_name'] ) . $out );

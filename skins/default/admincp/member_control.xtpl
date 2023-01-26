@@ -2,10 +2,10 @@
 <!-- BEGIN: ChooseForm -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s={s}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" /> {mc}</div>
- {mc_find}:<br /><br />
- <input type="text" name="membername" size="30" class="input" />
- <input type="submit" name="submit" value="{submit}" />
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_online.png" alt=""> {mc}</div>
+ {mc_find}:<br><br>
+ <input type="text" name="membername" size="30" class="input">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: ChooseForm -->
@@ -13,12 +13,12 @@
 <!-- BEGIN: DeleteForm -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s=delete&amp;id={id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt="" /> {mc_delete}: {user_name}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt=""> {mc_delete}: {user_name}</div>
  {mc_confirm} <b>{user_name}</b>?
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: DeleteForm -->
@@ -26,13 +26,13 @@
 <!-- BEGIN: Spambot -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt="" /> {mc_delete}: {user_name}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_delete.png" alt=""> {mc_delete}: {user_name}</div>
  {mc_confirm_bot}
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="hidden" name="member" value="{id}" />
- <input type="submit" name="confirm_spambot" value="{yes}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="hidden" name="member" value="{id}">
+ <input type="submit" name="confirm_spambot" value="{yes}">
 </div>
 </form>
 <!-- END: Spambot -->
@@ -40,7 +40,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={id}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/user_edit.png" alt="" /> {mc}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/user_edit.png" alt=""> {mc}</div>
 
 <!-- BEGIN: Line -->
  <span class="field">{field}</span>
@@ -48,10 +48,10 @@
  <p class="line"></p>
 <!-- END: Line -->
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="memberspambot" value="{mc_report_spambot}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="memberspambot" value="{mc_report_spambot}">
  <p class="line"></p>
- <input type="submit" name="submit" value="{submit}" />
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: EditForm -->

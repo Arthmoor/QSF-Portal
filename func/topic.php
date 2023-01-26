@@ -654,7 +654,7 @@ class topic extends qsfglobal
 				}
 
 				if( $post['user_signature'] && $this->user['user_view_signatures'] ) {
-					$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+					$post['user_signature'] = '.........................<br>' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
 				} else {
 					$post['user_signature'] = null;
 				}
@@ -686,7 +686,7 @@ class topic extends qsfglobal
 
 						if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
 							$topic_link = $this->htmlwidgets->clean_url( $post['topic_title'] );
-							$post['post_text'] .= "<br /><br />{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br /><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}' />";
+							$post['post_text'] .= "<br><br>{$this->lang->topic_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->topic_attached_downloads})<br><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}'>";
 							continue;
 						}
 					}

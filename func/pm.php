@@ -251,7 +251,7 @@ class pm extends qsfglobal
 		$pm['user_avatar'] = $this->htmlwidgets->display_avatar( $pm );
 
 		if( $pm['user_signature'] && $this->user['user_view_signatures'] ) {
-			$pm['user_signature'] = '.........................<br />' . $this->format( $pm['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+			$pm['user_signature'] = '.........................<br>' . $this->format( $pm['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
 		} else {
 			$pm['user_signature'] = null;
 		}
@@ -317,7 +317,7 @@ class pm extends qsfglobal
 		$xtpl->assign( 'user_joined', $pm['user_joined'] );
 
 		if( $recipients )
-			$xtpl->assign( 'recipients', "{$this->lang->pm_recipients}: {$recipients}<hr />" );
+			$xtpl->assign( 'recipients', "{$this->lang->pm_recipients}: {$recipients}<hr>" );
 
 		$xtpl->assign( 'pm_message', $pm['pm_message'] );
 		$xtpl->assign( 'user_signature', $pm['user_signature'] );

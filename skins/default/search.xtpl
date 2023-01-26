@@ -2,53 +2,53 @@
 <form action="{site}/index.php?a=search" method="post" id="search">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/search.png" alt="">
   {search_search}
  </div>
 
  <span class="half">
   <span class="head">
    <strong>{search_basic}</strong>
-  </span><br />
-  {search_for}:<br />
-  <input type="text" style="width:95%" name="query" />
-  <br /><br />
-  {search_in}: <a href="javascript:select_all_forums()">{search_select_all}</a><br />
+  </span><br>
+  {search_for}:<br>
+  <input type="text" style="width:95%" name="query">
+  <br><br>
+  {search_in}: <a href="javascript:select_all_forums()">{search_select_all}</a><br>
   <select name="forums[]" style="width:100%" size="10" multiple="multiple">
    {forum_options}
-  </select><br /><br />
+  </select><br><br>
  </span>
 
  <span class="half">
   <span class="head">
    <strong>{search_advanced}</strong>
-  </span><br />
+  </span><br>
 
-  <input class="check" type="radio" name="searchtype" id="type_match" value="match" checked="checked" />
-  <label for="type_match">{search_match}</label><br />
+  <input class="check" type="radio" name="searchtype" id="type_match" value="match" checked="checked">
+  <label for="type_match">{search_match}</label><br>
 
-  <input class="check" type="radio" name="searchtype" id="type_soundex" value="soundex" />
-  <label for="type_soundex">{search_sound}</label><br />
+  <input class="check" type="radio" name="searchtype" id="type_soundex" value="soundex">
+  <label for="type_soundex">{search_sound}</label><br>
 
-  <input class="check" type="radio" name="searchtype" id="type_regex" value="regex" />
-  <label for="type_regex">{search_regex}</label><br /><br />
+  <input class="check" type="radio" name="searchtype" id="type_regex" value="regex">
+  <label for="type_regex">{search_regex}</label><br><br>
 
-  <input class="check" type="checkbox" name="member_check" id="member_check" />
+  <input class="check" type="checkbox" name="member_check" id="member_check">
   <label for="member_check">{search_posts_by}</label>
-  <input type="text" size="20" name="member_text" />
+  <input type="text" size="20" name="member_text">
   <select name="member_select">
    <option value="exact" selected="selected">{search_exact_name}</option>
    <option value="partial">{search_partial_name}</option>
-  </select><br />
+  </select><br>
 
-  <input class="check" type="checkbox" name="showposts_check" id="showposts_check" checked="checked" />
-  <label for="showposts_check">{search_show_posts}</label><br />
-  <input class="check" type="checkbox" name="limit_check" id="limit_check" checked="checked" />
+  <input class="check" type="checkbox" name="showposts_check" id="showposts_check" checked="checked">
+  <label for="showposts_check">{search_show_posts}</label><br>
+  <input class="check" type="checkbox" name="limit_check" id="limit_check" checked="checked">
   <label for="limit_check">{search_only_display}</label>
-  <input type="text" size="6" maxlength="6" name="limit_chars" value="400" />
-  <label for="limit_check">{search_characters}</label><br />
+  <input type="text" size="6" maxlength="6" name="limit_chars" value="400">
+  <label for="limit_check">{search_characters}</label><br>
 
-  <input class="check" type="checkbox" name="time_check" id="time_check" checked="checked" />
+  <input class="check" type="checkbox" name="time_check" id="time_check" checked="checked">
   <label for="time_check">{search_in_posts}</label>
   <select name="time_way_select">
    <option value="newer" selected="selected">{search_newer}</option>
@@ -69,7 +69,7 @@
 
  <p class="line"></p>
 
- <input class="button" type="submit" name="submit" value="{search_search}" />
+ <input class="button" type="submit" name="submit" value="{search_search}">
 </div>
 </form>
 <!-- END: Search -->
@@ -77,7 +77,7 @@
 <!-- BEGIN: Results -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/search.png" alt="">
   {search_result}
  </div>
  <span class="head">
@@ -88,10 +88,10 @@
   <span class="last_post">{search_starter}</span>
  </span>
 <!-- BEGIN: Entry -->
- <span class="icon"><img src="{site}/skins/{skin}/images/icons/topic.png" alt="" /></span>
+ <span class="icon"><img src="{site}/skins/{skin}/images/icons/topic.png" alt=""></span>
  <span class="thread">
   <a href="{site}/topic/{topic_title_link}-{post_topic}/"><strong>{topic_title}</strong></a>
-  <br />- <a href="{site}/forum/{forum_link_name}-{topic_forum}/">{forum_name}</a>
+  <br>- <a href="{site}/forum/{forum_link_name}-{topic_forum}/">{forum_name}</a>
  </span>
  <span class="number">{matches}</span>
  <span class="number">{topic_replies}</span>
@@ -107,7 +107,7 @@
 <!-- BEGIN: Post -->
 <!-- BEGIN: PosterInfoGuest -->
  <span class="avatar">
-  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="">
  </span>
  <span class="member_info">
   <strong>{search_guest}</strong> - ({search_unreg})
@@ -120,22 +120,22 @@
  </span>
  <span class="member_info">
 <!-- BEGIN: Online -->
-  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="{search_online}" title="{search_online}" />
+  <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="{search_online}" title="{search_online}">
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
-  <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="{search_offline}" title="{search_offline}" />
+  <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="{search_offline}" title="{search_offline}">
 <!-- END: Offline -->
-  <strong><a href="{site}/profile/{link_name}-{post_author}/">{user_name}</a></strong><br />
-  <strong>{user_title}</strong>   <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="{search_level}" /><br />
-  <span class="text">{search_group}</span>{group_name}<br />
-  <span class="text">{search_posts}</span> {user_posts}<br />
+  <strong><a href="{site}/profile/{link_name}-{post_author}/">{user_name}</a></strong><br>
+  <strong>{user_title}</strong>   <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="{search_level}"><br>
+  <span class="text">{search_group}</span>{group_name}<br>
+  <span class="text">{search_posts}</span> {user_posts}<br>
   <span class="text">{search_joined}</span> {user_joined}
  </span>
  <p></p>
 <!-- END: PosterInfoMember -->
  <div class="post_triangle">&nbsp;</div>
  <div class="rounded_box">
-  {post_text}<br /><br />
+  {post_text}<br><br>
   <span class="right"><strong>{score}</strong></span>
   {search_posted_on} {post_time}
  </div>

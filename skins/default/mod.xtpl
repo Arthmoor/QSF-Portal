@@ -2,7 +2,7 @@
 <form action="{site}/index.php?a=mod&amp;s=move&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic_moved.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic_moved.png" alt="">
   {mod_label_topic_move}
  </div>
  <span class="field">{mod_label_move_to}</span>
@@ -15,13 +15,13 @@
 
  <span class="field">{mod_label_options}</span>
  <span class="form">
-  <input class="check" type="radio" name="operation" value="delete" id="delete" checked="checked" /> <label for="delete">{mod_label_topic_move_complete}</label><br />
-  <input class="check" type="radio" name="operation" value="lock" id="move" /> <label for="move">{mod_label_topic_move_link}</label>
+  <input class="check" type="radio" name="operation" value="delete" id="delete" checked="checked"> <label for="delete">{mod_label_topic_move_complete}</label><br>
+  <input class="check" type="radio" name="operation" value="lock" id="move"> <label for="move">{mod_label_topic_move_link}</label>
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: ModMoveTopic -->
@@ -30,12 +30,12 @@
 <!-- BEGIN: Preview -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="">
   {preview_title}
  </div>
 <!-- BEGIN: PosterGuest -->
 <span class="avatar">
- <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+ <img src="{site}/skins/{skin}/images/noavatar.png" alt="">
 </span>
 <span class="member_info">
  <strong>[{topic_guest}]</strong> - ({topic_unreg})
@@ -47,11 +47,11 @@
  {avatar}
 </span>
 <span class="member_info">
- <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" />
- <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br />
- <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{topic_level}" /><br />
- <span class="text">{topic_group}</span>{gname}<br />
- <span class="text">{topic_posts}</span> {uposts}<br />
+ <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="">
+ <strong><a href="{site}/profile/{link_name}-{uid}/">{uname}</a></strong><br>
+ <strong>{utitle}</strong>   <img src="{site}/skins/{skin}/images/{utitleicon}" alt="{topic_level}"><br>
+ <span class="text">{topic_group}</span>{gname}<br>
+ <span class="text">{topic_posts}</span> {uposts}<br>
  <span class="text">{topic_joined}</span> {joined}
 </span>
 <p></p>
@@ -67,7 +67,7 @@
 <form action="{site}/index.php?a=mod&amp;s=edit_post&amp;p={p}" method="post" name="mbpost" enctype="multipart/form-data">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/comment_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/comment_edit.png" alt="">
   {mod_label_post_edit} {topic_title}
  </div>
  <span class="field">{post_icon}</span>
@@ -89,16 +89,16 @@
 
  <span class="field">{mod_label_options}</span>
  <span class="form">
-  <input class="check" type="checkbox" name="emojis" id="emojis" value="1"{emot_check} /><label for="emojis">{mod_label_emoji}</label><br />
-  <input class="check" type="checkbox" name="code" id="code" value="1"{code_check} /> <label for="code">{mod_label_bbcode}</label>
+  <input class="check" type="checkbox" name="emojis" id="emojis" value="1"{emot_check}><label for="emojis">{mod_label_emoji}</label><br>
+  <input class="check" type="checkbox" name="code" id="code" value="1"{code_check}> <label for="code">{mod_label_bbcode}</label>
  </span>
  <p class="line"></p>
 
 <!-- BEGIN: AttachBox -->
- <span class="field">{post_attach_add}<br /><span class="tiny">{post_attach_disrupt}</span></span>
+ <span class="field">{post_attach_add}<br><span class="tiny">{post_attach_disrupt}</span></span>
  <span class="form">
-  <input type="file" name="attach_upload" /><br />
-  <input type="submit" name="attach" value="{post_attach_add}" /> <b>{upload_error}</b>
+  <input type="file" name="attach_upload"><br>
+  <input type="submit" name="attach" value="{post_attach_add}"> <b>{upload_error}</b>
  </span>
  <p class="line"></p>
 
@@ -108,16 +108,16 @@
   <select name="attached">
    {attached}
   </select>
-  <input type="submit" name="detach" value="{post_attach_remove}" />
+  <input type="submit" name="detach" value="{post_attach_remove}">
  </span>
  {attached_data}
  <p class="line"></p>
 <!-- END: Remove -->
 <!-- END: AttachBox -->
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
- <input type="submit" name="preview" value="{post_preview}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
+ <input type="submit" name="preview" value="{post_preview}">
 </div>
 </form>
 <!-- END: ModEditPost -->
@@ -126,31 +126,31 @@
 <form action="{site}/index.php?a=mod&amp;s=edit_topic&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic_edit.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic_edit.png" alt="">
   {mod_label_topic_edit}
  </div>
  <span class="field">{mod_label_title}</span>
- <span class="form"><input type="text" size="40" maxlength="75" name="title" value="{topic_title}" /></span>
+ <span class="form"><input type="text" size="40" maxlength="75" name="title" value="{topic_title}"></span>
  <p class="line"></p>
  
  <span class="field">{mod_label_description}</span>
- <span class="form"><input type="text" size="40" maxlength="35" name="desc" value="{topic_description}" /></span>
+ <span class="form"><input type="text" size="40" maxlength="35" name="desc" value="{topic_description}"></span>
  <p class="line"></p>
 
 <!-- BEGIN: Global -->
  <span class="field">{mod_label_global}</span>
- <span class="form"><input class="check" style="margin-top:5px;" type="checkbox" name="global_topic"{checkGlob} /></span>
+ <span class="form"><input class="check" style="margin-top:5px;" type="checkbox" name="global_topic"{checkGlob}></span>
  <p class="line"></p>
 <!-- END: Global -->
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 </form>
 <!-- END: ModEditTopic -->
 
 <!-- BEGIN: ModSplitTopic -->
 <form action="{site}/index.php?a=mod&amp;s=split&amp;t={t}" method="post">
- <input type="hidden" name="posttarget" value="{posttarget}" />
+ <input type="hidden" name="posttarget" value="{posttarget}">
  <div class="article">
   <div class="title">{mod_label_topic_split}</div>
   <span class="field">{mod_label_title_original}</span>
@@ -159,25 +159,25 @@
   <p class="line"></p>
 
   <span class="field" style="{display1}">{mod_label_title_split} 1</span>
-  <span class="form" style="{display1}"><input type="text" name="topic[1]" size="60" maxlength="75" /></span>
+  <span class="form" style="{display1}"><input type="text" name="topic[1]" size="60" maxlength="75"></span>
 
   <p class="line" style="{display1}"></p>
 
   <span class="field" style="{display2}">{mod_label_title_split} 2</span>
-  <span class="form" style="{display2}"><input type="text" name="topic[2]" size="60" maxlength="75" /></span>
+  <span class="form" style="{display2}"><input type="text" name="topic[2]" size="60" maxlength="75"></span>
 
   <p class="line" style="{display2}"></p>
 
   <span class="field" style="{display3}">{mod_label_title_split} 3</span>
-  <span class="form" style="{display3}"><input type="text" name="topic[3]" size="60" maxlength="75" /></span>
+  <span class="form" style="{display3}"><input type="text" name="topic[3]" size="60" maxlength="75"></span>
 
   <p class="line" style="{display3}"></p>
 
   <span class="field" style="{display4}">{mod_label_title_split} 4</span>
-  <span class="form" style="{display4}"><input type="text" name="topic[4]" size="60" maxlength="75" /></span>
+  <span class="form" style="{display4}"><input type="text" name="topic[4]" size="60" maxlength="75"></span>
 
   <p class="line" style="{display4}"></p>
-  <input type="submit" name="submitsplit" value="{submit}" />
+  <input type="submit" name="submitsplit" value="{submit}">
  </div>
 </form>
 <!-- END: ModSplitTopic -->

@@ -441,15 +441,15 @@ if( $qsf->nohtml ) {
 	if( $qsf->sets['closed'] ) {
 		if( !$qsf->perms->auth( 'board_view_closed' ) ) {
 			if( $qsf->get['a'] != 'login' ) {
-				error( QUICKSILVER_NOTICE, $qsf->sets['closedtext'] . "<br /><hr />If you are an administrator, <a href='{$qsf->site}/index.php?a=login&amp;s=on'>click here</a> to login." );
+				error( QUICKSILVER_NOTICE, $qsf->sets['closedtext'] . "<br><hr>If you are an administrator, <a href='{$qsf->site}/index.php?a=login&amp;s=on'>click here</a> to login." );
 			}
 		} else {
-			$reminder_text = $qsf->lang->main_reminder_closed . '<br />&quot;' . $qsf->sets['closedtext'] . '&quot;';
+			$reminder_text = $qsf->lang->main_reminder_closed . '<br>&quot;' . $qsf->sets['closedtext'] . '&quot;';
 		}
 	}
 
 	if( $qsf->user['user_group'] == USER_AWAIT ) {
-		$reminder_text = "{$qsf->lang->main_activate}<br /><a href='{$qsf->site}/index.php?a=register&amp;s=resend'>{$qsf->lang->main_activate_resend}</a>";
+		$reminder_text = "{$qsf->lang->main_activate}<br><a href='{$qsf->site}/index.php?a=register&amp;s=resend'>{$qsf->lang->main_activate_resend}</a>";
 	}
 	if( $reminder_text ) {
 		$xtpl->assign( 'main_reminder', $qsf->lang->main_reminder );

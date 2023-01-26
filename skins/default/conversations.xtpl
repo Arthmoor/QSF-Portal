@@ -7,7 +7,7 @@
 </div>
 
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt="" /> {cv_conversations}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/report.png" alt=""> {cv_conversations}</div>
 </div>
 
 <div class="article">
@@ -46,7 +46,7 @@
   <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}" title="{conv_topic_posted}: {conv_posted}">{conv_title}</a> {Pages}
   {conv_description}
 <!-- BEGIN: NewPost -->
-  &mdash; <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{conv_unread}" alt="{conv_unread}" /></a>
+  &mdash; <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}&amp;unread=1#unread"><img src="{site}/skins/{skin}/images/icons/topic_unread.png" title="{conv_unread}" alt="{conv_unread}"></a>
 <!-- END: NewPost -->
  </span>
  <span class="starter">
@@ -60,8 +60,8 @@
  <span class="number">{conv_replies}</span>
  <span class="number">{conv_views}</span>
  <span class="topic_last_post">
-  {conv_edited}<br />
-  <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{conv_jump}" alt="{conv_jump}" /></a> &nbsp;
+  {conv_edited}<br>
+  <a href="{site}/index.php?a=conversations&amp;s=viewconvo&amp;id={conv_id}{jump}"><img src="{site}/skins/{skin}/images/icons/goto_last_post.png" title="{conv_jump}" alt="{conv_jump}"></a> &nbsp;
 <!-- BEGIN: LastPosterMember -->
   {conv_by} <a href="{site}/profile/{link_name_last}-{conv_last_poster}/" class="small">{conv_last_poster_name}</a>
 <!-- END: LastPosterMember -->
@@ -82,7 +82,7 @@
 <div class="article">
  <span class="select_align">
   {cv_pages}: {pagelinks}
- </span><br />
+ </span><br>
  <p></p>
 </div>
 <!-- END: Topics -->
@@ -97,19 +97,19 @@
 <form action="{site}/index.php?a=conversations&amp;s=newconvo" method="post" id="mbpost">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/new_message.png" alt="">
   {cv_new_convo}
  </div>
- <span class="field">{cv_to}<br /><span class="tiny">{cv_multiple}</span></span>
- <span class="form"><input name="to" size="60" value="{to}" /></span>
+ <span class="field">{cv_to}<br><span class="tiny">{cv_multiple}</span></span>
+ <span class="form"><input name="to" size="60" value="{to}"></span>
  <p class="line"></p>
 
  <span class="field">{cv_title}</span>
- <span class="form"><input name="title" size="60" value="{title}" /></span>
+ <span class="form"><input name="title" size="60" value="{title}"></span>
  <p class="line"></p>
 
  <span class="field">{cv_description}</span>
- <span class="form"><input name="description" size="60" value="{description}" /></span>
+ <span class="form"><input name="description" size="60" value="{description}"></span>
  <p class="line"></p>
 
  <span class="field">{cv_icon}</span>
@@ -131,15 +131,15 @@
 
  <span class="field">{cv_options}</span>
  <span class="form">
-  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot} /> <label for="parseEmot">{cv_option_emojis}</label><br />
-  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode} /> <label for="parseCode">{cv_option_bbcode}</label>
+  <input type="checkbox" name="parseEmot" value="1" id="parseEmot"{checkEmot}> <label for="parseEmot">{cv_option_emojis}</label><br>
+  <input type="checkbox" name="parseCode" value="1" id="parseCode"{checkCode}> <label for="parseCode">{cv_option_bbcode}</label>
  </span>
  <p class="line"></p>
 <!-- BEGIN: AttachBox -->
- <span class="field">{cv_attach_add}<br /><span class="tiny">{cv_attach_disrupt}</span></span>
+ <span class="field">{cv_attach_add}<br><span class="tiny">{cv_attach_disrupt}</span></span>
  <span class="form">
-  <input type="file" name="attach_upload" /><br />
-  <input type="submit" name="attach" value="{cv_attach_add}" /> <b>{upload_error}</b>
+  <input type="file" name="attach_upload"><br>
+  <input type="submit" name="attach" value="{cv_attach_add}"> <b>{upload_error}</b>
  </span>
  <p class="line"></p>
 
@@ -149,15 +149,15 @@
   <select name="attached">
    {attached}
   </select>
-  <input type="submit" name="detach" value="{post_attach_remove}" />
+  <input type="submit" name="detach" value="{post_attach_remove}">
  </span>
  {attached_data}
  <p class="line"></p>
 <!-- END: Remove -->
 <!-- END: AttachBox -->
- <input type="hidden" name="token" value="{token}" />
- <input name="submit" type="submit" value="{cv_post}" />
- <input type="submit" name="preview" value="{cv_preview}" />
+ <input type="hidden" name="token" value="{token}">
+ <input name="submit" type="submit" value="{cv_post}">
+ <input type="submit" name="preview" value="{cv_preview}">
 </div>
 </form>
 <!-- END: NewConvo -->

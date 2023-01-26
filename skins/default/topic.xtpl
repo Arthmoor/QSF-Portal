@@ -21,7 +21,7 @@
 
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/topic.png" alt="">
   {title_html}
  </div>
  <span class="next_prev_topics">
@@ -53,20 +53,20 @@
  <div class="title">
   <div style="float:left;">
 <!-- BEGIN: NewPost -->
-   <img src="{site}/skins/{skin}/images/icons/post_new.png" alt="{topic_new_post}" />
+   <img src="{site}/skins/{skin}/images/icons/post_new.png" alt="{topic_new_post}">
 <!-- END: NewPost -->
 <!-- BEGIN: NewPostTopic -->
-   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{topic_new_post}" />
+   <img src="{site}/skins/{skin}/images/icons/topic.png" alt="{topic_new_post}">
 <!-- END: NewPostTopic -->
 <!-- BEGIN: PostIcon -->
-   <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px" />
+   <img src="{site}/skins/{skin}/mbicons/{post_icon}" alt="*" style="margin-right:5px">
 <!-- END: PostIcon -->
    <a href="{site}/topic/{topic_title_link}-{topicnum}/&amp;p={post_id}#p{post_id}">#{post_num}</a> {post_time}
    &nbsp;&nbsp;<span class="small_text">{edited}</span>
   </div>
   <div style="text-align:right;">
-   <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{topic_top}" title="{topic_top}" /></a></div>
-   <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{topic_bottom}" title="{topic_bottom}" /></a></div>
+   <div style="float:right;"><a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{topic_top}" title="{topic_top}"></a></div>
+   <div style="float:right;"><a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{topic_bottom}" title="{topic_bottom}"></a></div>
 <!-- BEGIN: CanDelete -->
    <div class="button"><a class="spam" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}&amp;c=spam" title="{topic_delete_spam}">{spam}</a></div>
    <div class="button"><a class="delete" href="{site}/index.php?a=mod&amp;s=del_post&amp;p={post_id}" title="{topic_delete_post}">{delete}</a></div>
@@ -88,12 +88,12 @@
   <option value="3">{topic_split_move} (3)</option>
   <option value="4">{topic_split_move} (4)</option>
  </select>
- <input name="submit" type="submit" value="{topic_split_finish}" />
+ <input name="submit" type="submit" value="{topic_split_finish}">
  <p class="line"></p>
 <!-- END: SplitSelect -->
 <!-- BEGIN: PosterInfoGuest -->
  <span class="avatar">
-  <img src="{site}/skins/{skin}/images/noavatar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/noavatar.png" alt="">
  </span>
  <span class="member_info">
   <strong>{topic_guest}</strong> - ({topic_unreg}) {post_ip}
@@ -107,18 +107,18 @@
 
  <span class="member_info">
 <!-- BEGIN: Online -->
-   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}" />
+   <img src="{site}/skins/{skin}/images/icons/user_online.png" alt="" title="{topic_online}">
 <!-- END: Online -->
 <!-- BEGIN: Offline -->
-   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}" />
+   <img src="{site}/skins/{skin}/images/icons/user_offline.png" alt="" title="{topic_offline}">
 <!-- END: Offline -->
-  <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br />
-  <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt="" /><br />
-  <span class="text">{topic_group}</span>{group_name}<br />
-  <span class="text">{topic_posts}</span>{user_posts}<br />
+  <strong><a href="{site}/profile/{link_name}-{user_id}/">{user_name}</a></strong><br>
+  <strong>{user_title}</strong> <img src="{site}/skins/{skin}/images/{membertitle_icon}" alt=""><br>
+  <span class="text">{topic_group}</span>{group_name}<br>
+  <span class="text">{topic_posts}</span>{user_posts}<br>
   <span class="text">{topic_joined}</span>{user_joined}
 <!-- BEGIN: PostIP -->
-  <br /><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
+  <br><span class="text">IP</span><a href="{site}/index.php?a=mod&amp;s=viewips&amp;t={topicnum}&amp;w={post_author}">{post_ip}</a>
 <!-- END: PostIP -->
  </span>
 
@@ -152,9 +152,9 @@
   <div class="filebox">
    <strong>{topic_attached}</strong>
    <div class="file">
-    <br />{topic_attached_filename} <a href="{site}/topic/attachment/{attach_id}/">{attach_name}</a>
-    <br />{topic_attached_size} {filesize} KB
-    <br />{topic_attached_downloads}: {attach_downloads}
+    <br>{topic_attached_filename} <a href="{site}/topic/attachment/{attach_id}/">{attach_name}</a>
+    <br>{topic_attached_size} {filesize} KB
+    <br>{topic_attached_downloads}: {attach_downloads}
    </div>
   </div>
 <!-- END: Attachment -->
@@ -195,7 +195,7 @@
 <form action="{site}/index.php?a=post&amp;s=reply&amp;t={topicnum}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/comment_add_blured.png" alt="">
   {topic_quickreply}: {title_html}
  </div>
  <span class="head">
@@ -212,14 +212,14 @@
  </span>
  <p class="line"></p>
 
- <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked" /> <label for="parseEmot">{post_option_emojis}</label>
+ <input class="check" type="checkbox" name="parseEmot" value="1" id="parseEmot" checked="checked"> <label for="parseEmot">{post_option_emojis}</label>
  <p class="line"></p>
 
- <input class="check" type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked" /> <label for="parseCode">{post_option_bbcode}</label>
+ <input class="check" type="checkbox" name="parseCode" value="1" id="parseCode" checked="checked"> <label for="parseCode">{post_option_bbcode}</label>
  <p class="line"></p>
 
- <input type="submit" name="submit" value="{reply}" />
- <input type="submit" name="preview" value="{post_preview}" />
+ <input type="submit" name="submit" value="{reply}">
+ <input type="submit" name="preview" value="{post_preview}">
 </div>
 </form>
 </div>
@@ -229,7 +229,7 @@
 <!-- BEGIN: PollResults -->
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="">
   {title_html} ({total_votes} {topic_votes})
  </div>
 <!-- BEGIN: Entry -->
@@ -238,7 +238,7 @@
  </span>
 
  <span class="form">
-  <img src="{site}/skins/{skin}/images/vote_left.png" width="6" height="12" alt="" /><img src="{site}/skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt="" /><img src="{site}/skins/{skin}/images/vote_right.png" width="6" height="12" alt="" /> &nbsp;{percent}% - {votes}
+  <img src="{site}/skins/{skin}/images/vote_left.png" width="6" height="12" alt=""><img src="{site}/skins/{skin}/images/vote_bar.png" width="{width}" height="12" alt=""><img src="{site}/skins/{skin}/images/vote_right.png" width="6" height="12" alt=""> &nbsp;{percent}% - {votes}
  </span>
 
  <p class="list_line"></p>
@@ -250,15 +250,15 @@
 <form action="{site}/index.php?a=post&amp;s=vote&amp;t={t}" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/chart_bar.png" alt="">
   {title_html} (<a href="{site}/index.php?a=post&amp;s=results&amp;t={t}&amp;tname={topic_link_name}">{topic_view}</a>)
  </div>
 <!-- BEGIN: Option -->
- <input class="check" type="radio" name="pollvote" id="pollvote_{i}" value="{i}" />
+ <input class="check" type="radio" name="pollvote" id="pollvote_{i}" value="{i}">
  <label class="poll" for="pollvote_{i}">{option}</label>
  <p class="list_line"></p>
 <!-- END: Option -->
- <input type="submit" name="submitvote" value="{topic_vote}" />
+ <input type="submit" name="submitvote" value="{topic_vote}">
 </div>
 </form>
 <!-- END: Poll -->

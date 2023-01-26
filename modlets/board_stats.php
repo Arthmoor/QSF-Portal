@@ -77,7 +77,7 @@ class board_stats extends modlet
 
 		$birthdays = '';
 		if( $arg == true ) {
-			$birthdays = "<strong>{$this->qsf->lang->board_birthdays}</strong><br />\n" . $this->getuser_birthdays();
+			$birthdays = "<strong>{$this->qsf->lang->board_birthdays}</strong><br>\n" . $this->getuser_birthdays();
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/board_stats.xtpl' );

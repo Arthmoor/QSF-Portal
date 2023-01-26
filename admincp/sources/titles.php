@@ -135,7 +135,7 @@ class titles extends admin
 
 				if( !$this->get['edit'] || ( $this->get['edit'] != $data['membertitle_id'] ) ) {
 					$title_link = $data['membertitle_title'];
-					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" alt=\"{$data['membertitle_icon']}\" />";
+					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" alt=\"{$data['membertitle_icon']}\">";
 					$icon = $data['membertitle_icon'];
 					$posts_link = $data['membertitle_posts'];
 					$edit_link = "<a href=\"{$this->site}/admincp/index.php?a=titles&amp;s=edit&amp;edit={$data['membertitle_id']}\">{$this->lang->edit}</a>";
@@ -147,10 +147,10 @@ class titles extends admin
 					$icon .= $options;
 					$icon .= '</select>';
 
-					$title_link = "<input name=\"new_title\" value=\"{$data['membertitle_title']}\" />";
-					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" id=\"title_preview\" />";
-					$posts_link = "<input name=\"new_posts\" value=\"{$data['membertitle_posts']}\" size=\"8\" />";
-					$edit_link = "<input type=\"submit\" name=\"submit\" value=\"{$this->lang->edit}\" />";
+					$title_link = "<input name=\"new_title\" value=\"{$data['membertitle_title']}\">";
+					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" id=\"title_preview\">";
+					$posts_link = "<input name=\"new_posts\" value=\"{$data['membertitle_posts']}\" size=\"8\">";
+					$edit_link = "<input type=\"submit\" name=\"submit\" value=\"{$this->lang->edit}\">";
 					$delete_link = "<a href=\"{$this->site}/admincp/index.php?a=titles&amp;s=edit&amp;delete={$data['membertitle_id']}\">{$this->lang->delete}</a>";
 				}
 

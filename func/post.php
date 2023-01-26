@@ -278,7 +278,7 @@ class post extends qsfglobal
 					$avatar = $this->htmlwidgets->display_avatar( $this->user );
 
 					if( $this->user['user_signature'] ) {
-						$signature = '.........................<br />' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+						$signature = '.........................<br>' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
 					}
 
 					$joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
@@ -311,12 +311,12 @@ class post extends qsfglobal
 							$ext = strtolower( substr( $file, -4 ) );
 
 							if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-								$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}<br /><img src='{$this->site}/attachments/$md5' alt='{$file}' />";
+								$preview_text .= "<br><br>{$this->lang->topic_attached} {$file}<br><img src='{$this->site}/attachments/$md5' alt='{$file}'>";
 								continue;
 							}
 						}
 
-						$preview_text .= "<br /><br />{$this->lang->topic_attached} {$file}";
+						$preview_text .= "<br><br>{$this->lang->topic_attached} {$file}";
 					}
 				}
 

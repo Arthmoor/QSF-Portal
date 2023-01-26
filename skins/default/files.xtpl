@@ -2,7 +2,7 @@
 <form action="{site}/files/search/" method="post">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/downloads.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/downloads.png" alt="">
   {files}
  </div>
  <a href="{site}/files/upload_rules/">{files_upload_rules}</a>
@@ -15,19 +15,19 @@
   {editcat}
   {delcat}
   {admin}
- <br />
+ <br>
  <script src="{site}/javascript/files.js" async defer></script>
  <select class="select" id="file_jump">
   {filejump}
  </select>
- <input type="text" name="query" />
- <input type="hidden" name="cats" value="all" />
- <input type="hidden" name="sName" value="1" />
- <input type="hidden" name="sDesc" value="1" />
- <input type="hidden" name="sAuth" value="1" />
- <input type="hidden" name="downCount" value="0" />
- <input type="hidden" name="dispCount" value="100" />
- <input type="submit" name="submit" value="{main_search}" />
+ <input type="text" name="query">
+ <input type="hidden" name="cats" value="all">
+ <input type="hidden" name="sName" value="1">
+ <input type="hidden" name="sDesc" value="1">
+ <input type="hidden" name="sAuth" value="1">
+ <input type="hidden" name="downCount" value="0">
+ <input type="hidden" name="dispCount" value="100">
+ <input type="submit" name="submit" value="{main_search}">
 </div>
 </form>
 {file_page}
@@ -40,24 +40,24 @@
 
 <div class="article">
  <div class="title">{file_name}</div>
- <strong>{files_desc}:</strong><br /><br />{file_description}<br /><br />
- <strong>{files_author}:</strong> {file_author} <strong>{files_submitted_by}:</strong> {user_name}<br />
- <strong>{files_size}:</strong> {filesize} <strong>{files_added}:</strong> {date} <strong>{files_downloads}:</strong> {file_downloads}<br />
+ <strong>{files_desc}:</strong><br><br>{file_description}<br><br>
+ <strong>{files_author}:</strong> {file_author} <strong>{files_submitted_by}:</strong> {user_name}<br>
+ <strong>{files_size}:</strong> {filesize} <strong>{files_added}:</strong> {date} <strong>{files_downloads}:</strong> {file_downloads}<br>
 </div>
 
 <form action="{site}/index.php?a=files&amp;s=edit&amp;fid={id}" method="post">
 <div class="article">
  <div class="titlecenter">{files_modify_info}</div>
  <span class="field">{files_name}:</span>
- <span class="form"><input class="input" name="file_name" type="text" size="50" maxlength="50" value="{file_name}" /></span>
+ <span class="form"><input class="input" name="file_name" type="text" size="50" maxlength="50" value="{file_name}"></span>
  <p class="line"></p>
 
  <span class="field">{files_author}:</span>
- <span class="form"><input class="input" name="file_author" type="text" size="30" maxlength="30" value="{file_author}" /></span>
+ <span class="form"><input class="input" name="file_author" type="text" size="30" maxlength="30" value="{file_author}"></span>
  <p class="line"></p>
 
  <span class="field">{files_version}:</span>
- <span class="form"><input class="input" name="file_version" type="text" size="10" maxlength="10" value="{file_fileversion}" /></span>
+ <span class="form"><input class="input" name="file_version" type="text" size="10" maxlength="10" value="{file_fileversion}"></span>
  <p class="line"></p>
 
  <span class="field">{files_cat}:</span>
@@ -76,8 +76,8 @@
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{submit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{submit}">
 </div>
 <!-- END: Edit -->
 
@@ -89,8 +89,8 @@
  <select name="category">
   {list}
  </select>
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{files_move_file}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{files_move_file}">
 </div>
 </form>
 <!-- END: Move -->
@@ -98,10 +98,10 @@
 <!-- BEGIN: ApproveNew -->
 <div class="article">
  <div class="title">{file_name}</div>
- <strong>{files_desc}:</strong><br />{file_description}<br /><br />
+ <strong>{files_desc}:</strong><br>{file_description}<br><br>
  <strong>{files_submitted_by}:</strong> {user_name} <strong>{files_author}:</strong> {file_author}
- <strong>{files_size}:</strong> {filesize} <br />
- <strong>{files_added}:</strong> {date}<br />
+ <strong>{files_size}:</strong> {filesize} <br>
+ <strong>{files_added}:</strong> {date}<br>
 </div>
 
 <div class="article">
@@ -114,10 +114,10 @@
 <!-- BEGIN: ApproveUpdate -->
 <div class="article">
  <div class="title">{file_name} ({files_update})</div>
- <strong>{files_desc}:</strong><br />{file_description}<br /><br />
+ <strong>{files_desc}:</strong><br>{file_description}<br><br>
  <strong>{files_submitted_by}:</strong> {user_name}
- <strong>{files_size}:</strong> {filesize} <br />
- <strong>{files_added}:</strong> {date}<br />
+ <strong>{files_size}:</strong> {filesize} <br>
+ <strong>{files_added}:</strong> {date}<br>
 </div>
 
 <div class="article">
@@ -132,7 +132,7 @@
 <div class="article">
  <div class="title">{files_edit_category}</div>
  <span class="field"><strong>{files_name}:</strong></span>
- <span class="form"><input type="text" name="cat_name" value="{fcat_name}" maxlength="32" /></span>
+ <span class="form"><input type="text" name="cat_name" value="{fcat_name}" maxlength="32"></span>
  <p class="line"></p>
 
  <span class="field"><strong>{files_add_cat_parent}:</strong></span>
@@ -149,8 +149,8 @@
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{edit}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{edit}">
 </div>
 </form>
 <!-- END: EditCategory -->
@@ -163,8 +163,8 @@
  <select name="category">
   {list}
  </select>
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{delete}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{delete}">
 </div>
 </form>
 <!-- END: DeleteCategory -->
@@ -174,7 +174,7 @@
 <div class="article">
  <div class="title">{files_add_cat}</div>
  <span class="field"><strong>{files_add_cat_name}:</strong></span>
- <span class="form"><input type="text" name="cat_name" value="" maxlength="32" /></span>
+ <span class="form"><input type="text" name="cat_name" value="" maxlength="32"></span>
  <p class="line"></p>
 
  <span class="field"><strong>{files_add_cat_parent}:</strong></span>
@@ -190,7 +190,7 @@
  <p class="line"></p>
 
  <span class="field">
-  <b>{files_add_cat_qperms}</b><br />{files_add_cat_qperms2}
+  <b>{files_add_cat_qperms}</b><br>{files_add_cat_qperms2}
  </span>
  <span class="form">
   <select name="sync">
@@ -199,8 +199,8 @@
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{files_add_cat}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{files_add_cat}">
 </div>
 </form>
 <!-- END: AddCategory -->
@@ -209,9 +209,9 @@
 <form action="{site}/index.php?a=files&amp;s=delete&amp;fid={file_id}&amp;cid={cid}" method="post">
 <div class="article">
  <div class="title">{files_delete_file}</div>
- {files_delete_confirm} <strong>{file_name}</strong>?<br />
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{delete}" />
+ {files_delete_confirm} <strong>{file_name}</strong>?<br>
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{delete}">
 </div>
 </form>
 <!-- END: DeleteFile -->
@@ -221,11 +221,11 @@
 <div class="article">
  <div class="title">{files_update_file}: {name}</div>
  <span class="field">{file}:</span>
- <span class="form"><input type="file" name="code_update" /></span>
+ <span class="form"><input type="file" name="code_update"></span>
  <p class="line"></p>
 
  <span class="field">{files_version}:</span>
- <span class="form"><input class="input" type="text" name="file_version" value="{version}" size="10" maxlength="10" /></span>
+ <span class="form"><input class="input" type="text" name="file_version" value="{version}" size="10" maxlength="10"></span>
  <p class="line"></p>
 
  <span class="field">{files_desc}:</span>
@@ -236,8 +236,8 @@
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{files_update_file}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{files_update_file}">
 </div>
 </form>
 <!-- END: UpdateFile -->
@@ -247,15 +247,15 @@
 <div class="article">
  <div class="title">{files_upload}</div>
  <span class="field">{files_name}:</span>
- <span class="form"><input class="input" type="text" name="file_name" value="" size="50" maxlength="50" /></span>
+ <span class="form"><input class="input" type="text" name="file_name" value="" size="50" maxlength="50"></span>
  <p class="line"></p>
 
  <span class="field">{files_author}:</span>
- <span class="form"><input class="input" type="text" name="file_author" value="" size="30" maxlength="30" /></span>
+ <span class="form"><input class="input" type="text" name="file_author" value="" size="30" maxlength="30"></span>
  <p class="line"></p>
 
  <span class="field">{files_version}:</span>
- <span class="form"><input class="input" type="text" name="file_version" value="" size="10" maxlength="10" /></span>
+ <span class="form"><input class="input" type="text" name="file_version" value="" size="10" maxlength="10"></span>
  <p class="line"></p>
 
  <span class="field">{files_cat}:</span>
@@ -267,7 +267,7 @@
  <p class="line"></p>
 
  <span class="field">{file}:</span>
- <span class="form"><input type="file" name="code_upload" /></span>
+ <span class="form"><input type="file" name="code_upload"></span>
  <p class="line"></p>
 
  <span class="field">{files_desc}:</span>
@@ -278,32 +278,32 @@
  </span>
  <p class="line"></p>
 
- <input type="hidden" name="token" value="{token}" />
- <input type="submit" name="submit" value="{files_upload}" />
+ <input type="hidden" name="token" value="{token}">
+ <input type="submit" name="submit" value="{files_upload}">
 </div>
 </form>
 <!-- END: UploadFile -->
 
 <!-- BEGIN: CategoryLink -->
 <span class="file_folder">
- <img src="{site}/skins/{skin}/images/icons/folder.png" height="14" width="14" alt="" />
+ <img src="{site}/skins/{skin}/images/icons/folder.png" height="14" width="14" alt="">
  <a href="{site}/files/category/{id}/">{name}</a> ({count})
 </span>
 <!-- END: CategoryLink -->
 
 <!-- BEGIN: FileCategories -->
 <div class="article">
- {tree}<br /><br />
+ {tree}<br><br>
  {catlinks}
  <div class="clearboth"></div>
 </div>
-<br />
+<br>
 {displaycat}
 <!-- END: FileCategories -->
 
 <!-- BEGIN: FileCategory -->
 <!-- BEGIN: Desc -->
- <div class="article">{desc}</div><br />
+ <div class="article">{desc}</div><br>
 <!-- END: Desc -->
 <div class="article">
 <!-- BEGIN: Top20 -->
@@ -332,7 +332,7 @@
  <span class="file_number">{file_downloads}</span>
  <span class="file_number">{size}</span>
  <span class="file_number">{file_comments}</span>
- <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
+ <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt=""></span>
 
  <p class="list_line"></p>
 <!-- END: Item -->
@@ -363,7 +363,7 @@
  <span class="file_number">{file_downloads}</span>
  <span class="file_number">{size}</span>
  <span class="file_number">{file_comments}</span>
- <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
+ <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt=""></span>
 
  <p class="list_line"></p>
 <!-- END: Item -->
@@ -398,7 +398,7 @@
  <p class="list_line"></p>
 
  <div class="title">{files_desc}</div>
- {file_description}<br /><br />
+ {file_description}<br><br>
 
  <strong>{files_revisions}:</strong> {file_revision}
 </div>
@@ -418,49 +418,49 @@
 <form action="{site}/files/search/" method="post" id="search">
 <div class="article">
  <div class="title">
-  <img src="{site}/skins/{skin}/images/icons/search.png" alt="" />
+  <img src="{site}/skins/{skin}/images/icons/search.png" alt="">
   {files_search}
  </div>
 
  <span class="half">
   <span class="head"><strong>{files_search_basic}</strong></span>
-  {files_search_for}:<br />
-  <input class="input" type="text" style="width:100%" name="query" />
-  <br /><br />
-  {files_search_in}: <a href="javascript:select_all_cats()">{select_all}</a><br />
+  {files_search_for}:<br>
+  <input class="input" type="text" style="width:100%" name="query">
+  <br><br>
+  {files_search_in}: <a href="javascript:select_all_cats()">{select_all}</a><br>
   <select class="input" name="cats[]" size="10" style="width:100%" multiple="multiple">
    {selectItems}
-  </select><br /><br />
+  </select><br><br>
  </span>
 
  <span class="half">
   <span class="head"><strong>{files_search_advanced}</strong></span>
-  {files_search_by}<br />
+  {files_search_by}<br>
   
   {files_name}
-  <input type="checkbox" name="sName" value="1" checked="checked" />
+  <input type="checkbox" name="sName" value="1" checked="checked">
   {files_desc}
-  <input type="checkbox" name="sDesc" value="1" checked="checked" />
+  <input type="checkbox" name="sDesc" value="1" checked="checked">
   {files_author}
-  <input type="checkbox" name="sAuth" value="1" checked="checked" />
+  <input type="checkbox" name="sAuth" value="1" checked="checked">
 
   <p class="line"></p>
 
-  {files_search_display_more} <input name="downCount" type="text" value="0" size="2"> {files_downloads2}<br />
-  {files_search_display_first} <input name="dispCount" type="text" value="100" size="2" /> {files_search_results2}<br />
+  {files_search_display_more} <input name="downCount" type="text" value="0" size="2"> {files_downloads2}<br>
+  {files_search_display_first} <input name="dispCount" type="text" value="100" size="2"> {files_search_results2}<br>
 
   <p class="line"></p>
 
-  <input type="checkbox" name="useRating" value="1" /> {files_search_minimum_rating}
-  1 <input type="radio" name="minRating" value="1" checked="checked" />
-  2 <input type="radio" name="minRating" value="2" />
-  3 <input type="radio" name="minRating" value="3" />
-  4 <input type="radio" name="minRating" value="4" />
-  5 <input type="radio" name="minRating" value="5" />
+  <input type="checkbox" name="useRating" value="1"> {files_search_minimum_rating}
+  1 <input type="radio" name="minRating" value="1" checked="checked">
+  2 <input type="radio" name="minRating" value="2">
+  3 <input type="radio" name="minRating" value="3">
+  4 <input type="radio" name="minRating" value="4">
+  5 <input type="radio" name="minRating" value="5">
 
   <p class="line"></p>
 
-  <input type="checkbox" name="byTime" value="1" /> {files_search3}
+  <input type="checkbox" name="byTime" value="1"> {files_search3}
   <select class="select" name="time_way_select">
    <option value="newer" selected="selected">{files_search_newer}</option>
    <option value="older">{files_search_older}</option>
@@ -479,7 +479,7 @@
  </span>
 
  <p class="line"></p>
- <input type="submit" name="submit" value="{files_search2}" />
+ <input type="submit" name="submit" value="{files_search2}">
 </div>
 </form>
 <!-- END: FileSearch -->
@@ -508,7 +508,7 @@
  <span class="file_number">{file_downloads}</span>
  <span class="file_number">{size}</span>
  <span class="file_number">{file_comments}</span>
- <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt="" /></span>
+ <span class="file_rating"><img src="{site}/skins/{skin}/images/{file_rating}.png" alt=""></span>
  <p class="list_line"></p>
 <!-- END: Item -->
 </div>
@@ -522,7 +522,7 @@
  <span class="form"><textarea name="commentbody" cols="60" rows="6" id="commentbody"></textarea></span>
  <p class="line"></p>
 
- <input name="addcomment" type="submit" value="{files_comment}" />
+ <input name="addcomment" type="submit" value="{files_comment}">
 </div>
 </form>
 <!-- END: AddComment -->
@@ -537,7 +537,7 @@
  <div class="rounded_box">
   {text}
  </div>
- <br />
+ <br>
 <!-- END: Item -->
 </div>
 

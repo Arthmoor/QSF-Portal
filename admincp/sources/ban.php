@@ -67,11 +67,11 @@ class ban extends admin
 			$banned_query = $this->db->query( "SELECT user_name FROM %pusers WHERE user_group=%d ORDER BY user_name ASC", USER_BANNED );
 			while( $user = $this->db->nqfetch( $banned_query ) )
 			{
-				$banned .= htmlspecialchars( $user['user_name'] ) . "<br />";
+				$banned .= htmlspecialchars( $user['user_name'] ) . "<br>";
 			}
 
 			if( !$banned ) {
-				$banned = $this->lang->ban_nomembers . '<br />';
+				$banned = $this->lang->ban_nomembers . '<br>';
 			}
 
 			$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/ban.xtpl' );

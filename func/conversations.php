@@ -209,7 +209,7 @@ class conversations extends qsfglobal
 
 			$icon = $row['conv_icon']; // Store so skin can still access
 			if( $row['conv_icon'] ) {
-            $xtpl->assign( 'conv_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->cv_icon}\" class=\"left\" />" );
+            $xtpl->assign( 'conv_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->cv_icon}\" class=\"left\">" );
 			} else {
             $xtpl->assign( 'conv_icon', null );
          }
@@ -222,7 +222,7 @@ class conversations extends qsfglobal
          $xtpl->assign( 'conv_title', $row['conv_title'] );
 
          if( trim( $row['conv_description'] ) != '' ) {
-            $row['conv_description'] = '<br />&raquo; ' . $this->format( $row['conv_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+            $row['conv_description'] = '<br>&raquo; ' . $this->format( $row['conv_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
          } else {
             $row['conv_description'] = null;
          }
@@ -920,7 +920,7 @@ class conversations extends qsfglobal
 				}
 
 				if( $post['user_signature'] && $this->user['user_view_signatures'] ) {
-					$post['user_signature'] = '.........................<br />' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+					$post['user_signature'] = '.........................<br>' . $this->format( $post['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
 				} else {
 					$post['user_signature'] = null;
 				}
@@ -962,7 +962,7 @@ class conversations extends qsfglobal
 
 						if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
 							$topic_link = $this->htmlwidgets->clean_url( $post['topic_title'] );
-							$post_text .= "<br /><br />{$this->lang->cv_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->cv_attached_downloads})<br /><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}' />";
+							$post_text .= "<br><br>{$this->lang->cv_attached_image} {$file['attach_name']} ({$file['attach_downloads']} {$this->lang->cv_attached_downloads})<br><img src='{$this->site}/attachments/{$file['attach_file']}' alt='{$file['attach_name']}'>";
 							continue;
 						}
 					}
@@ -1078,7 +1078,7 @@ class conversations extends qsfglobal
 
             $signature = null;
             if( $this->user['user_signature'] ) {
-               $signature = '.........................<br />' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+               $signature = '.........................<br>' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
             }
 
             $joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
@@ -1108,12 +1108,12 @@ class conversations extends qsfglobal
                      $ext = strtolower( substr( $file, -4 ) );
 
                      if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-                        $preview_text .= "<br /><br />{$this->lang->cv_attached} {$file}<br /><img src='{$this->site}/attachments/$md5' alt='{$file}' />";
+                        $preview_text .= "<br><br>{$this->lang->cv_attached} {$file}<br><img src='{$this->site}/attachments/$md5' alt='{$file}'>";
                         continue;
                      }
                   }
 
-                  $preview_text .= "<br /><br />{$this->lang->cv_attached} {$file}";
+                  $preview_text .= "<br><br>{$this->lang->cv_attached} {$file}";
                }
             }
 

@@ -2,19 +2,19 @@
 <!-- BEGIN: AddForm -->
 <form action="{site}/admincp/index.php?a=titles&amp;s=add" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/big_star.png" alt="" /> {titles_add}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/big_star.png" alt=""> {titles_add}</div>
  <div align="center" style="width:400px">
   <label class="free" for="new_title">{titles_title}:</label>
-  <input class="free" name="new_title" id="new_title" /><br class="free" />
+  <input class="free" name="new_title" id="new_title"><br class="free">
 
   <label class="free" for="new_icon">{titles_image}:</label>
   <select class="free" name="new_icon" id="new_icon" onchange="document.title_preview.src='../skins/{skin}/images/'+this.options[selectedIndex].value; document.title_preview.style.display='inline'">{image_list}</select>
-  <img class="free" name="title_preview" src="null" style="display:none;" alt="" /><br class="free" />
+  <img class="free" name="title_preview" src="null" style="display:none;" alt=""><br class="free">
 
   <label class="free" for="new_posts">{titles_minpost}:</label>
-  <input class="freec" name="new_posts" id="new_posts" /><br class="free" /><br class="free" />
-  <input type="hidden" name="token" value="{token}" />
-  <input type="submit" name="submit" value="{submit}" />
+  <input class="freec" name="new_posts" id="new_posts"><br class="free"><br class="free">
+  <input type="hidden" name="token" value="{token}">
+  <input type="submit" name="submit" value="{submit}">
  </div>
 </div>
 </form>
@@ -23,7 +23,7 @@
 <!-- BEGIN: EditForm -->
 <form action="{site}/admincp/index.php?a=titles&amp;s=edit&amp;edit={edit}" method="post">
 <div class="article">
- <div class="title"><img src="{site}/skins/{skin}/images/icons/big_star.png" alt="" /> {titles_edit}</div>
+ <div class="title"><img src="{site}/skins/{skin}/images/icons/big_star.png" alt=""> {titles_edit}</div>
  <span class="head">
   <span class="emotion">{titles_title}</span>
   <span class="emotion">{titles_image}</span>

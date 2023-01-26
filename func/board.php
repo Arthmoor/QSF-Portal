@@ -202,7 +202,7 @@ class board extends qsfglobal
 					}
 				} else {
 					if( $forum['forum_description'] && !$forum['forum_redirect'] ) {
-						$forum['forum_description'] = '<br />' . $forum['forum_description'];
+						$forum['forum_description'] = '<br>' . $forum['forum_description'];
 					}
 
 					$forum['forum_topics'] = number_format( $forum['forum_topics'], 0, null, $this->lang->sep_thousands );

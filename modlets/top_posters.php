@@ -51,7 +51,7 @@ class top_posters extends modlet
 			$uPostRef = "<a href=\"{$this->qsf->site}/index.php?a=search&amp;id={$uid}\">";
 
 			$name = $this->qsf->htmlwidgets->clean_url( $user );
-			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($post)</a><br />";
+			$content .= "<a href=\"{$this->qsf->site}/profile/{$name}-{$uid}/\">{$user}</a> {$uPostRef}($post)</a><br>";
 		}
 
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/top_posters.xtpl' );

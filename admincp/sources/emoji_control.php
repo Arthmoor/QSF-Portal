@@ -100,7 +100,7 @@ class emoji_control extends admin
 					$xtpl->assign( 'em_string', $em_string );
 					$xtpl->assign( 'em_image', $em_image );
 
-					$xtpl->assign( 'img_src', "<img src=\"{$this->site}/emojis/{$em_image}\" alt=\"{$em_string}\" />" );
+					$xtpl->assign( 'img_src', "<img src=\"{$this->site}/emojis/{$em_image}\" alt=\"{$em_string}\">" );
 
 					if( $data['emoji_clickable'] == 0 )
 						$xtpl->assign( 'em_clickable', $this->lang->no );
@@ -109,7 +109,7 @@ class emoji_control extends admin
 
 					$xtpl->assign( 'em_edit', "<a href=\"{$this->site}/admincp/index.php?a=emoji_control&amp;s=edit&amp;edit={$em_id}\">{$this->lang->edit}</a>" );
 				} else {
-					$xtpl->assign( 'em_string', "<input name=\"new_string\" value=\"{$em_string}\" class=\"input\" />" );
+					$xtpl->assign( 'em_string', "<input name=\"new_string\" value=\"{$em_string}\" class=\"input\">" );
 
 					$em_list = $this->list_emojis( $em_image );
 					$xtpl->assign( 'em_image', "<select name=\"new_image\" onchange='document.emoji_preview.src=\"../emojis/\"+this.options[selectedIndex].value'>{$em_list}</select>" );
@@ -117,9 +117,9 @@ class emoji_control extends admin
 					$checked = '';
 					if( $data['emoji_clickable'] == 1 )
 						$checked = 'checked';
-					$xtpl->assign( 'em_clickable', "<input type=\"checkbox\" name=\"new_click\" {$checked} />" );
+					$xtpl->assign( 'em_clickable', "<input type=\"checkbox\" name=\"new_click\" {$checked}>" );
 
-					$xtpl->assign( 'img_src', "<img name=\"emoji_preview\" src=\"{$this->site}/emojis/{$em_image}\" alt=\"{$em_string}\" />" );
+					$xtpl->assign( 'img_src', "<img name=\"emoji_preview\" src=\"{$this->site}/emojis/{$em_image}\" alt=\"{$em_string}\">" );
 
 					$xtpl->assign( 'em_edit', "<input type=\"submit\" name=\"submit\" value=\"{$this->lang->edit}\">" );
 				}

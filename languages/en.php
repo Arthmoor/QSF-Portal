@@ -189,7 +189,7 @@ class en
 		$this->board_regfirst = 'You do not have permission to view the board. If you register, you may be able to.';
 		$this->board_replies = 'Replies';
 		$this->board_stats = 'Statistics';
-		$this->board_stats_string = '%s users have registered. Welcome to our newest member, %s.<br />There are %s topics and %s replies for a total of %s posts.';
+		$this->board_stats_string = '%s users have registered. Welcome to our newest member, %s.<br>There are %s topics and %s replies for a total of %s posts.';
 		$this->board_top_page = 'Go to the top of the page';
 		$this->board_topics = 'Topics';
 		$this->board_unread = 'Jump to oldest unread post';
@@ -228,9 +228,9 @@ class en
       $this->cv_cannot_send = 'The conversation cannot be started. The recipients may not exist, or they all have private conversations disabled.';
       $this->cv_cant_reply = 'You do not have permission to reply to this conversation.';
       $this->cv_edited = 'Last edited %s by %s';
-      $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting private conversations: %s';
-      $this->cv_error_invite = 'There were problems inviting some of the people you selected.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting private conversations: %s';
-      $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br /><br />Please try again in a few seconds.';
+      $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br><br>The following members do not exist: %s<br><br>The following members are not accepting private conversations: %s';
+      $this->cv_error_invite = 'There were problems inviting some of the people you selected.<br><br>The following members do not exist: %s<br><br>The following members are not accepting private conversations: %s';
+      $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br><br>Please try again in a few seconds.';
       $this->cv_group = 'Group';
 		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
 		$this->cv_guest_user = 'Guest';
@@ -685,7 +685,7 @@ class en
 		$this->forum_created = 'Forum Created';
 		$this->forum_default_perms = 'Default Permissions';
 		$this->forum_delete = 'Delete Forum';
-		$this->forum_delete_warning = 'Are you sure you want to delete this forum, its topics, and its posts?<br />This action cannot be reversed.';
+		$this->forum_delete_warning = 'Are you sure you want to delete this forum, its topics, and its posts?<br>This action cannot be reversed.';
 		$this->forum_deleted = 'The forum has been deleted.';
 		$this->forum_description = 'Description';
 		$this->forum_edit = 'Edit Forum';
@@ -727,7 +727,7 @@ class en
 		$this->groups_i_confirm = 'I confirm that I want to delete this member group.';
 		$this->groups_name = 'Name';
 		$this->groups_no_action = 'No action was taken.';
-		$this->groups_no_delete = 'There are no custom groups to delete.<br />The core groups are necessary for QSF Portal to function, and cannot be deleted.';
+		$this->groups_no_delete = 'There are no custom groups to delete.<br>The core groups are necessary for QSF Portal to function, and cannot be deleted.';
 		$this->groups_no_group = 'No group was specified.';
 		$this->groups_no_name = 'No group name was given.';
 		$this->groups_only_custom = 'Note: You can only delete custom member groups. The core groups are necessary for QSF Portal to function.';
@@ -747,7 +747,7 @@ class en
 	public function login()
 	{
 		$this->login = 'Login';
-		$this->login_cant_logged = 'You could not be logged in. Check to see that your user name and password are correct.<br /><br />They are case sensitive, so \'UsErNaMe\' is different from \'Username\'. Also, check to see that cookies are enabled in your browser.';
+		$this->login_cant_logged = 'You could not be logged in. Check to see that your user name and password are correct.<br><br>They are case sensitive, so \'UsErNaMe\' is different from \'Username\'. Also, check to see that cookies are enabled in your browser.';
 		$this->login_cookies = 'Cookies must be enabled to login.';
 		$this->login_did_not_request = 'If you do not want to reset your password, please ignore or delete this email.';
 		$this->login_did_request = 'If you did request this, go to the below URL to continue with the password reset:';
@@ -977,7 +977,7 @@ class en
 		$this->mod_ip_view = 'View IP History';
       $this->mod_ip_view_no_user = 'No such user ID exists.';
 		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.';
-		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br />';
+		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br>';
 		$this->mod_label_controls = 'Moderator Controls';
 		$this->mod_label_description = 'Description';
 		$this->mod_label_emoji = 'Convert emojis into images?';
@@ -1164,9 +1164,9 @@ class en
 		$this->pm_delete_selected = 'Delete Selected Messages';
 		$this->pm_deleted = 'Message deleted.';
 		$this->pm_deleted_all = 'Messages deleted.';
-		$this->pm_error = 'There were problems sending your message to some of the recipients.<br /><br />The following members do not exist: %s<br /><br />The following members are not accepting personal messages: %s';
+		$this->pm_error = 'There were problems sending your message to some of the recipients.<br><br>The following members do not exist: %s<br><br>The following members are not accepting personal messages: %s';
 		$this->pm_fields = 'Your message could not be sent. Make sure all required fields are filled in.';
-		$this->pm_flood = 'You have sent a message in the past %s seconds, and you may not send another right now.<br /><br />Please try again in a few seconds.';
+		$this->pm_flood = 'You have sent a message in the past %s seconds, and you may not send another right now.<br><br>Please try again in a few seconds.';
 		$this->pm_folder_inbox = 'Inbox';
 		$this->pm_folder_new = '%s new';
 		$this->pm_folder_sentbox = 'Outbox';
@@ -1229,7 +1229,7 @@ class en
 		$this->post_create_topic = 'Create Topic';
 		$this->post_creating = 'Creating Topic';
 		$this->post_creating_poll = 'Creating Poll';
-		$this->post_flood = 'You have posted in the past %s seconds, and you may not post right now.<br /><br />Please try again in a few seconds.';
+		$this->post_flood = 'You have posted in the past %s seconds, and you may not post right now.<br><br>Please try again in a few seconds.';
 		$this->post_guest = 'Guest';
 		$this->post_icon = 'Post Icon';
 		$this->post_last_five = 'Last Five Posts In Reverse Order';
@@ -1451,7 +1451,7 @@ class en
 		$this->search_day = 'day';
 		$this->search_days = 'days';
 		$this->search_exact_name = 'exact name';
-		$this->search_flood = 'You have searched in the past %s seconds, and you may not search right now.<br /><br />Please try again in a few seconds.';
+		$this->search_flood = 'You have searched in the past %s seconds, and you may not search right now.<br><br>Please try again in a few seconds.';
 		$this->search_for = 'Search For';
 		$this->search_forum = 'Forum';
 		$this->search_group = 'Group';
@@ -1468,7 +1468,7 @@ class en
 		$this->search_mysqldoc = 'MySQL Documentation';
 		$this->search_newer = 'newer';
 		$this->search_no_results = 'Your search returned no results.';
-		$this->search_no_words = 'You must specify some search terms.<br /><br />Each term must be longer than 3 characters, including letters, numbers, apostrophes, and underscores.';
+		$this->search_no_words = 'You must specify some search terms.<br><br>Each term must be longer than 3 characters, including letters, numbers, apostrophes, and underscores.';
 		$this->search_offline = 'This member is currently offline';
 		$this->search_older = 'older';
 		$this->search_online = 'This member is currently online';

@@ -713,10 +713,6 @@ class settings extends admin
 			$xtpl->assign( 'settings_security_xcto', $this->lang->settings_security_xcto );
 			$xtpl->assign( 'settings_security_xcto_detail', $this->lang->settings_security_xcto_detail );
 			$xtpl->assign( 'settings_security_xcto_explain', $this->lang->settings_security_xcto_explain );
-			$xtpl->assign( 'settings_security_ect', $this->lang->settings_security_ect );
-			$xtpl->assign( 'settings_security_ect_detail', $this->lang->settings_security_ect_detail );
-			$xtpl->assign( 'settings_security_ect_max_age', $this->lang->settings_security_ect_max_age );
-			$xtpl->assign( 'settings_security_ect_warning', $this->lang->settings_security_ect_warning );
 			$xtpl->assign( 'settings_security_csp', $this->lang->settings_security_csp );
 			$xtpl->assign( 'settings_security_csp_detail', $this->lang->settings_security_csp_detail );
 			$xtpl->assign( 'settings_security_csp_warning', $this->lang->settings_security_csp_warning );

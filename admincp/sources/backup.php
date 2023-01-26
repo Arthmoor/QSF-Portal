@@ -148,7 +148,7 @@ class backup extends admin
 
 		if ( 0 != $retval )
 		{
-			return $this->message( $this->lang->backup_create, $this->lang->backup_failed . '<br />' . $stderr );
+			return $this->message( $this->lang->backup_create, $this->lang->backup_failed . '<br>' . $stderr );
 		}
 
 		$buf = $stdout . $stderr;
@@ -156,7 +156,7 @@ class backup extends admin
 		$this->chmod( '../packages/' . $filename, 0440 );
 		$backup = sprintf( $this->lang->backup_created, '../packages/' );
 
-		return $this->message( $this->lang->backup_create, "$backup<br />", $filename, "../packages/$filename" );
+		return $this->message( $this->lang->backup_create, "$backup<br>", $filename, "../packages/$filename" );
 	}
 
 	/**
@@ -186,13 +186,13 @@ class backup extends admin
 			if( count( $backups ) <= 0 )
 				return $this->message( $this->lang->backup_restore, $this->lang->backup_none );
 
-			$output = $this->lang->backup_warning . "<br /><br />";
-			$output .= $this->lang->backup_found . ":<br /><br />";
+			$output = $this->lang->backup_warning . "<br><br>";
+			$output .= $this->lang->backup_found . ":<br><br>";
 			$count = 0;
 
 			foreach( $backups as $bkup )
 			{
-				$output .= "<a href='{$this->site}/admincp/index.php?a=backup&amp;s=restore&amp;restore=".$bkup."'>".$bkup."</a><br />";
+				$output .= "<a href='{$this->site}/admincp/index.php?a=backup&amp;s=restore&amp;restore=".$bkup."'>".$bkup."</a><br>";
 			}
 			return $this->message( $this->lang->backup_restore, $output );
 		}
@@ -233,12 +233,12 @@ class backup extends admin
 
 		if( 0 != $retval )
 		{
-			return $this->message( $this->lang->backup_restore, $this->lang->backup_import_fail . '<br />' . $stderr );
+			return $this->message( $this->lang->backup_restore, $this->lang->backup_import_fail . '<br>' . $stderr );
 		}
 
 		$output = $stdout . $stderr;
 
-		return $this->message( $this->lang->backup_restore, $this->lang->backup_restore_done ."<br />". $this->lang->backup_output .": ".$output );
+		return $this->message( $this->lang->backup_restore, $this->lang->backup_restore_done ."<br>". $this->lang->backup_output .": ".$output );
 	}
 }
 ?>

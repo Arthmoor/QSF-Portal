@@ -132,9 +132,9 @@ class qsfglobal
 		while( $e = $this->db->nqfetch( $emojis ) )
 		{
 			if( $e['emoji_clickable'] == 1 )
-				$this->emojis['click_replacement'][$e['emoji_string']] = '<img src="' . $this->site . '/emojis/' . $e['emoji_image'] . '" alt="' . $e['emoji_string'] . '" />';
+				$this->emojis['click_replacement'][$e['emoji_string']] = '<img src="' . $this->site . '/emojis/' . $e['emoji_image'] . '" alt="' . $e['emoji_string'] . '">';
 			else
-				$this->emojis['replacement'][$e['emoji_string']] = '<img src="' . $this->site . '/emojis/' . $e['emoji_image'] . '" alt="' . $e['emoji_string'] . '" />';
+				$this->emojis['replacement'][$e['emoji_string']] = '<img src="' . $this->site . '/emojis/' . $e['emoji_image'] . '" alt="' . $e['emoji_string'] . '">';
 		}
 	}
 
@@ -301,7 +301,7 @@ class qsfglobal
 	 * @param int $posts Member's post count
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.1
-	 * @return array Array of information about the member:<br /><i>string user_title</i> - default member title for that post count<br /><i>int user_level</i> - default member level for that post count
+	 * @return array Array of information about the member:<br><i>string user_title</i> - default member title for that post count<br><i>int user_level</i> - default member level for that post count
 	 **/
 	public function get_level( $posts )
 	{
@@ -486,7 +486,7 @@ class qsfglobal
 	public function message( $title, $message, $link_text = null, $link = null, $redirect = null, $delay = 4 )
 	{
 		if( $link_text ) {
-			$message .= '<br /><br /><a href="' . $link . '">' . $link_text . '</a>';
+			$message .= '<br><br><a href="' . $link . '">' . $link_text . '</a>';
 		}
 
 		if( $redirect ) {
@@ -530,7 +530,7 @@ class qsfglobal
 
 			$title = htmlspecialchars( $this->sets['rss_feed_title'] );
 			$subtitle = htmlspecialchars( $subtitle );
-			$this->feed_links .= "<link rel=\"alternate\" title=\"$title$subtitle\" href=\"$url\" type=\"application/rss+xml\" />\n";
+			$this->feed_links .= "<link rel=\"alternate\" title=\"$title$subtitle\" href=\"$url\" type=\"application/rss+xml\">\n";
 		}
 	}
 
