@@ -199,7 +199,7 @@ class register extends qsfglobal
 				return $this->message( $this->lang->register_reging, $this->lang->register_email_invalid );
 			}
 
-         if( !$this->validator->validate( $email ) ) {
+         if( !$this->validator->validate( $email, TYPE_EMAIL_DOMAIN ) ) {
             return $this->message( $this->lang->register_reging, $this->lang->register_email_domain_invalid );
          }
 
@@ -215,6 +215,11 @@ class register extends qsfglobal
 			if( $eexists ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_email_used );
 			}
+
+         $timezone = $this->post['timezone'];
+         if( !in_array( $timezone, timezone_identifiers_list() ) {
+            $timezone = $this->sets['default_timezone'];
+         }
 
 			$pass = $this->qsfp_password_hash( $pass );
 			$level = $this->get_level( 0 );
@@ -264,7 +269,7 @@ class register extends qsfglobal
 			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emojis, user_view_signatures,
 				user_language, user_email_show, user_pm, user_timezone, user_regip, user_register_email, user_file_perms, user_server_data) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, '%s', '%s', '%s', '', '%s')",
 				$username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
-				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $this->sets['default_timezone'], $this->ip, $email, $svars );
+				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $timezone, $this->ip, $email, $svars );
 
 			$this->sets['last_member'] = $username;
 			$this->sets['last_member_id'] = $this->db->insert_id( 'users', 'user_id' );

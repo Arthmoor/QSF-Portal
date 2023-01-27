@@ -209,9 +209,6 @@ class cp extends qsfglobal
 			$time_list = $this->htmlwidgets->select_timezones( $this->user['user_timezone'] );
 			$xtpl->assign( 'time_list', $time_list );
 
-			$current_time = sprintf( $this->lang->cp_current_time, $this->mbdate( DATE_TIME ) );
-			$xtpl->assign( 'current_time', $current_time );
-
 			$xtpl->assign( 'cp_skin', $this->lang->cp_skin );
 			$skin_list = $this->htmlwidgets->select_skins( $this->user['user_skin'] );
 			$xtpl->assign( 'skin_list', $skin_list );

@@ -59,7 +59,7 @@
  <span class="form">
   <select class="select timezone" name="user_timezone">
    {time_list}
-  </select><br>{current_time}
+  </select>
  </span>
  <p class="line"></p>
 

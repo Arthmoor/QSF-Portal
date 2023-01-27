@@ -424,58 +424,11 @@ class htmlwidgets extends forumutils
 	{
 		$out = null;
 
-		$zones = array(
-			'-12'			=> $this->lang->gmt_nev12,
-			'Pacific/Pago_Pago'	=> $this->lang->gmt_nev11,
-			'America/Adak'		=> $this->lang->gmt_nev10a,
-			'Pacific/Honolulu'	=> $this->lang->gmt_nev10,
-			'America/Anchorage'	=> $this->lang->gmt_nev09,
-			'America/Los_Angeles'	=> $this->lang->gmt_nev08,
-			'America/Denver'	=> $this->lang->gmt_nev07a,
-			'America/Phoenix'	=> $this->lang->gmt_nev07,
-			'America/Chicago'	=> $this->lang->gmt_nev06,
-			'America/New_York'	=> $this->lang->gmt_nev05,
-			'America/Halifax'	=> $this->lang->gmt_nev04,
-			'America/St_Johns'	=> $this->lang->gmt_nev03b,
-			'America/Argentina/Buenos_Aires'	=> $this->lang->gmt_nev03a,
-			'America/Sao_Paulo'	=> $this->lang->gmt_nev03,
-			'America/Noronha'	=> $this->lang->gmt_nev02,
-			'Atlantic/Azores'	=> $this->lang->gmt_nev01,
-			'Europe/London'		=> $this->lang->gmt_00000,
-			'Atlantic/Reykjavik'	=> $this->lang->gmt_0000a,
-			'Europe/Berlin'		=> $this->lang->gmt_pos01,
-			'Europe/Athens'		=> $this->lang->gmt_pos02,
-			'Europe/Moscow'		=> $this->lang->gmt_pos03,
-			'Asia/Tehran'		=> $this->lang->gmt_pos03a,
-			'Asia/Dubai'		=> $this->lang->gmt_pos04,
-			'Asia/Kabul'		=> $this->lang->gmt_pos04a,
-			'Asia/Karachi'		=> $this->lang->gmt_pos05,
-			'Asia/Kolkata'		=> $this->lang->gmt_pos05a,
-			'Asia/Almaty'		=> $this->lang->gmt_pos06,
-			'Asia/Yangon'		=> $this->lang->gmt_pos06a,
-			'Asia/Bangkok'  	=> $this->lang->gmt_pos07,
-			'Asia/Shanghai'		=> $this->lang->gmt_pos08,
-			'Australia/Perth'	=> $this->lang->gmt_pos08a,
-			'Australia/Eucla'	=> $this->lang->gmt_pos08b,
-			'Asia/Tokyo'		=> $this->lang->gmt_pos09,
-			'Australia/Broken_Hill'	=> $this->lang->gmt_pos09a,
-			'Australia/Darwin'	=> $this->lang->gmt_pos09b,
-			'Australia/Brisbane'    => $this->lang->gmt_pos10,
-			'Australia/Hobart'	=> $this->lang->gmt_pos10a,
-			'Australia/Melbourne'	=> $this->lang->gmt_pos10b,
-			'Australia/Lord_Howe'	=> $this->lang->gmt_pos10c,
-			'Pacific/Bougainville'	=> $this->lang->gmt_pos11,
-			'Asia/Kamchatka'	=> $this->lang->gmt_pos12,
-			'Pacific/Auckland'	=> $this->lang->gmt_pos12a,
-			'Pacific/Funafuti'	=> $this->lang->gmt_pos12b,
-			'Pacific/Chatham'	=> $this->lang->gmt_pos12c,
-			'Pacific/Tongatapu'	=> $this->lang->gmt_pos13,
-			'Pacific/Kiritimati'	=> $this->lang->gmt_pos14
-		);
+      $zones = timezone_identifiers_list();
 
 		foreach( $zones as $offset => $zone_name )
 		{
-			$out .= "<option value='$offset'" . ( ( $offset == $zone ) ? ' selected=\'selected\'' : null ) . ">$zone_name</option>\n";
+			$out .= "<option value='$offset'" . ( ( $zone_name == $zone ) ? ' selected=\'selected\'' : null ) . ">$zone_name</option>\n";
 		}
 
 		return $out;
