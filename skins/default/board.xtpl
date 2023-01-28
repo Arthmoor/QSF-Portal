@@ -40,8 +40,8 @@
    <a href="{site}/board/category/{cat_link_name}-{fid}/">{fname}</a>
   </div>
   <div style="text-align:right;">
-   <a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{board_bottom_page}" title="{board_bottom_page}" /></a>
-   <a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{board_top_page}" title="{board_top_page}" /></a>
+   <a href="#bottom"><img src="{site}/skins/{skin}/images/icons/arrow_down.png" alt="{board_bottom_page}" title="{board_bottom_page}"></a>
+   <a href="#top"><img src="{site}/skins/{skin}/images/icons/arrow_up.png" alt="{board_top_page}" title="{board_top_page}"></a>
   </div>
  </div>
 
