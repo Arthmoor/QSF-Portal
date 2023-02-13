@@ -901,7 +901,7 @@ class files extends qsfglobal
 			$userId = $this->user['user_id'];
 
 			$update = $this->db->fetch( "SELECT update_name FROM %pupdates WHERE update_name='%s'", $filename );
-			if( $update['update_name'] == $filename )
+			if( $update && $update['update_name'] == $filename )
 				return $this->message( $this->lang->files_update_file, $this->lang->files_update_exists, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
 
 			if( is_uploaded_file( $this->files['code_update']['tmp_name'] ) )

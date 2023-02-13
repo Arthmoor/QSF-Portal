@@ -1415,7 +1415,7 @@ class en
 		$this->register_name_invalid = 'The name you entered is too long.';
 		$this->register_name_taken = 'That member name is already taken.';
 		$this->register_new_user = 'Desired User Name';
-		$this->register_pass_invalid = 'The password you entered is not valid. Make sure it uses only valid characters such as letters, numbers, dashes, underscores, or spaces, and is at least 5 characters.';
+		$this->register_pass_invalid = 'The password you entered is not valid. Make sure it uses only valid characters such as letters, numbers, dashes, underscores, or spaces, and is at least 8 characters.';
 		$this->register_pass_match = 'The passwords you entered do not match.';
 		$this->register_passwd = 'Password';
 		$this->register_reg = 'Register';

@@ -99,4 +99,5 @@ define( 'TYPE_OBJECT', 7 ); // Variable is an object. Can put in a class in the 
 define( 'TYPE_USERNAME', 8 ); // Check if it's okay to use as a username
 define( 'TYPE_PASSWORD', 9 ); // Check if string is okay to use as a password
 define( 'TYPE_EMAIL', 10 ); // Check if string is a valid email
+define( 'TYPE_EMAIL_DOMAIN', 11 ); // Check if string is a valid email domain
 ?>

@@ -142,7 +142,7 @@ class tool
 
             $response = checkdnsrr( $domainname, 'MX' );
 
-            if( !response )
+            if( !$response )
                $unchanged = false;
             break;
 
