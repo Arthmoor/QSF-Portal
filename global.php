@@ -433,7 +433,14 @@ class qsfglobal
 			$timezone = $this->sets['servertime'];
 
 		$dt = new DateTime();
-		$dt->setTimezone( new DateTimeZone( $timezone ) );
+
+      try {
+         $dt->setTimezone( new DateTimeZone( $timezone ) );
+      }
+      catch( Exception $e ) {
+         error( QUICKSILVER_PHP_ERROR, $e->getMessage(), __FILE__, __LINE__ );
+      }
+
 		$dt->setTimestamp( $time );
 
 		if( is_int( $format ) ) {

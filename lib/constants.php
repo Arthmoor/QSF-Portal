@@ -33,6 +33,7 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 define( 'QUICKSILVER_NOTICE', 3 );
 define( 'QUICKSILVER_ERROR', 5 );
 define( 'QUICKSILVER_QUERY_ERROR', 6 );
+define( 'QUICKSILVER_PHP_ERROR', 7 );
 
 /* Uploading */
 define( 'UPLOAD_TOO_LARGE', 1 );
