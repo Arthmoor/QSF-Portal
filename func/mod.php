@@ -769,11 +769,6 @@ class mod extends qsfglobal
 
 		if( $spam ) {
 			$this->log_action( 'spam_delete', $p );
-
-			// Torch topic along with post if it's the only one.
-			if( $post['topic_replies'] == 0 ) {
-				$this->htmlwidgets->delete_topic( $post['post_topic'] );
-			}
 		} else {
 			$this->log_action( 'post_delete', $p );
 		}

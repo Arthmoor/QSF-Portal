@@ -242,13 +242,19 @@ require_once $set['include_path'] . '/lib/tool.php';
 	 **/
 	public function delete_post( $p )
 	{
-		$result = $this->db->fetch( "SELECT t.topic_forum, t.topic_id, a.attach_file, p.post_author, p.post_count, u.user_posts
+		$result = $this->db->fetch( "SELECT t.topic_forum, t.topic_id, t.topic_replies, a.attach_file, p.post_author, p.post_count, u.user_posts
 			FROM (%ptopics t, %pposts p, %pusers u)
 			LEFT JOIN %pattach a ON p.post_id=a.attach_post
 			WHERE p.post_id=%d AND t.topic_id=p.post_topic AND u.user_id=p.post_author", $p );
 
+      // If the topic has only one post, run this through topic deletion instead. That will remove all the relevant data.
+      if( $result['topic_replies'] == 0 ) {
+         $this->delete_topic( $result['topic_id'] );
+         return;
+      }
+
 		$this->db->query( "UPDATE %pforums SET forum_replies=forum_replies-1 WHERE forum_id=%d", $result['topic_forum'] );
-		$this->db->query( "UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=%d", $result['topic_id'] );
+      $this->db->query( "UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=%d", $result['topic_id'] );
 
 		if( $result['post_count'] ) {
 			$posts = $result['user_posts'] - 1;
