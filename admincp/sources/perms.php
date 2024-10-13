@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Member permissions
+ *
+ * @author Jason Warner <jason@mercuryboard.com>
+ * @since Beta 3.0
+ **/
 class perms extends admin
 {
 	public function execute()

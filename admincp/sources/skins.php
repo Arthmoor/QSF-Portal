@@ -21,8 +21,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
 /**
  * Skin Management
  *

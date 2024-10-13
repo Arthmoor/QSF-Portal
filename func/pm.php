@@ -31,8 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
-
 /**
  * User's system for sending and receiving personal messages
  *

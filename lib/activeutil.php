@@ -35,6 +35,19 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class activeutil extends forumutils
 {
+   private $db;
+   private $get;
+   private $user_id;
+   private $time;
+   private $ip;
+   private $agent;
+   private $site;
+   private $bbcode;
+   private $sets;
+   private $perms;
+   private $user;
+   private $qsf;
+   private $htmlwidgets;
 	private $activeUsers    = array();
 	private $doneUpdate     = false;
 	private $totalGuests    = 0; // Total guest users online
@@ -51,6 +64,7 @@ class activeutil extends forumutils
 	{
 		parent::__construct( $qsf );
 
+      $this->db = &$qsf->db;
 		$this->get = &$qsf->get;
 		$this->user_id = &$qsf->user['user_id'];
 		$this->time = &$qsf->time;
@@ -58,6 +72,12 @@ class activeutil extends forumutils
 		$this->agent = &$qsf->agent;
 		$this->site = &$qsf->site;
 		$this->bbcode = &$qsf->bbcode;
+      $this->sets = &$qsf->sets;
+      $this->perms = &$qsf->perms;
+      $this->user = &$qsf->user;
+      $this->htmlwidgets = &$qsf->htmlwidgets;
+      $this->qsf = &$qsf;
+
 		$this->sessionid = session_id();
 	}
 
@@ -235,8 +255,8 @@ class activeutil extends forumutils
 				$title = ( !$this->perms->auth( 'post_viewip' ) ? null : $user['active_ip'] . ' --- ' ) . htmlspecialchars( $user['active_user_agent'] );
 
 				if( $user['active_id'] != USER_GUEST_UID ) {
-					if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
-						$link_name = $this->qsf->htmlwidgets->clean_url( $user['user_name'] );
+					if( $this->user['user_group'] != USER_GUEST && $this->user['user_group'] != USER_AWAIT ) {
+						$link_name = $this->htmlwidgets->clean_url( $user['user_name'] );
 
 						$link = "href=\"{$this->site}/profile/{$link_name}-{$user['active_id']}/\"";
 					}
@@ -265,14 +285,14 @@ class activeutil extends forumutils
 				{
 				case 'newspost':
 					$topic = $user['topic_forum'];
-					$link_name = $this->qsf->htmlwidgets->clean_url( $user['topic_title'] );
+					$link_name = $this->htmlwidgets->clean_url( $user['topic_title'] );
 					$action_link = "<a href='{$this->site}/newspost/{$link_name}-{$user['active_item']}/'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
 					break;
 
 				case 'topic':
 					if( $this->perms->auth( 'topic_view', $user['topic_forum'] ) || $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$topic = $user['topic_forum'];
-						$link_name = $this->qsf->htmlwidgets->clean_url( $user['topic_title'] );
+						$link_name = $this->htmlwidgets->clean_url( $user['topic_title'] );
 						$action_link = "<a href='{$this->site}/topic/{$link_name}-{$user['active_item']}/'>" . $this->bbcode->format( $user['topic_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '</a>';
 					}
 					break;
@@ -280,13 +300,13 @@ class activeutil extends forumutils
 				case 'forum':
 					if( $this->perms->auth( 'forum_view', $user['topic_forum'] ) ) {
 						$forum = $user['topic_forum'];
-						$link_name = $this->qsf->htmlwidgets->clean_url( $user['forum_name'] );
+						$link_name = $this->htmlwidgets->clean_url( $user['forum_name'] );
 						$action_link = "<a href='{$this->site}/forum/{$link_name}-{$user['active_item']}/'>{$user['forum_name']}</a>";
 					}
 					break;
 
 				case 'profile':
-					$link_name = $this->qsf->htmlwidgets->clean_url( $user['profile_name'] );
+					$link_name = $this->htmlwidgets->clean_url( $user['profile_name'] );
 					$action_link = "<a href='{$this->site}/profile/{$link_name}-{$user['active_item']}/'>{$user['profile_name']}</a>";
 					break;
 				}

@@ -35,6 +35,8 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class users_online extends modlet
 {
+   private $userlist;
+
 	public function __construct( $forumobject )
 	{
 		parent::__construct( $forumobject );

@@ -131,6 +131,7 @@ if( $missing ) {
 	exit( );
 }
 
+require './global.php';
 require './func/' . $module . '.php';
 
 $qsf = new $module( $db );

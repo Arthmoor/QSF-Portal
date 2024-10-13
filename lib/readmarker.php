@@ -38,6 +38,11 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class readmarker extends forumutils
 {
+   private $db;
+   private $sets;
+   private $time;
+   private $cookie;
+   private $day_in_seconds;
 	private $last_read_all = 0;           // Time beyond which all posts are considered read
 	private $guest_mode = true;           // Mark if we're using a cookie or database records
 	private $readmarkers_loaded = false;  // Have we queried the database yet
@@ -57,14 +62,17 @@ class readmarker extends forumutils
 	{
 		parent::__construct( $qsf );
 
+      $this->db = &$qsf->db;
+      $this->cookie = &$qsf->cookie;
+      $this->sets = &$qsf->sets;
 		$this->time = &$qsf->time;
 		$this->day_in_seconds = 86400;
 
 		// To initalise ourselves we need to look at the user
 		if( $qsf->perms->is_guest ) {
 			// With a guest user we can try and read/set a cookie but that's all!
-			if( isset( $qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread'] ) && $qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread'] < ( $this->time - ( $this->day_in_seconds * 2 ) ) ) {
-				$this->last_read_all = intval( $qsf->cookie[$this->sets['cookie_prefix'] . 'lastallread'] );
+			if( isset( $this->cookie[$this->sets['cookie_prefix'] . 'lastallread'] ) && $this->cookie[$this->sets['cookie_prefix'] . 'lastallread'] < ( $this->time - ( $this->day_in_seconds * 2 ) ) ) {
+				$this->last_read_all = intval( $this->cookie[$this->sets['cookie_prefix'] . 'lastallread'] );
 			} else {
 				$this->last_read_all = $this->time - $this->day_in_seconds;
 

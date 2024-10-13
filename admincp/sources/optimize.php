@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Database Optimization
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ **/
 class optimize extends admin
 {
 	public function execute()

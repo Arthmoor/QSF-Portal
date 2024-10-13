@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * File Permissions UI
+ *
+ * @author Roger Libiez, Davion, Asylumius
+ * @since 1.2.2
+ **/
 class file_perms extends admin
 {
 	public function execute()

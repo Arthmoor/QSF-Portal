@@ -35,6 +35,10 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class attachutil
 {
+   private $db;
+   private $sets;
+   private $lang;
+
 	/**
 	 * Constructor
 	 *
@@ -43,7 +47,6 @@ class attachutil
 	public function __construct( &$qsf )
 	{
 		$this->db  = &$qsf->db;
-		$this->pre = &$qsf->pre;
 		$this->sets = &$qsf->sets;
 		$this->lang = &$qsf->lang;
 	}

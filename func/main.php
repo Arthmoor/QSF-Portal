@@ -21,7 +21,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
 require_once $set['include_path'] . '/modlets/users_online.php';
 
 /**

@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Main AdminCP Page
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ **/
 class home extends admin
 {
 	public function execute()

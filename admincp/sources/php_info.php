@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * PHP Info Page
+ *
+ * @author Jason Warner <jason@mercuryboard.com>
+ * @since Beta 3.0
+ **/
 class php_info extends admin
 {
 	public function execute()

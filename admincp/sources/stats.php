@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Statistics
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ */
 class stats extends admin
 {
 	public function execute()

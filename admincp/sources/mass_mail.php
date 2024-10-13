@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Mass Mail Users
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ **/
 class mass_mail extends admin
 {
 	public function execute()

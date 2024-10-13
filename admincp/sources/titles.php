@@ -31,8 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
 class titles extends admin
 {
 	public function execute()

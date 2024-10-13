@@ -33,12 +33,14 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 
 class bbcode
 {
+   private $site;
+   private $censor;
+   private $emojis;
+   private $lang;
+
 	public function __construct( &$module )
 	{
-		$this->settings = &$module->settings; // <---- When you figure out why this works, you let me know. -- Samson
 		$this->site = &$module->site;
-		$this->skin = &$module->skin;
-		$this->db = &$module->db;
 		$this->censor = &$module->censor;
 		$this->emojis = &$module->emojis;
 		$this->lang = &$module->lang;

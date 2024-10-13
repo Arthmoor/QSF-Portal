@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Member Control Panel
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ **/
 class member_control extends admin
 {
 	public function execute()

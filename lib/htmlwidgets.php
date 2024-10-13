@@ -38,6 +38,14 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class htmlwidgets extends forumutils
 {
+   private $db;
+   private $lang;
+   private $site;
+   private $skin;
+   private $user;
+   private $sets;
+   private $perms;
+
 	public $tree    = null;              // The navigational tree @var string
 
 	/**
@@ -49,15 +57,13 @@ class htmlwidgets extends forumutils
 	{
 		parent::__construct( $qsf );
 
+      $this->db = &$qsf->db;
 		$this->lang = &$qsf->lang;
 		$this->site = &$qsf->site;
 		$this->skin = &$qsf->skin;
 		$this->user = &$qsf->user;
 		$this->sets = &$qsf->sets;
-		$this->qsf  = &$qsf;
-
-		// Need the time for timezone stuff
-		$this->time = &$qsf->time;
+      $this->perms = &$qsf->perms;
 	}
 
 	/**

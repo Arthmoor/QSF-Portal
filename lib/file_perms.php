@@ -44,7 +44,6 @@ class file_permissions
 	public $group;
 	public $user;
 	public $db;
-	public $pre;
 	public $is_guest;
 	public $globals = array();
 	public $standard = array(
@@ -70,7 +69,6 @@ class file_permissions
 	public function __construct( &$qsf )
 	{
 		$this->db  = &$qsf->db;
-		$this->pre = &$qsf->pre;
 
 		if( !empty( $qsf->user ) ) {
 			$this->get_perms( $qsf->user['user_group'], $qsf->user['user_id'], ( $qsf->user['user_file_perms'] ? $qsf->user['user_file_perms'] : $qsf->user['group_file_perms'] ) );

@@ -117,6 +117,7 @@ if( $missing ) {
 	exit( );
 }
 
+require './admin.php';
 require './sources/' . $module . '.php';
 
 $db = new $database( $set['db_host'], $set['db_user'], $set['db_pass'], $set['db_name'], $set['db_port'], $set['db_socket'], $set['prefix'] );

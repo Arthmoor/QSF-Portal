@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS') || !defined('QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
+/**
+ * Database Repair
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ **/
 class db_repair extends admin
 {
 	public function execute()

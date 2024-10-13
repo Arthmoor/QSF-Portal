@@ -31,23 +31,15 @@ if( !defined( 'QUICKSILVERFORUMS' ) || !defined( 'QSF_ADMIN' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/admincp/admin.php';
-
 /**
  * Query Interface
  *
  * @author Jason Warner <jason@mercuryboard.com>
  * @since RC1
+ * @return string HTML
  **/
 class query extends admin
 {
-	/**
-	 * Query Interface
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since RC1
-	 * @return string HTML
-	 **/
 	public function execute()
 	{
 		$this->set_title( $this->lang->query );

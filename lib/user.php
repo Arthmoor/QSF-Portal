@@ -39,6 +39,12 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class user
 {
+   public $db;
+   public $cookie;
+   public $sets;
+   public $time;
+   public $ip;
+
 	/**
 	 * Constructor
 	 *
@@ -47,8 +53,6 @@ class user
 	public function __construct( &$qsf )
 	{
 		$this->db      = &$qsf->db;
-		$this->pre     = &$qsf->pre;
-		$this->server  = &$qsf->server;
 		$this->cookie  = &$qsf->cookie;
 		$this->sets    = &$qsf->sets;
 		$this->time    = &$qsf->time;

@@ -21,8 +21,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
-
 /**
  * Downloads file browser
  *

@@ -31,8 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
-
 class spam_control extends qsfglobal
 {
 	public function execute()

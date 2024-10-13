@@ -65,6 +65,10 @@ class qsfglobal
 	public $query;                       // The query string @public string
 	public $time_exec;                   // Execution time for the whole page
 	public $feed_links = null;	          // HTML of RSS link tags
+   public $title;                       // Page Title for Modules
+
+   public $pre;
+   public $user_cl;
 
 	public $attachmentutil;   // Attachment handler @public object
 	public $htmlwidgets;		  // HTML widget handler @public object
@@ -99,6 +103,7 @@ class qsfglobal
 		$this->cookie   = $_COOKIE;
 		$this->files    = $_FILES;
 		$this->query    = htmlspecialchars( $this->query );
+      $this->title    = '';
 	}
 
 	/**

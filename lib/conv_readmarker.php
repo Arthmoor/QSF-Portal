@@ -39,6 +39,10 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class conv_readmarker extends forumutils
 {
+   private $db;
+   private $time;
+   private $day_in_seconds;
+   private $last_cv_read_all;
 	private $last_read_all = 0;           // Time beyond which all conversations are considered read
 	private $readmarkers_loaded = false;  // Have we queried the database yet
 	private $user_id;                     // What user ID should we use for any queries or updates
@@ -55,6 +59,7 @@ class conv_readmarker extends forumutils
 	{
 		parent::__construct( $qsf );
 
+      $this->db = &$qsf->db;
 		$this->time = &$qsf->time;
 		$this->day_in_seconds = 86400;
 
@@ -66,8 +71,8 @@ class conv_readmarker extends forumutils
 		// Get the user ID and the lastallread value and prepare to
 		if( $qsf->user['user_lastallread'] ) {
 			$this->last_cv_read_all = $qsf->user['user_lastcvallread'];
-		} elseif( isset( $qsf->cookie[$this->sets['cookie_prefix'] . 'lastcvallread'] ) ) {
-			$this->last_cv_read_all = intval( $qsf->cookie[$this->sets['cookie_prefix'] . 'lastcvallread'] );
+		} elseif( isset( $qsf->cookie[$qsf->sets['cookie_prefix'] . 'lastcvallread'] ) ) {
+			$this->last_cv_read_all = intval( $qsf->cookie[$qsf->sets['cookie_prefix'] . 'lastcvallread'] );
 		} else {
 			$this->last_cv_read_all = $this->time - $this->day_in_seconds;
 		}

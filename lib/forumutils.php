@@ -37,7 +37,11 @@ require_once $set['include_path'] . '/lib/tool.php';
  **/
  class forumutils extends tool
  {
-	 private $forum_data;	// Array of forum forum_id, forum_parent, forum_tree, forum_name, forum_position
+   private $qsf;
+   private $db;
+   private $sets;
+   private $perms;
+   private $forum_data;	// Array of forum forum_id, forum_parent, forum_tree, forum_name, forum_position
 
 	/**
 	 * Constructor. Initalise the read marker for guest (cookie and session)
@@ -51,7 +55,6 @@ require_once $set['include_path'] . '/lib/tool.php';
 
 		$this->qsf = &$qsf;
 		$this->db  = &$qsf->db;
-		$this->pre = &$qsf->pre;
 		$this->sets = &$qsf->sets;
 		$this->perms = &$qsf->perms;
 

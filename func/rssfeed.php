@@ -27,8 +27,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
-
 /**
  * RSS Feed Generator
  *
@@ -38,6 +36,7 @@ require_once $set['include_path'] . '/global.php';
  **/
 class rssfeed extends qsfglobal
 {
+   private $link;
 	private $cat_data;
 
 	/**

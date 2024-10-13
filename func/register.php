@@ -31,8 +31,6 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
-
 /**
  * Creates a member account
  *
@@ -41,7 +39,7 @@ require_once $set['include_path'] . '/global.php';
  **/
 class register extends qsfglobal
 {
-	public function execute()
+   public function execute()
 	{
 		$this->set_title( $this->lang->register_reging );
 		$this->tree( $this->lang->register_reging );
@@ -217,7 +215,7 @@ class register extends qsfglobal
 			}
 
          $timezone = $this->post['timezone'];
-         if( !in_array( $timezone, timezone_identifiers_list() ) {
+         if( !in_array( $timezone, timezone_identifiers_list() ) ) {
             $timezone = $this->sets['default_timezone'];
          }
 

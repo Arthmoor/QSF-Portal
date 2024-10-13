@@ -31,8 +31,12 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 	die;
 }
 
-require_once $set['include_path'] . '/global.php';
-
+/**
+ * Private Conversations
+ *
+ * @author Roger Libiez
+ * @since 2.0
+ **/
 class conversations extends qsfglobal
 {
 	public function execute()
@@ -174,6 +178,12 @@ class conversations extends qsfglobal
          $cv_starter = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_starter'] );
          $cv_last_poster = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_last_poster'] );
 
+         if( $cv_starter != null && $cv_last_poster['user_id'] != USER_GUEST_UID ) {
+            $cv_starter = $cv_starter['user_name'];
+			} else {
+				$cv_starter = $this->lang->cv_guest_user;
+			}
+
 			$row['conv_title'] = $this->format( $row['conv_title'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
 
 			$row['newpost'] = !$this->conv_readmarker->is_conv_read( $row['conv_id'], $row['conv_edited'] );
@@ -236,8 +246,8 @@ class conversations extends qsfglobal
 
 			if( $row['conv_starter'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'conv_starter', $row['conv_starter'] );
-				$xtpl->assign( 'conv_starter_name', $cv_starter['user_name'] );
-				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $cv_starter['user_name'] ) );
+				$xtpl->assign( 'conv_starter_name', $cv_starter );
+				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $cv_starter ) );
 
 				$xtpl->parse( 'Conversations.Topics.ConvoTopic.ConvoStarterMember' );
 			} else {
