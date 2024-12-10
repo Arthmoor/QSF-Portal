@@ -48,9 +48,8 @@ class files extends qsfglobal
 
 		static $cat_array = false;
 		$this->cat_array = &$cat_array;
-
-                $this->tree( $this->lang->files );
-                $this->set_title( $this->lang->files );
+      $this->tree( $this->lang->files );
+      $this->set_title( $this->lang->files );
 		$dowload = false;
 
 		if( !isset( $this->get['s'] ) ) {
@@ -347,6 +346,7 @@ class files extends qsfglobal
 			$list = $this->get_categories( $file['file_catid'], true );
 			$move_file = sprintf( $this->lang->files_move_category, "<strong>{$file['file_name']}</strong>" );
 
+         $xtpl->assign( 'id', $id );
 			$xtpl->assign( 'files_move_file', $this->lang->files_move_file );
 			$xtpl->assign( 'move_file', $move_file );
 			$xtpl->assign( 'list', $list );
