@@ -1385,9 +1385,9 @@ class files extends qsfglobal
 		    LEFT JOIN %pusers u ON u.user_id=f.file_submitted
 		    WHERE file_id=%d', $fid );
 
-                if( !$query ) {
+      if( !$query ) {
 			header( 'HTTP/1.0 404 Not Found' );
-                        return $this->message( $this->lang->files_view, $this->lang->files_comment_specify );
+         return $this->message( $this->lang->files_view, $this->lang->files_comment_specify );
 		}
 
 		//if( $this->htmlwidgets->clean_url( $query['file_name'] ) != $this->get['fname'] ) {
@@ -1764,7 +1764,13 @@ class files extends qsfglobal
 			return $this->message( $this->lang->files_comment_view, $this->lang->files_comment_specify );
 		}
 
-		$file = $this->show_file( $xtpl, $id );
+		$query = $this->db->fetch( 'SELECT file_id FROM %pfiles WHERE file_id=%d', $id );
+
+      if( !$query ) {
+			header( 'HTTP/1.0 404 Not Found' );
+         return $this->message( $this->lang->files_comment_view, $this->lang->files_comment_specify );
+		}
+
 		$cfile = $this->db->fetch( 'SELECT file_name, file_catid FROM %pfiles WHERE file_id=%d', $id );
 
 		$comments = '';

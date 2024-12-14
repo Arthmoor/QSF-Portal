@@ -2200,7 +2200,7 @@ class en
 		$this->files_comment_empty = 'Your comment does not contain anything.';
 		$this->files_comment_not_permitted = 'You are not permitted to post comments.';
 		$this->files_comment_posted = 'Your comment has been posted.';
-		$this->files_comment_specify = 'No file was specified.';
+		$this->files_comment_specify = 'No file was specified, or the file does not exist.';
 		$this->files_comment_user = 'User Comments For';
 		$this->files_comment_view = 'View Comments';
 		$this->files_comments = 'Comments';
