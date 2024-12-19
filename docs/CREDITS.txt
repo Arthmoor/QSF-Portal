@@ -66,4 +66,4 @@ Many thanks to:
     * The phpMyAdmin team for their fantastic tool, which was heavily used during development
     * Sunsite.dk for free CVS hosting
     * The Webmin team for their awesome administration tool that aided greatly in further development.
-    * Google Code for their free project hosting.
+    * GitHub for their free project hosting.

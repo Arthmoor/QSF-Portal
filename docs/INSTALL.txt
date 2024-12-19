@@ -21,7 +21,7 @@ Up-to-date releases of QSF Portal can be accessed at its [https://github.com/Art
  
 === Copyright and License ===
 
-This document, The QSF Portal Installation Guide, is copyrighted (c) 2006 by
+This document, The QSF Portal Installation Guide, is copyrighted (c) 2006-2025 by
 The QSF Portal Development Team. Permission is granted to copy, distribute and/or modify this
 document under the terms of the GNU Free Documentation License, Version 1.1 or any later version published
 by the Free Software Foundation; with no Invariant Sections, with no Front-Cover Texts, and with
@@ -47,8 +47,7 @@ TODO: Probably will require a separate guide.
 
 === Preparing for Upgrade ===
 
-If you will be upgrading from an earlier version of QSF Portal, from Quicksilver Forums, or from MercuryBoard,
-please hang onto your settings.php file.
+If you will be upgrading from an earlier version of QSF Portal, please hang onto your settings.php file.
 
 It is recommended when uploading files you do not overwrite this file. This is easiest done by making a copy
 temporarily and putting it back after all files are in place. Or deleting the settings.php provided in the new release.

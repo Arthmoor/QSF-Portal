@@ -22,21 +22,14 @@
 
 === Upgrading ===
  Upgrading is done in the same way as installing. Make sure you select the
- "upgrade" option. Before upgrading, make a note of your current MercuryBoard,
- Quicksilver Forums, or QSF Portal installation version: you will need it to correctly
- upgrade.
+ "upgrade" option. Before upgrading, make a note of your current QSF Portal
+ installation version: you will need it to correctly upgrade.
 
- It is recommended you keep old settings.php. Do not overwrite it as you do
- with  other files
-
- Please note on upgrading the upgrade script will set the skin to default
- (previously known as Candy Corn) for all administrators. This is so you can
- still login and access Admin CP. Many templates have been added so any
- skins for Mercuryboard 1.1.4 or older will need significant changes.
- See https://github.com/Arthmoor/QSF-Portal for more information
+ It is recommended you keep the old settings.php. Do not overwrite it as you do
+ with other files.
 
 === Requirements ===
- QSF Portal works with PHP 7.4.0 or higher.
+ QSF Portal works with PHP 8.0.0 or higher.
  MySQL 5.7 or higher (or MariaDB 10.3 or higher) is required.
  QSF Portal should work on any operating system and web server combination.
  It has only been tested on Apache and Nginx though.
