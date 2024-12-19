@@ -689,8 +689,8 @@ class htmlwidgets extends forumutils
 	 **/
 	public function get_gravatar( $avatar )
 	{
-		$gravatar = 'https://secure.gravatar.com/avatar/';
-		$gravatar .= md5( strtolower( trim( $avatar ) ) );
+		$gravatar = 'https://www.gravatar.com/avatar/';
+		$gravatar .= hash( 'sha256', strtolower( trim( $avatar ) ) );
 		$gravatar .= "?s={$this->sets['avatar_width']}&amp;r=pg";
 
 		return $gravatar;
