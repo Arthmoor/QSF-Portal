@@ -121,9 +121,6 @@ class login extends qsfglobal
 				setcookie( $this->sets['cookie_prefix'] . 'user', $user, $options );
 				setcookie( $this->sets['cookie_prefix'] . 'pass', $pass, $options );
 
-				$_SESSION['user'] = $user;
-				$_SESSION['pass'] = md5( $pass . $this->ip );
-
 				return $this->message( $this->lang->login_header, $this->lang->login_logged, $this->lang->continue, str_replace( '&', '&amp;', $this->post['request_uri'] ), $this->post['request_uri'] );
 			} else {
 				return $this->message( $this->lang->login_header, sprintf( $this->lang->login_cant_logged, $this->self ) );
@@ -145,9 +142,6 @@ class login extends qsfglobal
 
          $stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
          $this->db->execute_query( $stmt );
-
-         $result = $stmt->get_result();
-         $data = $this->db->nqfetch( $result );
          $stmt->close();
 
 			$options = array( 'expires' => $this->time - 9000, 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );

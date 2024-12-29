@@ -188,7 +188,6 @@ class cp extends qsfglobal
 
 				setcookie( $this->sets['cookie_prefix'] . 'pass', $hashed_pass, $options );
 
-				$_SESSION['pass'] = md5( $hashed_pass . $this->ip );
 				$this->user['user_password'] = $hashed_pass;
 
 				return $this->message( $this->lang->cp_changing_pass, sprintf( $this->lang->cp_valided, $this->site ) );

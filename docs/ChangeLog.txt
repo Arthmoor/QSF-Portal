@@ -60,6 +60,7 @@ Changes for 2.0:
 * Removed server load checking as there is no real use for it anymore.
 * Removed the unused addons folder support.
 * Removed birthdays from the database as this information is dangerous to store these days.
+* Removed obsolete support for $_SESSION logins as these were not secure.
 
    Bugs addressed:
 

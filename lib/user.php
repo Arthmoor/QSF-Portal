@@ -82,21 +82,6 @@ class user
          $result = $stmt->get_result();
          $user = $this->db->nqfetch( $result );
          $stmt->close();
-		} else if( isset( $_SESSION['user'] ) && isset( $_SESSION['pass'] ) ) {
-			$session_user = intval( $_SESSION['user'] );
-			$session_pass = $_SESSION['pass'];
-
-			$stmt = $this->db->prepare_query( 'SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name, t.membertitle_icon
-				FROM (%pskins s, %pgroups g, %pusers m)
-				LEFT JOIN %pmembertitles t ON t.membertitle_id = m.user_level
-				WHERE m.user_id=? AND MD5(CONCAT(m.user_password,?))=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group LIMIT 1' );
-
-         $stmt->bind_param( 'iss', $session_user, $this->ip, $session_pass );
-         $this->db->execute_query( $stmt );
-
-         $result = $stmt->get_result();
-         $user = $this->db->nqfetch( $result );
-         $stmt->close();
 		} else {
 			$stmt = $this->db->prepare_query( 'SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
 				FROM (%pskins s, %pgroups g, %pusers m)
@@ -131,9 +116,6 @@ class user
 
 			setcookie( $this->sets['cookie_prefix'] . 'user', '', $options );
 			setcookie( $this->sets['cookie_prefix'] . 'pass', '', $options );
-
-			unset( $_SESSION['user'] );
-			unset( $_SESSION['pass'] );
 
 			$user['user_language'] = $this->get_browser_lang( $this->sets['default_lang'] );
 		}
