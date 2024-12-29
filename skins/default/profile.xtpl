@@ -82,7 +82,7 @@
    <p class="line"></p>
    <span class="field">{twitter}</span>
    <span class="form">
-    <span class="smallbutton"><a class="twitter" href="https://twitter.com/{user_twitter}"></a></span>
+    <span class="smallbutton"><a class="twitter" href="{user_twitter}"></a></span>
    </span>
 <!-- END: Twitter -->
 <!-- BEGIN: Facebook -->

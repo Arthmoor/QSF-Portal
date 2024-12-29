@@ -2104,7 +2104,7 @@ class en
 		$this->cp_sub_updated = 'Selected subscriptions have been deleted.';
 		$this->cp_topic_option = 'Topic Options';
 		$this->cp_topics_page = 'Topics per forum page. 0 resets to board default.';
-		$this->cp_twitter = 'Twitter Username';
+		$this->cp_twitter = 'X Username';
 		$this->cp_updated = 'Profile Updated';
 		$this->cp_updated1 = 'Avatar Updated';
 		$this->cp_updated_prefs = 'Preferences Updated';
@@ -2611,7 +2611,7 @@ class en
 		$this->mc_user_email_show = 'Email Is Public';
 		$this->mc_user_facebook = 'Facebook Page';
 		$this->mc_user_group = 'Group';
-		$this->mc_user_twitter = 'Twitter ID';
+		$this->mc_user_twitter = 'X ID';
 		$this->mc_user_homepage = 'Blog or Other Homepage';
 		$this->mc_user_id = 'User ID';
 		$this->mc_user_interests = 'Interests';
@@ -2659,7 +2659,7 @@ class en
 		$this->members_send_pm = 'Send this user a personal message';
 		$this->members_title = 'Title';
 		$this->members_visit_facebook = 'Visit this member\'s Facebook page';
-		$this->members_visit_twitter = 'Visit this member\'s Twitter page';
+		$this->members_visit_twitter = 'Visit this member\'s X page';
 		$this->members_visit_www = 'Visit this member\'s web site';
 		$this->members_www = 'Web Sites';
 	}
@@ -3000,7 +3000,7 @@ class en
 		$this->profile_private = '[ Private ]';
 		$this->profile_profile = 'Profile';
 		$this->profile_signature = 'Signature';
-		$this->profile_twitter = 'Twitter ID';
+		$this->profile_twitter = 'X ID';
 		$this->profile_unkown = '[ Unknown ]';
 		$this->profile_upload_last = 'Last Upload';
 		$this->profile_uploads = 'Uploads';
@@ -3454,7 +3454,7 @@ class en
 		$this->topic_level = 'Member Level';
 		$this->topic_links_email = 'Send an email to %s';
 		$this->topic_links_facebook = 'Visit this member\'s Facebook page';
-		$this->topic_links_twitter = 'Visit %s\'s Twitter page';
+		$this->topic_links_twitter = 'Visit %s\'s X page';
 		$this->topic_links_pm = 'Send a personal messsage to %s';
 		$this->topic_links_web = 'Visit %s\'s web site';
 		$this->topic_lock = 'Lock';
@@ -3588,7 +3588,7 @@ class en
 		$this->time_only = 'g:i a';
 		$this->today = 'Today';
 		$this->topic = 'Topic';
-		$this->twitter = 'Twitter';
+		$this->twitter = 'X';
 		$this->website = 'WWW';
 		$this->yes = 'Yes';
 		$this->yesterday = 'Yesterday';

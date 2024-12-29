@@ -49,7 +49,7 @@ Changes for 2.0:
    Removed:
 
 * Conversion from other ancient forum packages has been removed as they're all woefully obsolete and writing new ones would be a huge time sink for little gain.
-* Removed GTalk/Skype profile fields and replaced them with Twitter ID.
+* Removed GTalk/Skype profile fields and replaced them with X ID.
 * Eliminated Debug Mode as it was only truly useful for the old template system.
 * The unused HELP module has been removed.
 * Removed ICQ, MSN, AIM, and Yahoo from user profile data as those platforms are essentially all dead now.

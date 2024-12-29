@@ -205,7 +205,7 @@ class profile extends qsfglobal
 
 		if( $profile['user_twitter'] ) {
 			$xtpl->assign( 'twitter', $this->lang->twitter );
-			$xtpl->assign( 'user_twitter', $profile['user_twitter'] );
+			$xtpl->assign( 'user_twitter', 'https://x.com/' . $profile['user_twitter'] );
 
 			$xtpl->parse( 'Profile.Twitter' );
 		}

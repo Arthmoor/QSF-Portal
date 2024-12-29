@@ -316,7 +316,7 @@ class newspost extends qsfglobal
 		}
 
 		if( $post['user_twitter'] ) {
-			$xtpl->assign( 'twitter', 'https://twitter.com/' . $post['user_twitter'] );
+			$xtpl->assign( 'twitter', 'https://x.com/' . $post['user_twitter'] );
 
 			$xtpl->parse( 'MemberInfo.Twitter' );
 		}

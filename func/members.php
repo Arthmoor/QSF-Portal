@@ -183,7 +183,7 @@ class members extends qsfglobal
 			}
 
 			if( $member['user_twitter'] ) {
-				$xtpl->assign( 'twitter', 'https://twitter.com/' . $member['user_twitter'] );
+				$xtpl->assign( 'twitter', 'https://x.com/' . $member['user_twitter'] );
 
 				$xtpl->parse( 'Members.User.Twitter' );
 			}
