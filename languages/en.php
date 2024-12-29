@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -246,6 +246,7 @@ class en
    public $board_cant_post;
    public $board_cant_topics;
    public $board_forum;
+   public $board_forums;
    public $board_forum_url;
    public $board_guests;
    public $board_last_post;
@@ -1884,6 +1885,7 @@ class en
 		$this->board_cant_post = 'You cannot reply in this forum.';
 		$this->board_cant_topics = 'You cannot view or create topics in this forum.';
 		$this->board_forum = 'Forum';
+      $this->board_forums = 'Forums';
 		$this->board_forum_url = 'URL Redirect:';
 		$this->board_guests = 'guests';
 		$this->board_last_post = 'Last Post';

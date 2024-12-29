@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -93,9 +93,11 @@ class activeutil extends forumutils
 			$item = $this->_get_item( $action );
 
 			if( $item >= 0 && $item < 4000000000 ) {
-				$this->db->query( "REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) 
-					VALUES (%d, '%s', %d, %d, '%s', '%s', '%s')",
-					$userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid );
+				$stmt = $this->db->prepare_query( 'REPLACE INTO %pactive (active_id, active_action, active_item, active_time, active_ip, active_user_agent, active_session) VALUES( ?, ?, ?, ?, ?, ?, ? )' );
+
+            $stmt->bind_param( 'isiisss', $userid, $action, $item, $this->time, $this->ip, $this->agent, $this->sessionid );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 			}
 
 			$this->purge_unvalidated_users();
@@ -111,7 +113,11 @@ class activeutil extends forumutils
 	 **/
 	public function delete( $userid )
 	{
-		$this->db->query( "DELETE FROM %pactive WHERE active_id=%d", $userid );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pactive WHERE active_id=?' );
+
+      $stmt->bind_param( 'i', $userid );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		if( $userid == $this->user_id )
 			$this->user_id = USER_GUEST_UID;
@@ -183,30 +189,87 @@ class activeutil extends forumutils
 	{
 		$expired = $this->time - ( 86400 * $this->sets['validation_purge_timeout'] ); // Defaults to 10 Days
 
-		$query = $this->db->query( 'SELECT * FROM %pusers WHERE user_group=%d AND user_joined < %d AND user_posts=0 AND user_uploads=0', USER_AWAIT, $expired );
+		$stmt = $this->db->prepare_query( 'SELECT * FROM %pusers WHERE user_group=? AND user_joined < ? AND user_posts=0 AND user_uploads=0' );
+
+      $user_group = intval( USER_AWAIT );
+      $stmt->bind_param( 'ii', $user_group, $expired );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
+
+      $user_query = $this->db->prepare_query( 'DELETE FROM %pusers WHERE user_id=?' );
+      $user_query->bind_param( 'i', $id );
+
+      $log_query = $this->db->prepare_query( 'DELETE FROM %plogs WHERE log_user=?' );
+      $log_query->bind_param( 'i', $id );
+
+      $file_comment_query = $this->db->prepare_query( 'DELETE FROM %pfilecomments WHERE user_id=?' );
+      $file_comment_query->bind_param( 'i', $id );
+
+      $subs_query = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=?' );
+      $subs_query->bind_param( 'i', $id );
+
+      $votes_query = $this->db->prepare_query( 'DELETE FROM %pvotes WHERE vote_user=?' );
+      $votes_query->bind_param( 'i', $id );
+
+      $file_ratings_query = $this->db->prepare_query( 'DELETE FROM %pfileratings WHERE user_id=?' );
+      $file_ratings_query->bind_param( 'i', $id );
+
+      $pmsystem_to_query = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_to=?' );
+      $pmsystem_to_query->bind_param( 'i', $id );
+
+      $pmsystem_from_query = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_from=?' );
+      $pmsystem_from_query->bind_param( 'i', $id );
+
+      $readmark_query = $this->db->prepare_query( 'DELETE FROM %preadmarks WHERE readmark_user=?' );
+      $readmark_query->bind_param( 'i', $id );
+
+      $conv_readmark_query = $this->db->prepare_query( 'DELETE FROM %pconv_readmarks WHERE readmark_user=?' );
+      $conv_readmark_query->bind_param( 'i', $id );
 
 		while( $user = $this->db->nqfetch( $query ) )
 		{
 			$id = $user['user_id'];
 
-			$this->db->query( "DELETE FROM %pusers WHERE user_id=%d", $id );
-			$this->db->query( "DELETE FROM %plogs WHERE log_user=%d", $id );
-			$this->db->query( "DELETE FROM %pfilecomments WHERE user_id=%d", $id );
-			$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d", $id );
-			$this->db->query( "DELETE FROM %pvotes WHERE vote_user=%d", $id );
-			$this->db->query( "DELETE FROM %pfileratings WHERE user_id=%d", $id );
-			$this->db->query( "DELETE FROM %ppmsystem WHERE pm_to=%d", $id );
-			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d", $id );
-         $this->db->query( "DELETE FROM %pconv_readmarks WHERE readmark_user=%d", $id );
+         $this->db->execute_query( $user_query );
 
-			$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
-			$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
+         $this->db->execute_query( $log_query );
 
-			$this->sets['last_member'] = $member['user_name'];
-			$this->sets['last_member_id'] = $member['user_id'];
-			$this->sets['members'] = $counts['count']-1;
-			$this->qsf->write_sets();
+         $this->db->execute_query( $file_comment_query );
+
+         $this->db->execute_query( $subs_query );
+
+         $this->db->execute_query( $votes_query );
+
+         $this->db->execute_query( $file_ratings_query );
+
+         $this->db->execute_query( $pmsystem_to_query );
+
+         $this->db->execute_query( $pmsystem_from_query );
+
+         $this->db->execute_query( $readmark_query );
+
+         $this->db->execute_query( $conv_readmark_query );
 		}
+      $user_query->close();
+      $log_query->close();
+      $file_comment_query->close();
+      $subs_query->close();
+      $votes_query->close();
+      $file_ratings_query->close();
+      $pmsystem_to_query->close();
+      $pmsystem_from_query->close();
+      $readmark_query->close();
+      $conv_readmark_query->close();
+
+		$member = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1' );
+      $counts = $this->db->fetch( 'SELECT COUNT(user_id) AS count FROM %pusers' );
+
+		$this->sets['last_member'] = $member['user_name'];
+		$this->sets['last_member_id'] = $member['user_id'];
+		$this->sets['members'] = $counts['count']-1;
+		$this->qsf->write_sets();
 	}
 
 	/**
@@ -227,13 +290,13 @@ class activeutil extends forumutils
 		// Add self to top of list
 		$this->update( $this->get['a'], $this->user_id );
 
-		$query = $this->db->query( "SELECT a.*, a.active_ip, u.user_name, u.user_active, g.group_format, f.forum_name, t.topic_title, t.topic_forum, u2.user_name AS profile_name
+		$query = $this->db->query( 'SELECT a.*, a.active_ip, u.user_name, u.user_active, g.group_format, f.forum_name, t.topic_title, t.topic_forum, u2.user_name AS profile_name
 			FROM (%pactive a, %pgroups g, %pusers u)
 			LEFT JOIN %pforums f ON f.forum_id=a.active_item
 			LEFT JOIN %ptopics t ON t.topic_id=a.active_item
 			LEFT JOIN %pusers u2 ON u2.user_id=a.active_item
 			WHERE a.active_id = u.user_id AND u.user_group = g.group_id
-			ORDER BY a.active_time DESC" );
+			ORDER BY a.active_time DESC' );
 
 		while( $user = $this->db->nqfetch( $query ) )
 		{
@@ -318,8 +381,18 @@ class activeutil extends forumutils
 		}
 
 		if( $oldusers ) {
-			$this->db->query( "UPDATE %pusers SET user_lastvisit=%d WHERE user_id IN (%s)", $oldtime, implode( ', ', $oldusers ) );
-			$this->db->query( "DELETE FROM %pactive WHERE active_time < %d", $oldtime );
+         $old = implode( ', ', $oldusers );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastvisit=? WHERE user_id IN ( ' . $old . ' )' );
+
+         $stmt->bind_param( 'i',  $oldtime );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'DELETE FROM %pactive WHERE active_time < ?' );
+
+         $stmt->bind_param( 'i',  $oldtime );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 	}
 

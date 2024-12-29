@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -57,7 +57,11 @@ class emoji_control extends admin
 			$delete_id = isset( $this->get['delete'] ) ? intval( $this->get['delete'] ) : 0;
 
 			if( isset( $this->get['delete'] ) ) {
-				$this->db->query( 'DELETE FROM %pemojis WHERE emoji_id=%d', $delete_id );
+				$stmt = $this->db->prepare_query( 'DELETE FROM %pemojis WHERE emoji_id=?' );
+
+            $stmt->bind_param( 'i', $delete_id );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 			}
 
 			if( !isset( $this->get['edit'] ) ) {
@@ -66,8 +70,12 @@ class emoji_control extends admin
 
 			if( isset( $this->post['submit'] ) && ( trim( $this->post['new_string'] ) != '' ) && ( trim( $this->post['new_image'] ) != '' ) ) {
 				$new_click = intval( isset( $this->post['new_click'] ) );
-				$this->db->query( "UPDATE %pemojis SET emoji_string='%s', emoji_image='%s', emoji_clickable=%d WHERE emoji_id=%d",
-					$this->post['new_string'], $this->post['new_image'], $new_click, $edit_id );
+				$stmt = $this->db->prepare_query( 'UPDATE %pemojis SET emoji_string=?, emoji_image=?, emoji_clickable=? WHERE emoji_id=?' );
+
+            $stmt->bind_param( 'ssii', $this->post['new_string'], $this->post['new_image'], $new_click, $edit_id );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
+
 				$this->get['edit'] = null;
 			}
 
@@ -175,7 +183,11 @@ class emoji_control extends admin
 					}
 				}
 
-				$this->db->query( "INSERT INTO %pemojis (emoji_string, emoji_image, emoji_clickable) VALUES ('%s', '%s', %d )", $new_string, $new_image, $new_clickable );
+				$stmt = $this->db->prepare_query( 'INSERT INTO %pemojis ( emoji_string, emoji_image, emoji_clickable ) VALUES( ?, ?, ? )' );
+
+            $stmt->bind_param( 'ssi', $new_string, $new_image, $new_clickable );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 
 				return $this->message( $this->lang->emoji_add, $this->lang->emoji_added, $this->lang->emoji_back, $this->site . '/admincp/index.php?a=emoji_control' );
 			}

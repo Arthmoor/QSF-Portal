@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -66,7 +66,14 @@ class forums extends admin
 			if( isset( $this->get['id'] ) ) {
 				$id = intval( $this->get['id'] );
 
-				$f = $this->db->fetch( "SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect, forum_news FROM %pforums WHERE forum_id=%d", $id );
+				$stmt = $this->db->prepare_query( 'SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect, forum_news FROM %pforums WHERE forum_id=?' );
+
+            $stmt->bind_param( 'i', $id );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $f = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				$this->tree( $this->lang->forum_edit, "{$this->site}/admincp/index.php?a=forums&amp;s=edit" );
 				$this->tree( $f['forum_name'] );
@@ -128,7 +135,14 @@ class forums extends admin
 			if( isset( $this->get['id'] ) ) {
 				$id = intval( $this->get['id'] );
 
-				$f = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id=%d", $id );
+				$stmt = $this->db->prepare_query( 'SELECT forum_name FROM %pforums WHERE forum_id=?' );
+
+            $stmt->bind_param( 'i', $id );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $f = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				$this->tree( $this->lang->forum_delete, "{$this->site}/admincp/index.php?a=forums&amp;s=delete" );
 				$this->tree( $f['forum_name'] );
@@ -320,7 +334,7 @@ class forums extends admin
 		$forumTree = array();
 
 		// Build tree structure of 'id' => 'parent' structure
-		$q = $this->db->query( "SELECT forum_id, forum_parent FROM %pforums ORDER BY forum_parent" );
+		$q = $this->db->query( 'SELECT forum_id, forum_parent FROM %pforums ORDER BY forum_parent' );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
@@ -330,18 +344,23 @@ class forums extends admin
 		}
 
 		// Run through group
-		$q = $this->db->query( "SELECT forum_parent FROM %pforums GROUP BY forum_parent" );
+		$q = $this->db->query( 'SELECT forum_parent FROM %pforums GROUP BY forum_parent' );
+
+      $parent_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_tree=? WHERE forum_parent=?' );
+      $parent_query->bind_param( 'si', $tree, $forum_parent );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
-			if ($f['forum_parent']) {
+         $tree = '';
+
+			if( $f['forum_parent'] ) {
 				$tree = $this->buildTree( $forums, $f['forum_parent'] );
-			} else {
-				$tree = '';
 			}
 
-			$this->db->query( "UPDATE %pforums SET forum_tree='%s' WHERE forum_parent=%d", $tree, $f['forum_parent'] );
+         $forum_parent = $f['forum_parent'];
+         $this->db->execute_query( $parent_query );
 		}
+      $parent_query->close();
 	}
 
 	/**
@@ -355,30 +374,50 @@ class forums extends admin
 		$topic_purge = null;
 
 		$topics = $this->db->query( 'SELECT topic_id, topic_forum FROM %ptopics' );
+
+      $forum_query = $this->db->prepare_query( 'SELECT forum_id FROM %pforums WHERE forum_id=?' );
+      $forum_query->bind_param( 'i', $forum_id );
+
 		while( $topic = $this->db->nqfetch( $topics ) )
 		{
-			$exists = $this->db->fetch( 'SELECT forum_id FROM %pforums WHERE forum_id=%d', $topic['topic_forum'] );
+         $forum_id = $topic['topic_forum'];
+         $this->db->execute_query( $forum_query );
+
+         $result = $forum_query->get_result();
+         $exists = $this->db->nqfetch( $result );
+
 			if( !$exists )
 				$topic_purge .= "topic_id={$topic['topic_id']} OR ";
 		}
+      $forum_query->close();
 
 		if( $topic_purge ) {
-			$topic_purge = substr($topic_purge, 0, -4);
+			$topic_purge = substr( $topic_purge, 0, -4 );
 			$this->db->query( "DELETE FROM %ptopics WHERE $topic_purge" );
 		}
 
 		$post_purge = null;
 
 		$posts = $this->db->query( 'SELECT post_id, post_topic FROM %pposts' );
+
+      $topic_query = $this->db->prepare_query( 'SELECT topic_id FROM %ptopics WHERE topic_id=?' );
+      $topic_query->bind_param( 'i', $topic_id );
+
 		while( $post = $this->db->nqfetch( $posts ) )
 		{
-			$exists2 = $this->db->fetch( 'SELECT topic_id FROM %ptopics WHERE topic_id=%d', $post['post_topic'] );
-			if( !$exists2 )
+         $topic_id = $post['post_topic'];
+         $this->db->execute_query( $topic_query );
+
+         $result = $topic_query->get_result();
+         $exists = $this->db->nqfetch( $result );
+
+			if( !$exists )
 				$post_purge .= "post_id={$post['post_id']} OR ";
 		}
+      $topic_query->close();
 
 		if( $post_purge ) {
-			$post_purge = substr($post_purge, 0, -4);
+			$post_purge = substr( $post_purge, 0, -4 );
 			$this->db->query( "DELETE FROM %pposts WHERE $post_purge" );
 		}
 	}
@@ -399,7 +438,14 @@ class forums extends admin
 
 		$topics = null;
 
-		$query = $this->db->query( "SELECT topic_id FROM %ptopics WHERE topic_forum=%d", $id );
+		$stmt = $this->db->prepare_query( 'SELECT topic_id FROM %ptopics WHERE topic_forum=?' );
+
+      $stmt->bind_param( 'i', $id );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
+
 		while( $data = $this->db->nqfetch( $query ) )
 		{
 			$topics .= "post_topic={$data['topic_id']} OR ";
@@ -407,10 +453,18 @@ class forums extends admin
 
 		if( $topics ) {
 			$this->db->query( "DELETE FROM %pposts WHERE " . substr( $topics, 0, -4 ) );
-			$this->db->query( "DELETE FROM %ptopics WHERE topic_forum=%d", $id );
+			$stmt = $this->db->prepare_query( 'DELETE FROM %ptopics WHERE topic_forum=?' );
+
+         $stmt->bind_param( 'i', $id );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 
-		$this->db->query( "DELETE FROM %pforums WHERE forum_id=%d", $id );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pforums WHERE forum_id=?' );
+
+      $stmt->bind_param( 'i', $id );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$perms = new permissions( $this );
 
@@ -468,11 +522,14 @@ class forums extends admin
 			}
 
 			// Treat this as though we're changing the news forum each time. Set them all to 0 if the news checkbox was ticked.
-			$this->db->query( "UPDATE %pforums SET forum_news=0" );
+			$this->db->query( 'UPDATE %pforums SET forum_news=0' );
 		}
 
-		$this->db->query( "UPDATE %pforums SET forum_parent=%d, forum_name='%s', forum_description='%s', forum_subcat=%d, forum_redirect=%d, forum_news=%d
-			  WHERE forum_id=%d", $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $news, $id );
+		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_parent=?, forum_name=?, forum_description=?, forum_subcat=?, forum_redirect=?, forum_news=? WHERE forum_id=?' );
+
+      $stmt->bind_param( 'issiiii', $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $news, $id );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$this->updateForumTrees();
 
@@ -499,13 +556,13 @@ class forums extends admin
 		$subcat     = isset( $this->post['subcat'] ) ? 1 : 0;
 		$redirect   = isset( $this->post['redirect'] ) ? 1 : 0;
 
-		$this->db->query( "INSERT INTO %pforums
-			(forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat, forum_redirect)
-			VALUES('%s', %d, '%s', '%s', %d, %d, %d)",
-			$this->CreateTree($forums, $this->post['parent']),
-			$this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %pforums ( forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat, forum_redirect ) VALUES( ?, ?, ?, ?, ?, ?, ? )' );
 
-		$id = $this->db->insert_id( 'forums', 'forum_id' );
+      $stmt->bind_param( 'sissiii', $this->CreateTree($forums, $this->post['parent']), $this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$id = $this->db->insert_id();
 
 		$perms = new permissions( $this );
 
@@ -550,11 +607,20 @@ class forums extends admin
 	 **/
 	private function OrderUpdate()
 	{
-		$q = $this->db->query( "SELECT forum_id FROM %pforums ORDER BY forum_id ASC" );
+		$q = $this->db->query( 'SELECT forum_id FROM %pforums ORDER BY forum_id ASC' );
+
+      $forum_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_position=? WHERE forum_id=?' );
+      $forum_query->bind_param( 'ii', $forum_position, $forum_id );
+
 		while( $f = $this->db->nqfetch( $q ) )
 		{
-			$this->db->query( "UPDATE %pforums SET forum_position=%d WHERE forum_id=%d", $this->post["_{$f['forum_id']}"], $f['forum_id'] );
+         $forum_position = $this->post["_{$f['forum_id']}"];
+         $forum_id = $f['forum_id'];
+
+         $this->db->execute_query( $forum_query );
 		}
+      $forum_query->close();
+
 		return $this->lang->forum_ordered;
 	}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -98,8 +98,16 @@ class login extends qsfglobal
 
 			$username = str_replace( '\\', '&#092;', $this->format( $this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
 
-			$data  = $this->db->fetch( "SELECT user_id, user_password FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
-				str_replace( ' ', '', strtolower( $username ) ), USER_GUEST_UID );
+			$stmt = $this->db->prepare_query( "SELECT user_id, user_password FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=? AND user_id != ? LIMIT 1" );
+
+         $uname = str_replace( ' ', '', strtolower( $username ) );
+         $uid = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'si', $uname, $uid );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $data = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( !isset( $data ) )
 				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
@@ -116,7 +124,7 @@ class login extends qsfglobal
 				$_SESSION['user'] = $user;
 				$_SESSION['pass'] = md5( $pass . $this->ip );
 
-				return $this->message( $this->lang->login_header, $this->lang->login_logged, $this->lang->continue, str_replace('&', '&amp;', $this->post['request_uri']), $this->post['request_uri'] );
+				return $this->message( $this->lang->login_header, $this->lang->login_logged, $this->lang->continue, str_replace( '&', '&amp;', $this->post['request_uri'] ), $this->post['request_uri'] );
 			} else {
 				return $this->message( $this->lang->login_header, sprintf( $this->lang->login_cant_logged, $this->self ) );
 			}
@@ -133,7 +141,14 @@ class login extends qsfglobal
 		} else {
 			$this->activeutil->delete( $this->user['user_id'] );
 
-			$this->db->query( "UPDATE %pusers SET user_lastvisit=%d WHERE user_id=%d", $this->time, $this->user['user_id'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastvisit=? WHERE user_id=?' );
+
+         $stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $data = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			$options = array( 'expires' => $this->time - 9000, 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
 
@@ -168,9 +183,16 @@ class login extends qsfglobal
 			$xtpl->parse( 'LoginPass' );
 			return $xtpl->text( 'LoginPass' );
 		} else {
-			$target = $this->db->fetch( "SELECT user_id, user_name, user_password, user_joined, user_email
-				FROM %pusers WHERE user_name='%s' AND user_id != %d LIMIT 1",
-				$this->format( $this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR), USER_GUEST_UID );
+			$stmt = $this->db->prepare_query( 'SELECT user_id, user_name, user_password, user_joined, user_email FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
+
+         $uname = $this->format( $this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
+         $uid = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'si', $uname, $uid );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $target = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( !isset( $target['user_id'] ) ) {
 				return $this->message( $this->lang->login_pass_reset, $this->lang->login_pass_no_id );
@@ -204,9 +226,17 @@ class login extends qsfglobal
 			$this->get['e'] = null;
 		}
 
-		$target = $this->db->fetch( "SELECT user_id, user_name, user_email FROM %pusers
-			WHERE MD5(CONCAT(user_email, user_name, user_password, user_joined))='%s' AND user_id != %d LIMIT 1",
-			 preg_replace( '/[^a-z0-9]/', '', $this->get['e'] ), USER_GUEST_UID );
+		$stmt = $this->db->prepare_query( 'SELECT user_id, user_name, user_email FROM %pusers
+			WHERE MD5(CONCAT(user_email, user_name, user_password, user_joined))=? AND user_id != ? LIMIT 1' );
+
+      $validate = preg_replace( '/[^a-z0-9]/', '', $this->get['e'] );
+      $uid = intval( USER_GUEST_UID );
+      $stmt->bind_param( 'si', $validate, $uid );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $target = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !isset( $target['user_id'] ) ) {
 			return $this->message( $this->lang->login_pass_reset, $this->lang->login_pass_no_id );
@@ -228,7 +258,11 @@ class login extends qsfglobal
 		$mailer->setServer( $this->sets['mailserver'] );
 		$mailer->doSend();
 
-		$this->db->query( "UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $dbpass, $target['user_id'] );
+		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_password=? WHERE user_id=?' );
+
+      $stmt->bind_param( 'si', $dbpass, $target['user_id'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		return $this->message( $this->lang->login_pass_reset, $this->lang->login_pass_sent );
 	}

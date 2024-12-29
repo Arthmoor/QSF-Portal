@@ -2,7 +2,7 @@
 # Blocking things the bots don't need to know about can help improve content indexing.
 # Some links such as the page navigation links for multi-page topics don't need indexing because they'll duplicate content.
 #
-# This is a less detailed file. Links to places lime Private messaging are left out on purpose.
+# This is a less detailed file. Links to places like Private messaging are left out on purpose.
 # Some search bots use robots.txt as a means of looking for exactly what you don't want them to find!
 # Code changes in the PHP and skins don't list the links to begin with now, so there's less chance of them being found.
 # An alternative version of the file which is more aggresive and specific is available should you need it.

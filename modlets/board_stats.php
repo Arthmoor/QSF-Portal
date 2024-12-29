@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -142,8 +142,17 @@ class board_stats extends modlet
 	private function getuser_birthdays()
 	{
 		$links  = array();
-		$members  = $this->qsf->db->query( "SELECT user_id, user_name, user_birthday FROM %pusers WHERE user_birthday LIKE '%%%s%%'", $this->qsf->mbdate( '%-m-d' ) );
-		$count    = $this->qsf->db->num_rows( $members );
+		$stmt = $this->qsf->db->prepare_query( 'SELECT user_id, user_name, user_birthday FROM %pusers WHERE user_birthday LIKE ?' );
+
+      $mbdate = $this->qsf->mbdate( '%-m-d' );
+      $key = "%{$mbdate}%";
+      $stmt->bind_param( 's', $key );
+      $this->qsf->db->execute_query( $stmt );
+
+      $members = $stmt->get_result();
+      $stmt->close();
+
+		$count = $this->qsf->db->num_rows( $members );
 
 		if( !$count ) {
 			return $this->qsf->lang->board_nobday;

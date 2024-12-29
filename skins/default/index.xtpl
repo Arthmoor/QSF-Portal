@@ -115,12 +115,10 @@
   </div>
 
   <footer>
-   {powered_by} <a href="https://github.com/Arthmoor/QSF-Portal">{qsf_name}</a> &copy; 2006-2019 The {qsf_name} Development Team<br>
+   {powered_by} <a href="https://github.com/Arthmoor/QSF-Portal">{qsf_name}</a> &copy; 2006-2025 The {qsf_name} Development Team<br>
    {based_on} <a href="https://github.com/Arthmoor/Quicksilver-Forums">Quicksilver Forums</a> &copy; 2005-2011 The Quicksilver Forums Development Team<br>
    {based_on} <a href="https://github.com/markelliot/MercuryBoard">MercuryBoard</a> &copy; 2001-2009 The Mercury Development Team<br>
    Ashlander 4 by Roger Libiez [<a href="https://www.afkmods.com">Arthmoor</a>]. {based_on} HForumv3.1 skin &copy; 2006-2007 <a href="https://www.syridium.com/">Syridium SC</a>
-   <br>100% Valid &lsaquo;&rsaquo; <a href="https://validator.w3.org/check?uri=referer">HTML5</a> <a href="https://jigsaw.w3.org/css-validator/check/referer">CSS</a>
-   Best viewed at 1024x768 or better resolution.
    <br>{servertime}
   </footer>
  </body>

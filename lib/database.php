@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -39,7 +39,7 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 class database
 {
 	public $connection = false; // Connection link identifier @var resource
-	public $querytime  = 0;     // Time spent executing queries @var int
+	public $query_time  = 0;    // Time spent executing queries @var int
 	public $querycount = 0;     // Number of executed queries @var int
 	public $get;                // Alias for $_GET @var array
 	public $post;               // Alias for $_POST @var array
@@ -49,6 +49,7 @@ class database
 	public $db;                 // Database Name @var string
 	public $port = 3306;        // Database Port @var int
 	public $prefix = 'qsfp_';   // Database Table Prefix @var string
+	public $queries_exec = 0;
 
 	/**
 	 * Constructor; sets up variables and connection
@@ -81,7 +82,7 @@ class database
 	 * @param string $table Table name - unused
 	 * @return int Insert ID
 	 **/
-	public function insert_id( $table, $column )
+	public function insert_id( )
 	{
 		return null;
 	}
@@ -215,7 +216,7 @@ class database
 		}
 
 		$query = array_shift( $args );
-		$query = str_replace('%p', $this->prefix, $query);
+		$query = str_replace( '%p', $this->prefix, $query );
 
 		for( $i = 0; $i < count( $args ); $i++ ) {
 			$args[$i] = $this->escape( $args[$i] );
@@ -223,6 +224,16 @@ class database
 		array_unshift( $args, $query );
 
 		return call_user_func_array( 'sprintf', $args );
+	}
+
+	public function prepare_query( $query )
+	{
+		return false;
+	}
+
+	public function execute_query( $stmt )
+	{
+		return false;
 	}
 }
 ?>

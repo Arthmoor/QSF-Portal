@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -71,34 +71,61 @@ class user
 			$cookie_user = intval( $this->cookie[$this->sets['cookie_prefix'] . 'user'] );
 			$cookie_pass = $this->cookie[$this->sets['cookie_prefix'] . 'pass'];
 
-			$user = $this->db->fetch( "SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name, t.membertitle_icon
+			$stmt = $this->db->prepare_query( 'SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name, t.membertitle_icon
 				FROM (%pskins s, %pgroups g, %pusers m)
 				LEFT JOIN %pmembertitles t ON t.membertitle_id = m.user_level
-				WHERE m.user_id=%d AND m.user_password='%s' AND s.skin_id=m.user_skin AND g.group_id=m.user_group
-				LIMIT 1", $cookie_user, $cookie_pass );
+				WHERE m.user_id=? AND m.user_password=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group LIMIT 1' );
+
+         $stmt->bind_param( 'is', $cookie_user, $cookie_pass );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $user = $this->db->nqfetch( $result );
+         $stmt->close();
 		} else if( isset( $_SESSION['user'] ) && isset( $_SESSION['pass'] ) ) {
 			$session_user = intval( $_SESSION['user'] );
 			$session_pass = $_SESSION['pass'];
 
-			$user = $this->db->fetch( "SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name, t.membertitle_icon
+			$stmt = $this->db->prepare_query( 'SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name, t.membertitle_icon
 				FROM (%pskins s, %pgroups g, %pusers m)
 				LEFT JOIN %pmembertitles t ON t.membertitle_id = m.user_level
-				WHERE m.user_id=%d AND MD5(CONCAT(m.user_password,'%s'))='%s' AND s.skin_id=m.user_skin AND g.group_id=m.user_group
-				LIMIT 1", $session_user, $this->ip, $session_pass );
+				WHERE m.user_id=? AND MD5(CONCAT(m.user_password,?))=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group LIMIT 1' );
+
+         $stmt->bind_param( 'iss', $session_user, $this->ip, $session_pass );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $user = $this->db->nqfetch( $result );
+         $stmt->close();
 		} else {
-			$user = $this->db->fetch( "SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
+			$stmt = $this->db->prepare_query( 'SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
 				FROM (%pskins s, %pgroups g, %pusers m)
-				WHERE m.user_id=%d AND s.skin_id=m.user_skin AND g.group_id=m.user_group
-				LIMIT 1", USER_GUEST_UID );
+				WHERE m.user_id=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group LIMIT 1' );
+
+         $uid = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'i', $uid );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $user = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			$user['user_language'] = $this->get_browser_lang( $this->sets['default_lang'] );
 		}
 
 		if( !isset( $user['user_id'] ) ) {
-			$user = $this->db->fetch( "SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
+			$stmt = $this->db->prepare_query( "SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
 				FROM (%pskins s, %pgroups g, %pusers m)
-				WHERE m.user_id=%d AND s.skin_id=m.user_skin AND g.group_id=m.user_group
+				WHERE m.user_id=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group
 				LIMIT 1", USER_GUEST_UID );
+
+         $uid = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'i', $uid );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $user = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			$options = array( 'expires' => $this->time - 9000, 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
 
@@ -114,7 +141,11 @@ class user
 		if( !$this->is_skin_valid( $user['user_skin'] ) ) {
 			$user['user_skin'] = 1;
 
-			$this->db->query( "UPDATE %pusers SET user_skin=1 WHERE user_id=%d", $user['user_id'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_skin=1 WHERE user_id=?' );
+
+         $stmt->bind_param( 'i', $user['user_id'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 
 		return $user;
@@ -131,7 +162,14 @@ class user
 	 **/
 	private function is_skin_valid( $skin )
 	{
-		$check_skin = $this->db->fetch( "SELECT * FROM %pskins WHERE skin_id=%d", $skin );
+		$stmt = $this->db->prepare_query( 'SELECT * FROM %pskins WHERE skin_id=?' );
+
+      $stmt->bind_param( 'i', $skin );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $check_skin = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$check_skin )
 			return false;
@@ -142,7 +180,7 @@ class user
 		return true;
 	}
 
-   	/**
+  	/**
 	 * Look at the information the browser has sent and try and find a language
 	 *
 	 * @param $deflang Fallback language to use

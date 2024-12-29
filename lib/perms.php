@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -55,9 +55,9 @@ class permissions
 		'edit_avatar' => false,
 		'edit_profile' => false,
 		'edit_sig' => false,
-                'page_edit' => false, // Added for CMS
-                'page_create' => false, // Added for CMS
-                'page_delete' => false, // Added for CMS
+      'page_edit' => false, // Added for CMS
+      'page_create' => false, // Added for CMS
+      'page_delete' => false, // Added for CMS
 		'topic_global' => false,
 		'forum_view' => false,
 		'pm_noflood' => false,
@@ -108,9 +108,9 @@ class permissions
 		'edit_avatar' => true,
 		'edit_profile' => true,
 		'edit_sig' => true,
-                'page_edit' => true, // Added for CMS
-                'page_create' => true, // Added for CMS
-                'page_delete' => true, // Added for CMS
+      'page_edit' => true, // Added for CMS
+      'page_create' => true, // Added for CMS
+      'page_delete' => true, // Added for CMS
 		'pm_noflood' => true,
 		'search_noflood' => true,
 		'topic_global' => true
@@ -144,10 +144,26 @@ class permissions
 	{
 		if( !$perms ) {
 			if( $group != -1 ) {
-				$data  = $this->db->fetch( "SELECT group_perms FROM %pgroups WHERE group_id=%d", $group );
+				$stmt  = $this->db->prepare_query( 'SELECT group_perms FROM %pgroups WHERE group_id=?' );
+
+            $stmt->bind_param( 'i', $group );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $data = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$perms = $data['group_perms'];
 			} else {
-				$data  = $this->db->fetch( "SELECT user_perms, user_group FROM %pusers WHERE user_id=%d", $user );
+				$stmt  = $this->db->prepare_query( 'SELECT user_perms, user_group FROM %pusers WHERE user_id=?' );
+
+            $stmt->bind_param( 'i', $user );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $data = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$perms = $data['user_perms'];
 				$group = $data['user_group'];
 			}
@@ -195,7 +211,7 @@ class permissions
 		$cube = $this->standard;
 		$forums = array();
 
-		$query = $this->db->query( "SELECT forum_id FROM %pforums ORDER BY forum_id" );
+		$query = $this->db->query( 'SELECT forum_id FROM %pforums ORDER BY forum_id' );
 
 		while( $forum = $this->db->nqfetch( $query ) )
 		{
@@ -342,7 +358,7 @@ class permissions
 			if( $users ) {
 				$query = $this->db->query( "SELECT user_id, user_perms FROM %pusers WHERE user_perms != ''" );
 			} else {
-				$query = $this->db->query( "SELECT group_id, group_perms FROM %pgroups" );
+				$query = $this->db->query( 'SELECT group_id, group_perms FROM %pgroups' );
 			}
 
 			while( $group = $this->db->nqfetch( $query ) )
@@ -409,9 +425,17 @@ class permissions
 		}
 
 		if( $this->user == -1 ) {
-			$this->db->query( "UPDATE %pgroups SET group_perms='%s' WHERE group_id=%d", $serialized, $this->group );
+			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=?' );
+
+         $stmt->bind_param( 'si', $serialized, $this->group );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		} else {
-			$this->db->query( "UPDATE %pusers SET user_perms='%s' WHERE user_id=%d", $serialized, $this->user );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_perms=? WHERE user_id=?' );
+
+         $stmt->bind_param( 'si', $serialized, $this->user );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 	}
 }

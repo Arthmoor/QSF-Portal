@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -178,7 +178,11 @@ class cp extends qsfglobal
 
 			case PASS_SUCCESS:
 				$hashed_pass = $this->qsfp_password_hash( $this->post['passA'] );
-				$this->db->query( "UPDATE %pusers SET user_password='%s' WHERE user_id=%d", $hashed_pass, $this->user['user_id'] );
+				$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_password=? WHERE user_id=?' );
+
+            $stmt->bind_param( 'si', $hashed_pass, $this->user['user_id'] );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 
 				$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
 
@@ -314,14 +318,16 @@ class cp extends qsfglobal
 
 			$this->post['user_language'] = preg_replace( '/[^a-zA-Z0-9\-]/', '', $this->post['user_language'] );
 
-			$this->db->query( "UPDATE %pusers SET user_view_avatars=%d, user_view_signatures=%d, user_view_emojis=%d,
-				  user_email_show=%d, user_email_form=%d, user_active=%d, user_pm=%d, user_pm_mail=%d,
-				  user_timezone='%s', user_skin='%s', user_language='%s',
-				  user_topics_page=%d, user_posts_page=%d
-				WHERE user_id=%d",
-				$view_avatars, $view_sigs, $view_emojis, $show_email, $email_form, $active,
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_view_avatars=?, user_view_signatures=?, user_view_emojis=?,
+				  user_email_show=?, user_email_form=?, user_active=?, user_pm=?, user_pm_mail=?,
+				  user_timezone=?, user_skin=?, user_language=?, user_topics_page=?, user_posts_page=?
+				WHERE user_id=?' );
+
+         $stmt->bind_param( 'iiiiiiiisssiii', $view_avatars, $view_sigs, $view_emojis, $show_email, $email_form, $active,
 				$user_pm, $pm_mail, $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
-				$topic_per_page, $posts_per_page, $this->user['user_id'] );
+				$topic_per_page, $posts_per_page, $this->user['user_id']  );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			return $this->message( $this->lang->cp_updated_prefs, $this->lang->cp_been_updated_prefs );
 		}
@@ -387,8 +393,16 @@ class cp extends qsfglobal
 
 			$this->post['Newuser_name'] = str_replace( '\\', '&#092;', $this->format( $this->post['Newuser_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
 
-			if( $this->db->fetch( "SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d",
-				$this->post['Newuser_name'], $this->user['user_id'] ) )
+         $stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=? AND user_id != ?" );
+
+         $stmt->bind_param( 'si', $this->post['Newuser_name'], $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $uid = $this->db->nqfetch( $result );
+         $stmt->close();
+
+			if( $uid )
 			{
 				return $this->message( $this->lang->cp_err_updating, $this->lang->cp_user_exists );
 			}
@@ -416,14 +430,22 @@ class cp extends qsfglobal
 				}
 			}
 
-			if( $this->db->fetch( "SELECT user_email FROM %pusers WHERE user_email='%s' AND user_id !=%d",
-				 $this->post['user_email'], $this->user['user_id'] ) )
+         $stmt = $this->db->prepare_query( 'SELECT user_email FROM %pusers WHERE user_email=? AND user_id != ?' );
+
+         $stmt->bind_param( 'si', $this->post['user_email'], $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $uemail = $this->db->nqfetch( $result );
+         $stmt->close();
+
+			if( $uemail )
 			{
 				return $this->message( $this->lang->cp_err_updating, $this->lang->cp_already_member );
 			}
 
 			if( !empty( $this->post['user_homepage'] ) && ( ( substr( $this->post['user_homepage'], 0, 7 ) != 'http://' ) && ( substr( $this->post['user_homepage'], 0, 8 ) != 'https://' ) ) ) {
-				$this->post['user_homepage'] = 'http://' . $this->post['user_homepage'];
+				$this->post['user_homepage'] = 'https://' . $this->post['user_homepage'];
 			}
 
 			if( !empty( $this->post['user_facebook'] ) && ( ( substr( $this->post['user_facebook'], 0, 7 ) != 'http://' ) && ( substr( $this->post['user_facebook'], 0, 8 ) != 'https://' ) ) ) {
@@ -496,7 +518,7 @@ class cp extends qsfglobal
 				$twitter   = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
 
 			if( $this->perms->auth( 'is_admin' ) ) {
-				$query = $this->db->query( "SELECT membertitle_title FROM %pmembertitles" );
+				$query = $this->db->query( 'SELECT membertitle_title FROM %pmembertitles' );
 
 				if( !isset( $this->post['user_title'] ) || $this->post['user_title'] == '' ) {
 					$usertitle = '';
@@ -521,17 +543,22 @@ class cp extends qsfglobal
 				$custom_title = $this->user['user_title_custom'];
 			}
 
-			$this->db->query( "UPDATE %pusers SET
-				  user_email='%s', user_birthday='%s', user_homepage='%s', user_facebook='%s', user_location ='%s',
-				  user_interests='%s', user_twitter='%s', user_title='%s', user_title_custom=%d, user_name='%s'
-				WHERE user_id=%d",
-				$this->post['user_email'], $user_birthday, $homepage, $facebook, $location,
-				$interests, $twitter, $usertitle, $custom_title, $this->post['Newuser_name'],
-				$this->user['user_id'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET
+				  user_email=?, user_birthday=?, user_homepage=?, user_facebook=?, user_location=?,
+				  user_interests=?, user_twitter=?, user_title=?, user_title_custom=?, user_name=?
+				WHERE user_id=?' );
+
+         $stmt->bind_param( 'ssssssssisi', $this->post['user_email'], $user_birthday, $homepage, $facebook, $location,
+				$interests, $twitter, $usertitle, $custom_title, $this->post['Newuser_name'],	$this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			if( $this->post['Newuser_name'] != $this->user['user_name'] ) {
-				$this->db->query( "UPDATE %pposts SET post_edited_by='%s' WHERE post_edited_by='%s'",
-					$this->post['Newuser_name'], $this->user['user_name'] );
+				$this->db->query( 'UPDATE %pposts SET post_edited_by=? WHERE post_edited_by=?' );
+
+            $stmt->bind_param( 'ss', $this->post['Newuser_name'], $this->user['user_name'] );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 			}
 
 			return $this->message( $this->lang->cp_updated, $this->lang->cp_been_updated );
@@ -752,9 +779,11 @@ class cp extends qsfglobal
 				break;
 			}
 
-			$this->db->query( "UPDATE %pusers SET user_avatar='%s', user_avatar_type='%s', user_avatar_width=%d, user_avatar_height=%d
-				WHERE user_id=%d",
-				$avatar, $type, $this->user['user_avatar_width'], $this->user['user_avatar_height'], $this->user['user_id'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_avatar=?, user_avatar_type=?, user_avatar_width=?, user_avatar_height=? WHERE user_id=?' );
+
+         $stmt->bind_param( 'ssiii', $avatar, $type, $this->user['user_avatar_width'], $this->user['user_avatar_height'], $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			return $this->message( $this->lang->cp_updated1, $this->lang->cp_been_updated1 );
 		}
@@ -766,7 +795,11 @@ class cp extends qsfglobal
 		$this->tree( $this->lang->cp_cp, "{$this->site}/control_panel/" );
 		$this->tree( $this->lang->cp_sub_change );
 
-		$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_expire < %d", $this->time );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_expire < ?' );
+
+      $stmt->bind_param( 'i', $this->time );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$xtpl->assign( 'cp_label_edit_subs', $this->lang->cp_label_edit_subs );
 		$xtpl->assign( 'cp_sub_delete', $this->lang->cp_sub_delete );
@@ -775,12 +808,18 @@ class cp extends qsfglobal
 		$xtpl->assign( 'cp_sub_expire', $this->lang->cp_sub_expire );
 
 		if( !isset( $this->post['submit'] ) ) {
-			$query = $this->db->query( "SELECT s.subscription_id, s.subscription_type, s.subscription_expire, f.forum_name, f.forum_id, t.topic_title, t.topic_id
+			$stmt = $this->db->prepare_query( "SELECT s.subscription_id, s.subscription_type, s.subscription_expire, f.forum_name, f.forum_id, t.topic_title, t.topic_id
 				FROM %psubscriptions s
 				LEFT JOIN %pforums f ON (s.subscription_type = 'forum' AND f.forum_id = s.subscription_item)
 				LEFT JOIN %ptopics t ON (s.subscription_type = 'topic' AND t.topic_id = s.subscription_item)
-				WHERE s.subscription_user = %d
-				ORDER BY s.subscription_expire", $this->user['user_id'] );
+				WHERE s.subscription_user = ?
+				ORDER BY s.subscription_expire" );
+
+         $stmt->bind_param( 'i', $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			while( $sub = $this->db->nqfetch( $query ) )
 			{
@@ -814,8 +853,12 @@ class cp extends qsfglobal
 					$delSubs[] = intval( $id );
 				}
 
-				$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_id IN (%s)",
-					$this->user['user_id'], implode( ', ', $delSubs ) );
+				$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_id IN (?)' );
+
+            $dsubs = implode( ', ', $delSubs );
+            $stmt->bind_param( 'is', $this->user['user_id'], $dsubs );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 			}
 
 			return $this->message( $this->lang->cp_sub_change, $this->lang->cp_sub_updated );
@@ -883,11 +926,22 @@ class cp extends qsfglobal
 					}
 				}
 			}
-			$this->db->query( "UPDATE %pusers SET user_signature='%s' WHERE user_id=%d", $this->post['sig'], $this->user['user_id'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_signature=? WHERE user_id=?' );
+
+         $stmt->bind_param( 'si', $this->post['sig'], $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 
-		$query = $this->db->query( "SELECT user_signature FROM %pusers WHERE user_id=%d", $this->user['user_id'] );
-		$pr = $this->db->nqfetch( $query );
+		$stmt = $this->db->prepare_query( 'SELECT user_signature FROM %pusers WHERE user_id=?' );
+
+      $stmt->bind_param( 'i', $this->user['user_id'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $pr = $this->db->nqfetch( $result );
+      $stmt->close();
+
 		$preview = $this->format( $pr['user_signature'], $params );
 		$edit = $pr['user_signature'];
 		$bbcode_menu = $this->bbcode->get_bbcode_menu();
@@ -906,7 +960,7 @@ class cp extends qsfglobal
 		$xtpl->parse( 'EditSig' );
 		return $xtpl->text( 'EditSig' );
 	}
-	 
+
 	private function add_sub()
 	{
 		$this->set_title( $this->lang->cp_cp );
@@ -920,11 +974,17 @@ class cp extends qsfglobal
 
 		$expires = $this->time + 2592000; // 30 days
 
-		$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_type='%s' AND subscription_item=%d",
-			$this->user['user_id'], $this->get['type'], $item );
-		$this->db->query( "INSERT INTO %psubscriptions (subscription_user, subscription_type, subscription_item, subscription_expire)
-			VALUES (%d, '%s', %d, %d)",
-			$this->user['user_id'], $this->get['type'], $item, $expires );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_type=? AND subscription_item=?' );
+
+      $stmt->bind_param( 'isi', $this->user['user_id'], $this->get['type'], $item );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'INSERT INTO %psubscriptions (subscription_user, subscription_type, subscription_item, subscription_expire) VALUES( ?, ?, ?, ? )' );
+
+      $stmt->bind_param( 'isii', $this->user['user_id'], $this->get['type'], $item, $expires );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		return $this->message( $this->lang->cp_cp, sprintf( $this->lang->cp_sub_success, $this->get['type'] ) );
 	}

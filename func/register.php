@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -185,8 +185,15 @@ class register extends qsfglobal
 
 			$username = str_replace( '\\', '&#092;', $this->format( $username, FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
 
-			$exists = $this->db->fetch( "SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')='%s'",
-				str_replace( ' ', '', strtolower( $username ) ) );
+			$stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=?" );
+
+         $uname = str_replace( ' ', '', strtolower( $username ) );
+         $stmt->bind_param( 's', $uname );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $exists = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( $exists ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_name_taken );
@@ -209,7 +216,15 @@ class register extends qsfglobal
  				return $this->message( $this->lang->register_reging, $this->lang->register_pass_invalid );
  			}
 
-			$eexists = $this->db->fetch( "SELECT user_email FROM %pusers WHERE user_email='%s'", $email );
+			$stmt = $this->db->prepare_query( 'SELECT user_email FROM %pusers WHERE user_email=?' );
+
+         $stmt->bind_param( 's', $email );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $eexists = $this->db->nqfetch( $result );
+         $stmt->close();
+
 			if( $eexists ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_email_used );
 			}
@@ -264,13 +279,17 @@ class register extends qsfglobal
 				}
 			}
 
-			$this->db->query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emojis, user_view_signatures,
-				user_language, user_email_show, user_pm, user_timezone, user_regip, user_register_email, user_file_perms, user_server_data) VALUES ('%s', '%s', %d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d, %d, '%s', '%s', '%s', '', '%s')",
-				$username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
+			$stmt = $this->db->prepare_query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emojis, user_view_signatures,
+				user_language, user_email_show, user_pm, user_timezone, user_regip, user_register_email, user_file_perms, user_server_data)
+            VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', ? )" );
+
+         $stmt->bind_param( 'ssisissiiisiissss', $username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
 				$this->user['user_language'], $this->sets['default_email_shown'], $this->sets['default_pm'], $timezone, $this->ip, $email, $svars );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			$this->sets['last_member'] = $username;
-			$this->sets['last_member_id'] = $this->db->insert_id( 'users', 'user_id' );
+			$this->sets['last_member_id'] = $this->db->insert_id( );
 			$this->sets['members']++;
 			$this->write_sets();
 
@@ -307,8 +326,11 @@ class register extends qsfglobal
 		$mailer->setServer( $this->sets['mailserver'] );
 		$mailer->doSend();
 
-		$this->db->query( "REPLACE INTO %pvalidation (validate_id, validate_hash, validate_time, validate_ip, validate_user_agent) VALUES ( %d, '%s', %d, '%s', '%s' )",
-			$id, $vhash, $this->time, $this->ip, $this->agent );
+		$stmt = $this->db->prepare_query( 'REPLACE INTO %pvalidation (validate_id, validate_hash, validate_time, validate_ip, validate_user_agent) VALUES( ?, ?, ?, ?, ? )' );
+
+      $stmt->bind_param( 'isiss', $id, $vhash, $this->time, $this->ip, $this->agent );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		return $this->message( $this->lang->register_reging, sprintf( $this->lang->register_must_activate, $email ) );
 	}
@@ -318,18 +340,41 @@ class register extends qsfglobal
 		$this->update_validation_table();
 
 		if( isset( $this->get['e'] ) ) {
-			$member = $this->db->fetch( "SELECT * FROM %pusers WHERE user_id=%d", $this->user['user_id'] );
+			$stmt = $this->db->prepare_query( 'SELECT * FROM %pusers WHERE user_id=?' );
+
+         $stmt->bind_param( 'i', $this->user['user_id'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $member = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( $member && $member['user_id'] != USER_GUEST_UID && $member['user_group'] == USER_AWAIT ) {
-				$valid = $this->db->fetch( "SELECT * FROM %pvalidation WHERE validate_id=%d", $this->user['user_id'] );
+				$stmt = $this->db->prepare_query( 'SELECT * FROM %pvalidation WHERE validate_id=?' );
+
+            $stmt->bind_param( 'i', $this->user['user_id'] );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $valid = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				if( $valid ) {
 					$vhash = hash( 'sha512', $member['user_email'] . $member['user_name'] . $member['user_password'] . $valid['validate_time'] );
 
 					if( $vhash == $this->get['e'] ) {
-						$this->db->query( "UPDATE %pusers SET user_group=%d WHERE user_id=%d", USER_MEMBER, $member['user_id'] );
+						$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_group=? WHERE user_id=?' );
 
-						$this->db->query( 'DELETE FROM %pvalidation WHERE validate_id=%d', $valid['validate_id'] );
+                  $group = intval( USER_MEMBER );
+                  $stmt->bind_param( 'ii', $group, $member['user_id'] );
+                  $this->db->execute_query( $stmt );
+                  $stmt->close();
+
+						$stmt = $this->db->prepare_query( 'DELETE FROM %pvalidation WHERE validate_id=?' );
+
+                  $stmt->bind_param( 'i', $valid['validate_id'] );
+                  $this->db->execute_query( $stmt );
+                  $stmt->close();
 
 						return $this->message( $this->lang->register_activating, $this->lang->register_activated );
 					}
@@ -343,7 +388,11 @@ class register extends qsfglobal
 	{
 		$expire = $this->time - 14400; // 4 hours
 
-		$this->db->query( 'DELETE FROM %pvalidation WHERE validate_time < %d', $expire );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pvalidation WHERE validate_time < ?' );
+
+      $stmt->bind_param( 'i', $expire );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 }
 ?>

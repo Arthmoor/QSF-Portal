@@ -6,7 +6,6 @@ User-agent: *
 Disallow: /index.php?a=post
 Disallow: /index.php?a=search
 Disallow: /index.php?a=members
-Disallow: /index.php?a=help
 Disallow: /index.php?a=pm
 Disallow: /index.php?a=cp
 Disallow: /index.php?a=active

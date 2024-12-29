@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -45,7 +45,7 @@ class upgrade extends qsfglobal
 	// Override for upgrade purposes.
 	public function get_settings( $sets )
 	{
-		$settings = $this->db->fetch( "SELECT settings_data FROM %psettings LIMIT 1" );
+		$settings = $this->db->fetch( 'SELECT settings_data FROM %psettings LIMIT 1' );
 
 		return array_merge( $sets, json_decode( $settings['settings_data'], true ) );
 	}
@@ -81,16 +81,16 @@ class upgrade extends qsfglobal
 			if( isset( $this->sets['app_version'] ) )
 				$v_message = 'The upgrade script has determined you are currently using ' . $this->sets['app_version'];
 
-			echo "<br /><br /><strong>{$v_message}</strong>";
+			echo "<br><br><strong>{$v_message}</strong>";
 
 			if( isset( $this->sets['app_version'] ) && $this->sets['app_version'] == $this->version ) {
-				echo "<br /><br />The detected version of {$this->name} is the same as the version you are trying to upgrade to. The upgrade cannot be processed.";
+				echo "<br><br>The detected version of {$this->name} is the same as the version you are trying to upgrade to. The upgrade cannot be processed.";
 			} else {
 				echo "<div class='title' style='text-align:center'>Upgrade from what version?</div>
 			       <span class='half'>
 				<div class='title'>QSF Portal</div>
 
-				<span class='field'><input type='radio' name='from' value='1.5.1' id='151' /></span>
+				<span class='field'><input type='radio' name='from' value='1.5.1' id='151'></span>
 				<span class='form'><label for='151'>QSF Portal v1.5.1</label></span>
 				<p class='line'></p>
 			       </span>
@@ -98,9 +98,9 @@ class upgrade extends qsfglobal
 				<p></p>
 
 				<div style='text-align:center'>
-				 <input type='submit' value='Continue' />
-				 <input type='hidden' name='mode' value='upgrade' />
-				 <input type='hidden' name='step' value='2' />
+				 <input type='submit' value='Continue'>
+				 <input type='hidden' name='mode' value='upgrade'>
+				 <input type='hidden' name='step' value='2'>
 				</div>";
 			}
 			echo "    </div>
@@ -117,7 +117,7 @@ class upgrade extends qsfglobal
 
 			if( !$db->connection ) {
 				if( $this->get['step'] == 15 ) {
-					$sets_error = '<br />Could not connect with the specified information.';
+					$sets_error = '<br>Could not connect with the specified information.';
 				} else {
 					$sets_error = null;
 				}
@@ -408,7 +408,7 @@ class upgrade extends qsfglobal
 					}
 
 					// Users
-					while( $this->perms->get_group(true) )
+					while( $this->perms->get_group( true ) )
 					{
 						$perm_on = $default;
 						if( $this->perms->auth( 'is_admin' ) ) $perm_on = true;
@@ -433,7 +433,7 @@ class upgrade extends qsfglobal
 					}
 
 					// Users
-					while( $this->file_perms->get_group(true) )
+					while( $this->file_perms->get_group( true ) )
 					{
 						$perm_on = $default;
 						$this->file_perms->add_perm( $id, $perm_on );
@@ -446,7 +446,7 @@ class upgrade extends qsfglobal
 			$this->write_sets();
 
 			echo "<div class='title' style='text-align:center'>Upgrade Successful</div>
-			  <span style='color:yellow; font-weight:bold;'>REMEMBER TO DELETE THE INSTALL DIRECTORY!</span><br /><br />
+			  <span style='color:yellow; font-weight:bold;'>REMEMBER TO DELETE THE INSTALL DIRECTORY!</span><br><br>
 			  <a href='../index.php'>Go to your site.</a>
 			 </div>";
 			break;

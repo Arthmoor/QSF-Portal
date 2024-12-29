@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -79,7 +79,7 @@ class perms extends admin
 		$this->set_title( $title );
 		$this->tree( $title );
 
-		$forums_only = $this->db->query( "SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name" );
+		$forums_only = $this->db->query( 'SELECT forum_id, forum_name FROM %pforums ORDER BY forum_name' );
 
 		$forums_list = array();
 		while( $forum = $this->db->nqfetch( $forums_only ) )
@@ -146,10 +146,26 @@ class perms extends admin
 			$count = count( $perms ) + 1;
 
 			if( $mode == 'user' ) {
-				$query = $this->db->fetch( "SELECT user_name, user_perms FROM %pusers WHERE user_id=%d", $this->post['group'] );
+				$stmt = $this->db->prepare_query( 'SELECT user_name, user_perms FROM %pusers WHERE user_id=?' );
+
+            $stmt->bind_param( 'i', $this->post['group'] );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $query = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$label = "{$this->lang->perms_user} '{$query['user_name']}'";
 			} else {
-				$query = $this->db->fetch( "SELECT group_name FROM %pgroups WHERE group_id=%d", $this->post['group'] );
+				$stmt = $this->db->prepare_query( 'SELECT group_name FROM %pgroups WHERE group_id=?' );
+
+            $stmt->bind_param( 'i', $this->post['group'] );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $query = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$label = "{$this->lang->perms_group} '{$query['group_name']}'";
 			}
 
@@ -334,10 +350,16 @@ class perms extends admin
 	private function check_subscriptions( $mode, $group )
 	{
 		if( $mode == 'user' ) {
-			$query = $this->db->query( "SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, u.user_perms
+			$stmt = $this->db->prepare_query( 'SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, u.user_perms
 				FROM %psubscriptions s, %pusers u
-				WHERE s.subscription_user=%d
-				AND s.subscription_user=u.user_id", $group );
+				WHERE s.subscription_user=?
+				AND s.subscription_user=u.user_id' );
+
+         $stmt->bind_param( 'i', $group );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			while( $sub = $this->db->nqfetch( $query ) ) //if the user has subscriptions
 			{
@@ -347,22 +369,41 @@ class perms extends admin
 
 				if( $sub['subscription_type'] == 'forum' ) {
 					if( !$perms->auth( 'forum_view', $sub['subscription_item'] ) ) { //if user can no longer view forum
-						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item'] );
+						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
+
+                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+                  $this->db->execute_query( $stmt );
+                  $stmt->close();
 					}
 				} else {
-					$check = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item'] );
+					$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
+
+               $stmt->bind_param( 'i', $sub['subscription_item'] );
+               $this->db->execute_query( $stmt );
+
+               $result = $stmt->get_result();
+               $check = $this->db->nqfetch( $result );
+               $stmt->close();
 
 					if( !$perms->auth( 'forum_view', $check['topic_forum'] ) ) { //if user can no longer view forum
-						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item'] );
+						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
+
+                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+                  $this->db->execute_query( $stmt );
+                  $stmt->close();
 					}
 				}
 			}
 		} else { //if a member of the group has subscriptions
-			$query = $this->db->query( "SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, g.group_perms
+			$stmt = $this->db->prepare_query( 'SELECT s.subscription_user, s.subscription_item, s.subscription_type, u.user_id, u.user_group, g.group_perms
 				FROM %psubscriptions s, %pusers u, %pgroups g
-				WHERE g.group_id=%d AND u.user_group=g.group_id AND s.subscription_user=u.user_id", $group );
+				WHERE g.group_id=? AND u.user_group=g.group_id AND s.subscription_user=u.user_id' );
+
+         $stmt->bind_param( 'i', $group );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			while( $sub = $this->db->nqfetch( $query ) )
 			{
@@ -372,15 +413,28 @@ class perms extends admin
 
 				if( $sub['subscription_type'] == 'forum' ) {
 					if( !$perms->auth( 'forum_view', $sub['subscription_item'] ) ) { //if user can no longer view forum
-						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item'] );
+						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
+
+                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+                  $this->db->execute_query( $stmt );
+                  $stmt->close();
 					}
 				} else {
-					$check = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $sub['subscription_item'] );
+					$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
+
+               $stmt->bind_param( 'i', $sub['subscription_item'] );
+               $this->db->execute_query( $stmt );
+
+               $result = $stmt->get_result();
+               $check = $this->db->nqfetch( $result );
+               $stmt->close();
 
 					if( !$perms->auth( 'forum_view', $check['topic_forum'] ) ) { //if user can no longer view forum
-						$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d",
-						$sub['user_id'], $sub['subscription_item'] );
+						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
+
+                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+                  $this->db->execute_query( $stmt );
+                  $stmt->close();
 					}
 				}
 			}

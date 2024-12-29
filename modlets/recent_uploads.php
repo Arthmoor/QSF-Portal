@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -49,10 +49,10 @@ class recent_uploads extends modlet
 			return $content;
 		}
 
-		$result = $this->qsf->db->query( "SELECT f.*, u.user_name, c.fcat_name FROM %pfiles f
+		$result = $this->qsf->db->query( 'SELECT f.*, u.user_name, c.fcat_name FROM %pfiles f
 		    LEFT JOIN %pusers u ON u.user_id = f.file_submitted
 		    LEFT JOIN %pfile_categories c ON c.fcat_id = f.file_catid
-		    WHERE file_approved=1 AND c.fcat_id IN (%s) ORDER BY file_date DESC LIMIT 5", $cats );
+		    WHERE file_approved=1 AND c.fcat_id IN (%s) ORDER BY file_date DESC LIMIT 5', $cats );
 
 		while( $file = $this->qsf->db->nqfetch( $result ) )
 		{
@@ -114,7 +114,7 @@ class recent_uploads extends modlet
 		if( $this->cat_data === false ) {
 			$this->cat_data = array();
 
-			$q = $this->qsf->db->query( "SELECT * FROM %pfile_categories" );
+			$q = $this->qsf->db->query( 'SELECT * FROM %pfile_categories' );
 
 			while( $f = $this->qsf->db->nqfetch( $q ) )
 			{

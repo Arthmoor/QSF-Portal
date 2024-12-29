@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -93,17 +93,17 @@ class file_perms extends admin
 		}
 
 		$perms = array(
-                                'download_files'        => 'Download files',
-                                'upload_files'          => 'Upload files',
-				'approve_files'		=> 'Approve files',
-				'edit_files'		=> 'Edit files',
-				'move_files'		=> 'Move files',
-				'delete_files'		=> 'Delete files',
-				'post_comment'		=> 'Post comments',
-				'category_view'		=> 'View category',
-				'edit_category'		=> 'Edit category',
-				'delete_category'	=> 'Delete category',
-				'add_category'		=> 'Add category'
+            'download_files'  => 'Download files',
+            'upload_files'    => 'Upload files',
+            'approve_files'   => 'Approve files',
+            'edit_files'      => 'Edit files',
+            'move_files'      => 'Move files',
+            'delete_files'    => 'Delete files',
+            'post_comment'    => 'Post comments',
+            'category_view'   => 'View category',
+            'edit_category'   => 'Edit category',
+            'delete_category' => 'Delete category',
+            'add_category'    => 'Add category'
 		);
 
 		if( !isset( $this->post['submit'] ) ) {
@@ -112,10 +112,26 @@ class file_perms extends admin
 			$count = count( $cats_list ) + 1;
 
 			if( $mode == 'user' ) {
-				$query = $this->db->fetch( 'SELECT user_name, user_file_perms FROM %pusers WHERE user_id=%d', $this->post['group'] );
+				$stmt = $this->db->prepare_query( 'SELECT user_name, user_file_perms FROM %pusers WHERE user_id=?' );
+
+            $stmt->bind_param( 'i', $this->post['group'] );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $query = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$label = "User '{$query['user_name']}'";
 			} else {
-				$query = $this->db->fetch( 'SELECT group_name FROM %pgroups WHERE group_id=%d', $this->post['group'] );
+				$stmt = $this->db->prepare_query( 'SELECT group_name FROM %pgroups WHERE group_id=?' );
+
+            $stmt->bind_param( 'i', $this->post['group'] );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $query = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$label = "Group '{$query['group_name']}'";
 			}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -139,9 +139,14 @@ class recent extends qsfglobal
 	 **/
 	private function countTopics( $forums_str )
 	{
-		$query = $this->db->fetch( "SELECT COUNT(topic_id) AS count FROM %ptopics
-			WHERE topic_forum IN (%s) AND topic_edited >= %d",
-			$forums_str, $this->user['user_lastvisit'] );
+		$stmt = $this->db->prepare_query( 'SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum IN (?) AND topic_edited >= ?' );
+
+      $stmt->bind_param( 'si', $forums_str, $this->user['user_lastvisit'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $query = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		return $query['count'];
 	}
@@ -158,21 +163,27 @@ class recent extends qsfglobal
 	 **/
 	private function display_topics( $xtpl, $forums_str, $min, $n, $m )
 	{
-		$query = $this->db->query( "SELECT DISTINCT(t.topic_id), p.post_author as dot,
+		$stmt = $this->db->prepare_query( 'SELECT DISTINCT(t.topic_id), p.post_author as dot,
 				t.topic_title, t.topic_last_poster, t.topic_starter, t.topic_replies, t.topic_modes,
 				t.topic_posted, t.topic_edited, t.topic_icon, t.topic_views, t.topic_description, t.topic_moved, t.topic_forum,
 				t.topic_last_post, f.forum_id, f.forum_name,
 				s.user_name AS topic_starter_name,
 				m.user_name AS topic_last_poster_name
 			FROM (%ptopics t, %pforums f, %pusers m, %pusers s)
-			LEFT JOIN %pposts p ON (t.topic_id = p.post_topic AND p.post_author = %d)
-			LEFT JOIN %preadmarks rm ON (t.topic_id = rm.readmark_topic AND rm.readmark_user = %d)
-			WHERE t.topic_forum IN (%s) AND (t.topic_edited >= %d OR (t.topic_edited >= %d AND (rm.readmark_lastread IS NULL OR rm.readmark_lastread < t.topic_edited) ))
-				AND t.topic_forum = f.forum_id AND m.user_id = t.topic_last_poster AND s.user_id = t.topic_starter AND t.topic_modes & %d = 0
-			ORDER BY t.topic_modes & %d DESC, t.topic_edited DESC
-			LIMIT %d, %d",
-			$this->user['user_id'], $this->user['user_id'], $forums_str, $this->user['user_lastvisit'],
-			$this->user['user_lastallread'], TOPIC_MOVED, TOPIC_PINNED, $min, $n );
+			LEFT JOIN %pposts p ON (t.topic_id = p.post_topic AND p.post_author = ?)
+			LEFT JOIN %preadmarks rm ON (t.topic_id = rm.readmark_topic AND rm.readmark_user = ?)
+			WHERE t.topic_forum IN (?) AND ( t.topic_edited >= ? OR (t.topic_edited >= ? AND (rm.readmark_lastread IS NULL OR rm.readmark_lastread < t.topic_edited) ) )
+				AND t.topic_forum = f.forum_id AND m.user_id = t.topic_last_poster AND s.user_id = t.topic_starter AND t.topic_modes & ? = 0
+			ORDER BY t.topic_modes & ? DESC, t.topic_edited DESC
+			LIMIT ?, ?' );
+
+      $tflag1 = intval( TOPIC_MOVED );
+      $tflag2 = intval( TOPIC_PINNED );
+      $stmt->bind_param( 'iisiiiiii', $this->user['user_id'], $this->user['user_id'], $forums_str, $this->user['user_lastvisit'], $this->user['user_lastallread'], $tflag1, $tflag2, $min, $n );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{

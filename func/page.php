@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -66,7 +66,7 @@ class page extends qsfglobal
 		$this->set_title( $this->lang->pages );
 		$this->tree( $this->lang->pages );
 
-		$result = $this->db->query( "SELECT page_id, page_title, page_contents FROM %ppages" );
+		$result = $this->db->query( 'SELECT page_id, page_title, page_contents FROM %ppages' );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/page.xtpl' );
 
@@ -112,7 +112,14 @@ class page extends qsfglobal
 	{
 		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 
-		$page = $this->db->fetch( "SELECT page_id, page_title, page_contents, page_flags FROM %ppages WHERE page_id=%d", $p );
+		$stmt = $this->db->prepare_query( 'SELECT page_id, page_title, page_contents, page_flags FROM %ppages WHERE page_id=?' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $page = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( $page ) {
 			$this->tree( $page['page_title'] );
@@ -175,8 +182,14 @@ class page extends qsfglobal
 		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 		$this->tree( $this->lang->page_editing );
 		
-		$page = $this->db->fetch( "SELECT page_id as id, page_title as title, page_contents as contents, page_flags as flags FROM %ppages
-			WHERE page_id=%d", $p );
+		$stmt = $this->db->prepare_query( 'SELECT page_id as id, page_title as title, page_contents as contents, page_flags as flags FROM %ppages	WHERE page_id=?' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $page = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$page ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -238,8 +251,11 @@ class page extends qsfglobal
 			foreach( $this->post['flags'] as $flag )
 				$flags |= intval( $flag );
 
-		$this->db->query( "UPDATE %ppages SET page_title='%s', page_contents='%s', page_flags=%d WHERE page_id=%d",
-			$this->post['title'], $this->post['contents'], $flags, $p );
+		$stmt = $this->db->prepare_query( 'UPDATE %ppages SET page_title=?, page_contents=?, page_flags=? WHERE page_id=?' );
+
+      $stmt->bind_param( 'ssii', $this->post['title'], $this->post['contents'], $flags, $p );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		return $this->message( $this->lang->page_editing, $this->lang->page_edit_done, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}" );
 	}
@@ -289,8 +305,13 @@ class page extends qsfglobal
 			foreach( $this->post['flags'] as $flag )
 				$flags |= intval( $flag );
 
-		$this->db->query( "INSERT INTO %ppages (page_title,page_contents,page_flags) VALUES('%s', '%s', %d)", $this->post['title'], $this->post['contents'], $flags );
-		$p = $this->db->insert_id( 'pages', 'page_id' );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %ppages (page_title,page_contents,page_flags) VALUES( ?, ?, ? )' );
+
+      $stmt->bind_param( 'ssi', $this->post['title'], $this->post['contents'], $flags );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$p = $this->db->insert_id( );
 
 		return $this->message( $this->lang->page_creating, $this->lang->page_created, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}" );
 	}
@@ -304,7 +325,14 @@ class page extends qsfglobal
 		$this->tree( $this->lang->pages, "{$this->site}/index.php?a=page" );
 		$this->tree( $this->lang->page_delete );
 
-		$page = $this->db->fetch( "SELECT page_id FROM %ppages WHERE page_id=%d", $p );
+		$stmt = $this->db->prepare_query( 'SELECT page_id FROM %ppages WHERE page_id=?' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $page = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$page ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -314,7 +342,12 @@ class page extends qsfglobal
 		if( !isset( $this->get['confirm'] ) )
 			return $this->message( $this->lang->page_delete, $this->lang->page_delete_confirm, $this->lang->continue, "{$this->site}/index.php?a=page&amp;p={$p}&amp;&amp;s=delete&amp;confirm=1" );
 
-		$this->db->query( "DELETE FROM %ppages WHERE page_id=%d", $p );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %ppages WHERE page_id=?' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
 		return $this->message( $this->lang->page_delete, $this->lang->page_deleted, $this->lang->continue, "{$this->site}/index.php?a=page" );
 	}
 }

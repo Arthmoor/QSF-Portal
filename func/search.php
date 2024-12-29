@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -250,7 +250,11 @@ class search extends qsfglobal
 			$type = 'id';
 		}
 
-		$this->db->query( "UPDATE %pusers SET user_lastsearch=%d WHERE user_id=%d", $this->time, $this->user['user_id'] );
+		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastsearch=? WHERE user_id=?' );
+
+      $stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$sql = 'SELECT ';
 		$sql_data = array();
@@ -260,7 +264,7 @@ class search extends qsfglobal
 			$sql_data[] = $this->post['query'];
 		}
 
-		$sql .= " p.post_id, p.post_text, p.post_topic, p.post_ip, p.post_author, p.post_icon, p.post_time, p.post_bbcode, p.post_emojis,
+		$sql .= ' p.post_id, p.post_text, p.post_topic, p.post_ip, p.post_author, p.post_icon, p.post_time, p.post_bbcode, p.post_emojis,
 			m.user_name, m.user_title, m.user_avatar_type, m.user_avatar, m.user_avatar_width, m.user_avatar_height, m.user_posts, m.user_joined, m.user_level, m.user_active,
 			m2.user_name AS Starter,
 			t.topic_title, t.topic_forum, t.topic_replies, t.topic_starter,
@@ -277,7 +281,7 @@ class search extends qsfglobal
 			%pmembertitles mt,
 			%pgroups g)
 		LEFT JOIN %pactive a ON a.active_id=m.user_id
-		WHERE ";
+		WHERE ';
 
 		if( $type == 'fulltext' ) {
 			$sql .= "MATCH (p.post_text) AGAINST ('%s' IN BOOLEAN MODE) AND ";
@@ -312,7 +316,7 @@ class search extends qsfglobal
 
 					$sql_data[] = implode( ',', $this->post['forums'] );
 				} else {
-					$sql .= 'f.forum_id = \'%d\' AND ';
+					$sql .= 'f.forum_id = %d AND ';
 					$sql_data[] = (int)$this->post['forums'];
 				}
                         }
@@ -348,7 +352,7 @@ class search extends qsfglobal
 		if( $type == 'id' ) {
 			$url = "id={$this->get['id']}";
 		} else {
-			$url = "results=1&amp;" .
+			$url = 'results=1&amp;' .
 			'query=' . $this->format( $this->post['query'], FORMAT_HTMLCHARS ) . '&amp;' .
 			'forums=' . implode( 'f', $this->post['forums'] ) . '&amp;' .
 			'searchtype=' . $this->format( $this->post['searchtype'], FORMAT_HTMLCHARS ) . '&amp;' .
@@ -367,7 +371,7 @@ class search extends qsfglobal
 
 		$pages = $this->htmlwidgets->get_pages( $pages_sql, "index.php?a=search&amp;$url", $this->get['min'], $this->get['num'] );
 
-		$sql .= " LIMIT %d, %d";
+		$sql .= ' LIMIT %d, %d';
 		$sql_data[] = $this->get['min'];
 		$sql_data[] = $this->get['num'];
 

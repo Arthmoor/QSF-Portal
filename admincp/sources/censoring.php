@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -55,7 +55,7 @@ class censoring extends admin
 			$words = null;
 			$token = $this->generate_token();
 
-			$query = $this->db->query( "SELECT * FROM %preplacements ORDER BY replacement_id" );
+			$query = $this->db->query( 'SELECT * FROM %preplacements ORDER BY replacement_id' );
 			while( $word = $this->db->nqfetch( $query ) )
 			{
 				$words .= str_replace( '(.*?)', '*', $word['replacement_search'] ) . "\n";
@@ -85,15 +85,19 @@ class censoring extends admin
 			$words = str_replace( '*', '(.*?)', $words );
 			$words = explode( "\n", $words );
 
-			$this->db->query( "TRUNCATE TABLE %preplacements" );
+			$this->db->query( 'TRUNCATE TABLE %preplacements' );
+
+         $word_query = $this->db->prepare_query( 'INSERT INTO %preplacements (replacement_search) VALUES ( ? )' );
+         $word_query->bind_param( 's', $word );
 
 			foreach( $words as $word )
 			{
 				$word = trim( $word );
 				if( $word ) {
-					$this->db->query( "INSERT INTO %preplacements (replacement_search) VALUES ('%s')", $word );
+               $this->db->execute_query( $word_query );
 				}
 			}
+         $word_query->close();
 
 			return $this->message( $this->lang->censor, $this->lang->censor_updated );
 		}

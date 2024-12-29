@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -78,9 +78,9 @@ class mass_mail extends admin
 	private function group_list()
 	{
 		$out   = null;
-		$query = $this->db->query( "SELECT group_id, group_name, group_type FROM %pgroups ORDER BY group_name" );
+		$query = $this->db->query( 'SELECT group_id, group_name, group_type FROM %pgroups ORDER BY group_name' );
 
-		while( $group = $this->db->nqfetch($query) )
+		while( $group = $this->db->nqfetch( $query ) )
 		{
 			if( $group['group_type'] != 'GUEST' ) {
 				$out .= "<option value='{$group['group_id']}' selected='selected'>{$group['group_name']}</option>\n";
@@ -110,10 +110,25 @@ class mass_mail extends admin
 		$i = 0;
 		$members = null;
 		if( count( $this->post['groups'] ) ) {
-			$members = $this->db->query( "SELECT user_email FROM %pusers WHERE user_group IN (%s)", implode(', ', $this->post['groups']) );
+			$stmt = $this->db->prepare_query( 'SELECT user_email FROM %pusers WHERE user_group IN (?)' );
+
+         $groups = implode( ', ', $this->post['groups'] );
+         $stmt->bind_param( 's', $groups );
+         $this->db->execute_query( $stmt );
+
+         $members = $stmt->get_result();
+         $stmt->close();
 		} else {
-			$members = $this->db->query( "SELECT user_email FROM %pusers WHERE user_id !=%d", USER_GUEST_UID );
+			$members = $this->db->query( 'SELECT user_email FROM %pusers WHERE user_id !=?' );
+
+         $user_id = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'i', $user_id );
+         $this->db->execute_query( $stmt );
+
+         $members = $stmt->get_result();
+         $stmt->close();
 		}
+
 		while( $sub = $this->db->nqfetch( $members ) )
 		{
 			$mailer->setBcc( $sub['user_email'] );

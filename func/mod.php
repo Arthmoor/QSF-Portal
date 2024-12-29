@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -131,7 +131,14 @@ class mod extends qsfglobal
 
 		$t = intval( $this->get['t'] );
 
-		$topic = $this->db->fetch( "SELECT topic_title, topic_forum, topic_starter, topic_modes, topic_poll_options FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_title, topic_forum, topic_starter, topic_modes, topic_poll_options FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !isset( $topic['topic_title'] ) ) {
@@ -187,7 +194,14 @@ class mod extends qsfglobal
 				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_create, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
 			}
 
-			$target = $this->db->fetch( "SELECT forum_parent FROM %pforums WHERE forum_id=%d", $this->post['newforum'] );
+			$target = $this->db->prepare_query( 'SELECT forum_parent FROM %pforums WHERE forum_id=?' );
+
+         $stmt->bind_param( 'i', $this->post['newforum'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $target = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( !isset( $target['forum_parent'] ) ) {
 				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_forum, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
@@ -197,23 +211,49 @@ class mod extends qsfglobal
 
 			if( $this->post['operation'] == 'lock' ) {
 				$this->db->clone_row( 'topics', 'topic_id', $t );
-				$newtopic = $this->db->insert_id( 'topics', 'topic_id' );
+				$newtopic = $this->db->insert_id( );
 
-				$this->db->query( "UPDATE %ptopics SET topic_modes=%d, topic_moved=%d WHERE topic_id=%d OR topic_moved=%d",
-					$topic['topic_modes'] | TOPIC_MOVED, $newtopic, $t, $t );
+				$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=?, topic_moved=? WHERE topic_id=? OR topic_moved=?' );
+
+            $mode = intval( $topic['topic_modes'] | TOPIC_MOVED );
+            $stmt->bind_param( 'iiii', $mode, $newtopic, $t, $t );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 			} else {
 				$newtopic = $t;
 			}
 
-			$this->db->query( "UPDATE %ptopics SET topic_forum=%d WHERE topic_id=%d", $this->post['newforum'], $newtopic );
-			$this->db->query( "UPDATE %pposts SET post_topic=%d WHERE post_topic=%d", $newtopic, $t );
-			$this->db->query( "UPDATE %pvotes SET vote_topic=%d WHERE vote_topic=%d", $newtopic, $t );
+			$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_forum=? WHERE topic_id=?' );
+
+         $stmt->bind_param( 'ii', $this->post['newforum'], $newtopic );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %pposts SET post_topic=? WHERE post_topic=?' );
+
+         $stmt->bind_param( 'ii', $newtopic, $t );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %pvotes SET vote_topic=? WHERE vote_topic=?' );
+
+         $stmt->bind_param( 'ii', $newtopic, $t );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			$this->update_subscriptions( $newtopic, $t );
 			$this->htmlwidgets->update_last_post( $topic['topic_forum'] );
 			$this->htmlwidgets->update_last_post( $this->post['newforum'] );
 
-			$ammount = $this->db->fetch( "SELECT topic_replies FROM %ptopics WHERE topic_id=%d", $newtopic );
+			$stmt = $this->db->prepare_query( 'SELECT topic_replies FROM %ptopics WHERE topic_id=?' );
+
+         $stmt->bind_param( 'i', $newtopic );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $ammount = $this->db->nqfetch( $result );
+         $stmt->close();
+
 			$ammount = intval( $ammount['topic_replies'] );
 
 			$this->htmlwidgets->update_count_move( $topic['topic_forum'], $this->post['newforum'], $ammount );
@@ -244,13 +284,20 @@ class mod extends qsfglobal
 
 		$p = intval( $this->get['p'] );
 
-		$data = $this->db->fetch( "SELECT p.post_text, p.post_author, p.post_emojis, p.post_bbcode, p.post_topic, p.post_icon, p.post_time, t.topic_title, t.topic_forum, t.topic_replies,
+		$stmt = $this->db->prepare_query( 'SELECT p.post_text, p.post_author, p.post_emojis, p.post_bbcode, p.post_topic, p.post_icon, p.post_time, t.topic_title, t.topic_forum, t.topic_replies,
 				u.*, m.membertitle_icon, g.group_name
 			FROM (%pposts p, %ptopics t)
 			LEFT JOIN %pusers u ON u.user_id = p.post_author
 			LEFT JOIN %pmembertitles m ON m.membertitle_id = u.user_level
 			LEFT JOIN %pgroups g ON g.group_id = u.user_group
-			WHERE t.topic_id=p.post_topic AND p.post_id=%d", $p );
+			WHERE t.topic_id=p.post_topic AND p.post_id=?' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $data = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !isset( $data['post_text'] ) ) {
@@ -268,7 +315,15 @@ class mod extends qsfglobal
 		}
 
 		// Locked topic?
-		$topic = $this->db->fetch( "SELECT topic_modes FROM %ptopics WHERE topic_id=%d", $data['post_topic'] );
+		$stmt = $this->db->prepare_query( 'SELECT topic_modes FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $data['post_topic'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
+
 		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_edit_post_locked, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$data['post_topic']}/" );
 		}
@@ -454,15 +509,29 @@ class mod extends qsfglobal
 			if( $icon == 'None' )
 				$icon = '';
 
-			$this->db->query( "UPDATE %pposts SET post_text='%s', post_emojis=%d, post_bbcode=%d, post_edited_by='%s', post_edited_time=%d, post_icon='%s' WHERE post_id=%d",
-				$this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $icon, $p );
+			$stmt = $this->db->prepare_query( 'UPDATE %pposts SET post_text=?, post_emojis=?, post_bbcode=?, post_edited_by=?, post_edited_time=?, post_icon=? WHERE post_id=?' );
 
-			$first = $this->db->fetch( "SELECT p.post_id FROM %pposts p, %ptopics t
-				WHERE p.post_topic=t.topic_id AND t.topic_id=%d
-				ORDER BY p.post_time LIMIT 1", $data['post_topic'] );
+         $stmt->bind_param( 'siisisi', $this->post['post'], $emot , $code, $this->user['user_name'], $this->time, $icon, $p );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'SELECT p.post_id FROM %pposts p, %ptopics t
+				WHERE p.post_topic=t.topic_id AND t.topic_id=?
+				ORDER BY p.post_time LIMIT 1' );
+
+         $stmt->bind_param( 'i', $data['post_topic'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $first = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( $first['post_id'] == $p ) {
-				$this->db->query( "UPDATE %ptopics SET topic_icon='%s' WHERE topic_id='%d'", $icon, $data['post_topic'] );
+				$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_icon=? WHERE topic_id=?' );
+
+            $stmt->bind_param( 'si', $icon, $data['post_topic'] );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
 			}
 
 			$jump = '&amp;p=' . $p . '#p' . $p;
@@ -490,7 +559,14 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_title, topic_description, topic_starter, topic_forum, topic_modes FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_title, topic_description, topic_starter, topic_forum, topic_modes FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !isset( $topic['topic_title'] ) ) {
@@ -551,8 +627,11 @@ class mod extends qsfglobal
 				}
 			}
 
-			$this->db->query( "UPDATE %ptopics SET topic_title='%s', topic_description='%s', topic_modes=%d WHERE topic_id=%d",
-				$this->post['title'], $this->post['desc'], $topic['topic_modes'], $t );
+			$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_title=?, topic_description=?, topic_modes=? WHERE topic_id=?' );
+
+         $stmt->bind_param( 'ssii', $this->post['title'], $this->post['desc'], $topic['topic_modes'], $t );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			$this->log_action( 'topic_edit', $t );
 
@@ -581,7 +660,14 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_title, topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_title, topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !$topic ) {
@@ -632,7 +718,14 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_title, topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_title, topic_modes, topic_starter, topic_forum FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !$topic ) {
@@ -688,10 +781,17 @@ class mod extends qsfglobal
 
 		$p = intval( $this->get['p'] );
 
-		$post = $this->db->fetch( "SELECT p.post_id, p.post_author, p.post_topic, p.post_time, p.post_text, p.post_ip, p.post_referrer, p.post_agent,
+		$stmt = $this->db->prepare_query( 'SELECT p.post_id, p.post_author, p.post_topic, p.post_time, p.post_text, p.post_ip, p.post_referrer, p.post_agent,
 			t.topic_id, t.topic_forum, t.topic_replies, t.topic_title
 			FROM %pposts p,	%ptopics t
-			WHERE p.post_id=%d AND p.post_topic=t.topic_id", $p );
+			WHERE p.post_id=? AND p.post_topic=t.topic_id' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $post = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !isset( $post['post_id'] ) ) {
@@ -699,9 +799,16 @@ class mod extends qsfglobal
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_missing_post, $this->lang->continue, "javascript:history.go(-1)" );
 		}
 
-		$first = $this->db->fetch( "SELECT p.post_id FROM %pposts p, %ptopics t
-			WHERE p.post_topic=t.topic_id AND t.topic_id=%d
-			ORDER BY p.post_time LIMIT 1", $post['topic_id'] );
+		$stmt = $this->db->prepare_query( 'SELECT p.post_id FROM %pposts p, %ptopics t
+			WHERE p.post_topic=t.topic_id AND t.topic_id=?
+			ORDER BY p.post_time LIMIT 1' );
+
+      $stmt->bind_param( 'i', $post['topic_id'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $first = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( $first['post_id'] == $p && !$spam ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_first_post );
@@ -717,7 +824,15 @@ class mod extends qsfglobal
 		}
 
 		// Locked topic?
-		$topic = $this->db->fetch( "SELECT topic_modes FROM %ptopics WHERE topic_id=%d", $post['post_topic'] );
+		$stmt = $this->db->prepare_query( 'SELECT topic_modes FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $post['post_topic'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
+
 		if( $topic['topic_modes'] & TOPIC_LOCKED ) {
 			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_delete_post_locked, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$post['post_topic']}/" );
 		}
@@ -736,15 +851,28 @@ class mod extends qsfglobal
 				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_confirm_post_delete_spam, $this->lang->continue, "{$this->site}/index.php?a=mod&amp;s=del_post&amp;p=$p}&amp;confirm=1&amp;c=spam" );
 		}
 
-		$prev = $this->db->fetch( "SELECT MAX(p.post_id) AS prev_post FROM %pposts p
-			WHERE p.post_topic = %d AND p.post_time < %d",
-			$post['post_topic'], $post['post_time'] );
+		$stmt = $this->db->prepare_query( 'SELECT MAX(p.post_id) AS prev_post FROM %pposts p
+			WHERE p.post_topic = ? AND p.post_time < ?' );
+
+      $stmt->bind_param( 'ii', $post['post_topic'], $post['post_time'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $prev = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		$jump = '&amp;p=' . $prev['prev_post'] . '#p' . $prev['prev_post'];
 
 		if( $spam ) {
 			// Time to report the spammer before we delete the post. Hopefully this is enough info to strike back with.
-			$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $post['post_author'] );
+			$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
+
+         $stmt->bind_param( 'i', $post['post_author'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $user = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			require_once $this->sets['include_path'] . '/lib/akismet.php';
 			$akismet = new Akismet( $this );
@@ -794,10 +922,17 @@ class mod extends qsfglobal
 
 		$t = intval( $this->get['t'] );
 
-		$topic = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_starter, t.topic_title, f.forum_name
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_forum, t.topic_starter, t.topic_title, f.forum_name
 			FROM %ptopics t
 			LEFT JOIN %pforums f ON f.forum_id=t.topic_forum
-			WHERE topic_id=%d", $t );
+			WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !isset( $topic['topic_id'] ) ) {
@@ -846,7 +981,14 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_title, topic_modes, topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_title, topic_modes, topic_forum FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !$topic ) {
@@ -891,7 +1033,14 @@ class mod extends qsfglobal
 		}
 
 		$t = intval( $this->get['t'] );
-		$topic = $this->db->fetch( "SELECT topic_id, topic_forum, topic_starter, topic_title, topic_modes FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_forum, topic_starter, topic_title, topic_modes FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Existence check
 		if( !isset( $topic['topic_id'] ) ) {
@@ -957,11 +1106,23 @@ class mod extends qsfglobal
 				}
 			}
 
+         $topic_update_query = $this->db->prepare_query( "UPDATE %ptopics SET topic_title=?, topic_replies=?, topic_views=0, topic_description='', topic_modes=? WHERE topic_id=?" );
+         $topic_update_query->bind_param( 'siii', $topicx, $wherex, $mode, $id );
+
+         $post_update_query = $this->db->prepare_query( 'UPDATE %pposts SET post_topic=? WHERE post_id IN (?)' );
+         $post_update_query->bind_param( 'is', $id, $in );
+
+         $id_query = $this->db->prepare_query( 'SELECT post_author, post_icon, post_time FROM %pposts WHERE post_topic=? ORDER BY post_time ASC' );
+         $id_query->bind_param( 'i', $id );
+
+         $topic_update_query = $this->db->prepare_query( 'UPDATE %ptopics SET topic_starter=?, topic_icon=? WHERE topic_id=?' );
+         $topic_update_query->bind_param( 'isi', $author, $icon, $id );
+
 			for( $x = 1; $x <= 4; $x++ )
 			{
 				if( isset( $where[$x] ) ) {
 					$this->db->clone_row( 'topics', 'topic_id', $t );
-					$id = $this->db->insert_id( 'topics', 'topic_id' );
+					$id = $this->db->insert_id( );
 
 					if( $topic['topic_modes'] & TOPIC_PUBLISH ) {
 						$mode = TOPIC_PUBLISH;
@@ -969,18 +1130,34 @@ class mod extends qsfglobal
 						$mode = 0;
 					}
 
-					$this->db->query( "UPDATE %ptopics SET topic_title='%s', topic_replies=%d, topic_views=0, topic_description='', topic_modes=%d WHERE topic_id=%d",
-						$this->post['topic'][$x], $where[$x]['count'], $mode, $id );
-					$this->db->query( "UPDATE %pposts SET post_topic=%d WHERE post_id IN (%s)", $id, implode( ',', $where[$x]['posts'] ) );
+               $topicx = $this->post['topic'][$x];
+               $wherex = $where[$x]['count'];
+               $this->db->execute_query( $topic_update_query );
+
+               $in = implode( ',', $where[$x]['posts'] );
+               $this->db->execute_query( $post_update_query );
 
 					$this->htmlwidgets->update_last_post_topic( $id );
 
-					$posts = $this->db->fetch( "SELECT post_author, post_icon, post_time FROM %pposts WHERE post_topic=%d ORDER BY post_time ASC", $id );
-					$this->db->query( "UPDATE %ptopics SET topic_starter=%d, topic_icon='%s' WHERE topic_id=%d", $posts['post_author'], $posts['post_icon'], $id );
+               $this->db->execute_query( $id_query );
+               $result = $id_query->get_result();
+               $posts = $this->db->nqfetch( $result );
+
+               $author = $posts['post_author'];
+               $icon = $posts['post_icon'];
+               $this->db->execute_query( $topic_update_query );
 				}
 			}
+         $topic_update_query->close();
+         $post_update_query->close();
+         $id_query->close();
+         $topic_update_query->close();
 
-			$this->db->query( "UPDATE %ptopics SET topic_replies=topic_replies-%d WHERE topic_id=%d", $moved, $t );
+			$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_replies=topic_replies-? WHERE topic_id=?' );
+
+         $stmt->bind_param( 'ii', $moved, $t );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			$this->htmlwidgets->update_last_post_topic( $t );
 			$this->htmlwidgets->update_last_post( $topic['topic_forum'] );
@@ -1008,7 +1185,14 @@ class mod extends qsfglobal
       if( !$this->validator->validate( $id, TYPE_INT ) )
          return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
 
-		$topic = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
       if( !$topic )
          return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
@@ -1017,12 +1201,25 @@ class mod extends qsfglobal
 			return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_not_allowed );
 		}
 
-		$user = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $id );
-      
+		$user = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
+
+      $stmt->bind_param( 'i', $id );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $user = $this->db->nqfetch( $result );
+      $stmt->close();
+
       if( !$user )
          return $this->message( $this->lang->mod_ip_view, $this->lang->mod_ip_view_no_user );
 
-		$iplist = $this->db->query( "SELECT post_ip FROM %pposts WHERE post_author=%d GROUP BY post_ip", $id );
+		$stmt = $this->db->prepare_query( 'SELECT post_ip FROM %pposts WHERE post_author=? GROUP BY post_ip' );
+
+      $stmt->bind_param( 'i', $id );
+      $this->db->execute_query( $stmt );
+
+      $iplist = $stmt->get_result();
+      $stmt->close();
 
 		$out = '';
 		while( $ip = $this->db->nqfetch( $iplist ) )
@@ -1044,7 +1241,12 @@ class mod extends qsfglobal
 	 **/
 	private function lock( $t, $topic_modes )
 	{
-		$this->db->query( "UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d", $topic_modes | TOPIC_LOCKED, $t );
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=? WHERE topic_id=?' );
+
+      $modes = $topic_modes | TOPIC_LOCKED;
+      $stmt->bind_param( 'ii', $modes, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -1058,7 +1260,12 @@ class mod extends qsfglobal
 	 **/
 	private function unlock( $t, $topic_modes )
 	{
-		$this->db->query( "UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d", $topic_modes ^ TOPIC_LOCKED, $t );
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=? WHERE topic_id=?' );
+
+      $modes = $topic_modes ^ TOPIC_LOCKED;
+      $stmt->bind_param( 'ii', $modes, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -1072,7 +1279,12 @@ class mod extends qsfglobal
 	 **/
 	private function pin( $t, $topic_modes )
 	{
-		$this->db->query( "UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d", $topic_modes | TOPIC_PINNED, $t );
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=? WHERE topic_id=?' );
+
+      $modes = $topic_modes | TOPIC_PINNED;
+      $stmt->bind_param( 'ii', $modes, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -1086,9 +1298,22 @@ class mod extends qsfglobal
 	 **/
 	private function unpin( $t, $topic_modes )
 	{
-		$topic = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
 
-		$this->db->query( "UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d OR topic_moved=%d", $topic_modes ^ TOPIC_PINNED, $t, $t );
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=? WHERE topic_id=? OR topic_moved=?' );
+
+      $modes = $topic_modes ^ TOPIC_PINNED;
+      $stmt->bind_param( 'iii', $modes, $t, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
 		$this->htmlwidgets->update_last_post( $topic['topic_forum'] );
 	}
 
@@ -1101,7 +1326,12 @@ class mod extends qsfglobal
 	 **/
 	private function publish( $t, $topic_modes )
 	{
-		$this->db->query( "UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d", $topic_modes | TOPIC_PUBLISH, $t );
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=? WHERE topic_id=?' );
+
+      $modes = $topic_modes | TOPIC_PUBLISH;
+      $stmt->bind_param( 'ii', $modes, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -1113,7 +1343,12 @@ class mod extends qsfglobal
 	 **/
 	private function unpublish( $t, $topic_modes )
 	{
-		$this->db->query( "UPDATE %ptopics SET topic_modes=%d WHERE topic_id=%d", $topic_modes ^ TOPIC_PUBLISH, $t );
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_modes=? WHERE topic_id=?' );
+
+      $modes = $topic_modes ^ TOPIC_PUBLISH;
+      $stmt->bind_param( 'ii', $modes, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -1126,12 +1361,24 @@ class mod extends qsfglobal
 	 **/
 	private function update_subscriptions( $newtopic, $t )
 	{
-		$query = $this->db->query( "SELECT s.subscription_user, s.subscription_item, s.subscription_type,
+		$stmt = $this->db->prepare_query( 'SELECT s.subscription_user, s.subscription_item, s.subscription_type,
 				u.user_id, u.user_group, u.user_perms, g.group_id, g.group_perms, t.topic_forum
 				FROM (%psubscriptions s, %pusers u, %pgroups g, %ptopics t)
 				WHERE s.subscription_user=u.user_id
 				AND u.user_group=g.group_id
-				AND t.topic_id=%d", $t );
+				AND t.topic_id=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
+
+      $delete_query = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
+      $delete_query->bind_param( 'ii', $sub_user, $sub_item );
+
+      $update_query = $this->db->prepare_query( "UPDATE %psubscriptions SET subscription_item=? WHERE subscription_item=? AND subscription_type='topic'" );
+      $update_query->bind_param( 'ii', $newtopic, $t );
 
 		while( $sub = $this->db->nqfetch( $query ) )
 		{
@@ -1141,11 +1388,15 @@ class mod extends qsfglobal
 			$perms->get_perms( $sub['user_group'], $sub['user_id'], ( $sub['user_perms'] ? $sub['user_perms'] : $sub['group_perms'] ) );
 
 			if( !$perms->auth( 'forum_view', $sub['topic_forum'] ) ) {
-				$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_user=%d AND subscription_item=%d", $sub['user_id'], $sub['subscription_item'] );
+            $sub_user = $sub['user_id'];
+            $sub_item = $sub['subscription_item'];
+            $this->db->execute_query( $delete_query );
 			} else {
-				$this->db->query( "UPDATE %psubscriptions SET subscription_item=%d WHERE subscription_item=%d AND subscription_type='topic'", $newtopic, $t );
+            $this->db->execute_query( $update_query );
 			}
 		}
+      $delete_query->close();
+      $update_query->close();
 	}
 }
 ?>

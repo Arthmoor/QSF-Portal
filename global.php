@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -315,7 +315,13 @@ class qsfglobal
 			'user_level' => '0'
 		);
 
-		$titles = $this->db->query( "SELECT * FROM %pmembertitles WHERE membertitle_posts <= %d ORDER BY membertitle_posts", $posts );
+		$stmt = $this->db->prepare_query( 'SELECT * FROM %pmembertitles WHERE membertitle_posts <= ? ORDER BY membertitle_posts' );
+
+      $stmt->bind_param( 'i', $posts );
+      $this->db->execute_query( $stmt );
+
+      $titles = $stmt->get_result();
+      $stmt->close();
 
 		while( $title = $this->db->nqfetch( $titles ) )
 		{
@@ -344,8 +350,15 @@ class qsfglobal
 		if( $this->perms->is_guest )
 			return 0;
 
-		$count = $this->db->fetch( "SELECT COUNT(pm_id) AS messages FROM %ppmsystem WHERE pm_to=%d AND pm_folder=%d" . (!$seen ? " AND pm_read=0" : null),
-			$this->user['user_id'], $folder );
+		$stmt = $this->db->prepare_query( 'SELECT COUNT(pm_id) AS messages FROM %ppmsystem WHERE pm_to=? AND pm_folder=?' . ( !$seen ? ' AND pm_read=0' : null ) );
+
+      $stmt->bind_param( 'ii', $this->user['user_id'], $folder );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $count = $this->db->nqfetch( $result );
+      $stmt->close();
+
 		return $count['messages'];
 	}
 
@@ -359,7 +372,7 @@ class qsfglobal
 		if( $this->perms->auth( 'is_admin' ) )
 			return $this->sets['code_approval'];
 
-		$query = $this->db->query( "SELECT file_catid FROM %pfiles WHERE file_approved=0" );
+		$query = $this->db->query( 'SELECT file_catid FROM %pfiles WHERE file_approved=0' );
 		while( $file = $this->db->nqfetch( $query ) )
 		{
 			if( !$this->file_perms->auth( 'approve_files', $file['file_catid'] ) )
@@ -409,7 +422,7 @@ class qsfglobal
 						return true;
 				}
 
-				if( ( strstr($ip, '/') && $this->cidrmatch($ip) ) || strcasecmp( $ip, $this->ip ) == 0 ) {
+				if( ( strstr( $ip, '/' ) && $this->cidrmatch( $ip ) ) || strcasecmp( $ip, $this->ip ) == 0 ) {
 					return true;
 				}
 			}
@@ -583,7 +596,12 @@ class qsfglobal
 			}
 		}
 
-		$this->db->query( "UPDATE %psettings SET settings_data='%s'", json_encode( $sets ) );
+		$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_data=?' );
+
+      $data = json_encode( $sets );
+      $stmt->bind_param( 's', $data );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -598,20 +616,23 @@ class qsfglobal
 		// Converts old serialized array into a json encoded array due to potential exploits in the PHP serialize/unserialize functions.
 		$settings_array = array();
 
-		$settings = $this->db->fetch( "SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_mobile_icons, settings_data FROM %psettings LIMIT 1" );
+		$settings = $this->db->fetch( 'SELECT settings_version, settings_meta_keywords, settings_meta_description, settings_mobile_icons, settings_data FROM %psettings LIMIT 1' );
 		$sets['meta_keywords'] = $settings['settings_meta_keywords'];
 		$sets['meta_description'] = $settings['settings_meta_description'];
 		$sets['mobile_icons'] = $settings['settings_mobile_icons'];
 
 		if( $settings['settings_version'] == 1 ) {
 			$settings_array = array_merge( $sets, unserialize( $settings['settings_data'] ) );
-			$this->db->query( "UPDATE %psettings SET settings_version=2" );
+			$this->db->query( 'UPDATE %psettings SET settings_version=2' );
 			$this->sets = $settings_array;
 			$this->write_sets();
 
 			$perms = $this->db->query( 'SELECT group_id, group_perms, group_file_perms FROM %pgroups' );
 
 			// Settings version 1 also means the perm arrays are not updated so they need fixing now too.
+         $perms_query = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=?, group_file_perms=? WHERE group_id=?' );
+         $perms_query->bind_param( 'ssi', $new_forum_array, $new_file_array, $group_id );
+
 			while( ( $perm = $this->db->nqfetch( $perms ) ) )
 			{
 				$forum_array = unserialize( $perm['group_perms'] );
@@ -619,10 +640,11 @@ class qsfglobal
 
 				$new_forum_array = json_encode( $forum_array );
 				$new_file_array = json_encode( $file_array );
+            $group_id = $perm['group_id'];
 
-				$this->db->query( "UPDATE %pgroups SET group_perms='%s', group_file_perms='%s' WHERE group_id=%d",
-					$new_forum_array, $new_file_array, $perm['group_id'] );
+            $this->db->execute_query( $perms_query );
 			}
+         $perms_query->close();
 		} else {
 			$settings_array = array_merge( $sets, json_decode( $settings['settings_data'], true ) );
 		}
@@ -641,15 +663,21 @@ class qsfglobal
 	public function RecountForums()
 	{
 		// Recount all topics and posts - NiteShdw
-		$q = $this->db->query( "SELECT topic_id, COUNT(post_id) AS replies FROM %ptopics, %pposts WHERE post_topic=topic_id GROUP BY topic_id" );
+		$q = $this->db->query( 'SELECT topic_id, COUNT(post_id) AS replies FROM %ptopics, %pposts WHERE post_topic=topic_id GROUP BY topic_id' );
+
+      $topic_query = $this->db->prepare_query( 'UPDATE %ptopics SET topic_replies=? WHERE topic_id=?' );
+      $topic_query->bind_param( 'ii', $treplies, $topic_id );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
 			$treplies = $f['replies'] - 1;
-			$this->db->query( "UPDATE %ptopics SET topic_replies=%d WHERE topic_id=%d", $treplies, $f['topic_id'] );
-		}
+         $topic_id = $f['topic_id'];
 
-		$q = $this->db->query( "SELECT forum_id FROM %pforums WHERE forum_parent = 0" );
+         $this->db->execute_query( $topic_query );
+		}
+      $topic_query->close();
+
+		$q = $this->db->query( 'SELECT forum_id FROM %pforums WHERE forum_parent = 0' );
 		$this->sets['posts'] = 0;
 		$this->sets['topics'] = 0;
 
@@ -679,7 +707,14 @@ class qsfglobal
 		$lastPost = 0;
 
 		// Check for subforums
-		$q = $this->db->query( "SELECT forum_id FROM %pforums WHERE forum_parent=%d", $forum );
+		$stmt = $this->db->prepare_query( 'SELECT forum_id FROM %pforums WHERE forum_parent=?' );
+
+      $stmt->bind_param( 'i', $forum );
+      $this->db->execute_query( $stmt );
+
+      $q = $stmt->get_result();
+      $stmt->close();
+
 		while( $f = $this->db->nqfetch( $q ) )
 		{
 			$results = $this->countTopicsAndReplies( $f['forum_id'] );
@@ -692,14 +727,33 @@ class qsfglobal
 		}
 
 		// Count topics on this forum
-		$tc = $this->db->fetch( 'SELECT COUNT(topic_id) tc FROM %ptopics
-				WHERE NOT(topic_modes & %d) AND topic_forum=%d', TOPIC_MOVED, $forum );
-		$rc = $this->db->fetch( 'SELECT COUNT(p.post_id) rc FROM %pposts p, %ptopics t 
-				WHERE p.post_topic=t.topic_id AND topic_forum=%d', $forum );
-		$lp = $this->db->fetch( 'SELECT p.post_time pt, p.post_id post
-				FROM %pposts p, %ptopics t 
-				WHERE p.post_topic=t.topic_id AND topic_forum=%d
-				ORDER BY p.post_time DESC LIMIT 1', $forum );
+		$stmt = $this->db->prepare_query( 'SELECT COUNT(topic_id) tc FROM %ptopics WHERE NOT(topic_modes & ?) AND topic_forum=?' );
+
+      $tflag = intval( TOPIC_MOVED );
+      $stmt->bind_param( 'ii', $tflag, $forum );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $tc = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'SELECT COUNT(p.post_id) rc FROM %pposts p, %ptopics t WHERE p.post_topic=t.topic_id AND topic_forum=?' );
+
+      $stmt->bind_param( 'i', $forum );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $rc = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'SELECT p.post_time pt, p.post_id post FROM %pposts p, %ptopics t WHERE p.post_topic=t.topic_id AND topic_forum=? ORDER BY p.post_time DESC LIMIT 1' );
+
+      $stmt->bind_param( 'i', $forum );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $lp = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		$topicCount += $tc['tc'];
 		$replyCount += $rc['rc'];
@@ -709,9 +763,12 @@ class qsfglobal
 		}
 
 		// Update the details
-		$this->db->query( "UPDATE %pforums SET forum_replies=%d,
-				forum_topics=%d, forum_lastpost=%d WHERE forum_id=%d",
-				$replyCount - $topicCount, $topicCount, $lastPost, $forum );
+		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_replies=?, forum_topics=?, forum_lastpost=? WHERE forum_id=?' );
+
+      $count = $replyCount - $topicCount;
+      $stmt->bind_param( 'iiii', $count, $topicCount, $lastPost, $forum );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		return array( 'topics' => $topicCount, 'replies' => $replyCount, 'lastPost' => $lastPost, 'lastPostTime' => $lastPostTime );
 	}
@@ -729,9 +786,11 @@ class qsfglobal
 	 **/
 	public function log_action( $action, $data1, $data2 = 0, $data3 = 0 )
 	{
-		$this->db->query( "INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3 )
-			VALUES (%d, %d, '%s', %d, %d, %d)",
-			$this->user['user_id'], $this->time, $action, $data1, $data2, $data3 );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3 ) VALUES( ?, ?, ?, ?, ?, ? )' );
+
+      $stmt->bind_param( 'iisiii', $this->user['user_id'], $this->time, $action, $data1, $data2, $data3 );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -787,8 +846,8 @@ class qsfglobal
 			return $this->self;
 		}
 
-		if( $this->query && strpos( "http://", $this->query ) !== false ) {
-			error( QUICKSILVER_NOTICE, "BAD BOT! You should know better than that!" );
+		if( $this->query && strpos( 'http://', $this->query ) !== false ) {
+			error( QUICKSILVER_NOTICE, 'BAD BOT! You should know better than that!' );
 		}
 
 		if( !isset( $url['path'] ) ) {

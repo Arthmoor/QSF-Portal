@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -84,7 +84,7 @@ class bbcode
 		}
 
 		// Yes, this looks silly, but trust me.
-		if( !( $options & FORMAT_HTMLCHARS ) || ( ($options & FORMAT_HTMLCHARS) && ($options & FORMAT_BREAKS) ) )
+		if( !( $options & FORMAT_HTMLCHARS ) || ( ( $options & FORMAT_HTMLCHARS ) && ( $options & FORMAT_BREAKS ) ) )
 			$strtr["\n"] = "<br>\n";
 
 		// Don't format emojis!

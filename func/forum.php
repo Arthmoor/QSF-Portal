@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -121,7 +121,14 @@ class forum extends qsfglobal
 		 * Check if the forum exists. We also cause an error if
 		 * $exists['forum_parent'] is 0 because categories can't be viewed as forums.
 		 */
-		$exists = $this->db->fetch( "SELECT forum_id, forum_parent, forum_name, forum_subcat FROM %pforums WHERE forum_id=%d", $f );
+		$stmt = $this->db->prepare_query( 'SELECT forum_id, forum_parent, forum_name, forum_subcat FROM %pforums WHERE forum_id=?' );
+
+      $stmt->bind_param( 'i', $f );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $exists = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !isset( $exists['forum_parent'] ) || !$exists['forum_parent'] ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -138,7 +145,15 @@ class forum extends qsfglobal
 
 		$this->set_title( $exists['forum_name'] );
 
-		$topic = $this->db->fetch( "SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=%d AND topic_type=%d", $f, TOPIC_TYPE_FORUM );
+		$stmt = $this->db->prepare_query( 'SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=? AND topic_type=?' );
+
+      $ttype = intval( TOPIC_TYPE_FORUM );
+      $stmt->bind_param( 'ii', $f, $ttype );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		$link_name = $this->htmlwidgets->clean_url( $exists['forum_name'] );
 		$pagelinks = $this->htmlwidgets->get_pages( $topic['count'], "forum/{$link_name}-{$f}/&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
@@ -219,15 +234,21 @@ class forum extends qsfglobal
 
 	private function display_subforums( $xtpl, $f, $exists )
 	{
-		$query = $this->db->query( "SELECT f.forum_id, f.forum_parent, f.forum_name, f.forum_position, f.forum_description, f.forum_topics, f.forum_replies, f.forum_lastpost, f.forum_redirect,
+		$stmt = $this->db->prepare_query( 'SELECT f.forum_id, f.forum_parent, f.forum_name, f.forum_position, f.forum_description, f.forum_topics, f.forum_replies, f.forum_lastpost, f.forum_redirect,
 				t.topic_id as LastTopicID, t.topic_title as user_lastpost, t.topic_edited as LastTime,
 				m.user_name as user_lastposter, m.user_id as user_lastposterID
 			FROM %pforums f
 			LEFT JOIN %pposts p ON p.post_id = f.forum_lastpost
 			LEFT JOIN %ptopics t ON t.topic_id = p.post_topic
 			LEFT JOIN %pusers m ON m.user_id = p.post_author
-			WHERE f.forum_parent=%d
-			ORDER BY f.forum_parent, f.forum_position", $f );
+			WHERE f.forum_parent = ?
+			ORDER BY f.forum_parent, f.forum_position' );
+
+      $stmt->bind_param( 'i', $f );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$xtpl->assign( 'forum_sub', $this->lang->forum_sub );
 		$xtpl->assign( 'forum_forum_url', $this->lang->forum_forum_url );
@@ -319,18 +340,26 @@ class forum extends qsfglobal
 
 	private function display_topics( $xtpl, $f, $min, $n, $m, $order )
 	{
-		$query = $this->db->query( "SELECT DISTINCT(p.post_author) as dot,
+		$stmt = $this->db->prepare_query( "SELECT DISTINCT(p.post_author) as dot,
 				t.topic_id, t.topic_title, t.topic_last_poster, t.topic_starter, t.topic_replies, t.topic_modes,
 				t.topic_posted, t.topic_edited, t.topic_icon, t.topic_views, t.topic_description, t.topic_moved, t.topic_forum,
 				s.user_name AS topic_starter_name, m.user_name AS topic_last_poster_name, t.topic_last_post, t.topic_type
 			FROM (%ptopics t, %pusers s)
-			LEFT JOIN %pposts p ON (t.topic_id = p.post_topic AND p.post_author = %d)
+			LEFT JOIN %pposts p ON (t.topic_id = p.post_topic AND p.post_author = ?)
 			LEFT JOIN %pusers m ON m.user_id = t.topic_last_poster
-			WHERE ((t.topic_forum = %d) OR (t.topic_modes & %d)) AND t.topic_type=%d AND s.user_id = t.topic_starter
+			WHERE ((t.topic_forum = ?) OR (t.topic_modes & ?)) AND t.topic_type=? AND s.user_id = t.topic_starter
 			GROUP BY t.topic_id
-			ORDER BY (t.topic_modes & %d) DESC, $order
-			LIMIT %d, %d",
-			$this->user['user_id'], $f, TOPIC_GLOBAL, TOPIC_TYPE_FORUM, TOPIC_PINNED, $min, $n );
+			ORDER BY (t.topic_modes & ?) DESC, $order
+			LIMIT ?, ?" );
+
+      $tflag1 = intval( TOPIC_GLOBAL );
+      $tflag2 = intval( TOPIC_TYPE_FORUM );
+      $tflag3 = intval( TOPIC_PINNED );
+      $stmt->bind_param( 'iiiiiii', $this->user['user_id'], $f, $tflag1, $tflag2, $tflag3, $min, $n );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
@@ -362,7 +391,7 @@ class forum extends qsfglobal
 					$state = 'new';
 				}
 
-				if( ( $this->user['user_id'] != USER_GUEST_UID) && $row['dot'] ) {
+				if( ( $this->user['user_id'] != USER_GUEST_UID ) && $row['dot'] ) {
 					$state .= 'dot';
 				}
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -102,7 +102,14 @@ class settings extends admin
 				if( $c < 1 )
 					return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_invalid );
 
-				$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', $c );
+				$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
+
+            $stmt->bind_param( 'i', $c );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $cap = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				if( !$cap )
 					return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_no_pair );
@@ -135,12 +142,23 @@ class settings extends admin
 			}
 
 			$c = intval( $this->get['c'] );
-			$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', $c );
+			$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
+
+         $stmt->bind_param( 'i', $c );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $cap = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( !$cap )
 				return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_no_pair );
 
-			$this->db->query( "DELETE FROM %pcaptcha WHERE cap_id=%d", $c );
+			$stmt = $this->db->prepare_query( 'DELETE FROM %pcaptcha WHERE cap_id=?' );
+
+         $stmt->bind_param( 'i', $c );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_deleted );
 			break;
@@ -155,7 +173,14 @@ class settings extends admin
 				if( $c < 1 )
 					return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_invalid );
 
-				$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', $c );
+				$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
+
+            $stmt->bind_param( 'i', $c );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $cap = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				if( !$cap )
 					return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_no_pair );
@@ -188,12 +213,23 @@ class settings extends admin
 			}
 
 			$c = intval( $this->get['c'] );
-			$cap = $this->db->fetch( 'SELECT * FROM %pcaptcha WHERE cap_id=%d', $c );
+			$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
+
+         $stmt->bind_param( 'i', $c );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $cap = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( !$cap )
 				return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_no_pair );
 
-			$this->db->query( "UPDATE %pcaptcha SET cap_question='%s', cap_answer='%s' WHERE cap_id=%d", $this->post['cap_question'], $this->post['cap_answer'], $c );
+			$stmt = $this->db->prepare_query( 'UPDATE %pcaptcha SET cap_question=?, cap_answer=? WHERE cap_id=?' );
+
+         $stmt->bind_param( 'ssi', $this->post['cap_question'], $this->post['cap_answer'], $c );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_edited );
 			break;
@@ -226,7 +262,11 @@ class settings extends admin
 			if( empty( $this->post['cap_question'] ) || empty( $this->post['cap_answer'] ) )
 				return $this->message( $this->lang->settings_captcha_pair, $this->lang->settings_captcha_missing );
 
-			$this->db->query( "INSERT INTO %pcaptcha (cap_question, cap_answer) VALUES( '%s', '%s' )", $this->post['cap_question'], $this->post['cap_answer'] );
+			$stmt = $this->db->prepare_query( 'INSERT INTO %pcaptcha (cap_question, cap_answer) VALUES( ?, ? )' );
+
+         $stmt->bind_param( 'ss', $this->post['cap_question'], $this->post['cap_answer'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			return $this->message( $this->lang->settings_captcha_pair, $this->lang->settings_captcha_added );
 			break;
@@ -601,7 +641,16 @@ class settings extends admin
 				$email_validation_disabled = "checked=\"checked\"";
 			$xtpl->assign( 'email_validation_disabled', $email_validation_disabled );
 
-			$group = $this->db->fetch ("SELECT group_name FROM %pgroups WHERE group_id=%d", USER_AWAIT );
+			$stmt = $this->db->prepare_query( 'SELECT group_name FROM %pgroups WHERE group_id=?' );
+
+         $group_type = intval( USER_AWAIT );
+         $stmt->bind_param( 'i', $group_type );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $group = $this->db->nqfetch( $result );
+         $stmt->close();
+
 			$xtpl->assign( 'group_name', $group['group_name'] );
 
 			$xtpl->assign( 'settings_email_place1', $this->lang->settings_email_place1 );
@@ -902,7 +951,7 @@ class settings extends admin
 						$newval .= '/';
 					$newval .= $val;
 
-					if( $val[strlen($val)-1] != '/' )
+					if( $val[strlen( $val )-1] != '/' )
 						$newval .= '/';
 					$val = $newval;
 				}
@@ -913,19 +962,49 @@ class settings extends admin
 			$new_spider_names = array();
 			foreach( $this->sets['spider_agent'] as $key => $spider_name )
 			{
-				$new_spider_names[strtolower($spider_name)] = $this->sets['spider_name'][$key];
+				$new_spider_names[strtolower( $spider_name )] = $this->sets['spider_name'][$key];
 			}
 			unset( $this->sets['spider_agent'] );
 			$this->sets['spider_name'] = $new_spider_names;
 
-			$this->db->query( "UPDATE %pusers SET user_language='%s', user_skin='%s' WHERE user_id=%d",
-				$this->post['default_lang'], $this->post['default_skin'], USER_GUEST_UID );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_language=?, user_skin=? WHERE user_id=?' );
+
+         $user_id = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'ssi', $this->post['default_lang'], $this->post['default_skin'], $user_id );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
 			$this->write_sets();
-			$this->db->query( "UPDATE %psettings SET settings_tos='%s'", $tos_text );
-			$this->db->query( "UPDATE %psettings SET settings_tos_files='%s'", $tos_files_text );
-			$this->db->query( "UPDATE %psettings SET settings_meta_keywords='%s'", $meta_keywords );
-			$this->db->query( "UPDATE %psettings SET settings_meta_description='%s'", $meta_description );
-			$this->db->query( "UPDATE %psettings SET settings_mobile_icons='%s'", $mobile_icons );
+
+			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_tos=?' );
+
+         $stmt->bind_param( 's', $tos_text );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_tos_files=?' );
+
+         $stmt->bind_param( 's', $tos_files_text );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_meta_keywords=?' );
+
+         $stmt->bind_param( 's', $meta_keywords );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_meta_description=?' );
+
+         $stmt->bind_param( 's', $meta_description );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_mobile_icons=?' );
+
+         $stmt->bind_param( 's', $mobile_icons );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			return $this->message( $this->lang->settings, $this->lang->settings_updated );
 			break;

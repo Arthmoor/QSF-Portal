@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -110,8 +110,17 @@ class conv_readmarker extends forumutils
 		$this->last_read_all = $time;
 
 		// Clean out unneeded entries
-		$this->db->query( "UPDATE %pusers SET user_lastcvallread=%d WHERE user_id=%d", $time, $this->user_id );
-		$this->db->query( "DELETE FROM %pconv_readmarks WHERE readmark_user=%d AND readmark_lastread<%d", $this->user_id, $time );
+		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastcvallread=? WHERE user_id=?' );
+
+      $stmt->bind_param( 'ii', $time, $this->user_id );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$stmt = $this->db->query( 'DELETE FROM %pconv_readmarks WHERE readmark_user=? AND readmark_lastread < ?' );
+
+      $stmt->bind_param( 'ii', $this->user_id, $time );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$this->readmarkers_loaded = false;
 	}
@@ -133,7 +142,12 @@ class conv_readmarker extends forumutils
 			$this->_load_readmarkers();
 
 			if( !isset( $this->readmarkers[$conv_id] ) || $this->readmarkers[$conv_id] < $time ) {
-				$this->db->query( "REPLACE INTO %pconv_readmarks (readmark_user, readmark_conv, readmark_lastread) VALUES (%d, %d, %d)", $this->user_id, $conv_id, $time );
+				$stmt = $this->db->prepare_query( 'REPLACE INTO %pconv_readmarks (readmark_user, readmark_conv, readmark_lastread) VALUES ( ?, ?, ? )' );
+
+            $stmt->bind_param( 'iii', $this->user_id, $conv_id, $time );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
+
 				$this->readmarkers[$conv_id] = $time;
 			}
 
@@ -214,7 +228,13 @@ class conv_readmarker extends forumutils
 		if( !$this->readmarkers_loaded ) {
 			$this->readmarkers = array();
 
-			$query = $this->db->query( "SELECT * FROM %pconv_readmarks WHERE readmark_user=%d", $this->user_id );
+			$stmt = $this->db->prepare_query( 'SELECT * FROM %pconv_readmarks WHERE readmark_user=?' );
+
+         $stmt->bind_param( 'i', $this->user_id );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			while( $mark = $this->db->nqfetch( $query ) )
 			{
@@ -234,7 +254,13 @@ class conv_readmarker extends forumutils
 	private function _cleanup_readmarks()
 	{
 		// Find the OLDEST unread post
-		$query = $this->db->query( "SELECT conv_id, conv_edited FROM %pconversations WHERE conv_edited > %d AND %d IN (conv_users)", $this->last_read_all, $this->user_id );
+		$stmt = $this->db->prepare_query( 'SELECT conv_id, conv_edited FROM %pconversations WHERE conv_edited > ? AND ? IN (conv_users)' );
+
+      $stmt->bind_param( 'ii', $this->last_read_all, $this->user_id );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$oldest_time = $this->time;
 

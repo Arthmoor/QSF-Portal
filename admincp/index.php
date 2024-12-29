@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -187,7 +187,14 @@ if( $admin->sets['fp_enabled'] ) {
 // End security header options
 
 if( !isset( $admin->get['skin'] ) ) {
-	$skin = $admin->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $admin->user['user_skin'] );
+	$stmt = $admin->db->prepare_query( 'SELECT skin_dir FROM %pskins WHERE skin_id=?' );
+
+   $stmt->bind_param( 'i', $admin->user['user_skin'] );
+   $admin->db->execute_query( $stmt );
+
+   $result = $stmt->get_result();
+   $skin = $admin->db->nqfetch( $result );
+   $stmt->close();
 
 	$admin->skin = $skin['skin_dir'];
 } elseif( $admin->perms->auth( 'is_admin' ) ) {
@@ -196,7 +203,14 @@ if( !isset( $admin->get['skin'] ) ) {
 	// Allow admins to specify a skin manually for development purposes.
 	$skin = intval( $admin->get['skin'] );
 
-	$dev_skin = $admin->db->fetch( 'SELECT skin_dir FROM %pskins WHERE skin_id=%d', $skin );
+	$dev_skin = $admin->db->prepare_query( 'SELECT skin_dir FROM %pskins WHERE skin_id=?' );
+
+   $stmt->bind_param( 'i', $skin );
+   $admin->db->execute_query( $stmt );
+
+   $result = $stmt->get_result();
+   $dev_skin = $admin->db->nqfetch( $result );
+   $stmt->close();
 
 	if( $dev_Skin )
 		$admin->skin = $dev_skin['skin_dir'];

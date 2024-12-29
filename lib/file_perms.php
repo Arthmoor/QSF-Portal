@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -86,10 +86,26 @@ class file_permissions
 	{
 		if( !$perms ) {
 			if ($group != -1) {
-				$data  = $this->db->fetch( "SELECT group_file_perms FROM %pgroups WHERE group_id=%d", $group );
+				$stmt  = $this->db->prepare_query( 'SELECT group_file_perms FROM %pgroups WHERE group_id=?' );
+
+            $stmt->bind_param( 'i', $group );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $data = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$perms = $data['group_file_perms'];
 			} else {
-				$data  = $this->db->fetch( "SELECT user_file_perms, user_group FROM %pusers WHERE user_id=%d", $user );
+				$stmt  = $this->db->prepare_query( 'SELECT user_file_perms, user_group FROM %pusers WHERE user_id=?' );
+
+            $stmt->bind_param( 'i', $user );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $data = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				$perms = $data['user_file_perms'];
 				$group = $data['user_group'];
 			}
@@ -137,7 +153,7 @@ class file_permissions
 		$cats = array();
 
 		$cats[0] = $bool; // Root category
-		$query = $this->db->query( "SELECT fcat_id FROM %pfile_categories ORDER BY fcat_id" );
+		$query = $this->db->query( 'SELECT fcat_id FROM %pfile_categories ORDER BY fcat_id' );
 
 		while( $cat = $this->db->nqfetch( $query ) )
 		{
@@ -284,7 +300,7 @@ class file_permissions
 			if( $users ) {
 				$query = $this->db->query( "SELECT user_id, user_file_perms FROM %pusers WHERE user_file_perms != ''" );
 			} else {
-				$query = $this->db->query( "SELECT group_id, group_file_perms FROM %pgroups" );
+				$query = $this->db->query( 'SELECT group_id, group_file_perms FROM %pgroups' );
 			}
 
 			while( $group = $this->db->nqfetch( $query ) )
@@ -351,9 +367,17 @@ class file_permissions
 		}
 
 		if( $this->user == -1 ) {
-			$this->db->query( "UPDATE %pgroups SET group_file_perms='%s' WHERE group_id=%d", $serialized, $this->group );
+			$stmt->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=?' );
+
+         $stmt->bind_param( 'si', $serialized, $this->group );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		} else {
-			$this->db->query( "UPDATE %pusers SET user_file_perms='%s' WHERE user_id=%d", $serialized, $this->user );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_file_perms=? WHERE user_id=?' );
+
+         $stmt->bind_param( 'si', $serialized, $this->user );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 	}
 }

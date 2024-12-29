@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -61,7 +61,7 @@ class spam_control extends qsfglobal
 		$c = intval( $this->get['c'] );
 
 		if( $c == 0 ) {
-			$this->db->query( "TRUNCATE TABLE %pspam" );
+			$this->db->query( 'TRUNCATE TABLE %pspam' );
 			$this->sets['spam_pending'] = 0;
 			$this->write_sets();
 
@@ -80,17 +80,41 @@ class spam_control extends qsfglobal
 
 	private function delete_spam( $c )
 	{
-		$spam = $this->db->fetch( "SELECT spam_topic FROM %pspam WHERE spam_id=%d", $c );
+		$stmt = $this->db->prepare_query( 'SELECT spam_topic FROM %pspam WHERE spam_id=?' );
+
+      $stmt->bind_param( 'i', $c );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $spam = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$spam )
 			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->site . '/index.php?a=spam_control' );
 
-		$this->db->query( "DELETE FROM %pspam WHERE spam_id=%d", $c );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pspam WHERE spam_id=?' );
+
+      $stmt->bind_param( 'i', $c );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		// Only post in the topic? Kill the actual topic.
-		$topic = $this->db->fetch( "SELECT topic_id, topic_replies FROM %ptopics WHERE topic_id=%d", $spam['spam_topic'] );
-		if( $topic['topic_replies'] < 1 )
-			$this->db->query( "DELETE FROM %ptopics WHERE topic_id=%d", $topic['topic_id'] );
+		$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_replies FROM %ptopics WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $spam['spam_topic'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		if( $topic['topic_replies'] < 1 ) {
+			$stmt = $this->db->prepare_query( 'DELETE FROM %ptopics WHERE topic_id=?' );
+
+         $stmt->bind_param( 'i', $topic['topic_id'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+      }
 
 		$this->sets['spam_pending']--;
 
@@ -103,14 +127,29 @@ class spam_control extends qsfglobal
 
 	private function report_ham( $c )
 	{
-		$spam = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_emojis, spam_bbcode, spam_count, spam_text, spam_time,
-			spam_icon, spam_ip, spam_edited_by, spam_edited_time, spam_svars FROM %pspam WHERE spam_id=%d", $c );
+		$stmt = $this->db->prepare_query( 'SELECT spam_id, spam_topic, spam_author, spam_emojis, spam_bbcode, spam_count, spam_text, spam_time,
+			spam_icon, spam_ip, spam_edited_by, spam_edited_time, spam_svars FROM %pspam WHERE spam_id=?' );
+
+      $stmt->bind_param( 'i', $c );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $spam = $this->db->nqfetch( $result );
+      $stmt->close();
+
 		if( !$spam )
 			return $this->message( $this->lang->spam_control, $this->lang->spam_no_post, $this->lang->continue, $this->site . '/index.php?a=spam_control' );
 
 		$svars = json_decode( $spam['spam_svars'], true );
 
-		$user = $this->db->query( "SELECT user_name, FROM %pusers WHERE user_id=%d", $spam['spam_author'] );
+		$stmt = $this->db->prepare_query( 'SELECT user_name, FROM %pusers WHERE user_id=?' );
+
+      $stmt->bind_param( 'i', $spam['spam_author'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $user = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		// Setup and deliver the information to flag this comment as legit with Akismet.
 		require_once $this->sets['include_path'] . '/lib/akismet.php';
@@ -125,21 +164,37 @@ class spam_control extends qsfglobal
 
 		$akismet->submit_ham();
 
-		$this->db->query( "INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
-			VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s')",
-			$spam['spam_topic'], $spam['spam_author'], $spam['spam_text'], $spam['spam_time'], $spam['spam_emojis'], $spam['spam_bbcode'], $spam['spam_count'], $spam['spam_ip'], $spam['spam_icon'], $svars['HTTP_REFERER'], $svars['HTTP_USER_AGENT'] );
-		$post_id = $this->db->insert_id( 'posts', 'post_id' );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %pposts (post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_count, post_ip, post_icon, post_referrer, post_agent)
+			VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-		$this->db->query( "UPDATE %ptopics SET topic_last_post=%d WHERE topic_id=%d", $post_id, $spam['spam_topic'] );
+      $stmt->bind_param( 'iisiiiissss', $spam['spam_topic'], $spam['spam_author'], $spam['spam_text'], $spam['spam_time'], $spam['spam_emojis'], $spam['spam_bbcode'], $spam['spam_count'], $spam['spam_ip'], $spam['spam_icon'], $svars['HTTP_REFERER'], $svars['HTTP_USER_AGENT'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$post_id = $this->db->insert_id( );
+
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_last_post=? WHERE topic_id=?' );
+
+      $stmt->bind_param( 'ii', $post_id, $spam['spam_topic'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		if( $spam['spam_count'] ) {
-			$this->db->query( "UPDATE %pusers SET user_posts=user_posts+1' WHERE user_id=%d", $spam['spam_author'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=user_posts+1 WHERE user_id=?' );
+
+         $stmt->bind_param( 'i', $spam['spam_author'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 
 		// Easier to just do this as reporting ham isn't generally repeated that often.
 		$this->RecountForums();
 
-		$this->db->query( "DELETE FROM %pspam WHERE spam_id=%d", $spam['spam_id'] );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pspam WHERE spam_id=?' );
+
+      $stmt->bind_param( 'i', $spam['spam_id'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$this->sets['spam_post_count']--;
 		$this->sets['ham_count']++;
@@ -151,7 +206,7 @@ class spam_control extends qsfglobal
 
 	private function display_spam()
 	{
-		$result = $this->db->query( "SELECT spam_id, spam_topic, spam_author, spam_text, spam_time, spam_ip FROM %pspam ORDER BY spam_time" );
+		$result = $this->db->query( 'SELECT spam_id, spam_topic, spam_author, spam_text, spam_time, spam_ip FROM %pspam ORDER BY spam_time' );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/spam_control.xtpl' );
 
@@ -177,13 +232,28 @@ class spam_control extends qsfglobal
 		$xtpl->assign( 'lang_date', $this->lang->date );
 		$xtpl->assign( 'spam_text', $this->lang->spam_text );
 
+      $topic_query = $this->db->prepare_query( 'SELECT topic_id, topic_title FROM %ptopics WHERE topic_id=?' );
+      $topic_query->bind_param( 'i', $topic_id );
+
+      $user_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
+      $user_query->bind_param( 'i', $user_id );
+
 		while( $spam = $this->db->nqfetch( $result ) )
 		{
 			$ham_link = $this->site . '/index.php?a=spam_control&amp;s=report_ham&amp;c=' . $spam['spam_id'];
 			$delete_link = $this->site . '/index.php?a=spam_control&amp;s=delete_spam&amp;c=' . $spam['spam_id'];
 
-			$topic = $this->db->fetch( "SELECT topic_id, topic_title FROM %ptopics WHERE topic_id=%d", $spam['spam_topic'] );
-			$user = $this->db->fetch( "SELECT user_id, user_name FROM %pusers WHERE user_id=%d", $spam['spam_author'] );
+         $topic_id = $spam['spam_topic'];
+         $this->db->execute_query( $topic_query );
+
+         $tresult = $topic_query->get_result();
+         $topic = $this->db->nqfetch( $tresult );
+
+         $user_id = $spam['spam_author'];
+         $this->db->execute_query( $user_query );
+
+         $uresult = $stmt->get_result();
+         $user = $this->db->nqfetch( $uresult );
 
 			$title = $this->format( $topic['topic_title'], FORMAT_HTMLCHARS );
 
@@ -208,6 +278,9 @@ class spam_control extends qsfglobal
 
 			$xtpl->parse( 'SpamControl.Entry' );
 		}
+
+      $topic_query->close();
+      $user_query->close();
 
 		$xtpl->parse( 'SpamControl' );
 		return $xtpl->text( 'SpamControl' );

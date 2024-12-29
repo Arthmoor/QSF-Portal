@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -73,10 +73,17 @@ class profile extends qsfglobal
 		$uname = strtolower( $this->get['uname'] );
 		$uid = intval( $this->get['w'] );
 
-		$profile = $this->db->fetch( "SELECT u.*, g.group_name, a.active_time
+		$stmt = $this->db->prepare_query( 'SELECT u.*, g.group_name, a.active_time
 			FROM (%pusers u, %pgroups g)
 			LEFT JOIN %pactive a ON a.active_id=u.user_id
-			WHERE u.user_id=%d AND g.group_id=u.user_group", $uid );
+			WHERE u.user_id=? AND g.group_id=u.user_group' );
+
+      $stmt->bind_param( 'i', $uid );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $profile = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$profile || ( $uid == USER_GUEST_UID ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -146,6 +153,8 @@ class profile extends qsfglobal
 		} else {
 			$xtpl->parse( 'Profile.Offline' );
 		}
+
+      $this->set_title( $this->lang->profile_view_profile . ': ' . $profile['user_name'] );
 
 		$xtpl->assign( 'user_name', $profile['user_name'] );
 		$xtpl->assign( 'user_title', $profile['user_title'] );
@@ -242,11 +251,17 @@ class profile extends qsfglobal
 
 			$user_postsPerDay = number_format( $user_postsPerDay, 2, $this->lang->sep_decimals, $this->lang->sep_thousands );
 
-			$fav = $this->db->query( "SELECT COUNT(p.post_id) AS Forumuser_posts, f.forum_id AS Forum, f.forum_name
+			$stmt = $this->db->prepare_query( 'SELECT COUNT(p.post_id) AS Forumuser_posts, f.forum_id AS Forum, f.forum_name
 				FROM %pposts p, %ptopics t, %pforums f
-				WHERE p.post_topic=t.topic_id AND t.topic_forum=f.forum_id AND p.post_author=%d
+				WHERE p.post_topic=t.topic_id AND t.topic_forum=f.forum_id AND p.post_author=?
 				GROUP BY t.topic_forum
-				ORDER BY Forumuser_posts DESC", $uid );
+				ORDER BY Forumuser_posts DESC' );
+
+         $stmt->bind_param( 'i', $uid );
+         $this->db->execute_query( $stmt );
+
+         $fav = $stmt->get_result();
+         $stmt->close();
 
 			$final_fav = null;
 
@@ -258,11 +273,17 @@ class profile extends qsfglobal
 				}
 			}
 
-			$last = $this->db->fetch( "SELECT t.topic_id, t.topic_forum, t.topic_title, p.post_time
+			$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_forum, t.topic_title, p.post_time
 				FROM %ptopics t, %pposts p
-				WHERE t.topic_id = p.post_topic AND p.post_author=%d
-				ORDER BY p.post_time DESC
-				LIMIT 1", $profile['user_id'] );
+				WHERE t.topic_id = p.post_topic AND p.post_author=?
+				ORDER BY p.post_time DESC LIMIT 1' );
+
+         $stmt->bind_param( 'i', $profile['user_id'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $last = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( isset( $last['topic_forum'] ) && $this->perms->auth( 'topic_view', $last['topic_forum'] ) ) {
 				$topic_link = $this->htmlwidgets->clean_url( $last['topic_title'] );
@@ -277,7 +298,14 @@ class profile extends qsfglobal
 			}
 
 			if( isset( $final_fav['Forum'] ) ) {
-				$posts_total = $this->db->fetch( "SELECT COUNT(post_id) as count FROM %pposts WHERE post_author=%d", $uid );
+				$stmt = $this->db->prepare_query( 'SELECT COUNT(post_id) as count FROM %pposts WHERE post_author=?' );
+
+            $stmt->bind_param( 'i', $uid );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $posts_total = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				if( !$posts_total['count'] ) {
 					$fav_forum = $this->lang->profile_unkown;
@@ -302,8 +330,15 @@ class profile extends qsfglobal
 		}
 
 		if( $profile['user_uploads'] ) {
-			$last = $this->db->fetch( "SELECT file_id, file_name, file_date FROM %pfiles
-				WHERE file_submitted=%d ORDER BY file_date DESC LIMIT 1", $uid );
+			$stmt = $this->db->prepare_query( 'SELECT file_id, file_name, file_date FROM %pfiles
+				WHERE file_submitted=? ORDER BY file_date DESC LIMIT 1' );
+
+         $stmt->bind_param( 'i', $uid );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $last = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			$lastfile = $this->lang->profile_uploads_none_yet;
 			if( isset( $last['file_id'] ) ) {

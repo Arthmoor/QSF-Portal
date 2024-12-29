@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -172,7 +172,7 @@ require_once $set['include_path'] . '/lib/tool.php';
 		if( $this->forum_data === false ) {
 			$this->forum_data = array();
 
-			$q = $this->db->query( "SELECT forum_id, forum_parent, forum_tree, forum_name, forum_position FROM %pforums ORDER BY forum_position" );
+			$q = $this->db->query( 'SELECT forum_id, forum_parent, forum_tree, forum_name, forum_position FROM %pforums ORDER BY forum_position' );
 
 			while( $f = $this->db->nqfetch( $q ) )
 			{
@@ -191,44 +191,96 @@ require_once $set['include_path'] . '/lib/tool.php';
 	 **/
 	public function delete_topic( $t )
 	{
-		$posts = $this->db->query( "SELECT DISTINCT t.topic_forum, t.topic_id, a.attach_file, p.post_author, p.post_id, p.post_count
+		$stmt = $this->db->prepare_query( 'SELECT DISTINCT t.topic_forum, t.topic_id, a.attach_file, p.post_author, p.post_id, p.post_count
 			FROM (%ptopics t, %pposts p)
 			LEFT JOIN %pattach a ON p.post_id=a.attach_post
-			WHERE t.topic_id=%d AND t.topic_id=p.post_topic", $t );
+			WHERE t.topic_id=? AND t.topic_id=p.post_topic' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $posts = $stmt->get_result();
+      $stmt->close();
 
 		$deleted = -1;
+
+      $user_query = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=?' );
+      $user_query->bind_param( 'i', $user_id );
+
+      $attach_query = $this->db->prepare_query( 'DELETE FROM %pattach WHERE attach_post=?' );
+      $attach_query->bind_param( 'i', $attach_id );
 
 		while( $post = $this->db->nqfetch( $posts ) )
 		{
 			if( $post['post_count'] ) {
-				$this->db->query( "UPDATE %pusers SET user_posts=user_posts-1 WHERE user_id=%d", $post['post_author'] );
+            $user_id = $post['post_author'];
+            $this->db->execute_query( $user_query );
 			}
 
 			if( $post['attach_file'] ) {
-				$this->db->query( "DELETE FROM %pattach WHERE attach_post=%d", $post['post_id'] );
+            $attach_id = $post['post_id'];
+            $this->db->execute_query( $attach_query );
+
 				@unlink( './attachments/' . $post['attach_file'] );
 			}
 
 			$deleted++;
 		}
+      $user_query->close();
+      $attach_query->close();
 
-		$result = $this->db->fetch( "SELECT topic_forum FROM %ptopics WHERE topic_id=%d", $t );
+		$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
 
-		$this->db->query( "DELETE FROM %pvotes WHERE vote_topic=%d", $t );
-		$this->db->query( "DELETE FROM %ptopics WHERE topic_id=%d OR topic_moved=%d", $t, $t );
-		$this->db->query( "DELETE FROM %pposts WHERE post_topic=%d", $t );
-		$this->db->query( "DELETE FROM %preadmarks WHERE readmark_topic=%d", $t );
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
 
-		$this->update_reply_count( $result['topic_forum'], $deleted );
+      $result = $stmt->get_result();
+      $topic = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pvotes WHERE vote_topic=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'DELETE FROM %ptopics WHERE topic_id=? OR topic_moved=?' );
+
+      $stmt->bind_param( 'ii', $t, $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pposts WHERE post_topic=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'DELETE FROM %preadmarks WHERE readmark_topic=?' );
+
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$this->update_reply_count( $topic['topic_forum'], $deleted );
 
 		// Update all parent forums if any
-		$forums = $this->db->fetch( "SELECT forum_tree FROM %pforums WHERE forum_id=%d", $result['topic_forum'] );
+		$stmt = $this->db->prepare_query( 'SELECT forum_tree FROM %pforums WHERE forum_id=?' );
 
-		$this->db->query( "UPDATE %pforums SET forum_topics=forum_topics-1
-			WHERE forum_parent > 0 AND forum_id IN (%s) OR forum_id=%d",
-			$forums['forum_tree'], $result['topic_forum'] );
+      $stmt->bind_param( 'i', $topic['topic_forum'] );
+      $this->db->execute_query( $stmt );
 
-		$this->update_last_post( $result['topic_forum'] );
+      $result = $stmt->get_result();
+      $forums = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_topics=forum_topics-1	WHERE forum_parent > 0 AND forum_id IN (?) OR forum_id=?' );
+
+      $stmt->bind_param( 'si', $forums['forum_tree'], $topic['topic_forum'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$this->update_last_post( $topic['topic_forum'] );
 
 		$this->sets['posts'] -= ( $deleted + 1 );
 		$this->sets['topics'] -= 1;
@@ -245,10 +297,17 @@ require_once $set['include_path'] . '/lib/tool.php';
 	 **/
 	public function delete_post( $p )
 	{
-		$result = $this->db->fetch( "SELECT t.topic_forum, t.topic_id, t.topic_replies, a.attach_file, p.post_author, p.post_count, u.user_posts
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_forum, t.topic_id, t.topic_replies, a.attach_file, p.post_author, p.post_count, u.user_posts
 			FROM (%ptopics t, %pposts p, %pusers u)
 			LEFT JOIN %pattach a ON p.post_id=a.attach_post
-			WHERE p.post_id=%d AND t.topic_id=p.post_topic AND u.user_id=p.post_author", $p );
+			WHERE p.post_id=? AND t.topic_id=p.post_topic AND u.user_id=p.post_author' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+
+      $tresult = $stmt->get_result();
+      $result = $this->db->nqfetch( $tresult );
+      $stmt->close();
 
       // If the topic has only one post, run this through topic deletion instead. That will remove all the relevant data.
       if( $result['topic_replies'] == 0 ) {
@@ -256,8 +315,17 @@ require_once $set['include_path'] . '/lib/tool.php';
          return;
       }
 
-		$this->db->query( "UPDATE %pforums SET forum_replies=forum_replies-1 WHERE forum_id=%d", $result['topic_forum'] );
-      $this->db->query( "UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=%d", $result['topic_id'] );
+		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_replies=forum_replies-1 WHERE forum_id=?' );
+
+      $stmt->bind_param( 'i', $result['topic_forum'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+      $stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_replies=topic_replies-1 WHERE topic_id=?' );
+
+      $stmt->bind_param( 'i', $result['topic_id'] );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		if( $result['post_count'] ) {
 			$posts = $result['user_posts'] - 1;
@@ -265,13 +333,26 @@ require_once $set['include_path'] . '/lib/tool.php';
 			if( $posts < 0 ) {
 				$posts = 0;
 			}
-			$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts, $result['post_author'] );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=%d WHERE user_id=?' );
+
+         $stmt->bind_param( 'ii', $posts, $result['post_author'] );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 
-		$this->db->query( "DELETE FROM %pposts WHERE post_id=%d", $p );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pposts WHERE post_id=?' );
+
+      $stmt->bind_param( 'i', $p );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		if( $result['attach_file'] ) {
-			$this->db->query( "DELETE FROM %pattach WHERE attach_post=%d", $p );
+			$this->db->prepare_query( 'DELETE FROM %pattach WHERE attach_post=?' );
+
+         $stmt->bind_param( 'i', $p );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
 			@unlink( './attachments/' . $result['attach_file'] );
 		}
 
@@ -292,7 +373,14 @@ require_once $set['include_path'] . '/lib/tool.php';
 	public function update_last_post( $f )
 	{
 		/* update any parent forums */
-		$forums = $this->db->fetch( "SELECT forum_tree FROM %pforums WHERE forum_id=%d", $f );
+		$stmt = $this->db->prepare_query( 'SELECT forum_tree FROM %pforums WHERE forum_id=?' );
+
+      $stmt->bind_param( 'i', $f );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $forums = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( isset( $forums['forum_tree'] ) && 0 != strlen( $forums['forum_tree'] ) )
 		{
@@ -316,16 +404,27 @@ require_once $set['include_path'] . '/lib/tool.php';
 
 	private function _update_last_post( $f )
 	{
-		$post = $this->db->fetch( "SELECT p.post_id FROM (%pposts p, %ptopics t)
-			WHERE t.topic_id=p.post_topic AND t.topic_forum=%d
-			ORDER BY t.topic_edited DESC, p.post_id DESC
-			LIMIT 1", $f );
+		$stmt = $this->db->prepare_query( 'SELECT p.post_id FROM (%pposts p, %ptopics t)
+			WHERE t.topic_id=p.post_topic AND t.topic_forum=?
+			ORDER BY t.topic_edited DESC, p.post_id DESC	LIMIT 1' );
+
+      $stmt->bind_param( 'i', $f );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $post = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !isset( $post['post_id'] ) ) {
 			$post['post_id'] = 0;
 		}
 
-		$this->db->query( "UPDATE %pforums SET forum_lastpost=%d WHERE forum_id=%d", $post['post_id'], $f );
+		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_lastpost=? WHERE forum_id=?' );
+
+      $stmt->bind_param( 'ii', $post['post_id'], $f );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
 	}
 
 	/**
@@ -338,13 +437,23 @@ require_once $set['include_path'] . '/lib/tool.php';
 	 **/
 	public function update_last_post_topic( $t )
 	{
-		$last = $this->db->fetch( "SELECT p.post_id, p.post_author, p.post_time
+		$stmt = $this->db->prepare_query( 'SELECT p.post_id, p.post_author, p.post_time
 			FROM %pposts p, %ptopics t
-			WHERE p.post_topic=t.topic_id AND t.topic_id=%d
-			ORDER BY p.post_time DESC
-			LIMIT 1", $t );
+			WHERE p.post_topic=t.topic_id AND t.topic_id=?
+			ORDER BY p.post_time DESC LIMIT 1' );
 
-		$this->db->query( "UPDATE %ptopics SET topic_last_post=%d, topic_last_poster=%d, topic_edited=%d WHERE topic_id=%d", $last['post_id'], $last['post_author'], $last['post_time'], $t );
+      $stmt->bind_param( 'i', $t );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $last = $this->db->nqfetch( $result );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_last_post=?, topic_last_poster=?, topic_edited=? WHERE topic_id=?' );
+
+      $stmt->bind_param( 'iiii', $last['post_id'], $last['post_author'], $last['post_time'], $t );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -362,13 +471,26 @@ require_once $set['include_path'] . '/lib/tool.php';
 			return;
 
 		/* decrement the parent forums */
-		$forums = $this->db->fetch( "SELECT forum_tree FROM %pforums WHERE forum_id=%d", $f );
+		$stmt = $this->db->prepare_query( 'SELECT forum_tree FROM %pforums WHERE forum_id=?' );
+
+      $stmt->bind_param( 'i', $f );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $forums = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( isset( $forums['forum_tree'] ) && 0 != strlen( $forums['forum_tree'] ) )
 		{
 			$wip = explode( ',', $forums['forum_tree'] );
 
 			array_push( $wip, $f );
+
+         $replies_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_replies=forum_replies-? WHERE forum_id=?' );
+         $replies_query->bind_param( 'ii', $ammount, $fid );
+
+         $topics_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_topics=forum_topics-? WHERE forum_id=?' );
+         $topics_query->bind_param( 'ii', $topic, $fid );
 
 			foreach( $wip as $fid )
 			{
@@ -377,18 +499,20 @@ require_once $set['include_path'] . '/lib/tool.php';
 				if( 0 == $fid )
 					continue;
 
-				$this->db->query( "UPDATE %pforums SET forum_replies=forum_replies-%d WHERE forum_id=%d", $ammount, $fid );
+            $this->db->execute_query( $replies_query );
 
 				if( 0 != $topic )
-					$this->db->query( "UPDATE %pforums SET forum_topics=forum_topics-%d WHERE forum_id=%d",	intval( $topic ), $fid );
+               $this->db->execute_query( $topics_query );
 			}
+         $replies_query->close();
+         $topics_query->close();
 		}
 	}
 
 	public function update_count_move( $f_from, $f_to, $ammount )
 	{
 		$this->update_reply_count( $f_from, $ammount,  1 );
-		$this->update_reply_count( $f_to, 0-$ammount, -1 );
+		$this->update_reply_count( $f_to, 0 - $ammount, -1 );
 	}
 }
 ?>

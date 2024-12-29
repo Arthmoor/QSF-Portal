@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -44,7 +44,7 @@ class logs extends admin
 		$this->set_title( $this->lang->logs_view );
 		$this->tree( $this->lang->logs_view );
 
-		$data = $this->db->query( "SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC" );
+		$data = $this->db->query( 'SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC' );
 		$num = $this->db->num_rows( $data );
 
 		$this->lang->main();
@@ -53,8 +53,13 @@ class logs extends admin
 		$this->get['num'] = isset( $this->get['num'] ) ? intval( $this->get['num'] ) : 60;
 		$pages = $this->htmlwidgets->get_pages( $num, 'admincp/index.php?a=logs', $this->get['min'], $this->get['num'] );
 
-		$data = $this->db->query( "SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT %d, %d",
-                       $this->get['min'], $this->get['num'] );
+		$stmt = $this->db->prepare_query( 'SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT ?, ?' );
+
+      $stmt->bind_param( 'ii', $this->get['min'], $this->get['num'] );
+      $this->db->execute_query( $stmt );
+
+      $data = $stmt->get_result();
+      $stmt->close();
 
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/logs.xtpl' );
 

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ class top_posters extends modlet
 	public function execute( $arg )
 	{
 		$content = "";
-		$result = $this->qsf->db->query( "SELECT user_id, user_name, user_posts FROM %pusers ORDER BY user_posts DESC LIMIT 5" );
+		$result = $this->qsf->db->query( 'SELECT user_id, user_name, user_posts FROM %pusers ORDER BY user_posts DESC LIMIT 5' );
 
 		while( $row = $this->qsf->db->nqfetch( $result ) )
 		{

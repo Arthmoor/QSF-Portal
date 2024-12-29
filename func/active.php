@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -121,9 +121,9 @@ class active extends qsfglobal
 			$time = $this->mbdate( DATE_SHORT, $user['time'] );
 
 			if( $user['bot'] ) {
-				$icon = "robot.png";
+				$icon = 'robot.png';
 			} else {
-				$icon = "user_online.png";
+				$icon = 'user_online.png';
 			}
 
 			$xtpl->assign( 'icon', $icon );

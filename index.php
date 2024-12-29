@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -235,7 +235,7 @@ $new_files = null;
 if( $qsf->get_files() > 0 )
 	$new_files = ' class="attention"';
 
-$title = isset( $qsf->title ) ? $qsf->title : $qsf->sets['forum_name'];
+$qsf->set_title( $qsf->sets['forum_name'] );
 
 $time_now  = explode( ' ', microtime() );
 $qsf->time_exec = round( $time_now[1] + $time_now[0] - $time_start, 4 );
@@ -269,7 +269,7 @@ if( $qsf->nohtml ) {
 	$xtpl->assign( 'meta_keywords', $qsf->sets['meta_keywords'] );
 	$xtpl->assign( 'meta_desc', $qsf->sets['meta_description'] );
 	$xtpl->assign( 'mobile_icons', $qsf->sets['mobile_icons'] );
-	$xtpl->assign( 'title', $title );
+	$xtpl->assign( 'title', $qsf->title );
 	$xtpl->assign( 'skin', $qsf->skin );
 	$xtpl->assign( 'feed_links', $qsf->feed_links );
 

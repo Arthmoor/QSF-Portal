@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -101,13 +101,13 @@ class query extends admin
 
 					foreach( $row as $col => $data )
 					{
-						$out .= "<span class='starter'>" . $this->format($data, FORMAT_HTMLCHARS) . "</span>\n";
+						$out .= "<span class='starter'>" . $this->format( $data, FORMAT_HTMLCHARS ) . "</span>\n";
 					}
 					$out .= "<p class='list_line'></p>\n";
 				}
 				return $out . '</div>';
 			} else {
-				return $this->message( $this->lang->query, $this->lang->query_your . ' ' . ($result ? $this->lang->query_success : $this->lang->query_failed) );
+				return $this->message( $this->lang->query, $this->lang->query_your . ' ' . ( $result ? $this->lang->query_success : $this->lang->query_failed ) );
 			}
 		}
 	}

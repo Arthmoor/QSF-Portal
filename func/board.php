@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -55,6 +55,8 @@ class board extends qsfglobal
 			);
 		}
 
+      $this->set_title( $this->lang->board_forums );
+
 		$c = 0;
 		if( isset( $this->get['c'] ) ) {
 			$c = intval( $this->get['c'] );
@@ -87,7 +89,7 @@ class board extends qsfglobal
 			}
 		}
 
-		$query = $this->db->query( "SELECT
+		$query = $this->db->query( 'SELECT
 				f.forum_id, f.forum_parent, f.forum_name, f.forum_position, f.forum_description, f.forum_topics, f.forum_replies, f.forum_lastpost, f.forum_redirect,
 				t.topic_id as LastTopicID, t.topic_title as user_lastpost, t.topic_edited as LastTime, t.topic_replies,
 				m.user_name as user_lastposter, m.user_id as user_lastposterID
@@ -95,7 +97,7 @@ class board extends qsfglobal
 			LEFT JOIN %pposts p ON p.post_id = f.forum_lastpost
 			LEFT JOIN %ptopics t ON t.topic_id = p.post_topic
 			LEFT JOIN %pusers m ON m.user_id = p.post_author
-			ORDER BY f.forum_parent, f.forum_position" );
+			ORDER BY f.forum_parent, f.forum_position' );
 
 		$_forums = array();
 
@@ -120,7 +122,14 @@ class board extends qsfglobal
 		$forums = $this->getForums( $_forums, $c );
 
 		if( $c > 0 ) {
-			$query = $this->db->fetch( "SELECT forum_name FROM %pforums WHERE forum_id = %d", $c );
+			$stmt = $this->db->prepare_query( 'SELECT forum_name FROM %pforums WHERE forum_id = ?' );
+
+         $stmt->bind_param( 'i', $c );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $query = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			$xtpl->assign( 'cat_name', $query['forum_name'] );
 			$xtpl->assign( 'board_forum', $this->lang->board_forum );

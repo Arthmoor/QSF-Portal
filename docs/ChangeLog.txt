@@ -22,6 +22,7 @@ Changes for 2.0:
    Changes:
 
 * Minimum supported PHP version is now 8.0.0.
+* Switched nearly all database queries to use prepared statements. [The ones remaining in "old form" don't need to be prepared first.]
 * Replaced the skinning system with zTemplate. Skins are no longer stored in the database.
 * HTTP server data submitted with user registrations is now shown on the member control editing screen.
 * Emojis are now handled independently of skins and can be added on the fly as desired.

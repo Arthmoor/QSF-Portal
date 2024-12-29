@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -51,10 +51,10 @@ class recent_posts extends modlet
 			return $content;
 		}
 
-		$query = $this->qsf->db->query( "SELECT t.*, u.user_name FROM %ptopics t
+		$query = $this->qsf->db->query( 'SELECT t.*, u.user_name FROM %ptopics t
 			LEFT JOIN %pusers u ON u.user_id = t.topic_last_poster
-			WHERE t.topic_forum IN (%s) AND !(t.topic_modes & TOPIC_MOVED)
-			ORDER BY topic_edited DESC LIMIT 5", $forums_str );
+			WHERE t.topic_forum IN (%s) AND !(t.topic_modes & %d)
+			ORDER BY topic_edited DESC LIMIT 5', $forums_str, TOPIC_MOVED );
 
 		while( $row = $this->qsf->db->nqfetch( $query ) )
 		{

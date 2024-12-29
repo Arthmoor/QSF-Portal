@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -68,26 +68,38 @@ class membercount extends admin
 	**/
 	private function ResetMemberStats()
 	{
-		$member = $this->db->fetch( "SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1" );
-		$counts = $this->db->fetch( "SELECT COUNT(user_id) AS count FROM %pusers" );
+		$member = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1' );
+		$counts = $this->db->fetch( 'SELECT COUNT(user_id) AS count FROM %pusers' );
 
 		$this->sets['last_member'] = $member['user_name'];
 		$this->sets['last_member_id'] = $member['user_id'];
-		$this->sets['members'] = $counts['count']-1; // Subtract guest
+		$this->sets['members'] = $counts['count'] - 1; // Subtract guest
 
 		// Try to fix user post counts.
-		$users = $this->db->query( "SELECT user_id, user_posts FROM %pusers" );
+		$users = $this->db->query( 'SELECT user_id, user_posts FROM %pusers' );
+
+      $count_query = $this->db->prepare_query( 'SELECT COUNT(post_id) count FROM %pposts WHERE post_author=? AND post_count=1' );
+      $count_query->bind_param( 'i', $user_id );
+
+      $post_query = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=? WHERE user_id=?' );
+      $post_query->bind_param( 'ii', $post_count, $user_id );
+
 		while( ( $user = $this->db->nqfetch( $users ) ) )
 		{
-			$uid = $user['user_id'];
+			$user_id = $user['user_id'];
+         $post_count = 0;
 
-			$posts = $this->db->fetch( "SELECT COUNT(post_id) count FROM %pposts WHERE post_author=%d AND post_count=1", $uid );
+         $this->db->execute_query( $count_query );
+         $result = $count_query->get_result();
+			$posts = $this->db->nqfetch( $result );
+
 			if( $posts['count'] && $posts['count'] > 0 ) {
-				$this->db->query( "UPDATE %pusers SET user_posts=%d WHERE user_id=%d", $posts['count'], $uid );
-			} else {
-				$this->db->query( "UPDATE %pusers SET user_posts=0 WHERE user_id=%d", $uid );
+            $post_count = $posts['count'];
 			}
+         $this->db->execute_query( $post_query );
 		}
+      $count_query->close();
+      $post_query->close();
 	}
 }
 ?>

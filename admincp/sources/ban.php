@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -57,12 +57,29 @@ class ban extends admin
 			$ips = implode( "\n", $this->sets['banned_ips'] );
 			$ips = stripslashes( $ips ); // Leave here. IP ban data is stored with leading slashes.
 
-			$banned_group = $this->db->fetch( "SELECT group_name FROM %pgroups WHERE group_id=%d", USER_BANNED );
+			$stmt = $this->db->prepare_query( 'SELECT group_name FROM %pgroups WHERE group_id=?' );
+
+         $group_id = intval( USER_BANNED );
+         $stmt->bind_param( 'i', $group_id );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $banned_group = $this->db->nqfetch( $result );
+         $stmt->close();
+
 			$banned_group = $this->format( $banned_group['group_name'], FORMAT_HTMLCHARS );
 
 			$banned = null;
 
-			$banned_query = $this->db->query( "SELECT user_name FROM %pusers WHERE user_group=%d ORDER BY user_name ASC", USER_BANNED );
+			$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_group=? ORDER BY user_name ASC' );
+
+         $group_id = intval( USER_BANNED );
+         $stmt->bind_param( 'i', $group_id );
+         $this->db->execute_query( $stmt );
+
+         $banned_query = $stmt->get_result();
+         $stmt->close();
+
 			while( $user = $this->db->nqfetch( $banned_query ) )
 			{
 				$banned .= htmlspecialchars( $user['user_name'] ) . "<br>";

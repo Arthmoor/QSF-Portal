@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -144,8 +144,17 @@ class readmarker extends forumutils
 
 			setcookie( $this->sets['cookie_prefix'] . 'lastallread', $time, $options );
 		} else {
-			$this->db->query( "UPDATE %pusers SET user_lastallread=%d WHERE user_id=%d", $time, $this->user_id );
-			$this->db->query( "DELETE FROM %preadmarks WHERE readmark_user=%d AND readmark_lastread<%d", $this->user_id, $time );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastallread=? WHERE user_id=?' );
+
+         $stmt->bind_param( 'ii', $time, $this->user_id );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
+
+			$stmt = $this->db->prepare_query( 'DELETE FROM %preadmarks WHERE readmark_user=? AND readmark_lastread < ?' );
+
+         $stmt->bind_param( 'ii', $this->user_id, $time );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 		}
 		$this->readmarkers_loaded = false;
 	}
@@ -160,9 +169,15 @@ class readmarker extends forumutils
 	 **/
 	public function mark_forum_read( $forum_id, $time )
 	{
-		$query = $this->db->query( "SELECT topic_id, topic_edited FROM %ptopics	WHERE topic_edited > %d AND topic_forum = %d", $this->last_read_all, $forum_id );
+		$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_edited FROM %ptopics WHERE topic_edited > ? AND topic_forum = ?' );
 
-		while( $row = $this->db->nqfetch( $query ) ) {
+      $stmt->bind_param( 'ii', $this->last_read_all, $forum_id );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
+
+      while( $row = $this->db->nqfetch( $query ) ) {
 			$this->mark_topic_read( $row['topic_id'], $time );
 		}
 	}
@@ -189,7 +204,12 @@ class readmarker extends forumutils
 				$this->_load_readmarkers();
 
 				if( !isset( $this->readmarkers[$topic_id] ) || $this->readmarkers[$topic_id] < $time ) {
-					$this->db->query( "REPLACE INTO %preadmarks (readmark_user, readmark_topic, readmark_lastread) VALUES (%d, %d, %d)", $this->user_id, $topic_id, $time );
+					$stmt = $this->db->prepare_query( 'REPLACE INTO %preadmarks (readmark_user, readmark_topic, readmark_lastread) VALUES( ?, ?, ? )' );
+
+               $stmt->bind_param( 'iii', $this->user_id, $topic_id, $time );
+               $this->db->execute_query( $stmt );
+               $stmt->close();
+
 					$this->readmarkers[$topic_id] = $time;
 				}
 
@@ -323,9 +343,15 @@ class readmarker extends forumutils
 		if( !$this->readmarkers_loaded ) {
 			$this->readmarkers = array();
 
-			$query = $this->db->query( "SELECT * FROM %preadmarks WHERE readmark_user=%d", $this->user_id );
+			$stmt = $this->db->prepare_query( 'SELECT * FROM %preadmarks WHERE readmark_user=?' );
 
-			while( $mark = $this->db->nqfetch( $query ) )
+         $stmt->bind_param( 'i', $this->user_id );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
+
+         while( $mark = $this->db->nqfetch( $query ) )
 			{
 				$this->readmarkers[$mark['readmark_topic']] = $mark['readmark_lastread'];
 			}
@@ -347,7 +373,13 @@ class readmarker extends forumutils
 		if( !$this->forum_topics_loaded )
 		{
 			/* find all topics since we pressed mark all read */
-			$query = $this->db->query( "SELECT topic_id, topic_edited, topic_forum FROM %ptopics WHERE topic_edited > %d", $this->last_read_all );
+			$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_edited, topic_forum FROM %ptopics WHERE topic_edited > ?' );
+
+         $stmt->bind_param( 'i', $this->last_read_all );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			/* read all the records*/
 			while( $row = $this->db->nqfetch( $query ) )
@@ -380,7 +412,13 @@ class readmarker extends forumutils
 		$readable_forums = $this->create_forum_permissions_string();
 
 		// Find the OLDEST unread post
-		$query = $this->db->query( "SELECT topic_id, topic_edited FROM %ptopics WHERE topic_edited > %d AND topic_forum IN (%s)", $this->last_read_all, $readable_forums );
+		$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_edited FROM %ptopics WHERE topic_edited > ? AND topic_forum IN (?)' );
+
+      $stmt->bind_param( 'is', $this->last_read_all, $readable_forums );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$oldest_time = $this->time;
 

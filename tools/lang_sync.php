@@ -152,7 +152,7 @@ foreach( $result as $lang_name => $lang_words )
 	$out[$lang_name] = '<?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -251,7 +251,7 @@ foreach( $out as $filename => $contents )
 
 	$contents = preg_replace( "/(\r\n|\r)/", "\n", $contents );
 
-    echo "<b>$filename - " . $qsf->htmlwidgets->get_lang_name($filename) . "$encoding</b><br />";
+    echo "<b>$filename - " . $qsf->htmlwidgets->get_lang_name($filename) . "$encoding</b><br>";
 
     $fp = fopen( '../languages/' . $filename . '.php', 'w' );
     fwrite( $fp, $contents );
@@ -259,5 +259,5 @@ foreach( $out as $filename => $contents )
     fclose( $fp );
 }
 
-echo '<br />Done';
+echo '<br>Done';
 ?>

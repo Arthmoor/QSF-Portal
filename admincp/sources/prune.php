@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -87,7 +87,13 @@ class prune extends admin
 
 			$topics = '';
 
-			$query = $this->db->query( "SELECT * FROM %ptopics WHERE topic_edited < %d AND topic_forum in (%s) ORDER BY topic_edited", $age, $forums );
+			$query = $this->db->query( 'SELECT * FROM %ptopics WHERE topic_edited < ? AND topic_forum in (?) ORDER BY topic_edited' );
+
+         $stmt->bind_param( 'is', $age, $forums );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $stmt->close();
 
 			if( $this->db->num_rows( $query ) == 0 ) {
 				return $this->message( $this->lang->prune_title, $this->lang->prune_notopics_old );
@@ -155,16 +161,34 @@ class prune extends admin
 
 			if( $actionIsMove ) {
 				// Check the destination is a real forum and not a category or some other rubish
-				$dest = $this->db->fetch( "SELECT * FROM %pforums WHERE forum_id=%d", $this->post['dest'] );
+				$stmt = $this->db->prepare_query( 'SELECT * FROM %pforums WHERE forum_id=?' );
+
+            $stmt->bind_param( 'i', $this->post['dest'] );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $dest = $this->db->nqfetch( $result );
+            $stmt->close();
+
 				if( !$dest || $dest['forum_parent'] == 0 || $dest['forum_subcat'] == 1 ) {
 					// Can't move to a category!
 					return $this->message( $this->lang->prune_title, $this->lang->prune_nodest );
 				}
 
+            $update_query = $this->db->prepare_query( 'UPDATE %ptopics SET topic_forum=? WHERE topic_id=?' );
+            $update_query->bind_param( 'ii', $dest, $t );
+
+            $delete_query = $this->db->prepare_query( "DELETE FROM %psubscriptions WHERE subscription_item=? AND subscription_type='topic'" );
+            $delete_query->bind_param( 'ii', $dest, $t );
+
 				foreach( $this->post['topics'] as $t ) {
-					$this->db->query( "UPDATE %ptopics SET topic_forum=%d WHERE topic_id=%d", $this->post['dest'], $t );
-					$this->db->query( "DELETE FROM %psubscriptions WHERE subscription_item=%d AND subscription_type='topic'", $t );
+               $dest = $this->post['dest'];
+
+               $this->db->execute_query( $update_query );
+               $this->db->execute_query( $delete_query );
 				}
+            $update_query->close();
+            $delete_query->close();
 
 				$this->countTopicsAndReplies( $this->post['dest'] );
 			} else {

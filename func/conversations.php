@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -124,7 +124,15 @@ class conversations extends qsfglobal
 		}
 
 		// Figure out if it will need page navigation links
-		$conv = $this->db->fetch( "SELECT COUNT(conv_id) AS count FROM %pconversations WHERE FIND_IN_SET( '%s', conv_users )", $this->user['user_id'] );
+		$stmt = $this->db->prepare_query( 'SELECT COUNT(conv_id) AS count FROM %pconversations WHERE FIND_IN_SET( ?, conv_users )' );
+
+      $stmt->bind_param( 's', $this->user['user_id'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $conv = $this->db->nqfetch( $result );
+      $stmt->close();
+
 		$pagelinks = $this->htmlwidgets->get_pages( $conv['count'], "index.php?a=conversations&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/conversations.xtpl' );
@@ -161,22 +169,41 @@ class conversations extends qsfglobal
 	{
 		$has_topics = false;
 
-		$query = $this->db->query( "SELECT c.conv_id, c.conv_title, c.conv_description, c.conv_starter, c.conv_last_poster, c.conv_replies, c.conv_posted, c.conv_edited,
+		$stmt = $this->db->prepare_query( "SELECT c.conv_id, c.conv_title, c.conv_description, c.conv_starter, c.conv_last_poster, c.conv_replies, c.conv_posted, c.conv_edited,
 				c.conv_icon, c.conv_views, c.conv_users, c.conv_last_post
 			FROM (%pconversations c)
-			WHERE FIND_IN_SET( '%s', c.conv_users )
+			WHERE FIND_IN_SET( ?, c.conv_users )
 			ORDER BY $order
-			LIMIT %d, %d", $this->user['user_id'], $min, $n );
+			LIMIT ?, ?" );
+
+      $stmt->bind_param( 'sii', $this->user['user_id'], $min, $n );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
       $xtpl->assign( 'conv_by', $this->lang->cv_by );
+
+      $starter_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
+      $starter_query->bind_param( 'i', $starter_id );
+
+      $last_poster_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
+      $last_poster_query->bind_param( 'i', $last_poster_id );
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
          $has_topics = true;
 
          // There's almost certainly a better way to do this but I can't come up with it, so we're going to very hackishly do this the ugly way.
-         $cv_starter = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_starter'] );
-         $cv_last_poster = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers WHERE user_id=%d', $row['conv_last_poster'] );
+         $starter_id = $row['conv_starter'];
+         $this->db->execute_query( $starter_query );
+         $result = $starter_query->get_result();
+         $cv_starter = $this->db->nqfetch( $result );
+
+         $last_poster_id = $row['conv_last_poster'];
+         $this->db->execute_query( $last_poster_query );
+         $result = $last_poster_query->get_result();
+         $cv_last_poster = $this->db->nqfetch( $result );
 
          if( $cv_starter != null && $cv_last_poster['user_id'] != USER_GUEST_UID ) {
             $cv_starter = $cv_starter['user_name'];
@@ -278,6 +305,8 @@ class conversations extends qsfglobal
 
          $xtpl->parse( 'Conversations.Topics.ConvoTopic' );
 		}
+      $starter_query->close();
+      $last_poster_query->close();
 		return $has_topics;
 	}
 
@@ -444,27 +473,35 @@ class conversations extends qsfglobal
 		$bad_pm = array();
 		$ok_pm = array();
 
+      $user_query = $this->db->prepare_query( "SELECT user_id, user_pm, user_name FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')= ? AND user_id != ? LIMIT 1" );
+      $user_query->bind_param( 'si', $uname, $uid );
+
       foreach( $users as $username )
       {
-         	$username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
-				$who = $this->db->fetch( "SELECT user_id, user_pm, user_name FROM %pusers
-					WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
-					str_replace( ' ', '', strtolower( $username ) ), USER_GUEST_UID );
+         $username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
+         $uname = str_replace( ' ', '', strtolower( $username ) );
+         $uid = intval( USER_GUEST_UID );
 
-            if( !isset( $who['user_id'] ) ) {
-					$bad_name[] = $username;
-					continue;
-				}
+         $this->db->execute_query( $user_query );
 
-				if( !$who['user_pm'] ) {
-					$bad_pm[] = $who['user_name'];
-					continue;
-				}
+         $result = $user_query->get_result();
+         $who = $this->db->nqfetch( $result );
 
-            // User who started this should be excluded from the list.
-            if( $who['user_id'] != $this->user['user_id'] )
-               $ok_pm[] = $who['user_id'];
+         if( !isset( $who['user_id'] ) ) {
+			   $bad_name[] = $username;
+				continue;
+			}
+
+			if( !$who['user_pm'] ) {
+				$bad_pm[] = $who['user_name'];
+				continue;
+			}
+
+         // User who started this should be excluded from the list.
+         if( $who['user_id'] != $this->user['user_id'] )
+            $ok_pm[] = $who['user_id'];
       }
+      $user_query->close();
 
       if( empty( $ok_pm ) ) {
          return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_cannot_send );
@@ -473,21 +510,34 @@ class conversations extends qsfglobal
       $recipients = implode( ',', $ok_pm );
       $recipients = $this->user['user_id'] . ',' . $recipients;
 
-      $this->db->query( "INSERT INTO %pconversations (conv_title, conv_description, conv_starter, conv_last_poster, conv_icon, conv_posted, conv_edited, conv_users)
-			VALUES ('%s', '%s', %d, %d, '%s', %d, %d, '%s')", $this->post['title'], $this->post['description'], $this->user['user_id'], $this->user['user_id'], $icon, $this->time, $this->time, $recipients );
+      $stmt = $this->db->prepare_query( 'INSERT INTO %pconversations (conv_title, conv_description, conv_starter, conv_last_poster, conv_icon, conv_posted, conv_edited, conv_users) VALUES( ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-      $conv_id = $this->db->insert_id( 'conversations', 'conv_id' );
+      $stmt->bind_param( 'ssiisiis', $this->post['title'], $this->post['description'], $this->user['user_id'], $this->user['user_id'], $icon, $this->time, $this->time, $recipients );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
-      $this->db->query( "INSERT INTO %pconv_posts (post_convo, post_author, post_time, post_bbcode, post_emojis, post_ip, post_icon, post_text, post_referrer, post_agent)
-         VALUES (%d, %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')", $conv_id, $this->user['user_id'], $this->time, $this->post['parseCode'], $this->post['parseEmot'], $this->ip, $icon, $this->post['message'], $this->referrer, $this->agent );
+      $conv_id = $this->db->insert_id( );
 
-      $post_id = $this->db->insert_id( 'conv_posts', 'post_id' );
+      $stmt = $this->db->prepare_query( 'INSERT INTO %pconv_posts (post_convo, post_author, post_time, post_bbcode, post_emojis, post_ip, post_icon, post_text, post_referrer, post_agent) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-      $this->db->query( "UPDATE %pconversations SET conv_last_post=%d WHERE conv_id=%d", $post_id, $conv_id );
-      
+      $stmt->bind_param( 'iiiiisssss', $conv_id, $this->user['user_id'], $this->time, $this->post['parseCode'], $this->post['parseEmot'], $this->ip, $icon, $this->post['message'], $this->referrer, $this->agent );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+      $post_id = $this->db->insert_id( );
+
+      $stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=%d WHERE conv_id=%d' );
+
+      $stmt->bind_param( 'ii', $post_id, $conv_id );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
 		$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->cv_private_conversations}" );
 		$mailer->setServer( $this->sets['mailserver'] );
+
+      $email_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
+      $email_query->bind_param( 'i', $user );
 
       foreach( $ok_pm as $user )
       {
@@ -495,7 +545,10 @@ class conversations extends qsfglobal
          if( $user == $this->user['user_id'] )
             continue;
 
-         $who = $this->db->fetch( "SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=%d", $user );
+         $this->db->execute_query( $email_query );
+
+         $result = $email_query->get_result();
+         $who = $this->db->nqfetch( $result );
 
          if( $who['user_pm_mail'] ) {
             $message  = "{$this->sets['forum_name']}\n";
@@ -508,6 +561,7 @@ class conversations extends qsfglobal
 				$mailer->doSend();
          }
       }
+      $email_query->close();
 
 		if( $bad_name || $bad_pm ) {
 			return $this->message( $this->lang->cv_private_conversations, sprintf( $this->lang->cv_error, implode( '; ', $bad_name ), implode( '; ', $bad_pm ) ) );
@@ -551,7 +605,7 @@ class conversations extends qsfglobal
 			$conv_id = 0;
 
 		if( isset( $this->get['view'] ) ) {
-         $this->validator->validate( $this->get['view'], TYPE_STRING, array('newer', 'older'), false );
+         $this->validator->validate( $this->get['view'], TYPE_STRING, array( 'newer', 'older' ), false );
       } else {
          $this->get['view'] = false;
       }
@@ -567,11 +621,18 @@ class conversations extends qsfglobal
          $unread = true;
       }
 
-		$conv = $this->db->fetch( "SELECT c.conv_title, c.conv_description, c.conv_starter, c.conv_last_post, c.conv_last_poster, 
+		$stmt = $this->db->prepare_query( 'SELECT c.conv_title, c.conv_description, c.conv_starter, c.conv_last_post, c.conv_last_poster, 
          c.conv_icon, c.conv_posted, c.conv_edited, c.conv_replies, c.conv_users
 			FROM %pconversations c
-			WHERE FIND_IN_SET( '%s', c.conv_users )
-         AND c.conv_id=%d", $this->user['user_id'], $conv_id );
+			WHERE FIND_IN_SET( ?, c.conv_users )
+         AND c.conv_id=?' );
+
+      $stmt->bind_param( 'si', $this->user['user_id'], $conv_id );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $conv = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$conv ) {
 			$this->set_title( $this->lang->cv_conversations );
@@ -583,16 +644,22 @@ class conversations extends qsfglobal
 		if( $this->get['view'] ) {
 			if( $this->get['view'] == 'older' ) {
 				$order = 'DESC';
-				$where = "conv_edited < %d";
+				$where = 'conv_edited < ?';
 			} else {
 				$order = 'ASC';
-				$where = "conv_edited > %d";
+				$where = 'conv_edited > ?';
 			}
  
-			$new_conv = $this->db->fetch( "SELECT conv_id, conv_title FROM %pconversations
-					WHERE FIND_IN_SET( '%s', conv_users ) AND ($where)
-					ORDER BY conv_edited $order
-					LIMIT 1", $this->user['user_id'], $conv['conv_edited'] );
+			$stmt = $this->db->prepare_query( "SELECT conv_id, conv_title FROM %pconversations
+					WHERE FIND_IN_SET( ?, conv_users ) AND ($where)
+					ORDER BY conv_edited $order LIMIT 1" );
+
+         $stmt->bind_param( 'si', $this->user['user_id'], $conv['conv_edited'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $new_conv = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( $new_conv ) {
             // Move to that topic
@@ -613,7 +680,14 @@ class conversations extends qsfglobal
 			// Jump to the first unread post (or the last post)
 			$timeread = $this->conv_readmarker->conv_last_read( $conv_id );
 
-			$posts = $this->db->fetch( "SELECT COUNT(post_id) posts FROM %pconv_posts WHERE post_convo=%d AND post_time < %d", $conv_id, $timeread );
+			$posts = $this->db->prepare_query( 'SELECT COUNT(post_id) posts FROM %pconv_posts WHERE post_convo=? AND post_time < ?' );
+
+         $stmt->bind_param( 'ii', $conv_id, $timeread );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $posts = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( $posts )
 				$postCount = $posts['posts'] + 1;
@@ -628,7 +702,14 @@ class conversations extends qsfglobal
 
 		if( $postnum ) {
 			// We need to find what page this post exists on!
-			$posts = $this->db->fetch( "SELECT COUNT(post_id) posts FROM %pconv_posts WHERE post_convo=%d AND post_id < %d", $conv_id, $postnum );
+			$stmt = $this->db->prepare_query( 'SELECT COUNT(post_id) posts FROM %pconv_posts WHERE post_convo=? AND post_id < ?' );
+
+         $stmt->bind_param( 'ii', $conv_id, $postnum );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $posts = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( $posts )
 				$postCount = $posts['posts'] + 1;
@@ -641,7 +722,11 @@ class conversations extends qsfglobal
 			}
 		}
 
-		$this->db->query( "UPDATE %pconversations SET conv_views=conv_views+1 WHERE conv_id=%d", $conv_id );
+		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_views=conv_views+1 WHERE conv_id=?' );
+
+      $stmt->bind_param( 'i', $conv_id );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$conv['conv_title'] = $this->format( $conv['conv_title'], FORMAT_CENSOR );
 		$title_html = $this->format( $conv['conv_title'], FORMAT_HTMLCHARS );
@@ -665,7 +750,6 @@ class conversations extends qsfglobal
 		$opts = array();
  
       // Link options get built here
-      
       if( !$opts ) {
 			$mod_opts = '&nbsp;';
 		} else {
@@ -677,9 +761,15 @@ class conversations extends qsfglobal
 			$conv_icon = $conv['conv_icon'];
 		}
 
-		$query = $this->db->query( "SELECT a.attach_id, a.attach_name, a.attach_downloads, a.attach_size, p.post_id
+		$stmt = $this->db->prepare_query( 'SELECT a.attach_id, a.attach_name, a.attach_downloads, a.attach_size, p.post_id
 			FROM %pconv_posts p, %pattach a
-			WHERE p.post_convo = %d AND a.attach_post = p.post_id AND attach_pm = 1", $conv_id );
+			WHERE p.post_convo = ? AND a.attach_post = p.post_id AND attach_pm = 1' );
+
+      $stmt->bind_param( 'i',  $conv_id  );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$attachments = array();
 
@@ -692,7 +782,7 @@ class conversations extends qsfglobal
 			$attachments[$attach['post_id']][] = $attach;
 		}
 
-		$query = $this->db->query( "SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
+		$stmt = $this->db->prepare_query( 'SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
 			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_twitter, m.user_facebook,
 			  m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_pm, m.user_email_show, m.user_email_form, m.user_active,
 			  t.membertitle_icon,
@@ -701,11 +791,16 @@ class conversations extends qsfglobal
 			FROM (%pconv_posts p, %pusers m, %pgroups g)
 			LEFT JOIN %pactive a ON a.active_id=m.user_id
 			LEFT JOIN %pmembertitles t ON t.membertitle_id=m.user_level
-			WHERE p.post_convo = %d AND p.post_author = m.user_id AND m.user_group = g.group_id
+			WHERE p.post_convo = ? AND p.post_author = m.user_id AND m.user_group = g.group_id
 			GROUP BY p.post_id
 			ORDER BY p.post_time
-			LIMIT %d, %d",
-			$conv_id, $min, $num );
+			LIMIT ?, ?' );
+
+      $stmt->bind_param( 'iii', $conv_id, $min, $num );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$i = 0;
 		$oldtime = $this->time - 900;
@@ -759,9 +854,16 @@ class conversations extends qsfglobal
 
       // Participants
       $conv_users = explode( ',', $conv['conv_users'] );
+
+      $user_query = $this->db->prepare_query( 'SELECT user_name, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height FROM %pusers WHERE user_id=?' );
+      $user_query->bind_param( 'i', $user );
+
       foreach( $conv_users as $user )
       {
-         $result = $this->db->fetch( 'SELECT user_name, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height FROM %pusers WHERE user_id=%d', $user );
+         $this->db->execute_query( $user_query );
+
+         $tresult = $user_query->get_result();
+         $result = $this->db->nqfetch( $tresult );
 
          if( $result ) {
             $xtpl->assign( 'list_avatar', $this->htmlwidgets->display_avatar( $result, 35, 35 ) );
@@ -770,6 +872,7 @@ class conversations extends qsfglobal
             $xtpl->parse( 'Conversation.Participant' );
          }
       }
+      $user_query->close();
 
       // Page Links
       $xtpl->assign( 'cv_pages', $this->lang->cv_pages );
@@ -1007,7 +1110,14 @@ class conversations extends qsfglobal
 
 		$c = intval( $this->get['c'] );
 
-      $conv = $this->db->fetch( "SELECT *	FROM %pconversations WHERE FIND_IN_SET( '%s', conv_users ) AND conv_id=%d", $this->user['user_id'], $c );
+      $stmt = $this->db->prepare_query( 'SELECT * FROM %pconversations WHERE FIND_IN_SET( ?, conv_users ) AND conv_id=?' );
+
+      $stmt->bind_param( 'si', $this->user['user_id'], $c );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $conv = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$conv ) {
 			return $this->message( $this->lang->cv_replying, $this->lang->cv_cant_reply );
@@ -1137,8 +1247,15 @@ class conversations extends qsfglobal
          if( isset( $this->get['qu'] ) ) {
             $qu = intval( $this->get['qu'] );
 
-            $query = $this->db->fetch( "SELECT p.post_text, m.user_name FROM %pconv_posts p, %pusers m
-               WHERE p.post_id=%d AND p.post_author=m.user_id AND p.post_convo=%d", $qu, $c );
+            $stmt = $this->db->prepare_query( 'SELECT p.post_text, m.user_name FROM %pconv_posts p, %pusers m
+               WHERE p.post_id=? AND p.post_author=m.user_id AND p.post_convo=?' );
+
+            $stmt->bind_param( 'ii', $qu, $c );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $query = $this->db->nqfetch( $result );
+            $stmt->close();
 
             if( $query['post_text'] != '' ) {
                $quote = '[quote=' . $query['user_name'] . ']' . $this->format( $query['post_text'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '[/quote]';
@@ -1188,11 +1305,17 @@ class conversations extends qsfglobal
          $xtpl->assign( 'cv_last_five', $this->lang->cv_last_five );
          $xtpl->assign( 'cv_view_topic', $this->lang->cv_view_topic );
 
-			$query = $this->db->query( "SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, m.user_name
+			$stmt = $this->db->prepare_query( 'SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, m.user_name
 				FROM %pconv_posts p, %pusers m
-				WHERE p.post_convo=%d AND p.post_author = m.user_id
+				WHERE p.post_convo=? AND p.post_author = m.user_id
 				ORDER BY p.post_time DESC
-				LIMIT %d", $conv['conv_id'], 5 );
+				LIMIT 5' );
+
+         $stmt->bind_param( 'i', $conv['conv_id'] );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			$xtpl->assign( 'cv_posted', $this->lang->cv_posted );
 
@@ -1279,9 +1402,12 @@ class conversations extends qsfglobal
                      // Store the contents of the entire $_SERVER array.
                      $svars = json_encode( $_SERVER );
 
-                     $this->db->query( "INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
-                        VALUES (%d, %d, '%s', %d, %d, %d, %d, '%s', '%s', '%s', '%s', '%s')",
-                        $t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+                     $stmt = $this->db->prepare_query( 'INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
+                        VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
+
+                     $stmt->bind_param( 'iisiiiisssss', $t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+                     $this->db->execute_query( $stmt );
+                     $stmt->close();
                   }
 
                   $this->sets['spam_pm_count']++;
@@ -1294,14 +1420,26 @@ class conversations extends qsfglobal
          }
       }
 
-		$this->db->query( "INSERT INTO %pconv_posts (post_convo, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon, post_referrer, post_agent)
-			VALUES (%d, %d, '%s', %d, %d, %d, '%s', '%s', '%s', '%s')",
-			$c, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $this->ip, $this->post['icon'], $this->referrer, $this->agent );
-		$post_id = $this->db->insert_id( 'conv_posts', 'post_id' );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %pconv_posts (post_convo, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon, post_referrer, post_agent)
+			VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-		$this->db->query( "UPDATE %pconversations SET conv_last_post=%d WHERE conv_id=%d", $post_id, $c );
+      $stmt->bind_param( 'iisiiissss', $c, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $this->ip, $this->post['icon'], $this->referrer, $this->agent );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
-		$this->db->query( "UPDATE %pconversations SET conv_replies=conv_replies+1, conv_edited=%d, conv_last_poster=%d WHERE conv_id=%d", $this->time, $this->user['user_id'], $c );
+		$post_id = $this->db->insert_id( );
+
+		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=? WHERE conv_id=?' );
+
+      $stmt->bind_param( 'ii', $post_id, $c );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
+
+		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_replies=conv_replies+1, conv_edited=?, conv_last_poster=? WHERE conv_id=?' );
+
+      $stmt->bind_param( 'iii', $this->time, $this->user['user_id'], $c );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		if( isset( $this->post['attached_data'] ) /* && $this->perms->auth( 'post_attach', $f ) */ ) {
 			$this->attachmentutil->insert( $post_id, $this->post['attached_data'], true );
@@ -1312,13 +1450,20 @@ class conversations extends qsfglobal
 		$mailer->setServer( $this->sets['mailserver'] );
 
       $ok_pm = explode( ',', $conv['conv_users'] );
+
+      $user_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
+      $user_query->bind_param( 'i', $user );
+
       foreach( $ok_pm as $user )
       {
          // Don't send it to the user who just posted the reply. They already know :P
          if( $user == $this->user['user_id'] )
             continue;
 
-         $who = $this->db->fetch( "SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=%d", $user );
+         $this->db->execute_query( $user_query );
+
+         $result = $user_query->get_result();
+         $who = $this->db->nqfetch( $result );
 
          if( $who['user_pm_mail'] ) {
             $message  = "{$this->sets['forum_name']}\n";
@@ -1331,6 +1476,7 @@ class conversations extends qsfglobal
 				$mailer->doSend();
          }
       }
+      $user_query->close();
 
 		if( isset( $this->post['request_uri'] ) ) {
 			header( 'Location: ' . $this->post['request_uri'] );
@@ -1353,10 +1499,14 @@ class conversations extends qsfglobal
 
       $c = intval( $this->get['c'] );
 
-		$conv = $this->db->fetch( "SELECT *
-			FROM %pconversations c
-			WHERE FIND_IN_SET( '%s', c.conv_users )
-         AND c.conv_id=%d", $this->user['user_id'], $c );
+		$stmt = $this->db->prepare_query( 'SELECT * FROM %pconversations c WHERE FIND_IN_SET( ?, c.conv_users ) AND c.conv_id=?' );
+
+      $stmt->bind_param( 'si', $this->user['user_id'], $c );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $conv = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$conv ) {
 			$this->set_title( $this->lang->cv_conversations );
@@ -1370,29 +1520,37 @@ class conversations extends qsfglobal
 		$bad_pm = array();
 		$ok_pm = array();
 
+      $user_query = $this->db->prepare_query( "SELECT user_id, user_pm, user_name FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=? AND user_id != ? LIMIT 1" );
+      $user_query->bind_param( 'si', $uname, $uid );
+
       foreach( $users as $username )
       {
-         	$username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
-				$who = $this->db->fetch( "SELECT user_id, user_pm, user_name FROM %pusers
-					WHERE REPLACE(LOWER(user_name), ' ', '')='%s' AND user_id != %d LIMIT 1",
-					str_replace( ' ', '', strtolower( $username ) ), USER_GUEST_UID );
+         $username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
+         $uname = str_replace( ' ', '', strtolower( $username ) );
+         $uid = intval( USER_GUEST_UID );
+         
+         $this->db->execute_query( $user_query );
 
-            if( !isset( $who['user_id'] ) ) {
-					$bad_name[] = $username;
-					continue;
-				}
+         $result = $user_query->get_result();
+         $who = $this->db->nqfetch( $result );
 
-				if( !$who['user_pm'] ) {
-					$bad_pm[] = $who['user_name'];
-					continue;
-				}
+         if( !isset( $who['user_id'] ) ) {
+				$bad_name[] = $username;
+				continue;
+			}
 
-            if( in_array( $who_user['id'], $users ) )
-               continue;
+			if( !$who['user_pm'] ) {
+				$bad_pm[] = $who['user_name'];
+				continue;
+			}
 
-            if( $who['user_id'] != $this->user['user_id'] )
-               $ok_pm[] = $who['user_id'];
+         if( in_array( $who_user['id'], $users ) )
+            continue;
+
+         if( $who['user_id'] != $this->user['user_id'] )
+            $ok_pm[] = $who['user_id'];
       }
+      $user_query->close();
 
       if( empty( $ok_pm ) ) {
          return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_cannot_invite );
@@ -1401,15 +1559,25 @@ class conversations extends qsfglobal
       $new_users = implode( ',', $ok_pm );
       $new_users = $conv['conv_users'] . ',' . $new_users;
 
-      $this->db->query( "UPDATE %pconversations SET conv_users='%s' WHERE conv_id=%d", $new_users, $c );
+      $stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_users=? WHERE conv_id=?' );
+
+      $stmt->bind_param( 'si', $new_users, $c );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 
 		$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->cv_private_conversations}" );
 		$mailer->setServer( $this->sets['mailserver'] );
 
+      $email_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
+      $email_query->bind_param( 'i', $user );
+
       foreach( $ok_pm as $user )
       {
-         $who = $this->db->fetch( "SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=%d", $user );
+         $this->db->execute_query( $email_query );
+
+         $result = $email_query->get_result();
+         $who = $this->db->nqfetch( $result );
 
          if( $who['user_pm_mail'] ) {
             $message  = "{$this->sets['forum_name']}\n";
@@ -1422,6 +1590,7 @@ class conversations extends qsfglobal
 				$mailer->doSend();
          }
       }
+      $email_query->close();
 
 		if( $bad_name || $bad_pm ) {
 			return $this->message( $this->lang->cv_private_conversations, sprintf( $this->lang->cv_error_invite, implode( '; ', $bad_name ), implode( '; ', $bad_pm ) ) );

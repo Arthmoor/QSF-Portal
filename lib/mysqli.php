@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -42,6 +42,8 @@ require_once $set['include_path'] . '/lib/database.php';
  **/
 class db_mysqli extends database
 {
+	public $current_query;
+
 	/**
 	 * Constructor; sets up variables and connection
 	 *
@@ -83,13 +85,13 @@ class db_mysqli extends database
     *
     * Modified due to apparently not working every time it's called. Now returns the SELECT MAX() from the specified table and column. Returns that as an integer.
 	 **/
-	public function insert_id( $table, $column )
+	public function insert_id( )
 	{
-      $result = $this->fetch( "SELECT MAX(%s) AS max_value FROM %s", $column, $this->prefix . $table );
+      // $result = $this->fetch( "SELECT MAX(%s) AS max_value FROM %s", $column, $this->prefix . $table );
 
-      return $result['max_value'];
+      // return $result['max_value'];
 
-		// return $this->connection->insert_id;
+		return $this->connection->insert_id;
 	}
 
 	/**
@@ -115,6 +117,8 @@ class db_mysqli extends database
 
 		$this->querycount++;
 
+      $this->current_query = $query;
+
       try {
          $result = $this->connection->query( $query );
       }
@@ -134,7 +138,7 @@ class db_mysqli extends database
 	 **/
 	public function nqfetch( $query )
 	{
-		return $query->fetch_array( MYSQLI_ASSOC );
+		return $query->fetch_assoc( );
 	}
 
 	public function nqfetch_row( $query )
@@ -207,6 +211,38 @@ class db_mysqli extends database
 		array_unshift( $args, $query );
 
 		return call_user_func_array( 'sprintf', $args );
+	}
+
+	public function prepare_query( $query )
+	{
+		$query = str_replace( '%p', $this->prefix, $query );
+
+		$stmt = $this->connection->prepare( $query );
+
+		if( $stmt == false ) {
+			error( QUICKSILVER_QUERY_ERROR, $this->connection->error, $query, $this->connection->errno );
+		}
+
+		$this->current_query = $query;
+
+		return $stmt;
+	}
+
+	public function execute_query( $stmt )
+	{
+		$time_now   = explode( ' ', microtime() );
+		$time_start = $time_now[1] + $time_now[0];
+
+		if( !$stmt->execute() ) {
+			error( QUICKSILVER_QUERY_ERROR, $this->connection->error, $this->current_query, $this->connection->errno );
+		}
+
+		$this->querycount++;
+
+		$time_now  = explode( ' ', microtime() );
+		$time_exec = round( $time_now[1] + $time_now[0] - $time_start, 5 );
+		$this->query_time = $time_exec;
+		$this->queries_exec += $time_exec;
 	}
 }
 ?>

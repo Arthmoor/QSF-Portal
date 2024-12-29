@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2015 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -129,10 +129,17 @@ class rssfeed extends qsfglobal
 	{
 		$forums_str = $this->readmarker->create_forum_permissions_string();
 		
-		$query = $this->db->query( "SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name, u.user_email, u.user_email_show
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name, u.user_email, u.user_email_show
 			FROM %ptopics t, %pposts p, %pusers u
-			WHERE t.topic_forum IN (%s) AND t.topic_modes & %d AND p.post_topic = t.topic_id AND u.user_id = p.post_author
-			ORDER BY p.post_time DESC LIMIT %d", $forums_str, TOPIC_PUBLISH, $this->sets['rss_feed_posts'] );
+			WHERE t.topic_forum IN (?) AND t.topic_modes & ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author
+			ORDER BY p.post_time DESC LIMIT ?' );
+
+      $tflag = intval( TOPIC_PUBLISH );
+      $stmt->bind_param( 'sii', $forums_str, $tflag, $this->sets['rss_feed_posts'] );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
@@ -164,7 +171,14 @@ class rssfeed extends qsfglobal
 	 **/
 	function generate_forum_feed( $forum )
 	{
-		$exists = $this->db->fetch( "SELECT forum_parent, forum_name, forum_description, forum_subcat FROM %pforums WHERE forum_id=%d", $forum );
+		$stmt = $this->db->prepare_query( 'SELECT forum_parent, forum_name, forum_description, forum_subcat FROM %pforums WHERE forum_id=?' );
+
+      $stmt->bind_param( 'i', $forum );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $exists = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !isset( $exists['forum_parent'] ) || !$exists['forum_parent'] || $exists['forum_subcat'] ) {
 			return $this->rss_error_message( $this->lang->rssfeed_cannot_find_forum );
@@ -185,13 +199,18 @@ class rssfeed extends qsfglobal
 		$xtpl->assign( 'generator', htmlspecialchars( $this->sets['forum_name'] ) );
 		$xtpl->assign( 'ttl', $this->sets['rss_feed_time'] );
 
-		$query = $this->db->query( "SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name, u.user_email, u.user_email_show
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name, u.user_email, u.user_email_show
 			FROM %ptopics t, %pposts p, %pusers u
-			WHERE t.topic_forum = %d AND t.topic_modes & %d AND p.post_topic = t.topic_id AND u.user_id = p.post_author
-			ORDER BY p.post_time DESC
-			LIMIT %d",
-			$forum, TOPIC_PUBLISH, $this->sets['rss_feed_posts'] );
-			
+			WHERE t.topic_forum = ? AND t.topic_modes & ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author
+			ORDER BY p.post_time DESC LIMIT ?' );
+
+      $tflag = intval( TOPIC_PUBLISH );
+      $stmt->bind_param( 'iii', $forum, $tflag, $this->sets['rss_feed_posts'] );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
+
 		while( $row = $this->db->nqfetch( $query ) )
 		{
 			$this->get_post( $row, $xtpl, 'RSSFeedForum' );
@@ -212,9 +231,16 @@ class rssfeed extends qsfglobal
 	 **/
 	function generate_topic_feed( $topic )
 	{
-		$topicdata = $this->db->fetch( "SELECT t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum, t.topic_replies, t.topic_poll_options, f.forum_name
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum, t.topic_replies, t.topic_poll_options, f.forum_name
 			FROM %ptopics t, %pforums f
-			WHERE t.topic_id=%d AND f.forum_id=t.topic_forum", $topic );
+			WHERE t.topic_id=? AND f.forum_id=t.topic_forum' );
+
+      $stmt->bind_param( 'i', $topic );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $topicdata = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$topicdata ) {
 			return $this->rss_error_message( $this->lang->rssfeed_cannot_find_topic );
@@ -239,9 +265,15 @@ class rssfeed extends qsfglobal
 		$xtpl->assign( 'generator', htmlspecialchars( $this->sets['forum_name'] ) );
 		$xtpl->assign( 'ttl', $this->sets['rss_feed_time'] );
 
-		$query = $this->db->query( "SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name, u.user_email, u.user_email_show
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name, u.user_email, u.user_email_show
 			FROM %ptopics t, %pposts p, %pusers u
-			WHERE t.topic_id = %d AND p.post_topic = t.topic_id AND	u.user_id = p.post_author ORDER BY p.post_time DESC LIMIT %d", $topic, $this->sets['rss_feed_posts'] );
+			WHERE t.topic_id = ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author ORDER BY p.post_time DESC LIMIT ?' );
+
+      $stmt->bind_param( 'ii', $topic, $this->sets['rss_feed_posts'] );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
@@ -319,10 +351,16 @@ class rssfeed extends qsfglobal
 		$cat_str = $this->create_category_permissions_string();
 
 		if( $cat_str != '' ) {
-			$query = $this->db->query( "SELECT f.file_id, f.file_name, f.file_description, f.file_date, c.fcat_id, c.fcat_name, u.user_name, u.user_email, u.user_email_show
+			$stmt = $this->db->prepare_query( 'SELECT f.file_id, f.file_name, f.file_description, f.file_date, c.fcat_id, c.fcat_name, u.user_name, u.user_email, u.user_email_show
 			FROM %pfiles f, %pfile_categories c, %pusers u
-			WHERE c.fcat_id IN (%s) AND f.file_catid = c.fcat_id AND u.user_id = f.file_submitted AND f.file_approved = 1
-			ORDER BY f.file_date DESC	LIMIT %d", $cat_str, $this->sets['rss_feed_posts'] );
+			WHERE c.fcat_id IN (?) AND f.file_catid = c.fcat_id AND u.user_id = f.file_submitted AND f.file_approved = 1
+			ORDER BY f.file_date DESC LIMIT ?' );
+
+         $stmt->bind_param( 'si', $cat_str, $this->sets['rss_feed_posts'] );
+         $this->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
@@ -428,7 +466,7 @@ class rssfeed extends qsfglobal
 		if( $this->cat_data === false ) {
 			$this->cat_data = array();
 
-			$q = $this->db->query( "SELECT * FROM %pfile_categories" );
+			$q = $this->db->query( 'SELECT * FROM %pfile_categories' );
 
 			while( $f = $this->db->nqfetch( $q ) )
 			{

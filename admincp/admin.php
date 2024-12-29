@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -129,7 +129,7 @@ class admin extends qsfglobal
 		if( $custom_only ) {
 			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name" );
 		} else {
-			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups ORDER BY group_name" );
+			$groups = $this->db->query( 'SELECT group_name, group_id FROM %pgroups ORDER BY group_name' );
 		}
 
 		while( $group = $this->db->nqfetch( $groups ) )

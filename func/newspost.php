@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -65,21 +65,34 @@ class newspost extends qsfglobal
 	{
 		$items = '';
 
-		$post = $this->db->fetch( "SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_bbcode, p.post_emojis, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
+		$stmt = $this->db->prepare_query( 'SELECT t.*, u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_bbcode, p.post_emojis, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
 		    FROM (%ptopics t, %pgroups g)
 		    LEFT JOIN %pposts p ON p.post_topic=t.topic_id
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
 		    LEFT JOIN %pactive a ON a.active_id=u.user_id
 		    LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
-		    WHERE t.topic_id=%d AND u.user_group=g.group_id
-		    ORDER BY p.post_time LIMIT 1", $post_id );
+		    WHERE t.topic_id=? AND u.user_group=g.group_id
+		    ORDER BY p.post_time LIMIT 1' );
+
+      $stmt->bind_param( 'i',  $post_id );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $post = $this->db->nqfetch( $result );
+      $stmt->close();
 
 		if( !$post || $post_name != $this->htmlwidgets->clean_url( $post['topic_title'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->newspost_news, $this->lang->newspost_no_article );
 		}
 
-		$query = $this->db->query( "SELECT attach_id, attach_name, attach_downloads, attach_size FROM %pattach WHERE attach_post=%d", $post_id );
+		$stmt = $this->db->prepare_query( 'SELECT attach_id, attach_name, attach_downloads, attach_size FROM %pattach WHERE attach_post=?' );
+
+      $stmt->bind_param( 'i',  $post_id );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		$this->lang->topic();
 
@@ -139,13 +152,19 @@ class newspost extends qsfglobal
 
 		$comments = null;
 
-		$result = $this->db->query( "SELECT u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_bbcode, p.post_emojis, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
+		$stmt = $this->db->prepare_query( 'SELECT u.*, p.post_id, p.post_author, p.post_time, p.post_text, p.post_bbcode, p.post_emojis, p.post_ip, a.active_time, m.membertitle_icon, g.group_name
 			FROM (%pposts p, %pgroups g)
 			LEFT JOIN %pusers u ON u.user_id=p.post_author
 			LEFT JOIN %pactive a ON a.active_id=u.user_id
 			LEFT JOIN %pmembertitles m ON m.membertitle_id=u.user_level
-			WHERE post_topic=%d AND u.user_group=g.group_id
-			ORDER BY p.post_time", $post_id );
+			WHERE post_topic=? AND u.user_group=g.group_id
+			ORDER BY p.post_time' );
+
+      $stmt->bind_param( 'i',  $post_id );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $stmt->close();
 
 		$show = false;
 		$pos = 0;
@@ -209,7 +228,7 @@ class newspost extends qsfglobal
 	{
 		$oldtime = $this->time - 900;
 
-		$online = ( $post['active_time'] && ($post['active_time'] > $oldtime) && $post['user_active'] );
+		$online = ( $post['active_time'] && ( $post['active_time'] > $oldtime ) && $post['user_active'] );
 
 		$post['user_posts'] = number_format( $post['user_posts'], 0, null, $this->lang->sep_thousands );
 		$post['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $post['user_joined'] );

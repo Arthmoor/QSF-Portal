@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -85,7 +85,14 @@ class email extends qsfglobal
 
 				$tname = strtolower( $this->get['tname'] );
 
-				$target = $this->db->fetch( "SELECT user_name FROM %pusers WHERE user_id=%d", $to );
+				$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
+
+            $stmt->bind_param( 'i', $to );
+            $this->db->execute_query( $stmt );
+
+            $result = $stmt->get_result();
+            $target = $this->db->nqfetch( $result );
+            $stmt->close();
 
 				if( !isset( $target['user_name'] ) || ( $to == USER_GUEST_UID ) || $tname != $this->htmlwidgets->clean_url( $target['user_name'] ) ) {
 					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
@@ -119,7 +126,14 @@ class email extends qsfglobal
 				return $this->message( $this->lang->email_email, $this->lang->email_no_fields );
 			}
 
-			$target = $this->db->fetch( "SELECT user_id, user_email, user_email_form FROM %pusers WHERE user_name='%s'", $this->post['to'] );
+			$stmt = $this->db->prepare_query( 'SELECT user_id, user_email, user_email_form FROM %pusers WHERE user_name=?' );
+
+         $stmt->bind_param( 's', $this->post['to'] );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $target = $this->db->nqfetch( $result );
+         $stmt->close();
 
 			if( !$target['user_email_form'] ) {
 				return $this->message( $this->lang->email_email, $this->lang->email_blocked );

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -75,32 +75,32 @@ function check_writeable_files()
 	$fixme = '';
 
 	if( !is_writeable( '../attachments' ) ) {
-		$fixme .= "../attachments/<br />";
+		$fixme .= '../attachments/<br>';
 		$writeable = false;
 	}
 	if( !is_writeable( '../avatars/uploaded' ) ) {
-		$fixme .= "../avatars/uploaded/<br />";
+		$fixme .= '../avatars/uploaded/<br>';
 		$writeable = false;
 	}
 	if( !is_writeable( '../emojis' ) ) {
-		$fixme .= "../emojis/<br />";
+		$fixme .= '../emojis/<br>';
 		$writeable = false;
 	}
 	if( !is_writeable( '../packages' ) ) {
-		$fixme .= "../packages/<br />";
+		$fixme .= '../packages/<br>';
 		$writeable = false;
 	}
 	if( !is_writeable( '../downloads' ) ) {
-		$fixme .= "../downloads/<br />";
+		$fixme .= '../downloads/<br>';
 		$writeable = false;
 	}
 	if( !is_writeable( '../updates' ) ) {
-		$fixme .= "../updates/<br />";
+		$fixme .= '../updates/<br>';
 		$writeable = false;
 	}
 
 	if( !$writeable ) {
-		echo "The following files and directories are missing or not writeable. Some functions will be impaired unless these are changed to 0777 permission.<br /><br />";
+		echo 'The following files and directories are missing or not writeable. Some functions will be impaired unless these are changed to 0777 permission.<br><br>';
                 echo "<span style='color:red'>" . $fixme . "</span>";
 	} else {
 		echo "<span style='color:green'>Directory permissions are all OK.</span>";
@@ -138,8 +138,8 @@ if( $mode ) {
 	$register_globals = get_cfg_var( 'register_globals' ) ? 'on' : 'off';
 	$server = isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : 'unknown';
 
-	if( version_compare( PHP_VERSION, "8.0.0", "<" ) ) {
-		echo 'Your PHP version is ' . PHP_VERSION . '.<br />Currently only PHP 8.0.0 and higher are supported.';
+	if( version_compare( PHP_VERSION, '8.0.0', '<' ) ) {
+		echo 'Your PHP version is ' . PHP_VERSION . '. <br>Currently only PHP 8.0.0 and higher are supported.';
 		$failed = true;
 	}
 
@@ -159,7 +159,7 @@ if( $mode ) {
 	if( $db_fail > 0 )
 	{
 		if( $failed ) { // If we have already shown a message, show the next one two lines down
-			echo '<br /><br />';
+			echo '<br><br>';
 		}
 
 		echo 'Your PHP installation does not support MySQLi.';
@@ -170,17 +170,17 @@ if( $mode ) {
 	if( $mysqli ) {
 		$sql_version = get_sql_version();
 
-		if( version_compare( $sql_version, "5.7.0", "<" ) ) {
+		if( version_compare( $sql_version, '5.7.0', '<' ) ) {
 			if( $failed ) { // If we have already shown a message, show the next one two lines down
-				echo '<br /><br />';
+				echo '<br><br>';
 			}
-			echo 'Your MySQL version is not supported.<br /> Your version: ' . $sql_version . '.<br /> Required: 5.7.0 or higher.';
+			echo 'Your MySQL version is not supported.<br> Your version: ' . $sql_version . '.<br> Required: 5.7.0 or higher.';
 			$failed = true;
 		}
 	}
 
 	if( $failed ) {
-		echo "<br /><br /><b>To run {$qsf->name} and other advanced PHP software, the above error(s) must be fixed by you or your web host.</b>";
+		echo "<br><br><b>To run {$qsf->name} and other advanced PHP software, the above error(s) must be fixed by you or your web host.</b>";
 		exit;
 	}
 
@@ -239,7 +239,7 @@ if( $mode ) {
    <div id='bottom'>&nbsp;</div>
   </div>
   <div id='footer'>
-   <a href='https://github.com/Arthmoor/QSF-Portal'>{$qsf->name}</a> {$qsf->version} &copy; 2005-2019 The {$qsf->name} Development Team<br />
+   <a href='https://github.com/Arthmoor/QSF-Portal'>{$qsf->name}</a> {$qsf->version} &copy; 2005-2025 The {$qsf->name} Development Team<br>
   </div>
  </body>
 </html>";

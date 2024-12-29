@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -78,7 +78,7 @@ class db_repair extends admin
 
 			foreach( $row as $col => $data )
 			{
-				$out .= "<span class='starter'>" . $this->format($data, FORMAT_HTMLCHARS) . "</span>\n";
+				$out .= "<span class='starter'>" . $this->format( $data, FORMAT_HTMLCHARS ) . "</span>\n";
 			}
 			$out .= "<p class='list_line'></p>\n";
 		}

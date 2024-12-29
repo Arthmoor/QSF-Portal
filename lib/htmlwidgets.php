@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2020 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -313,7 +313,7 @@ class htmlwidgets extends forumutils
 		if( $custom_only ) {
 			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups WHERE group_type='' ORDER BY group_name" );
 		} else {
-			$groups = $this->db->query( "SELECT group_name, group_id FROM %pgroups ORDER BY group_name" );
+			$groups = $this->db->query( 'SELECT group_name, group_id FROM %pgroups ORDER BY group_name' );
 		}
 
 		$out = null;
@@ -414,7 +414,7 @@ class htmlwidgets extends forumutils
 	{
 		$out = null;
 
-		$query = $this->db->query( "SELECT * FROM %pskins" );
+		$query = $this->db->query( 'SELECT * FROM %pskins' );
 		while( $s = $this->db->nqfetch( $query ) )
 		{
 			if( $s['skin_id'] == $this->sets['default_skin'] ) {

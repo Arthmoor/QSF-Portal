@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -167,11 +167,27 @@ class users_online extends modlet
 		$which_day = date( 'd F Y', $this->qsf->time );
 		$today_date = strtotime( "$which_day" );
 
-		if( $this->qsf->user['user_group'] == USER_GUEST || $this->qsf->user['user_group'] == USER_AWAIT )
-			$query = $this->qsf->db->query( "SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= '%s' AND user_group !=%d AND user_group !=%d AND user_posts >= 1 ORDER BY user_name", $today_date, USER_GUEST, USER_AWAIT );
-		else
-			$query = $this->qsf->db->query( "SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= '%s' AND user_group !=%d ORDER BY user_name", $today_date, USER_GUEST );
+		if( $this->qsf->user['user_group'] == USER_GUEST || $this->qsf->user['user_group'] == USER_AWAIT ) {
+			$stmt = $this->qsf->db->prepare_query( 'SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= ? AND user_group != ? AND user_group != ? AND user_posts >= 1 ORDER BY user_name' );
 
+         $uid = intval( USER_GUEST );
+         $gid = intval( USER_AWAIT );
+         $stmt->bind_param( 'sii', $today_date, $uid, $gid );
+         $this->qsf->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
+      }
+		else {
+			$stmt = $this->qsf->db->prepare_query( 'SELECT user_id, user_name, user_lastvisit FROM %pusers WHERE user_lastvisit >= ? AND user_group != ? ORDER BY user_name' );
+
+         $uid = intval( USER_GUEST );
+         $stmt->bind_param( 'si', $today_date, $uid );
+         $this->qsf->db->execute_query( $stmt );
+
+         $query = $stmt->get_result();
+         $stmt->close();
+      }
 		$count_users = $this->qsf->db->num_rows( $query );
 		$user_names = '';
 
@@ -185,12 +201,12 @@ class users_online extends modlet
 				$user_name = $row['user_name'];
 
 				if( $i == ( $count_users - 1 ) ) {
-					$comma = "";
+					$comma = '';
 				} else {
-					$comma = ", ";
+					$comma = ', ';
 				}
 
-               			if( $count_users == '1' ) {
+            if( $count_users == '1' ) {
 					$title_onlinetd_table = "<strong>There has been " . $count_users . " member online today:</strong>";
 				}
 				if( $count_users > '1' ) {

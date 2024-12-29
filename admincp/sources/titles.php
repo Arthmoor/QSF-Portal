@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -70,13 +70,17 @@ class titles extends admin
 					return $this->message( $this->lang->titles_control, $this->lang->invalid_token );
 				}
 
-				if( ( trim( $this->post['new_title'] ) == '' ) || ( trim( $this->post['new_posts'] ) == '' ) ) {
+				if( trim( $this->post['new_title'] ) == '' ) {
 					return $this->message( $this->lang->titles_control, $this->lang->titles_error );
 				}
 
-				$this->db->query( "INSERT INTO %pmembertitles (membertitle_title, membertitle_icon, membertitle_posts)
-					VALUES ('%s', '%s', %d)",
-					$this->post['new_title'], $this->post['new_icon'], intval( $this->post['new_posts'] ) );
+				$stmt = $this->db->prepare_query( 'INSERT INTO %pmembertitles ( membertitle_title, membertitle_icon, membertitle_posts ) VALUES( ?, ?, ? )' );
+
+            $new_posts = intval( $this->post['new_posts'] );
+            $stmt->bind_param( 'ssi', $this->post['new_title'], $this->post['new_icon'], $new_posts );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
+
 				$this->update_titles();
 
 				return $this->message( $this->lang->titles_add, $this->lang->titles_added );
@@ -92,20 +96,32 @@ class titles extends admin
 			}
 
 			if( isset( $this->get['delete'] ) ) {
-				$this->db->query( "DELETE FROM %pmembertitles WHERE membertitle_id=%d", intval( $this->get['delete'] ) );
+				$stmt = $this->db->prepare_query( 'DELETE FROM %pmembertitles WHERE membertitle_id=?' );
+
+            $id = intval( $this->get['delete'] );
+            $stmt->bind_param( 'i', $id );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
+
 				$this->update_titles();
 			}
 
-			if( !isset( $this->get['edit'] ) ) {
-				$this->get['edit'] = null;
-			} else {
-				$this->get['edit'] = intval( $this->get['edit'] );
-			}
+         $id = null;
+			if( isset( $this->get['edit'] ) )
+				$id = intval( $this->get['edit'] );
 
-			if( isset( $this->post['submit'] ) && ( trim( $this->post['new_posts'] ) != '' ) && ( trim( $this->post['new_title'] ) != '' ) ) {
-				$this->db->query( "UPDATE %pmembertitles SET membertitle_title='%s', membertitle_posts=%d, membertitle_icon='%s' WHERE membertitle_id=%d",
-					$this->post['new_title'], intval( $this->post['new_posts'] ), $this->post['new_icon'], $this->get['edit'] );
-				$this->get['edit'] = null;
+         $new_posts = null;
+			if( isset( $this->post['new_posts'] ) )
+				$new_posts = intval( $this->post['new_posts'] );
+
+			if( isset( $this->post['submit'] ) && ( trim( $this->post['new_title'] ) != '' ) ) {
+				$stmt = $this->db->prepare_query( 'UPDATE %pmembertitles SET membertitle_title=?, membertitle_posts=?, membertitle_icon=? WHERE membertitle_id=?' );
+
+            $stmt->bind_param( 'sisi', $this->post['new_title'], $new_posts, $this->post['new_icon'], $id );
+            $this->db->execute_query( $stmt );
+            $stmt->close();
+
+            $id = null;
 
 				$this->update_titles();
 			}
@@ -116,7 +132,7 @@ class titles extends admin
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'skin', $this->skin );
-			$xtpl->assign( 'edit', $this->get['edit'] );
+			$xtpl->assign( 'edit', $id );
 			$xtpl->assign( 'titles_edit', $this->lang->titles_edit );
 			$xtpl->assign( 'titles_title', $this->lang->titles_title );
 			$xtpl->assign( 'titles_image', $this->lang->titles_image );
@@ -131,7 +147,7 @@ class titles extends admin
 				$delete_link = null;
 				$posts_link = null;
 
-				if( !$this->get['edit'] || ( $this->get['edit'] != $data['membertitle_id'] ) ) {
+				if( !$id || $id != $data['membertitle_id'] ) {
 					$title_link = $data['membertitle_title'];
 					$image_link = "<img src=\"../skins/default/images/{$data['membertitle_icon']}\" alt=\"{$data['membertitle_icon']}\">";
 					$icon = $data['membertitle_icon'];
@@ -200,25 +216,30 @@ class titles extends admin
 
 	private function update_titles()
 	{
-		$titles = $this->db->query( "SELECT * FROM %pmembertitles ORDER BY membertitle_posts" );
+		$titles = $this->db->query( 'SELECT * FROM %pmembertitles ORDER BY membertitle_posts' );
 		$last_count = 0;
 		$last_level = 0;
 		$last_title = '';
 
+      $title_query = $this->db->prepare_query( 'UPDATE %pusers SET user_title=?, user_level=? WHERE (user_title_custom = 0) AND (user_posts >= ?) AND (user_posts < ?)' );
+      $title_query->bind_param( 'siii', $last_title, $last_level, $last_count, $posts );
+
 		while( $title = $this->db->nqfetch( $titles ) )
 		{
-			$this->db->query( "UPDATE %pusers SET user_title='%s', user_level='%s'
-				WHERE (user_title_custom = 0) AND (user_posts >= %d) AND (user_posts < %d)",
-				$last_title, $last_level, $last_count, $title['membertitle_posts'] );
+			$posts = $title['membertitle_posts'];
+         $this->db->execute_query( $title_query );
 
 			$last_count = $title['membertitle_posts'];
 			$last_level = $title['membertitle_id'];
 		}
+      $title_query->close();
 
 		// We need this to take care of the users who have more posts than are set by any title
-		$this->db->query( "UPDATE %pusers SET user_title='%d', user_level='%s'
-			WHERE (user_title_custom = 0) AND (user_posts >= %d)",
-			$last_title, $last_level, $last_count );
+		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_title=?, user_level=?	WHERE (user_title_custom = 0) AND (user_posts >= ?)' );
+
+      $stmt->bind_param( 'sii', $last_title, $last_level, $last_count );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 }
 ?>

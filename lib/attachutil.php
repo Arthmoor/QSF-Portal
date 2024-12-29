@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2019 The QSF Portal Development Team
+ * Copyright (c) 2006-2025 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -124,9 +124,12 @@ class attachutil
 			$md5 = key( $temp_attached_data );
 			$filename = $temp_attached_data[$md5];
 
-         $this->db->query( "INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES 
-            ('%s', '%s', %d, %d, %d)",
-            $md5, $filename, $post_id, filesize( './attachments/' . $md5 ), $convo );
+         $stmt = $this->db->prepare_query( 'INSERT INTO %pattach ( attach_file, attach_name, attach_post, attach_size, attach_pm ) VALUES ( ?, ?, ?, ?, ?)' );
+
+         $filesize = filesize( './attachments/' . $md5 );
+         $stmt->bind_param( 'ssiii', $md5, $filename, $post_id, $filesize, $convo );
+         $this->db->execute_query( $stmt );
+         $stmt->close();
 
 			$attached_data = array_merge( $attached_data, $temp_attached_data );
 		}
@@ -147,7 +150,11 @@ class attachutil
 	{
 		$this->delete( $filename, $attached_data );
 
-      $this->db->query( "DELETE FROM %pattach WHERE attach_post=%d AND attach_file='%s' AND attach_pm=%d", $post_id, $filename, $convo );
+      $stmt = $this->db->prepare_query( 'DELETE FROM %pattach WHERE attach_post=? AND attach_file=? AND attach_pm=?' );
+
+      $stmt->bind_param( 'isi', $post_id, $filename, $convo );
+      $this->db->execute_query( $stmt );
+      $stmt->close();
 	}
 
 	/**
@@ -181,11 +188,15 @@ class attachutil
 	 **/
 	public function insert( $post_id, $attached_data, $convo = false )
 	{
+      $insert_query = $this->db->prepare_query( 'INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES ( ?, ?, ?, ?, ? )' );
+      $insert_query->bind_param( 'ssiii', $md5, $filename, $post_id, $filesize, $convo );
+
 		foreach( $attached_data as $md5 => $filename )
 		{
-         $this->db->query( "INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES 
-            ('%s', '%s', %d, %d, %d)", $md5, $filename, $post_id, filesize( './attachments/' . $md5 ), $convo );
+         $filesize = filesize( './attachments/' . $md5 );
+         $this->db->execute_query( $insert_query );
 		}
+      $insert_query->close();
 	}
 
 	/**
@@ -235,7 +246,13 @@ class attachutil
 	{
 		$attached_data = array();
 
-      $query = $this->db->query( "SELECT attach_file, attach_name FROM %pattach WHERE attach_post=%d AND attach_pm=%d", $post_id, $convo );
+      $stmt = $this->db->prepare_query( 'SELECT attach_file, attach_name FROM %pattach WHERE attach_post=? AND attach_pm=?' );
+
+      $stmt->bind_param( 'ii', $post_id, $convo );
+      $this->db->execute_query( $stmt );
+
+      $query = $stmt->get_result();
+      $stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
