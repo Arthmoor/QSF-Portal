@@ -100,6 +100,9 @@ class membercount extends admin
 		}
       $count_query->close();
       $post_query->close();
+
+      // Changing post counts might require title adjustments.
+      $this->update_titles();
 	}
 }
 ?>

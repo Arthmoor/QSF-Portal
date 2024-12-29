@@ -44,6 +44,7 @@ Changes for 2.0:
 * Overhauled the new user validation system to be more robust.
 * Overhauled private messages to be presented more like topics in a forum and posts in a topic.
 * Table engines have been changed to InnoDB instead of MyISAM for better reliability. Also MyISAM is heading for deprecation in the future as well.
+* Resetting member stats will now also correct any titles that need to be adjusted.
 
    Removed:
 
