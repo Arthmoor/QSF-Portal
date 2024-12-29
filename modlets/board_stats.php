@@ -43,7 +43,6 @@ class board_stats extends modlet
 	/**
 	* Display the board statistics
 	*
-	* @param string $arg set to true to display birthdays list
 	* @author Geoffrey Dunn <geoff@warmage.com>
 	* @since 1.2.0
 	* @return string HTML with current online users and total membercount
@@ -75,11 +74,6 @@ class board_stats extends modlet
 			$stats['LASTMEMBER'] = "<a href=\"{$this->qsf->site}/profile/{$name}-{$stats['LASTMEMBERID']}/\">{$stats['LASTMEMBER']}</a>";
 		}
 
-		$birthdays = '';
-		if( $arg == true ) {
-			$birthdays = "<strong>{$this->qsf->lang->board_birthdays}</strong><br>\n" . $this->getuser_birthdays();
-		}
-
 		$xtpl = new XTemplate( './skins/' . $this->qsf->skin . '/modlets/board_stats.xtpl' );
 
 		$xtpl->assign( 'site', $this->qsf->site );
@@ -95,7 +89,6 @@ class board_stats extends modlet
 		$xtpl->assign( 'posts', $stats['POSTS'] );
 		$xtpl->assign( 'members', $stats['MEMBERS'] );
 		$xtpl->assign( 'newest', $stats['LASTMEMBER'] );
-		$xtpl->assign( 'birthdays', $birthdays );
 
 		if( $this->qsf->perms->auth( 'is_admin' ) ) {
 			$xtpl->assign( 'time_exec', $this->qsf->time_exec );
@@ -130,51 +123,6 @@ class board_stats extends modlet
 			'MOSTONLINETIME' => $this->qsf->mbdate( DATE_LONG, $this->qsf->sets['mostonlinetime'] ),
 			'FILES'          => $this->qsf->sets['file_count']
 		);
-	}
-
-	/**
-	 * Makes a list of people whose birthday is today
-	 *
-	 * @author Jason Warner <jason@mercuryboard.com>
-	 * @since Beta 2.1
-	 * @return string List of members and their ages
-	 **/
-	private function getuser_birthdays()
-	{
-		$links  = array();
-		$stmt = $this->qsf->db->prepare_query( 'SELECT user_id, user_name, user_birthday FROM %pusers WHERE user_birthday LIKE ?' );
-
-      $mbdate = $this->qsf->mbdate( '%-m-d' );
-      $key = "%{$mbdate}%";
-      $stmt->bind_param( 's', $key );
-      $this->qsf->db->execute_query( $stmt );
-
-      $members = $stmt->get_result();
-      $stmt->close();
-
-		$count = $this->qsf->db->num_rows( $members );
-
-		if( !$count ) {
-			return $this->qsf->lang->board_nobday;
-		}
-
-		while( $m = $this->qsf->db->nqfetch( $members ) )
-		{
-			$year = explode( '-', $m['user_birthday'] );
-			$day = $this->qsf->mbdate( 'Y' ) - $year[0];
-
-         if( $year[0] == '1900' )
-            continue;
-
-			if( $this->qsf->user['user_group'] != USER_GUEST && $this->qsf->user['user_group'] != USER_AWAIT ) {
-				$name = $this->qsf->htmlwidgets->clean_url( $m['user_name'] );
-
-				$links[] = "<a href=\"{$this->qsf->site}/profile/{$name}-{$m['user_id']}/\" class=\"bdaylink\">{$m['user_name']}</a> ($day)";
-			} else {
-				$links[] = "{$m['user_name']} ($day)";
-			}
-		}
-		return implode( ', ', $links );
 	}
 }
 ?>

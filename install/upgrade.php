@@ -212,9 +212,7 @@ class upgrade extends qsfglobal
 					$queries[] = "ALTER TABLE %pactive CHANGE active_user_agent active_user_agent varchar(255) NOT NULL default 'Unknown'";
 					$queries[] = "ALTER TABLE %pusers CHANGE user_view_emoticons user_view_emojis tinyint(1) unsigned NOT NULL default '1'";
 					$queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
-					$queries[] = "ALTER TABLE %pusers CHANGE user_birthday user_birthday NOT NULL default '1900-01-01'";
 					$queries[] = "ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255) NOT NULL default 'Europe/London'";
-					$queries[] = "UPDATE %pusers SET user_birthday='1900-01-01' WHERE CAST(user_birthday AS CHAR(10)) = '0000-00-00'";
 					$queries[] = "UPDATE %pusers SET user_timezone='Europe/London'";
 					$queries[] = "ALTER TABLE %pusers ADD user_facebook varchar(255) NOT NULL default '' AFTER user_twitter";
                $queries[] = "ALTER TABLE %pusers ADD user_lastcvallread int(10) unsigned NOT NULL default '0' AFTER user_lastallread";
@@ -226,6 +224,8 @@ class upgrade extends qsfglobal
 					$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
 					$queries[] = "UPDATE %pusers SET user_skin=1";
 					$queries[] = 'ALTER TABLE %pattach ADD attach_pm tinyint(1) unsigned NOT NULL default 0 AFTER attach_size';
+
+               $queries[] = 'ALTER TABLE %pusers DROP COLUMN user_birthday';
 
                $queries[] = 'ALTER TABLE %pvotes ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
                $queries[] = 'ALTER TABLE %pvalidation ENGINE=InnoDB';

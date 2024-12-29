@@ -393,7 +393,6 @@ $queries[] = "CREATE TABLE %pusers (
   user_email varchar(100) NOT NULL default '',
   user_email_show tinyint(1) unsigned NOT NULL default '0',
   user_email_form tinyint(1) unsigned NOT NULL default '1',
-  user_birthday date NOT NULL default '1900-01-01',
   user_timezone varchar(255) NOT NULL default 'Europe/London',
   user_posts int(10) unsigned NOT NULL default '0',
   user_uploads int(10) unsigned NOT NULL default '0',

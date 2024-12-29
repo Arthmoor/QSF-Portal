@@ -344,12 +344,6 @@ class cp extends qsfglobal
 		$this->tree( $this->lang->cp_editing_profile );
 
 		if( !isset( $this->post['submit'] ) ) {
-			list( $year, $mon, $day ) = explode( '-', $this->user['user_birthday'] );
-
-			$day_list   = $this->htmlwidgets->select_days( $day );
-			$month_list = $this->htmlwidgets->select_months( $mon );
-			$year_list  = $this->htmlwidgets->select_years( $year );
-
 			$xtpl->assign( 'cp_label_edit_profile', $this->lang->cp_label_edit_profile );
 			$xtpl->assign( 'cp_format', $this->lang->cp_format );
 			$xtpl->assign( 'user_name', $this->user['user_name'] );
@@ -357,10 +351,6 @@ class cp extends qsfglobal
 			$xtpl->assign( 'user_email', $this->user['user_email'] );
 			$xtpl->assign( 'cp_pass', $this->lang->cp_pass );
 			$xtpl->assign( 'cp_pass2', $this->lang->cp_pass2 );
-			$xtpl->assign( 'cp_bday', $this->lang->cp_bday );
-			$xtpl->assign( 'month_list', $month_list );
-			$xtpl->assign( 'day_list', $day_list );
-			$xtpl->assign( 'year_list', $year_list );
 			$xtpl->assign( 'cp_location', $this->lang->cp_location );
 			$xtpl->assign( 'user_location', $this->user['user_location'] );
 
@@ -460,12 +450,6 @@ class cp extends qsfglobal
 				$this->post['month'] = '0' . $this->post['month'];
 			}
 
-			$user_birthday = $this->post['year'] . '-' . $this->post['month'] . '-' . $this->post['day'];
-
-			if( !checkdate( $this->post['month'], $this->post['day'], $this->post['year'] ) && ( $user_birthday != '1900-01-01' ) ) {
-				return $this->message( $this->lang->cp_err_updating, sprintf( $this->lang->cp_not_exist, $user_birthday ) );
-			}
-
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
 			if( !empty( $this->sets['wordpress_api_key'] ) && $this->sets['akismet_profiles'] && !empty($this->post['user_homepage'] ) ) {
 				require_once $this->sets['include_path'] . '/lib/akismet.php';
@@ -544,11 +528,11 @@ class cp extends qsfglobal
 			}
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET
-				  user_email=?, user_birthday=?, user_homepage=?, user_facebook=?, user_location=?,
+				  user_email=?, user_homepage=?, user_facebook=?, user_location=?,
 				  user_interests=?, user_twitter=?, user_title=?, user_title_custom=?, user_name=?
 				WHERE user_id=?' );
 
-         $stmt->bind_param( 'ssssssssisi', $this->post['user_email'], $user_birthday, $homepage, $facebook, $location,
+         $stmt->bind_param( 'sssssssisi', $this->post['user_email'], $homepage, $facebook, $location,
 				$interests, $twitter, $usertitle, $custom_title, $this->post['Newuser_name'],	$this->user['user_id'] );
          $this->db->execute_query( $stmt );
          $stmt->close();

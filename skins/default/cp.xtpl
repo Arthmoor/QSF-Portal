@@ -128,14 +128,6 @@
  <span class="form"><input type="password" name="passA" value="" size="40" autocomplete="off"></span>
  <p class="line"></p>
 
- <span class="field">{cp_bday}</span>
- <span class="form">
-  <select name="month">{month_list}</select>
-  <select name="day">{day_list}</select>
-  <select name="year">{year_list}</select>
- </span>
- <p class="line"></p>
-
  <span class="field">{cp_location}</span>
  <span class="form"><input type="text" name="user_location" value="{user_location}" size="40"></span>
  <p class="line"></p>

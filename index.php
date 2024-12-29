@@ -430,7 +430,7 @@ if( $qsf->nohtml ) {
 
 		$modlet = new board_stats( $qsf );
 
-		$board_stats = $modlet->execute( true ); // FIXME: Birthdays should be optional display.
+		$board_stats = $modlet->execute( null );
 
 		$xtpl->assign( 'board_stats', $board_stats );
 	}

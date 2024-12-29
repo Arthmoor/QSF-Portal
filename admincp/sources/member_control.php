@@ -251,7 +251,6 @@ class member_control extends admin
 					'user_avatar_width'	=> array( $this->lang->mc_user_avatar_width, U_INT, 3 ),
 					'user_avatar_height'	=> array( $this->lang->mc_user_avatar_height, U_INT, 3 ),
 					'user_level'		=> array( $this->lang->mc_user_level, U_TEXT, 2 ),
-					'user_birthday'		=> array( $this->lang->mc_user_birthday, U_TEXT, 10 ),
 					'user_timezone'		=> array( $this->lang->mc_user_timezone, U_TZONE ),
 					'user_location'		=> array( $this->lang->mc_user_location, U_TEXT, 100 ),
 					'user_twitter'		=> array( $this->lang->mc_user_twitter, U_TEXT, 50 ),
@@ -436,7 +435,6 @@ class member_control extends admin
 				$user_avatar_width = intval( $this->post['user_avatar_width'] );
 				$user_avatar_height = intval( $this->post['user_avatar_height'] );
 				$user_level = intval( $this->post['user_level'] );
-				$user_birthday = $this->post['user_birthday'];
 				$user_timezone = $this->post['user_timezone'];
 
             if( isset( $this->post['user_location'] ) )
@@ -476,15 +474,15 @@ class member_control extends admin
 				$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_name=?, user_email=?, user_group=?, user_title=?,
 				  user_title_custom=?, user_language=?, user_skin=?, user_avatar=?,
 				  user_avatar_type=?, user_avatar_width=?, user_avatar_height=?, user_level=?,
-				  user_birthday=?, user_timezone=?, user_location=?, user_homepage=?, user_facebook=?,
+				  user_timezone=?, user_location=?, user_homepage=?, user_facebook=?,
 				  user_interests=?, user_signature=?, user_posts=?, user_uploads=?,
 				  user_twitter=?, user_email_show=?, user_pm=?, user_pm_mail=?, user_view_avatars=?,
 				  user_view_signatures=?, user_view_emojis=? WHERE user_id=?' );
 
-            $stmt->bind_param( 'ssisisissiiisssssssiisiiiiiii',
+            $stmt->bind_param( 'ssisisissiiissssssiisiiiiiii',
               $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
 				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
-				  $user_birthday, $user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
+				  $user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
 				  $user_signature, $user_posts, $user_uploads, $user_twitter, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
 				  $user_view_signatures, $user_view_emojis, $id );
 

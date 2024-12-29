@@ -239,7 +239,6 @@ class en
    public $ban_users_banned;
 
    public $board_active_users;
-   public $board_birthdays;
    public $board_bottom_page;
    public $board_can_post;
    public $board_can_topics;
@@ -257,7 +256,6 @@ class en
    public $board_members;
    public $board_message;
    public $board_most_online;
-   public $board_nobday;
    public $board_nobody;
    public $board_nopost;
    public $board_noview;
@@ -382,7 +380,6 @@ class en
    public $cp_avatar_url;
    public $cp_avatar_use;
    public $cp_gravatar_upload_failed;
-   public $cp_bday;
    public $cp_been_updated;
    public $cp_been_updated1;
    public $cp_been_updated_prefs;
@@ -928,7 +925,6 @@ class en
    public $mc_user_avatar_height;
    public $mc_user_avatar_type;
    public $mc_user_avatar_width;
-   public $mc_user_birthday;
    public $mc_user_email;
    public $mc_user_email_show;
    public $mc_user_facebook;
@@ -1260,7 +1256,6 @@ class en
 
    public $profile_av_sign;
    public $profile_avatar;
-   public $profile_bday;
    public $profile_contact;
    public $profile_email_address;
    public $profile_facebook;
@@ -1878,7 +1873,6 @@ class en
 	public function board()
 	{
 		$this->board_active_users = 'Active Users';
-		$this->board_birthdays = 'Today\'s Birthdays';
 		$this->board_bottom_page = 'Go to the bottom of the page';
 		$this->board_can_post = 'You can reply in this forum.';
 		$this->board_can_topics = 'You can view but not create topics in this forum.';
@@ -1896,7 +1890,6 @@ class en
 		$this->board_members = 'members';
 		$this->board_message = '%s Message';
 		$this->board_most_online = 'The most users ever online was %d on %s.';
-		$this->board_nobday = 'There are no member birthdays today.';
 		$this->board_nobody = 'There are currently no members online.';
 		$this->board_nopost = 'No Posts';
 		$this->board_noview = 'You do not have permission to view the board.';
@@ -2030,7 +2023,6 @@ class en
 		$this->cp_avatar_url = 'Specify a URL for your avatar';
 		$this->cp_avatar_use = 'Use your uploaded avatar';
 		$this->cp_gravatar_upload_failed = 'The email address you entered was not a valid format.';
-		$this->cp_bday = 'Birthday';
 		$this->cp_been_updated = 'Your profile has been updated.';
 		$this->cp_been_updated1 = 'Your avatar has been updated.';
 		$this->cp_been_updated_prefs = 'Your preferences have been updated.';
@@ -2615,7 +2607,6 @@ class en
 		$this->mc_user_avatar_height = 'Avatar Height';
 		$this->mc_user_avatar_type = 'Avatar Type';
 		$this->mc_user_avatar_width = 'Avatar Width';
-		$this->mc_user_birthday = 'Birthday';
 		$this->mc_user_email = 'Email Address';
 		$this->mc_user_email_show = 'Email Is Public';
 		$this->mc_user_facebook = 'Facebook Page';
@@ -2983,7 +2974,6 @@ class en
 	{
 		$this->profile_av_sign = 'Avatar and Signature';
 		$this->profile_avatar = 'Avatar';
-		$this->profile_bday = 'Birthday';
 		$this->profile_contact = 'Contact';
 		$this->profile_email_address = 'Email Address';
 		$this->profile_facebook = 'Facebook Page';

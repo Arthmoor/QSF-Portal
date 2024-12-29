@@ -95,10 +95,6 @@ class profile extends qsfglobal
 			return $this->message( $this->lang->profile_view_profile, $this->lang->profile_no_member );
 		}
 
-		if( $profile['user_birthday'] == '1900-01-01' ) {
-			$profile['user_birthday'] = null;
-		}
-
 		if( !$profile['user_pm'] || $this->perms->is_guest ) {
 			$profile['user_pm'] = null;
 		}
@@ -226,13 +222,6 @@ class profile extends qsfglobal
 			$xtpl->assign( 'user_homepage', $profile['user_homepage'] );
 
 			$xtpl->parse( 'Profile.Homepage' );
-		}
-
-		if( $profile['user_birthday'] ) {
-			$xtpl->assign( 'profile_bday', $this->lang->profile_bday );
-			$xtpl->assign( 'user_birthday', $profile['user_birthday'] );
-
-			$xtpl->parse( 'Profile.Birthday' );
 		}
 
 		if( $profile['user_location'] ) {
