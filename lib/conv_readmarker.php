@@ -116,7 +116,7 @@ class conv_readmarker extends forumutils
       $this->db->execute_query( $stmt );
       $stmt->close();
 
-		$stmt = $this->db->query( 'DELETE FROM %pconv_readmarks WHERE readmark_user=? AND readmark_lastread < ?' );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pconv_readmarks WHERE readmark_user=? AND readmark_lastread < ?' );
 
       $stmt->bind_param( 'ii', $this->user_id, $time );
       $this->db->execute_query( $stmt );
