@@ -222,13 +222,31 @@ class qsfglobal
 	}
 
 	/**
+	 * Check to see if a given password has needs to be updated to a new hash algorithm
+	 *
+	 * @param string $password The unencrypted password to rehash
+	 * @param string $hash The hashed password to check
+	 * @author Roger Libiez
+	 * @since 2.0
+	 */
+	private function check_hash_update( #[\SensitiveParameter] string $password, $hash )
+	{
+		$options = [ 'cost' => 12, ];
+
+		if( password_needs_rehash( $hash, PASSWORD_DEFAULT, $options ) ) {
+			$hash = password_hash( $password, PASSWORD_DEFAULT, $options );
+		}
+		return $hash;
+	}
+
+	/**
 	 * Hash a given string into a password suitable for database use
 	 *
 	 * @param string $pass The supplied password to hash
 	 * @author Roger Libiez
 	 * @since 2.0
 	 */
-	public function qsfp_password_hash( $pass )
+	public function qsfp_password_hash( #[\SensitiveParameter] string $pass )
 	{
 		$options = [ 'cost' => 12, ];
 		$newpass = password_hash( $pass, PASSWORD_DEFAULT, $options );
@@ -256,7 +274,7 @@ class qsfglobal
 
 		for( $i = 0; $i < $length; $i++ )
 		{
-			$password .= $cons[rand(0, $num_cons - 1)] . $vowels[rand(0, $num_vowels - 1)];
+			$password .= $cons[rand(0, $num_cons - 1)] . $vowels[rand( 0, $num_vowels - 1 )];
 		}
 
 		return substr( $password, 0, $length );

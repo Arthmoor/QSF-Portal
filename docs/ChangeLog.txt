@@ -18,6 +18,7 @@ Changes for 2.0:
 * Added Facebook page to user profile data.
 * Added the ability to put extra links on the sidebar box to reduce the need for editing the base templates.
 * Friendly URL support has been added for much of the forum code. Requires the use of an .htaccess file.
+* Support for password hash updates has been added.
 
    Changes:
 

@@ -116,6 +116,17 @@ class login extends qsfglobal
 			$user  = $data['user_id'];
 
 			if( password_verify( $this->post['pass'], $pass ) ) {
+            $hashcheck = $this->check_hash_update( $this->post['pass'], $data['user_password'] );
+            if( $hashcheck != $pass ) {
+               $pass = $hashcheck;
+
+               $stmt = $this->db->prepare( 'UPDATE %pusers SET user_password=? WHERE user_id=?' );
+
+               $stmt->bind_param( 'si', $pass, $data['user_id'] );
+               $this->db->execute_query( $stmt );
+               $stmt->close();
+            }
+
 				$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
 
 				setcookie( $this->sets['cookie_prefix'] . 'user', $user, $options );
