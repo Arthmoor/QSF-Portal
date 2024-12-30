@@ -129,7 +129,7 @@ class rssfeed extends qsfglobal
 	{
 		$forums_str = $this->readmarker->create_forum_permissions_string();
 		
-		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name,
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name
 			FROM %ptopics t, %pposts p, %pusers u
 			WHERE t.topic_forum IN (?) AND t.topic_modes & ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author
 			ORDER BY p.post_time DESC LIMIT ?' );
@@ -199,7 +199,7 @@ class rssfeed extends qsfglobal
 		$xtpl->assign( 'generator', htmlspecialchars( $this->sets['forum_name'] ) );
 		$xtpl->assign( 'ttl', $this->sets['rss_feed_time'] );
 
-		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name,
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name
 			FROM %ptopics t, %pposts p, %pusers u
 			WHERE t.topic_forum = ? AND t.topic_modes & ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author
 			ORDER BY p.post_time DESC LIMIT ?' );
@@ -265,7 +265,7 @@ class rssfeed extends qsfglobal
 		$xtpl->assign( 'generator', htmlspecialchars( $this->sets['forum_name'] ) );
 		$xtpl->assign( 'ttl', $this->sets['rss_feed_time'] );
 
-		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name,
+		$stmt = $this->db->prepare_query( 'SELECT t.topic_id, t.topic_title, t.topic_forum, p.post_id, p.post_time, p.post_text, u.user_name
 			FROM %ptopics t, %pposts p, %pusers u
 			WHERE t.topic_id = ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author ORDER BY p.post_time DESC LIMIT ?' );
 
@@ -346,7 +346,7 @@ class rssfeed extends qsfglobal
 		$cat_str = $this->create_category_permissions_string();
 
 		if( $cat_str != '' ) {
-			$stmt = $this->db->prepare_query( 'SELECT f.file_id, f.file_name, f.file_description, f.file_date, c.fcat_id, c.fcat_name, u.user_name,
+			$stmt = $this->db->prepare_query( 'SELECT f.file_id, f.file_name, f.file_description, f.file_date, c.fcat_id, c.fcat_name, u.user_name
 			FROM %pfiles f, %pfile_categories c, %pusers u
 			WHERE c.fcat_id IN (?) AND f.file_catid = c.fcat_id AND u.user_id = f.file_submitted AND f.file_approved = 1
 			ORDER BY f.file_date DESC LIMIT ?' );
