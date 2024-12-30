@@ -191,6 +191,7 @@ class en
    public $admin_manage_skins;
    public $admin_mass_mail;
    public $admin_members;
+   public $admin_members_list;
    public $admin_phpinfo;
    public $admin_prune;
    public $admin_recount_forums;
@@ -1816,6 +1817,7 @@ class en
 		$this->admin_manage_skins = 'Manage Skins';
 		$this->admin_mass_mail = 'Send an email to your members';
 		$this->admin_members = 'Members';
+		$this->admin_members_list = 'Member List';
 		$this->admin_phpinfo = 'View PHP information';
 		$this->admin_prune = 'Prune old topics';
 		$this->admin_recount_forums = 'Recount topics and replies';
@@ -2538,8 +2540,8 @@ class en
 		$this->main_mark = 'Mark all';
 		$this->main_mark1 = 'Mark all topics as read';
 		$this->main_markforum_read = 'Mark forum as read';
+      $this->main_members = 'Members';
 		$this->main_member_newest = 'Newest Member';
-		$this->main_members = 'Members';
 		$this->main_messenger = 'Messenger';
 		$this->main_new = 'new';
 		$this->main_news = 'News';

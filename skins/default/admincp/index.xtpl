@@ -59,6 +59,7 @@
      {admin_members}
     </div>
     <nav>
+	 <a href="{site}/admincp/index.php?a=members">{admin_members_list}</a>
      <a href="{site}/admincp/index.php?a=member_control&amp;s=profile">{admin_edit_member}</a>
      <a href="{site}/admincp/index.php?a=member_control&amp;s=delete">{admin_delete_member}</a>
      <a href="{site}/admincp/index.php?a=member_control&amp;s=perms">{admin_edit_member_perms}</a>

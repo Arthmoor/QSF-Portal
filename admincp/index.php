@@ -256,6 +256,7 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_prune', $admin->lang->admin_prune );
 
 	$xtpl->assign( 'admin_members', $admin->lang->admin_members );
+   $xtpl->assign( 'admin_members_list', $admin->lang->admin_members_list );
 	$xtpl->assign( 'admin_edit_member', $admin->lang->admin_edit_member );
 	$xtpl->assign( 'admin_delete_member', $admin->lang->admin_delete_member );
 	$xtpl->assign( 'admin_edit_member_perms', $admin->lang->admin_edit_member_perms );

@@ -300,7 +300,6 @@ if( $qsf->nohtml ) {
 		$xtpl->assign( 'forum_name', $qsf->sets['forum_name'] );
 		$xtpl->assign( 'main_files', $qsf->lang->main_files );
 		$xtpl->assign( 'main_forum', $qsf->lang->main_forum );
-		$xtpl->assign( 'main_members', $qsf->lang->main_members );
 		$xtpl->assign( 'searchlink', $searchlink );
 		$xtpl->assign( 'main_search', $qsf->lang->main_search );
 
@@ -336,7 +335,6 @@ if( $qsf->nohtml ) {
 			$xtpl->parse( 'Index.MemberHeader.PagesLink' );
 		}
 
-		$xtpl->assign( 'main_members', $qsf->lang->main_members );
 		$xtpl->assign( 'searchlink', $searchlink );
 		$xtpl->assign( 'main_search', $qsf->lang->main_search );
 

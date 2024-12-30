@@ -26,7 +26,7 @@
  *
  **/
 
-if( !defined( 'QUICKSILVERFORUMS' ) ) {
+if( !defined( 'QUICKSILVERFORUMS') || !defined( 'QSF_ADMIN' ) ) {
 	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
@@ -37,19 +37,10 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  * @author Jason Warner <jason@mercuryboard.com>
  * @since Beta 2.0
  **/
-class members extends qsfglobal
+class members extends admin
 {
 	public function execute()
 	{
-		if( !$this->perms->auth( 'board_view' ) ) {
-			$this->lang->board();
-
-			return $this->message(
-				sprintf( $this->lang->board_message, $this->sets['forum_name'] ),
-				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview
-			);
-		}
-
 		$this->set_title( $this->lang->members_list );
 		$this->tree( $this->lang->members_list );
 
@@ -100,25 +91,46 @@ class members extends qsfglobal
 		}
 
 		if( $l ) {
-			$PageNums = $this->htmlwidgets->get_pages(
-				array( "SELECT user_id FROM %pusers m, %pgroups g
-				WHERE m.user_group = g.group_id AND m.user_id != %d AND UPPER(LEFT(LTRIM(m.user_name), 1)) = '%s'", USER_GUEST_UID, $l ),
-				"/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
+         $stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers m, %pgroups g
+				WHERE m.user_group = g.group_id AND m.user_id != ? AND UPPER(LEFT(LTRIM(m.user_name), 1)) = ?" );
+				
+         $guid = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'is', $guid, $l );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $num = $this->db->num_rows( $result );
+         $stmt->close();
+
+			$PageNums = $this->htmlwidgets->get_pages( $num, "admincp/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		} else {
-			$PageNums = $this->htmlwidgets->get_pages(
-				array( "SELECT user_id FROM %pusers m, %pgroups g WHERE m.user_group = g.group_id AND m.user_id != %d", USER_GUEST_UID ),
-				"/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
+         $stmt = $this->db->prepare_query( 'SELECT user_id FROM %pusers m, %pgroups g WHERE m.user_group = g.group_id AND m.user_id != ?' );
+
+         $guid = intval( USER_GUEST_UID );
+         $stmt->bind_param( 'i', $guid );
+         $this->db->execute_query( $stmt );
+
+         $result = $stmt->get_result();
+         $num = $this->db->num_rows( $result );
+         $stmt->close();
+
+			$PageNums = $this->htmlwidgets->get_pages( $num, "admincp/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		}
 
-		$result = $this->db->query ( "SELECT m.user_joined, m.user_email_show, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id,
+		$stmt = $this->db->prepare_query( "SELECT m.user_joined, m.user_email_show, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id,
 				m.user_posts, m.user_title, m.user_homepage, m.user_facebook, m.user_twitter, m.user_group, g.group_name
-			FROM %pusers m,	%pgroups g
-			WHERE m.user_group = g.group_id AND m.user_id != %d" . ( $l ? " AND UPPER(LEFT(LTRIM(m.user_name), 1)) = '{$l}'" : '' ) . "
-			ORDER BY {$sortby}
-			LIMIT %d, %d",
-			USER_GUEST_UID, $this->get['min'], $this->get['num'] );
+			FROM %pusers m, %pgroups g
+			WHERE m.user_group = g.group_id AND m.user_id != ?" . ( $l ? " AND UPPER(LEFT(LTRIM(m.user_name), 1)) = '{$l}'" : '' ) . "
+			ORDER BY {$sortby} LIMIT ?, ?" );
 
-		$xtpl = new XTemplate( './skins/' . $this->skin . '/members.xtpl' );
+      $guid = intval( USER_GUEST_UID );
+      $stmt->bind_param( 'iii', $guid, $this->get['min'], $this->get['num'] );
+      $this->db->execute_query( $stmt );
+
+      $result = $stmt->get_result();
+      $stmt->close();
+
+		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/members.xtpl' );
 
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'skin', $this->skin );
@@ -139,15 +151,6 @@ class members extends qsfglobal
 		while( $member = $this->db->nqfetch( $result ) )
 		{
 			$member['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $member['user_joined'] );
-
-			// Do not display members awaiting activation, or members with zero posts to guests or other members awaiting activation. Discourages spambots.
-			if( $this->user['user_id'] == USER_GUEST_UID || $this->user['user_group'] == USER_AWAIT ) {
-				if( $member['user_group'] == USER_AWAIT )
-					continue;
-
-				if( $member['user_posts'] < 1 )
-					continue;
-			}
 
 			if( $this->perms->auth( 'email_use' ) ) {
 				if( $member['user_email_show'] ) {

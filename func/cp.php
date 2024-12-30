@@ -441,14 +441,6 @@ class cp extends qsfglobal
 				$this->post['user_facebook'] = 'https://' . $this->post['user_facebook'];
 			}
 
-			if( strlen( $this->post['day'] ) == 1 ) {
-				$this->post['day'] = '0' . $this->post['day'];
-			}
-
-			if( strlen( $this->post['month'] ) == 1 ) {
-				$this->post['month'] = '0' . $this->post['month'];
-			}
-
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
 			if( !empty( $this->sets['wordpress_api_key'] ) && $this->sets['akismet_profiles'] && !empty($this->post['user_homepage'] ) ) {
 				require_once $this->sets['include_path'] . '/lib/akismet.php';

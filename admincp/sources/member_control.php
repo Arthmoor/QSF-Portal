@@ -192,8 +192,6 @@ class member_control extends admin
             $member = $this->db->nqfetch( $result );
             $stmt->close();
 
-				$svars = json_decode( $member['user_server_data'], true );
-
 				require_once $this->sets['include_path'] . '/lib/akismet.php';
 				$akismet = new Akismet( $this );
 				$akismet->set_comment_author( $member['user_name'] );
@@ -345,8 +343,9 @@ class member_control extends admin
 					case U_SVARS:
 						$svars = json_decode( $val, true );
 
-						foreach( $svars as $name => $value )
-							$line .= $name . ': ' . $value . '<br>';
+                  if( $svars != null )
+                     foreach( $svars as $name => $value )
+                        $line .= $name . ': ' . $value . '<br>';
 						break;
 					default:
 						$line = $val;

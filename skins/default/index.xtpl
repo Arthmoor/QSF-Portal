@@ -28,7 +28,6 @@
      <nav>
       <a href="{qsf_site}/files/">{main_files}</a>
       <a href="{qsf_site}/board/">{main_forum}</a>
-      <a href="{qsf_site}/index.php?a=members">{main_members}</a>
       <a href="{qsf_site}/index.php?a=search{searchlink}">{main_search}</a>
       {index_left_links}
       {index_right_links}
@@ -67,7 +66,6 @@
 <!-- BEGIN: PagesLink -->
       <a href="{qsf_site}/index.php?a=page">{main_pages}</a>
 <!-- END: PagesLink -->
-      <a href="{qsf_site}/index.php?a=members">{main_members}</a>
       <a href="{qsf_site}/index.php?a=search{searchlink}">{main_search}</a>
 <!-- BEGIN: SpamLink -->
       <a href="{qsf_site}/index.php?a=spam_control"{spam_style}>{main_spam_controls}</a>
