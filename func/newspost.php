@@ -284,25 +284,13 @@ class newspost extends qsfglobal
 			$xtpl->parse( 'MemberInfo.PostIP' );
 		}
 
-		if( $this->perms->auth( 'email_use' ) ) {
-			if( $post['user_email_show'] ) {
-				$post['email'] = $post['user_email'];
-			}
-		}
-
 		if( !$post['user_pm'] || $this->perms->is_guest ) {
 			$post['user_pm'] = null;
 		}
 
 		$this->lang->members(); // Time to cheat!
 
-		if( $post['user_email_show'] && $this->perms->auth( 'email_use' ) ) {
-			$xtpl->assign( 'user_email', $post['user_email'] );
-
-			$xtpl->parse( 'MemberInfo.EmailShow' );
-		}
-
-		if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
+		if( $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
 			$xtpl->assign( 'user_id', $post['user_id'] );
 			$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $post['user_name'] ) );
 

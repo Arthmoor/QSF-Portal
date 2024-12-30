@@ -229,7 +229,7 @@ class qsfglobal
 	 * @author Roger Libiez
 	 * @since 2.0
 	 */
-	private function check_hash_update( #[\SensitiveParameter] string $password, $hash )
+	public function check_hash_update( #[\SensitiveParameter] string $password, $hash )
 	{
 		$options = [ 'cost' => 12, ];
 

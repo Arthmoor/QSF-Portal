@@ -223,7 +223,6 @@ class cp extends qsfglobal
 			$ViewAvCheck = $this->user['user_view_avatars'] ? ' checked=\'checked\'' : null;
 			$ViewSiCheck = $this->user['user_view_signatures'] ? ' checked=\'checked\'' : null;
 			$ViewEmCheck = $this->user['user_view_emojis'] ? ' checked=\'checked\'' : null;
-			$user_email_showCheck = $this->user['user_email_show'] ? ' checked=\'checked\'' : null;
 			$EmailFormCheck = $this->user['user_email_form'] ? ' checked=\'checked\'' : null;
 			$user_pmCheck = $this->user['user_pm'] ? ' checked=\'checked\'' : null;
 			$user_pm_mailCheck = $this->user['user_pm_mail'] ? ' checked=\'checked\'' : null;
@@ -232,7 +231,6 @@ class cp extends qsfglobal
 			$xtpl->assign( 'ViewAvCheck', $ViewAvCheck );
 			$xtpl->assign( 'ViewSiCheck', $ViewSiCheck );
 			$xtpl->assign( 'ViewEmCheck', $ViewEmCheck );
-			$xtpl->assign( 'user_email_showCheck', $user_email_showCheck );
 			$xtpl->assign( 'EmailFormCheck', $EmailFormCheck );
 			$xtpl->assign( 'user_pmCheck', $user_pmCheck );
 			$xtpl->assign( 'user_pm_mailCheck', $user_pm_mailCheck );
@@ -277,10 +275,6 @@ class cp extends qsfglobal
 				$view_emojis = 1;
 			}
 
-			if( isset( $this->post['user_email_show'] ) ) {
-				$show_email = 1;
-			}
-
 			if( isset( $this->post['user_email_form'] ) ) {
 				$email_form = 1;
 			}
@@ -318,11 +312,11 @@ class cp extends qsfglobal
 			$this->post['user_language'] = preg_replace( '/[^a-zA-Z0-9\-]/', '', $this->post['user_language'] );
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_view_avatars=?, user_view_signatures=?, user_view_emojis=?,
-				  user_email_show=?, user_email_form=?, user_active=?, user_pm=?, user_pm_mail=?,
+				  user_email_form=?, user_active=?, user_pm=?, user_pm_mail=?,
 				  user_timezone=?, user_skin=?, user_language=?, user_topics_page=?, user_posts_page=?
 				WHERE user_id=?' );
 
-         $stmt->bind_param( 'iiiiiiiisssiii', $view_avatars, $view_sigs, $view_emojis, $show_email, $email_form, $active,
+         $stmt->bind_param( 'iiiiiiisssiii', $view_avatars, $view_sigs, $view_emojis, $show_email, $email_form, $active,
 				$user_pm, $pm_mail, $this->post['user_timezone'], $this->post['user_skin'], $this->post['user_language'],
 				$topic_per_page, $posts_per_page, $this->user['user_id']  );
          $this->db->execute_query( $stmt );

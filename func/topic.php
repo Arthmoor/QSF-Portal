@@ -370,7 +370,7 @@ class topic extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, p.post_id, p.post_ip, p.post_icon, p.post_edited_by, p.post_edited_time,
 			  m.user_joined, m.user_signature, m.user_posts, m.user_id, m.user_title, m.user_group, m.user_avatar, m.user_name, m.user_email, m.user_twitter, m.user_facebook,
-			  m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_pm, m.user_email_show, m.user_email_form, m.user_active,
+			  m.user_homepage, m.user_avatar_type, m.user_avatar_width, m.user_avatar_height, m.user_pm, m.user_email_form, m.user_active,
 			  t.membertitle_icon,
 			  g.group_name,
 			  a.active_time
@@ -640,23 +640,11 @@ class topic extends qsfglobal
 					$xtpl->parse( 'Topic.Post.PosterInfoMember.PostIP' );
 				}
 
-				if( $this->perms->auth( 'email_use' ) ) {
-					if( $post['user_email_show'] ) {
-						$post['email'] = $post['user_email'];
-					}
-				}
-
 				if( !$post['user_pm'] || $this->perms->is_guest ) {
 					$post['user_pm'] = null;
 				}
 
-				if( $post['user_email_show'] && $this->perms->auth('email_use') ) {
-					$xtpl->assign( 'user_email', $post['user_email'] );
-
-					$xtpl->parse( 'Topic.Post.PosterInfoMember.EmailShow' );
-				}
-
-				if( !$post['user_email_show'] && $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
+				if( $post['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
 					$xtpl->assign( 'user_id', $post['user_id'] );
 					$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $post['user_name'] ) );
 

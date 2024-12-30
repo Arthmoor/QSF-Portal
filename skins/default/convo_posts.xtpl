@@ -133,9 +133,6 @@
  </span>
 
  <span class="member_bits">
-<!-- BEGIN: EmailShow -->
-  <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
-<!-- END: EmailShow -->
 <!-- BEGIN: EmailForm -->
   <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
 <!-- END: EmailForm -->

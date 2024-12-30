@@ -927,7 +927,6 @@ class en
    public $mc_user_avatar_type;
    public $mc_user_avatar_width;
    public $mc_user_email;
-   public $mc_user_email_show;
    public $mc_user_facebook;
    public $mc_user_group;
    public $mc_user_twitter;
@@ -2610,7 +2609,6 @@ class en
 		$this->mc_user_avatar_type = 'Avatar Type';
 		$this->mc_user_avatar_width = 'Avatar Width';
 		$this->mc_user_email = 'Email Address';
-		$this->mc_user_email_show = 'Email Is Public';
 		$this->mc_user_facebook = 'Facebook Page';
 		$this->mc_user_group = 'Group';
 		$this->mc_user_twitter = 'X ID';

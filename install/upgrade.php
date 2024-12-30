@@ -226,6 +226,7 @@ class upgrade extends qsfglobal
 					$queries[] = 'ALTER TABLE %pattach ADD attach_pm tinyint(1) unsigned NOT NULL default 0 AFTER attach_size';
 
                $queries[] = 'ALTER TABLE %pusers DROP COLUMN user_birthday';
+               $queries[] = 'ALTER TABLE %pusers DROP COLUMN user_email_show';
 
                $queries[] = 'ALTER TABLE %pvotes ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
                $queries[] = 'ALTER TABLE %pvalidation ENGINE=InnoDB';

@@ -258,7 +258,6 @@ class member_control extends admin
 					'user_signature'	=> array( $this->lang->mc_user_signature, U_BLOB, 255 ),
 					'user_posts'		=> array( $this->lang->mc_user_posts, U_INT, 10 ),
 					'user_uploads'		=> array( $this->lang->mc_user_uploads, U_INT, 10 ),
-					'user_email_show'	=> array( $this->lang->mc_user_email_show, U_BOOL ),
 					'user_pm'		=> array( $this->lang->mc_user_pm, U_BOOL ),
 					'user_pm_mail'		=> array( $this->lang->mc_user_pm_mail, U_BOOL ),
 					'user_view_avatars'	=> array( $this->lang->mc_user_view_avatars, U_BOOL ),
@@ -404,10 +403,6 @@ class member_control extends admin
 					$this->post['user_view_emojis'] = 0;
 				}
 
-				if( !isset( $this->post['user_email_show'] ) ) {
-					$this->post['user_email_show'] = 0;
-				}
-
 				if( !isset( $this->post['user_pm'] ) ) {
 					$this->post['user_pm'] = 0;
 				}
@@ -463,7 +458,6 @@ class member_control extends admin
 
 				$user_posts = intval( $this->post['user_posts'] );
 				$user_uploads = intval( $this->post['user_uploads'] );
-				$user_email_show = intval( $this->post['user_email_show'] );
 				$user_pm = intval( $this->post['user_pm'] );
 				$user_pm_mail = intval( $this->post['user_pm_mail'] );
 				$user_view_avatars = intval( $this->post['user_view_avatars'] );
@@ -475,14 +469,14 @@ class member_control extends admin
 				  user_avatar_type=?, user_avatar_width=?, user_avatar_height=?, user_level=?,
 				  user_timezone=?, user_location=?, user_homepage=?, user_facebook=?,
 				  user_interests=?, user_signature=?, user_posts=?, user_uploads=?,
-				  user_twitter=?, user_email_show=?, user_pm=?, user_pm_mail=?, user_view_avatars=?,
+				  user_twitter=?, user_pm=?, user_pm_mail=?, user_view_avatars=?,
 				  user_view_signatures=?, user_view_emojis=? WHERE user_id=?' );
 
-            $stmt->bind_param( 'ssisisissiiissssssiisiiiiiii',
+            $stmt->bind_param( 'ssisisissiiissssssiisiiiiii',
               $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
 				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
 				  $user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
-				  $user_signature, $user_posts, $user_uploads, $user_twitter, $user_email_show, $user_pm, $user_pm_mail, $user_view_avatars,
+				  $user_signature, $user_posts, $user_uploads, $user_twitter, $user_pm, $user_pm_mail, $user_view_avatars,
 				  $user_view_signatures, $user_view_emojis, $id );
 
             $this->db->execute_query( $stmt );

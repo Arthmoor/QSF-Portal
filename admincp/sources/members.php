@@ -117,7 +117,7 @@ class members extends admin
 			$PageNums = $this->htmlwidgets->get_pages( $num, "admincp/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		}
 
-		$stmt = $this->db->prepare_query( "SELECT m.user_joined, m.user_email_show, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id,
+		$stmt = $this->db->prepare_query( "SELECT m.user_joined, m.user_email_form, m.user_email, m.user_pm, m.user_name, m.user_id,
 				m.user_posts, m.user_title, m.user_homepage, m.user_facebook, m.user_twitter, m.user_group, g.group_name
 			FROM %pusers m, %pgroups g
 			WHERE m.user_group = g.group_id AND m.user_id != ?" . ( $l ? " AND UPPER(LEFT(LTRIM(m.user_name), 1)) = '{$l}'" : '' ) . "
@@ -152,38 +152,16 @@ class members extends admin
 		{
 			$member['user_joined'] = $this->mbdate( DATE_ONLY_LONG, $member['user_joined'] );
 
-			if( $this->perms->auth( 'email_use' ) ) {
-				if( $member['user_email_show'] ) {
-					$member['email'] = $member['user_email'];
-				}
-			}
-
-			if( !$member['user_pm'] || $this->perms->is_guest ) {
-				$member['user_pm'] = null;
-			}
-
 			$xtpl->assign( 'user_id', $member['user_id'] );
 			$xtpl->assign( 'user_name', $member['user_name'] );
 			$xtpl->assign( 'profile_link_name', $this->htmlwidgets->clean_url( $member['user_name'] ) );
 
-			if( $member['user_email_show'] && $this->perms->auth('email_use') ) {
-				$xtpl->assign( 'user_email', $member['user_email'] );
+			$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $member['user_name'] ) );
+			$xtpl->assign( 'user_id', $member['user_id'] );
+			$xtpl->parse( 'Members.User.EmailForm' );
 
-				$xtpl->parse( 'Members.User.EmailShow' );
-			}
-
-			if( !$member['user_email_show'] && $member['user_email_form'] && $this->perms->auth( 'email_use' ) ) {
-				$xtpl->assign( 'email_link_name', $this->htmlwidgets->clean_url( $member['user_name'] ) );
-				$xtpl->assign( 'user_id', $member['user_id'] );
-
-				$xtpl->parse( 'Members.User.EmailForm' );
-			}
-
-			if( $member['user_pm'] ) {
-				$xtpl->assign( 'encoded_name', base64_encode( $member['user_name'] ) );
-
-				$xtpl->parse( 'Members.User.PM' );
-			}
+			$xtpl->assign( 'encoded_name', base64_encode( $member['user_name'] ) );
+			$xtpl->parse( 'Members.User.PM' );
 
 			if( $member['user_twitter'] ) {
 				$xtpl->assign( 'twitter', 'https://x.com/' . $member['user_twitter'] );

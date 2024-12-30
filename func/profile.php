@@ -107,15 +107,11 @@ class profile extends qsfglobal
 		$profile['user_email'] = null;
 
 		if( $this->perms->auth( 'email_use' ) ) {
-			if( $profile['user_email_show'] ) {
-				$profile['user_email'] = "<a href=\"mailto:{$profile['user_email']}\">{$profile['user_email']}</a>";
+			if( $profile['user_email_form'] ) {
+				$link = $this->htmlwidgets->clean_url( $profile['user_name'] );
+				$profile['user_email'] = "<a href=\"{$this->site}/email/{$link}-{$profile['user_id']}/\">{$this->lang->profile_private}</a>";
 			} else {
-				if( $profile['user_email_form'] ) {
-					$link = $this->htmlwidgets->clean_url( $profile['user_name'] );
-					$profile['user_email'] = "<a href=\"{$this->site}/email/{$link}-{$profile['user_id']}/\">{$this->lang->profile_private}</a>";
-				} else {
-					$profile['user_email'] = $this->lang->profile_private;
-				}
+				$profile['user_email'] = $this->lang->profile_private;
 			}
 		}
 

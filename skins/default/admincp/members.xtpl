@@ -18,9 +18,8 @@
  <span class="icon"><img src="{site}/skins/{skin}/images/icons/user_online.png" alt=""></span>
  <span class="member"><a href="{site}/profile/{profile_link_name}-{user_id}/">{user_name}</a></span>
  <span class="nine">
-<!-- BEGIN: EmailShow -->
-  <span class="smallbutton"><a class="email" href="mailto:{user_email}" title="{members_email_member}"></a></span>
-<!-- END: EmailShow -->
+  <a href="{site}/admincp/index.php?a=member_control&amp;s=profile&amp;id={user_id}">Edit</a>
+  <a href="{site}/admincp/index.php?a=member_control&amp;s=delete&amp;id={user_id}">Delete</a>
 <!-- BEGIN: EmailForm -->
   <span class="smallbutton"><a class="email" href="{site}/email/{email_link_name}-{user_id}/" title="{members_email_member}"></a></span>
 <!-- END: EmailForm -->

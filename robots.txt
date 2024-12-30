@@ -9,7 +9,6 @@
 
 User-agent: *
 Disallow: /index.php?a=search
-Disallow: /index.php?a=members
 Disallow: /index.php?a=active
 Disallow: /index.php?a=register
 Disallow: /register/

@@ -91,7 +91,6 @@
 
  <span class="field">{cp_privacy}</span>
  <span class="form">
-  <input class="check" type="checkbox" name="user_email_show" id="user_email_show" value="1"{user_email_showCheck}> <label for="user_email_show">{cp_show_email}</label><br>
   <input class="check" type="checkbox" name="user_email_form" id="user_email_form" value="1"{EmailFormCheck}> <label for="user_email_form">{cp_email_form}</label><br>
   <input class="check" type="checkbox" name="user_pm" id="user_pm" value="1"{user_pmCheck}> <label for="user_pm">{cp_contact_pm}</label><br>
   <input class="check" type="checkbox" name="user_pm_mail" id="user_pm_mail" value="1"{user_pm_mailCheck}> <label for="user_pm_mail">{cp_contact_pm_email}</label><br>
