@@ -8,7 +8,7 @@
  <a href="{site}/files/upload_rules/">{files_upload_rules}</a>
   | <a href="{site}/files/">{files_index}</a> 
   | <a href="{site}/files/search/">{files_search2}</a>
-  | <a href="{site}/files/recent/">{files_recent}</a>
+  | <a href="{site}/files/recent_uploads/">{files_recent}</a>
   {upload}
   {approve}
   {addcat}
