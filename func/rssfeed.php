@@ -45,7 +45,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.1.5
 	 * @return string rss output
 	 **/
-	function execute()
+	public function execute()
 	{
 		$this->nohtml = true;
 
@@ -88,7 +88,7 @@ class rssfeed extends qsfglobal
 		return $feed;
 	}
 
-	function cleanup()
+	public function cleanup()
 	{
 		// Do nothing!
 	}
@@ -100,7 +100,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.1.9
 	 * @return string rss output
 	 **/
-	function rss_error_message( $error )
+	private function rss_error_message( $error )
 	{
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
@@ -125,7 +125,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.1.5
 	 * @return string rss output
 	 **/
-	function generate_full_feed()
+	private function generate_full_feed()
 	{
 		$forums_str = $this->readmarker->create_forum_permissions_string();
 		
@@ -169,7 +169,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.1.9
 	 * @return string rss output
 	 **/
-	function generate_forum_feed( $forum )
+	private function generate_forum_feed( $forum )
 	{
 		$stmt = $this->db->prepare_query( 'SELECT forum_parent, forum_name, forum_description, forum_subcat FROM %pforums WHERE forum_id=?' );
 
@@ -229,7 +229,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.1.9
 	 * @return string rss output
 	 **/
-	function generate_topic_feed( $topic )
+	private function generate_topic_feed( $topic )
 	{
 		$stmt = $this->db->prepare_query( 'SELECT t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum, t.topic_replies, t.topic_poll_options, f.forum_name
 			FROM %ptopics t, %pforums f
@@ -286,7 +286,7 @@ class rssfeed extends qsfglobal
 		return $xtpl->text( 'RSSFeedTopic' );
 	}
 
-	function remove_breaks( $in )
+	private function remove_breaks( $in )
 	{
 		return preg_replace( "/(<br\s*\/?>\s*)+/", ' ', $in );
 	}
@@ -299,7 +299,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.1.9
 	 * @return string rss item output
 	 **/
-	function get_post( $query_row, $xtpl, $block )
+	private function get_post( $query_row, $xtpl, $block )
 	{
 		$item_title = $this->format( $query_row['topic_title'], FORMAT_CENSOR );
 		$item_title = htmlspecialchars( $item_title );
@@ -341,7 +341,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.4.3
 	 * @return string rss output
 	 **/
-	function generate_files_feed()
+	private function generate_files_feed()
 	{
 		$cat_str = $this->create_category_permissions_string();
 
@@ -388,7 +388,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.4.3
 	 * @return string rss item output
 	 **/
-	function get_file( $query_row, $xtpl )
+	private function get_file( $query_row, $xtpl )
 	{
 		$item_title = $this->format( $query_row['file_name'], FORMAT_CENSOR );
 		$item_title = $this->remove_breaks( $item_title );
@@ -429,7 +429,7 @@ class rssfeed extends qsfglobal
 	 * @since 1.4.3
 	 * @return string comma delimited list for us in SQL
 	 **/
-	function create_category_permissions_string()
+	private function create_category_permissions_string()
 	{
 		$categories = array();
 		$allCats = $this->_load_cat_data();
@@ -451,7 +451,7 @@ class rssfeed extends qsfglobal
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.4.3
 	 **/
-	function _load_cat_data()
+	private function _load_cat_data()
 	{
 		if( $this->cat_data === false ) {
 			$this->cat_data = array();
