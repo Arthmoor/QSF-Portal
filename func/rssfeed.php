@@ -108,7 +108,7 @@ class rssfeed extends qsfglobal
 		$xtpl->assign( 'title', htmlspecialchars( $title ) );
 
 		$xtpl->assign( 'link', $this->link );
-		$xtpl->assign( 'error', htmpspecialchars( $error ) );
+		$xtpl->assign( 'error', htmlspecialchars( $error ) );
 		$xtpl->assign( 'language', $this->user['user_language'] );
 		$xtpl->assign( 'generator', htmlspecialchars( $this->sets['forum_name'] ) );
 		$xtpl->assign( 'ttl', $this->sets['rss_feed_time'] );
