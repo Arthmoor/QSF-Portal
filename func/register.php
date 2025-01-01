@@ -183,12 +183,9 @@ class register extends qsfglobal
 			}
 			$_SESSION['last_register'] = $this->time;
 
-			$username = str_replace( '\\', '&#092;', $this->format( $username, FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
+			$stmt = $this->db->prepare_query( 'SELECT user_id FROM %pusers WHERE user_name=?' );
 
-			$stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=?" );
-
-         $uname = str_replace( ' ', '', strtolower( $username ) );
-         $stmt->bind_param( 's', $uname );
+         $stmt->bind_param( 's', $username );
          $this->db->execute_query( $stmt );
 
          $result = $stmt->get_result();

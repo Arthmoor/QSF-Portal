@@ -473,7 +473,7 @@ class conversations extends qsfglobal
 		$bad_pm = array();
 		$ok_pm = array();
 
-      $user_query = $this->db->prepare_query( "SELECT user_id, user_pm, user_name FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')= ? AND user_id != ? LIMIT 1" );
+      $user_query = $this->db->prepare_query( 'SELECT user_id, user_pm, user_name FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
       $user_query->bind_param( 'si', $uname, $uid );
 
       foreach( $users as $username )
@@ -1508,15 +1508,13 @@ class conversations extends qsfglobal
 		$bad_pm = array();
 		$ok_pm = array();
 
-      $user_query = $this->db->prepare_query( "SELECT user_id, user_pm, user_name FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=? AND user_id != ? LIMIT 1" );
-      $user_query->bind_param( 'si', $uname, $uid );
+      $user_query = $this->db->prepare_query( 'SELECT user_id, user_pm, user_name FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
+      $user_query->bind_param( 'si', $username, $uid );
+
+      $uid = intval( USER_GUEST_UID );
 
       foreach( $users as $username )
       {
-         $username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
-         $uname = str_replace( ' ', '', strtolower( $username ) );
-         $uid = intval( USER_GUEST_UID );
-         
          $this->db->execute_query( $user_query );
 
          $result = $user_query->get_result();

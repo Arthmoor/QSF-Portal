@@ -96,13 +96,10 @@ class login extends qsfglobal
 			if( !isset( $this->post['pass'] ) )
 				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
 
-			$username = str_replace( '\\', '&#092;', $this->format( $this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
+			$stmt = $this->db->prepare_query( 'SELECT user_id, user_password FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
 
-			$stmt = $this->db->prepare_query( "SELECT user_id, user_password FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=? AND user_id != ? LIMIT 1" );
-
-         $uname = str_replace( ' ', '', strtolower( $username ) );
          $uid = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'si', $uname, $uid );
+         $stmt->bind_param( 'si', $this->post['user'], $uid );
          $this->db->execute_query( $stmt );
 
          $result = $stmt->get_result();

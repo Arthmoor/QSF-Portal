@@ -374,9 +374,7 @@ class cp extends qsfglobal
 				return $this->message( $this->lang->cp_updated, $this->lang->invalid_token );
 			}
 
-			$this->post['Newuser_name'] = str_replace( '\\', '&#092;', $this->format( $this->post['Newuser_name'], FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
-
-         $stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers WHERE REPLACE(LOWER(user_name), ' ', '')=? AND user_id != ?" );
+         $stmt = $this->db->prepare_query( 'SELECT user_id FROM %pusers WHERE user_name=? AND user_id != ?' );
 
          $stmt->bind_param( 'si', $this->post['Newuser_name'], $this->user['user_id'] );
          $this->db->execute_query( $stmt );
