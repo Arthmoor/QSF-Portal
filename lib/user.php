@@ -99,10 +99,9 @@ class user
 		}
 
 		if( !isset( $user['user_id'] ) ) {
-			$stmt = $this->db->prepare_query( "SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
+			$stmt = $this->db->prepare_query( 'SELECT m.*, s.skin_id, g.group_perms, g.group_file_perms, g.group_name
 				FROM (%pskins s, %pgroups g, %pusers m)
-				WHERE m.user_id=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group
-				LIMIT 1", USER_GUEST_UID );
+				WHERE m.user_id=? AND s.skin_id=m.user_skin AND g.group_id=m.user_group	LIMIT 1' );
 
          $uid = intval( USER_GUEST_UID );
          $stmt->bind_param( 'i', $uid );
