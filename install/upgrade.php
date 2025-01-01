@@ -201,28 +201,28 @@ class upgrade extends qsfglobal
                $queries[] = 'ALTER TABLE %pupdates CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
                $queries[] = 'ALTER TABLE %pusers CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci';
 
-					$queries[] = "ALTER TABLE %ptopics CHANGE topic_description topic_description varchar(255)";
+					$queries[] = 'ALTER TABLE %ptopics CHANGE topic_description topic_description varchar(255)';
 					$queries[] = 'ALTER TABLE %psettings ADD settings_version smallint(2) NOT NULL default 1 AFTER settings_id';
 					$queries[] = 'ALTER TABLE %psettings ADD settings_mobile_icons text AFTER settings_meta_description';
-					$queries[] = "ALTER TABLE %pforums ADD forum_news tinyint(1) unsigned NOT NULL default '0' AFTER forum_redirect";
-					$queries[] = "ALTER TABLE %pposts CHANGE post_emoticons post_emojis tinyint(1) unsigned NOT NULL default '1'";
-					$queries[] = "ALTER TABLE %pposts CHANGE post_mbcode post_bbcode tinyint(1) unsigned NOT NULL default '1'";
-					$queries[] = "ALTER TABLE %pspam CHANGE spam_emoticons spam_emojis tinyint(1) unsigned NOT NULL default '1'";
-					$queries[] = "ALTER TABLE %pspam CHANGE spam_mbcode spam_bbcode tinyint(1) unsigned NOT NULL default '1'";
+					$queries[] = 'ALTER TABLE %pforums ADD forum_news tinyint(1) unsigned NOT NULL default 0 AFTER forum_redirect';
+					$queries[] = 'ALTER TABLE %pposts CHANGE post_emoticons post_emojis tinyint(1) unsigned NOT NULL default 1';
+					$queries[] = 'ALTER TABLE %pposts CHANGE post_mbcode post_bbcode tinyint(1) unsigned NOT NULL default 1';
+					$queries[] = 'ALTER TABLE %pspam CHANGE spam_emoticons spam_emojis tinyint(1) unsigned NOT NULL default 1';
+					$queries[] = 'ALTER TABLE %pspam CHANGE spam_mbcode spam_bbcode tinyint(1) unsigned NOT NULL default 1';
 					$queries[] = "ALTER TABLE %pactive CHANGE active_user_agent active_user_agent varchar(255) NOT NULL default 'Unknown'";
-					$queries[] = "ALTER TABLE %pusers CHANGE user_view_emoticons user_view_emojis tinyint(1) unsigned NOT NULL default '1'";
+					$queries[] = 'ALTER TABLE %pusers CHANGE user_view_emoticons user_view_emojis tinyint(1) unsigned NOT NULL default 1';
 					$queries[] = 'ALTER TABLE %pusers CHANGE user_password user_password varchar(255) NOT NULL';
 					$queries[] = "ALTER TABLE %pusers CHANGE user_timezone user_timezone varchar(255) NOT NULL default 'Europe/London'";
 					$queries[] = "UPDATE %pusers SET user_timezone='Europe/London'";
 					$queries[] = "ALTER TABLE %pusers ADD user_facebook varchar(255) NOT NULL default '' AFTER user_twitter";
-               $queries[] = "ALTER TABLE %pusers ADD user_lastcvallread int(10) unsigned NOT NULL default '0' AFTER user_lastallread";
+               $queries[] = 'ALTER TABLE %pusers ADD user_lastcvallread int(10) unsigned NOT NULL default 0 AFTER user_lastallread';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_icq';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_aim';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_msn';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_yahoo';
 					$queries[] = 'ALTER TABLE %pusers DROP COLUMN user_skin';
 					$queries[] = 'ALTER TABLE %pusers ADD user_skin int(10) unsigned NOT NULL default 1 AFTER user_group';
-					$queries[] = "UPDATE %pusers SET user_skin=1";
+					$queries[] = 'UPDATE %pusers SET user_skin=1';
 					$queries[] = 'ALTER TABLE %pattach ADD attach_pm tinyint(1) unsigned NOT NULL default 0 AFTER attach_size';
 
                $queries[] = 'ALTER TABLE %pusers DROP COLUMN user_birthday';

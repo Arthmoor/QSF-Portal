@@ -494,8 +494,8 @@ Have fun and enjoy your new site!";
          $stmt->close();
 
 			// Create Topic
-			$stmt = $this->db->prepare_query( "INSERT INTO %ptopics ( topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes ) 
-				VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )" );
+			$stmt = $this->db->prepare_query( 'INSERT INTO %ptopics ( topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes ) 
+				VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
          $publish = intval( TOPIC_PUBLISH );
          $stmt->bind_param( 'sisisiiii', $topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, $publish );
@@ -505,8 +505,8 @@ Have fun and enjoy your new site!";
 			$topicId = $this->db->insert_id( );
 
 			// Create Post
-			$stmt = $this->db->prepare_query( "INSERT INTO %pposts ( post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon )
-				VALUES( ?, ?, ?, ?, 1, 1, ?, ? )" );
+			$stmt = $this->db->prepare_query( 'INSERT INTO %pposts ( post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon )
+				VALUES( ?, ?, ?, ?, 1, 1, ?, ? )' );
 
          $stmt->bind_param( 'iisiss', $topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon );
          $this->db->execute_query( $stmt );
@@ -526,7 +526,7 @@ Have fun and enjoy your new site!";
          $this->db->execute_query( $stmt );
          $stmt->close();
 
-			$stmt = $this->db->prepare_query( "UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=? WHERE forum_id=?" );
+			$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=? WHERE forum_id=?' );
 
          $stmt->bind_param( 'ii', $postId, $forumId );
          $this->db->execute_query( $stmt );
