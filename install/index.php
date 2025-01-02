@@ -187,9 +187,9 @@ if( $mode ) {
 	echo "<!DOCTYPE html>
 <html lang=\"en-US\">
 <head>
- <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
+ <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">
  <title>{$qsf->name} Installer</title>
- <link rel=\"stylesheet\" type=\"text/css\" href=\"../skins/default/styles.css\" />
+ <link rel=\"stylesheet\" type=\"text/css\" href=\"../skins/default/styles.css\">
  <style type=\"text/css\">
   h1.title {background: #292929; text-align:center; font: 18px Arial, sans-serif; color: #c0c0c0; margin: 0px -7px 4px -2px; padding: 3px 4px 2px 7px; border: 1px solid #3e3e3e; border-left: 3px double #3e3e3e;}
   #blocks ul {margin:0;	padding:0;}

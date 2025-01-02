@@ -1,6 +1,10 @@
 QSF Portal Changes
 ------------------
 
+Changes for 2.1:
+
+None yet.
+
 Changes for 2.0:
 
    New Features:

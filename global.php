@@ -40,7 +40,7 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 class qsfglobal
 {
 	public $name    = 'QSF Portal';      // The name of the software @public string
-	public $version = '2.0';             // QSF Portal version @public float
+	public $version = 2.1;               // QSF Portal version @public float
 	public $server  = array();           // Alias for $_SERVER @public array
 	public $get     = array();           // Alias for $_GET @public array
 	public $post    = array();           // Alias for $_POST @public array
