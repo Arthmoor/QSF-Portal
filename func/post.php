@@ -813,11 +813,10 @@ class post extends qsfglobal
          $stmt->bind_param( 'iii', $this->user['user_id'], $t, $f );
          $this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $subs = $this->db->nqfetch( $result );
+         $subs = $stmt->get_result();
          $stmt->close();
 
-			if( $this->db->num_rows( $subs ) ) {
+			if( $this->db->num_rows( $subs ) > 0 ) {
 				$stmt = $this->db->prepare_query( 'SELECT t.topic_title, f.forum_name
 					FROM %ptopics t, %pforums f
 					WHERE t.topic_id=? AND t.topic_forum=f.forum_id' );
