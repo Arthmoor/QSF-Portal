@@ -333,7 +333,7 @@ require_once $set['include_path'] . '/lib/tool.php';
 			if( $posts < 0 ) {
 				$posts = 0;
 			}
-			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=%d WHERE user_id=?' );
+			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=? WHERE user_id=?' );
 
          $stmt->bind_param( 'ii', $posts, $result['post_author'] );
          $this->db->execute_query( $stmt );
