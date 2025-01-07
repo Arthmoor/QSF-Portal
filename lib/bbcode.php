@@ -297,7 +297,9 @@ class bbcode
 
 			// Trim pointless space
 			$input = preg_replace( '/^<code><span style="color: #000000">\s(.+)\s<\/span>\s<\/code>$/', '<span style="color: #000000">$1</span>', $input );
-		}
+		} else {
+         $input = htmlentities( $input, ENT_COMPAT, 'UTF-8' ); // Regular text, process it as would be done otherwise.
+      }
 
 		if( isset( $tagged ) ) {
 			$input = str_replace( array( '&lt;?php&nbsp;', '?&gt;' ), '', $input );
@@ -344,7 +346,7 @@ class bbcode
 		if( $pos === FALSE ) {
 			$pos = strpos( $url, 'https://' );
 			if( $pos === FALSE ) {
-				$url = 'http://' . $url;
+				$url = 'https://' . $url;
 			}
 		}
 
