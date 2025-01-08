@@ -292,12 +292,14 @@ class files extends qsfglobal
 			$list = $this->get_categories( $file_catid, true );
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 			$filesize = $this->format_filesize( $file_size );
-			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE );
+			$file_desc_preview = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_BREAKS );
+         $file_description = $this->format( $file_description, FORMAT_HTMLCHARS );
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'tree', $tree );
 			$xtpl->assign( 'file_name', $file_name );
 			$xtpl->assign( 'files_desc', $this->lang->files_desc );
+         $xtpl->assign( 'file_desc_preview', $file_desc_preview );
 			$xtpl->assign( 'file_description', $file_description );
 			$xtpl->assign( 'files_author', $this->lang->files_author );
 			$xtpl->assign( 'file_author', $file_author );
@@ -346,7 +348,7 @@ class files extends qsfglobal
          $this->db->execute_query( $stmt );
          $stmt->close();
 
-			return $this->message( $this->lang->files_edit_file, "{$file['file_name']} " . $this->lang->files_has_updated, "{$this->lang->continue}", "{$this->site}/files/{$furl}-{$id}" );
+			return $this->message( $this->lang->files_edit_file, "{$file['file_name']} " . $this->lang->files_has_updated, "{$this->lang->continue}", "{$this->site}/files/{$furl}-{$id}/" );
 		}
 	}
 

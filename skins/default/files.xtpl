@@ -40,7 +40,7 @@
 
 <div class="article">
  <div class="title">{file_name}</div>
- <strong>{files_desc}:</strong><br><br>{file_description}<br><br>
+ <strong>{files_desc}:</strong><br><br>{file_desc_preview}<br><br>
  <strong>{files_author}:</strong> {file_author} <strong>{files_submitted_by}:</strong> {user_name}<br>
  <strong>{files_size}:</strong> {filesize} <strong>{files_added}:</strong> {date} <strong>{files_downloads}:</strong> {file_downloads}<br>
 </div>
