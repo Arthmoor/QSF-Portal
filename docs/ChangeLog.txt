@@ -1,9 +1,14 @@
 QSF Portal Changes
 ------------------
 
-Changes for 2.1:
+Changes for 2.0.1:
 
-None yet.
+   Bugs addressed:
+
+* Fixed issues with the file editing form.
+* Codeboxes not being HTML encoded properly.
+* Fixed a query formatting error in forumutils.
+* Fixed a bad subscriptions check when posting.
 
 Changes for 2.0:
 

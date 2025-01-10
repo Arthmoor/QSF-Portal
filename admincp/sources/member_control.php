@@ -192,6 +192,8 @@ class member_control extends admin
             $member = $this->db->nqfetch( $result );
             $stmt->close();
 
+            $svars = json_decode( $member['user_server_data'], true );
+
 				require_once $this->sets['include_path'] . '/lib/akismet.php';
 				$akismet = new Akismet( $this );
 				$akismet->set_comment_author( $member['user_name'] );

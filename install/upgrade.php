@@ -402,8 +402,8 @@ class upgrade extends qsfglobal
          // Missing breaks are deliberate. Upgrades from older versions need to step through all of this.
          switch( $this->settings['app_version'] )
          {
-            // 2.0 to 2.1
-            case 2.0:
+            // 2.0 to 2.0.1
+            case 2.01:
 
             default:
                break;
