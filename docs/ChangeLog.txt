@@ -9,6 +9,8 @@ Changes for 2.0.1:
 * Codeboxes not being HTML encoded properly.
 * Fixed a query formatting error in forumutils.
 * Fixed a bad subscriptions check when posting.
+* Fixed an issue where deleting a member account crashed due to the $svars data not being set.
+* Several issues addressed with being able to move topics without the code crashing out.
 
 Changes for 2.0:
 

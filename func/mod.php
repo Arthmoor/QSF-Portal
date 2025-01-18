@@ -156,11 +156,11 @@ class mod extends qsfglobal
 		$topic_link = $this->htmlwidgets->clean_url( $topic['topic_title'] );
 
 		if( !$this->perms->auth( 'topic_move', $topic['topic_forum'] ) && ( !$is_owner || ( $is_owner && !$this->perms->auth( 'topic_move_own', $topic['topic_forum'] ) ) ) ) {
-			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_move, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
+			return $this->message( $this->lang->mod_label_controls, $this->lang->mod_perm_topic_move, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 		}
 
-		if( !isset($this->post['submit'] ) ) {
-			$forumlist = $this->htmlwidgets->select_forums( false, $topic['topic_forum'] );
+		if( !isset( $this->post['submit'] ) ) {
+			$forumlist = $this->htmlwidgets->select_forums( true, $topic['topic_forum'] );
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/mod.xtpl' );
 
@@ -187,14 +187,14 @@ class mod extends qsfglobal
 			$this->post['newforum'] = intval( $this->post['newforum'] );
 
 			if( $this->post['newforum'] == $topic['topic_forum'] ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_same, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_same, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			}
 
 			if( !$this->perms->auth( 'topic_create', $this->post['newforum'] ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_create, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_create, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			}
 
-			$target = $this->db->prepare_query( 'SELECT forum_parent FROM %pforums WHERE forum_id=?' );
+			$stmt = $this->db->prepare_query( 'SELECT forum_parent FROM %pforums WHERE forum_id=?' );
 
          $stmt->bind_param( 'i', $this->post['newforum'] );
          $this->db->execute_query( $stmt );
@@ -204,9 +204,9 @@ class mod extends qsfglobal
          $stmt->close();
 
 			if( !isset( $target['forum_parent'] ) ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_forum, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_forum, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			} elseif( !$target['forum_parent'] ) {
-				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_category, $this->lang->continue, "{$this->site}/topic/{$link}-{$t}/" );
+				return $this->message( $this->lang->mod_label_controls, $this->lang->mod_error_move_category, $this->lang->continue, "{$this->site}/topic/{$topic_link}-{$t}/" );
 			}
 
 			if( $this->post['operation'] == 'lock' ) {

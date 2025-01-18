@@ -498,10 +498,10 @@ class htmlwidgets extends forumutils
 
 			// Ugly hack time!
 			if( $num_select ) {
-				$return .= "<option value=\"{$dot}{$val['forum_id']}\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
+				$return .= "<option value=\"{$dot}{$val['forum_id']}\"{$selected}>{$space}{$val['forum_name']}</option>\n" .
 				$this->_select_forums_recurse( $array, true, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 			} else {
-				$return .= "<option value=\"{$dot}{$link}-{$val['forum_id']}/\" {$selected}>{$space}{$val['forum_name']}</option>\n" .
+				$return .= "<option value=\"{$dot}{$link}-{$val['forum_id']}/\"{$selected}>{$space}{$val['forum_name']}</option>\n" .
 				$this->_select_forums_recurse( $array, false, $select, $val['forum_id'], $space . '&nbsp; &nbsp;' );
 			}
 		}
