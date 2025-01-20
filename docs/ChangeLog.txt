@@ -11,6 +11,7 @@ Changes for 2.0.1:
 * Fixed a bad subscriptions check when posting.
 * Fixed an issue where deleting a member account crashed due to the $svars data not being set.
 * Several issues addressed with being able to move topics without the code crashing out.
+* Fixed an issue where attempting to download a non-existent file attachment resulted in a crash.
 
 Changes for 2.0:
 
@@ -80,7 +81,7 @@ Changes for 2.0:
 
 * File updates were not unlinking the old files after replacing them with new ones, leading to large scale space waste.
 * Bare URLs entered into posts were getting stray single quotes placed around them.
-* News post retreival was not correctly handling time stamps. Posts were being displayed in random order.
+* News post retrieval was not correctly handling time stamps. Posts were being displayed in random order.
 * When changing emails, passwords were not being verified using the proper secure hashing.
 * Corrected a number of long standing issues with selecting an avatar.
 * Timezones were being incorrectly stored in the database when new users registered.
@@ -212,7 +213,7 @@ Changes for 1.4.3:
 * Added TOS text setting for uploads.
 * Created generic TOS links on file and forum menus.
 * Able to mark PM's as unread. - Jon
-* All copyright headers updatd for 2008.
+* All copyright headers updated for 2008.
 
    Bugs addressed:
 
@@ -392,7 +393,7 @@ Changes for 1.3.1:
 
 Changes for 1.3.0:
 
-* Uploaded avatars now save using original extention
+* Uploaded avatars now save using original extension
 * Can detect the size of uploaded avatars
 * Skin exporter/importer now uses XML and tar.gz files
 * Major rework on how addquotes is handled (now database end)
@@ -400,7 +401,7 @@ Changes for 1.3.0:
 * Install now loads templates via XML
 * Avatars can now be grouped into sub-folders
 * Can now mark forums as read
-* Navigation links capitalised
+* Navigation links capitalized
 * Template position no longer exists
 * Debug mode can be toggled from admin cp
 * Can now add custom board settings via admin cp
@@ -446,7 +447,7 @@ Changes for 1.2.0:
 * Updated timezones including three new timezones
 * Topic icons no longer hasn it's own column
 * Removed no-cache settings for admin cp
-* Speed information now supressed when not in debug mode
+* Speed information now suppressed when not in debug mode
 * Topics can now be marked as published or unpublished - Jon
 * Birthday display is now handled as a modlet
 * ini_set only used if a mailserver is selected
@@ -512,7 +513,7 @@ Changes for 1.1.9:
 * More PHP 5 and MySQL 5 bugfixes.
 * BUG: Modlets could not be used inside <IF> tags.
 * BUG: Search spiders were counting toward guest user total.
-* BUG: Code tags contained leadng spaces.
+* BUG: Code tags contained leading spaces.
 * BUG: Error when editing profile
 
 Changes for 1.1.8:
@@ -567,7 +568,7 @@ Changes for 1.1.6:
 * Plugged an XSS injection point
 * Poll options now use BB code
 * Added enhanced editor for user signatures - Jon
-* Pulled out BB code buttons into seperate template
+* Pulled out BB code buttons into separate template
 
 Bugfixes for 1.1.4:
 
@@ -633,7 +634,7 @@ New features and modifications for 1.1.5:
 * debug link hidden from non-admins
 * FAQ added to documents
 * Automatic detection of guest language 
-* Rss reader in Admin CP to alert of new releases or other important annoucements
+* Rss reader in Admin CP to alert of new releases or other important announcements
 * Full timezone handling including daylight savings
 * New skin by http://www.misterpink.com.au/
 * Skin icons by http://www.famfamfam.com/

@@ -773,6 +773,9 @@ class topic extends qsfglobal
       $data = $this->db->nqfetch( $result );
       $stmt->close();
 
+      if( !$data || !isset( $data['topic_forum'] ) )
+         return $this->message( $this->lang->topic_attached_title, $this->lang->topic_attached_invalid );
+
 		if( $this->perms->auth( 'post_attach_download', $data['topic_forum'] ) ) {
 			$this->nohtml = true;
 

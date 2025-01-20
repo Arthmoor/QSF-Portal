@@ -1679,6 +1679,7 @@ class en
    public $topic_attached_downloads;
    public $topic_attached_filename;
    public $topic_attached_image;
+   public $topic_attached_invalid;
    public $topic_attached_perm;
    public $topic_attached_size;
    public $topic_attached_title;
@@ -3433,6 +3434,7 @@ class en
 		$this->topic_attached_downloads = 'Downloads';
 		$this->topic_attached_filename = 'Filename:';
 		$this->topic_attached_image = 'Attached image:';
+      $this->topic_attached_invalid = 'The attachment you are trying to download does not exist.';
 		$this->topic_attached_perm = 'You do not have permission to download this file.';
 		$this->topic_attached_size = 'Size:';
 		$this->topic_attached_title = 'Attached File';
