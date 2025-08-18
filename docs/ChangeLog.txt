@@ -13,6 +13,7 @@ Changes for 2.0.1:
 * Several issues addressed with being able to move topics without the code crashing out.
 * Fixed an issue where attempting to download a non-existent file attachment resulted in a crash.
 * Fixed a query issue when updating conversations.
+* Empty strings should not be getting processed by bbcode formatting.
 
 Changes for 2.0:
 

@@ -70,6 +70,10 @@ class bbcode
 	{
 		$strtr = array();
 
+      // An ugly hack, but something is feeding this empty strings.
+      if( !$in || empty( $in ) )
+         return $in;
+
 		if( $options & FORMAT_CENSOR ) {
 			$in = $this->process_censors( $in );
 		}
