@@ -526,7 +526,7 @@ class conversations extends qsfglobal
 
       $post_id = $this->db->insert_id( );
 
-      $stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=%d WHERE conv_id=%d' );
+      $stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=? WHERE conv_id=?' );
 
       $stmt->bind_param( 'ii', $post_id, $conv_id );
       $this->db->execute_query( $stmt );
