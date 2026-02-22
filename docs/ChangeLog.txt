@@ -254,7 +254,7 @@ Changes for 1.4.1:
 
 Changes for 1.4.0:
 
-* New default skin based on Syridium HForum v3 skin © 2006-2007 Syridium SC.
+* New default skin based on Syridium HForum v3 skin Â© 2006-2007 Syridium SC.
 * Fixed the 0.png to be a single transparent pixel.
 * Changed template color change can be difficult or impossible to see on LCD monitors.
 * Limit the maximum size of fonts in posts.
