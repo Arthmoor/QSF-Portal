@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -175,26 +175,26 @@ class admin extends qsfglobal
 		$last_level = 0;
 		$last_title = '';
 
-      $title_query = $this->db->prepare_query( 'UPDATE %pusers SET user_title=?, user_level=? WHERE (user_title_custom = 0) AND (user_posts >= ?) AND (user_posts < ?)' );
-      $title_query->bind_param( 'siii', $last_title, $last_level, $last_count, $posts );
+		$title_query = $this->db->prepare_query( 'UPDATE %pusers SET user_title=?, user_level=? WHERE (user_title_custom = 0) AND (user_posts >= ?) AND (user_posts < ?)' );
+		$title_query->bind_param( 'siii', $last_title, $last_level, $last_count, $posts );
 
 		while( $title = $this->db->nqfetch( $titles ) )
 		{
 			$posts = $title['membertitle_posts'];
-         $this->db->execute_query( $title_query );
+			$this->db->execute_query( $title_query );
 
 			$last_count = $title['membertitle_posts'];
 			$last_level = $title['membertitle_id'];
-         $last_title = $title['membertitle_title'];
+			$last_title = $title['membertitle_title'];
 		}
-      $title_query->close();
+		$title_query->close();
 
 		// We need this to take care of the users who have more posts than are set by any title
 		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_title=?, user_level=?	WHERE (user_title_custom = 0) AND (user_posts >= ?)' );
 
-      $stmt->bind_param( 'sii', $last_title, $last_level, $last_count );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'sii', $last_title, $last_level, $last_count );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 }
 ?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -134,12 +134,12 @@ class rssfeed extends qsfglobal
 			WHERE t.topic_forum IN (?) AND t.topic_modes & ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author
 			ORDER BY p.post_time DESC LIMIT ?' );
 
-      $tflag = intval( TOPIC_PUBLISH );
-      $stmt->bind_param( 'sii', $forums_str, $tflag, $this->sets['rss_feed_posts'] );
-      $this->db->execute_query( $stmt );
+		$tflag = intval( TOPIC_PUBLISH );
+		$stmt->bind_param( 'sii', $forums_str, $tflag, $this->sets['rss_feed_posts'] );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 
@@ -173,12 +173,12 @@ class rssfeed extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT forum_parent, forum_name, forum_description, forum_subcat FROM %pforums WHERE forum_id=?' );
 
-      $stmt->bind_param( 'i', $forum );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $forum );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $exists = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$exists = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !isset( $exists['forum_parent'] ) || !$exists['forum_parent'] || $exists['forum_subcat'] ) {
 			return $this->rss_error_message( $this->lang->rssfeed_cannot_find_forum );
@@ -204,12 +204,12 @@ class rssfeed extends qsfglobal
 			WHERE t.topic_forum = ? AND t.topic_modes & ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author
 			ORDER BY p.post_time DESC LIMIT ?' );
 
-      $tflag = intval( TOPIC_PUBLISH );
-      $stmt->bind_param( 'iii', $forum, $tflag, $this->sets['rss_feed_posts'] );
-      $this->db->execute_query( $stmt );
+		$tflag = intval( TOPIC_PUBLISH );
+		$stmt->bind_param( 'iii', $forum, $tflag, $this->sets['rss_feed_posts'] );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
@@ -235,12 +235,12 @@ class rssfeed extends qsfglobal
 			FROM %ptopics t, %pforums f
 			WHERE t.topic_id=? AND f.forum_id=t.topic_forum' );
 
-      $stmt->bind_param( 'i', $topic );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $topic );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $topicdata = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$topicdata = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$topicdata ) {
 			return $this->rss_error_message( $this->lang->rssfeed_cannot_find_topic );
@@ -269,11 +269,11 @@ class rssfeed extends qsfglobal
 			FROM %ptopics t, %pposts p, %pusers u
 			WHERE t.topic_id = ? AND p.post_topic = t.topic_id AND u.user_id = p.post_author ORDER BY p.post_time DESC LIMIT ?' );
 
-      $stmt->bind_param( 'ii', $topic, $this->sets['rss_feed_posts'] );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $topic, $this->sets['rss_feed_posts'] );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
@@ -351,11 +351,11 @@ class rssfeed extends qsfglobal
 			WHERE c.fcat_id IN (?) AND f.file_catid = c.fcat_id AND u.user_id = f.file_submitted AND f.file_approved = 1
 			ORDER BY f.file_date DESC LIMIT ?' );
 
-         $stmt->bind_param( 'si', $cat_str, $this->sets['rss_feed_posts'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'si', $cat_str, $this->sets['rss_feed_posts'] );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/rssfeed.xtpl' );
 

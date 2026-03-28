@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -55,9 +55,9 @@ class permissions
 		'edit_avatar' => false,
 		'edit_profile' => false,
 		'edit_sig' => false,
-      'page_edit' => false, // Added for CMS
-      'page_create' => false, // Added for CMS
-      'page_delete' => false, // Added for CMS
+		'page_edit' => false, // Added for CMS
+		'page_create' => false, // Added for CMS
+		'page_delete' => false, // Added for CMS
 		'topic_global' => false,
 		'forum_view' => false,
 		'pm_noflood' => false,
@@ -108,9 +108,9 @@ class permissions
 		'edit_avatar' => true,
 		'edit_profile' => true,
 		'edit_sig' => true,
-      'page_edit' => true, // Added for CMS
-      'page_create' => true, // Added for CMS
-      'page_delete' => true, // Added for CMS
+		'page_edit' => true, // Added for CMS
+		'page_create' => true, // Added for CMS
+		'page_delete' => true, // Added for CMS
 		'pm_noflood' => true,
 		'search_noflood' => true,
 		'topic_global' => true
@@ -134,7 +134,7 @@ class permissions
 	}
 
 	/**
-	 * Initialise the permissions object cube
+	 * Initialize the permissions object cube
 	 *
 	 * @param int $group Group id to load perms from. Set to -1 if using user perms
 	 * @param int $user User id. Checked against USER_GUEST_UID as loaded as perms if group is set to -1
@@ -146,23 +146,23 @@ class permissions
 			if( $group != -1 ) {
 				$stmt  = $this->db->prepare_query( 'SELECT group_perms FROM %pgroups WHERE group_id=?' );
 
-            $stmt->bind_param( 'i', $group );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $group );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $data = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$data = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$perms = $data['group_perms'];
 			} else {
 				$stmt  = $this->db->prepare_query( 'SELECT user_perms, user_group FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $user );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $user );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $data = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$data = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$perms = $data['user_perms'];
 				$group = $data['user_group'];
@@ -183,7 +183,7 @@ class permissions
 	/**
 	 * Query if a permission is turned on or not
 	 *
-	 * @param string $y Indentifier of the permission being queried
+	 * @param string $y Identifier of the permission being queried
 	 * @param mixed $z Forum to check the permission against
 	 *
 	 * @return true if found the permission and it is on
@@ -234,7 +234,7 @@ class permissions
 	 * Turn on or off a specific permission. Also turn on or off for all forums
 	 * that permission applies to
 	 *
-	 * @param string $y Indentifier of the permission being queried
+	 * @param string $y Identifier of the permission being queried
 	 * @param bool $bool What value to assign to all permissions
 	 **/
 	public function set_xy( $y, $bool )
@@ -274,7 +274,7 @@ class permissions
 	/**
 	 * Turn on or off a specific permission for a specific forum
 	 *
-	 * @param string $y Indentifier of the permission being queried
+	 * @param string $y Identifier of the permission being queried
 	 * @param int $z Forum to check the permission against
 	 * @param bool $bool What value to assign to all permissions
 	 **/
@@ -391,7 +391,7 @@ class permissions
 	 *
 	 * Note: This is only used for upgrades
 	 *
-	 * @param string $y Indentifier of the permission being added
+	 * @param string $y Identifier of the permission being added
 	 * @param bool $bool What value to assign to all permissions
 	 **/
 	public function add_perm( $y, $bool )
@@ -427,15 +427,15 @@ class permissions
 		if( $this->user == -1 ) {
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=?' );
 
-         $stmt->bind_param( 'si', $serialized, $this->group );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'si', $serialized, $this->group );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 		} else {
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_perms=? WHERE user_id=?' );
 
-         $stmt->bind_param( 'si', $serialized, $this->user );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'si', $serialized, $this->user );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 		}
 	}
 }

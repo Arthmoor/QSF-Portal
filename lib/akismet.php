@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class Akismet
 
 		$this->akismet_request_path = '/' . $this->akismet_version;
 
-      $this->comment_data['api_key'] = $this->api_key;
+		$this->comment_data['api_key'] = $this->api_key;
 		$this->comment_data['blog'] = $this->site_url;
 		$this->comment_data['user_ip'] = $qsf->ip;
 		$this->comment_data['user_agent'] = $qsf->agent;
@@ -57,8 +57,8 @@ class Akismet
 
 	private function send_request( $request, $path )
 	{
-      $path = $this->akismet_request_path . $path;
-      $server = $this->akismet_domain;
+		$path = $this->akismet_request_path . $path;
+		$server = $this->akismet_domain;
 
 		$http_request  = "POST $path HTTP/1.0\r\n";
 		$http_request .= "Host: $server\r\n";

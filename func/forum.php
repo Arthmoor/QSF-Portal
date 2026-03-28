@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -123,12 +123,12 @@ class forum extends qsfglobal
 		 */
 		$stmt = $this->db->prepare_query( 'SELECT forum_id, forum_parent, forum_name, forum_subcat FROM %pforums WHERE forum_id=?' );
 
-      $stmt->bind_param( 'i', $f );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $f );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $exists = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$exists = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !isset( $exists['forum_parent'] ) || !$exists['forum_parent'] ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -147,13 +147,13 @@ class forum extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum=? AND topic_type=?' );
 
-      $ttype = intval( TOPIC_TYPE_FORUM );
-      $stmt->bind_param( 'ii', $f, $ttype );
-      $this->db->execute_query( $stmt );
+		$ttype = intval( TOPIC_TYPE_FORUM );
+		$stmt->bind_param( 'ii', $f, $ttype );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $topic = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$topic = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$link_name = $this->htmlwidgets->clean_url( $exists['forum_name'] );
 		$pagelinks = $this->htmlwidgets->get_pages( $topic['count'], "forum/{$link_name}-{$f}/&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
@@ -244,11 +244,11 @@ class forum extends qsfglobal
 			WHERE f.forum_parent = ?
 			ORDER BY f.forum_parent, f.forum_position' );
 
-      $stmt->bind_param( 'i', $f );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $f );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$xtpl->assign( 'forum_sub', $this->lang->forum_sub );
 		$xtpl->assign( 'forum_forum_url', $this->lang->forum_forum_url );
@@ -352,14 +352,14 @@ class forum extends qsfglobal
 			ORDER BY (t.topic_modes & ?) DESC, $order
 			LIMIT ?, ?" );
 
-      $tflag1 = intval( TOPIC_GLOBAL );
-      $tflag2 = intval( TOPIC_TYPE_FORUM );
-      $tflag3 = intval( TOPIC_PINNED );
-      $stmt->bind_param( 'iiiiiii', $this->user['user_id'], $f, $tflag1, $tflag2, $tflag3, $min, $n );
-      $this->db->execute_query( $stmt );
+		$tflag1 = intval( TOPIC_GLOBAL );
+		$tflag2 = intval( TOPIC_TYPE_FORUM );
+		$tflag3 = intval( TOPIC_PINNED );
+		$stmt->bind_param( 'iiiiiii', $this->user['user_id'], $f, $tflag1, $tflag2, $tflag3, $min, $n );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{

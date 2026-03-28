@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -66,12 +66,12 @@ class member_control extends admin
 			} else {
 				$stmt = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_name LIKE ? LIMIT 250' );
 
-            $name = "%{$this->post['membername']}%";
-            $stmt->bind_param( 's', $name );
-            $this->db->execute_query( $stmt );
+				$name = "%{$this->post['membername']}%";
+				$stmt->bind_param( 's', $name );
+				$this->db->execute_query( $stmt );
 
-            $query = $stmt->get_result();
-            $stmt->close();
+				$query = $stmt->get_result();
+				$stmt->close();
 
 				if( !$this->db->num_rows( $query ) ) {
 					return $this->message( $this->lang->mc, "{$this->lang->mc_not_found} \"{$this->post['membername']}\"" );
@@ -112,12 +112,12 @@ class member_control extends admin
 			if( !isset( $this->post['submit'] ) ) {
 				$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $member = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$member = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/member_control.xtpl' );
 
@@ -151,12 +151,12 @@ class member_control extends admin
 			if( isset( $this->post['memberspambot'] ) ) {
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $member = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$member = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$this->lang->mc_confirm_bot = sprintf( $this->lang->mc_confirm_bot, $member['user_name'] );
 
@@ -185,14 +185,14 @@ class member_control extends admin
 				$id = intval( $this->post['member'] );
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $member = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$member = $this->db->nqfetch( $result );
+				$stmt->close();
 
-            $svars = json_decode( $member['user_server_data'], true );
+				$svars = json_decode( $member['user_server_data'], true );
 
 				require_once $this->sets['include_path'] . '/lib/akismet.php';
 				$akismet = new Akismet( $this );
@@ -216,12 +216,12 @@ class member_control extends admin
 			if( !isset( $this->post['submit'] ) ) {
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $member = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$member = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$out = '';
 
@@ -270,7 +270,7 @@ class member_control extends admin
 					'user_lastvisit'	=> array( $this->lang->mc_user_lastvisit, U_TIME ),
 					'user_lastpost'		=> array( $this->lang->mc_user_lastpost, U_TIME ),
 					'user_regip'		=> array( $this->lang->mc_user_regip, U_IGNORE ),
-               'user_register_email'   => array( $this->lang->mc_user_regemail, U_IGNORE ),
+					'user_register_email'   => array( $this->lang->mc_user_regemail, U_IGNORE ),
 					'user_server_data'	=> array( $this->lang->mc_user_server_data, U_SVARS )
 				);
 
@@ -344,9 +344,9 @@ class member_control extends admin
 					case U_SVARS:
 						$svars = json_decode( $val, true );
 
-                  if( $svars != null )
-                     foreach( $svars as $name => $value )
-                        $line .= $name . ': ' . $value . '<br>';
+					if( $svars != null )
+						foreach( $svars as $name => $value )
+							$line .= $name . ': ' . $value . '<br>';
 						break;
 					default:
 						$line = $val;
@@ -377,12 +377,12 @@ class member_control extends admin
 
 				$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $member = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$member = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				if( ( $this->post['user_group'] == USER_BANNED ) && ( $id == USER_GUEST_UID ) ) {
 					return $this->message( $this->lang->mc, $this->lang->mc_guest_banned );
@@ -424,39 +424,39 @@ class member_control extends admin
 				$user_language = $this->post['user_language'];
 				$user_skin = $this->post['user_skin'];
 				$user_avatar_type = $this->post['user_avatar_type'];
-            if( $user_avatar_type != 'none' )
-               $user_avatar = $this->post['user_avatar'];
-            else
-               $user_avatar = '';
+				if( $user_avatar_type != 'none' )
+					$user_avatar = $this->post['user_avatar'];
+				else
+					$user_avatar = '';
 				$user_avatar_width = intval( $this->post['user_avatar_width'] );
 				$user_avatar_height = intval( $this->post['user_avatar_height'] );
 				$user_level = intval( $this->post['user_level'] );
 				$user_timezone = $this->post['user_timezone'];
 
-            if( isset( $this->post['user_location'] ) )
-               $user_location = $this->format( $this->post['user_location'], FORMAT_HTMLCHARS );
-            else
-               $user_location = '';
-            if( isset( $this->post['user_homepage'] ) )
-               $user_homepage = $this->format( $this->post['user_homepage'], FORMAT_HTMLCHARS );
-            else
-               $user_homepage = '';
-            if( isset( $this->post['user_facebook'] ) )
-               $user_facebook = $this->format( $this->post['user_facebook'], FORMAT_HTMLCHARS );
-            else
-               $user_facebook = '';
-            if( isset( $this->post['user_twitter'] ) )
-            	$user_twitter = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
-            else
-               $user_twitter = '';
-            if( isset( $this->post['user_interests'] ) )
-               $user_interests = $this->format( $this->post['user_interests'], FORMAT_HTMLCHARS );
-            else
-               $user_interests = '';
-            if( isset( $this->post['user_signature'] ) )
-               $user_signature = $this->post['user_signature'];
-            else
-               $user_signature = '';
+				if( isset( $this->post['user_location'] ) )
+					$user_location = $this->format( $this->post['user_location'], FORMAT_HTMLCHARS );
+				else
+					$user_location = '';
+				if( isset( $this->post['user_homepage'] ) )
+					$user_homepage = $this->format( $this->post['user_homepage'], FORMAT_HTMLCHARS );
+				else
+					$user_homepage = '';
+				if( isset( $this->post['user_facebook'] ) )
+					$user_facebook = $this->format( $this->post['user_facebook'], FORMAT_HTMLCHARS );
+				else
+					$user_facebook = '';
+				if( isset( $this->post['user_twitter'] ) )
+					$user_twitter = $this->format( $this->post['user_twitter'], FORMAT_HTMLCHARS );
+				else
+					$user_twitter = '';
+				if( isset( $this->post['user_interests'] ) )
+					$user_interests = $this->format( $this->post['user_interests'], FORMAT_HTMLCHARS );
+				else
+					$user_interests = '';
+				if( isset( $this->post['user_signature'] ) )
+					$user_signature = $this->post['user_signature'];
+				else
+					$user_signature = '';
 
 				$user_posts = intval( $this->post['user_posts'] );
 				$user_uploads = intval( $this->post['user_uploads'] );
@@ -474,25 +474,25 @@ class member_control extends admin
 				  user_twitter=?, user_pm=?, user_pm_mail=?, user_view_avatars=?,
 				  user_view_signatures=?, user_view_emojis=? WHERE user_id=?' );
 
-            $stmt->bind_param( 'ssisisissiiissssssiisiiiiii',
-              $user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
-				  $user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
-				  $user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
-				  $user_signature, $user_posts, $user_uploads, $user_twitter, $user_pm, $user_pm_mail, $user_view_avatars,
-				  $user_view_signatures, $user_view_emojis, $id );
+				$stmt->bind_param( 'ssisisissiiissssssiisiiiiii',
+					$user_name, $guest_email, $user_group, $user_title, $user_title_custom, $user_language, $user_skin,
+					$user_avatar, $user_avatar_type, $user_avatar_width, $user_avatar_height, $user_level,
+					$user_timezone, $user_location, $user_homepage, $user_facebook, $user_interests,
+					$user_signature, $user_posts, $user_uploads, $user_twitter, $user_pm, $user_pm_mail, $user_view_avatars,
+					$user_view_signatures, $user_view_emojis, $id );
 
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				if( $user_group == USER_BANNED ) {
 					$this->db->query( 'DELETE FROM %psubscriptions WHERE subscription_user=?' );
 
-               $stmt->bind_param( 'i', $id );
-               $this->db->execute_query( $stmt );
-               $stmt->close();
+					$stmt->bind_param( 'i', $id );
+					$this->db->execute_query( $stmt );
+					$stmt->close();
 				}
-				if( ( $id == $this->sets['last_member_id'] )
-				&& ( $this->post['user_name'] != $this->sets['last_member'] ) ) {
+
+				if( ( $id == $this->sets['last_member_id'] ) && ( $this->post['user_name'] != $this->sets['last_member'] ) ) {
 					$this->sets['last_member'] = $this->post['user_name'];
 					$this->write_sets();
 				}
@@ -540,173 +540,175 @@ class member_control extends admin
 
 	private function delete_member_account( $id )
 	{
-      $guest_id = intval( USER_GUEST_UID );
+		$guest_id = intval( USER_GUEST_UID );
 
-      $stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
+		$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $name = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$name = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pposts SET post_author=? WHERE post_author=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pposts SET post_edited_by=? WHERE post_edited_by=?' );
 
-      $stmt->bind_param( 'is', $guest_id, $name['user_name'] );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'is', $guest_id, $name['user_name'] );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_starter=? WHERE topic_starter=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_last_poster=? WHERE topic_last_poster=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %plogs SET log_user=? WHERE log_user=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_submitted=? WHERE file_submitted=? AND file_approved=1' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pfilecomments SET user_id=? WHERE user_id=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$this->activeutil->delete( $id );
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pvotes WHERE vote_user=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pfileratings WHERE user_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pusers WHERE user_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_to=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_from=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_starter=? WHERE conv_starter=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_poster=? WHERE conv_last_poster=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconv_posts SET post_author=? WHERE post_author=?' );
 
-      $stmt->bind_param( 'ii', $guest_id, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $guest_id, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconv_posts SET post_edited_by=? WHERE post_edited_by=?' );
 
-      $stmt->bind_param( 'is', $guest_id, $name['user_name'] );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'is', $guest_id, $name['user_name'] );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %preadmarks WHERE readmark_user=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pconv_readmarks WHERE readmark_user=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'SELECT file_id, file_md5name FROM %pfiles WHERE file_submitted=? AND file_approved=0' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $files = $stmt->get_result();
-      $stmt->close();
+		$files = $stmt->get_result();
+		$stmt->close();
 
-      $file_query = $this->db->prepare_query( 'DELETE FROM %pfiles WHERE file_id=?' );
-      $file_query->bind_param( 'i', $file_id );
+		$file_query = $this->db->prepare_query( 'DELETE FROM %pfiles WHERE file_id=?' );
+		$file_query->bind_param( 'i', $file_id );
+
 		while( $file = $this->db->nqfetch( $files ) )
 		{
 			@unlink( './downloads/' . $file['file_md5name'] );
 
-         $file_id = $file['file_id'];
+			$file_id = $file['file_id'];
 
-         $this->db->execute_query( $file_query );
-         $stmt->close();
+			$this->db->execute_query( $file_query );
+			$stmt->close();
 		}
-      $file_query->close();
+		$file_query->close();
 
 		$stmt = $this->db->prepare_query( 'SELECT update_id, update_md5name FROM %pupdates WHERE update_updater=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $updates = $stmt->get_result();
-      $stmt->close();
+		$updates = $stmt->get_result();
+		$stmt->close();
 
-      $update_query = $this->db->prepare_query( 'DELETE FROM %pupdates WHERE update_id=?' );
-      $update_query->bind_param( 'i', $update_id );
+		$update_query = $this->db->prepare_query( 'DELETE FROM %pupdates WHERE update_id=?' );
+		$update_query->bind_param( 'i', $update_id );
+
 		while( $update = $this->db->nqfetch( $updates ) )
 		{
 			@unlink( './updates/' . $update['update_md5name'] );
 
-         $update_id = $update['update_id'];
+			$update_id = $update['update_id'];
 
-         $this->db->execute_query( $update_query );
+			$this->db->execute_query( $update_query );
 		}
-      $update_query->close();
+		$update_query->close();
 
 		$member = $this->db->fetch( 'SELECT user_id, user_name FROM %pusers ORDER BY user_id DESC LIMIT 1' );
 		$counts = $this->db->fetch( 'SELECT COUNT(user_id) AS count FROM %pusers' );

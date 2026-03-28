@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -189,7 +189,7 @@ class database
 	 * Returns a escaped string
 	 *
 	 * @since 1.3.0
-	 * @return string A string with the quotes and other charaters escaped
+	 * @return string A string with the quotes and other characters escaped
 	 * @param string $string The string to escape
 	 **/
 	private function escape( $string )

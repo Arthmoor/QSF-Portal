@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ class recent_posts extends modlet
 	/**
 	* Display a simplified list of the last 5 posts to the board
 	*
-	* @param string $param unusued
+	* @param string $param unused
 	* @author Geoffrey Dunn <geoff@warmage.com>
 	* @since 1.2.0
 	* @return string HTML with current online users and total membercount

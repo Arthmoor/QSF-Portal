@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -78,31 +78,31 @@ class membercount extends admin
 		// Try to fix user post counts.
 		$users = $this->db->query( 'SELECT user_id, user_posts FROM %pusers' );
 
-      $count_query = $this->db->prepare_query( 'SELECT COUNT(post_id) count FROM %pposts WHERE post_author=? AND post_count=1' );
-      $count_query->bind_param( 'i', $user_id );
+		$count_query = $this->db->prepare_query( 'SELECT COUNT(post_id) count FROM %pposts WHERE post_author=? AND post_count=1' );
+		$count_query->bind_param( 'i', $user_id );
 
-      $post_query = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=? WHERE user_id=?' );
-      $post_query->bind_param( 'ii', $post_count, $user_id );
+		$post_query = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=? WHERE user_id=?' );
+		$post_query->bind_param( 'ii', $post_count, $user_id );
 
 		while( ( $user = $this->db->nqfetch( $users ) ) )
 		{
 			$user_id = $user['user_id'];
-         $post_count = 0;
+			$post_count = 0;
 
-         $this->db->execute_query( $count_query );
-         $result = $count_query->get_result();
+			$this->db->execute_query( $count_query );
+			$result = $count_query->get_result();
 			$posts = $this->db->nqfetch( $result );
 
 			if( $posts['count'] && $posts['count'] > 0 ) {
-            $post_count = $posts['count'];
+				$post_count = $posts['count'];
 			}
-         $this->db->execute_query( $post_query );
+			$this->db->execute_query( $post_query );
 		}
-      $count_query->close();
-      $post_query->close();
+		$count_query->close();
+		$post_query->close();
 
-      // Changing post counts might require title adjustments.
-      $this->update_titles();
+		// Changing post counts might require title adjustments.
+		$this->update_titles();
 	}
 }
 ?>

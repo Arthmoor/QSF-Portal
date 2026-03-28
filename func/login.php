@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -98,13 +98,13 @@ class login extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT user_id, user_password FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
 
-         $uid = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'si', $this->post['user'], $uid );
-         $this->db->execute_query( $stmt );
+			$uid = intval( USER_GUEST_UID );
+			$stmt->bind_param( 'si', $this->post['user'], $uid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $data = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$data = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !isset( $data ) )
 				return $this->message( $this->lang->login_header, $this->lang->login_cant_logged );
@@ -113,16 +113,16 @@ class login extends qsfglobal
 			$user  = $data['user_id'];
 
 			if( password_verify( $this->post['pass'], $pass ) ) {
-            $hashcheck = $this->check_hash_update( $this->post['pass'], $data['user_password'] );
-            if( $hashcheck != $pass ) {
-               $pass = $hashcheck;
+				$hashcheck = $this->check_hash_update( $this->post['pass'], $data['user_password'] );
+				if( $hashcheck != $pass ) {
+					$pass = $hashcheck;
 
-               $stmt = $this->db->prepare( 'UPDATE %pusers SET user_password=? WHERE user_id=?' );
+					$stmt = $this->db->prepare( 'UPDATE %pusers SET user_password=? WHERE user_id=?' );
 
-               $stmt->bind_param( 'si', $pass, $data['user_id'] );
-               $this->db->execute_query( $stmt );
-               $stmt->close();
-            }
+					$stmt->bind_param( 'si', $pass, $data['user_id'] );
+					$this->db->execute_query( $stmt );
+					$stmt->close();
+				}
 
 				$options = array( 'expires' => $this->time + $this->sets['logintime'], 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
 
@@ -148,9 +148,9 @@ class login extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastvisit=? WHERE user_id=?' );
 
-         $stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$options = array( 'expires' => $this->time - 9000, 'path' => $this->sets['cookie_path'], 'domain' => $this->sets['cookie_domain'], 'secure' => $this->sets['cookie_secure'], 'HttpOnly' => true, 'SameSite' => 'Lax' );
 
@@ -187,14 +187,14 @@ class login extends qsfglobal
 		} else {
 			$stmt = $this->db->prepare_query( 'SELECT user_id, user_name, user_password, user_joined, user_email FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
 
-         $uname = $this->format( $this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
-         $uid = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'si', $uname, $uid );
-         $this->db->execute_query( $stmt );
+			$uname = $this->format( $this->post['user'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
+			$uid = intval( USER_GUEST_UID );
+			$stmt->bind_param( 'si', $uname, $uid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $target = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$target = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !isset( $target['user_id'] ) ) {
 				return $this->message( $this->lang->login_pass_reset, $this->lang->login_pass_no_id );
@@ -231,14 +231,14 @@ class login extends qsfglobal
 		$stmt = $this->db->prepare_query( 'SELECT user_id, user_name, user_email FROM %pusers
 			WHERE MD5(CONCAT(user_email, user_name, user_password, user_joined))=? AND user_id != ? LIMIT 1' );
 
-      $validate = preg_replace( '/[^a-z0-9]/', '', $this->get['e'] );
-      $uid = intval( USER_GUEST_UID );
-      $stmt->bind_param( 'si', $validate, $uid );
-      $this->db->execute_query( $stmt );
+		$validate = preg_replace( '/[^a-z0-9]/', '', $this->get['e'] );
+		$uid = intval( USER_GUEST_UID );
+		$stmt->bind_param( 'si', $validate, $uid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $target = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$target = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !isset( $target['user_id'] ) ) {
 			return $this->message( $this->lang->login_pass_reset, $this->lang->login_pass_no_id );
@@ -262,9 +262,9 @@ class login extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_password=? WHERE user_id=?' );
 
-      $stmt->bind_param( 'si', $dbpass, $target['user_id'] );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'si', $dbpass, $target['user_id'] );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		return $this->message( $this->lang->login_pass_reset, $this->lang->login_pass_sent );
 	}

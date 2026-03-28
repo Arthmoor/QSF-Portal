@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -86,10 +86,10 @@ class upgrade extends qsfglobal
 			if( isset( $this->sets['app_version'] ) && $this->sets['app_version'] == $this->version ) {
 				echo "<br><br>The detected version of {$this->name} is the same as the version you are trying to upgrade to. The upgrade cannot be processed.";
 			} elseif( isset( $this->settings['app_version'] ) && $this->settings['app_version'] > $this->version ) {
-            echo "<br><br><strong>The detected version of {$this->name} is newer than the version you are trying to upgrade to. The upgrade cannot be processed.</strong>";
-         } elseif( isset( $this->settings['app_version'] ) {
+              echo "<br><br><strong>The detected version of {$this->name} is newer than the version you are trying to upgrade to. The upgrade cannot be processed.</strong>";
+            } elseif( isset( $this->settings['app_version'] ) {
             echo "	<br><br><strong>Current detected version: " . $this->settings['app_version'] . "</strong>
-               <br><br><strong>Upgrading to version: " . $this->version . "</strong>
+                <br><br><strong>Upgrading to version: " . $this->version . "</strong>
  
 					<div style='text-align:center'>
 					 <input type='submit' value='Proceed With Upgrade'>

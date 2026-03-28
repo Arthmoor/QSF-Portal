@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -48,8 +48,8 @@ class files extends qsfglobal
 
 		static $cat_array = false;
 		$this->cat_array = &$cat_array;
-      $this->tree( $this->lang->files );
-      $this->set_title( $this->lang->files );
+		$this->tree( $this->lang->files );
+		$this->set_title( $this->lang->files );
 		$dowload = false;
 
 		if( !isset( $this->get['s'] ) ) {
@@ -209,7 +209,7 @@ class files extends qsfglobal
 			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_action_not_permitted );
 		}
 
-      $query = $this->db->fetch( 'SELECT COUNT(file_id) files FROM %pfiles WHERE file_approved=1' );
+		$query = $this->db->fetch( 'SELECT COUNT(file_id) files FROM %pfiles WHERE file_approved=1' );
 		$query2 = $this->db->fetch( 'SELECT COUNT(file_id) files FROM %pfiles WHERE file_approved=0' );
 		$query3 = $this->db->fetch( 'SELECT COUNT(update_id) files FROM %pupdates' );
 
@@ -220,19 +220,19 @@ class files extends qsfglobal
 		$this->db->query( 'UPDATE %pfile_categories SET fcat_count=0' );
 		$cats = $this->db->query( 'SELECT fcat_id FROM %pfile_categories' );
 
-      $count_query = $this->db->prepare_query( 'SELECT COUNT(file_id) files FROM %pfiles WHERE file_approved=1 AND file_catid=?' );
-      $count_query->bind_param( 'i', $category_id );
+		$count_query = $this->db->prepare_query( 'SELECT COUNT(file_id) files FROM %pfiles WHERE file_approved=1 AND file_catid=?' );
+		$count_query->bind_param( 'i', $category_id );
 
 		while( ( $cat = $this->db->nqfetch( $cats ) ) )
 		{
-         $category_id = $cat['fcat_id'];
-         $this->db->execute_query( $count_query );
-         $result = $count_query->get_result();
-         $count = $this->db->nqfetch( $result );
+			$category_id = $cat['fcat_id'];
+			$this->db->execute_query( $count_query );
+			$result = $count_query->get_result();
+			$count = $this->db->nqfetch( $result );
 
 			$this->increase_cat_count( $cat['fcat_id'], $count['files'] );
 		}
-      $count_query->close();
+		$count_query->close();
 		$this->update_category_trees();
 
 		$dirname = './downloads/';
@@ -273,12 +273,12 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT f.*, u.user_name FROM %pfiles f LEFT JOIN %pusers u ON user_id=file_submitted WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$this->file_perms->auth( 'edit_files', $file['file_catid'] ) ) {
 			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_edit_not_permitted );
@@ -293,13 +293,13 @@ class files extends qsfglobal
 			$date = $this->mbdate( DATE_ONLY_LONG, $file_date );
 			$filesize = $this->format_filesize( $file_size );
 			$file_desc_preview = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_BREAKS );
-         $file_description = $this->format( $file_description, FORMAT_HTMLCHARS );
+			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS );
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'tree', $tree );
 			$xtpl->assign( 'file_name', $file_name );
 			$xtpl->assign( 'files_desc', $this->lang->files_desc );
-         $xtpl->assign( 'file_desc_preview', $file_desc_preview );
+			$xtpl->assign( 'file_desc_preview', $file_desc_preview );
 			$xtpl->assign( 'file_description', $file_description );
 			$xtpl->assign( 'files_author', $this->lang->files_author );
 			$xtpl->assign( 'file_author', $file_author );
@@ -344,9 +344,9 @@ class files extends qsfglobal
 			$this->log_action( 'file_edit', $id );
 			$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_name=?, file_catid=?, file_author=?, file_fileversion=?, file_description=? WHERE file_id=?' );
 
-         $stmt->bind_param( 'sisssi', $name, $catid, $author, $version, $desc, $id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'sisssi', $name, $catid, $author, $version, $desc, $id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->files_edit_file, "{$file['file_name']} " . $this->lang->files_has_updated, "{$this->lang->continue}", "{$this->site}/files/{$furl}-{$id}/" );
 		}
@@ -358,12 +358,12 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT file_id, file_name, file_catid FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$this->file_perms->auth( 'move_files', $file['file_catid'] ) ) {
 			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_move_not_permitted );
@@ -373,7 +373,7 @@ class files extends qsfglobal
 			$list = $this->get_categories( $file['file_catid'], true );
 			$move_file = sprintf( $this->lang->files_move_category, "<strong>{$file['file_name']}</strong>" );
 
-         $xtpl->assign( 'id', $id );
+			$xtpl->assign( 'id', $id );
 			$xtpl->assign( 'files_move_file', $this->lang->files_move_file );
 			$xtpl->assign( 'move_file', $move_file );
 			$xtpl->assign( 'list', $list );
@@ -391,12 +391,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT fcat_name FROM %pfile_categories WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $catid );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $catid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$cat ) {
 				return $this->message( $this->lang->files_move_file, $this->lang->files_move_no_category, "{$this->lang->continue}", "{$this->site}/index.php?a=files&amp;s=move&amp;fid={$id}" );
@@ -408,9 +408,9 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_catid=? WHERE file_id=?' );
 
-         $stmt->bind_param( 'ii', $catid, $id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $catid, $id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->files_move_file, "<strong>{$file['file_name']}</strong> " . $this->lang->files_moved_file, "{$this->lang->continue}", "{$this->site}/files/category/{$catid}/" );
 		}
@@ -447,8 +447,8 @@ class files extends qsfglobal
 
 			while( $file = $this->db->nqfetch( $query ) )
 			{
-            foreach( $file as $key => $value )
-               $$key = $value;
+				foreach( $file as $key => $value )
+					$$key = $value;
 
 				if( !$this->file_perms->auth( 'approve_files', $file_catid ) )
 					continue;
@@ -537,24 +537,24 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT file_name, file_submitted, file_catid FROM %pfiles WHERE file_id=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $file = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$file = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_approved=1 WHERE file_id=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_uploads=user_uploads+1 WHERE user_id=?' );
 
-         $stmt->bind_param( 'i', $file['file_submitted'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $file['file_submitted'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->increase_cat_count( $file['file_catid'] );
 
@@ -573,12 +573,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT file_submitted FROM %pfiles WHERE file_id=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $file = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$file = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$name = $this->remove_file( $id );
 
@@ -595,12 +595,12 @@ class files extends qsfglobal
 			{
 				$stmt = $this->db->prepare_query( 'SELECT file_filename, file_md5name, file_catid, file_size FROM %pfiles WHERE file_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $file = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$file = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$filename = $file['file_filename'];
 				$md5name = $file['file_md5name'];
@@ -611,12 +611,12 @@ class files extends qsfglobal
 			{
 				$stmt = $this->db->prepare_query( 'SELECT update_name, update_md5name, update_updating, update_size FROM %pupdates WHERE update_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $update = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$update = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$filename = $update['update_name'];
 				$md5name = $update['update_md5name'];
@@ -652,12 +652,12 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$stmt = $this->db->prepare_query( 'SELECT fcat_name, fcat_parent, fcat_description FROM %pfile_categories WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $cid );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $cid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$list = $this->get_categories( $cat['fcat_parent'], true );
 
@@ -688,12 +688,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT * FROM %pfile_categories WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $cid );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $cid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$this->file_perms->auth( 'edit_category', $parent ) ) {
 				return $this->message( $this->lang->files_edit_category, $this->lang->files_edit_mod );
@@ -705,12 +705,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT fcat_id, fcat_name, fcat_parent FROM %pfile_categories WHERE fcat_name=?' );
 
-         $stmt->bind_param( 's', $name );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 's', $name );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $ecat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$ecat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $ecat && $ecat['fcat_parent'] == $parent ) {
 				if( $parent == 0 ) {
@@ -731,9 +731,9 @@ class files extends qsfglobal
 			}
 			$stmt = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_name=?, fcat_parent=?, fcat_longpath=?, fcat_description=? WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'sissi', $name, $parent, $longpath, $desc, $cid );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'sissi', $name, $parent, $longpath, $desc, $cid );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->update_children_longpath( $cat['fcat_id'] );
 			$this->update_category_trees();
@@ -782,12 +782,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT fcat_name, fcat_parent, fcat_count FROM %pfile_categories WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $catid );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $catid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$cat ) {
 				return $this->message( $this->lang->files_delete_cat, $this->lang->files_delete_nocat, $this->lang->continue, "{$this->site}/files/" );
@@ -802,9 +802,9 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'DELETE FROM %pfile_categories WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $catid );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $catid );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$perms = new file_permissions( $this );
 
@@ -874,12 +874,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT fcat_name, fcat_parent FROM %pfile_categories WHERE fcat_name=?' );
 
-         $stmt->bind_param( 's', $name );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 's', $name );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $cat && $cat['fcat_parent'] == $parent ) {
 				if( $parent == 0 ) {
@@ -905,11 +905,11 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'INSERT INTO %pfile_categories (fcat_parent, fcat_name, fcat_longpath, fcat_tree, fcat_description) VALUES( ?, ?, ?, ?, ? )' );
 
-         $stmt->bind_param( 'issss', $parent, $name, $longpath, $tree, $desc );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'issss', $parent, $name, $longpath, $tree, $desc );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
-         $newid = $this->db->insert_id( );
+			$newid = $this->db->insert_id( );
 			$perms = new file_permissions( $this );
 
 			while( $perms->get_group() )
@@ -956,12 +956,12 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) ) {
 			$stmt = $this->db->prepare_query( 'SELECT file_name, file_id FROM %pfiles WHERE file_id=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $file = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$file = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$xtpl->assign( 'site', $this->site );
 			$xtpl->assign( 'file_id', $file['file_id'] );
@@ -996,12 +996,12 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT file_name, file_md5name, file_fileversion, file_description FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $fid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $fid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$file )
 			return $this->message( $this->lang->files_update_file, $this->lang->files_update_not_exist, $this->lang->continue, "{$this->site}/files/category/{$cid}/" );
@@ -1049,12 +1049,12 @@ class files extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT update_name FROM %pupdates WHERE update_name=?' );
 
-         $stmt->bind_param( 's', $filename );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 's', $filename );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $update = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$update = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $update && $update['update_name'] == $filename )
 				return $this->message( $this->lang->files_update_file, $this->lang->files_update_exists, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=update&amp;fid={$fid}&amp;cid={$cid}" );
@@ -1092,9 +1092,9 @@ class files extends qsfglobal
 					file_description=?, file_md5name=?, file_size=?, file_filename=?, file_fileversion=?, file_revdate=?,
 					file_revision=file_revision+1 WHERE file_id=?' );
 
-            $stmt->bind_param( 'ssissii', $desc, $md5name, $size, $filename, $version, $date, $fid );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'ssissii', $desc, $md5name, $size, $filename, $version, $date, $fid );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				$this->log_action( 'file_update', $fid );
 				return $this->message( $this->lang->files_upload, $this->lang->files_uploaded, $this->lang->continue, "{$this->site}/files/category/{$cid}/" );
@@ -1102,9 +1102,9 @@ class files extends qsfglobal
 				$stmt = $this->db->prepare_query( 'INSERT INTO %pupdates (update_name, update_fileversion, update_updating, update_description, update_md5name, update_date, update_size, update_updater)
 					VALUES( ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-            $stmt->bind_param( 'ssissiii', $filename, $version, $fid, $desc, $md5name, $date, $size, $userId );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'ssissiii', $filename, $version, $fid, $desc, $md5name, $date, $size, $userId );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				$this->log_action( 'file_update', $fid );
 				$this->sets['code_approval']++;
@@ -1115,9 +1115,9 @@ class files extends qsfglobal
 		} else {
 			$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_fileversion=?, file_description=? WHERE file_id=?' );
 
-         $stmt->bind_param( 'ssissiii', $version, $desc, $fid);
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ssissiii', $version, $desc, $fid);
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->files_update_file, $this->lang->files_update_desc, $this->lang->continue, "{$this->site}/files/category/{$cid}/" );
 		}
@@ -1127,12 +1127,12 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT update_md5name, update_updater FROM %pupdates WHERE update_id=?' );
 
-      $stmt->bind_param( 'i', $uid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $uid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $update = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$update = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		@unlink( './updates/' . $update['update_md5name'] );
 
@@ -1141,9 +1141,9 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pupdates WHERE update_id=?' );
 
-      $stmt->bind_param( 'i', $uid );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $uid );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$this->log_action( 'file_deny_update', $uid );
 
@@ -1158,12 +1158,12 @@ class files extends qsfglobal
 		
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pupdates WHERE update_id=?' );
 
-      $stmt->bind_param( 'i', $uid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $uid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $update = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$update = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$update )
 			return $this->message( $this->lang->files_update_approve, $this->lang->files_update_not_exist2, $this->lang->continue, "{$this->site}/files/category/{$cid}/" );
@@ -1171,12 +1171,12 @@ class files extends qsfglobal
 		$fid = $update['update_updating'];
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $fid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $fid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$file )
 			return $this->message( $this->lang->files_update_approve, $this->lang->files_update_not_exist, $this->lang->continue, "{$this->site}/files/category/{$cid}/" );
@@ -1200,15 +1200,15 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_description=?, file_md5name=?, file_size=?, file_filename=?, file_fileversion=?, file_revdate=?, file_revision=file_revision+1 WHERE file_id=?' );
 
-      $stmt->bind_param( 'ssissii', $desc, $md5name, $size, $filename, $version, $date, $fid );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ssissii', $desc, $md5name, $size, $filename, $version, $date, $fid );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pupdates WHERE update_id=?' );
 
-      $stmt->bind_param( 'i', $uid );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $uid );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$this->sets['code_approval']--;
 		$this->write_sets();
@@ -1270,12 +1270,12 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT file_filename FROM %pfiles WHERE file_filename=?' );
 
-      $stmt->bind_param( 's', $filename );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 's', $filename );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( isset( $file['file_filename'] ) && $file['file_filename'] == $filename ) {
 			return $this->message( $this->lang->files_upload, $this->lang->files_update_exists );
@@ -1303,9 +1303,9 @@ class files extends qsfglobal
 		$stmt = $this->db->prepare_query( 'INSERT INTO %pfiles (file_name, file_catid, file_filename, file_md5name, file_author, file_fileversion, file_size, file_date, file_submitted, file_description, file_approved)
 			VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'sissssiiisi', $name, $catid, $filename, $md5name, $author, $version, $size, $date, $uid, $desc, $approved );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'sissssiiisi', $name, $catid, $filename, $md5name, $author, $version, $size, $date, $uid, $desc, $approved );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		if( $approved == 0 ) {
 			$this->sets['code_approval']++;
@@ -1314,9 +1314,9 @@ class files extends qsfglobal
 		} else {
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_uploads=user_uploads+1 WHERE user_id=?' );
 
-         $stmt->bind_param( 'i', $uid );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $uid );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->increase_cat_count( $catid );
 
@@ -1337,28 +1337,28 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT file_filename, file_md5name, file_catid, file_size FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
-      if( !$file ) {
+		if( !$file ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->files_download, $this->lang->files_invalid_file );
 		}
 
-      if( !$this->file_perms->auth( 'download_files', $file['file_catid'] ) ) {
-         return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_download_not_permitted );
-      }
+		if( !$this->file_perms->auth( 'download_files', $file['file_catid'] ) ) {
+			return $this->message( $this->lang->files_action_not_allowed, $this->lang->files_download_not_permitted );
+		}
 
 		$this->nohtml = true;
 		$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_downloads=file_downloads+1 WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		// Need to terminate and unlock the session at this point or the site will stall for the current user.
 		session_write_close();
@@ -1382,12 +1382,12 @@ class files extends qsfglobal
 		if( $cid != 0 ) {
 			$stmt = $this->db->prepare_query( 'SELECT fcat_id, fcat_moderator, fcat_description FROM %pfile_categories WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $cid );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $cid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cat = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cat = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$cat && $cid != 0 ) {
 				header( 'HTTP/1.0 404 Not Found' );
@@ -1490,12 +1490,12 @@ class files extends qsfglobal
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
 
-         if( $user_id != USER_GUEST_UID ) {
-            $link_name = $this->htmlwidgets->clean_url( $user_name );
-            $link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
-         }
-         else
-            $link_name = $user_name;
+			if( $user_id != USER_GUEST_UID ) {
+				$link_name = $this->htmlwidgets->clean_url( $user_name );
+				$link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
+			}
+			else
+				$link_name = $user_name;
          
 			$xtpl->assign( 'link_name', $link_name );
 
@@ -1549,11 +1549,11 @@ class files extends qsfglobal
 		    WHERE f.file_date>= ? AND f.file_approved=1
 		    ORDER BY f.file_date DESC, f.file_name' );
 
-      $stmt->bind_param( 'i', $date );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $date );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$i = 0;
 		while( $row = $this->db->nqfetch( $query ) )
@@ -1583,12 +1583,12 @@ class files extends qsfglobal
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
 
-         if( $user_id != USER_GUEST_UID ) {
-            $link_name = $this->htmlwidgets->clean_url( $user_name );
-            $link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
-         }
-         else
-            $link_name = $user_name;
+			if( $user_id != USER_GUEST_UID ) {
+				$link_name = $this->htmlwidgets->clean_url( $user_name );
+				$link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
+			}
+			else
+				$link_name = $user_name;
          
 			$xtpl->assign( 'link_name', $link_name );
 
@@ -1631,16 +1631,16 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT f.*, u.user_name FROM %pfiles f LEFT JOIN %pusers u ON u.user_id=f.file_submitted WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $fid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $fid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $query = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$query = $this->db->nqfetch( $result );
+		$stmt->close();
 
-      if( !$query ) {
+		if( !$query ) {
 			header( 'HTTP/1.0 404 Not Found' );
-         return $this->message( $this->lang->files_view, $this->lang->files_comment_specify );
+			return $this->message( $this->lang->files_view, $this->lang->files_comment_specify );
 		}
 
 		//if( $this->htmlwidgets->clean_url( $query['file_name'] ) != $this->get['fname'] ) {
@@ -1681,7 +1681,7 @@ class files extends qsfglobal
 		$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 		$filename = $this->format( $file_filename, FORMAT_HTMLCHARS );
 
-      $this->set_title( $this->lang->files . ': ' . $file_name );
+		$this->set_title( $this->lang->files . ': ' . $file_name );
 
 		$xtpl->assign( 'site', $this->site );
 		$xtpl->assign( 'tree', $tree );
@@ -1746,26 +1746,26 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT file_rating, file_catid FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $fid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $fid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file_rating = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file_rating = $this->db->nqfetch( $result );
+		$stmt->close();
 
-      if( !$this->file_perms->auth( 'upload_files', $file_rating['file_catid'] ) ) {
-         $can_rate = false;
-      }
+		if( !$this->file_perms->auth( 'upload_files', $file_rating['file_catid'] ) ) {
+			$can_rate = false;
+		}
 
 		if( $can_rate ) {
 			$stmt = $this->db->prepare_query( 'SELECT file_id FROM %pfileratings WHERE user_id=? AND file_id=?' );
 
-         $stmt->bind_param( 'ii', $this->user['user_id'], $fid );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $this->user['user_id'], $fid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $file_rated = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$file_rated = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( isset( $file_rated['file_id'] ) && $file_rated['file_id'] == $fid ) {
 				$has_rated = true;
@@ -1786,32 +1786,32 @@ class files extends qsfglobal
 		if( !isset( $this->post['submit'] ) )
 		{
 			if( isset( $this->get['uid'] ) )	{
-            $uid = 0;
-           	if( !is_numeric( $this->get['uid'] ) ) {
-               return $this->message( $this->lang->files, $this->lang->files_invalid_user );
-            }
+				$uid = 0;
+				if( !is_numeric( $this->get['uid'] ) ) {
+					return $this->message( $this->lang->files, $this->lang->files_invalid_user );
+				}
 
-			   $uid = intval( $this->get['uid'] );
+				$uid = intval( $this->get['uid'] );
 				$stmt = $this->db->prepare_query( 'SELECT user_name from %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $uid );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $uid );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $uname = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$uname = $this->db->nqfetch( $result );
+				$stmt->close();
 
-            if( $uname == null ) {
-               return $this->message( $this->lang->files, $this->lang->files_invalid_user );
-            }
+				if( $uname == null ) {
+					return $this->message( $this->lang->files, $this->lang->files_invalid_user );
+				}
 
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pfiles WHERE file_submitted=? AND file_approved=1 ORDER BY file_name' );
 
-            $stmt->bind_param( 'i', $uid );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $uid );
+				$this->db->execute_query( $stmt );
 
-            $query = $stmt->get_result();
-            $stmt->close();
+				$query = $stmt->get_result();
+				$stmt->close();
 
 				return $this->run_search( $xtpl, $query, 'User: ' . $uname['user_name'] );
 			}
@@ -1942,8 +1942,8 @@ class files extends qsfglobal
 		if( $this->db->num_rows( $query ) == 0 )
 			return $this->message( $this->lang->files_search, $this->lang->files_search_error_none, $this->lang->continue, "{$this->site}/files/search/" );
 
-      $file_query = $this->db->prepare_query( 'SELECT user_name, user_id FROM %pusers WHERE user_id=?' );
-      $file_query->bind_param( 'i', $file_submitted );
+		$file_query = $this->db->prepare_query( 'SELECT user_name, user_id FROM %pusers WHERE user_id=?' );
+		$file_query->bind_param( 'i', $file_submitted );
 
 		while( $row = $this->db->nqfetch( $query ) ) {
 			$found++;
@@ -1959,9 +1959,9 @@ class files extends qsfglobal
 			if( $file_revdate > 0 )
 				$revdate = $this->mbdate( DATE_ONLY_LONG, $file_revdate );
 
-         $this->db->execute_query( $file_query );
-         $result = $file_query->get_result();
-         $user = $this->db->nqfetch( $result );
+			$this->db->execute_query( $file_query );
+			$result = $file_query->get_result();
+			$user = $this->db->nqfetch( $result );
 
 			$file_description = $this->format( $file_description, FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE );
 
@@ -1979,12 +1979,12 @@ class files extends qsfglobal
 			$xtpl->assign( 'user_id', $user_id );
 			$xtpl->assign( 'user_name', $user_name );
 
-         if( $user_id != USER_GUEST_UID ) {
-            $link_name = $this->htmlwidgets->clean_url( $user_name );
-            $link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
-         }
-         else
-            $link_name = $user_name;
+			if( $user_id != USER_GUEST_UID ) {
+				$link_name = $this->htmlwidgets->clean_url( $user_name );
+				$link_name = "<a href=\"{$this->site}/profile/{$link_name}-{$user_id}/\">{$user_name}</a>";
+			}
+			else
+				$link_name = $user_name;
          
 			$xtpl->assign( 'link_name', $link_name );
 
@@ -1997,7 +1997,7 @@ class files extends qsfglobal
 
 			$xtpl->parse( 'FileSearchResults.Item' );
 		}
-      $file_query->close();
+		$file_query->close();
 
 		$xtpl->assign( 'files_search_results', $this->lang->files_search_results );
 		$xtpl->assign( 'qString', $qString );
@@ -2039,17 +2039,17 @@ class files extends qsfglobal
 			$uid = $this->user['user_id'];
 			$stmt = $this->db->prepare_query( 'INSERT INTO %pfilecomments (file_id,comment_text,user_id) VALUES( ?, ?, ? )' );
 
-         $stmt->bind_param( 'isi', $id, $text, $uid );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'isi', $id, $text, $uid );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_comments=file_comments+1 WHERE file_id=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
-         return $this->message( $this->lang->files_comment, $this->lang->files_comment_posted, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=viewfile&amp;fid={$id}" );
+			return $this->message( $this->lang->files_comment, $this->lang->files_comment_posted, $this->lang->continue, "{$this->site}/index.php?a=files&amp;s=viewfile&amp;fid={$id}" );
 		}
 	}
 
@@ -2064,26 +2064,26 @@ class files extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT file_id FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $query = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$query = $this->db->nqfetch( $result );
+		$stmt->close();
 
-      if( !$query ) {
+		if( !$query ) {
 			header( 'HTTP/1.0 404 Not Found' );
-         return $this->message( $this->lang->files_comment_view, $this->lang->files_comment_specify );
+			return $this->message( $this->lang->files_comment_view, $this->lang->files_comment_specify );
 		}
 
 		$stmt = $this->db->prepare_query( 'SELECT file_name, file_catid FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $cfile = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$cfile = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$comments = '';
 
@@ -2091,11 +2091,11 @@ class files extends qsfglobal
 		    LEFT JOIN %pusers u ON u.user_id=c.user_id
 		    WHERE c.file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) ) {
 			$fid = $row['file_id'];
@@ -2143,11 +2143,11 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT fcat_name, fcat_id, fcat_parent FROM %pfile_categories WHERE fcat_parent=? AND fcat_id != 0' );
 
-      $stmt->bind_param( 'i', $cid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $cid );
+		$this->db->execute_query( $stmt );
 
-      $cats = $stmt->get_result();
-      $stmt->close();
+		$cats = $stmt->get_result();
+		$stmt->close();
 
 		if( $cats && $this->db->num_rows( $cats ) <= 0 )
 			return '';
@@ -2157,6 +2157,7 @@ class files extends qsfglobal
 
 		for( $i = 0; $i < $nest; $i++ )
 			$nestSpace .= '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+
 		while( $row = $this->db->nqfetch( $cats ) )
 		{
 			$sArray = array();
@@ -2166,6 +2167,7 @@ class files extends qsfglobal
 			array_push( $sArray, $row['fcat_id'] );
 			$selectItems .= "<option value='{$row['fcat_id']}' selected='selected' ondblclick='select_all_children(".implode(", ", $sArray).")'>{$nestSpace}{$row['fcat_name']}</option>\n";
 			$selectItems .= $toAdd;
+
 			if( $cid == 0 )
 				$selectArray = array();
 		}
@@ -2176,45 +2178,45 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		@unlink( './downloads/' . $file['file_md5name'] );
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pfileratings WHERE file_id=?', $id );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pfilecomments WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		if( $count ) {
 			$this->decrease_cat_count( $file['file_catid'] );
 			$stmt = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count-1 WHERE fcat_id=?' );
 
-         $stmt->bind_param( 'i', $file['file_catid'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $file['file_catid'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_uploads=user_uploads-1 WHERE user_id=?' );
 
-         $stmt->bind_param( 'i', $file['file_submitted'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $file['file_submitted'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->sets['file_count']--;
 			$this->write_sets();
@@ -2317,12 +2319,12 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT file_submitted FROM %pfiles WHERE file_id=?' );
 
-      $stmt->bind_param( 'i', $fid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $fid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $file = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$file = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$file )
 			return false;
@@ -2343,12 +2345,12 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT fcat_longpath FROM %pfile_categories WHERE fcat_id=?' );
 
-      $stmt->bind_param( 'i', $cid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $cid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $path = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$path = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( isset( $path['fcat_longpath'] ) )
 			return $path['fcat_longpath'];
@@ -2361,41 +2363,41 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT fcat_id, fcat_name FROM %pfile_categories WHERE fcat_parent=?' );
 
-      $stmt->bind_param( 'i', $cid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $cid );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
-      $file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_longpath=? WHERE fcat_id=?' );
-      $file_query->bind_param( 'si', $newpath, $cat_id );
+		$file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_longpath=? WHERE fcat_id=?' );
+		$file_query->bind_param( 'si', $newpath, $cat_id );
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
 			$newpath = $this->get_longpath( $cid ) ;
 			$newpath .= '/' . $row['fcat_name'];
 
-         $cat_id = $row['fcat_id'];
-         $this->db->execute_query( $file_query );
+			$cat_id = $row['fcat_id'];
+			$this->db->execute_query( $file_query );
 
 			$this->update_children_longpath( $row['fcat_id'] );
 		}
-      $file_query->close();
+		$file_query->close();
 	}
 
 	private function get_subcat( $cid )
 	{
-      $stmt = $this->db->prepare_query( 'SELECT fcat_parent FROM %pfile_categories WHERE fcat_id=?' );
+		$stmt = $this->db->prepare_query( 'SELECT fcat_parent FROM %pfile_categories WHERE fcat_id=?' );
 
-      $stmt->bind_param( 'i', $cid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $cid );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
-      if( $row = $this->db->nqfetch( $query ) ) {
-         return $row['fcat_parent'];
-      }
+		if( $row = $this->db->nqfetch( $query ) ) {
+			return $row['fcat_parent'];
+		}
 	}
 
 	// We want to see if cid is it's own parent, or being put into a catagory to which it is a parent of.
@@ -2461,8 +2463,8 @@ class files extends qsfglobal
 		// Run through group
 		$q = $this->db->query( 'SELECT fcat_parent FROM %pfile_categories GROUP BY fcat_parent' );
 
-      $file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_tree=? WHERE fcat_parent=?' );
-      $file_query->bind_param( 'si', $tree, $cat_id );
+		$file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_tree=? WHERE fcat_parent=?' );
+		$file_query->bind_param( 'si', $tree, $cat_id );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
@@ -2471,10 +2473,10 @@ class files extends qsfglobal
 				$tree = $this->buildTree( $cats, $f['fcat_parent'] );
 			}
 
-         $cat_id = $f['fcat_parent'];
-         $this->db->execute_query( $file_query );
+			$cat_id = $f['fcat_parent'];
+			$this->db->execute_query( $file_query );
 		}
-      $file_query->close();
+		$file_query->close();
 	}
 
 	private function buildTree( $catsArray, $parent )
@@ -2495,56 +2497,56 @@ class files extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pfile_categories WHERE fcat_id=?' );
 
-      $stmt->bind_param( 'i', $cid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $cid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $category = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$category = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$parents = explode( ',', $category['fcat_tree'] );
 
-      $file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count + ? WHERE fcat_id=?' );
-      $file_query->bind_param( 'ii', $value, $parent );
+		$file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count + ? WHERE fcat_id=?' );
+		$file_query->bind_param( 'ii', $value, $parent );
 
 		foreach( $parents as $parent ) {
-         $this->db->execute_query( $file_query );
-      }
-      $file_query->close();
+			$this->db->execute_query( $file_query );
+		}
+		$file_query->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count + ? WHERE fcat_id=?' );
 
-      $stmt->bind_param( 'ii', $value, $cid );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $value, $cid );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 
 	private function decrease_cat_count( $cid, $value = 1 )
 	{
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pfile_categories WHERE fcat_id=?' );
 
-      $stmt->bind_param( 'i', $cid );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $cid );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $category = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$category = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$parents = explode( ',', $category['fcat_tree'] );
 
-      $file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count - ? WHERE fcat_id=?' );
-      $file_query->bind_param( 'ii', $value, $parent );
+		$file_query = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count - ? WHERE fcat_id=?' );
+		$file_query->bind_param( 'ii', $value, $parent );
 
 		foreach( $parents as $parent ) {
-         $this->db->execute_query( $file_query );
-      }
-      $file_query->close();
+			$this->db->execute_query( $file_query );
+		}
+		$file_query->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pfile_categories SET fcat_count=fcat_count - ? WHERE fcat_id=?' );
 
-      $stmt->bind_param( 'ii', $value, $cid );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $value, $cid );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 
 	private function array_remove_value()

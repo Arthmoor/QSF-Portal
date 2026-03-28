@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -17,8 +17,8 @@
  **/
 
 if( !defined( 'QUICKSILVERFORUMS' ) ) {
-        header( 'HTTP/1.0 403 Forbidden' );
-        die;
+	header( 'HTTP/1.0 403 Forbidden' );
+	die;
 }
 
 /**
@@ -28,12 +28,9 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class filerating extends qsfglobal
 {
-   /**
-    * Main interface. Process display after clicking on a "rating" link.
-    *
-    **/
-   function execute()
-   {
+	// Main interface. Process display after clicking on a "rating" link.
+	function execute()
+	{
 		if( !$this->perms->auth( 'board_view' ) ) {
 			$this->lang->board();
 
@@ -42,7 +39,7 @@ class filerating extends qsfglobal
 				( $this->perms->is_guest ) ? sprintf( $this->lang->board_regfirst, $this->site ) : $this->lang->board_noview );
 		}
 
-      $this->nohtml = true;
+		$this->nohtml = true;
 
 		$this->lang->files();
 
@@ -61,12 +58,12 @@ class filerating extends qsfglobal
 		if( !isset( $this->post['rate'] ) ) {
 			$stmt = $this->db->prepare_query( 'SELECT file_id FROM %pfileratings WHERE user_id=? AND file_id=?' );
 
-         $stmt->bind_param( 'ii', $this->user['user_id'], $this->get['f'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $this->user['user_id'], $this->get['f'] );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $file_rated = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$file_rated = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$file_rated || $file_rated['file_id'] != $this->get['f'] ) {
 				$xtpl->assign( 'site', $this->site );
@@ -91,28 +88,28 @@ class filerating extends qsfglobal
 		else {
 			$stmt = $this->db->prepare_query( 'SELECT file_rating_total, file_rating_votes FROM %pfiles WHERE file_id=?' );
 
-         $stmt->bind_param( 'i', $this->get['f'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $this->get['f'] );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $file = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$file = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$votes = $file['file_rating_votes'] + 1;
 			$newrate = ( $file['file_rating_total'] + $this->post['rate'] ) / $votes;
 
 			$stmt = $this->db->prepare_query( 'INSERT INTO %pfileratings (user_id, file_id) VALUES( ?, ? )' );
 
-         $stmt->bind_param( 'ii', $this->user['user_id'], $this->get['f'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $this->user['user_id'], $this->get['f'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pfiles SET file_rating_total=?, file_rating_votes=?, file_rating=? WHERE file_id=?' );
 
-         $total = $file['file_rating_total'] + $this->post['rate'];
-         $stmt->bind_param( 'iiii', $total, $votes, $newrate, $this->get['f'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$total = $file['file_rating_total'] + $this->post['rate'];
+			$stmt->bind_param( 'iiii', $total, $votes, $newrate, $this->get['f'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$xtpl->assign( 'other', $this->lang->files_rate_thank );
 

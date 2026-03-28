@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -39,10 +39,10 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class conv_readmarker extends forumutils
 {
-   private $db;
-   private $time;
-   private $day_in_seconds;
-   private $last_cv_read_all;
+	private $db;
+	private $time;
+	private $day_in_seconds;
+	private $last_cv_read_all;
 	private $last_read_all = 0;           // Time beyond which all conversations are considered read
 	private $readmarkers_loaded = false;  // Have we queried the database yet
 	private $user_id;                     // What user ID should we use for any queries or updates
@@ -50,7 +50,7 @@ class conv_readmarker extends forumutils
 	private $cleanupchance = false;       // Set to true if we want a cleanup operation done
 
 	/**
-	 * Constructor. Initalise the read marker for guest (cookie and session)
+	 * Constructor. Initialize the read marker for guest (cookie and session)
 	 * or user (readmark table)
 	 *
 	 * @param $qsf - Quicksilver Forums module
@@ -59,11 +59,11 @@ class conv_readmarker extends forumutils
 	{
 		parent::__construct( $qsf );
 
-      $this->db = &$qsf->db;
+		$this->db = &$qsf->db;
 		$this->time = &$qsf->time;
 		$this->day_in_seconds = 86400;
 
-		// To initalise ourselves we need to look at the user - Guests don't have CVs to track.
+		// To initialize ourselves we need to look at the user - Guests don't have CVs to track.
 		if( $qsf->perms->is_guest ) {
          return;
 		}
@@ -112,15 +112,15 @@ class conv_readmarker extends forumutils
 		// Clean out unneeded entries
 		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastcvallread=? WHERE user_id=?' );
 
-      $stmt->bind_param( 'ii', $time, $this->user_id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $time, $this->user_id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pconv_readmarks WHERE readmark_user=? AND readmark_lastread < ?' );
 
-      $stmt->bind_param( 'ii', $this->user_id, $time );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $this->user_id, $time );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$this->readmarkers_loaded = false;
 	}
@@ -144,9 +144,9 @@ class conv_readmarker extends forumutils
 			if( !isset( $this->readmarkers[$conv_id] ) || $this->readmarkers[$conv_id] < $time ) {
 				$stmt = $this->db->prepare_query( 'REPLACE INTO %pconv_readmarks (readmark_user, readmark_conv, readmark_lastread) VALUES ( ?, ?, ? )' );
 
-            $stmt->bind_param( 'iii', $this->user_id, $conv_id, $time );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'iii', $this->user_id, $conv_id, $time );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				$this->readmarkers[$conv_id] = $time;
 			}
@@ -230,11 +230,11 @@ class conv_readmarker extends forumutils
 
 			$stmt = $this->db->prepare_query( 'SELECT * FROM %pconv_readmarks WHERE readmark_user=?' );
 
-         $stmt->bind_param( 'i', $this->user_id );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $this->user_id );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			while( $mark = $this->db->nqfetch( $query ) )
 			{
@@ -256,11 +256,11 @@ class conv_readmarker extends forumutils
 		// Find the OLDEST unread post
 		$stmt = $this->db->prepare_query( 'SELECT conv_id, conv_edited FROM %pconversations WHERE conv_edited > ? AND ? IN (conv_users)' );
 
-      $stmt->bind_param( 'ii', $this->last_read_all, $this->user_id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $this->last_read_all, $this->user_id );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$oldest_time = $this->time;
 

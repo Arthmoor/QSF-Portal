@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -74,12 +74,12 @@ class newspost extends qsfglobal
 		    WHERE t.topic_id=? AND u.user_group=g.group_id
 		    ORDER BY p.post_time LIMIT 1' );
 
-      $stmt->bind_param( 'i',  $post_id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i',  $post_id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $post = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$post = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$post || $post_name != $this->htmlwidgets->clean_url( $post['topic_title'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -88,11 +88,11 @@ class newspost extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT attach_id, attach_name, attach_downloads, attach_size FROM %pattach WHERE attach_post=?' );
 
-      $stmt->bind_param( 'i',  $post_id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i',  $post_id );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$this->lang->topic();
 
@@ -160,11 +160,11 @@ class newspost extends qsfglobal
 			WHERE post_topic=? AND u.user_group=g.group_id
 			ORDER BY p.post_time' );
 
-      $stmt->bind_param( 'i',  $post_id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i',  $post_id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $stmt->close();
+		$result = $stmt->get_result();
+		$stmt->close();
 
 		$show = false;
 		$pos = 0;

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -148,23 +148,23 @@ class perms extends admin
 			if( $mode == 'user' ) {
 				$stmt = $this->db->prepare_query( 'SELECT user_name, user_perms FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $this->post['group'] );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $this->post['group'] );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $query = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$query = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$label = "{$this->lang->perms_user} '{$query['user_name']}'";
 			} else {
 				$stmt = $this->db->prepare_query( 'SELECT group_name FROM %pgroups WHERE group_id=?' );
 
-            $stmt->bind_param( 'i', $this->post['group'] );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $this->post['group'] );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $query = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$query = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$label = "{$this->lang->perms_group} '{$query['group_name']}'";
 			}
@@ -355,11 +355,11 @@ class perms extends admin
 				WHERE s.subscription_user=?
 				AND s.subscription_user=u.user_id' );
 
-         $stmt->bind_param( 'i', $group );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $group );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			while( $sub = $this->db->nqfetch( $query ) ) //if the user has subscriptions
 			{
@@ -371,26 +371,26 @@ class perms extends admin
 					if( !$perms->auth( 'forum_view', $sub['subscription_item'] ) ) { //if user can no longer view forum
 						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
 
-                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
-                  $this->db->execute_query( $stmt );
-                  $stmt->close();
+						$stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+						$this->db->execute_query( $stmt );
+						$stmt->close();
 					}
 				} else {
 					$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
 
-               $stmt->bind_param( 'i', $sub['subscription_item'] );
-               $this->db->execute_query( $stmt );
+					$stmt->bind_param( 'i', $sub['subscription_item'] );
+					$this->db->execute_query( $stmt );
 
-               $result = $stmt->get_result();
-               $check = $this->db->nqfetch( $result );
-               $stmt->close();
+					$result = $stmt->get_result();
+					$check = $this->db->nqfetch( $result );
+					$stmt->close();
 
 					if( !$perms->auth( 'forum_view', $check['topic_forum'] ) ) { //if user can no longer view forum
 						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
 
-                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
-                  $this->db->execute_query( $stmt );
-                  $stmt->close();
+						$stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+						$this->db->execute_query( $stmt );
+						$stmt->close();
 					}
 				}
 			}
@@ -399,11 +399,11 @@ class perms extends admin
 				FROM %psubscriptions s, %pusers u, %pgroups g
 				WHERE g.group_id=? AND u.user_group=g.group_id AND s.subscription_user=u.user_id' );
 
-         $stmt->bind_param( 'i', $group );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $group );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			while( $sub = $this->db->nqfetch( $query ) )
 			{
@@ -415,26 +415,26 @@ class perms extends admin
 					if( !$perms->auth( 'forum_view', $sub['subscription_item'] ) ) { //if user can no longer view forum
 						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
 
-                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
-                  $this->db->execute_query( $stmt );
-                  $stmt->close();
+						$stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+						$this->db->execute_query( $stmt );
+						$stmt->close();
 					}
 				} else {
 					$stmt = $this->db->prepare_query( 'SELECT topic_forum FROM %ptopics WHERE topic_id=?' );
 
-               $stmt->bind_param( 'i', $sub['subscription_item'] );
-               $this->db->execute_query( $stmt );
+					$stmt->bind_param( 'i', $sub['subscription_item'] );
+					$this->db->execute_query( $stmt );
 
-               $result = $stmt->get_result();
-               $check = $this->db->nqfetch( $result );
-               $stmt->close();
+					$result = $stmt->get_result();
+					$check = $this->db->nqfetch( $result );
+					$stmt->close();
 
 					if( !$perms->auth( 'forum_view', $check['topic_forum'] ) ) { //if user can no longer view forum
 						$stmt = $this->db->prepare_query( 'DELETE FROM %psubscriptions WHERE subscription_user=? AND subscription_item=?' );
 
-                  $stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
-                  $this->db->execute_query( $stmt );
-                  $stmt->close();
+						$stmt->bind_param( 'ii', $sub['user_id'], $sub['subscription_item'] );
+						$this->db->execute_query( $stmt );
+						$stmt->close();
 					}
 				}
 			}

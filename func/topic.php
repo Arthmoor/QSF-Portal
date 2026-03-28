@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -105,34 +105,34 @@ class topic extends qsfglobal
 			$topicnum = 0;
 
 		if( isset( $this->get['view'] ) ) {
-         $this->validator->validate( $this->get['view'], TYPE_STRING, array( 'newer', 'older' ), false );
-      } else {
-         $this->get['view'] = false;
-      }
+			$this->validator->validate( $this->get['view'], TYPE_STRING, array( 'newer', 'older' ), false );
+		} else {
+			$this->get['view'] = false;
+		}
 
 		if( isset( $this->get['p'] ) ) {
 			$postnum = intval( $this->get['p'] );
-         $this->validator->validate( $postnum, TYPE_UINT );
-      } else {
-         $postnum = false;
-      }
+			$this->validator->validate( $postnum, TYPE_UINT );
+		} else {
+			$postnum = false;
+		}
 
 		if( isset( $this->get['unread'] ) ) {
-         $unread = true;
-      }
+			$unread = true;
+		}
 		
 		$stmt = $this->db->prepare_query( 'SELECT t.topic_title, t.topic_description, t.topic_modes, t.topic_starter, t.topic_forum,
 				t.topic_icon, t.topic_edited, t.topic_replies, t.topic_poll_options, t.topic_type, f.forum_name
 			FROM %ptopics t, %pforums f
 			WHERE t.topic_id=? AND t.topic_type=? AND f.forum_id=t.topic_forum' );
 
-      $ttype = intval( TOPIC_TYPE_FORUM );
-      $stmt->bind_param( 'ii', $topicnum, $ttype );
-      $this->db->execute_query( $stmt );
+		$ttype = intval( TOPIC_TYPE_FORUM );
+		$stmt->bind_param( 'ii', $topicnum, $ttype );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $topic = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$topic = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$topic || $tname != $this->htmlwidgets->clean_url( $topic['topic_title'] ) ) {
 			$this->set_title( $this->lang->topic_not_found );
@@ -202,12 +202,12 @@ class topic extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=? AND post_time < ?' );
 
-         $stmt->bind_param( 'ii', $topicnum, $timeread );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $topicnum, $timeread );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $posts = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$posts = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $posts )
 				$postCount = $posts['posts'] + 1;
@@ -224,12 +224,12 @@ class topic extends qsfglobal
 			// We need to find what page this post exists on!
 			$stmt = $this->db->prepare_query( 'SELECT COUNT(post_id) posts FROM %pposts WHERE post_topic=? AND post_id < ?' );
 
-         $stmt->bind_param( 'ii', $topicnum, $postnum );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $topicnum, $postnum );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $posts = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$posts = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $posts )
 				$postCount = $posts['posts'] + 1;
@@ -244,9 +244,9 @@ class topic extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_views=topic_views+1 WHERE topic_id=?' );
 
-      $stmt->bind_param( 'i', $topicnum );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $topicnum );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$topic['topic_title'] = $this->format( $topic['topic_title'], FORMAT_CENSOR );
 		$title_html = $this->format( $topic['topic_title'], FORMAT_HTMLCHARS );
@@ -259,7 +259,7 @@ class topic extends qsfglobal
 		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;f=' . $topic['topic_forum'], "{$this->lang->forum_forum}: {$topic['forum_name']}" );
 		$this->add_feed( $this->site . '/index.php?a=rssfeed&amp;t=' . $topicnum, "{$this->lang->forum_topic}: $title_html" );
 
-      $title_short = $topic['topic_title'];
+		$title_short = $topic['topic_title'];
 
 		if( strlen( $topic['topic_title'] ) > 30 ) {
 			$title_short = substr( $topic['topic_title'], 0, 29 ) . '...';
@@ -351,11 +351,11 @@ class topic extends qsfglobal
 		$stmt = $this->db->prepare_query( 'SELECT a.attach_id, a.attach_name, a.attach_downloads, a.attach_size, p.post_id FROM %pposts p, %pattach a
 			WHERE p.post_topic = ? AND a.attach_post = p.post_id' );
 
-      $stmt->bind_param( 'i', $topicnum );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $topicnum );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$attachments = array();
 
@@ -382,11 +382,11 @@ class topic extends qsfglobal
 			ORDER BY p.post_time
 			LIMIT ?, ?' );
 
-      $stmt->bind_param( 'iii', $topicnum, $min, $num );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'iii', $topicnum, $min, $num );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$i = 0;
 		$split = '';
@@ -766,26 +766,26 @@ class topic extends qsfglobal
 			FROM %pattach a, %pposts p, %ptopics t
 			WHERE a.attach_post = p.post_id AND p.post_topic = t.topic_id AND a.attach_id = ?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $data = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$data = $this->db->nqfetch( $result );
+		$stmt->close();
 
-      if( !$data || !isset( $data['topic_forum'] ) ) {
-         header( 'HTTP/1.0 404 Not Found' );
-         return $this->message( $this->lang->topic_attached_title, $this->lang->topic_attached_invalid );
-      }
+		if( !$data || !isset( $data['topic_forum'] ) ) {
+			header( 'HTTP/1.0 404 Not Found' );
+			return $this->message( $this->lang->topic_attached_title, $this->lang->topic_attached_invalid );
+		}
 
 		if( $this->perms->auth( 'post_attach_download', $data['topic_forum'] ) ) {
 			$this->nohtml = true;
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pattach SET attach_downloads=attach_downloads+1 WHERE attach_id=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			// Need to terminate and unlock the session at this point or the site will stall for the current user.
 			session_write_close();
@@ -809,12 +809,12 @@ class topic extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT vote_option FROM %pvotes WHERE vote_user=? AND vote_topic=?' );
 
-      $stmt->bind_param( 'ii', $this->user['user_id'], $t );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $this->user['user_id'], $t );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $user_voted = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$user_voted = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/topic.xtpl' );
 
@@ -825,11 +825,11 @@ class topic extends qsfglobal
 		if( $user_voted || !$this->perms->auth( 'poll_vote', $f ) || ( $topic_modes & TOPIC_LOCKED ) || ( isset( $this->get['results'] ) && $this->sets['vote_after_results'] ) ) {
 			$stmt = $this->db->prepare_query( 'SELECT vote_option FROM %pvotes WHERE vote_topic=? AND vote_option != -1' );
 
-         $stmt->bind_param( 'i', $t );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $t );
+			$this->db->execute_query( $stmt );
 
-         $votes = $stmt->get_result();
-         $stmt->close();
+			$votes = $stmt->get_result();
+			$stmt->close();
 
 			$results = array();
 			$total_votes = 0;

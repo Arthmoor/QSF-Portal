@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -35,9 +35,9 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
  **/
 class attachutil
 {
-   private $db;
-   private $sets;
-   private $lang;
+	private $db;
+	private $sets;
+	private $lang;
 
 	/**
 	 * Constructor
@@ -124,12 +124,12 @@ class attachutil
 			$md5 = key( $temp_attached_data );
 			$filename = $temp_attached_data[$md5];
 
-         $stmt = $this->db->prepare_query( 'INSERT INTO %pattach ( attach_file, attach_name, attach_post, attach_size, attach_pm ) VALUES ( ?, ?, ?, ?, ?)' );
+			$stmt = $this->db->prepare_query( 'INSERT INTO %pattach ( attach_file, attach_name, attach_post, attach_size, attach_pm ) VALUES ( ?, ?, ?, ?, ?)' );
 
-         $filesize = filesize( './attachments/' . $md5 );
-         $stmt->bind_param( 'ssiii', $md5, $filename, $post_id, $filesize, $convo );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$filesize = filesize( './attachments/' . $md5 );
+			$stmt->bind_param( 'ssiii', $md5, $filename, $post_id, $filesize, $convo );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$attached_data = array_merge( $attached_data, $temp_attached_data );
 		}
@@ -142,7 +142,7 @@ class attachutil
 	 * @param int $post_id post to attach the file to
 	 * @param string $filename md5 encoded filename
 	 * @param array $attached_data attachments to insert
-    * @param bool $convo whether or not the attachment is for a conversation
+	 * @param bool $convo whether or not the attachment is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 **/
@@ -150,11 +150,11 @@ class attachutil
 	{
 		$this->delete( $filename, $attached_data );
 
-      $stmt = $this->db->prepare_query( 'DELETE FROM %pattach WHERE attach_post=? AND attach_file=? AND attach_pm=?' );
+		$stmt = $this->db->prepare_query( 'DELETE FROM %pattach WHERE attach_post=? AND attach_file=? AND attach_pm=?' );
 
-      $stmt->bind_param( 'isi', $post_id, $filename, $convo );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'isi', $post_id, $filename, $convo );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 
 	/**
@@ -182,21 +182,21 @@ class attachutil
 	 *
 	 * @param int $post_id id number of the post we're attaching to
 	 * @param array $attached_data attachments to insert
-    * @param bool $convo whether or not the post ID is for a conversation
+     * @param bool $convo whether or not the post ID is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.8
 	 **/
 	public function insert( $post_id, $attached_data, $convo = false )
 	{
-      $insert_query = $this->db->prepare_query( 'INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES ( ?, ?, ?, ?, ? )' );
-      $insert_query->bind_param( 'ssiii', $md5, $filename, $post_id, $filesize, $convo );
+		$insert_query = $this->db->prepare_query( 'INSERT INTO %pattach (attach_file, attach_name, attach_post, attach_size, attach_pm) VALUES ( ?, ?, ?, ?, ? )' );
+		$insert_query->bind_param( 'ssiii', $md5, $filename, $post_id, $filesize, $convo );
 
 		foreach( $attached_data as $md5 => $filename )
 		{
-         $filesize = filesize( './attachments/' . $md5 );
-         $this->db->execute_query( $insert_query );
+			$filesize = filesize( './attachments/' . $md5 );
+			$this->db->execute_query( $insert_query );
 		}
-      $insert_query->close();
+		$insert_query->close();
 	}
 
 	/**
@@ -237,7 +237,7 @@ class attachutil
 	 * Fetch attachment data from database and return it as an array
 	 *
 	 * @param int $post_id Post to get attachments for
-    * @param bool $convo whether or not the post ID is for a conversation
+     * @param bool $convo whether or not the post ID is for a conversation
 	 * @author Geoffrey Dunn <geoff@warmage.com>
 	 * @since 1.1.9
 	 * @return array $attached_data attachments to for post
@@ -246,13 +246,13 @@ class attachutil
 	{
 		$attached_data = array();
 
-      $stmt = $this->db->prepare_query( 'SELECT attach_file, attach_name FROM %pattach WHERE attach_post=? AND attach_pm=?' );
+		$stmt = $this->db->prepare_query( 'SELECT attach_file, attach_name FROM %pattach WHERE attach_post=? AND attach_pm=?' );
 
-      $stmt->bind_param( 'ii', $post_id, $convo );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $post_id, $convo );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{

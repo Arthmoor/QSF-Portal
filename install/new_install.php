@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -124,9 +124,9 @@ class new_install extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'INSERT INTO %pforums ( forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat ) VALUES( ?, ?, ?, ?, 0, 0 )' );
 
-      $stmt->bind_param( 'siss', $tree, $parent, $name, $desc );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'siss', $tree, $parent, $name, $desc );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$forumId = $this->db->insert_id( );
 
@@ -450,10 +450,10 @@ break;
 			$stmt = $this->db->prepare_query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_title_custom, user_joined, user_email, user_timezone, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height, user_signature)
 				VALUES( ?, ?, ?, 'Administrator', 1, ?, ?, ?, './avatars/avatar.jpg', 'local', 100, 100, '' )" );
 
-         $group = intval( USER_ADMIN );
-         $stmt->bind_param( 'ssiiss', $this->post['admin_name'], $admin_pass, $group, $this->time, $this->post['admin_email'], $this->post['user_timezone'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$group = intval( USER_ADMIN );
+			$stmt->bind_param( 'ssiiss', $this->post['admin_name'], $admin_pass, $group, $this->time, $this->post['admin_email'], $this->post['user_timezone'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$admin_uid = $this->db->insert_id( );
 
@@ -489,18 +489,18 @@ Have fun and enjoy your new site!";
 			$forumId = $this->create_forum( 'News Posts', 'The main page news forum. Only administrators can see this or post in it. Posts here appear as front page news items.', $categoryId );
 			$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_news=1 WHERE forum_id=?' );
 
-         $stmt->bind_param( 'i', $forumId );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $forumId );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			// Create Topic
 			$stmt = $this->db->prepare_query( 'INSERT INTO %ptopics ( topic_title, topic_forum, topic_description, topic_starter, topic_icon, topic_posted, topic_edited, topic_last_poster, topic_modes ) 
 				VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-         $publish = intval( TOPIC_PUBLISH );
-         $stmt->bind_param( 'sisisiiii', $topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, $publish );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$publish = intval( TOPIC_PUBLISH );
+			$stmt->bind_param( 'sisisiiii', $topicName, $forumId, $topicDesc, $admin_uid, $topicIcon, $this->time, $this->time, $admin_uid, $publish );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$topicId = $this->db->insert_id( );
 
@@ -508,29 +508,29 @@ Have fun and enjoy your new site!";
 			$stmt = $this->db->prepare_query( 'INSERT INTO %pposts ( post_topic, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon )
 				VALUES( ?, ?, ?, ?, 1, 1, ?, ? )' );
 
-         $stmt->bind_param( 'iisiss', $topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'iisiss', $topicId, $admin_uid, $topicPost, $this->time, $this->ip, $topicIcon );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$postId = $this->db->insert_id( );
 
 			$stmt = $this->db->prepare_query( 'UPDATE %ptopics SET topic_last_post=? WHERE topic_id=?' );
 
-         $stmt->bind_param( 'ii', $postId, $topicId );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $postId, $topicId );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_posts=user_posts+1, user_lastpost=? WHERE user_id=?' );
 
-         $stmt->bind_param( 'ii', $this->time, $admin_uid );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $this->time, $admin_uid );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_topics=forum_topics+1, forum_lastpost=? WHERE forum_id=?' );
 
-         $stmt->bind_param( 'ii', $postId, $forumId );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $postId, $forumId );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->sets['topics']++;
 			$this->sets['posts']++;
@@ -542,86 +542,86 @@ Have fun and enjoy your new site!";
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=1' );
 			$perms = 	'{"board_view":true,"board_view_closed":true,"do_anything":true,"edit_avatar":true,"edit_profile":true,"edit_sig":true,"email_use":true,"forum_view":{"1":true,"2":true,"3":true},"is_admin":true,"page_create":true,"page_delete":true,"page_edit":true,"pm_noflood":true,"poll_create":{"1":true,"2":true,"3":true},"poll_vote":{"1":true,"2":true,"3":true},"post_attach":{"1":true,"2":true,"3":true},"post_attach_download":{"1":true,"2":true,"3":true},"post_create":{"1":true,"2":true,"3":true},"post_delete":{"1":true,"2":true,"3":true},"post_delete_old":{"1":true,"2":true,"3":true},"post_delete_own":{"1":true,"2":true,"3":true},"post_edit":{"1":true,"2":true,"3":true},"post_edit_old":{"1":true,"2":true,"3":true},"post_edit_own":{"1":true,"2":true,"3":true},"post_inc_userposts":{"1":true,"2":true,"3":true},"post_noflood":{"1":true,"2":true,"3":true},"post_viewip":{"1":true,"2":true,"3":true},"search_noflood":true,"topic_create":{"1":true,"2":true,"3":true},"topic_delete":{"1":true,"2":true,"3":true},"topic_delete_own":{"1":true,"2":true,"3":true},"topic_edit":{"1":true,"2":true,"3":true},"topic_edit_own":{"1":true,"2":true,"3":true},"topic_global":true,"topic_lock":{"1":true,"2":true,"3":true},"topic_lock_own":{"1":true,"2":true,"3":true},"topic_move":{"1":true,"2":true,"3":true},"topic_move_own":{"1":true,"2":true,"3":true},"topic_pin":{"1":true,"2":true,"3":true},"topic_pin_own":{"1":true,"2":true,"3":true},"topic_publish":{"1":true,"2":true,"3":true},"topic_publish_auto":{"1":true,"2":true,"3":true},"topic_split":{"1":true,"2":true,"3":true},"topic_split_own":{"1":true,"2":true,"3":true},"topic_unlock":{"1":true,"2":true,"3":true},"topic_unlock_own":{"1":true,"2":true,"3":true},"topic_unpin":{"1":true,"2":true,"3":true},"topic_unpin_own":{"1":true,"2":true,"3":true},"topic_view":{"1":true,"2":true,"3":true},"topic_view_unpublished":{"1":true,"2":true,"3":true}}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=1' );
-         $perms = '{"add_category":true,"approve_files":true,"category_view":true,"delete_category":true,"delete_files":true,"download_files":true,"edit_category":true,"edit_files":true,"move_files":true,"post_comment":true,"upload_files":true}';
+			$perms = '{"add_category":true,"approve_files":true,"category_view":true,"delete_category":true,"delete_files":true,"download_files":true,"edit_category":true,"edit_files":true,"move_files":true,"post_comment":true,"upload_files":true}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=2' );
 			$perms = 	'{"board_view":true,"board_view_closed":false,"do_anything":true,"edit_avatar":true,"edit_profile":true,"edit_sig":true,"email_use":true,"forum_view":{"1":true,"2":false,"3":true},"is_admin":false,"page_create":false,"page_delete":false,"page_edit":false,"pm_noflood":false,"poll_create":{"1":true,"2":false,"3":true},"poll_vote":{"1":true,"2":false,"3":true},"post_attach":{"1":true,"2":false,"3":true},"post_attach_download":{"1":true,"2":false,"3":true},"post_create":{"1":true,"2":true,"3":true},"post_delete":{"1":false,"2":false,"3":false},"post_delete_old":{"1":false,"2":false,"3":false},"post_delete_own":{"1":false,"2":false,"3":false},"post_edit":{"1":false,"2":false,"3":false},"post_edit_old":{"1":false,"2":false,"3":false},"post_edit_own":{"1":true,"2":false,"3":true},"post_inc_userposts":{"1":true,"2":false,"3":true},"post_noflood":{"1":false,"2":false,"3":false},"post_viewip":{"1":false,"2":false,"3":false},"search_noflood":false,"topic_create":{"1":true,"2":false,"3":true},"topic_delete":{"1":false,"2":false,"3":false},"topic_delete_own":{"1":false,"2":false,"3":false},"topic_edit":{"1":false,"2":false,"3":false},"topic_edit_own":{"1":true,"2":false,"3":true},"topic_global":false,"topic_lock":{"1":false,"2":false,"3":false},"topic_lock_own":{"1":false,"2":false,"3":false},"topic_move":{"1":false,"2":false,"3":false},"topic_move_own":{"1":false,"2":false,"3":false},"topic_pin":{"1":false,"2":false,"3":false},"topic_pin_own":{"1":false,"2":false,"3":false},"topic_publish":{"1":false,"2":false,"3":false},"topic_publish_auto":{"1":true,"2":false,"3":true},"topic_split":{"1":false,"2":false,"3":false},"topic_split_own":{"1":false,"2":false,"3":false},"topic_unlock":{"1":false,"2":false,"3":false},"topic_unlock_own":{"1":false,"2":false,"3":false},"topic_unpin":{"1":false,"2":false,"3":false},"topic_unpin_own":{"1":false,"2":false,"3":false},"topic_view":{"1":true,"2":false,"3":true},"topic_view_unpublished":{"1":false,"2":false,"3":false}}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=2' );
-         $perms = '{"add_category":false,"approve_files":false,"category_view":true,"delete_category":false,"delete_files":false,"download_files":true,"edit_category":false,"edit_files":false,"move_files":false,"post_comment":true,"upload_files":true}';
+			$perms = '{"add_category":false,"approve_files":false,"category_view":true,"delete_category":false,"delete_files":false,"download_files":true,"edit_category":false,"edit_files":false,"move_files":false,"post_comment":true,"upload_files":true}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=3' );
 			$perms =	'{"board_view":true,"board_view_closed":false,"do_anything":true,"edit_avatar":false,"edit_profile":false,"edit_sig":false,"email_use":false,"forum_view":{"1":true,"2":true,"3":true},"is_admin":false,"page_create":false,"page_delete":false,"page_edit":false,"pm_noflood":false,"poll_create":{"1":false,"2":false,"3":false},"poll_vote":{"1":false,"2":false,"3":false},"post_attach":{"1":false,"2":false,"3":false},"post_attach_download":{"1":false,"2":false,"3":false},"post_create":{"1":false,"2":false,"3":false},"post_delete":{"1":false,"2":false,"3":false},"post_delete_old":{"1":false,"2":false,"3":false},"post_delete_own":{"1":false,"2":false,"3":false},"post_edit":{"1":false,"2":false,"3":false},"post_edit_old":{"1":false,"2":false,"3":false},"post_edit_own":{"1":false,"2":false,"3":false},"post_inc_userposts":{"1":false,"2":false,"3":false},"post_noflood":{"1":false,"2":false,"3":false},"post_viewip":{"1":false,"2":false,"3":false},"search_noflood":false,"topic_create":{"1":false,"2":false,"3":false},"topic_delete":{"1":false,"2":false,"3":false},"topic_delete_own":{"1":false,"2":false,"3":false},"topic_edit":{"1":false,"2":false,"3":false},"topic_edit_own":{"1":false,"2":false,"3":false},"topic_global":false,"topic_lock":{"1":false,"2":false,"3":false},"topic_lock_own":{"1":false,"2":false,"3":false},"topic_move":{"1":false,"2":false,"3":false},"topic_move_own":{"1":false,"2":false,"3":false},"topic_pin":{"1":false,"2":false,"3":false},"topic_pin_own":{"1":false,"2":false,"3":false},"topic_publish":{"1":false,"2":false,"3":false},"topic_publish_auto":{"1":false,"2":false,"3":false},"topic_split":{"1":false,"2":false,"3":false},"topic_split_own":{"1":false,"2":false,"3":false},"topic_unlock":{"1":false,"2":false,"3":false},"topic_unlock_own":{"1":false,"2":false,"3":false},"topic_unpin":{"1":false,"2":false,"3":false},"topic_unpin_own":{"1":false,"2":false,"3":false},"topic_view":{"1":true,"2":true,"3":true},"topic_view_unpublished":{"1":false,"2":false,"3":false}}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=3' );
-         $perms = '{"add_category":false,"approve_files":false,"category_view":true,"delete_category":false,"delete_files":false,"download_files":true,"edit_category":false,"edit_files":false,"move_files":false,"post_comment":false,"upload_files":false}';
+			$perms = '{"add_category":false,"approve_files":false,"category_view":true,"delete_category":false,"delete_files":false,"download_files":true,"edit_category":false,"edit_files":false,"move_files":false,"post_comment":false,"upload_files":false}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=4' );
 			$perms = 	'{"board_view":false,"board_view_closed":false,"do_anything":false,"edit_avatar":false,"edit_profile":false,"edit_sig":false,"email_use":false,"forum_view":{"1":false,"2":false,"3":false},"is_admin":false,"page_create":false,"page_delete":false,"page_edit":false,"pm_noflood":false,"poll_create":{"1":false,"2":false,"3":false},"poll_vote":{"1":false,"2":false,"3":false},"post_attach":{"1":false,"2":false,"3":false},"post_attach_download":{"1":false,"2":false,"3":false},"post_create":{"1":false,"2":false,"3":false},"post_delete":{"1":false,"2":false,"3":false},"post_delete_old":{"1":false,"2":false,"3":false},"post_delete_own":{"1":false,"2":false,"3":false},"post_edit":{"1":false,"2":false,"3":false},"post_edit_old":{"1":false,"2":false,"3":false},"post_edit_own":{"1":false,"2":false,"3":false},"post_inc_userposts":{"1":false,"2":false,"3":false},"post_noflood":{"1":false,"2":false,"3":false},"post_viewip":{"1":false,"2":false,"3":false},"search_noflood":false,"topic_create":{"1":false,"2":false,"3":false},"topic_delete":{"1":false,"2":false,"3":false},"topic_delete_own":{"1":false,"2":false,"3":false},"topic_edit":{"1":false,"2":false,"3":false},"topic_edit_own":{"1":false,"2":false,"3":false},"topic_global":false,"topic_lock":{"1":false,"2":false,"3":false},"topic_lock_own":{"1":false,"2":false,"3":false},"topic_move":{"1":false,"2":false,"3":false},"topic_move_own":{"1":false,"2":false,"3":false},"topic_pin":{"1":false,"2":false,"3":false},"topic_pin_own":{"1":false,"2":false,"3":false},"topic_publish":{"1":false,"2":false,"3":false},"topic_publish_auto":{"1":false,"2":false,"3":false},"topic_split":{"1":false,"2":false,"3":false},"topic_split_own":{"1":false,"2":false,"3":false},"topic_unlock":{"1":false,"2":false,"3":false},"topic_unlock_own":{"1":false,"2":false,"3":false},"topic_unpin":{"1":false,"2":false,"3":false},"topic_unpin_own":{"1":false,"2":false,"3":false},"topic_view":{"1":false,"2":false,"3":false},"topic_view_unpublished":{"1":false,"2":false,"3":false}}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( "UPDATE %pgroups SET group_file_perms=? WHERE group_id=4" );
 			$perms = '{"add_category":false,"approve_files":false,"category_view":false,"delete_category":false,"delete_files":false,"download_files":false,"edit_category":false,"edit_files":false,"move_files":false,"post_comment":false,"upload_files":false}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=5' );
 			$perms = 	'{"board_view":true,"board_view_closed":false,"do_anything":true,"edit_avatar":true,"edit_profile":false,"edit_sig":false,"email_use":false,"forum_view":{"1":false,"2":false,"3":true},"is_admin":false,"page_create":false,"page_delete":false,"page_edit":false,"pm_noflood":false,"poll_create":{"1":false,"2":false,"3":false},"poll_vote":{"1":false,"2":false,"3":false},"post_attach":{"1":false,"2":false,"3":false},"post_attach_download":{"1":false,"2":false,"3":false},"post_create":{"1":false,"2":false,"3":false},"post_delete":{"1":false,"2":false,"3":false},"post_delete_old":{"1":false,"2":false,"3":false},"post_delete_own":{"1":false,"2":false,"3":false},"post_edit":{"1":false,"2":false,"3":false},"post_edit_old":{"1":false,"2":false,"3":false},"post_edit_own":{"1":false,"2":false,"3":false},"post_inc_userposts":{"1":false,"2":false,"3":false},"post_noflood":{"1":false,"2":false,"3":false},"post_viewip":{"1":false,"2":false,"3":false},"search_noflood":false,"topic_create":{"1":false,"2":false,"3":false},"topic_delete":{"1":false,"2":false,"3":false},"topic_delete_own":{"1":false,"2":false,"3":false},"topic_edit":{"1":false,"2":false,"3":false},"topic_edit_own":{"1":false,"2":false,"3":false},"topic_global":false,"topic_lock":{"1":false,"2":false,"3":false},"topic_lock_own":{"1":false,"2":false,"3":false},"topic_move":{"1":false,"2":false,"3":false},"topic_move_own":{"1":false,"2":false,"3":false},"topic_pin":{"1":false,"2":false,"3":false},"topic_pin_own":{"1":false,"2":false,"3":false},"topic_publish":{"1":false,"2":false,"3":false},"topic_publish_auto":{"1":false,"2":false,"3":false},"topic_split":{"1":false,"2":false,"3":false},"topic_split_own":{"1":false,"2":false,"3":false},"topic_unlock":{"1":false,"2":false,"3":false},"topic_unlock_own":{"1":false,"2":false,"3":false},"topic_unpin":{"1":false,"2":false,"3":false},"topic_unpin_own":{"1":false,"2":false,"3":false},"topic_view":{"1":false,"2":false,"3":true},"topic_view_unpublished":{"1":false,"2":false,"3":false}}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=5' );
 			$perms = '{"add_category":false,"approve_files":false,"category_view":true,"delete_category":false,"delete_files":false,"download_files":true,"edit_category":false,"edit_files":false,"move_files":false,"post_comment":false,"upload_files":false}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_perms=? WHERE group_id=6' );
 			$perms =	'{"board_view":true,"board_view_closed":true,"do_anything":true,"edit_avatar":true,"edit_profile":true,"edit_sig":true,"email_use":true,"forum_view":{"1":true,"2":false,"3":true},"is_admin":false,"page_create":false,"page_delete":false,"page_edit":true,"pm_noflood":true,"poll_create":{"1":true,"2":false,"3":true},"poll_vote":{"1":true,"2":false,"3":true},"post_attach":{"1":true,"2":false,"3":true},"post_attach_download":{"1":true,"2":true,"3":true},"post_create":{"1":true,"2":true,"3":true},"post_delete":{"1":true,"2":false,"3":true},"post_delete_old":{"1":true,"2":false,"3":true},"post_delete_own":{"1":false,"2":false,"3":false},"post_edit":{"1":true,"2":false,"3":true},"post_edit_old":{"1":true,"2":false,"3":true},"post_edit_own":{"1":false,"2":false,"3":false},"post_inc_userposts":{"1":true,"2":false,"3":true},"post_noflood":{"1":true,"2":false,"3":true},"post_viewip":{"1":true,"2":false,"3":true},"search_noflood":true,"topic_create":{"1":true,"2":false,"3":true},"topic_delete":{"1":true,"2":false,"3":true},"topic_delete_own":{"1":false,"2":false,"3":false},"topic_edit":{"1":true,"2":false,"3":true},"topic_edit_own":{"1":false,"2":false,"3":false},"topic_global":true,"topic_lock":{"1":true,"2":false,"3":true},"topic_lock_own":{"1":false,"2":false,"3":false},"topic_move":{"1":true,"2":false,"3":true},"topic_move_own":{"1":false,"2":false,"3":false},"topic_pin":{"1":true,"2":false,"3":true},"topic_pin_own":{"1":false,"2":false,"3":false},"topic_publish":{"1":true,"2":false,"3":true},"topic_publish_auto":{"1":true,"2":false,"3":true},"topic_split":{"1":true,"2":false,"3":true},"topic_split_own":{"1":false,"2":false,"3":false},"topic_unlock":{"1":true,"2":false,"3":true},"topic_unlock_own":{"1":false,"2":false,"3":false},"topic_unpin":{"1":true,"2":false,"3":true},"topic_unpin_own":{"1":false,"2":false,"3":false},"topic_view":{"1":true,"2":false,"3":true},"topic_view_unpublished":{"1":true,"2":false,"3":true}}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( "UPDATE %pgroups SET group_file_perms=? WHERE group_id=6" );
 			$perms = '{"add_category":true,"approve_files":true,"category_view":true,"delete_category":true,"delete_files":true,"download_files":true,"edit_category":true,"edit_files":true,"move_files":true,"post_comment":true,"upload_files":true}';
 
-         $stmt->bind_param( 's', $perms );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $perms );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			// Stupid as this may look, it appears to be quite necessary to allow categories to work.
 			$perms = new file_permissions( $this );

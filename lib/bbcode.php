@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -33,10 +33,10 @@ if( !defined( 'QUICKSILVERFORUMS' ) ) {
 
 class bbcode
 {
-   private $site;
-   private $censor;
-   private $emojis;
-   private $lang;
+	private $site;
+	private $censor;
+	private $emojis;
+	private $lang;
 
 	public function __construct( &$module )
 	{
@@ -70,9 +70,9 @@ class bbcode
 	{
 		$strtr = array();
 
-      // An ugly hack, but something is feeding this empty strings.
-      if( !$in || empty( $in ) )
-         return $in;
+		// An ugly hack, but something is feeding this empty strings.
+		if( !$in || empty( $in ) )
+			return $in;
 
 		if( $options & FORMAT_CENSOR ) {
 			$in = $this->process_censors( $in );
@@ -302,8 +302,8 @@ class bbcode
 			// Trim pointless space
 			$input = preg_replace( '/^<code><span style="color: #000000">\s(.+)\s<\/span>\s<\/code>$/', '<span style="color: #000000">$1</span>', $input );
 		} else {
-         $input = htmlentities( $input, ENT_COMPAT, 'UTF-8' ); // Regular text, process it as would be done otherwise.
-      }
+			$input = htmlentities( $input, ENT_COMPAT, 'UTF-8' ); // Regular text, process it as would be done otherwise.
+		}
 
 		if( isset( $tagged ) ) {
 			$input = str_replace( array( '&lt;?php&nbsp;', '?&gt;' ), '', $input );

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -1776,7 +1776,7 @@ class en
 	public function admin()
 	{
 		$this->admin_add_member_titles = 'Add automatic member titles';
-      $this->admin_akismet_api_key_test = 'Test Akismet API Key';
+        $this->admin_akismet_api_key_test = 'Test Akismet API Key';
 		$this->admin_ban_ips = 'Ban IP addresses';
 		$this->admin_censor = 'Censor words';
 		$this->admin_cp_denied = 'Access Denied';
@@ -1881,7 +1881,7 @@ class en
 		$this->board_cant_post = 'You cannot reply in this forum.';
 		$this->board_cant_topics = 'You cannot view or create topics in this forum.';
 		$this->board_forum = 'Forum';
-      $this->board_forums = 'Forums';
+        $this->board_forums = 'Forums';
 		$this->board_forum_url = 'URL Redirect:';
 		$this->board_guests = 'guests';
 		$this->board_last_post = 'Last Post';
@@ -1917,91 +1917,91 @@ class en
 	public function conversations()
 	{
 		$this->cv_conversations = 'Private Conversations';
-      $this->cv_akismet_posts_spam = 'Your post has been flagged as spam and must be approved by a moderator.';
+        $this->cv_akismet_posts_spam = 'Your post has been flagged as spam and must be approved by a moderator.';
 		$this->cv_attach = 'Attachments';
 		$this->cv_attach_add = 'Add Attachment';
 		$this->cv_attach_disrupt = 'Adding or removing attachments will not disrupt your post.';
 		$this->cv_attach_failed = 'The attachment upload failed. The file you specified may not exist.';
-      $this->cv_attached_image = 'Attached image:';
+        $this->cv_attached_image = 'Attached image:';
 		$this->cv_attach_not_allowed = 'You cannot attach files of that type.';
 		$this->cv_attach_remove = 'Remove Attachment';
 		$this->cv_attach_too_large = 'The specified file is too large. The maximum size is %d KB.';
-      $this->cv_attached = 'Attached file:';
-      $this->cv_attached_downloads = 'Downloads';
-      $this->cv_attached_filename = 'Filename:';
-      $this->cv_attached_size = 'Size:';
-      $this->cv_bottom = 'Go to the bottom of the page';
+        $this->cv_attached = 'Attached file:';
+        $this->cv_attached_downloads = 'Downloads';
+        $this->cv_attached_filename = 'Filename:';
+        $this->cv_attached_size = 'Size:';
+        $this->cv_bottom = 'Go to the bottom of the page';
 		$this->cv_by = 'By';
-      $this->cv_cannot_invite = 'No valid users were specified for invitation. They either do not exist or have private conversations disabled.';
-      $this->cv_cannot_send = 'The conversation cannot be started. The recipients may not exist, or they all have private conversations disabled.';
-      $this->cv_cant_reply = 'You do not have permission to reply to this conversation.';
-      $this->cv_edited = 'Last edited %s by %s';
-      $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br><br>The following members do not exist: %s<br><br>The following members are not accepting private conversations: %s';
-      $this->cv_error_invite = 'There were problems inviting some of the people you selected.<br><br>The following members do not exist: %s<br><br>The following members are not accepting private conversations: %s';
-      $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br><br>Please try again in a few seconds.';
-      $this->cv_group = 'Group';
+        $this->cv_cannot_invite = 'No valid users were specified for invitation. They either do not exist or have private conversations disabled.';
+        $this->cv_cannot_send = 'The conversation cannot be started. The recipients may not exist, or they all have private conversations disabled.';
+        $this->cv_cant_reply = 'You do not have permission to reply to this conversation.';
+        $this->cv_edited = 'Last edited %s by %s';
+        $this->cv_error = 'There were problems starting a conversation with some of the recipients.<br><br>The following members do not exist: %s<br><br>The following members are not accepting private conversations: %s';
+        $this->cv_error_invite = 'There were problems inviting some of the people you selected.<br><br>The following members do not exist: %s<br><br>The following members are not accepting private conversations: %s';
+        $this->cv_flood = 'You have started a conversation in the past %s seconds, and you may not send another right now.<br><br>Please try again in a few seconds.';
+        $this->cv_group = 'Group';
 		$this->cv_guest = 'As a guest, you cannot use private conversations. Please login or register.';
 		$this->cv_guest_user = 'Guest';
 		$this->cv_icon = 'Message Icon';
-      $this->cv_invite = 'Invite Others';
-      $this->cv_invite_others = 'Invite Others to Conversation';
-      $this->cv_invited = 'New users have been invited to the conversation.';
-      $this->cv_joined = 'Joined';
+        $this->cv_invite = 'Invite Others';
+        $this->cv_invite_others = 'Invite Others to Conversation';
+        $this->cv_invited = 'New users have been invited to the conversation.';
+        $this->cv_joined = 'Joined';
 		$this->cv_jump = 'Jump to newest post in topic';
 		$this->cv_last = 'Last Post';
-      $this->cv_last_five = 'Last Five Posts In Reverse Order';
-      $this->cv_level = 'Member Level';
-      $this->cv_multiple = 'Separate multiple recipients with commas.';
-      $this->cv_msg = 'Message';
-      $this->cv_must_msg = 'You must include a message when posting.';
+        $this->cv_last_five = 'Last Five Posts In Reverse Order';
+        $this->cv_level = 'Member Level';
+        $this->cv_multiple = 'Separate multiple recipients with commas.';
+        $this->cv_msg = 'Message';
+        $this->cv_must_msg = 'You must include a message when posting.';
 		$this->cv_new_convo = 'New Conversation';
-      $this->cv_newer = 'Newer Conversation';
-      $this->cv_new_post = 'Post is unread';
+        $this->cv_newer = 'Newer Conversation';
+        $this->cv_new_post = 'Post is unread';
 		$this->cv_no_convos = 'You have no private conversations to display.';
-      $this->cv_no_message = 'No message content was provided for the conversation you are trying to start.';
-      $this->cv_no_recipients = 'You cannot start a conversation without specifying at least one recipient.';
-      $this->cv_no_title = 'A conversation requires a title. Please go back and enter one.';
-      $this->cv_not_found_message = 'The conversation could not be found. It may have been deleted, moved, or perhaps never existed.';
-      $this->cv_no_newer = 'There is no newer conversation.';
+        $this->cv_no_message = 'No message content was provided for the conversation you are trying to start.';
+        $this->cv_no_recipients = 'You cannot start a conversation without specifying at least one recipient.';
+        $this->cv_no_title = 'A conversation requires a title. Please go back and enter one.';
+        $this->cv_not_found_message = 'The conversation could not be found. It may have been deleted, moved, or perhaps never existed.';
+        $this->cv_no_newer = 'There is no newer conversation.';
 		$this->cv_no_older = 'There is no older conversation.';
-      $this->cv_old_pmsystem = 'Old Message System';
-      $this->cv_older = 'Older Conversation';
+        $this->cv_old_pmsystem = 'Old Message System';
+        $this->cv_older = 'Older Conversation';
 		$this->cv_offline = 'This member is currently offline';
 		$this->cv_online = 'This member is currently online';
 		$this->cv_option_emojis = 'Convert emojis into images?';
 		$this->cv_option_bbcode = 'Format BBCode?';
-      $this->cv_options = 'Options';
+        $this->cv_options = 'Options';
 		$this->cv_pages = 'Pages';
-      $this->cv_participants = 'Participants';
-      $this->cv_post = 'Post';
-      $this->cv_posted = 'Posted';
-      $this->cv_posting = 'Posting';
-      $this->cv_posts = 'Posts';
-      $this->cv_preview = 'Preview';
-      $this->cv_private_conversations = 'Private Conversations';
-      $this->cv_quickreply = 'Quick Reply';
-      $this->cv_quote = 'Reply with a quote from this post';
+        $this->cv_participants = 'Participants';
+        $this->cv_post = 'Post';
+        $this->cv_posted = 'Posted';
+        $this->cv_posting = 'Posting';
+        $this->cv_posts = 'Posts';
+        $this->cv_preview = 'Preview';
+        $this->cv_private_conversations = 'Private Conversations';
+        $this->cv_quickreply = 'Quick Reply';
+        $this->cv_quote = 'Reply with a quote from this post';
 		$this->cv_replies = 'Replies';
-      $this->cv_reply = 'Reply to Topic';
-      $this->cv_reply_topic = 'Replying to conversation \'%s\':';
-      $this->cv_replying = 'Replying To Conversation';
-      $this->cv_sent_invite = 'has invited you into a private conversation.';
-      $this->cv_sent_mail = 'has started a private conversation with you.';
-      $this->cv_sent_reply = 'has replied to a private conversation you are participating in.';
-      $this->cv_separate_names = 'Separate names with commas.';
-      $this->cv_started = 'Your conversation has been started.';
+        $this->cv_reply = 'Reply to Topic';
+        $this->cv_reply_topic = 'Replying to conversation \'%s\':';
+        $this->cv_replying = 'Replying To Conversation';
+        $this->cv_sent_invite = 'has invited you into a private conversation.';
+        $this->cv_sent_mail = 'has started a private conversation with you.';
+        $this->cv_sent_reply = 'has replied to a private conversation you are participating in.';
+        $this->cv_separate_names = 'Separate names with commas.';
+        $this->cv_started = 'Your conversation has been started.';
 		$this->cv_starter = 'Starter';
-      $this->cv_title = 'Title';
-      $this->cv_to = 'To';
-      $this->cv_top = 'Go to the top of the page';
+        $this->cv_title = 'Title';
+        $this->cv_to = 'To';
+        $this->cv_top = 'Go to the top of the page';
 		$this->cv_topic = 'Topic';
 		$this->cv_topic_posted = 'Posted';
 		$this->cv_unread = 'Jump to oldest unread post';
-      $this->cv_unreg = 'Unregistered';
-      $this->cv_users = 'Users:';
-      $this->cv_view_topic = 'View Entire Conversation';
+        $this->cv_unreg = 'Unregistered';
+        $this->cv_users = 'Users:';
+        $this->cv_view_topic = 'View Entire Conversation';
 		$this->cv_views = 'Views';
-      $this->cv_viewing = 'Viewing Conversation';
+        $this->cv_viewing = 'Viewing Conversation';
 	}
 
 	public function cp()
@@ -2240,7 +2240,7 @@ class en
 		$this->files_invalid_category = 'An invalid category was entered. Please check the URL.';
 		$this->files_invalid_file = 'An invalid file ID was entered. Please check the URL.';
 		$this->files_invalid_option = 'Invalid option flag';
-      $this->files_invalid_user = 'An invalid user ID was entered. Please check the URL.';
+        $this->files_invalid_user = 'An invalid user ID was entered. Please check the URL.';
 		$this->files_moderator = 'Moderator';
 		$this->files_modify_info = 'Modify File Information';
 		$this->files_move = 'Move';
@@ -2525,7 +2525,7 @@ class en
 		$this->main_affiliates = 'Related Links';
 		$this->main_banned = 'You have been banned from viewing any portion of this board.';
 		$this->main_code = 'Code';
-      $this->main_conversations = 'Conversations';
+        $this->main_conversations = 'Conversations';
 		$this->main_cp = 'Control Panel';
 		$this->main_files = 'Files';
 		$this->main_forum = 'Forum';
@@ -2540,7 +2540,7 @@ class en
 		$this->main_mark = 'Mark all';
 		$this->main_mark1 = 'Mark all topics as read';
 		$this->main_markforum_read = 'Mark forum as read';
-      $this->main_members = 'Members';
+        $this->main_members = 'Members';
 		$this->main_member_newest = 'Newest Member';
 		$this->main_messenger = 'Messenger';
 		$this->main_new = 'new';
@@ -2680,7 +2680,7 @@ class en
 		$this->mod_error_move_global = 'You cannot move a global topic. Edit the topic before moving it.';
 		$this->mod_error_move_same = 'You cannot move a topic to the forum it is already in.';
 		$this->mod_ip_view = 'View IP History';
-      $this->mod_ip_view_no_user = 'No such user ID exists.';
+        $this->mod_ip_view_no_user = 'No such user ID exists.';
 		$this->mod_ip_view_not_allowed = 'You are not permitted to view poster IP history.';
 		$this->mod_ip_view_posted = '%s has posted from the following IP addresses:<br>';
 		$this->mod_label_controls = 'Moderator Controls';
@@ -2906,7 +2906,7 @@ class en
 		$this->pm_success = 'Your message was sent successfully.';
 		$this->pm_sure_del = 'Are you sure you want to delete this message?';
 		$this->pm_sure_delall = 'Are you sure you want to delete all messages from this folder?';
-      $this->pm_system_disabled = 'The old private messaging system has been disabled. Please use the new private conversations system instead.';
+        $this->pm_system_disabled = 'The old private messaging system has been disabled. Please use the new private conversations system instead.';
 		$this->pm_title = 'Title';
 		$this->pm_to = 'To';
 	}
@@ -3102,7 +3102,7 @@ class en
 		$this->register_cookie_required = 'You must enable cookies in order to register on this site.';
 		$this->register_done = 'You have been registered! You can now login.';
 		$this->register_email = 'Email Address';
-      $this->register_email_domain_invalid = 'The email domain you provided does not exist or is not configured to receive mail.';
+        $this->register_email_domain_invalid = 'The email domain you provided does not exist or is not configured to receive mail.';
 		$this->register_email_invalid = 'The email address you entered is invalid.';
 		$this->register_email_msg = 'This is an automated email generated by QSF Portal, and sent to you in order';
 		$this->register_email_msg2 = 'for you to activate your account with';
@@ -3204,11 +3204,11 @@ class en
 	{
 		$this->settings = 'Settings';
 		$this->settings_active = 'Active Users Settings';
-      $this->settings_allow = 'Allow';
-      $this->settings_akismet_api_key_invalid = 'Your Akismet API Key is not valid. Check with the Akismet website to make sure you have the right key specified.';
-      $this->settings_akismet_api_key_missing = 'You have not set an API Key for Akismet yet.';
-      $this->settings_akismet_api_key_test = 'Test Akismet API Key';
-      $this->settings_akismet_api_key_valid = 'Your Akismet API Key is valid.';
+        $this->settings_allow = 'Allow';
+        $this->settings_akismet_api_key_invalid = 'Your Akismet API Key is not valid. Check with the Akismet website to make sure you have the right key specified.';
+        $this->settings_akismet_api_key_missing = 'You have not set an API Key for Akismet yet.';
+        $this->settings_akismet_api_key_test = 'Test Akismet API Key';
+        $this->settings_akismet_api_key_valid = 'Your Akismet API Key is valid.';
 		$this->settings_akismet_email_enable = 'Email Form Protection';
 		$this->settings_akismet_email_enable_msg = 'Spam filter protection for the user email forms.';
 		$this->settings_akismet_posts_enable = 'Forum Post Protection';
@@ -3434,7 +3434,7 @@ class en
 		$this->topic_attached_downloads = 'Downloads';
 		$this->topic_attached_filename = 'Filename:';
 		$this->topic_attached_image = 'Attached image:';
-      $this->topic_attached_invalid = 'The attachment you are trying to download does not exist.';
+        $this->topic_attached_invalid = 'The attachment you are trying to download does not exist.';
 		$this->topic_attached_perm = 'You do not have permission to download this file.';
 		$this->topic_attached_size = 'Size:';
 		$this->topic_attached_title = 'Attached File';

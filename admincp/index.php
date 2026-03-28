@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -189,12 +189,12 @@ if( $admin->sets['fp_enabled'] ) {
 if( !isset( $admin->get['skin'] ) ) {
 	$stmt = $admin->db->prepare_query( 'SELECT skin_dir FROM %pskins WHERE skin_id=?' );
 
-   $stmt->bind_param( 'i', $admin->user['user_skin'] );
-   $admin->db->execute_query( $stmt );
+	$stmt->bind_param( 'i', $admin->user['user_skin'] );
+	$admin->db->execute_query( $stmt );
 
-   $result = $stmt->get_result();
-   $skin = $admin->db->nqfetch( $result );
-   $stmt->close();
+	$result = $stmt->get_result();
+	$skin = $admin->db->nqfetch( $result );
+	$stmt->close();
 
 	$admin->skin = $skin['skin_dir'];
 } elseif( $admin->perms->auth( 'is_admin' ) ) {
@@ -205,12 +205,12 @@ if( !isset( $admin->get['skin'] ) ) {
 
 	$dev_skin = $admin->db->prepare_query( 'SELECT skin_dir FROM %pskins WHERE skin_id=?' );
 
-   $stmt->bind_param( 'i', $skin );
-   $admin->db->execute_query( $stmt );
+	$stmt->bind_param( 'i', $skin );
+	$admin->db->execute_query( $stmt );
 
-   $result = $stmt->get_result();
-   $dev_skin = $admin->db->nqfetch( $result );
-   $stmt->close();
+	$result = $stmt->get_result();
+	$dev_skin = $admin->db->nqfetch( $result );
+	$stmt->close();
 
 	if( $dev_Skin )
 		$admin->skin = $dev_skin['skin_dir'];
@@ -256,7 +256,7 @@ if( $admin->nohtml ) {
 	$xtpl->assign( 'admin_prune', $admin->lang->admin_prune );
 
 	$xtpl->assign( 'admin_members', $admin->lang->admin_members );
-   $xtpl->assign( 'admin_members_list', $admin->lang->admin_members_list );
+	$xtpl->assign( 'admin_members_list', $admin->lang->admin_members_list );
 	$xtpl->assign( 'admin_edit_member', $admin->lang->admin_edit_member );
 	$xtpl->assign( 'admin_delete_member', $admin->lang->admin_delete_member );
 	$xtpl->assign( 'admin_edit_member_perms', $admin->lang->admin_edit_member_perms );

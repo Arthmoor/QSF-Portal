@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -136,15 +136,15 @@ class tool
 				}
 				break;
 
-         case TYPE_EMAIL_DOMAIN:
-            // $range is unused
-            list( $username, $domainname ) = explode( '@', $var );
+			case TYPE_EMAIL_DOMAIN:
+				// $range is unused
+				list( $username, $domainname ) = explode( '@', $var );
 
-            $response = checkdnsrr( $domainname, 'MX' );
+				$response = checkdnsrr( $domainname, 'MX' );
 
-            if( !$response )
-               $unchanged = false;
-            break;
+				if( !$response )
+				$unchanged = false;
+			break;
 
 			default:
 				// Invalid type! Only developers should ever see this error

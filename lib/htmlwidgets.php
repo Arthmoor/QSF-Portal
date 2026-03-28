@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -38,13 +38,13 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class htmlwidgets extends forumutils
 {
-   private $db;
-   private $lang;
-   private $site;
-   private $skin;
-   private $user;
-   private $sets;
-   private $perms;
+	private $db;
+	private $lang;
+	private $site;
+	private $skin;
+	private $user;
+	private $sets;
+	private $perms;
 
 	public $tree    = null;              // The navigational tree @var string
 
@@ -57,13 +57,13 @@ class htmlwidgets extends forumutils
 	{
 		parent::__construct( $qsf );
 
-      $this->db = &$qsf->db;
+		$this->db = &$qsf->db;
 		$this->lang = &$qsf->lang;
 		$this->site = &$qsf->site;
 		$this->skin = &$qsf->skin;
 		$this->user = &$qsf->user;
 		$this->sets = &$qsf->sets;
-      $this->perms = &$qsf->perms;
+		$this->perms = &$qsf->perms;
 	}
 
 	/**
@@ -75,8 +75,8 @@ class htmlwidgets extends forumutils
 	 */
 	public function clean_url( $link )
 	{
-      if( $link == null )
-         $link = '';
+		if( $link == null )
+			$link = '';
 		$link = strtolower( $link );
 		$link = preg_replace( "/[^a-zA-Z0-9\- ]/", "", $link );
 		$link = str_replace( ' ', '-', $link );
@@ -245,7 +245,7 @@ class htmlwidgets extends forumutils
 	}
 
 	/**
-	 * Look at all the avatars avaialble and make them selectable options
+	 * Look at all the avatars available and make them selectable options
 	 *
 	 * @param string $current filename of the current avatar (if any)
 	 * @param string $relative Path to look for avatars in (optional)
@@ -430,7 +430,7 @@ class htmlwidgets extends forumutils
 	{
 		$out = null;
 
-      $zones = timezone_identifiers_list();
+		$zones = timezone_identifiers_list();
 
 		foreach( $zones as $offset => $zone_name )
 		{
@@ -708,13 +708,13 @@ class htmlwidgets extends forumutils
 	{
 		$url = null;
 		$avatar = $user['user_avatar'];
-      $img_height = $user['user_avatar_height'];
-      $img_width = $user['user_avatar_width'];
+		$img_height = $user['user_avatar_height'];
+		$img_width = $user['user_avatar_width'];
 
-      if( $height != 0 )
-         $img_height = $height;
-      if( $width != 0 )
-         $img_width = $width;
+		if( $height != 0 )
+			$img_height = $height;
+		if( $width != 0 )
+			$img_width = $width;
 
 		if( $this->user['user_view_avatars'] ) {
 			if( $user['user_avatar_type'] == 'local' )
@@ -727,15 +727,14 @@ class htmlwidgets extends forumutils
 				$avatar = "{$this->site}/avatars/uploaded/$avatar";
 			else {
 				$avatar = "{$this->site}/skins/{$this->skin}/images/noavatar.png";
-            if( $height == 0 )
-               $img_height = 100;
-            if( $width == 0 )
-               $img_width = 100;
+				if( $height == 0 )
+					$img_height = 100;
+				if( $width == 0 )
+					$img_width = 100;
 			}
 
 			$url = "<img src=\"{$avatar}\" alt=\"\" style=\"width:{$img_width}px; height:{$img_height}px;\">";
 		}
-
 		return $url;
 	}
 }

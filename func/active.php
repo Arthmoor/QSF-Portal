@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -27,7 +27,7 @@
  **/
 
 if( !defined( 'QUICKSILVERFORUMS' ) ) {
-	header('HTTP/1.0 403 Forbidden');
+	header( 'HTTP/1.0 403 Forbidden' );
 	die;
 }
 
@@ -138,3 +138,4 @@ class active extends qsfglobal
 	}
 }
 ?>
+

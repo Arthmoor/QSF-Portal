@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -72,30 +72,30 @@ class skins extends admin
 
 		$skin = $this->db->prepare_query( 'SELECT * FROM %pskins WHERE skin_dir=?' );
 
-      $stmt->bind_param( 's', $dir );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 's', $dir );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $skin = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$skin = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$skin ) {
 			$stmt = $this->db->prepare_query( 'INSERT INTO %pskins (skin_name, skin_dir, skin_enabled) VALUES ( ?, ?, 1 )' );
 
-         $stmt->bind_param( 'ss', $skin_name, $dir  );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ss', $skin_name, $dir  );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->skins_enable_skin, $skin_name . $this->lang->skins_is_enabled );
 		}
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pskins SET skin_enabled=1 WHERE skin_id=?' );
 
-      $stmt->bind_param( 'i', $skin['skin_id'] );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $skin['skin_id'] );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
-      return $this->message( $this->lang->skins_enable_skin, $skin['skin_name'] . $this->lang->skins_is_enabled );
+		return $this->message( $this->lang->skins_enable_skin, $skin['skin_name'] . $this->lang->skins_is_enabled );
 	}
 
 	private function disable_skin()
@@ -112,12 +112,12 @@ class skins extends admin
 
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pskins WHERE skin_id=? AND skin_enabled=1' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $skin = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$skin = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$skin ) {
 			return $this->message( $this->lang->skins_disable_skin, $this->lang->skins_cant_disable );
@@ -145,15 +145,15 @@ class skins extends admin
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pskins SET skin_enabled=0 WHERE skin_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_skin=1 WHERE user_skin=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		return $this->message( $this->lang->skins_disable_skin, $skin['skin_name'] . $this->lang->skins_is_disabled );
 	}
@@ -169,17 +169,17 @@ class skins extends admin
 
 		if( $dh = opendir( '../skins/' ) )
 		{
-         $skin_query = $this->db->prepare_query( 'SELECT skin_dir, skin_enabled FROM %pskins WHERE skin_dir=?' );
-         $skin_query->bind_param( 's', $skin_dir );
+			$skin_query = $this->db->prepare_query( 'SELECT skin_dir, skin_enabled FROM %pskins WHERE skin_dir=?' );
+			$skin_query->bind_param( 's', $skin_dir );
 
 			while( ( $item = readdir( $dh ) ) !== false )
 			{
 				if( $item[0] != '.' && is_dir( '../skins/' . $item ) ) {
-               $skin_dir = $item;
+					$skin_dir = $item;
 
-               $this->db->execute_query( $skin_query );
-               $result = $skin_query->get_result();
-               $check_skin = $this->db->nqfetch( $result );
+					$this->db->execute_query( $skin_query );
+					$result = $skin_query->get_result();
+					$check_skin = $this->db->nqfetch( $result );
 
 					if( !$check_skin || $check_skin['skin_enabled'] == 0 ) {
 						$fname = '../skins/' . $item . '/skin_data.txt';
@@ -200,7 +200,7 @@ class skins extends admin
 					}
 				}
 			}
-         $skin_query->close();
+			$skin_query->close();
 			closedir( $dh );
 		}
 

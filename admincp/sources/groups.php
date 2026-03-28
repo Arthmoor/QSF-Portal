@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -92,18 +92,18 @@ class groups extends admin
 
 				$stmt = $this->db->prepare_query( 'SELECT group_format, group_perms FROM %pgroups WHERE group_id=?' );
 
-            $stmt->bind_param( 'i', $this->post['user_group'] );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $this->post['user_group'] );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $copying = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$copying = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$stmt = $this->db->prepare_query( 'INSERT INTO %pgroups ( group_name, group_format, group_perms ) VALUES( ?, ?, ? )' );
 
-            $stmt->bind_param( 'sss', $this->format( $this->post['group_name'], FORMAT_HTMLCHARS ), $copying['group_format'], $copying['group_perms'] );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'sss', $this->format( $this->post['group_name'], FORMAT_HTMLCHARS ), $copying['group_format'], $copying['group_perms'] );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				return $this->message( $this->lang->groups_create, $this->lang->groups_created );
 			}
@@ -140,12 +140,12 @@ class groups extends admin
 
 					$stmt = $this->db->prepare_query( 'SELECT group_name, group_type, group_format FROM %pgroups WHERE group_id=?' );
 
-               $stmt->bind_param( 'i', $g );
-               $this->db->execute_query( $stmt );
+					$stmt->bind_param( 'i', $g );
+					$this->db->execute_query( $stmt );
 
-               $result = $stmt->get_result();
-               $old = $this->db->nqfetch( $result );
-               $stmt->close();
+					$result = $stmt->get_result();
+					$old = $this->db->nqfetch( $result );
+					$stmt->close();
 
 					if( $old['group_type'] == '' ) {
 						$old['group_type'] = 'CUSTOM';
@@ -194,12 +194,12 @@ class groups extends admin
 
 				$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_name=?, group_format=? WHERE group_id=?' );
 
-            $stmt->bind_param( 'ssi', $this->format( $this->post['group_name'], FORMAT_HTMLCHARS ), $this->post['group_format'], $g );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'ssi', $this->format( $this->post['group_name'], FORMAT_HTMLCHARS ), $this->post['group_format'], $g );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $query = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$query = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				return $this->message( $this->lang->groups_edit, $this->lang->groups_edited );
 			}
@@ -252,15 +252,15 @@ class groups extends admin
 
 				$stmt = $this->db->prepare_query( "DELETE FROM %pgroups WHERE group_id=? AND group_type=''" );
 
-            $stmt->bind_param( 'i', $this->post['old_group'] );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'i', $this->post['old_group'] );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_group=? WHERE user_group=?' );
 
-            $stmt->bind_param( 'ii', $this->post['new_group'], $this->post['old_group'] );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'ii', $this->post['new_group'], $this->post['old_group'] );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				return $this->message( $this->lang->groups_delete, $this->lang->groups_deleted );
 			}

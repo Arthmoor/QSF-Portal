@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -87,12 +87,12 @@ class email extends qsfglobal
 
 				$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $to );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $to );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $target = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$target = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				if( !isset( $target['user_name'] ) || ( $to == USER_GUEST_UID ) || $tname != $this->htmlwidgets->clean_url( $target['user_name'] ) ) {
 					return $this->message( $this->lang->email_email, $this->lang->email_no_member );
@@ -128,12 +128,12 @@ class email extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT user_id, user_email, user_email_form FROM %pusers WHERE user_name=?' );
 
-         $stmt->bind_param( 's', $this->post['to'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 's', $this->post['to'] );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $target = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$target = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$target['user_email_form'] ) {
 				return $this->message( $this->lang->email_email, $this->lang->email_blocked );
@@ -163,16 +163,16 @@ class email extends qsfglobal
 				catch( Exception $e ) {}
 
 				if( $spam_checked && $akismet != null ) {
-               $response = $akismet->is_this_spam();
+					$response = $akismet->is_this_spam();
 
-               if( isset( $response[1] ) && $response[1] == 'true' ) {
-                  $this->log_action( 'Spam Email Caught', 0, 0, 0 );
+					if( isset( $response[1] ) && $response[1] == 'true' ) {
+						$this->log_action( 'Spam Email Caught', 0, 0, 0 );
 
-                  $this->sets['spam_email_count']++;
-                  $this->write_sets();
+						$this->sets['spam_email_count']++;
+						$this->write_sets();
 
-                  return $this->message( $this->lang->email_email, $this->lang->email_akismet_email_spam );
-               }
+						return $this->message( $this->lang->email_email, $this->lang->email_akismet_email_spam );
+					}
 				}
 			}
 

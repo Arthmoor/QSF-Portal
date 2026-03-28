@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -41,20 +41,20 @@ class settings extends admin
 
 		switch( $this->get['s'] )
 		{
-      case 'akismet_api_key_test':
-         $this->set_title( $this->lang->settings_akismet_api_key_test );
-         $this->tree( $this->lang->settings_akismet_api_key_test );
+		case 'akismet_api_key_test':
+			$this->set_title( $this->lang->settings_akismet_api_key_test );
+			$this->tree( $this->lang->settings_akismet_api_key_test );
 
-         if( empty( $this->sets['wordpress_api_key'] ) ) {
-            return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_missing );
-         }
+			if( empty( $this->sets['wordpress_api_key'] ) ) {
+				return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_missing );
+			}
 
-         $key_test = $this->test_akismet_key();
-         if( $key_test )
-            return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_valid );
-         else
-            return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_invalid );
-         break;
+			$key_test = $this->test_akismet_key();
+			if( $key_test )
+				return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_valid );
+			else
+				return $this->message( $this->lang->settings_akismet_api_key_test, $this->lang->settings_akismet_api_key_invalid );
+			break;
 
 		case 'showcaptcha':
 			$this->set_title( $this->lang->settings_captcha_display );
@@ -104,12 +104,12 @@ class settings extends admin
 
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
 
-            $stmt->bind_param( 'i', $c );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $c );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $cap = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$cap = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				if( !$cap )
 					return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_no_pair );
@@ -144,21 +144,21 @@ class settings extends admin
 			$c = intval( $this->get['c'] );
 			$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
 
-         $stmt->bind_param( 'i', $c );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $c );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cap = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cap = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$cap )
 				return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_no_pair );
 
 			$stmt = $this->db->prepare_query( 'DELETE FROM %pcaptcha WHERE cap_id=?' );
 
-         $stmt->bind_param( 'i', $c );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $c );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->settings_captcha_delete, $this->lang->settings_captcha_deleted );
 			break;
@@ -175,12 +175,12 @@ class settings extends admin
 
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
 
-            $stmt->bind_param( 'i', $c );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $c );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $cap = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$cap = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				if( !$cap )
 					return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_no_pair );
@@ -215,21 +215,21 @@ class settings extends admin
 			$c = intval( $this->get['c'] );
 			$stmt = $this->db->prepare_query( 'SELECT * FROM %pcaptcha WHERE cap_id=?' );
 
-         $stmt->bind_param( 'i', $c );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $c );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $cap = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$cap = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( !$cap )
 				return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_no_pair );
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pcaptcha SET cap_question=?, cap_answer=? WHERE cap_id=?' );
 
-         $stmt->bind_param( 'ssi', $this->post['cap_question'], $this->post['cap_answer'], $c );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ssi', $this->post['cap_question'], $this->post['cap_answer'], $c );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->settings_captcha_edit, $this->lang->settings_captcha_edited );
 			break;
@@ -264,9 +264,9 @@ class settings extends admin
 
 			$stmt = $this->db->prepare_query( 'INSERT INTO %pcaptcha (cap_question, cap_answer) VALUES( ?, ? )' );
 
-         $stmt->bind_param( 'ss', $this->post['cap_question'], $this->post['cap_answer'] );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ss', $this->post['cap_question'], $this->post['cap_answer'] );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->settings_captcha_pair, $this->lang->settings_captcha_added );
 			break;
@@ -643,13 +643,13 @@ class settings extends admin
 
 			$stmt = $this->db->prepare_query( 'SELECT group_name FROM %pgroups WHERE group_id=?' );
 
-         $group_type = intval( USER_AWAIT );
-         $stmt->bind_param( 'i', $group_type );
-         $this->db->execute_query( $stmt );
+			$group_type = intval( USER_AWAIT );
+			$stmt->bind_param( 'i', $group_type );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $group = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$group = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$xtpl->assign( 'group_name', $group['group_name'] );
 
@@ -969,42 +969,42 @@ class settings extends admin
 
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_language=?, user_skin=? WHERE user_id=?' );
 
-         $user_id = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'ssi', $this->post['default_lang'], $this->post['default_skin'], $user_id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$user_id = intval( USER_GUEST_UID );
+			$stmt->bind_param( 'ssi', $this->post['default_lang'], $this->post['default_skin'], $user_id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->write_sets();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_tos=?' );
 
-         $stmt->bind_param( 's', $tos_text );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $tos_text );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_tos_files=?' );
 
-         $stmt->bind_param( 's', $tos_files_text );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $tos_files_text );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_meta_keywords=?' );
 
-         $stmt->bind_param( 's', $meta_keywords );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $meta_keywords );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_meta_description=?' );
 
-         $stmt->bind_param( 's', $meta_description );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $meta_description );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_mobile_icons=?' );
 
-         $stmt->bind_param( 's', $mobile_icons );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 's', $mobile_icons );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->settings, $this->lang->settings_updated );
 			break;
@@ -1018,7 +1018,7 @@ class settings extends admin
 
 		$response = $akismet->is_key_valid();
 
-      return $response;
+		return $response;
 	}
 }
 ?>

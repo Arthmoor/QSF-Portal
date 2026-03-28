@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -63,25 +63,25 @@ class conversations extends qsfglobal
 
 		switch( $this->get['s'] )
 		{
-         case 'newconvo':
-            return $this->start_conversation();
-            break;
+			case 'newconvo':
+				return $this->start_conversation();
+			break;
 
-         case 'viewconvo':
-            return $this->view_conversation();
-            break;
+			case 'viewconvo':
+				return $this->view_conversation();
+			break;
 
-         case 'reply':
-            return $this->reply();
-            break;
- 
-         case 'invite':
-            return $this->invite_users();
-            break;
+			case 'reply':
+				return $this->reply();
+			break;
 
-         default: // Falls down to the view page for all of a user's conversations.
+			case 'invite':
+				return $this->invite_users();
+			break;
+
+			default: // Falls down to the view page for all of a user's conversations.
             break;
-      }
+		}
 
 		if( isset( $this->get['num'] ) ) {
 			$n = intval( $this->get['num'] );
@@ -126,12 +126,12 @@ class conversations extends qsfglobal
 		// Figure out if it will need page navigation links
 		$stmt = $this->db->prepare_query( 'SELECT COUNT(conv_id) AS count FROM %pconversations WHERE FIND_IN_SET( ?, conv_users )' );
 
-      $stmt->bind_param( 's', $this->user['user_id'] );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 's', $this->user['user_id'] );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $conv = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$conv = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$pagelinks = $this->htmlwidgets->get_pages( $conv['count'], "index.php?a=conversations&amp;order={$this->get['order']}&amp;asc=$lasc", $min, $n );
 
@@ -141,27 +141,27 @@ class conversations extends qsfglobal
 		$xtpl->assign( 'skin', $this->skin );
 		$xtpl->assign( 'tree', $this->htmlwidgets->tree );
 		$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
-      $xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
-      $xtpl->assign( 'cv_new_convo', $this->lang->cv_new_convo );
+		$xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
+		$xtpl->assign( 'cv_new_convo', $this->lang->cv_new_convo );
 		$xtpl->assign( 'cv_topic', $this->lang->cv_topic );
 		$xtpl->assign( 'cv_starter', $this->lang->cv_starter );
 		$xtpl->assign( 'cv_replies', $this->lang->cv_replies );
 		$xtpl->assign( 'cv_views', $this->lang->cv_views );
 		$xtpl->assign( 'cv_last', $this->lang->cv_last );
-      $xtpl->assign( 'cv_pages', $this->lang->cv_pages );
-      $xtpl->assign( 'conv_jump', $this->lang->cv_jump );
-      $xtpl->assign( 'conv_topic_posted', $this->lang->cv_topic_posted );
-      $xtpl->assign( 'cv_old_pmsystem', $this->lang->cv_old_pmsystem );
-      $xtpl->assign( 'pagelinks', $pagelinks );
+		$xtpl->assign( 'cv_pages', $this->lang->cv_pages );
+		$xtpl->assign( 'conv_jump', $this->lang->cv_jump );
+		$xtpl->assign( 'conv_topic_posted', $this->lang->cv_topic_posted );
+		$xtpl->assign( 'cv_old_pmsystem', $this->lang->cv_old_pmsystem );
+		$xtpl->assign( 'pagelinks', $pagelinks );
 
 		$convos = $this->getConvos( $xtpl, $min, $n, $m, $order );
 		if( !$convos ) {
-         $xtpl->assign( 'cv_no_convos', $this->lang->cv_no_convos );
+			$xtpl->assign( 'cv_no_convos', $this->lang->cv_no_convos );
 			$xtpl->parse( 'Conversations.Topics.NoTopics' );
-      }
+		}
 
-      $xtpl->parse( 'Conversations.Topics' );
-      $xtpl->parse( 'Conversations' );
+		$xtpl->parse( 'Conversations.Topics' );
+		$xtpl->parse( 'Conversations' );
 		return $xtpl->text( 'Conversations' );
 	}
 
@@ -176,37 +176,37 @@ class conversations extends qsfglobal
 			ORDER BY $order
 			LIMIT ?, ?" );
 
-      $stmt->bind_param( 'sii', $this->user['user_id'], $min, $n );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'sii', $this->user['user_id'], $min, $n );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
-      $xtpl->assign( 'conv_by', $this->lang->cv_by );
+		$xtpl->assign( 'conv_by', $this->lang->cv_by );
 
-      $starter_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
-      $starter_query->bind_param( 'i', $starter_id );
+		$starter_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
+		$starter_query->bind_param( 'i', $starter_id );
 
-      $last_poster_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
-      $last_poster_query->bind_param( 'i', $last_poster_id );
+		$last_poster_query = $this->db->prepare_query( 'SELECT user_id, user_name FROM %pusers WHERE user_id=?' );
+		$last_poster_query->bind_param( 'i', $last_poster_id );
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{
-         $has_topics = true;
+			$has_topics = true;
 
-         // There's almost certainly a better way to do this but I can't come up with it, so we're going to very hackishly do this the ugly way.
-         $starter_id = $row['conv_starter'];
-         $this->db->execute_query( $starter_query );
-         $result = $starter_query->get_result();
-         $cv_starter = $this->db->nqfetch( $result );
+			// There's almost certainly a better way to do this but I can't come up with it, so we're going to very hackishly do this the ugly way.
+			$starter_id = $row['conv_starter'];
+			$this->db->execute_query( $starter_query );
+			$result = $starter_query->get_result();
+			$cv_starter = $this->db->nqfetch( $result );
 
-         $last_poster_id = $row['conv_last_poster'];
-         $this->db->execute_query( $last_poster_query );
-         $result = $last_poster_query->get_result();
-         $cv_last_poster = $this->db->nqfetch( $result );
+			$last_poster_id = $row['conv_last_poster'];
+			$this->db->execute_query( $last_poster_query );
+			$result = $last_poster_query->get_result();
+			$cv_last_poster = $this->db->nqfetch( $result );
 
-         if( $cv_starter != null && $cv_last_poster['user_id'] != USER_GUEST_UID ) {
-            $cv_starter = $cv_starter['user_name'];
+			if( $cv_starter != null && $cv_last_poster['user_id'] != USER_GUEST_UID ) {
+				$cv_starter = $cv_starter['user_name'];
 			} else {
 				$cv_starter = $this->lang->cv_guest_user;
 			}
@@ -249,27 +249,27 @@ class conversations extends qsfglobal
             $xtpl->assign( 'conv_icon', "<img src=\"{$this->site}/skins/{$this->skin}/mbicons/{$icon}\" alt=\"{$this->lang->cv_icon}\" class=\"left\">" );
 			} else {
             $xtpl->assign( 'conv_icon', null );
-         }
+			}
 
 			$conv_posted = $this->mbdate( DATE_LONG, $row['conv_posted'] );
 
-         $xtpl->assign( 'state', $state );
-         $xtpl->assign( 'conv_id', $row['conv_id'] );
-         $xtpl->assign( 'conv_posted', $this->mbdate( DATE_LONG, $row['conv_posted'] ) );
-         $xtpl->assign( 'conv_title', $row['conv_title'] );
+			$xtpl->assign( 'state', $state );
+			$xtpl->assign( 'conv_id', $row['conv_id'] );
+			$xtpl->assign( 'conv_posted', $this->mbdate( DATE_LONG, $row['conv_posted'] ) );
+			$xtpl->assign( 'conv_title', $row['conv_title'] );
 
-         if( trim( $row['conv_description'] ) != '' ) {
-            $row['conv_description'] = '<br>&raquo; ' . $this->format( $row['conv_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
-         } else {
-            $row['conv_description'] = null;
-         }
+			if( trim( $row['conv_description'] ) != '' ) {
+				$row['conv_description'] = '<br>&raquo; ' . $this->format( $row['conv_description'], FORMAT_CENSOR | FORMAT_HTMLCHARS );
+			} else {
+				$row['conv_description'] = null;
+			}
 
-         $xtpl->assign( 'conv_description', $row['conv_description'] );
+			$xtpl->assign( 'conv_description', $row['conv_description'] );
 
-         $Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], "index.php?a=conversations&amp;s=viewconvo&amp;id={$row['conv_id']}", ', ', 0, $m );
-         $xtpl->assign( 'Pages', $Pages );
+			$Pages = $this->htmlwidgets->get_pages_topic( $row['conv_replies'], "index.php?a=conversations&amp;s=viewconvo&amp;id={$row['conv_id']}", ', ', 0, $m );
+			$xtpl->assign( 'Pages', $Pages );
 
-         $xtpl->assign( 'conv_unread', 'conv_unread' );
+			$xtpl->assign( 'conv_unread', 'conv_unread' );
 
 			if( $row['conv_starter'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'conv_starter', $row['conv_starter'] );
@@ -283,13 +283,13 @@ class conversations extends qsfglobal
 				$xtpl->parse( 'Conversations.Topics.ConvoTopic.ConvoStarterGuest' );
 			}
 
-         $xtpl->assign( 'conv_replies', $row['conv_replies'] );
-         $xtpl->assign( 'conv_views', $row['conv_views'] );
-         $xtpl->assign( 'conv_edited', $row['conv_edited'] );
-         
-         $jump = '&amp;p=' . $row['conv_last_post'] . '#p' . $row['conv_last_post'];
+			$xtpl->assign( 'conv_replies', $row['conv_replies'] );
+			$xtpl->assign( 'conv_views', $row['conv_views'] );
+			$xtpl->assign( 'conv_edited', $row['conv_edited'] );
 
-         $xtpl->assign( 'jump', $jump );
+			$jump = '&amp;p=' . $row['conv_last_post'] . '#p' . $row['conv_last_post'];
+
+			$xtpl->assign( 'jump', $jump );
 
 			if( $cv_last_poster['user_id'] != USER_GUEST_UID ) {
 				$xtpl->assign( 'conv_last_poster', $cv_last_poster['user_id'] );
@@ -303,26 +303,26 @@ class conversations extends qsfglobal
 				$xtpl->parse( 'Conversations.Topics.ConvoTopic.LastPosterGuest' );
 			}
 
-         $xtpl->parse( 'Conversations.Topics.ConvoTopic' );
-		}
-      $starter_query->close();
-      $last_poster_query->close();
+			$xtpl->parse( 'Conversations.Topics.ConvoTopic' );
+		} // End While block
+		$starter_query->close();
+		$last_poster_query->close();
 		return $has_topics;
 	}
 
-   private function start_conversation()
-   {
-      if( !isset( $this->post['submit'] ) ) {
-         $to    = null;
+	private function start_conversation()
+	{
+		if( !isset( $this->post['submit'] ) ) {
+			$to    = null;
 			$title = null;
 			$msg   = null;
-         $desc  = null;
+			$desc  = null;
 			$preview = '';
-         $attached = null;
+			$attached = null;
 			$attached_data = null;
 			$upload_error = null;
 			$icon = -1;
-         $checkEmot = ' checked="checked"';
+			$checkEmot = ' checked="checked"';
 			$checkCode = ' checked="checked"';
 
 			if( !isset( $this->post['attached_data'] ) ) {
@@ -343,16 +343,16 @@ class conversations extends qsfglobal
 
 			$xtpl = new XTemplate( './skins/' . $this->skin . '/conversations.xtpl' );
 
-         $xtpl->assign( 'site', $this->site );
-         $xtpl->assign( 'skin', $this->skin );
-         $xtpl->assign( 'tree', $this->htmlwidgets->tree );
-         $xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
-         $xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
-         $xtpl->assign( 'cv_old_pmsystem', $this->lang->cv_old_pmsystem );
-         $xtpl->assign( 'cv_new_convo', $this->lang->cv_new_convo );
-         $xtpl->assign( 'cv_to', $this->lang->cv_to );
-         $xtpl->assign( 'cv_multiple', $this->lang->cv_multiple );
-         $xtpl->assign( 'cv_title', $this->lang->cv_title );
+			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
+			$xtpl->assign( 'tree', $this->htmlwidgets->tree );
+			$xtpl->assign( 'main_forum_rules', $this->lang->main_forum_rules );
+			$xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
+			$xtpl->assign( 'cv_old_pmsystem', $this->lang->cv_old_pmsystem );
+			$xtpl->assign( 'cv_new_convo', $this->lang->cv_new_convo );
+			$xtpl->assign( 'cv_to', $this->lang->cv_to );
+			$xtpl->assign( 'cv_multiple', $this->lang->cv_multiple );
+			$xtpl->assign( 'cv_title', $this->lang->cv_title );
 
 			$icon = isset( $this->post['icon'] ) ? $this->post['icon'] : -1;
 			$msg_icons = $this->htmlwidgets->get_icons( $icon );
@@ -363,20 +363,20 @@ class conversations extends qsfglobal
 			$xtpl->assign( 'smilies', $this->bbcode->generate_emoji_links() );
 			$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
 
-         if( isset( ( $this->get['to'] ) ) ) {
-            $to = base64_decode( $this->get['to'] );
-            $to = $this->format( $to, FORMAT_HTMLCHARS );
-         }
+			if( isset( ( $this->get['to'] ) ) ) {
+				$to = base64_decode( $this->get['to'] );
+				$to = $this->format( $to, FORMAT_HTMLCHARS );
+			}
  
-         if( isset( $this->get['title'] ) && isset( $this->get['text'] ) ) {
-            $title = base64_decode( $this->get['title'] );
-            $title = $this->format( $title, FORMAT_HTMLCHARS | FORMAT_CENSOR );
+			if( isset( $this->get['title'] ) && isset( $this->get['text'] ) ) {
+				$title = base64_decode( $this->get['title'] );
+				$title = $this->format( $title, FORMAT_HTMLCHARS | FORMAT_CENSOR );
 
 				$text = base64_decode( $this->get['text'] );
 				$msg = $this->format( $text, FORMAT_HTMLCHARS );
-         }
+			}
 
-         if( isset( $this->post['preview'] ) ) {
+			if( isset( $this->post['preview'] ) ) {
 				$preview_text = $this->post['message'];
 				$msg = $this->format( $preview_text, FORMAT_HTMLCHARS );
 				$preview_text = $this->format( $preview_text, FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_BBCODE | FORMAT_EMOJIS );
@@ -385,14 +385,14 @@ class conversations extends qsfglobal
 				$title = $this->format( $this->post['title'], FORMAT_HTMLCHARS | FORMAT_CENSOR );
 				$preview_title = $title;
 
-            $preview_desc = $this->post['description'];
-            $desc = $this->format( $preview_desc, FORMAT_HTMLCHARS );
-            $preview_desc = $desc;
+				$preview_desc = $this->post['description'];
+				$desc = $this->format( $preview_desc, FORMAT_HTMLCHARS );
+				$preview_desc = $desc;
 
 				$xtpl->assign( 'preview_title', $preview_title );
 				$xtpl->assign( 'preview_text', $preview_text );
 
-            $params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
+				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
 				if( isset( $this->post['parseCode'] ) ) {
 					$params |= FORMAT_BBCODE;
@@ -409,11 +409,11 @@ class conversations extends qsfglobal
 				}
 
 				$xtpl->parse( 'Conversations.NewConvo.Preview' );
-         }
+			}
 
-         $xtpl->assign( 'to', $to );
-         $xtpl->assign( 'title', $title );
-         $xtpl->assign( 'description', $desc );
+			$xtpl->assign( 'to', $to );
+			$xtpl->assign( 'title', $title );
+			$xtpl->assign( 'description', $desc );
 			$xtpl->assign( 'msg', $msg );
 
 			$xtpl->assign( 'cv_options', $this->lang->cv_options );
@@ -444,9 +444,9 @@ class conversations extends qsfglobal
 			$xtpl->assign( 'cv_preview', $this->lang->cv_preview );
 
 			$xtpl->parse( 'Conversations.NewConvo' );
-         $xtpl->parse( 'Conversations' );
+			$xtpl->parse( 'Conversations' );
 			return $xtpl->text( 'Conversations' );
-      }
+		}
 
 		if( !$this->perms->auth( 'pm_noflood' ) && ( $this->user['user_lastpm'] > ( $this->time - $this->sets['flood_time_pm'] ) ) ) {
 			return $this->message( $this->lang->cv_private_conversations, sprintf( $this->lang->cv_flood, $this->sets['flood_time_pm'] ) );
@@ -460,35 +460,35 @@ class conversations extends qsfglobal
 			return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_no_title );
 		}
 
-      if( empty( $this->post['message'] ) ) {
-         return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_no_message );
-      }
+		if( empty( $this->post['message'] ) ) {
+			return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_no_message );
+		}
 
-      $icon = '';
-      if( isset( $this->post['icon'] ) )
-         $icon = $this->post['icon'];
+		$icon = '';
+		if( isset( $this->post['icon'] ) )
+			$icon = $this->post['icon'];
 
 		$users = explode( ',', $this->post['to'] );
 		$bad_name = array();
 		$bad_pm = array();
 		$ok_pm = array();
 
-      $user_query = $this->db->prepare_query( 'SELECT user_id, user_pm, user_name FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
-      $user_query->bind_param( 'si', $uname, $uid );
+		$user_query = $this->db->prepare_query( 'SELECT user_id, user_pm, user_name FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
+		$user_query->bind_param( 'si', $uname, $uid );
 
-      foreach( $users as $username )
-      {
-         $username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
-         $uname = str_replace( ' ', '', strtolower( $username ) );
-         $uid = intval( USER_GUEST_UID );
+		foreach( $users as $username )
+		{
+			$username = str_replace( '\\', '&#092;', $this->format( trim( $username ), FORMAT_HTMLCHARS | FORMAT_CENSOR ) );
+			$uname = str_replace( ' ', '', strtolower( $username ) );
+			$uid = intval( USER_GUEST_UID );
 
-         $this->db->execute_query( $user_query );
+			$this->db->execute_query( $user_query );
 
-         $result = $user_query->get_result();
-         $who = $this->db->nqfetch( $result );
+			$result = $user_query->get_result();
+			$who = $this->db->nqfetch( $result );
 
-         if( !isset( $who['user_id'] ) ) {
-			   $bad_name[] = $username;
+			if( !isset( $who['user_id'] ) ) {
+				$bad_name[] = $username;
 				continue;
 			}
 
@@ -497,61 +497,61 @@ class conversations extends qsfglobal
 				continue;
 			}
 
-         // User who started this should be excluded from the list.
-         if( $who['user_id'] != $this->user['user_id'] )
-            $ok_pm[] = $who['user_id'];
-      }
-      $user_query->close();
+			// User who started this should be excluded from the list.
+			if( $who['user_id'] != $this->user['user_id'] )
+				$ok_pm[] = $who['user_id'];
+		}
+		$user_query->close();
 
-      if( empty( $ok_pm ) ) {
-         return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_cannot_send );
-      }
+		if( empty( $ok_pm ) ) {
+			return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_cannot_send );
+		}
 
-      $recipients = implode( ',', $ok_pm );
-      $recipients = $this->user['user_id'] . ',' . $recipients;
+		$recipients = implode( ',', $ok_pm );
+		$recipients = $this->user['user_id'] . ',' . $recipients;
 
-      $stmt = $this->db->prepare_query( 'INSERT INTO %pconversations (conv_title, conv_description, conv_starter, conv_last_poster, conv_icon, conv_posted, conv_edited, conv_users) VALUES( ?, ?, ?, ?, ?, ?, ?, ? )' );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %pconversations (conv_title, conv_description, conv_starter, conv_last_poster, conv_icon, conv_posted, conv_edited, conv_users) VALUES( ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'ssiisiis', $this->post['title'], $this->post['description'], $this->user['user_id'], $this->user['user_id'], $icon, $this->time, $this->time, $recipients );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ssiisiis', $this->post['title'], $this->post['description'], $this->user['user_id'], $this->user['user_id'], $icon, $this->time, $this->time, $recipients );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
-      $conv_id = $this->db->insert_id( );
+		$conv_id = $this->db->insert_id( );
 
-      $stmt = $this->db->prepare_query( 'INSERT INTO %pconv_posts (post_convo, post_author, post_time, post_bbcode, post_emojis, post_ip, post_icon, post_text, post_referrer, post_agent) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
+		$stmt = $this->db->prepare_query( 'INSERT INTO %pconv_posts (post_convo, post_author, post_time, post_bbcode, post_emojis, post_ip, post_icon, post_text, post_referrer, post_agent) VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'iiiiisssss', $conv_id, $this->user['user_id'], $this->time, $this->post['parseCode'], $this->post['parseEmot'], $this->ip, $icon, $this->post['message'], $this->referrer, $this->agent );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'iiiiisssss', $conv_id, $this->user['user_id'], $this->time, $this->post['parseCode'], $this->post['parseEmot'], $this->ip, $icon, $this->post['message'], $this->referrer, $this->agent );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
-      $post_id = $this->db->insert_id( );
+		$post_id = $this->db->insert_id( );
 
-      $stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=? WHERE conv_id=?' );
+		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=? WHERE conv_id=?' );
 
-      $stmt->bind_param( 'ii', $post_id, $conv_id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $post_id, $conv_id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->cv_private_conversations}" );
 		$mailer->setServer( $this->sets['mailserver'] );
 
-      $email_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
-      $email_query->bind_param( 'i', $user );
+		$email_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
+		$email_query->bind_param( 'i', $user );
 
-      foreach( $ok_pm as $user )
-      {
-         // The user who started the conversation already knows and doesn't need to be notified.
-         if( $user == $this->user['user_id'] )
-            continue;
+		foreach( $ok_pm as $user )
+		{
+			// The user who started the conversation already knows and doesn't need to be notified.
+			if( $user == $this->user['user_id'] )
+				continue;
 
-         $this->db->execute_query( $email_query );
+			$this->db->execute_query( $email_query );
 
-         $result = $email_query->get_result();
-         $who = $this->db->nqfetch( $result );
+			$result = $email_query->get_result();
+			$who = $this->db->nqfetch( $result );
 
-         if( $who['user_pm_mail'] ) {
-            $message  = "{$this->sets['forum_name']}\n";
+			if( $who['user_pm_mail'] ) {
+				$message  = "{$this->sets['forum_name']}\n";
 				$message .= "{$this->site}/index.php?a=conversations&s=viewconvo&id={$conv_id}\n\n";
 				$message .= $this->user['user_name'] . " " . $this->lang->cv_sent_mail . "\n\n";
 				$message .= $this->lang->cv_title . ": " . $this->format( $this->post['title'], FORMAT_CENSOR );
@@ -559,19 +559,19 @@ class conversations extends qsfglobal
 				$mailer->setMessage( $message );
 				$mailer->setRecipient( $who['user_email'] );
 				$mailer->doSend();
-         }
-      }
-      $email_query->close();
+			}
+		}
+		$email_query->close();
 
 		if( $bad_name || $bad_pm ) {
 			return $this->message( $this->lang->cv_private_conversations, sprintf( $this->lang->cv_error, implode( '; ', $bad_name ), implode( '; ', $bad_pm ) ) );
 		}
 
-      return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_started );
-   }
+		return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_started );
+	}
 
-   private function view_conversation()
-   {
+	private function view_conversation()
+	{
 		if( !isset( $this->get['id'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->cv_conversations, $this->lang->cv_not_found_message );
@@ -605,34 +605,34 @@ class conversations extends qsfglobal
 			$conv_id = 0;
 
 		if( isset( $this->get['view'] ) ) {
-         $this->validator->validate( $this->get['view'], TYPE_STRING, array( 'newer', 'older' ), false );
-      } else {
-         $this->get['view'] = false;
-      }
+			$this->validator->validate( $this->get['view'], TYPE_STRING, array( 'newer', 'older' ), false );
+		} else {
+			$this->get['view'] = false;
+		}
 
 		if( isset( $this->get['p'] ) ) {
 			$postnum = intval( $this->get['p'] );
-         $this->validator->validate( $postnum, TYPE_UINT );
-      } else {
-         $postnum = false;
-      }
+			$this->validator->validate( $postnum, TYPE_UINT );
+		} else {
+			$postnum = false;
+		}
 
 		if( isset( $this->get['unread'] ) ) {
-         $unread = true;
-      }
+			$unread = true;
+		}
 
 		$stmt = $this->db->prepare_query( 'SELECT c.conv_title, c.conv_description, c.conv_starter, c.conv_last_post, c.conv_last_poster, 
-         c.conv_icon, c.conv_posted, c.conv_edited, c.conv_replies, c.conv_users
+			c.conv_icon, c.conv_posted, c.conv_edited, c.conv_replies, c.conv_users
 			FROM %pconversations c
 			WHERE FIND_IN_SET( ?, c.conv_users )
-         AND c.conv_id=?' );
+			AND c.conv_id=?' );
 
-      $stmt->bind_param( 'si', $this->user['user_id'], $conv_id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'si', $this->user['user_id'], $conv_id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $conv = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$conv = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$conv ) {
 			$this->set_title( $this->lang->cv_conversations );
@@ -654,18 +654,18 @@ class conversations extends qsfglobal
 					WHERE FIND_IN_SET( ?, conv_users ) AND ($where)
 					ORDER BY conv_edited $order LIMIT 1" );
 
-         $stmt->bind_param( 'si', $this->user['user_id'], $conv['conv_edited'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'si', $this->user['user_id'], $conv['conv_edited'] );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $new_conv = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$new_conv = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $new_conv ) {
-            // Move to that topic
+				// Move to that topic
 				header( "Location: {$this->site}/index.php?a=conversations&id={$new_conv['conv_id']}" );
 				return;
-         } else {
+			} else {
 				header( 'HTTP/1.0 404 Not Found' );
 
 				if( $this->get['view'] == 'older' ) {
@@ -674,7 +674,7 @@ class conversations extends qsfglobal
 					return $this->message( $this->lang->cv_not_found_message, $this->lang->cv_no_newer );
 				}
 			}
-      }
+		}
 
 		if( $unread ) {
 			// Jump to the first unread post (or the last post)
@@ -682,12 +682,12 @@ class conversations extends qsfglobal
 
 			$posts = $this->db->prepare_query( 'SELECT COUNT(post_id) posts FROM %pconv_posts WHERE post_convo=? AND post_time < ?' );
 
-         $stmt->bind_param( 'ii', $conv_id, $timeread );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $conv_id, $timeread );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $posts = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$posts = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $posts )
 				$postCount = $posts['posts'] + 1;
@@ -704,12 +704,12 @@ class conversations extends qsfglobal
 			// We need to find what page this post exists on!
 			$stmt = $this->db->prepare_query( 'SELECT COUNT(post_id) posts FROM %pconv_posts WHERE post_convo=? AND post_id < ?' );
 
-         $stmt->bind_param( 'ii', $conv_id, $postnum );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $conv_id, $postnum );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $posts = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$posts = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $posts )
 				$postCount = $posts['posts'] + 1;
@@ -724,14 +724,14 @@ class conversations extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_views=conv_views+1 WHERE conv_id=?' );
 
-      $stmt->bind_param( 'i', $conv_id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $conv_id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$conv['conv_title'] = $this->format( $conv['conv_title'], FORMAT_CENSOR );
 		$title_html = $this->format( $conv['conv_title'], FORMAT_HTMLCHARS );
 
-      $title_short = $conv['conv_title'];
+		$title_short = $conv['conv_title'];
 
 		if( strlen( $conv['conv_title'] ) > 30 ) {
 			$title_short = substr( $conv['conv_title'], 0, 29 ) . '...';
@@ -749,8 +749,8 @@ class conversations extends qsfglobal
 		$user_started_topic = ( $this->user['user_id'] == $conv['conv_starter'] );
 		$opts = array();
  
-      // Link options get built here
-      if( !$opts ) {
+		// Link options get built here
+		if( !$opts ) {
 			$mod_opts = '&nbsp;';
 		} else {
 			$mod_opts = $this->lang->topic_options . ': [ ' . implode(' | ', $opts) . ' ]';
@@ -765,11 +765,11 @@ class conversations extends qsfglobal
 			FROM %pconv_posts p, %pattach a
 			WHERE p.post_convo = ? AND a.attach_post = p.post_id AND attach_pm = 1' );
 
-      $stmt->bind_param( 'i',  $conv_id  );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i',  $conv_id  );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$attachments = array();
 
@@ -796,11 +796,11 @@ class conversations extends qsfglobal
 			ORDER BY p.post_time
 			LIMIT ?, ?' );
 
-      $stmt->bind_param( 'iii', $conv_id, $min, $num );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'iii', $conv_id, $min, $num );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$i = 0;
 		$oldtime = $this->time - 900;
@@ -818,23 +818,23 @@ class conversations extends qsfglobal
 		$xtpl->assign( 'main_mark1', $this->lang->main_mark1 );
 		$xtpl->assign( 'main_mark', $this->lang->main_mark );
 		$xtpl->assign( 'conv_id', $conv_id );
-      $xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
-      $xtpl->assign( 'cv_new_convo', $this->lang->cv_new_convo );
+		$xtpl->assign( 'cv_conversations', $this->lang->cv_conversations );
+		$xtpl->assign( 'cv_new_convo', $this->lang->cv_new_convo );
 		$xtpl->assign( 'reply', $this->lang->reply );
 		$xtpl->assign( 'cv_quote', $this->lang->cv_quote );
-      $xtpl->assign( 'cv_new_post', $this->lang->cv_new_post );
-      $xtpl->assign( 'cv_top', $this->lang->cv_top );
+		$xtpl->assign( 'cv_new_post', $this->lang->cv_new_post );
+		$xtpl->assign( 'cv_top', $this->lang->cv_top );
 		$xtpl->assign( 'cv_bottom', $this->lang->cv_bottom );
-      $xtpl->assign( 'title_html', $title_html );
+		$xtpl->assign( 'title_html', $title_html );
 		$xtpl->assign( 'cv_newer', $this->lang->cv_newer );
 		$xtpl->assign( 'cv_older', $this->lang->cv_older );
-      $xtpl->assign( 'quote', $this->lang->quote );
-      $xtpl->assign( 'cv_unreg', $this->lang->cv_unreg );
+		$xtpl->assign( 'quote', $this->lang->quote );
+		$xtpl->assign( 'cv_unreg', $this->lang->cv_unreg );
 		$xtpl->assign( 'cv_online', $this->lang->cv_online );
 		$xtpl->assign( 'cv_offline', $this->lang->cv_offline );
-      $xtpl->assign( 'cv_group', $this->lang->cv_group );
-      $xtpl->assign( 'cv_posts', $this->lang->cv_posts );
-      $xtpl->assign( 'cv_joined', $this->lang->cv_joined );
+		$xtpl->assign( 'cv_group', $this->lang->cv_group );
+		$xtpl->assign( 'cv_posts', $this->lang->cv_posts );
+		$xtpl->assign( 'cv_joined', $this->lang->cv_joined );
 		$xtpl->assign( 'members_email_member', $this->lang->members_email_member );
 		$xtpl->assign( 'members_send_pm', $this->lang->members_send_pm );
 		$xtpl->assign( 'members_visit_twitter', $this->lang->members_visit_twitter );
@@ -844,44 +844,44 @@ class conversations extends qsfglobal
 		$xtpl->assign( 'cv_attached_filename', $this->lang->cv_attached_filename );
 		$xtpl->assign( 'cv_attached_size', $this->lang->cv_attached_size );
 		$xtpl->assign( 'cv_attached_downloads', $this->lang->cv_attached_downloads );
-      $xtpl->assign( 'cv_invite', $this->lang->cv_invite );
-      $xtpl->assign( 'cv_invite_others', $this->lang->cv_invite_others );
-      $xtpl->assign( 'cv_users', $this->lang->cv_users );
-      $xtpl->assign( 'cv_separate_names', $this->lang->cv_separate_names );
-      $xtpl->assign( 'cv_participants', $this->lang->cv_participants );
+		$xtpl->assign( 'cv_invite', $this->lang->cv_invite );
+		$xtpl->assign( 'cv_invite_others', $this->lang->cv_invite_others );
+		$xtpl->assign( 'cv_users', $this->lang->cv_users );
+		$xtpl->assign( 'cv_separate_names', $this->lang->cv_separate_names );
+		$xtpl->assign( 'cv_participants', $this->lang->cv_participants );
 
-      $xtpl->assign( 'conv_description', $conv['conv_description'] );
+		$xtpl->assign( 'conv_description', $conv['conv_description'] );
 
-      // Participants
-      $conv_users = explode( ',', $conv['conv_users'] );
+		// Participants
+		$conv_users = explode( ',', $conv['conv_users'] );
 
-      $user_query = $this->db->prepare_query( 'SELECT user_name, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height FROM %pusers WHERE user_id=?' );
-      $user_query->bind_param( 'i', $user );
+		$user_query = $this->db->prepare_query( 'SELECT user_name, user_avatar, user_avatar_type, user_avatar_width, user_avatar_height FROM %pusers WHERE user_id=?' );
+		$user_query->bind_param( 'i', $user );
 
-      foreach( $conv_users as $user )
-      {
-         $this->db->execute_query( $user_query );
+		foreach( $conv_users as $user )
+		{
+			$this->db->execute_query( $user_query );
 
-         $tresult = $user_query->get_result();
-         $result = $this->db->nqfetch( $tresult );
+			$tresult = $user_query->get_result();
+			$result = $this->db->nqfetch( $tresult );
 
-         if( $result ) {
-            $xtpl->assign( 'list_avatar', $this->htmlwidgets->display_avatar( $result, 35, 35 ) );
-            $xtpl->assign( 'list_name', $result['user_name'] );
+			if( $result ) {
+				$xtpl->assign( 'list_avatar', $this->htmlwidgets->display_avatar( $result, 35, 35 ) );
+				$xtpl->assign( 'list_name', $result['user_name'] );
 
-            $xtpl->parse( 'Conversation.Participant' );
-         }
-      }
-      $user_query->close();
+				$xtpl->parse( 'Conversation.Participant' );
+			}
+		}
+		$user_query->close();
 
-      // Page Links
-      $xtpl->assign( 'cv_pages', $this->lang->cv_pages );
+		// Page Links
+		$xtpl->assign( 'cv_pages', $this->lang->cv_pages );
 		$pagelinks = $this->htmlwidgets->get_pages( $conv['conv_replies'] + 1, "index.php?a=conversations&amp;s=viewconvo&amp;id={$conv_id}", $min, $num );
 		$xtpl->assign( 'pagelinks', $pagelinks );
 
 		$xtpl->assign( 'cv_reply', $this->lang->cv_reply );
 
-      // Moderator Controls
+		// Moderator Controls
 		if( strpos( $mod_opts, '&nbsp' ) === false ) {
 			$xtpl->assign( 'mod_opts', $mod_opts );
 
@@ -892,17 +892,17 @@ class conversations extends qsfglobal
 			$xtpl->parse( 'Conversation.PageLinksBottom' );
 		}
 
-      // Quick Reply
-      $xtpl->assign( 'cv_quickreply', $this->lang->cv_quickreply );
+		// Quick Reply
+		$xtpl->assign( 'cv_quickreply', $this->lang->cv_quickreply );
 		$xtpl->assign( 'cv_msg', $this->lang->cv_msg );
-      $xtpl->assign( 'cv_options', $this->lang->cv_options );
+		$xtpl->assign( 'cv_options', $this->lang->cv_options );
 		$xtpl->assign( 'cv_option_emojis', $this->lang->cv_option_emojis );
 		$xtpl->assign( 'cv_option_bbcode', $this->lang->cv_option_bbcode );
 
-      $checkEmot = ' checked="checked"';
-      $checkCode = ' checked="checked"';
+		$checkEmot = ' checked="checked"';
+		$checkCode = ' checked="checked"';
 		$xtpl->assign( 'checkEmot', $checkEmot );
-      $xtpl->assign( 'checkCode', $checkCode );
+		$xtpl->assign( 'checkCode', $checkCode );
 
 		$xtpl->assign( 'cv_preview', $this->lang->cv_preview );
 		$xtpl->assign( 'bbcode_menu', $this->bbcode->get_bbcode_menu() );
@@ -1043,15 +1043,15 @@ class conversations extends qsfglobal
 
 			$xtpl->assign( 'user_signature', $post['user_signature'] );
 
-         $params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
+			$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
-         if( $post['post_bbcode'] == true )
-            $params |= FORMAT_BBCODE;
+			if( $post['post_bbcode'] == true )
+				$params |= FORMAT_BBCODE;
 
-         if( $post['post_emojis'] == true )
-            $params |= FORMAT_EMOJIS;
+			if( $post['post_emojis'] == true )
+				$params |= FORMAT_EMOJIS;
 
-         $post_text = $this->format( $post['post_text'], $params );
+			$post_text = $this->format( $post['post_text'], $params );
 
 			if( isset( $attachments[$post['post_id']] ) ) {
 				$download_perm = $this->perms->auth( 'post_attach_download', -1 );
@@ -1081,176 +1081,174 @@ class conversations extends qsfglobal
 			}
 			$xtpl->assign( 'post_text', $post_text );
 
-         $xtpl->parse( 'Conversation.Post' );
-      }
+			$xtpl->parse( 'Conversation.Post' );
+		}
 
 		$this->conv_readmarker->mark_conv_read( $conv_id, $newest_post_read );
 
 		$xtpl->parse( 'Conversation' );
 		return $xtpl->text( 'Conversation' );
-   }
+	}
 
-   private function reply()
-   {
+	private function reply()
+	{
 		if( !isset( $this->get['c'] ) ) {
 			return $this->message( $this->lang->cv_replying, $this->lang->cv_cant_reply );
 		}
 
 		$c = intval( $this->get['c'] );
 
-      $stmt = $this->db->prepare_query( 'SELECT * FROM %pconversations WHERE FIND_IN_SET( ?, conv_users ) AND conv_id=?' );
+		$stmt = $this->db->prepare_query( 'SELECT * FROM %pconversations WHERE FIND_IN_SET( ?, conv_users ) AND conv_id=?' );
 
-      $stmt->bind_param( 'si', $this->user['user_id'], $c );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'si', $this->user['user_id'], $c );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $conv = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$conv = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$conv ) {
 			return $this->message( $this->lang->cv_replying, $this->lang->cv_cant_reply );
 		}
 
-      $this->lang->cv_reply_topic = sprintf( $this->lang->cv_reply_topic, $conv['conv_title'] );
+		$this->lang->cv_reply_topic = sprintf( $this->lang->cv_reply_topic, $conv['conv_title'] );
 
 		/**
 		 * Show the form
 		 */
 		if( !isset( $this->post['submit'] ) ) {
-         $attached = null;
-         $attached_data = null;
-         $upload_error = null;
-         $icon = -1;
-         $preview = '';
-         $quote = '';
+			$attached = null;
+			$attached_data = null;
+			$upload_error = null;
+			$icon = -1;
+			$preview = '';
+			$quote = '';
 
-         $checkEmot = ' checked="checked"';
-         $checkCode = ' checked="checked"';
+			$checkEmot = ' checked="checked"';
+			$checkCode = ' checked="checked"';
 
-         if( !isset( $this->post['attached_data'] ) ) {
-            $this->post['attached_data'] = array();
-         }
+			if( !isset( $this->post['attached_data'] ) ) {
+				$this->post['attached_data'] = array();
+			}
 
-         // if( $this->perms->auth( 'post_attach', -1 ) ) {
-            // Attach
-            if( isset( $this->post['attach'] ) ) {
-               $upload_error = $this->attachmentutil->attach( $this->files['attach_upload'], $this->post['attached_data'] );
-            // Detach
-            } elseif( isset( $this->post['detach'] ) ) {
-               $this->attachmentutil->delete( $this->post['attached'], $this->post['attached_data'] );
-            }
+			// if( $this->perms->auth( 'post_attach', -1 ) ) {
+				// Attach
+				if( isset( $this->post['attach'] ) ) {
+				$upload_error = $this->attachmentutil->attach( $this->files['attach_upload'], $this->post['attached_data'] );
+				// Detach
+				} elseif( isset( $this->post['detach'] ) ) {
+				$this->attachmentutil->delete( $this->post['attached'], $this->post['attached_data'] );
+				}
 
-            $this->attachmentutil->getdata( $attached, $attached_data, $this->post['attached_data'] );
-         // }
+				$this->attachmentutil->getdata( $attached, $attached_data, $this->post['attached_data'] );
+			// }
 
-         $xtpl = new XTemplate( './skins/' . $this->skin . '/convo_posts.xtpl' );
+			$xtpl = new XTemplate( './skins/' . $this->skin . '/convo_posts.xtpl' );
 
-         $xtpl->assign( 'site', $this->site );
-         $xtpl->assign( 'skin', $this->skin );
-         $xtpl->assign( 'conv_id', $conv['conv_id'] );
+			$xtpl->assign( 'site', $this->site );
+			$xtpl->assign( 'skin', $this->skin );
+			$xtpl->assign( 'conv_id', $conv['conv_id'] );
 
-         /**
-         * Preview
-         */
-         if( isset( $this->post['preview'] ) || isset( $this->post['attach'] ) || isset( $this->post['detach'] ) ) {
-            $title = $this->format( $conv['conv_title'], FORMAT_HTMLCHARS );
-            $desc  = $this->format( $conv['conv_description'], FORMAT_HTMLCHARS );
+			// Preview
+			if( isset( $this->post['preview'] ) || isset( $this->post['attach'] ) || isset( $this->post['detach'] ) ) {
+				$title = $this->format( $conv['conv_title'], FORMAT_HTMLCHARS );
+				$desc  = $this->format( $conv['conv_description'], FORMAT_HTMLCHARS );
 
-            $params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
+				$params = FORMAT_BREAKS | FORMAT_CENSOR | FORMAT_HTMLCHARS;
 
-            if( isset( $this->post['parseCode'] ) ) {
-               $params |= FORMAT_BBCODE;
-               $checkCode = ' checked=\'checked\'';
-            } else {
-               $checkCode = '';
-            }
+				if( isset( $this->post['parseCode'] ) ) {
+					$params |= FORMAT_BBCODE;
+					$checkCode = ' checked=\'checked\'';
+				} else {
+					$checkCode = '';
+				}
 
-            if( isset( $this->post['parseEmot'] ) ) {
-               $params |= FORMAT_EMOJIS;
-               $checkEmot = ' checked=\'checked\'';
-            } else {
-               $checkEmot = '';
-            }
+				if( isset( $this->post['parseEmot'] ) ) {
+					$params |= FORMAT_EMOJIS;
+					$checkEmot = ' checked=\'checked\'';
+				} else {
+					$checkEmot = '';
+				}
 
-            $quote = $this->format( $this->post['post'], FORMAT_HTMLCHARS );
-            $preview_text = $this->format( $this->post['post'], $params );
+				$quote = $this->format( $this->post['post'], FORMAT_HTMLCHARS );
+				$preview_text = $this->format( $this->post['post'], $params );
 
-            if( $title != '' ) {
-               $preview_title = $title;
-               $preview_title = $desc != '' ? $preview_title . ', ' . $desc : $preview_title;
-            } else {
-               $preview_title = $this->lang->cv_preview;
-            }
+				if( $title != '' ) {
+					$preview_title = $title;
+					$preview_title = $desc != '' ? $preview_title . ', ' . $desc : $preview_title;
+				} else {
+					$preview_title = $this->lang->cv_preview;
+				}
 
-            $avatar = $this->htmlwidgets->display_avatar( $this->user );
+				$avatar = $this->htmlwidgets->display_avatar( $this->user );
 
-            $signature = null;
-            if( $this->user['user_signature'] ) {
-               $signature = '.........................<br>' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
-            }
+				$signature = null;
+				if( $this->user['user_signature'] ) {
+					$signature = '.........................<br>' . $this->format( $this->user['user_signature'], FORMAT_CENSOR | FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE | FORMAT_EMOJIS );
+				}
 
-            $joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
+				$joined = $this->mbdate( DATE_ONLY_LONG, $this->user['user_joined'] );
 
-            $xtpl->assign( 'avatar', $avatar );
-            $xtpl->assign( 'uid', $this->user['user_id'] );
-            $xtpl->assign( 'uname', $this->user['user_name'] );
-            $xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $this->user['user_name'] ) );
-            $xtpl->assign( 'utitle', $this->user['user_title'] );
-            $xtpl->assign( 'utitleicon', $this->user['membertitle_icon'] );
-            $xtpl->assign( 'cv_level', $this->lang->cv_level );
-            $xtpl->assign( 'cv_group', $this->lang->cv_group );
-            $xtpl->assign( 'gname', $this->user['group_name'] );
-            $xtpl->assign( 'cv_posts', $this->lang->cv_posts );
-            $xtpl->assign( 'uposts', $this->user['user_posts'] );
-            $xtpl->assign( 'cv_joined', $this->lang->cv_joined );
-            $xtpl->assign( 'joined', $joined );
+				$xtpl->assign( 'avatar', $avatar );
+				$xtpl->assign( 'uid', $this->user['user_id'] );
+				$xtpl->assign( 'uname', $this->user['user_name'] );
+				$xtpl->assign( 'link_name', $this->htmlwidgets->clean_url( $this->user['user_name'] ) );
+				$xtpl->assign( 'utitle', $this->user['user_title'] );
+				$xtpl->assign( 'utitleicon', $this->user['membertitle_icon'] );
+				$xtpl->assign( 'cv_level', $this->lang->cv_level );
+				$xtpl->assign( 'cv_group', $this->lang->cv_group );
+				$xtpl->assign( 'gname', $this->user['group_name'] );
+				$xtpl->assign( 'cv_posts', $this->lang->cv_posts );
+				$xtpl->assign( 'uposts', $this->user['user_posts'] );
+				$xtpl->assign( 'cv_joined', $this->lang->cv_joined );
+				$xtpl->assign( 'joined', $joined );
 
-            $xtpl->parse( 'ConvoReply.Preview.PosterMember' );
+				$xtpl->parse( 'ConvoReply.Preview.PosterMember' );
 
-            if( $this->post['attached_data'] ) {
-               $download_perm = $this->perms->auth( 'post_attach_download', -1 );
+				if( $this->post['attached_data'] ) {
+					$download_perm = $this->perms->auth( 'post_attach_download', -1 );
 
-               foreach( $this->post['attached_data'] as $md5 => $file )
-               {
-                  if( $download_perm ) {
-                     $ext = strtolower( substr( $file, -4 ) );
+					foreach( $this->post['attached_data'] as $md5 => $file )
+					{
+						if( $download_perm ) {
+							$ext = strtolower( substr( $file, -4 ) );
 
-                     if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
-                        $preview_text .= "<br><br>{$this->lang->cv_attached} {$file}<br><img src='{$this->site}/attachments/$md5' alt='{$file}'>";
-                        continue;
-                     }
-                  }
+							if( ( $ext == '.jpg' ) || ( $ext == '.gif' ) || ( $ext == '.png' ) ) {
+								$preview_text .= "<br><br>{$this->lang->cv_attached} {$file}<br><img src='{$this->site}/attachments/$md5' alt='{$file}'>";
+								continue;
+							}
+						}
 
-                  $preview_text .= "<br><br>{$this->lang->cv_attached} {$file}";
-               }
-            }
+						$preview_text .= "<br><br>{$this->lang->cv_attached} {$file}";
+					}
+				}
 
-            $xtpl->assign( 'preview_title', $preview_title );
-            $xtpl->assign( 'preview_text', $preview_text );
-            $xtpl->assign( 'signature', $signature );
+				$xtpl->assign( 'preview_title', $preview_title );
+				$xtpl->assign( 'preview_text', $preview_text );
+				$xtpl->assign( 'signature', $signature );
 
-            $xtpl->parse( 'ConvoReply.Preview' );
-         } // End Preview
+				$xtpl->parse( 'ConvoReply.Preview' );
+			} // End Preview
 
-         if( isset( $this->get['qu'] ) ) {
-            $qu = intval( $this->get['qu'] );
+			if( isset( $this->get['qu'] ) ) {
+				$qu = intval( $this->get['qu'] );
 
-            $stmt = $this->db->prepare_query( 'SELECT p.post_text, m.user_name FROM %pconv_posts p, %pusers m
-               WHERE p.post_id=? AND p.post_author=m.user_id AND p.post_convo=?' );
+				$stmt = $this->db->prepare_query( 'SELECT p.post_text, m.user_name FROM %pconv_posts p, %pusers m
+					WHERE p.post_id=? AND p.post_author=m.user_id AND p.post_convo=?' );
 
-            $stmt->bind_param( 'ii', $qu, $c );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'ii', $qu, $c );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $query = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$query = $this->db->nqfetch( $result );
+				$stmt->close();
 
-            if( $query['post_text'] != '' ) {
-               $quote = '[quote=' . $query['user_name'] . ']' . $this->format( $query['post_text'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '[/quote]';
-            }
-         }
+				if( $query['post_text'] != '' ) {
+					$quote = '[quote=' . $query['user_name'] . ']' . $this->format( $query['post_text'], FORMAT_CENSOR | FORMAT_HTMLCHARS ) . '[/quote]';
+				}
+			}
 
-         $xtpl->assign( 'cv_new_reply', $this->lang->cv_reply_topic );
+			$xtpl->assign( 'cv_new_reply', $this->lang->cv_reply_topic );
 
 			$icon = isset( $this->post['icon'] ) ? $this->post['icon'] : -1;
 			$msg_icons = $this->htmlwidgets->get_icons( $icon );
@@ -1287,11 +1285,11 @@ class conversations extends qsfglobal
 				$xtpl->parse( 'ConvoReply.AttachBox' );
 			// }
 
-         $xtpl->assign( 'cv_reply', $this->lang->reply );
-         $xtpl->assign( 'cv_preview', $this->lang->cv_preview );
+			$xtpl->assign( 'cv_reply', $this->lang->reply );
+			$xtpl->assign( 'cv_preview', $this->lang->cv_preview );
 
-         $xtpl->assign( 'cv_last_five', $this->lang->cv_last_five );
-         $xtpl->assign( 'cv_view_topic', $this->lang->cv_view_topic );
+			$xtpl->assign( 'cv_last_five', $this->lang->cv_last_five );
+			$xtpl->assign( 'cv_view_topic', $this->lang->cv_view_topic );
 
 			$stmt = $this->db->prepare_query( 'SELECT p.post_emojis, p.post_bbcode, p.post_time, p.post_text, p.post_author, m.user_name
 				FROM %pconv_posts p, %pusers m
@@ -1299,11 +1297,11 @@ class conversations extends qsfglobal
 				ORDER BY p.post_time DESC
 				LIMIT 5' );
 
-         $stmt->bind_param( 'i', $conv['conv_id'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $conv['conv_id'] );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			$xtpl->assign( 'cv_posted', $this->lang->cv_posted );
 
@@ -1340,9 +1338,9 @@ class conversations extends qsfglobal
 				$xtpl->parse( 'ConvoReply.ReplyReview' );
 			}
 
-         $xtpl->parse( 'ConvoReply' );
-         return $xtpl->text( 'ConvoReply' );
-      } // End Form Presentation
+			$xtpl->parse( 'ConvoReply' );
+			return $xtpl->text( 'ConvoReply' );
+		} // End Form Presentation
 
 		/**
 		 * Final submission of form, after all attachments and previews
@@ -1380,54 +1378,54 @@ class conversations extends qsfglobal
 				catch(Exception $e) {}
 
 				if( $spam_checked && $akismet != null ) {
-               $response = $akismet->is_this_spam();
+					$response = $akismet->is_this_spam();
 
-               if( isset( $response[1] ) && $response[1] == 'true' ) {
-                  // Only store this if Akismet has not issues the x-akismet-pro-tip header
-                  if( !isset( $response[0]['x-akismet-pro-tip'] ) || $response[0]['x-akismet-pro-tip'] != 'discard' ) {
-                     $this->log_action( 'Possible Spam Posted', 0, 0, 0 );
+					if( isset( $response[1] ) && $response[1] == 'true' ) {
+						// Only store this if Akismet has not issues the x-akismet-pro-tip header
+						if( !isset( $response[0]['x-akismet-pro-tip'] ) || $response[0]['x-akismet-pro-tip'] != 'discard' ) {
+							$this->log_action( 'Possible Spam Posted', 0, 0, 0 );
 
-                     // Store the contents of the entire $_SERVER array.
-                     $svars = json_encode( $_SERVER );
+							// Store the contents of the entire $_SERVER array.
+							$svars = json_encode( $_SERVER );
 
-                     $stmt = $this->db->prepare_query( 'INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
-                        VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
+							$stmt = $this->db->prepare_query( 'INSERT INTO %pspam (spam_topic, spam_author, spam_text, spam_time, spam_emojis, spam_bbcode, spam_count, spam_ip, spam_icon, spam_svars)
+								VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-                     $stmt->bind_param( 'iisiiiisssss', $t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
-                     $this->db->execute_query( $stmt );
-                     $stmt->close();
-                  }
+							$stmt->bind_param( 'iisiiiisssss', $t, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $post_count, $this->ip, $this->post['icon'], $svars );
+							$this->db->execute_query( $stmt );
+							$stmt->close();
+						}
 
-                  $this->sets['spam_pm_count']++;
-                  $this->sets['spam_pending']++;
-                  $this->write_sets();
+						$this->sets['spam_pm_count']++;
+						$this->sets['spam_pending']++;
+						$this->write_sets();
 
-                  return $this->message( $this->lang->cv_posting, $this->lang->cv_akismet_posts_spam );
-               }
-            }
-         }
-      }
+						return $this->message( $this->lang->cv_posting, $this->lang->cv_akismet_posts_spam );
+					}
+				}
+			}
+		}
 
 		$stmt = $this->db->prepare_query( 'INSERT INTO %pconv_posts (post_convo, post_author, post_text, post_time, post_emojis, post_bbcode, post_ip, post_icon, post_referrer, post_agent)
 			VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'iisiiissss', $c, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $this->ip, $this->post['icon'], $this->referrer, $this->agent );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'iisiiissss', $c, $this->user['user_id'], $this->post['post'], $this->time, $this->post['parseEmot'], $this->post['parseCode'], $this->ip, $this->post['icon'], $this->referrer, $this->agent );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$post_id = $this->db->insert_id( );
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_last_post=? WHERE conv_id=?' );
 
-      $stmt->bind_param( 'ii', $post_id, $c );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $post_id, $c );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_replies=conv_replies+1, conv_edited=?, conv_last_poster=? WHERE conv_id=?' );
 
-      $stmt->bind_param( 'iii', $this->time, $this->user['user_id'], $c );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'iii', $this->time, $this->user['user_id'], $c );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		if( isset( $this->post['attached_data'] ) /* && $this->perms->auth( 'post_attach', $f ) */ ) {
 			$this->attachmentutil->insert( $post_id, $this->post['attached_data'], true );
@@ -1437,24 +1435,24 @@ class conversations extends qsfglobal
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->cv_private_conversations}" );
 		$mailer->setServer( $this->sets['mailserver'] );
 
-      $ok_pm = explode( ',', $conv['conv_users'] );
+		$ok_pm = explode( ',', $conv['conv_users'] );
 
-      $user_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
-      $user_query->bind_param( 'i', $user );
+		$user_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
+		$user_query->bind_param( 'i', $user );
 
-      foreach( $ok_pm as $user )
-      {
-         // Don't send it to the user who just posted the reply. They already know :P
-         if( $user == $this->user['user_id'] )
-            continue;
+		foreach( $ok_pm as $user )
+		{
+			// Don't send it to the user who just posted the reply. They already know :P
+			if( $user == $this->user['user_id'] )
+				continue;
 
-         $this->db->execute_query( $user_query );
+			$this->db->execute_query( $user_query );
 
-         $result = $user_query->get_result();
-         $who = $this->db->nqfetch( $result );
+			$result = $user_query->get_result();
+			$who = $this->db->nqfetch( $result );
 
-         if( $who['user_pm_mail'] ) {
-            $message  = "{$this->sets['forum_name']}\n";
+			if( $who['user_pm_mail'] ) {
+				$message  = "{$this->sets['forum_name']}\n";
 				$message .= "{$this->site}/index.php?a=conversations&s=viewconvo&id={$conv['conv_id']}\n\n";
 				$message .= $this->user['user_name'] . " " . $this->lang->cv_sent_reply . "\n\n";
 				$message .= $this->lang->cv_title . ": " . $this->format( $conv['conv_title'], FORMAT_CENSOR );
@@ -1462,19 +1460,19 @@ class conversations extends qsfglobal
 				$mailer->setMessage( $message );
 				$mailer->setRecipient( $who['user_email'] );
 				$mailer->doSend();
-         }
-      }
-      $user_query->close();
+			}
+		}
+		$user_query->close();
 
 		if( isset( $this->post['request_uri'] ) ) {
 			header( 'Location: ' . $this->post['request_uri'] );
 		} else {
 			header( "Location: {$this->site}/index.php?a=conversations&s=viewconvo&id=$c&&p={$post_id}#p{$post_id}" );
 		}
-   }
+	}
 
-   private function invite_users()
-   {
+	private function invite_users()
+	{
  		if( !isset( $this->get['c'] ) ) {
 			header( 'HTTP/1.0 404 Not Found' );
 			return $this->message( $this->lang->cv_conversations, $this->lang->cv_not_found_message );
@@ -1485,16 +1483,16 @@ class conversations extends qsfglobal
 			return $this->message( $this->lang->cv_conversations, $this->lang->cv_not_found_message );
 		}
 
-      $c = intval( $this->get['c'] );
+		$c = intval( $this->get['c'] );
 
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pconversations c WHERE FIND_IN_SET( ?, c.conv_users ) AND c.conv_id=?' );
 
-      $stmt->bind_param( 'si', $this->user['user_id'], $c );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'si', $this->user['user_id'], $c );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $conv = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$conv = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$conv ) {
 			$this->set_title( $this->lang->cv_conversations );
@@ -1508,19 +1506,19 @@ class conversations extends qsfglobal
 		$bad_pm = array();
 		$ok_pm = array();
 
-      $user_query = $this->db->prepare_query( 'SELECT user_id, user_pm, user_name FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
-      $user_query->bind_param( 'si', $username, $uid );
+		$user_query = $this->db->prepare_query( 'SELECT user_id, user_pm, user_name FROM %pusers WHERE user_name=? AND user_id != ? LIMIT 1' );
+		$user_query->bind_param( 'si', $username, $uid );
 
-      $uid = intval( USER_GUEST_UID );
+		$uid = intval( USER_GUEST_UID );
 
-      foreach( $users as $username )
-      {
-         $this->db->execute_query( $user_query );
+		foreach( $users as $username )
+		{
+			$this->db->execute_query( $user_query );
 
-         $result = $user_query->get_result();
-         $who = $this->db->nqfetch( $result );
+			$result = $user_query->get_result();
+			$who = $this->db->nqfetch( $result );
 
-         if( !isset( $who['user_id'] ) ) {
+			if( !isset( $who['user_id'] ) ) {
 				$bad_name[] = $username;
 				continue;
 			}
@@ -1530,43 +1528,43 @@ class conversations extends qsfglobal
 				continue;
 			}
 
-         if( in_array( $who_user['id'], $users ) )
-            continue;
+			if( in_array( $who_user['id'], $users ) )
+				continue;
 
-         if( $who['user_id'] != $this->user['user_id'] )
-            $ok_pm[] = $who['user_id'];
-      }
-      $user_query->close();
+			if( $who['user_id'] != $this->user['user_id'] )
+				$ok_pm[] = $who['user_id'];
+		}
+		$user_query->close();
 
-      if( empty( $ok_pm ) ) {
-         return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_cannot_invite );
-      }
+		if( empty( $ok_pm ) ) {
+			return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_cannot_invite );
+		}
 
-      $new_users = implode( ',', $ok_pm );
-      $new_users = $conv['conv_users'] . ',' . $new_users;
+		$new_users = implode( ',', $ok_pm );
+		$new_users = $conv['conv_users'] . ',' . $new_users;
 
-      $stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_users=? WHERE conv_id=?' );
+		$stmt = $this->db->prepare_query( 'UPDATE %pconversations SET conv_users=? WHERE conv_id=?' );
 
-      $stmt->bind_param( 'si', $new_users, $c );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'si', $new_users, $c );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$mailer = new mailer( $this->sets['admin_incoming'], $this->sets['admin_outgoing'], $this->sets['forum_name'], false );
 		$mailer->setSubject( "{$this->sets['forum_name']} - {$this->lang->cv_private_conversations}" );
 		$mailer->setServer( $this->sets['mailserver'] );
 
-      $email_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
-      $email_query->bind_param( 'i', $user );
+		$email_query = $this->db->prepare_query( 'SELECT user_email, user_pm_mail FROM %pusers WHERE user_id=?' );
+		$email_query->bind_param( 'i', $user );
 
-      foreach( $ok_pm as $user )
-      {
-         $this->db->execute_query( $email_query );
+		foreach( $ok_pm as $user )
+		{
+			$this->db->execute_query( $email_query );
 
-         $result = $email_query->get_result();
-         $who = $this->db->nqfetch( $result );
+			$result = $email_query->get_result();
+			$who = $this->db->nqfetch( $result );
 
-         if( $who['user_pm_mail'] ) {
-            $message  = "{$this->sets['forum_name']}\n";
+			if( $who['user_pm_mail'] ) {
+				$message  = "{$this->sets['forum_name']}\n";
 				$message .= "{$this->site}/index.php?a=conversations&s=viewconvo&id={$conv['conv_id']}\n\n";
 				$message .= $this->user['user_name'] . " " . $this->lang->cv_sent_invite . "\n\n";
 				$message .= $this->lang->cv_title . ": " . $this->format( $conv['conv_title'], FORMAT_CENSOR );
@@ -1574,14 +1572,15 @@ class conversations extends qsfglobal
 				$mailer->setMessage( $message );
 				$mailer->setRecipient( $who['user_email'] );
 				$mailer->doSend();
-         }
-      }
-      $email_query->close();
+			}
+		}
+		$email_query->close();
 
 		if( $bad_name || $bad_pm ) {
 			return $this->message( $this->lang->cv_private_conversations, sprintf( $this->lang->cv_error_invite, implode( '; ', $bad_name ), implode( '; ', $bad_pm ) ) );
 		}
 
-      return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_invited );
-   }
+		return $this->message( $this->lang->cv_private_conversations, $this->lang->cv_invited );
+	}
 }
+?>

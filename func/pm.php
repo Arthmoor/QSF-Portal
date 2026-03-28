@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -125,11 +125,11 @@ class pm extends qsfglobal
 				WHERE p.pm_to = ? AND p.pm_folder = ? AND m.user_id = p.pm_from
 				ORDER BY p.pm_time DESC" );
 
-         $stmt->bind_param( 'ii', $this->user['user_id'], $f );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'ii', $this->user['user_id'], $f );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			while( $pm = $this->db->nqfetch( $query ) )
 			{
@@ -177,10 +177,10 @@ class pm extends qsfglobal
 
 				$stmt = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_id IN (?) AND pm_to=?' );
 
-            $list = implode( ', ', $deleteMessages );
-            $stmt->bind_param( 'si', $list, $this->user['user_id'] );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$list = implode( ', ', $deleteMessages );
+				$stmt->bind_param( 'si', $list, $this->user['user_id'] );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 			}
 
 			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_deleted_all );
@@ -212,12 +212,12 @@ class pm extends qsfglobal
 			$stmt = $this->db->prepare_query( 'SELECT p.pm_to, p.pm_title, p.pm_message, m.user_name
 				FROM %ppmsystem p, %pusers m WHERE p.pm_id=? AND p.pm_from=m.user_id' );
 
-         $stmt->bind_param( 'i', $re );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $re );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $reply = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$reply = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $reply['pm_to'] == $this->user['user_id'] ) {
 				$to    = base64_encode( $reply['user_name'] );
@@ -229,13 +229,13 @@ class pm extends qsfglobal
 				}
 				$msg = "[quote]{$reply['pm_message']}[/quote]\n\n";
 
-            $title = base64_encode( $title );
-            $msg = base64_encode( $msg );
-            header( "Location: {$this->site}/index.php?a=conversations&s=newconvo&to=$to&title=$title&text=$msg" );
+				$title = base64_encode( $title );
+				$msg = base64_encode( $msg );
+				header( "Location: {$this->site}/index.php?a=conversations&s=newconvo&to=$to&title=$title&text=$msg" );
 			}
-      } else {
-         return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_system_disabled );
-      }
+		} else {
+			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_system_disabled );
+		}
 	}
 
 	private function view()
@@ -254,12 +254,12 @@ class pm extends qsfglobal
 			WHERE p.pm_id = ? AND m.user_id = p.pm_from AND
 			  m.user_group = g.group_id", $m );
 
-      $stmt->bind_param( 'i', $m );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $m );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $pm = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$pm = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		if( !$pm ) {
 			header( 'HTTP/1.0 404 Not Found' );
@@ -291,12 +291,12 @@ class pm extends qsfglobal
 		if( $pm['pm_folder'] == 1 ) {
 			$stmt = $this->db->prepare_query( 'SELECT user_name FROM %pusers WHERE user_id IN (?)' );
 
-         $bcc = implode( ',', explode( ';', $pm['pm_bcc'] ) );
-         $stmt->bind_param( 's', $bcc );
-         $this->db->execute_query( $stmt );
+			$bcc = implode( ',', explode( ';', $pm['pm_bcc'] ) );
+			$stmt->bind_param( 's', $bcc );
+			$this->db->execute_query( $stmt );
 
-         $names = $stmt->get_result();
-         $stmt->close();
+			$names = $stmt->get_result();
+			$stmt->close();
 
 			while( $name = $this->db->nqfetch( $names ) )
 			{
@@ -309,9 +309,9 @@ class pm extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %ppmsystem SET pm_read=1 WHERE pm_id=?' );
 
-      $stmt->bind_param( 's', $m );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 's', $m );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$xtpl = new XTemplate( './skins/' . $this->skin . '/pm.xtpl' );
 
@@ -378,9 +378,9 @@ class pm extends qsfglobal
 		} else {
 			$stmt = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_to=? AND pm_id=?' );
 
-         $stmt->bind_param( 'ii', $this->user['user_id'], $m );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $this->user['user_id'], $m );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_deleted );
 		}
@@ -400,9 +400,9 @@ class pm extends qsfglobal
 		} else {
 			$stmt = $this->db->prepare_query( 'DELETE FROM %ppmsystem WHERE pm_to=? AND pm_folder=?' );
 
-         $stmt->bind_param( 'ii', $this->user['user_id'], $f );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $this->user['user_id'], $f );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_deleted_all );
 		}
@@ -426,9 +426,9 @@ class pm extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %ppmsystem SET pm_read=0 WHERE pm_id=? AND pm_to=?' );
 
-      $stmt->bind_param( 'ii', $m, $this->user['user_id'] );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $m, $this->user['user_id'] );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		return $this->message( $this->lang->pm_personal_msging, $this->lang->pm_mark_unread );
 	}
@@ -437,12 +437,12 @@ class pm extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT pm_to FROM %ppmsystem WHERE pm_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $data = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$data = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		return( $data['pm_to'] == $this->user['user_id'] );
 	}

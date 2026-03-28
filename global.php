@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -65,16 +65,16 @@ class qsfglobal
 	public $query;                       // The query string @public string
 	public $time_exec;                   // Execution time for the whole page
 	public $feed_links = null;	          // HTML of RSS link tags
-   public $title;                       // Page Title for Modules
+	public $title;                       // Page Title for Modules
 
-   public $pre;
-   public $user_cl;
+	public $pre;
+	public $user_cl;
 
 	public $attachmentutil;   // Attachment handler @public object
-	public $htmlwidgets;		  // HTML widget handler @public object
+	public $htmlwidgets;      // HTML widget handler @public object
 	public $bbcode;			  // BBCode formatter @public object
 	public $readmarker;		  // Handles tracking what posts are read and unread
-   public $conv_readmarker;  // Handles tracking which private conversatons have been read
+	public $conv_readmarker;  // Handles tracking which private conversations have been read
 	public $validator;		  // Handler for checking usernames, passwords, etc
 	public $activeutil;		  // Handler user activity
 
@@ -103,7 +103,7 @@ class qsfglobal
 		$this->cookie   = $_COOKIE;
 		$this->files    = $_FILES;
 		$this->query    = htmlspecialchars( $this->query );
-      $this->title    = '';
+		$this->title    = '';
 	}
 
 	/**
@@ -123,7 +123,7 @@ class qsfglobal
 		$this->bbcode = new bbcode( $this );
 		$this->validator = new tool();
 		$this->readmarker = new readmarker( $this );
-      $this->conv_readmarker = new conv_readmarker( $this );
+		$this->conv_readmarker = new conv_readmarker( $this );
 		$this->activeutil = new activeutil( $this );
 
 		$replace = $this->db->query( 'SELECT * FROM %preplacements ORDER BY LENGTH(replacement_search) DESC' );
@@ -159,7 +159,7 @@ class qsfglobal
 		}
 
 		$this->readmarker->cleanup();
-      $this->conv_readmarker->cleanup();
+		$this->conv_readmarker->cleanup();
 	}
 
 	/**
@@ -335,11 +335,11 @@ class qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT * FROM %pmembertitles WHERE membertitle_posts <= ? ORDER BY membertitle_posts' );
 
-      $stmt->bind_param( 'i', $posts );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $posts );
+		$this->db->execute_query( $stmt );
 
-      $titles = $stmt->get_result();
-      $stmt->close();
+		$titles = $stmt->get_result();
+		$stmt->close();
 
 		while( $title = $this->db->nqfetch( $titles ) )
 		{
@@ -370,12 +370,12 @@ class qsfglobal
 
 		$stmt = $this->db->prepare_query( 'SELECT COUNT(pm_id) AS messages FROM %ppmsystem WHERE pm_to=? AND pm_folder=?' . ( !$seen ? ' AND pm_read=0' : null ) );
 
-      $stmt->bind_param( 'ii', $this->user['user_id'], $folder );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $this->user['user_id'], $folder );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $count = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$count = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		return $count['messages'];
 	}
@@ -470,12 +470,12 @@ class qsfglobal
 
 		$dt = new DateTime();
 
-      try {
-         $dt->setTimezone( new DateTimeZone( $timezone ) );
-      }
-      catch( Exception $e ) {
-         error( QUICKSILVER_PHP_ERROR, $e->getMessage(), __FILE__, __LINE__ );
-      }
+		try {
+			$dt->setTimezone( new DateTimeZone( $timezone ) );
+		}
+		catch( Exception $e ) {
+			error( QUICKSILVER_PHP_ERROR, $e->getMessage(), __FILE__, __LINE__ );
+		}
 
 		$dt->setTimestamp( $time );
 
@@ -616,10 +616,10 @@ class qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_data=?' );
 
-      $data = json_encode( $sets );
-      $stmt->bind_param( 's', $data );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$data = json_encode( $sets );
+		$stmt->bind_param( 's', $data );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 
 	/**
@@ -683,17 +683,17 @@ class qsfglobal
 		// Recount all topics and posts - NiteShdw
 		$q = $this->db->query( 'SELECT topic_id, COUNT(post_id) AS replies FROM %ptopics, %pposts WHERE post_topic=topic_id GROUP BY topic_id' );
 
-      $topic_query = $this->db->prepare_query( 'UPDATE %ptopics SET topic_replies=? WHERE topic_id=?' );
-      $topic_query->bind_param( 'ii', $treplies, $topic_id );
+		$topic_query = $this->db->prepare_query( 'UPDATE %ptopics SET topic_replies=? WHERE topic_id=?' );
+		$topic_query->bind_param( 'ii', $treplies, $topic_id );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
 			$treplies = $f['replies'] - 1;
-         $topic_id = $f['topic_id'];
+			$topic_id = $f['topic_id'];
 
-         $this->db->execute_query( $topic_query );
+			$this->db->execute_query( $topic_query );
 		}
-      $topic_query->close();
+		$topic_query->close();
 
 		$q = $this->db->query( 'SELECT forum_id FROM %pforums WHERE forum_parent = 0' );
 		$this->sets['posts'] = 0;
@@ -727,11 +727,11 @@ class qsfglobal
 		// Check for subforums
 		$stmt = $this->db->prepare_query( 'SELECT forum_id FROM %pforums WHERE forum_parent=?' );
 
-      $stmt->bind_param( 'i', $forum );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $forum );
+		$this->db->execute_query( $stmt );
 
-      $q = $stmt->get_result();
-      $stmt->close();
+		$q = $stmt->get_result();
+		$stmt->close();
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
@@ -747,31 +747,31 @@ class qsfglobal
 		// Count topics on this forum
 		$stmt = $this->db->prepare_query( 'SELECT COUNT(topic_id) tc FROM %ptopics WHERE NOT(topic_modes & ?) AND topic_forum=?' );
 
-      $tflag = intval( TOPIC_MOVED );
-      $stmt->bind_param( 'ii', $tflag, $forum );
-      $this->db->execute_query( $stmt );
+		$tflag = intval( TOPIC_MOVED );
+		$stmt->bind_param( 'ii', $tflag, $forum );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $tc = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$tc = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'SELECT COUNT(p.post_id) rc FROM %pposts p, %ptopics t WHERE p.post_topic=t.topic_id AND topic_forum=?' );
 
-      $stmt->bind_param( 'i', $forum );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $forum );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $rc = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$rc = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$stmt = $this->db->prepare_query( 'SELECT p.post_time pt, p.post_id post FROM %pposts p, %ptopics t WHERE p.post_topic=t.topic_id AND topic_forum=? ORDER BY p.post_time DESC LIMIT 1' );
 
-      $stmt->bind_param( 'i', $forum );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $forum );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $lp = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$lp = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		$topicCount += $tc['tc'];
 		$replyCount += $rc['rc'];
@@ -783,10 +783,10 @@ class qsfglobal
 		// Update the details
 		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_replies=?, forum_topics=?, forum_lastpost=? WHERE forum_id=?' );
 
-      $count = $replyCount - $topicCount;
-      $stmt->bind_param( 'iiii', $count, $topicCount, $lastPost, $forum );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$count = $replyCount - $topicCount;
+		$stmt->bind_param( 'iiii', $count, $topicCount, $lastPost, $forum );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		return array( 'topics' => $topicCount, 'replies' => $replyCount, 'lastPost' => $lastPost, 'lastPostTime' => $lastPostTime );
 	}
@@ -806,9 +806,9 @@ class qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'INSERT INTO %plogs (log_user, log_time, log_action, log_data1, log_data2, log_data3 ) VALUES( ?, ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'iisiii', $this->user['user_id'], $this->time, $action, $data1, $data2, $data3 );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'iisiii', $this->user['user_id'], $this->time, $action, $data1, $data2, $data3 );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 
 	/**

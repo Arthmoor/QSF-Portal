@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -124,12 +124,12 @@ class board extends qsfglobal
 		if( $c > 0 ) {
 			$stmt = $this->db->prepare_query( 'SELECT forum_name FROM %pforums WHERE forum_id = ?' );
 
-         $stmt->bind_param( 'i', $c );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $c );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $query = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$query = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			$xtpl->assign( 'cat_name', $query['forum_name'] );
 			$xtpl->assign( 'board_forum', $this->lang->board_forum );

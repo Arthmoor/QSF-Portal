@@ -69,16 +69,16 @@ class ztemplate
 	private		$cachedblocks	= array();			// an array of cached blocks
 	private		$blocks			= array();			// an array of blocks
 	private		$parsed			= array();			// an array of parsed blocks
-   private     $delim;
-   private     $_parse_options;
-   private     $count;
-   private     $block_order;
-   private     $options;
-   private     $parselines;
-   private     $log;
-   private     $contents;
-   private     $parents;
-   private     $vars;
+	private     $delim;
+	private     $_parse_options;
+	private     $count;
+	private     $block_order;
+	private     $options;
+	private     $parselines;
+	private     $log;
+	private     $contents;
+	private     $parents;
+	private     $vars;
 
 	protected	$stblocks		= array();
 	
@@ -87,7 +87,7 @@ class ztemplate
 	 * 
 	 * @param	string		$file		the filename to open and parse
 	 * @param	array		$options	an array of config options
-	 * @return	boolean 				true on successul load and parse of the template, otherwise false
+	 * @return	boolean 				true on successful load and parse of the template, otherwise false
 	 */
 	public	function __construct($file = null, $options = null)
 	{

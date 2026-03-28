@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -82,14 +82,14 @@ class db_mysqli extends database
 	 * @author Jason Warner <jason@mercuryboard.com>
 	 * @since Beta 2.1
 	 * @return int Insert ID
-    *
-    * Modified due to apparently not working every time it's called. Now returns the SELECT MAX() from the specified table and column. Returns that as an integer.
+	 *
+	 * Modified due to apparently not working every time it's called. Now returns the SELECT MAX() from the specified table and column. Returns that as an integer.
 	 **/
 	public function insert_id( )
 	{
-      // $result = $this->fetch( "SELECT MAX(%s) AS max_value FROM %s", $column, $this->prefix . $table );
+		// $result = $this->fetch( "SELECT MAX(%s) AS max_value FROM %s", $column, $this->prefix . $table );
 
-      // return $result['max_value'];
+		// return $result['max_value'];
 
 		return $this->connection->insert_id;
 	}
@@ -117,14 +117,14 @@ class db_mysqli extends database
 
 		$this->querycount++;
 
-      $this->current_query = $query;
+		$this->current_query = $query;
 
-      try {
-         $result = $this->connection->query( $query );
-      }
-      catch( Exception $e ) {
-         error( QUICKSILVER_QUERY_ERROR, $this->connection->error, $query, $this->connection->errno );
-      }
+		try {
+			$result = $this->connection->query( $query );
+		}
+		catch( Exception $e ) {
+			error( QUICKSILVER_QUERY_ERROR, $this->connection->error, $query, $this->connection->errno );
+		}
 		return $result;
 	}
 
@@ -176,7 +176,7 @@ class db_mysqli extends database
 	 *
 	 * @author Matthew Lawrence <matt@quicksilverforums.com>
 	 * @since 1.3.0
-	 * @return string A string with the quotes and other charaters escaped
+	 * @return string A string with the quotes and other characters escaped
 	 * @param string $string The string to escape
 	 **/
 	private function escape( $string )

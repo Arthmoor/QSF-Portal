@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -185,12 +185,12 @@ class register extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT user_id FROM %pusers WHERE user_name=?' );
 
-         $stmt->bind_param( 's', $username );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 's', $username );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $exists = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$exists = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $exists ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_name_taken );
@@ -201,9 +201,9 @@ class register extends qsfglobal
 				return $this->message( $this->lang->register_reging, $this->lang->register_email_invalid );
 			}
 
-         if( !$this->validator->validate( $email, TYPE_EMAIL_DOMAIN ) ) {
-            return $this->message( $this->lang->register_reging, $this->lang->register_email_domain_invalid );
-         }
+			if( !$this->validator->validate( $email, TYPE_EMAIL_DOMAIN ) ) {
+				return $this->message( $this->lang->register_reging, $this->lang->register_email_domain_invalid );
+			}
 
 			if( $pass != $pass2 ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_pass_match );
@@ -215,21 +215,21 @@ class register extends qsfglobal
 
 			$stmt = $this->db->prepare_query( 'SELECT user_email FROM %pusers WHERE user_email=?' );
 
-         $stmt->bind_param( 's', $email );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 's', $email );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $eexists = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$eexists = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $eexists ) {
 				return $this->message( $this->lang->register_reging, $this->lang->register_email_used );
 			}
 
-         $timezone = $this->post['timezone'];
-         if( !in_array( $timezone, timezone_identifiers_list() ) ) {
-            $timezone = $this->sets['default_timezone'];
-         }
+			$timezone = $this->post['timezone'];
+			if( !in_array( $timezone, timezone_identifiers_list() ) ) {
+				$timezone = $this->sets['default_timezone'];
+			}
 
 			$pass = $this->qsfp_password_hash( $pass );
 			$level = $this->get_level( 0 );
@@ -240,9 +240,9 @@ class register extends qsfglobal
 				$group_id = $this->sets['default_group'];
 			}
 
-         // Store the contents of the entire $_SERVER array. Along with the captcha question. If bots get past this, knowing which question they got right may be helpful.
+			// Store the contents of the entire $_SERVER array. Along with the captcha question. If bots get past this, knowing which question they got right may be helpful.
 			$_SERVER['cap_question'] = $_SESSION['question'];
-         $svars = json_encode( $_SERVER );
+			$svars = json_encode( $_SERVER );
 
 			// I'm not sure if the anti-spam code needs to use the escaped strings or not, so I'll feed them whatever the spammer fed me.
 			if( !empty( $this->sets['wordpress_api_key'] ) && $this->sets['akismet_ureg'] ) {
@@ -263,27 +263,27 @@ class register extends qsfglobal
 				catch( Exception $e ) {}
 
 				if( $spam_checked && $akismet != null ) {
-               $response = $akismet->is_this_spam();
+					$response = $akismet->is_this_spam();
 
-               if( isset( $response[1] ) && $response[1] == 'true' ) {
-                  $this->log_action( 'Blocked Registration', 0, 0, 0 );
+					if( isset( $response[1] ) && $response[1] == 'true' ) {
+						$this->log_action( 'Blocked Registration', 0, 0, 0 );
 
-                  $this->sets['spam_reg_count']++;
-                  $this->write_sets();
+						$this->sets['spam_reg_count']++;
+						$this->write_sets();
 
-                  return $this->message( $this->lang->register_reging, $this->lang->register_akismet_ureg_spam );
-               }
+						return $this->message( $this->lang->register_reging, $this->lang->register_akismet_ureg_spam );
+					}
 				}
 			}
 
 			$stmt = $this->db->prepare_query( "INSERT INTO %pusers (user_name, user_password, user_group, user_title, user_joined, user_email, user_skin, user_view_avatars, user_view_emojis, user_view_signatures,
 				user_language, user_pm, user_timezone, user_regip, user_register_email, user_file_perms, user_server_data)
-            VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', ? )" );
+				VALUES( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '', ? )" );
 
-         $stmt->bind_param( 'ssisissiiisissss', $username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
+			$stmt->bind_param( 'ssisissiiisissss', $username, $pass, $group_id, $level['user_title'], $this->time, $email, $this->sets['default_skin'], $this->sets['default_view_avatars'], $this->sets['default_view_emots'], $this->sets['default_view_sigs'],
 				$this->user['user_language'], $this->sets['default_pm'], $timezone, $this->ip, $email, $svars );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$this->sets['last_member'] = $username;
 			$this->sets['last_member_id'] = $this->db->insert_id( );
@@ -325,9 +325,9 @@ class register extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'REPLACE INTO %pvalidation (validate_id, validate_hash, validate_time, validate_ip, validate_user_agent) VALUES( ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'isiss', $id, $vhash, $this->time, $this->ip, $this->agent );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'isiss', $id, $vhash, $this->time, $this->ip, $this->agent );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		return $this->message( $this->lang->register_reging, sprintf( $this->lang->register_must_activate, $email ) );
 	}
@@ -339,22 +339,22 @@ class register extends qsfglobal
 		if( isset( $this->get['e'] ) ) {
 			$stmt = $this->db->prepare_query( 'SELECT * FROM %pusers WHERE user_id=?' );
 
-         $stmt->bind_param( 'i', $this->user['user_id'] );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $this->user['user_id'] );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $member = $this->db->nqfetch( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$member = $this->db->nqfetch( $result );
+			$stmt->close();
 
 			if( $member && $member['user_id'] != USER_GUEST_UID && $member['user_group'] == USER_AWAIT ) {
 				$stmt = $this->db->prepare_query( 'SELECT * FROM %pvalidation WHERE validate_id=?' );
 
-            $stmt->bind_param( 'i', $this->user['user_id'] );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $this->user['user_id'] );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $valid = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$valid = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				if( $valid ) {
 					$vhash = hash( 'sha512', $member['user_email'] . $member['user_name'] . $member['user_password'] . $valid['validate_time'] );
@@ -362,16 +362,16 @@ class register extends qsfglobal
 					if( $vhash == $this->get['e'] ) {
 						$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_group=? WHERE user_id=?' );
 
-                  $group = intval( USER_MEMBER );
-                  $stmt->bind_param( 'ii', $group, $member['user_id'] );
-                  $this->db->execute_query( $stmt );
-                  $stmt->close();
+						$group = intval( USER_MEMBER );
+						$stmt->bind_param( 'ii', $group, $member['user_id'] );
+						$this->db->execute_query( $stmt );
+						$stmt->close();
 
 						$stmt = $this->db->prepare_query( 'DELETE FROM %pvalidation WHERE validate_id=?' );
 
-                  $stmt->bind_param( 'i', $valid['validate_id'] );
-                  $this->db->execute_query( $stmt );
-                  $stmt->close();
+						$stmt->bind_param( 'i', $valid['validate_id'] );
+						$this->db->execute_query( $stmt );
+						$stmt->close();
 
 						return $this->message( $this->lang->register_activating, $this->lang->register_activated );
 					}
@@ -387,9 +387,9 @@ class register extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pvalidation WHERE validate_time < ?' );
 
-      $stmt->bind_param( 'i', $expire );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $expire );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 	}
 }
 ?>

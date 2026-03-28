@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -91,28 +91,28 @@ class members extends admin
 		}
 
 		if( $l ) {
-         $stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers m, %pgroups g
+			$stmt = $this->db->prepare_query( "SELECT user_id FROM %pusers m, %pgroups g
 				WHERE m.user_group = g.group_id AND m.user_id != ? AND UPPER(LEFT(LTRIM(m.user_name), 1)) = ?" );
 				
-         $guid = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'is', $guid, $l );
-         $this->db->execute_query( $stmt );
+			$guid = intval( USER_GUEST_UID );
+			$stmt->bind_param( 'is', $guid, $l );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $num = $this->db->num_rows( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$num = $this->db->num_rows( $result );
+			$stmt->close();
 
 			$PageNums = $this->htmlwidgets->get_pages( $num, "admincp/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		} else {
-         $stmt = $this->db->prepare_query( 'SELECT user_id FROM %pusers m, %pgroups g WHERE m.user_group = g.group_id AND m.user_id != ?' );
+			$stmt = $this->db->prepare_query( 'SELECT user_id FROM %pusers m, %pgroups g WHERE m.user_group = g.group_id AND m.user_id != ?' );
 
-         $guid = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'i', $guid );
-         $this->db->execute_query( $stmt );
+			$guid = intval( USER_GUEST_UID );
+			$stmt->bind_param( 'i', $guid );
+			$this->db->execute_query( $stmt );
 
-         $result = $stmt->get_result();
-         $num = $this->db->num_rows( $result );
-         $stmt->close();
+			$result = $stmt->get_result();
+			$num = $this->db->num_rows( $result );
+			$stmt->close();
 
 			$PageNums = $this->htmlwidgets->get_pages( $num, "admincp/index.php?a=members&amp;l={$l}&amp;order=$order&amp;asc=$lasc", $this->get['min'], $this->get['num'] );
 		}
@@ -123,12 +123,12 @@ class members extends admin
 			WHERE m.user_group = g.group_id AND m.user_id != ?" . ( $l ? " AND UPPER(LEFT(LTRIM(m.user_name), 1)) = '{$l}'" : '' ) . "
 			ORDER BY {$sortby} LIMIT ?, ?" );
 
-      $guid = intval( USER_GUEST_UID );
-      $stmt->bind_param( 'iii', $guid, $this->get['min'], $this->get['num'] );
-      $this->db->execute_query( $stmt );
+		$guid = intval( USER_GUEST_UID );
+		$stmt->bind_param( 'iii', $guid, $this->get['min'], $this->get['num'] );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $stmt->close();
+		$result = $stmt->get_result();
+		$stmt->close();
 
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/members.xtpl' );
 

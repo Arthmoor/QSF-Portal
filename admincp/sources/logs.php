@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -55,11 +55,11 @@ class logs extends admin
 
 		$stmt = $this->db->prepare_query( 'SELECT l.*, u.user_name FROM %plogs l, %pusers u WHERE u.user_id=l.log_user ORDER BY l.log_time DESC LIMIT ?, ?' );
 
-      $stmt->bind_param( 'ii', $this->get['min'], $this->get['num'] );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $this->get['min'], $this->get['num'] );
+		$this->db->execute_query( $stmt );
 
-      $data = $stmt->get_result();
-      $stmt->close();
+		$data = $stmt->get_result();
+		$stmt->close();
 
 		$xtpl = new XTemplate( '../skins/' . $this->skin . '/admincp/logs.xtpl' );
 

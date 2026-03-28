@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -68,12 +68,12 @@ class forums extends admin
 
 				$stmt = $this->db->prepare_query( 'SELECT forum_name, forum_description, forum_parent, forum_subcat, forum_redirect, forum_news FROM %pforums WHERE forum_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $f = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$f = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$this->tree( $this->lang->forum_edit, "{$this->site}/admincp/index.php?a=forums&amp;s=edit" );
 				$this->tree( $f['forum_name'] );
@@ -137,12 +137,12 @@ class forums extends admin
 
 				$stmt = $this->db->prepare_query( 'SELECT forum_name FROM %pforums WHERE forum_id=?' );
 
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $f = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$f = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$this->tree( $this->lang->forum_delete, "{$this->site}/admincp/index.php?a=forums&amp;s=delete" );
 				$this->tree( $f['forum_name'] );
@@ -291,7 +291,7 @@ class forums extends admin
 	}
 
 	/**
-	 * Creates the list of forums preceeding $id in $array
+	 * Creates the list of forums preceding $id in $array
 	 *
 	 * @param array $array Array of forums
 	 * @param int $id Used as reference point for tree construction
@@ -346,21 +346,21 @@ class forums extends admin
 		// Run through group
 		$q = $this->db->query( 'SELECT forum_parent FROM %pforums GROUP BY forum_parent' );
 
-      $parent_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_tree=? WHERE forum_parent=?' );
-      $parent_query->bind_param( 'si', $tree, $forum_parent );
+		$parent_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_tree=? WHERE forum_parent=?' );
+		$parent_query->bind_param( 'si', $tree, $forum_parent );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
-         $tree = '';
+			$tree = '';
 
 			if( $f['forum_parent'] ) {
 				$tree = $this->buildTree( $forums, $f['forum_parent'] );
 			}
 
-         $forum_parent = $f['forum_parent'];
-         $this->db->execute_query( $parent_query );
+			$forum_parent = $f['forum_parent'];
+			$this->db->execute_query( $parent_query );
 		}
-      $parent_query->close();
+		$parent_query->close();
 	}
 
 	/**
@@ -375,21 +375,21 @@ class forums extends admin
 
 		$topics = $this->db->query( 'SELECT topic_id, topic_forum FROM %ptopics' );
 
-      $forum_query = $this->db->prepare_query( 'SELECT forum_id FROM %pforums WHERE forum_id=?' );
-      $forum_query->bind_param( 'i', $forum_id );
+		$forum_query = $this->db->prepare_query( 'SELECT forum_id FROM %pforums WHERE forum_id=?' );
+		$forum_query->bind_param( 'i', $forum_id );
 
 		while( $topic = $this->db->nqfetch( $topics ) )
 		{
-         $forum_id = $topic['topic_forum'];
-         $this->db->execute_query( $forum_query );
+			$forum_id = $topic['topic_forum'];
+			$this->db->execute_query( $forum_query );
 
-         $result = $forum_query->get_result();
-         $exists = $this->db->nqfetch( $result );
+			$result = $forum_query->get_result();
+			$exists = $this->db->nqfetch( $result );
 
 			if( !$exists )
 				$topic_purge .= "topic_id={$topic['topic_id']} OR ";
 		}
-      $forum_query->close();
+		$forum_query->close();
 
 		if( $topic_purge ) {
 			$topic_purge = substr( $topic_purge, 0, -4 );
@@ -400,21 +400,21 @@ class forums extends admin
 
 		$posts = $this->db->query( 'SELECT post_id, post_topic FROM %pposts' );
 
-      $topic_query = $this->db->prepare_query( 'SELECT topic_id FROM %ptopics WHERE topic_id=?' );
-      $topic_query->bind_param( 'i', $topic_id );
+		$topic_query = $this->db->prepare_query( 'SELECT topic_id FROM %ptopics WHERE topic_id=?' );
+		$topic_query->bind_param( 'i', $topic_id );
 
 		while( $post = $this->db->nqfetch( $posts ) )
 		{
-         $topic_id = $post['post_topic'];
-         $this->db->execute_query( $topic_query );
+			$topic_id = $post['post_topic'];
+			$this->db->execute_query( $topic_query );
 
-         $result = $topic_query->get_result();
-         $exists = $this->db->nqfetch( $result );
+			$result = $topic_query->get_result();
+			$exists = $this->db->nqfetch( $result );
 
 			if( !$exists )
 				$post_purge .= "post_id={$post['post_id']} OR ";
 		}
-      $topic_query->close();
+		$topic_query->close();
 
 		if( $post_purge ) {
 			$post_purge = substr( $post_purge, 0, -4 );
@@ -440,11 +440,11 @@ class forums extends admin
 
 		$stmt = $this->db->prepare_query( 'SELECT topic_id FROM %ptopics WHERE topic_forum=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $data = $this->db->nqfetch( $query ) )
 		{
@@ -455,16 +455,16 @@ class forums extends admin
 			$this->db->query( "DELETE FROM %pposts WHERE " . substr( $topics, 0, -4 ) );
 			$stmt = $this->db->prepare_query( 'DELETE FROM %ptopics WHERE topic_forum=?' );
 
-         $stmt->bind_param( 'i', $id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'i', $id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 		}
 
 		$stmt = $this->db->prepare_query( 'DELETE FROM %pforums WHERE forum_id=?' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$perms = new permissions( $this );
 
@@ -527,9 +527,9 @@ class forums extends admin
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pforums SET forum_parent=?, forum_name=?, forum_description=?, forum_subcat=?, forum_redirect=?, forum_news=? WHERE forum_id=?' );
 
-      $stmt->bind_param( 'issiiii', $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $news, $id );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'issiiii', $this->post['parent'], $this->post['name'], $this->post['description'], $subcat, $redirect, $news, $id );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$this->updateForumTrees();
 
@@ -558,9 +558,9 @@ class forums extends admin
 
 		$stmt = $this->db->prepare_query( 'INSERT INTO %pforums ( forum_tree, forum_parent, forum_name, forum_description, forum_position, forum_subcat, forum_redirect ) VALUES( ?, ?, ?, ?, ?, ?, ? )' );
 
-      $stmt->bind_param( 'sissiii', $this->CreateTree($forums, $this->post['parent']), $this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'sissiii', $this->CreateTree($forums, $this->post['parent']), $this->post['parent'], $this->post['name'], $this->post['description'], $position, $subcat, $redirect );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$id = $this->db->insert_id();
 
@@ -609,29 +609,29 @@ class forums extends admin
 	{
 		$q = $this->db->query( 'SELECT forum_id FROM %pforums ORDER BY forum_id ASC' );
 
-      $forum_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_position=? WHERE forum_id=?' );
-      $forum_query->bind_param( 'ii', $forum_position, $forum_id );
+		$forum_query = $this->db->prepare_query( 'UPDATE %pforums SET forum_position=? WHERE forum_id=?' );
+		$forum_query->bind_param( 'ii', $forum_position, $forum_id );
 
 		while( $f = $this->db->nqfetch( $q ) )
 		{
-         $forum_position = $this->post["_{$f['forum_id']}"];
-         $forum_id = $f['forum_id'];
+			$forum_position = $this->post["_{$f['forum_id']}"];
+			$forum_id = $f['forum_id'];
 
-         $this->db->execute_query( $forum_query );
+			$this->db->execute_query( $forum_query );
 		}
-      $forum_query->close();
+		$forum_query->close();
 
 		return $this->lang->forum_ordered;
 	}
 
 	/**
-	 * Creates a heirarchial list of all HTML forums with an input box in front with id _$forum_id
+	 * Creates a hierarchical list of all HTML forums with an input box in front with id _$forum_id
 	 *
 	 * @param array $array Array of forums
 	 * @param int $parent Used to degredate down through the recursive loop
 	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
 	 * @since Beta 2.1
-	 * @return string A heirarchial HTML list of all the forums with an input box in front with id _$forum_id
+	 * @return string A hierarchical HTML list of all the forums with an input box in front with id _$forum_id
 	 **/
 	private function InputBox( $array, $parent = 0 )
 	{
@@ -651,14 +651,14 @@ class forums extends admin
 	}
 
 	/**
-	 * Creates a heirarchial HTML list of all forums
+	 * Creates a hierarchical HTML list of all forums
 	 *
 	 * @param array $array Array of forums
 	 * @param string $link Link to plug into list
 	 * @param int $parent Used to degredate down through the recursive loop
 	 * @author Mark Elliot <mark.elliot@mercuryboard.com>
 	 * @since Beta 2.1
-	 * @return string A heirarchial HTML list of all the forums
+	 * @return string A hierarchical HTML list of all the forums
 	 **/
 	private function Text( $array, $link = "", $parent = 0 )
 	{

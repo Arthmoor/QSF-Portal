@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * This program is free software; you can redistribute it and/or
@@ -83,11 +83,11 @@ class main extends qsfglobal
 		    LEFT JOIN %pusers u ON u.user_id=p.post_author
 		    WHERE topic_forum=? GROUP BY t.topic_id ORDER BY t.topic_posted DESC' );
 
-      $stmt->bind_param( 'i', $id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'i', $id );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $stmt->close();
+		$result = $stmt->get_result();
+		$stmt->close();
 
 		// Display the first 5 news posts in the normal boxes.
 		$x = 0;

@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -38,11 +38,11 @@ require_once $set['include_path'] . '/lib/forumutils.php';
  **/
 class readmarker extends forumutils
 {
-   private $db;
-   private $sets;
-   private $time;
-   private $cookie;
-   private $day_in_seconds;
+	private $db;
+	private $sets;
+	private $time;
+	private $cookie;
+	private $day_in_seconds;
 	private $last_read_all = 0;           // Time beyond which all posts are considered read
 	private $guest_mode = true;           // Mark if we're using a cookie or database records
 	private $readmarkers_loaded = false;  // Have we queried the database yet
@@ -53,7 +53,7 @@ class readmarker extends forumutils
 	private $cleanupchance = false;       // Set to true if we want a cleanup operation done
 
 	/**
-	 * Constructor. Initalise the read marker for guest (cookie and session)
+	 * Constructor. Initialize the read marker for guest (cookie and session)
 	 * or user (readmark table)
 	 *
 	 * @param $qsf - Quicksilver Forums module
@@ -62,13 +62,13 @@ class readmarker extends forumutils
 	{
 		parent::__construct( $qsf );
 
-      $this->db = &$qsf->db;
-      $this->cookie = &$qsf->cookie;
-      $this->sets = &$qsf->sets;
+		$this->db = &$qsf->db;
+		$this->cookie = &$qsf->cookie;
+		$this->sets = &$qsf->sets;
 		$this->time = &$qsf->time;
 		$this->day_in_seconds = 86400;
 
-		// To initalise ourselves we need to look at the user
+		// To initialize ourselves we need to look at the user
 		if( $qsf->perms->is_guest ) {
 			// With a guest user we can try and read/set a cookie but that's all!
 			if( isset( $this->cookie[$this->sets['cookie_prefix'] . 'lastallread'] ) && $this->cookie[$this->sets['cookie_prefix'] . 'lastallread'] < ( $this->time - ( $this->day_in_seconds * 2 ) ) ) {
@@ -146,15 +146,15 @@ class readmarker extends forumutils
 		} else {
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastallread=? WHERE user_id=?' );
 
-         $stmt->bind_param( 'ii', $time, $this->user_id );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $time, $this->user_id );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 
 			$stmt = $this->db->prepare_query( 'DELETE FROM %preadmarks WHERE readmark_user=? AND readmark_lastread < ?' );
 
-         $stmt->bind_param( 'ii', $this->user_id, $time );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'ii', $this->user_id, $time );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 		}
 		$this->readmarkers_loaded = false;
 	}
@@ -171,13 +171,13 @@ class readmarker extends forumutils
 	{
 		$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_edited FROM %ptopics WHERE topic_edited > ? AND topic_forum = ?' );
 
-      $stmt->bind_param( 'ii', $this->last_read_all, $forum_id );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'ii', $this->last_read_all, $forum_id );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
-      while( $row = $this->db->nqfetch( $query ) ) {
+		while( $row = $this->db->nqfetch( $query ) ) {
 			$this->mark_topic_read( $row['topic_id'], $time );
 		}
 	}
@@ -206,9 +206,9 @@ class readmarker extends forumutils
 				if( !isset( $this->readmarkers[$topic_id] ) || $this->readmarkers[$topic_id] < $time ) {
 					$stmt = $this->db->prepare_query( 'REPLACE INTO %preadmarks (readmark_user, readmark_topic, readmark_lastread) VALUES( ?, ?, ? )' );
 
-               $stmt->bind_param( 'iii', $this->user_id, $topic_id, $time );
-               $this->db->execute_query( $stmt );
-               $stmt->close();
+				$stmt->bind_param( 'iii', $this->user_id, $topic_id, $time );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 					$this->readmarkers[$topic_id] = $time;
 				}
@@ -345,13 +345,13 @@ class readmarker extends forumutils
 
 			$stmt = $this->db->prepare_query( 'SELECT * FROM %preadmarks WHERE readmark_user=?' );
 
-         $stmt->bind_param( 'i', $this->user_id );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $this->user_id );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
-         while( $mark = $this->db->nqfetch( $query ) )
+			while( $mark = $this->db->nqfetch( $query ) )
 			{
 				$this->readmarkers[$mark['readmark_topic']] = $mark['readmark_lastread'];
 			}
@@ -375,11 +375,11 @@ class readmarker extends forumutils
 			/* find all topics since we pressed mark all read */
 			$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_edited, topic_forum FROM %ptopics WHERE topic_edited > ?' );
 
-         $stmt->bind_param( 'i', $this->last_read_all );
-         $this->db->execute_query( $stmt );
+			$stmt->bind_param( 'i', $this->last_read_all );
+			$this->db->execute_query( $stmt );
 
-         $query = $stmt->get_result();
-         $stmt->close();
+			$query = $stmt->get_result();
+			$stmt->close();
 
 			/* read all the records*/
 			while( $row = $this->db->nqfetch( $query ) )
@@ -414,11 +414,11 @@ class readmarker extends forumutils
 		// Find the OLDEST unread post
 		$stmt = $this->db->prepare_query( 'SELECT topic_id, topic_edited FROM %ptopics WHERE topic_edited > ? AND topic_forum IN (?)' );
 
-      $stmt->bind_param( 'is', $this->last_read_all, $readable_forums );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'is', $this->last_read_all, $readable_forums );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		$oldest_time = $this->time;
 

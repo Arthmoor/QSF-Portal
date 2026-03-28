@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -252,9 +252,9 @@ class search extends qsfglobal
 
 		$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_lastsearch=? WHERE user_id=?' );
 
-      $stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
-      $this->db->execute_query( $stmt );
-      $stmt->close();
+		$stmt->bind_param( 'ii', $this->time, $this->user['user_id'] );
+		$this->db->execute_query( $stmt );
+		$stmt->close();
 
 		$sql = 'SELECT ';
 		$sql_data = array();

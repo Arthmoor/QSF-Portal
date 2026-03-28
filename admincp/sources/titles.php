@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -76,10 +76,10 @@ class titles extends admin
 
 				$stmt = $this->db->prepare_query( 'INSERT INTO %pmembertitles ( membertitle_title, membertitle_icon, membertitle_posts ) VALUES( ?, ?, ? )' );
 
-            $new_posts = intval( $this->post['new_posts'] );
-            $stmt->bind_param( 'ssi', $this->post['new_title'], $this->post['new_icon'], $new_posts );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$new_posts = intval( $this->post['new_posts'] );
+				$stmt->bind_param( 'ssi', $this->post['new_title'], $this->post['new_icon'], $new_posts );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				$this->update_titles();
 
@@ -98,10 +98,10 @@ class titles extends admin
 			if( isset( $this->get['delete'] ) ) {
 				$stmt = $this->db->prepare_query( 'DELETE FROM %pmembertitles WHERE membertitle_id=?' );
 
-            $id = intval( $this->get['delete'] );
-            $stmt->bind_param( 'i', $id );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$id = intval( $this->get['delete'] );
+				$stmt->bind_param( 'i', $id );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
 				$this->update_titles();
 			}
@@ -117,11 +117,11 @@ class titles extends admin
 			if( isset( $this->post['submit'] ) && ( trim( $this->post['new_title'] ) != '' ) ) {
 				$stmt = $this->db->prepare_query( 'UPDATE %pmembertitles SET membertitle_title=?, membertitle_posts=?, membertitle_icon=? WHERE membertitle_id=?' );
 
-            $stmt->bind_param( 'sisi', $this->post['new_title'], $new_posts, $this->post['new_icon'], $id );
-            $this->db->execute_query( $stmt );
-            $stmt->close();
+				$stmt->bind_param( 'sisi', $this->post['new_title'], $new_posts, $this->post['new_icon'], $id );
+				$this->db->execute_query( $stmt );
+				$stmt->close();
 
-            $id = null;
+				$id = null;
 
 				$this->update_titles();
 			}

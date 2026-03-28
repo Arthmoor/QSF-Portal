@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -47,8 +47,8 @@ class file_permissions
 	public $is_guest;
 	public $globals = array();
 	public $standard = array(
-                'download_files' => false,
-                'upload_files' => false,
+		'download_files' => false,
+		'upload_files' => false,
 		'approve_files' => false,
 		'edit_files' => false,
 		'move_files' => false,
@@ -76,7 +76,7 @@ class file_permissions
 	}
 
 	/**
-	 * Initialise the permissions object cube
+	 * Initialize the permissions object cube
 	 *
 	 * @param int $group Group id to load perms from. Set to -1 if using user perms
 	 * @param int $user User id. Checked against USER_GUEST_UID as loaded as perms if group is set to -1
@@ -88,23 +88,23 @@ class file_permissions
 			if ($group != -1) {
 				$stmt  = $this->db->prepare_query( 'SELECT group_file_perms FROM %pgroups WHERE group_id=?' );
 
-            $stmt->bind_param( 'i', $group );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $group );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $data = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$data = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$perms = $data['group_file_perms'];
 			} else {
 				$stmt  = $this->db->prepare_query( 'SELECT user_file_perms, user_group FROM %pusers WHERE user_id=?' );
 
-            $stmt->bind_param( 'i', $user );
-            $this->db->execute_query( $stmt );
+				$stmt->bind_param( 'i', $user );
+				$this->db->execute_query( $stmt );
 
-            $result = $stmt->get_result();
-            $data = $this->db->nqfetch( $result );
-            $stmt->close();
+				$result = $stmt->get_result();
+				$data = $this->db->nqfetch( $result );
+				$stmt->close();
 
 				$perms = $data['user_file_perms'];
 				$group = $data['user_group'];
@@ -124,7 +124,7 @@ class file_permissions
 	/**
 	 * Query if a permission is turned on or not
 	 *
-	 * @param string $y Indentifier of the permission being queried
+	 * @param string $y Identifier of the permission being queried
 	 * @param mixed $z Category to check the permission against
 	 *
 	 * @return true if found the permission and it is on
@@ -176,7 +176,7 @@ class file_permissions
 	 * Turn on or off a specific permission. Also turn on or off for all categories
 	 * that permission applies to
 	 *
-	 * @param string $y Indentifier of the permission being queried
+	 * @param string $y Identifier of the permission being queried
 	 * @param bool $bool What value to assign to all permissions
 	 **/
 	public function set_xy( $y, $bool )
@@ -216,7 +216,7 @@ class file_permissions
 	/**
 	 * Turn on or off a specific permission for a specific category
 	 *
-	 * @param string $y Indentifier of the permission being queried
+	 * @param string $y Identifier of the permission being queried
 	 * @param int $z Forum to check the permission against
 	 * @param bool $bool What value to assign to all permissions
 	 **/
@@ -333,7 +333,7 @@ class file_permissions
 	 *
 	 * Note: This is only used for upgrades
 	 *
-	 * @param string $y Indentifier of the permission being added
+	 * @param string $y Identifier of the permission being added
 	 * @param bool $bool What value to assign to all permissions
 	 **/
 	public function add_perm( $y, $bool )
@@ -369,15 +369,15 @@ class file_permissions
 		if( $this->user == -1 ) {
 			$stmt->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=?' );
 
-         $stmt->bind_param( 'si', $serialized, $this->group );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'si', $serialized, $this->group );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 		} else {
 			$stmt = $this->db->prepare_query( 'UPDATE %pusers SET user_file_perms=? WHERE user_id=?' );
 
-         $stmt->bind_param( 'si', $serialized, $this->user );
-         $this->db->execute_query( $stmt );
-         $stmt->close();
+			$stmt->bind_param( 'si', $serialized, $this->user );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
 		}
 	}
 }

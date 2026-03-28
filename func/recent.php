@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -141,12 +141,12 @@ class recent extends qsfglobal
 	{
 		$stmt = $this->db->prepare_query( 'SELECT COUNT(topic_id) AS count FROM %ptopics WHERE topic_forum IN (?) AND topic_edited >= ?' );
 
-      $stmt->bind_param( 'si', $forums_str, $this->user['user_lastvisit'] );
-      $this->db->execute_query( $stmt );
+		$stmt->bind_param( 'si', $forums_str, $this->user['user_lastvisit'] );
+		$this->db->execute_query( $stmt );
 
-      $result = $stmt->get_result();
-      $query = $this->db->nqfetch( $result );
-      $stmt->close();
+		$result = $stmt->get_result();
+		$query = $this->db->nqfetch( $result );
+		$stmt->close();
 
 		return $query['count'];
 	}
@@ -177,13 +177,13 @@ class recent extends qsfglobal
 			ORDER BY t.topic_modes & ? DESC, t.topic_edited DESC
 			LIMIT ?, ?' );
 
-      $tflag1 = intval( TOPIC_MOVED );
-      $tflag2 = intval( TOPIC_PINNED );
-      $stmt->bind_param( 'iisiiiiii', $this->user['user_id'], $this->user['user_id'], $forums_str, $this->user['user_lastvisit'], $this->user['user_lastallread'], $tflag1, $tflag2, $min, $n );
-      $this->db->execute_query( $stmt );
+		$tflag1 = intval( TOPIC_MOVED );
+		$tflag2 = intval( TOPIC_PINNED );
+		$stmt->bind_param( 'iisiiiiii', $this->user['user_id'], $this->user['user_id'], $forums_str, $this->user['user_lastvisit'], $this->user['user_lastallread'], $tflag1, $tflag2, $min, $n );
+		$this->db->execute_query( $stmt );
 
-      $query = $stmt->get_result();
-      $stmt->close();
+		$query = $stmt->get_result();
+		$stmt->close();
 
 		while( $row = $this->db->nqfetch( $query ) )
 		{

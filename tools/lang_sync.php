@@ -152,7 +152,7 @@ foreach( $result as $lang_name => $lang_words )
 	$out[$lang_name] = '<?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:

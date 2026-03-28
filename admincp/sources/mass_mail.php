@@ -1,7 +1,7 @@
 <?php
 /**
  * QSF Portal
- * Copyright (c) 2006-2025 The QSF Portal Development Team
+ * Copyright (c) 2006-2026 The QSF Portal Development Team
  * https://github.com/Arthmoor/QSF-Portal
  *
  * Based on:
@@ -112,21 +112,21 @@ class mass_mail extends admin
 		if( count( $this->post['groups'] ) ) {
 			$stmt = $this->db->prepare_query( 'SELECT user_email FROM %pusers WHERE user_group IN (?)' );
 
-         $groups = implode( ', ', $this->post['groups'] );
-         $stmt->bind_param( 's', $groups );
-         $this->db->execute_query( $stmt );
+			$groups = implode( ', ', $this->post['groups'] );
+			$stmt->bind_param( 's', $groups );
+			$this->db->execute_query( $stmt );
 
-         $members = $stmt->get_result();
-         $stmt->close();
+			$members = $stmt->get_result();
+			$stmt->close();
 		} else {
 			$members = $this->db->query( 'SELECT user_email FROM %pusers WHERE user_id !=?' );
 
-         $user_id = intval( USER_GUEST_UID );
-         $stmt->bind_param( 'i', $user_id );
-         $this->db->execute_query( $stmt );
+			$user_id = intval( USER_GUEST_UID );
+			$stmt->bind_param( 'i', $user_id );
+			$this->db->execute_query( $stmt );
 
-         $members = $stmt->get_result();
-         $stmt->close();
+			$members = $stmt->get_result();
+			$stmt->close();
 		}
 
 		while( $sub = $this->db->nqfetch( $members ) )
