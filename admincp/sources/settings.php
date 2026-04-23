@@ -419,6 +419,10 @@ class settings extends admin
 			$tos = $this->db->fetch( "SELECT settings_tos_files FROM %psettings" );
 			$xtpl->assign( 'tos_files_text', htmlspecialchars( $tos['settings_tos_files'] ) );
 
+			$xtpl->assign( 'settings_tos_privacy', $this->lang->settings_tos_privacy );
+			$tos = $this->db->fetch( "SELECT settings_tos_privacy FROM %psettings" );
+			$xtpl->assign( 'tos_privacy_text', htmlspecialchars( $tos['settings_tos_privacy'] ) );
+
 			$xtpl->assign( 'settings', $this->lang->settings );
 			$xtpl->assign( 'settings_wordpress_id', $this->lang->settings_wordpress_id );
 			$xtpl->assign( 'settings_wordpress_msg', $this->lang->settings_wordpress_msg );
@@ -827,6 +831,7 @@ class settings extends admin
 
 			$tos_text = $this->post['tos'];
 			$tos_files_text = $this->post['tos_files'];
+			$tos_privacy_text = $this->post['tos_privacy'];
 			$meta_keywords = $this->post['meta_keywords'];
 			$meta_description = $this->post['meta_description'];
 			$mobile_icons = $this->post['mobile_icons'];
@@ -924,7 +929,7 @@ class settings extends admin
 
 			foreach( $this->post as $var => $val )
 			{
-				if( $var == 'tos' || $var == 'tos_files' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' || $var == 'mobile_icons' || in_array($var, $checkboxes) )
+				if( $var == 'tos' || $var == 'tos_files' || $var == 'tos_privacy' || $var == 'token' || $var == 'meta_keywords' || $var == 'meta_description' || $var == 'mobile_icons' || in_array($var, $checkboxes) )
 					continue;
 				if( ( $vartypes[$var] == 'int' ) || ( $vartypes[$var] == 'bool' ) ) {
 					$val = intval( $val );
@@ -985,6 +990,12 @@ class settings extends admin
 			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_tos_files=?' );
 
 			$stmt->bind_param( 's', $tos_files_text );
+			$this->db->execute_query( $stmt );
+			$stmt->close();
+
+			$stmt = $this->db->prepare_query( 'UPDATE %psettings SET settings_tos_privacy=?' );
+
+			$stmt->bind_param( 's', $tos_privacy_text );
 			$this->db->execute_query( $stmt );
 			$stmt->close();
 

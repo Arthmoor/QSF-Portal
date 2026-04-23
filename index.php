@@ -107,7 +107,7 @@ if( !isset( $_GET['a'] ) ) {
 	} elseif( !file_exists( 'func/' . $a . '.php' ) ) {
 		$module = 'main';
 
-		if( $a != 'forum_rules' && $a != 'upload_rules' ) {
+		if( $a != 'forum_rules' && $a != 'upload_rules' && $a != 'privacy' ) {
 			$qstring = $_SERVER['REQUEST_URI'];
 
 			$missing = true;
@@ -253,6 +253,11 @@ if( $terms_module == 'forum_rules' ) {
 
 	$message = $qsf->format( $tos['settings_tos_files'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE );
 	$output = $qsf->message( $qsf->lang->main_tos_files, $message );
+} elseif ( $terms_module == 'privacy' ) {
+	$tos = $qsf->db->fetch( 'SELECT settings_tos_privacy FROM %psettings' );
+
+	$message = $qsf->format( $tos['settings_tos_privacy'], FORMAT_HTMLCHARS | FORMAT_BREAKS | FORMAT_BBCODE );
+	$output = $qsf->message( $qsf->lang->main_tos_privacy, $message );
 } else {
 	$output = $qsf->execute();
 }

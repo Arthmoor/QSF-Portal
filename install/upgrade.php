@@ -397,14 +397,14 @@ class upgrade extends qsfglobal
                default:
                   break;
             }
-			}
+         }
 
          // Missing breaks are deliberate. Upgrades from older versions need to step through all of this.
          switch( $this->settings['app_version'] )
          {
             // 2.0 to 2.0.1
             case 2.01:
-
+                  $queries[] = 'ALTER TABLE %psettings ADD settings_tos_privacy mediumtext AFTER settings_tos_files';
             default:
                break;
          }

@@ -98,6 +98,10 @@
  <span class="form"><textarea name="tos_files" rows="10" cols="37">{tos_files_text}</textarea></span>
  <p class="line"></p>
 
+ <span class="field">{settings_tos_privacy}</span>
+ <span class="form"><textarea name="tos_privacy" rows="10" cols="37">{tos_privacy_text}</textarea></span>
+ <p class="line"></p>
+
  <input type="submit" value="{submit}">
 </div>
 

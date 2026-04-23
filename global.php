@@ -603,7 +603,8 @@ class qsfglobal
 			'mobile_icons',
 			'settings_version',
 			'settings_tos',
-			'settings_tos_files'
+			'settings_tos_files',
+			'settings_tos_privacy'
 		);
 
 		$sets = array();

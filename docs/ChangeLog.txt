@@ -3,6 +3,10 @@ QSF Portal Changes
 
 Changes for 2.0.1:
 
+   New Features:
+
+* Added support for a privacy policy to display to users.
+
    Bugs addressed:
 
 * Fixed issues with the file editing form.

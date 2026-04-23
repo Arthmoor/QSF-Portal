@@ -902,6 +902,7 @@ class en
    public $main_topics_old;
    public $main_tos_files;
    public $main_tos_forums;
+   public $main_tos_privacy;
    public $main_users_online;
    public $main_visitors;
    public $main_welcome;
@@ -1616,6 +1617,7 @@ class en
    public $settings_topics_page;
    public $settings_tos;
    public $settings_tos_files;
+   public $settings_tos_privacy;
    public $settings_updated;
    public $settings_validating_user_purge_time;
    public $settings_wordpress_id;
@@ -2569,6 +2571,7 @@ class en
 		$this->main_topics_old = 'There are no new posts in this forum.';
 		$this->main_tos_files = 'Terms of Service: Uploads';
 		$this->main_tos_forums = 'Terms of Service: Forums';
+        $this->main_tos_privacy = 'Privacy Policy';
 		$this->main_users_online = 'Users Online';
 		$this->main_visitors = 'Today\'s Visitors:';
 		$this->main_welcome = 'Welcome';
@@ -3356,6 +3359,7 @@ class en
 		$this->settings_topics_page = 'Topics Per Forum Page';
 		$this->settings_tos = 'Terms of Service';
 		$this->settings_tos_files = 'Terms of Service: Uploads';
+        $this->settings_tos_privacy = 'Privacy Policy';
 		$this->settings_updated = 'Settings have been updated.';
 		$this->settings_validating_user_purge_time = 'Number of days to wait before purging unvalidated user accounts.';
 		$this->settings_wordpress_id = 'Wordpress API Key';
