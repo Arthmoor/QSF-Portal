@@ -115,16 +115,15 @@ class db_mysqli extends database
 
 		$query = $this->_format_query( $args );
 
-		$this->querycount++;
-
 		$this->current_query = $query;
 
-		try {
-			$result = $this->connection->query( $query );
-		}
-		catch( Exception $e ) {
+		$result = $this->connection->query( $query );
+		if( !$result ) {
 			error( QUICKSILVER_QUERY_ERROR, $this->connection->error, $query, $this->connection->errno );
 		}
+
+		$this->querycount++;
+
 		return $result;
 	}
 
