@@ -19,6 +19,7 @@ Changes for 2.0.1:
 * Fixed a query issue when updating conversations.
 * Empty strings should not be getting processed by bbcode formatting.
 * Fixed an issue with Akismet return checks on forum posts resulting in a notification that there is pending spam to evaluate when it's not actually been saved to the table because the "ninja" function canned it immediately.
+* Fixed a query bug when setting default permissions on a new file category.
 
 Changes for 2.0:
 

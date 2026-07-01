@@ -343,7 +343,7 @@ class file_permissions
 		if( !isset( $this->standard[$y] ) )
 			return; // Don't allow the action!
 
-		$category_view_array = $this->cube['category_view']; // Use this to find the exisitng forums
+		$category_view_array = $this->cube['category_view']; // Use this to find the existing forums
 
 		if( !$new_global && is_array( $category_view_array ) ) {
 			foreach( array_keys( $category_view_array ) as $cat ) {
@@ -367,7 +367,7 @@ class file_permissions
 		}
 
 		if( $this->user == -1 ) {
-			$stmt->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=?' );
+			$stmt = $this->db->prepare_query( 'UPDATE %pgroups SET group_file_perms=? WHERE group_id=?' );
 
 			$stmt->bind_param( 'si', $serialized, $this->group );
 			$this->db->execute_query( $stmt );
