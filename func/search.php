@@ -223,7 +223,7 @@ class search extends qsfglobal
 				$this->post['forums'] = array();
 			}
 
-			if( $this->post['searchtype'] == 'match' ) {
+			if( isset( $this->post['searchtype'] ) && $this->post['searchtype'] == 'match' ) {
 				$type = 'fulltext';
 			} else {
 				$type = 'normal';

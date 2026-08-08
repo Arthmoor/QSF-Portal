@@ -109,7 +109,7 @@ class forum extends qsfglobal
 				$order = 't.topic_edited';
 			}
 
-			if( !$this->get['asc'] ) {
+			if( !isset( $this->get['asc'] ) ) {
 				$order .= ' DESC';
 			}
 		} else {
